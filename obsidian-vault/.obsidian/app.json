@@ -1,0 +1,10 @@
+{
+  "vaultName": "Credenciamento",
+  "defaultViewMode": "preview",
+  "showLineNumber": true,
+  "enabledPlugins": [
+    "obsidian-git"
+  ],
+  "alwaysUpdateLinks": true,
+  "attachmentFolderPath": "Anexos"
+}

@@ -1,0 +1,48 @@
+# Sistema de Credenciamento — .gitignore
+
+# Excel binarios (fonte de verdade e vba_export/)
+*.xlsm
+*.xlsx
+
+# Excel temporarios
+~$*.xls*
+*.tmp
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# IDE
+.vscode/
+.idea/
+.continue/
+*.swp
+*.swo
+
+# Versoes historicas (manter no disco, nao no git)
+historico/
+V12-093/
+
+# Artefatos de bateria
+BateriaOficial_*.csv
+backup_bateria_oficial/
+
+# Backups
+*.bak
+
+# Ollama
+*.gguf
+
+# Obsidian cache (config do vault vai no git, cache nao)
+obsidian-vault/.obsidian/workspace.json
+obsidian-vault/.obsidian/cache
+obsidian-vault/.obsidian/plugins/
+obsidian-vault/.obsidian/core-plugins-migration.json
+
+# Deploy package (gerado por script, nao versionado)
+vba_import/
