@@ -4,7 +4,7 @@ Option Explicit
 ' Metadata centralizada da release atual.
 ' Fonte de verdade: vba_export/. O Menu_Principal apenas consome estas funcoes.
 
-Public Const APP_RELEASE_ATUAL As String = "V12.0.0182"
+Public Const APP_RELEASE_ATUAL As String = "V12.0.0183"
 Public Const APP_RELEASE_STATUS As String = "EM_VALIDACAO"
 Public Const APP_GITHUB_REPO_URL As String = "https://github.com/rwv8gscs8g-blip/credenciamento"
 Public Const APP_GITHUB_RELEASE_NOTES_URL As String = APP_GITHUB_REPO_URL & "/tree/main/obsidian-vault/releases"

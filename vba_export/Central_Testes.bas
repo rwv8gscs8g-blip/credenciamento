@@ -29,22 +29,14 @@ Public Sub CT_AbrirCentral()
     On Error GoTo falha
     Dim op As String
     op = Trim$(InputBox( _
-        "=== FUNIL QA — CENTRAL DE TESTES V12 ===" & vbCrLf & vbCrLf & _
-        "[1] Roteiro Rápido (16 passos — fase SETUP)" & vbCrLf & _
-        "[2] Checklist Treinamento (21 itens — legado)" & vbCrLf & _
-        "[3] Abrir RESULTADO_QA (funil unificado)" & vbCrLf & _
-        "[4] Executar Bateria Automatizada" & vbCrLf & _
-        "[5] Relatórios de Teste" & vbCrLf & _
-        "[6] Testes Guiados de UI" & vbCrLf & vbCrLf & _
-        "Digite o numero:", "Central de Testes V12", "4"))
+        "=== CENTRAL DE TESTES V12 / TRANSICAO ===" & vbCrLf & vbCrLf & _
+        "[1] Executar Bateria Automatizada Legada" & vbCrLf & _
+        "[2] Abrir Central de Testes V2" & vbCrLf & vbCrLf & _
+        "Digite o numero:", "Central de Testes V12", "1"))
     If op = "" Then Exit Sub
     Select Case op
-        Case "1": Call CT_AbrirRoteiroRapido
-        Case "2": Call Treinamento_AbrirChecklist
-        Case "3": Call CT_AbrirResultadoQA
-        Case "4": Call CT_IniciarBateria
-        Case "5": Call CT_MenuRelatorios
-        Case "6": Call RunTesteUI
+        Case "1": Call CT_IniciarBateria
+        Case "2": Call CT2_AbrirCentral
         Case Else: MsgBox "Opção inválida.", vbInformation, "Central V12"
     End Select
     Exit Sub
@@ -81,7 +73,7 @@ Public Sub CT_AbrirResultadoQA()
     On Error GoTo falha
     If ws Is Nothing Then
         MsgBox "Aba RESULTADO_QA não encontrada." & vbCrLf & _
-               "Execute a Bateria Automatizada (opção 4) primeiro.", vbInformation, "Central V12"
+               "Execute primeiro a bateria automatizada legada.", vbInformation, "Central V12"
         Exit Sub
     End If
     ws.Activate
@@ -735,7 +727,6 @@ Private Function ObterUsr() As String
     On Error GoTo 0
     If ObterUsr = "" Then ObterUsr = "OPERADOR"
 End Function
-
 
 
 
