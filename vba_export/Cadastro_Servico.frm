@@ -89,8 +89,10 @@ If ativId = "" Then
         Exit Sub
     End If
 
-    If EncontrarAtividadeExistente(wsAtiv, "", ativDesc, ativId, ativDesc, CNAE) Then
-        msgCriacaoAtiv = "Atividade existente reutilizada: " & ativId & " - " & CNAE & "." & vbCrLf
+    Dim rngAtiv As Range
+    Set rngAtiv = wsAtiv.Columns(3).Find(What:=ativDesc, LookAt:=xlWhole)
+    If Not rngAtiv Is Nothing Then
+        ativId = Pad3(rngAtiv.Offset(0, -2).Value)
     Else
         CNAE = Trim(InputBox("Atividade ainda não cadastrada." & vbCrLf & _
                              "Informe o CNAE para criar a atividade '" & ativDesc & "':", _
@@ -98,17 +100,6 @@ If ativId = "" Then
         If CNAE = "" Then
             MsgBox "Cadastro cancelado: CNAE é obrigatório para nova atividade.", vbExclamation, "Cadastro de serviço"
             Exit Sub
-        End If
-
-        CNAE = NormalizarCNAECadastro(CNAE)
-        If Not CNAECadastroValido(CNAE) Then
-            MsgBox "Cadastro cancelado: CNAE inválido para nova atividade.", vbExclamation, "Cadastro de serviço"
-            Exit Sub
-        End If
-
-        If EncontrarAtividadeExistente(wsAtiv, CNAE, ativDesc, ativId, ativDesc, CNAE) Then
-            msgCriacaoAtiv = "Atividade/CNAE já existente reutilizada: " & ativId & " - " & CNAE & "." & vbCrLf
-            GoTo atividade_resolvida
         End If
 
         If Not Util_PrepararAbaParaEscrita(wsAtiv, estavaProtAtiv, senhaProtAtiv) Then
@@ -119,16 +110,13 @@ If ativId = "" Then
         ativId = ProximoId(SHEET_ATIVIDADES)
         linhaNova = UltimaLinhaAba(SHEET_ATIVIDADES) + 1
         If linhaNova < LINHA_DADOS Then linhaNova = LINHA_DADOS
-        wsAtiv.Cells(linhaNova, COL_ATIV_ID).Value = ativId
-        wsAtiv.Cells(linhaNova, COL_ATIV_CNAE).NumberFormat = "@"
-        wsAtiv.Cells(linhaNova, COL_ATIV_CNAE).Value = CNAE
-        wsAtiv.Cells(linhaNova, COL_ATIV_DESCRICAO).Value = Funcoes.NormalizarTextoPTBR(ativDesc)
+        wsAtiv.Cells(linhaNova, 1).Value = ativId
+        wsAtiv.Cells(linhaNova, 2).Value = Funcoes.NormalizarTextoPTBR(CNAE)
+        wsAtiv.Cells(linhaNova, 3).Value = Funcoes.NormalizarTextoPTBR(ativDesc)
         Call Util_RestaurarProtecaoAba(wsAtiv, estavaProtAtiv, senhaProtAtiv)
         msgCriacaoAtiv = "Atividade/CNAE criada: " & ativId & " - " & CNAE & "." & vbCrLf
     End If
 End If
-
-atividade_resolvida:
 
 ' Evita duplicidade do mesmo servico na mesma atividade
 If ServicoJaExiste(wsServ, ativId, descServ) Then
@@ -185,79 +173,6 @@ If Not wsAtiv Is Nothing Then Call Util_RestaurarProtecaoAba(wsAtiv, estavaProtA
 On Error GoTo 0
 MsgBox "Erro ao cadastrar servi" & ChrW(231) & "o: " & Err.Description, vbCritical, "Cadastro de serviço"
 End Sub
-
-Private Function EncontrarAtividadeExistente( _
-    ByVal wsAtiv As Worksheet, _
-    ByVal CNAE As String, _
-    ByVal descricao As String, _
-    ByRef ativId As String, _
-    ByRef descricaoCanonica As String, _
-    Optional ByRef cnaeCanonico As String _
-) As Boolean
-    Dim ultima As Long
-    Dim i As Long
-    Dim cnaeBusca As String
-    Dim descBusca As String
-    Dim cnaeAtual As String
-    Dim descAtual As String
-
-    ultima = UltimaLinhaAba(SHEET_ATIVIDADES)
-    If ultima < LINHA_DADOS Then Exit Function
-
-    cnaeBusca = SomenteDigitosCadastro(CNAE)
-    descBusca = NormalizarTextoBuscaCadastro(descricao)
-
-    For i = LINHA_DADOS To ultima
-        cnaeAtual = SomenteDigitosCadastro(wsAtiv.Cells(i, COL_ATIV_CNAE).Value)
-        descAtual = NormalizarTextoBuscaCadastro(wsAtiv.Cells(i, COL_ATIV_DESCRICAO).Value)
-
-        If (cnaeBusca <> "" And cnaeAtual = cnaeBusca) Or _
-           (descBusca <> "" And descAtual = descBusca) Then
-            ativId = Pad3(wsAtiv.Cells(i, COL_ATIV_ID).Value)
-            descricaoCanonica = Trim$(CStr(wsAtiv.Cells(i, COL_ATIV_DESCRICAO).Value))
-            cnaeCanonico = Trim$(CStr(wsAtiv.Cells(i, COL_ATIV_CNAE).Value))
-            EncontrarAtividadeExistente = (ativId <> "")
-            Exit Function
-        End If
-    Next i
-End Function
-
-Private Function NormalizarCNAECadastro(ByVal codigo As String) As String
-    Dim digitos As String
-
-    digitos = SomenteDigitosCadastro(codigo)
-
-    If Len(digitos) = 7 Then
-        NormalizarCNAECadastro = Left$(digitos, 4) & "-" & Mid$(digitos, 5, 1) & "/" & Right$(digitos, 2)
-    ElseIf Len(digitos) = 5 Then
-        NormalizarCNAECadastro = Left$(digitos, 4) & "-" & Right$(digitos, 1)
-    Else
-        NormalizarCNAECadastro = Trim$(codigo)
-    End If
-End Function
-
-Private Function CNAECadastroValido(ByVal codigo As String) As Boolean
-    Select Case Len(SomenteDigitosCadastro(codigo))
-        Case 5, 7
-            CNAECadastroValido = True
-    End Select
-End Function
-
-Private Function SomenteDigitosCadastro(ByVal txt As Variant) As String
-    Dim s As String
-    Dim i As Long
-    Dim ch As String
-
-    s = CStr(txt)
-    For i = 1 To Len(s)
-        ch = Mid$(s, i, 1)
-        If ch Like "[0-9]" Then SomenteDigitosCadastro = SomenteDigitosCadastro & ch
-    Next i
-End Function
-
-Private Function NormalizarTextoBuscaCadastro(ByVal txt As Variant) As String
-    NormalizarTextoBuscaCadastro = UCase$(Trim$(CStr(txt)))
-End Function
 
 Private Sub Descricao_SV_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
 On Error GoTo erro_carregamento:

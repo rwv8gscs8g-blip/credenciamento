@@ -3,14 +3,14 @@ titulo: Estado Atual do Sistema
 ultima-atualizacao: 2026-04-17
 autor-ultima-alteracao: GPT-5 (Codex)
 tags: [vivo, regra]
-versao-sistema: V12.0.0193
+versao-sistema: V12.0.0194
 ---
 
 # Estado Atual do Sistema
 
 ## Versao
 
-- **Versao**: V12.0.0193
+- **Versao**: V12.0.0194
 - **Data**: 2026-04-17
 - **Status**: EM_VALIDACAO
 - **Compila**: Pendente de validacao no Excel
@@ -38,10 +38,8 @@ versao-sistema: V12.0.0193
 - `Svc_Avaliacao` passou a validar `QtExecutada > 0` e agora aceita `Observacao` como motivo efetivo de divergencia quando o campo dedicado vier vazio
 - Os cenarios `MIG_001`, `MIG_002`, `MIG_003` e `MIG_004` ficaram assertivos no smoke da V2
 - Fluxos de inativacao/reativacao passaram a higienizar duplicidades nas abas `*_INATIVOS`, preferir a linha mais recente e bloquear reativacao quando houver conflito semantico na mesma chave
-- `Cadastro_Servico` passou a reutilizar atividade existente por CNAE normalizado ou descricao, evitando criar CNAEs duplicados na aba `ATIVIDADES`
-- `PreenchimentoListaAtividade` passou a esconder duplicidades legadas da lista visual e priorizar a primeira ocorrencia canonica
-- `Limpa_Base` passou a chamar `LIMPAR_CADSERV_AGORA`, saneando `ATIVIDADES` e reconstruindo `CAD_SERV` em modo estrutural simples sem duplicidade
-- `ResetarECarregarCNAE_Padrao` passou a terminar com `CAD_SERV` simplificada e pronta para uma base apenas com CNAEs
+- A bateria oficial veio limpa nos CSVs enviados pelo revisor humano durante a estabilizacao da `0193`
+- A `0194` reverteu apenas o recorte `CNAE/CAD_SERV` da `0193` para o comportamento anterior, preservando as correcoes de avaliacao e da bateria V2
 - Terminologia MEI eliminada no codigo VBA e no `Menu_Principal` (designer); relatorio **Rel_OSEmpresa** abre sem crash
 - Exportacao de CSV de resultados de teste
 - Release metadata centralizada (App_Release.bas)
@@ -53,6 +51,7 @@ versao-sistema: V12.0.0193
 - Ordens de servico (Svc_PreOS, Svc_OS, Svc_Avaliacao) apos a migracao das guardas para servico
 - Execucao no Excel dos cenarios `MIG_001`, `MIG_002`, `MIG_003` e `MIG_004` dentro do smoke V2
 - Revalidacao da bateria oficial nos casos `BO_330*`
+- Validacao no Excel da `V12.0.0194` apos o rollback cirurgico de `CNAE/CAD_SERV`
 - Importacao no Excel dos modulos V2 e execucao das macros `CT2_*`
 
 ## Riscos Conhecidos
@@ -62,17 +61,15 @@ versao-sistema: V12.0.0193
 - Ainda existem validacoes operacionais e defaults na interface; a `0191` migra apenas as tres guardas criticas aprovadas para o servico
 - Bases historicas com conflito real em `ENTIDADE_INATIVOS` ou `EMPRESAS_INATIVAS` podem agora ser bloqueadas na reativacao ate saneamento manual
 - A bateria V2 ainda nao substitui totalmente a legada: a base automatica ficou mais forte, mas ainda faltam atomicidade, edge cases e shadow mode
-- A `V12.0.0193` ainda precisa de homologacao no Excel para confirmar compatibilidade da avaliacao, deduplicacao de CNAE e a nova simplificacao da limpeza de base
+- O desenho definitivo de `CNAE/CAD_SERV` foi explicitamente adiado como debito tecnico para nao interromper a estabilizacao das fases do Opus
 - Emergencia_CNAE, Emergencia_CNAE1/2/3 e Importar_Agora sao modulos temporarios — remover apos estabilizacao
 
 ## Proximos Passos
 
-1. Importar a V12.0.0193 no Excel e reexecutar a bateria oficial focando `BO_330*`.
-2. Validar `CT2_ExecutarSmokeRapido`, `CT2_ExecutarSmokeAssistido`, `CT2_ExecutarStress` e `CT2_ExecutarStressAssistido`, agora com `MIG_004`.
-3. Validar manualmente que `Cadastro_Servico` nao duplica CNAE ao criar atividade nova ou reaproveitar atividade existente.
-4. Rodar `Limpa_Base` e conferir que `ATIVIDADES` fica saneada e `CAD_SERV` termina reconstruida sem duplicidade.
-5. Seguir para atomicidade, edge cases e shadow mode da V2.
-6. Limpar modulos temporarios de importacao (`Emergencia_CNAE`, etc.) apos CNAE estavel.
+1. Importar a `V12.0.0194` no Excel e validar a compilacao.
+2. Reexecutar a bateria oficial e a V2 para confirmar que o rollback de `CNAE/CAD_SERV` nao afetou as correcoes de avaliacao e das guardas migradas.
+3. Seguir para a fase 3 da estabilizacao do Opus: atomicidade, rollback parcial e edge cases.
+4. Tratar `CNAE/CAD_SERV` apenas no backlog dedicado documentado em `DEBITO-TECNICO-CNAE-CADSERV.md`.
 
 ## Documentos Relacionados
 
