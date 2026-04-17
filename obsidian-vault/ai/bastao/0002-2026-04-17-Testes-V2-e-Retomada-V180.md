@@ -2,7 +2,7 @@
 titulo: Retomada do desenvolvimento na V12.0.0180 e fundacao da bateria V2
 data: 2026-04-17
 autor: GPT-5 (Codex)
-versao: V12.0.0183
+versao: V12.0.0184
 status: ativo
 tags: [bastao, testes, estabilizacao]
 ---
@@ -34,6 +34,7 @@ Havia tentativa local posterior a `0180` focada no importador VBA, sem commit pr
 - definicao de resultados estruturados em `RESULTADO_QA_V2`
 - stress deterministico com invariantes basicas de fila
 - simplificacao da `Central_Testes` para a transicao: apenas legado + V2
+- V2 passa a recolher o `Menu_Principal`, abrir `RESULTADO_QA_V2` filtrado na execucao atual e exportar CSVs automaticamente com contexto semantico
 
 ## Pendencias
 

@@ -20,6 +20,7 @@ Public Const TV2_STATUS_FAIL As String = "FALHA"
 Public Const TV2_STATUS_INFO As String = "INFO"
 Public Const TV2_STATUS_MANUAL As String = "MANUAL_ASSISTIDO"
 
+Private Const TV2_COLUNA_BOTOES_INICIO As Long = 13
 Private Const TV2_EMP_STATUS_ATIVA As String = "ATIVA"
 Private Const TV2_CRED_STATUS_ATIVO As String = "ATIVO"
 Private Const TV2_PREOS_STATUS_AGUARDANDO As String = "AGUARDANDO_ACEITE"
@@ -47,6 +48,9 @@ Public Sub TV2_InitExecucao(ByVal suite As String, Optional ByVal visual As Bool
     gTV2Fail = 0
     gTV2Manual = 0
 
+    TV2_RecolherMenuPrincipal
+    Util_LimparFiltrosAba TV2_EnsureResultadoSheet()
+    Util_LimparFiltrosAba TV2_EnsureHistoricoSheet()
     TV2_GerarCatalogoBase
     TV2_LogInfo suite, "BOOT", "Inicializar a suite V2", "Suite pronta para execucao"
 End Sub
@@ -54,6 +58,11 @@ End Sub
 Public Sub TV2_FinalizarExecucao(ByVal suite As String)
     Dim ws As Worksheet
     Dim nr As Long
+    Dim pathCsvCompleto As String
+    Dim pathCsvCorretivo As String
+
+    pathCsvCompleto = TV2_ExportarResultadoCSV(gTV2ExecucaoId, False)
+    pathCsvCorretivo = TV2_ExportarResultadoCSV(gTV2ExecucaoId, True)
 
     Set ws = TV2_EnsureHistoricoSheet()
     nr = TV2_NextRow(ws, 1, 2)
@@ -65,12 +74,19 @@ Public Sub TV2_FinalizarExecucao(ByVal suite As String)
     ws.Cells(nr, 5).Value = gTV2Fail
     ws.Cells(nr, 6).Value = gTV2Manual
     ws.Cells(nr, 7).Value = gTV2Ok + gTV2Fail + gTV2Manual
+    ws.Cells(nr, 8).Value = pathCsvCompleto
+    ws.Cells(nr, 9).Value = pathCsvCorretivo
 
     TV2_FormatarResultadoSheet
+    TV2_FormatarHistoricoSheet
+    TV2_AbrirResultadoExecucao gTV2ExecucaoId
+    Application.StatusBar = False
 
     MsgBox "Suite V2 concluida." & vbCrLf & _
            "Execucao: " & gTV2ExecucaoId & vbCrLf & _
-           "OK=" & CStr(gTV2Ok) & " | FALHA=" & CStr(gTV2Fail) & " | MANUAL=" & CStr(gTV2Manual), _
+           "OK=" & CStr(gTV2Ok) & " | FALHA=" & CStr(gTV2Fail) & " | MANUAL=" & CStr(gTV2Manual) & vbCrLf & vbCrLf & _
+           "CSV completo:" & vbCrLf & IIf(Len(pathCsvCompleto) > 0, pathCsvCompleto, "Nao gerado") & vbCrLf & vbCrLf & _
+           "CSV corretivo (FALHA + MANUAL):" & vbCrLf & IIf(Len(pathCsvCorretivo) > 0, pathCsvCorretivo, "Nao gerado"), _
            IIf(gTV2Fail = 0, vbInformation, vbExclamation), "Testes V2"
 End Sub
 
@@ -157,6 +173,7 @@ End Sub
 Public Sub TV2_AbrirResultado()
     Dim ws As Worksheet
     Set ws = TV2_EnsureResultadoSheet()
+    TV2_FormatarResultadoSheet
     ws.Activate
     ws.Range("A2").Select
 End Sub
@@ -164,8 +181,29 @@ End Sub
 Public Sub TV2_AbrirCatalogo()
     Dim ws As Worksheet
     Set ws = TV2_EnsureCatalogoSheet()
+    TV2_FormatarCatalogoSheet
     ws.Activate
     ws.Range("A2").Select
+End Sub
+
+Public Sub TV2_ExportarUltimaExecucaoCSVs()
+    Dim execucaoId As String
+    Dim pathCsvCompleto As String
+    Dim pathCsvCorretivo As String
+
+    execucaoId = TV2_ExecucaoEmFoco()
+    If execucaoId = "" Then
+        MsgBox "Nenhuma execucao V2 encontrada para exportacao.", vbInformation, "Testes V2"
+        Exit Sub
+    End If
+
+    pathCsvCompleto = TV2_ExportarResultadoCSV(execucaoId, False)
+    pathCsvCorretivo = TV2_ExportarResultadoCSV(execucaoId, True)
+
+    MsgBox "Execucao exportada: " & execucaoId & vbCrLf & vbCrLf & _
+           "CSV completo:" & vbCrLf & IIf(Len(pathCsvCompleto) > 0, pathCsvCompleto, "Nao gerado") & vbCrLf & vbCrLf & _
+           "CSV corretivo:" & vbCrLf & IIf(Len(pathCsvCorretivo) > 0, pathCsvCorretivo, "Nao gerado"), _
+           vbInformation, "Testes V2"
 End Sub
 
 Public Sub TV2_GerarCatalogoBase()
@@ -838,6 +876,11 @@ Private Function TV2_EnsureHistoricoSheet() As Worksheet
         ws.Cells(1, 5).Value = "FALHA"
         ws.Cells(1, 6).Value = "MANUAL"
         ws.Cells(1, 7).Value = "TOTAL"
+        ws.Cells(1, 8).Value = "CSV_COMPLETO"
+        ws.Cells(1, 9).Value = "CSV_CORRETIVO"
+    Else
+        If Trim$(CStr(ws.Cells(1, 8).Value)) = "" Then ws.Cells(1, 8).Value = "CSV_COMPLETO"
+        If Trim$(CStr(ws.Cells(1, 9).Value)) = "" Then ws.Cells(1, 9).Value = "CSV_CORRETIVO"
     End If
 
     Set TV2_EnsureHistoricoSheet = ws
@@ -856,12 +899,21 @@ End Function
 
 Private Sub TV2_FormatarResultadoSheet()
     Dim ws As Worksheet
+    Dim ultima As Long
 
     Set ws = TV2_EnsureResultadoSheet()
     ws.Rows(1).Font.Bold = True
     ws.Rows(1).Interior.Color = RGB(0, 51, 102)
     ws.Rows(1).Font.Color = RGB(255, 255, 255)
     ws.Columns("A:K").EntireColumn.AutoFit
+    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    If ultima >= 1 Then
+        On Error Resume Next
+        If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
+        On Error GoTo 0
+        ws.Range(ws.Cells(1, 1), ws.Cells(ultima, 11)).AutoFilter
+    End If
+    TV2_AdicionarBotoes ws
 End Sub
 
 Private Sub TV2_FormatarCatalogoSheet()
@@ -872,6 +924,26 @@ Private Sub TV2_FormatarCatalogoSheet()
     ws.Rows(1).Interior.Color = RGB(0, 51, 102)
     ws.Rows(1).Font.Color = RGB(255, 255, 255)
     ws.Columns("A:L").EntireColumn.AutoFit
+    TV2_AdicionarBotoes ws
+End Sub
+
+Private Sub TV2_FormatarHistoricoSheet()
+    Dim ws As Worksheet
+    Dim ultima As Long
+
+    Set ws = TV2_EnsureHistoricoSheet()
+    ws.Rows(1).Font.Bold = True
+    ws.Rows(1).Interior.Color = RGB(0, 51, 102)
+    ws.Rows(1).Font.Color = RGB(255, 255, 255)
+    ws.Columns("A:I").EntireColumn.AutoFit
+    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    If ultima >= 1 Then
+        On Error Resume Next
+        If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
+        On Error GoTo 0
+        ws.Range(ws.Cells(1, 1), ws.Cells(ultima, 9)).AutoFilter
+    End If
+    TV2_AdicionarBotoes ws
 End Sub
 
 Private Sub TV2_ApplyStatusColor(ByVal alvo As Range, ByVal statusTeste As String)
@@ -890,4 +962,269 @@ End Sub
 Private Sub TV2_PausarVisual(ByVal segundos As Long)
     If segundos <= 0 Then Exit Sub
     Application.Wait Now + TimeSerial(0, 0, segundos)
+End Sub
+
+Private Sub TV2_RecolherMenuPrincipal()
+    Dim frmMP As Object
+
+    On Error Resume Next
+    For Each frmMP In VBA.UserForms
+        If TypeName(frmMP) = "Menu_Principal" Then
+            frmMP.Hide
+            Exit For
+        End If
+    Next frmMP
+    Application.Visible = True
+    ThisWorkbook.Activate
+    On Error GoTo 0
+End Sub
+
+Private Sub TV2_AdicionarBotoes(ByVal ws As Worksheet)
+    Dim shp As Shape
+    Dim b As Shape
+    Dim topPos As Double
+    Dim leftMenu As Double
+    Dim leftCentral As Double
+    Dim leftCsv As Double
+
+    On Error Resume Next
+    For Each shp In ws.Shapes
+        If Left$(shp.Name, 8) = "TV2_BTN_" Then shp.Delete
+    Next shp
+    On Error GoTo 0
+
+    topPos = ws.Cells(1, TV2_COLUNA_BOTOES_INICIO).Top + 2
+    leftMenu = ws.Cells(1, TV2_COLUNA_BOTOES_INICIO).Left
+    leftCentral = ws.Cells(1, TV2_COLUNA_BOTOES_INICIO + 3).Left
+    leftCsv = ws.Cells(1, TV2_COLUNA_BOTOES_INICIO + 6).Left
+
+    Set b = ws.Shapes.AddShape(msoShapeRoundedRectangle, leftMenu, topPos, 180, 22)
+    With b
+        .Name = "TV2_BTN_MENU_" & ws.Name
+        .TextFrame2.TextRange.Text = "Voltar ao Menu Principal"
+        .TextFrame2.TextRange.Font.Size = 9
+        .TextFrame2.TextRange.Font.Bold = msoTrue
+        .TextFrame2.TextRange.ParagraphFormat.Alignment = msoAlignCenter
+        .Fill.ForeColor.RGB = RGB(0, 51, 102)
+        .TextFrame2.TextRange.Font.Fill.ForeColor.RGB = RGB(255, 255, 255)
+        .OnAction = "CT_AbrirMenuPrincipal"
+    End With
+
+    Set b = ws.Shapes.AddShape(msoShapeRoundedRectangle, leftCentral, topPos, 140, 22)
+    With b
+        .Name = "TV2_BTN_CENTRAL_" & ws.Name
+        .TextFrame2.TextRange.Text = "Central de Testes"
+        .TextFrame2.TextRange.Font.Size = 9
+        .TextFrame2.TextRange.Font.Bold = msoTrue
+        .TextFrame2.TextRange.ParagraphFormat.Alignment = msoAlignCenter
+        .Fill.ForeColor.RGB = RGB(255, 192, 0)
+        .TextFrame2.TextRange.Font.Fill.ForeColor.RGB = RGB(0, 0, 0)
+        .OnAction = "CT2_AbrirCentral"
+    End With
+
+    Set b = ws.Shapes.AddShape(msoShapeRoundedRectangle, leftCsv, topPos, 160, 22)
+    With b
+        .Name = "TV2_BTN_CSV_" & ws.Name
+        .TextFrame2.TextRange.Text = "Exportar CSVs V2"
+        .TextFrame2.TextRange.Font.Size = 9
+        .TextFrame2.TextRange.Font.Bold = msoTrue
+        .TextFrame2.TextRange.ParagraphFormat.Alignment = msoAlignCenter
+        .Fill.ForeColor.RGB = RGB(0, 128, 0)
+        .TextFrame2.TextRange.Font.Fill.ForeColor.RGB = RGB(255, 255, 255)
+        .OnAction = "TV2_ExportarUltimaExecucaoCSVs"
+    End With
+End Sub
+
+Private Sub TV2_AbrirResultadoExecucao(ByVal execucaoId As String)
+    Dim ws As Worksheet
+    Dim ultima As Long
+
+    Set ws = TV2_EnsureResultadoSheet()
+    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    On Error Resume Next
+    If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
+    On Error GoTo 0
+    If ultima >= 1 Then
+        ws.Range(ws.Cells(1, 1), ws.Cells(ultima, 11)).AutoFilter Field:=1, Criteria1:=execucaoId
+    End If
+    ws.Activate
+    ws.Range("A1").Select
+End Sub
+
+Private Function TV2_UltimaExecucaoId() As String
+    Dim ws As Worksheet
+    Dim ultima As Long
+
+    Set ws = TV2_EnsureHistoricoSheet()
+    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    If ultima >= 2 Then
+        TV2_UltimaExecucaoId = Trim$(CStr(ws.Cells(ultima, 1).Value))
+    End If
+End Function
+
+Private Function TV2_ExecucaoEmFoco() As String
+    Dim ws As Worksheet
+    Dim linhaAtual As Long
+    Dim ultima As Long
+    Dim r As Long
+
+    On Error Resume Next
+    Set ws = ActiveSheet
+    On Error GoTo 0
+
+    If ws Is Nothing Then
+        TV2_ExecucaoEmFoco = TV2_UltimaExecucaoId()
+        Exit Function
+    End If
+
+    Select Case UCase$(ws.Name)
+        Case UCase$(TV2_SHEET_RESULTADO), UCase$(TV2_SHEET_HIST)
+            linhaAtual = ActiveCell.Row
+            If linhaAtual >= 2 Then
+                TV2_ExecucaoEmFoco = Trim$(CStr(ws.Cells(linhaAtual, 1).Value))
+                If TV2_ExecucaoEmFoco <> "" Then Exit Function
+            End If
+
+            ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+            For r = 2 To ultima
+                If Not ws.Rows(r).Hidden Then
+                    TV2_ExecucaoEmFoco = Trim$(CStr(ws.Cells(r, 1).Value))
+                    If TV2_ExecucaoEmFoco <> "" Then Exit Function
+                End If
+            Next r
+    End Select
+
+    TV2_ExecucaoEmFoco = TV2_UltimaExecucaoId()
+End Function
+
+Public Function TV2_ExportarResultadoCSV(ByVal execucaoId As String, Optional ByVal somenteCorretivo As Boolean = False) As String
+    Dim wsSrc As Worksheet
+    Dim pastaBase As String
+    Dim caminho As String
+    Dim fNum As Integer
+    Dim ultLinha As Long
+    Dim r As Long
+    Dim suite As String
+    Dim stamp As String
+    Dim statusAtual As String
+
+    On Error GoTo falha
+
+    If Trim$(execucaoId) = "" Then Exit Function
+    Set wsSrc = TV2_EnsureResultadoSheet()
+
+    pastaBase = Trim$(ThisWorkbook.Path)
+    If Len(pastaBase) = 0 Then pastaBase = Environ$("TEMP")
+
+    suite = TV2_SuiteDaExecucao(execucaoId)
+    If suite = "" Then suite = "V2"
+
+    stamp = Replace$(Replace$(Replace$(execucaoId, ":", ""), "-", ""), " ", "_")
+    If somenteCorretivo Then
+        caminho = pastaBase & Application.PathSeparator & "TesteV2_" & suite & "_Corretivo_" & stamp & ".csv"
+    Else
+        caminho = pastaBase & Application.PathSeparator & "TesteV2_" & suite & "_" & stamp & ".csv"
+    End If
+
+    ultLinha = wsSrc.Cells(wsSrc.Rows.Count, 1).End(xlUp).Row
+    If ultLinha < 2 Then Exit Function
+
+    fNum = FreeFile
+    Open caminho For Output As #fNum
+    Print #fNum, "EXECUCAO_ID;SUITE;CENARIO_ID;AUTOMACAO;DOMINIO;CENARIO;CONTEXTO;OBJETIVO;RESULTADO_ESPERADO;RESULTADO_OBTIDO;STATUS;SIGNIFICADO;OBSERVACAO;DATA_HORA"
+
+    For r = 2 To ultLinha
+        If Trim$(CStr(wsSrc.Cells(r, 1).Value)) = execucaoId Then
+            statusAtual = UCase$(Trim$(CStr(wsSrc.Cells(r, 8).Value)))
+            If (Not somenteCorretivo) Or statusAtual = TV2_STATUS_FAIL Or statusAtual = TV2_STATUS_MANUAL Then
+                Print #fNum, TV2_CsvLinha(wsSrc, r)
+            End If
+        End If
+    Next r
+
+    Close #fNum
+    TV2_ExportarResultadoCSV = caminho
+    Exit Function
+
+falha:
+    On Error Resume Next
+    If fNum <> 0 Then Close #fNum
+    TV2_ExportarResultadoCSV = ""
+End Function
+
+Private Function TV2_SuiteDaExecucao(ByVal execucaoId As String) As String
+    Dim ws As Worksheet
+    Dim ultLinha As Long
+    Dim r As Long
+
+    Set ws = TV2_EnsureResultadoSheet()
+    ultLinha = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    For r = 2 To ultLinha
+        If Trim$(CStr(ws.Cells(r, 1).Value)) = execucaoId Then
+            TV2_SuiteDaExecucao = Trim$(CStr(ws.Cells(r, 2).Value))
+            Exit Function
+        End If
+    Next r
+End Function
+
+Private Function TV2_CsvLinha(ByVal ws As Worksheet, ByVal r As Long) As String
+    Dim dominio As String
+    Dim cenario As String
+    Dim contexto As String
+
+    TV2_LerCatalogoCenario Trim$(CStr(ws.Cells(r, 3).Value)), dominio, cenario, contexto
+
+    TV2_CsvLinha = _
+        TV2_CsvCel(ws.Cells(r, 1).Value) & ";" & _
+        TV2_CsvCel(ws.Cells(r, 2).Value) & ";" & _
+        TV2_CsvCel(ws.Cells(r, 3).Value) & ";" & _
+        TV2_CsvCel(ws.Cells(r, 4).Value) & ";" & _
+        TV2_CsvCel(dominio) & ";" & _
+        TV2_CsvCel(cenario) & ";" & _
+        TV2_CsvCel(contexto) & ";" & _
+        TV2_CsvCel(ws.Cells(r, 5).Value) & ";" & _
+        TV2_CsvCel(ws.Cells(r, 6).Value) & ";" & _
+        TV2_CsvCel(ws.Cells(r, 7).Value) & ";" & _
+        TV2_CsvCel(ws.Cells(r, 8).Value) & ";" & _
+        TV2_CsvCel(ws.Cells(r, 9).Value) & ";" & _
+        TV2_CsvCel(ws.Cells(r, 10).Value) & ";" & _
+        TV2_CsvCel(ws.Cells(r, 11).Value)
+End Function
+
+Private Function TV2_CsvCel(ByVal v As Variant) As String
+    Dim s As String
+
+    If IsDate(v) Then
+        s = Format$(CDate(v), "dd/mm/yyyy hh:nn:ss")
+    Else
+        s = CStr(v)
+    End If
+
+    s = Trim$(Replace$(Replace$(s, vbCr, " "), vbLf, " "))
+    s = Replace$(s, """", """""")
+    If InStr(1, s, ";", vbBinaryCompare) > 0 Or InStr(1, s, """", vbBinaryCompare) > 0 Then
+        TV2_CsvCel = """" & s & """"
+    Else
+        TV2_CsvCel = s
+    End If
+End Function
+
+Private Sub TV2_LerCatalogoCenario(ByVal cenarioId As String, ByRef dominioOut As String, ByRef cenarioOut As String, ByRef contextoOut As String)
+    Dim ws As Worksheet
+    Dim ultLinha As Long
+    Dim r As Long
+
+    If Trim$(cenarioId) = "" Then Exit Sub
+
+    Set ws = TV2_EnsureCatalogoSheet()
+    ultLinha = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+
+    For r = 2 To ultLinha
+        If Trim$(CStr(ws.Cells(r, 1).Value)) = cenarioId Then
+            dominioOut = Trim$(CStr(ws.Cells(r, 5).Value))
+            cenarioOut = Trim$(CStr(ws.Cells(r, 6).Value))
+            contextoOut = Trim$(CStr(ws.Cells(r, 7).Value))
+            Exit Sub
+        End If
+    Next r
 End Sub
