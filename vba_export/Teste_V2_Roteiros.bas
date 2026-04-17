@@ -108,10 +108,10 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     resAval = AvaliarOS(osId, "QA V2", notas, 2, "Cenario smoke V2", "", Date + 6, Date + 15)
     TV2_LogAssert "SMOKE", "SMK_007", "AUTO", _
                   "Avaliar OS e concluir o ciclo", _
-                  "OS concluida e fila com posicoes canonicas", _
-                  "SUCESSO_AVAL=" & CStr(resAval.Sucesso) & "; STATUS_OS=" & TV2_StatusOS(osId) & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()), _
+                  "OS concluida e fila com ordem integra", _
+                  "SUCESSO_AVAL=" & CStr(resAval.Sucesso) & "; STATUS_OS=" & TV2_StatusOS(osId) & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & "; POSICOES=" & TV2_FilaComPosicoesCsv(TV2_AtivCanonA()), _
                   "Fecha o fluxo core ponta a ponta no nivel de servico", _
-                  (resAval.Sucesso And TV2_StatusOS(osId) = "CONCLUIDA" And TV2_FilaTemPosicoesCanonicas(TV2_AtivCanonA(), 3))
+                  (resAval.Sucesso And TV2_StatusOS(osId) = "CONCLUIDA" And TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3))
 
     TV2_LogManual "SMOKE", "MIG_001", _
                   "Entidade inexistente deve falhar no servico de Pre-OS", _
@@ -190,12 +190,12 @@ Public Sub TV2_RunStress(Optional ByVal iteracoes As Long = 12, Optional ByVal v
             ok = False
         End If
 
-        ok = ok And TV2_FilaTemPosicoesCanonicas(TV2_AtivCanonA(), 3)
+        ok = ok And TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3)
 
         TV2_LogAssert "STRESS", "STR_001", "AUTO", _
                       "Manter invariantes de fila em repeticao controlada", _
-                      "Fila com IDs unicos e posicoes 1..3 apos cada iteracao", _
-                      detalhe & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()), _
+                      "Fila com IDs unicos, ordem integra e posicoes estritamente crescentes", _
+                      detalhe & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & "; POSICOES=" & TV2_FilaComPosicoesCsv(TV2_AtivCanonA()), _
                       "Busca regressao estrutural sob repeticao", ok
     Next i
 

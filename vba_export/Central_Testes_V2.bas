@@ -19,10 +19,11 @@ Public Sub CT2_AbrirCentral()
         "[1] Smoke rapido" & vbCrLf & _
         "[2] Smoke assistido" & vbCrLf & _
         "[3] Stress deterministico" & vbCrLf & _
-        "[4] Gerar catalogo semantico" & vbCrLf & _
-        "[5] Abrir RESULTADO_QA_V2" & vbCrLf & _
-        "[6] Abrir CATALOGO_CENARIOS_V2" & vbCrLf & _
-        "[7] Abrir HISTORICO_QA_V2" & vbCrLf & vbCrLf & _
+        "[4] Stress assistido" & vbCrLf & _
+        "[5] Abrir roteiro assistido V2" & vbCrLf & _
+        "[6] Abrir RESULTADO_QA_V2" & vbCrLf & _
+        "[7] Abrir CATALOGO_CENARIOS_V2" & vbCrLf & _
+        "[8] Abrir HISTORICO_QA_V2" & vbCrLf & vbCrLf & _
         "Digite o numero:", _
         "Central de Testes V2", "1"))
 
@@ -36,13 +37,14 @@ Public Sub CT2_AbrirCentral()
         Case "3"
             CT2_ExecutarStress
         Case "4"
-            TV2_GerarCatalogoBase
-            TV2_AbrirCatalogo
+            CT2_ExecutarStressAssistido
         Case "5"
-            TV2_AbrirResultado
+            TV2_AbrirRoteiroAssistido
         Case "6"
-            TV2_AbrirCatalogo
+            TV2_AbrirResultado
         Case "7"
+            TV2_AbrirCatalogo
+        Case "8"
             TV2_AbrirHistorico
         Case Else
             MsgBox "Opcao invalida.", vbInformation, "Central V2"

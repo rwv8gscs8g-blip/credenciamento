@@ -14,6 +14,7 @@ Option Explicit
 Public Const TV2_SHEET_RESULTADO As String = "RESULTADO_QA_V2"
 Public Const TV2_SHEET_CATALOGO As String = "CATALOGO_CENARIOS_V2"
 Public Const TV2_SHEET_HIST As String = "HISTORICO_QA_V2"
+Public Const TV2_SHEET_ROTEIRO As String = "ROTEIRO_ASSISTIDO_V2"
 
 Public Const TV2_STATUS_OK As String = "OK"
 Public Const TV2_STATUS_FAIL As String = "FALHA"
@@ -196,6 +197,16 @@ Public Sub TV2_AbrirCatalogo()
     ws.Range("A2").Select
 End Sub
 
+Public Sub TV2_AbrirRoteiroAssistido()
+    Dim ws As Worksheet
+    TV2_PrepararNavegacaoHumana
+    TV2_GerarCatalogoBase
+    Set ws = TV2_EnsureRoteiroSheet()
+    TV2_FormatarRoteiroSheet
+    ws.Activate
+    ws.Range("A2").Select
+End Sub
+
 Public Sub TV2_AbrirHistorico()
     Dim ws As Worksheet
     TV2_PrepararNavegacaoHumana
@@ -264,20 +275,23 @@ Public Sub TV2_GerarCatalogoBase()
     ws.Cells(1, 12).Value = "OBS_OPERACIONAL"
 
     nr = 2
-    TV2_AddCatalogo ws, nr, "SMK_001", "SMOKE", "RAPIDO", "AUTO", "Baseline", "Fila inicial canonica", "Base transacional vazia; 3 empresas credenciadas no item A", "Validar baseline e setup deterministico", "Fila inicial 001,002,003", "Garante ponto de partida repetivel", "AUTOMATIZADO_ATUAL", "Executado no smoke"
+    TV2_AddCatalogo ws, nr, "SMK_001", "SMOKE", "RAPIDO", "AUTO", "Baseline", "Fila inicial canonica", "Base operacional limpa; configuracao canonica; servicos padrao garantidos; 3 empresas credenciadas no item A", "Validar baseline e setup deterministico", "Fila inicial 001,002,003", "Garante ponto de partida repetivel", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "SMK_002", "SMOKE", "RAPIDO", "AUTO", "Rodizio", "Selecionar empresa do topo", "Fila canonica sem bloqueios", "Provar o contrato minimo do rodizio", "Seleciona EMP_ID=001", "Valida o fluxo central de indicacao", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "SMK_003", "SMOKE", "RAPIDO", "AUTO", "Pre-OS", "Emitir Pre-OS basica", "Entidade valida; atividade valida; quantidade positiva", "Validar persistencia minima de PRE_OS", "STATUS=AGUARDANDO_ACEITE e VL_EST coerente", "Confirma emissao basica sem UI", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "SMK_004", "SMOKE", "RAPIDO", "AUTO", "Rodizio", "Pre-OS pendente nao move fila", "Empresa do topo com PRE_OS aguardando aceite", "Validar filtro E e invariantes de nao-movimento", "Proxima indicacao retorna a segunda empresa; fila mantida", "Evita punicao indevida", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "SMK_005", "SMOKE", "RAPIDO", "AUTO", "Pre-OS", "Recusa avanca fila e pune", "PRE_OS aguardando aceite para a empresa do topo", "Validar politica de recusa com punicao", "Fila move para 002,003,001 e QTD_RECUSAS sobe", "Garante giro correto apos recusa", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "SMK_006", "SMOKE", "RAPIDO", "AUTO", "OS", "Emitir OS converte PRE_OS", "PRE_OS valida aguardando aceite", "Validar conversao minima Pre-OS -> OS", "PRE_OS convertida; OS em execucao", "Confirma integracao entre servicos", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "SMK_007", "SMOKE", "RAPIDO", "AUTO", "Avaliacao", "Avaliar OS e concluir", "OS em execucao com notas validas", "Validar fechamento minimo da OS", "OS concluida e fila continua consistente", "Fecha o ciclo core ponta a ponta", "AUTOMATIZADO_ATUAL", "Executado no smoke"
-    TV2_AddCatalogo ws, nr, "STR_001", "STRESS", "COMPLETO", "AUTO", "Integridade", "Giros repetidos com recusa e conclusao", "Sequencia deterministica de 12 iteracoes", "Verificar invariantes de fila em repeticao", "IDs unicos; posicoes 1..3 sem buracos", "Captura regressao estrutural em lote", "AUTOMATIZADO_ATUAL", "Executado no stress"
-    TV2_AddCatalogo ws, nr, "ASS_001", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual de menu e feedback", "Humano acompanha selecao de abas e resultados", "Dar leitura operacional dos testes", "Operador entende o que esta sendo testado", "Suporta homologacao observada", "PREVISTO_V2", "Executar smoke assistido"
+    TV2_AddCatalogo ws, nr, "STR_001", "STRESS", "COMPLETO", "AUTO", "Integridade", "Giros repetidos com recusa e conclusao", "Sequencia deterministica de 12 iteracoes", "Verificar invariantes de fila em repeticao", "IDs unicos; ordem relativa integra e posicoes estritamente crescentes", "Captura regressao estrutural em lote", "AUTOMATIZADO_ATUAL", "Executado no stress"
+    TV2_AddCatalogo ws, nr, "ASS_001", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do smoke assistido", "Humano acompanha fechamento do menu, status bar e abertura do resultado", "Dar leitura operacional do smoke", "Operador entende o que esta sendo testado", "Suporta homologacao observada", "PREVISTO_V2", "Executar smoke assistido"
+    TV2_AddCatalogo ws, nr, "ASS_002", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do stress assistido", "Humano acompanha lote deterministico sem precisar abrir o menu", "Dar leitura operacional do stress", "Operador acompanha o teste de repeticao sem perder contexto", "Suporta homologacao observada", "PREVISTO_V2", "Executar stress assistido"
+    TV2_AddCatalogo ws, nr, "ASS_003", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Botoes de retorno e central", "Humano valida navegacao pelos botoes das abas V2", "Garantir navegacao humana assistida", "Botoes reabrem menu e central corretamente", "Fecha o ciclo operacional da homologacao", "PREVISTO_V2", "Validar apos smoke ou stress"
     TV2_AddCatalogo ws, nr, "MIG_001", "MIGRACAO", "RAPIDO", "BLOQUEADO", "Pre-OS", "Entidade inexistente deve falhar no servico", "Hoje a guarda principal mora na interface", "Migrar validacao de ENT_ID para Svc_PreOS", "Servico retorna erro sem depender de form", "Remove dependencia da interface", "DEPENDENCIA_SERVICO", "Backlog aprovado"
     TV2_AddCatalogo ws, nr, "MIG_002", "MIGRACAO", "RAPIDO", "BLOQUEADO", "OS", "Data prevista invalida deve falhar no servico", "Hoje a guarda principal mora na interface", "Migrar validacao de DT_PREV_TERMINO para Svc_OS", "Servico rejeita data incoerente", "Torna automacao sem UI confiavel", "DEPENDENCIA_SERVICO", "Backlog aprovado"
     TV2_AddCatalogo ws, nr, "MIG_003", "MIGRACAO", "RAPIDO", "BLOQUEADO", "Avaliacao", "Divergencia exige justificativa no servico", "Hoje a guarda principal mora na interface", "Migrar regra de justificativa para Svc_Avaliacao", "Servico rejeita divergencia sem motivo", "Fecha lacuna de regra de negocio", "DEPENDENCIA_SERVICO", "Backlog aprovado"
 
     TV2_FormatarCatalogoSheet
+    TV2_GerarRoteiroAssistido
 End Sub
 
 Private Sub TV2_AddCatalogo( _
@@ -337,6 +351,7 @@ Public Sub TV2_PrepararCenarioTriploCanonico()
     TV2_CredenciarAtividade "001", gTV2AtivCanonA, "001"
     TV2_CredenciarAtividade "002", gTV2AtivCanonA, "001"
     TV2_CredenciarAtividade "003", gTV2AtivCanonA, "001"
+    TV2_ValidarCenarioTriploCanonico
 End Sub
 
 Private Sub TV2_SetConfigCanonica()
@@ -702,6 +717,16 @@ Public Function TV2_QtdRecusasEmpresa(ByVal empId As String) As Long
     End If
 End Function
 
+Public Function TV2_StatusEmpresa(ByVal empId As String) As String
+    Dim linhaEmp As Long
+    Dim emp As TEmpresa
+
+    emp = LerEmpresa(empId, linhaEmp)
+    If linhaEmp > 0 Then
+        TV2_StatusEmpresa = Trim$(emp.STATUS_GLOBAL)
+    End If
+End Function
+
 Public Function TV2_StatusPreOS(ByVal preosId As String) As String
     Dim ws As Worksheet
     Dim linha As Long
@@ -747,37 +772,49 @@ Public Function TV2_StatusOS(ByVal osId As String) As String
     TV2_StatusOS = Trim$(os.STATUS_OS)
 End Function
 
-Public Function TV2_FilaTemPosicoesCanonicas(ByVal ativId As String, ByVal qtdEsperada As Long) As Boolean
-    Dim ws As Worksheet
-    Dim linha As Long
-    Dim dictPos As Object
+Public Function TV2_FilaTemOrdemIntegra(ByVal ativId As String, ByVal qtdEsperada As Long) As Boolean
+    Dim fila() As TCredenciamento
     Dim dictEmp As Object
-    Dim posicao As Long
+    Dim i As Long
+    Dim ultimaPosicao As Long
+    Dim empId As String
 
-    Set dictPos = CreateObject("Scripting.Dictionary")
+    ' O contrato real do repositorio preserva ordem relativa e posicoes crescentes,
+    ' mas nao renumera necessariamente a fila para 1..N apos cada movimento.
+    fila = BuscarFila(ativId)
+    If fila(LBound(fila)).CRED_ID = "" Then Exit Function
+    If (UBound(fila) - LBound(fila) + 1) <> qtdEsperada Then Exit Function
+
     Set dictEmp = CreateObject("Scripting.Dictionary")
-    Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    ultimaPosicao = 0
 
-    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_CREDENCIADOS)
-        If IdsIguais(ws.Cells(linha, COL_CRED_ATIV_ID).Value, ativId) Then
-            posicao = CLng(Val(ws.Cells(linha, COL_CRED_POSICAO).Value))
-            If posicao <= 0 Then Exit Function
-            If dictPos.Exists(CStr(posicao)) Then Exit Function
-            dictPos.Add CStr(posicao), True
+    For i = LBound(fila) To UBound(fila)
+        empId = TV2_Pad3(fila(i).EMP_ID)
+        If dictEmp.Exists(empId) Then Exit Function
+        dictEmp.Add empId, True
 
-            If dictEmp.Exists(TV2_Pad3(ws.Cells(linha, COL_CRED_EMP_ID).Value)) Then Exit Function
-            dictEmp.Add TV2_Pad3(ws.Cells(linha, COL_CRED_EMP_ID).Value), True
-        End If
-    Next linha
+        If fila(i).POSICAO_FILA <= 0 Then Exit Function
+        If fila(i).POSICAO_FILA <= ultimaPosicao Then Exit Function
+        ultimaPosicao = fila(i).POSICAO_FILA
+    Next i
 
-    If dictPos.Count <> qtdEsperada Then Exit Function
-    If dictEmp.Count <> qtdEsperada Then Exit Function
+    TV2_FilaTemOrdemIntegra = True
+End Function
 
-    For posicao = 1 To qtdEsperada
-        If Not dictPos.Exists(CStr(posicao)) Then Exit Function
-    Next posicao
+Public Function TV2_FilaComPosicoesCsv(ByVal ativId As String) As String
+    Dim fila() As TCredenciamento
+    Dim i As Long
+    Dim txt As String
 
-    TV2_FilaTemPosicoesCanonicas = True
+    fila = BuscarFila(ativId)
+    If fila(LBound(fila)).CRED_ID = "" Then Exit Function
+
+    For i = LBound(fila) To UBound(fila)
+        If txt <> "" Then txt = txt & ","
+        txt = txt & TV2_Pad3(fila(i).EMP_ID) & "#" & CStr(fila(i).POSICAO_FILA)
+    Next i
+
+    TV2_FilaComPosicoesCsv = txt
 End Function
 
 Public Function TV2_AtivCanonA() As String
@@ -893,6 +930,21 @@ Private Function TV2_EnsureCatalogoSheet() As Worksheet
     Set TV2_EnsureCatalogoSheet = ws
 End Function
 
+Private Function TV2_EnsureRoteiroSheet() As Worksheet
+    Dim ws As Worksheet
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Sheets(TV2_SHEET_ROTEIRO)
+    On Error GoTo 0
+
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        ws.Name = TV2_SHEET_ROTEIRO
+    End If
+
+    Set TV2_EnsureRoteiroSheet = ws
+End Function
+
 Private Function TV2_EnsureHistoricoSheet() As Worksheet
     Dim ws As Worksheet
 
@@ -964,6 +1016,25 @@ Private Sub TV2_FormatarCatalogoSheet()
     TV2_AdicionarBotoes ws
 End Sub
 
+Private Sub TV2_FormatarRoteiroSheet()
+    Dim ws As Worksheet
+    Dim ultima As Long
+
+    Set ws = TV2_EnsureRoteiroSheet()
+    ws.Rows(1).Font.Bold = True
+    ws.Rows(1).Interior.Color = RGB(0, 51, 102)
+    ws.Rows(1).Font.Color = RGB(255, 255, 255)
+    ws.Columns("A:H").EntireColumn.AutoFit
+    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    If ultima >= 1 Then
+        On Error Resume Next
+        If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
+        On Error GoTo 0
+        ws.Range(ws.Cells(1, 1), ws.Cells(ultima, 8)).AutoFilter
+    End If
+    TV2_AdicionarBotoes ws
+End Sub
+
 Private Sub TV2_FormatarHistoricoSheet()
     Dim ws As Worksheet
     Dim ultima As Long
@@ -982,6 +1053,112 @@ Private Sub TV2_FormatarHistoricoSheet()
     End If
     TV2_AdicionarBotoes ws
 End Sub
+
+Private Sub TV2_GerarRoteiroAssistido()
+    Dim ws As Worksheet
+    Dim nr As Long
+
+    Set ws = TV2_EnsureRoteiroSheet()
+    ws.Cells.Clear
+
+    ws.Cells(1, 1).Value = "CENARIO_ID"
+    ws.Cells(1, 2).Value = "TIPO"
+    ws.Cells(1, 3).Value = "OBJETIVO"
+    ws.Cells(1, 4).Value = "ACAO_HUMANA"
+    ws.Cells(1, 5).Value = "RESULTADO_ESPERADO"
+    ws.Cells(1, 6).Value = "O_QUE_OBSERVAR"
+    ws.Cells(1, 7).Value = "SIGNIFICADO"
+    ws.Cells(1, 8).Value = "STATUS_ATUAL"
+
+    nr = 2
+    TV2_AddRoteiro ws, nr, "SMK_001", "AUTO", "Validar setup deterministico", "Apenas executar o smoke e conferir a primeira linha automatica", "Fila inicial 001,002,003", "Resultado automatizado na aba RESULTADO_QA_V2", "Confirma que o cenario foi reconstruido do zero", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "SMK_002", "AUTO", "Validar selecao do topo da fila", "Apenas conferir o resultado automatizado do cenario", "EMP_ID=001", "Linha do cenario SMK_002", "Garante contrato minimo do rodizio", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "SMK_003", "AUTO", "Validar emissao de Pre-OS", "Apenas conferir o resultado automatizado do cenario", "PRE_OS aguardando aceite com valor estimado coerente", "Linha do cenario SMK_003", "Garante emissao minima sem interface", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "SMK_004", "AUTO", "Validar filtro E sem punicao", "Apenas conferir o resultado automatizado do cenario", "Rodizio pula a empresa com PRE_OS pendente sem mover a fila", "Linha do cenario SMK_004", "Evita giro indevido", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "SMK_005", "AUTO", "Validar recusa com punicao", "Apenas conferir o resultado automatizado do cenario", "Fila gira e QTD_RECUSAS sobe", "Linha do cenario SMK_005", "Confirma punicao por recusa", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "SMK_006", "AUTO", "Validar conversao de Pre-OS em OS", "Apenas conferir o resultado automatizado do cenario", "PRE_OS convertida; OS em execucao; fila gira", "Linha do cenario SMK_006", "Confirma integracao entre servicos", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "SMK_007", "AUTO", "Validar conclusao de OS", "Apenas conferir o resultado automatizado do cenario", "Avaliacao bem-sucedida; STATUS_OS=CONCLUIDA; fila continua integra", "Linha do cenario SMK_007", "Fecha o ciclo ponta a ponta", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "STR_001", "AUTO", "Validar repeticao deterministica do rodizio", "Executar Stress deterministico e acompanhar somente se houver falha", "Fila sem duplicidade e em ordem integra apos cada iteracao", "Linhas STR_001 no resultado", "Captura degradacao estrutural em lote", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "ASS_001", "ASSISTIDO", "Acompanhar visualmente o smoke assistido", "Executar a opcao 2 da central V2 e observar a tela durante toda a execucao", "Menu principal fechado; status bar evoluindo; aba de resultado assumindo o foco ao final", "Fechamento do menu, transicao para planilha e feedback visual", "Prova que o operador consegue assistir ao smoke sem interferencia do formulario", "ASSISTIDO"
+    TV2_AddRoteiro ws, nr, "ASS_002", "ASSISTIDO", "Acompanhar visualmente o stress assistido", "Executar a opcao 4 da central V2 e acompanhar apenas o giro da fila e a abertura do resultado ao final", "Sem erro fatal; resultados STR_001 visiveis; menu principal fechado durante toda a bateria", "Status bar, aba RESULTADO_QA_V2 e ausencia do formulario do menu", "Permite homologacao assistida do lote deterministico", "ASSISTIDO"
+    TV2_AddRoteiro ws, nr, "ASS_003", "ASSISTIDO", "Confirmar retorno ao menu e botoes da V2", "Ao fim do smoke ou stress, clicar nos botoes de retorno e central de testes", "Botoes funcionam e reabrem o fluxo correto", "Topo das abas V2", "Confirma operacao humana sem perder contexto", "ASSISTIDO"
+    TV2_AddRoteiro ws, nr, "MIG_001", "ASSISTIDO", "Validar que ENT_ID invalida ainda depende da interface", "Tentar emitir Pre-OS com entidade invalida via interface e via servico quando a migracao ocorrer", "Hoje a interface barra; no futuro o servico deve barrar sozinho", "Mensagem exibida e comportamento do servico", "Mostra a lacuna de migracao UI -> servico", "PENDENTE_MIGRACAO"
+    TV2_AddRoteiro ws, nr, "MIG_002", "ASSISTIDO", "Validar data invalida de OS", "Tentar emitir OS com data incoerente", "Hoje a interface barra; no futuro o servico deve barrar sozinho", "Mensagem exibida e comportamento do servico", "Mostra a lacuna de migracao UI -> servico", "PENDENTE_MIGRACAO"
+    TV2_AddRoteiro ws, nr, "MIG_003", "ASSISTIDO", "Validar justificativa obrigatoria na divergencia", "Avaliar OS com divergencia entre realizado e orcado sem justificativa", "Hoje a interface exige justificativa; no futuro o servico deve exigir sozinho", "Prompt de justificativa e retorno do servico", "Fecha a lacuna de regra de negocio", "PENDENTE_MIGRACAO"
+
+    TV2_FormatarRoteiroSheet
+End Sub
+
+Private Sub TV2_AddRoteiro( _
+    ByVal ws As Worksheet, _
+    ByRef nr As Long, _
+    ByVal cenarioId As String, _
+    ByVal tipo As String, _
+    ByVal objetivo As String, _
+    ByVal acaoHumana As String, _
+    ByVal esperado As String, _
+    ByVal observar As String, _
+    ByVal significado As String, _
+    ByVal statusAtual As String _
+)
+    ws.Cells(nr, 1).Value = cenarioId
+    ws.Cells(nr, 2).Value = tipo
+    ws.Cells(nr, 3).Value = objetivo
+    ws.Cells(nr, 4).Value = acaoHumana
+    ws.Cells(nr, 5).Value = esperado
+    ws.Cells(nr, 6).Value = observar
+    ws.Cells(nr, 7).Value = significado
+    ws.Cells(nr, 8).Value = statusAtual
+    nr = nr + 1
+End Sub
+
+Private Sub TV2_ValidarCenarioTriploCanonico()
+    Dim mensagem As String
+
+    If TV2_CountRows(SHEET_EMPRESAS) <> 3 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "EMPRESAS=" & CStr(TV2_CountRows(SHEET_EMPRESAS)))
+    If TV2_CountRows(SHEET_ENTIDADE) <> 3 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "ENTIDADE=" & CStr(TV2_CountRows(SHEET_ENTIDADE)))
+    If TV2_CountRows(SHEET_CREDENCIADOS) <> 3 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "CREDENCIADOS=" & CStr(TV2_CountRows(SHEET_CREDENCIADOS)))
+    If TV2_CountRows(SHEET_PREOS) <> 0 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "PRE_OS=" & CStr(TV2_CountRows(SHEET_PREOS)))
+    If TV2_CountRows(SHEET_CAD_OS) <> 0 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "CAD_OS=" & CStr(TV2_CountRows(SHEET_CAD_OS)))
+    If gTV2AtivCanonA = "" Or gTV2AtivCanonB = "" Or gTV2AtivCanonC = "" Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "ATIVIDADES_CANONICAS_NAO_MAPEADAS")
+    If Abs(CDbl(TV2_ValorUnitServico(gTV2AtivCanonA, "001")) - 100#) > 0.001 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "SERV_A=" & Format$(TV2_ValorUnitServico(gTV2AtivCanonA, "001"), "0.00"))
+    If Abs(CDbl(TV2_ValorUnitServico(gTV2AtivCanonB, "001")) - 200#) > 0.001 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "SERV_B=" & Format$(TV2_ValorUnitServico(gTV2AtivCanonB, "001"), "0.00"))
+    If Abs(CDbl(TV2_ValorUnitServico(gTV2AtivCanonC, "001")) - 300#) > 0.001 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "SERV_C=" & Format$(TV2_ValorUnitServico(gTV2AtivCanonC, "001"), "0.00"))
+    If CLng(Val(ThisWorkbook.Sheets(SHEET_CONFIG).Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value)) <> 5 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "CFG_PRAZO_PREOS")
+    If CLng(Val(ThisWorkbook.Sheets(SHEET_CONFIG).Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value)) <> 3 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "CFG_MAX_RECUSAS")
+    If CDbl(Val(ThisWorkbook.Sheets(SHEET_CONFIG).Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value)) <> 5# Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "CFG_NOTA_MINIMA")
+    If TV2_FilaCsv(gTV2AtivCanonA) <> "001,002,003" Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "FILA_A=" & TV2_FilaCsv(gTV2AtivCanonA))
+    If TV2_StatusEmpresa("001") <> TV2_EMP_STATUS_ATIVA Or TV2_QtdRecusasEmpresa("001") <> 0 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "EMP001=" & TV2_StatusEmpresa("001") & ";QTD=" & CStr(TV2_QtdRecusasEmpresa("001")))
+    If TV2_StatusEmpresa("002") <> TV2_EMP_STATUS_ATIVA Or TV2_QtdRecusasEmpresa("002") <> 0 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "EMP002=" & TV2_StatusEmpresa("002") & ";QTD=" & CStr(TV2_QtdRecusasEmpresa("002")))
+    If TV2_StatusEmpresa("003") <> TV2_EMP_STATUS_ATIVA Or TV2_QtdRecusasEmpresa("003") <> 0 Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "EMP003=" & TV2_StatusEmpresa("003") & ";QTD=" & CStr(TV2_QtdRecusasEmpresa("003")))
+    If Not TV2_FilaTemOrdemIntegra(gTV2AtivCanonA, 3) Then mensagem = TV2_AcumularFalhaEstrutural(mensagem, "ORDEM_FILA=" & TV2_FilaComPosicoesCsv(gTV2AtivCanonA))
+
+    If mensagem <> "" Then
+        Err.Raise 1004, "TV2_ValidarCenarioTriploCanonico", "Cenario triplo V2 inconsistente: " & mensagem
+    End If
+End Sub
+
+Private Function TV2_AcumularFalhaEstrutural(ByVal atual As String, ByVal trecho As String) As String
+    If atual <> "" Then
+        TV2_AcumularFalhaEstrutural = atual & " | " & trecho
+    Else
+        TV2_AcumularFalhaEstrutural = trecho
+    End If
+End Function
+
+Private Function TV2_ValorUnitServico(ByVal ativId As String, ByVal servId As String) As Currency
+    Dim ws As Worksheet
+    Dim linha As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_SERV)
+    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_CAD_SERV)
+        If IdsIguais(ws.Cells(linha, COL_SERV_ATIV_ID).Value, ativId) And _
+           IdsIguais(ws.Cells(linha, COL_SERV_ID).Value, servId) Then
+            TV2_ValorUnitServico = CCur(Val(ws.Cells(linha, COL_SERV_VALOR_UNIT).Value))
+            Exit Function
+        End If
+    Next linha
+End Function
 
 Private Sub TV2_ApplyStatusColor(ByVal alvo As Range, ByVal statusTeste As String)
     Select Case UCase$(Trim$(statusTeste))

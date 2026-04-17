@@ -2,7 +2,7 @@
 titulo: Retomada do desenvolvimento na V12.0.0180 e fundacao da bateria V2
 data: 2026-04-17
 autor: GPT-5 (Codex)
-versao: V12.0.0188
+versao: V12.0.0189
 status: ativo
 tags: [bastao, testes, estabilizacao]
 ---
@@ -39,6 +39,9 @@ Havia tentativa local posterior a `0180` focada no importador VBA, sem commit pr
 - o proprio `Menu_Principal` passa a se recolher antes de abrir a `Central_Testes`, reduzindo interferencia do formulario modal
 - a V2 passa a exportar apenas CSV de falhas reais, e somente quando houver `FALHA` na execucao
 - o recolhimento passa a descarregar a instancia real criada por `VBA.UserForms.Add("Menu_Principal")`, corrigindo os casos em que o formulario permanecia visivel
+- a V2 passa a validar o contrato real da fila: ordem relativa integra e posicoes crescentes, sem exigir renumeracao artificial `1..N`
+- o cenario deterministico passa a validar tambem configuracao canonica e servicos canonicos antes de executar smoke/stress
+- a Central V2 passa a expor `stress assistido` e `roteiro assistido`, deixando explicito o que e automatico e o que o humano deve observar
 
 ## Pendencias
 
