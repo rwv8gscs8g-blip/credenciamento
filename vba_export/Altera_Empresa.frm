@@ -394,6 +394,13 @@ On Error GoTo erro_carregamento:
     Dim senhaInativas As String
     Dim estProtCred As Boolean
     Dim senhaCred As String
+    Dim coll As Collection
+    Dim cnpjEmpresa As String
+    Dim linhasDel() As Long
+    Dim nDelDup As Long
+    Dim kDup As Long
+    Dim jDup As Long
+    Dim tmpDup As Long
 
     If m_empresaId = "" Then
         MsgBox "ID da empresa n" & ChrW(227) & "o identificado. Feche e reabra o formul" & ChrW(225) & "rio.", _
@@ -424,6 +431,38 @@ On Error GoTo erro_carregamento:
     If EncontrarID Is Nothing Then
         MsgBox "Empresa n" & ChrW(227) & "o encontrada na aba EMPRESAS.", vbExclamation, "Inativação"
         Exit Sub
+    End If
+
+    cnpjEmpresa = Trim$(CStr(EncontrarID.Offset(0, 1).Value))
+    Set coll = Util_EmpresaInativos_ColetarLinhasMesmaChave(wsInativas, LINHA_DADOS, CStr(EncontrarID.Value), cnpjEmpresa)
+    If Not coll Is Nothing Then
+        nDelDup = coll.Count
+        If nDelDup > 0 Then
+            ReDim linhasDel(1 To nDelDup)
+            For kDup = 1 To nDelDup
+                linhasDel(kDup) = CLng(coll(kDup))
+            Next kDup
+            For kDup = 1 To nDelDup - 1
+                For jDup = kDup + 1 To nDelDup
+                    If linhasDel(kDup) < linhasDel(jDup) Then
+                        tmpDup = linhasDel(kDup)
+                        linhasDel(kDup) = linhasDel(jDup)
+                        linhasDel(jDup) = tmpDup
+                    End If
+                Next jDup
+            Next kDup
+
+            If Not Util_PrepararAbaParaEscrita(wsInativas, estProtInativas, senhaInativas) Then
+                MsgBox "Não foi possível preparar EMPRESAS_INATIVAS para escrita.", vbCritical, "Inativação"
+                Exit Sub
+            End If
+            For kDup = 1 To nDelDup
+                If Not Util_ExcluirLinhaSegura(wsInativas, linhasDel(kDup)) Then
+                    Err.Raise 1004, "Empresa_InativarSelecionada", "Nao foi possivel excluir linha " & CStr(linhasDel(kDup)) & " em EMPRESAS_INATIVAS."
+                End If
+            Next kDup
+            Call Util_RestaurarProtecaoAba(wsInativas, estProtInativas, senhaInativas)
+        End If
     End If
 
     ' Copiar linha inteira para aba de inativas (sem .Select)

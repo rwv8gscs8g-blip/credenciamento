@@ -532,7 +532,7 @@ Dim wsEntInativas As Worksheet
 Dim total As Long
 Dim vistos As Object
 Dim chave As String
-Dim linhasUnicas As Collection
+Dim chaves As Collection
 Dim i As Long
 Dim linhaUsada As Long
 
@@ -552,23 +552,23 @@ End With
 If NLinhas < LINHA_DADOS Then Exit Sub
 
 Set vistos = CreateObject("Scripting.Dictionary")
-Set linhasUnicas = New Collection
+Set chaves = New Collection
 For linha = LINHA_DADOS To NLinhas
     If LinhaEntidadeInativosConsideravel(wsEntInativas, linha) Then
         chave = EntidadeInativos_ChaveDedupeLinha(wsEntInativas, linha)
         If Not vistos.Exists(chave) Then
-            vistos.Add chave, 1
-            linhasUnicas.Add linha
+            chaves.Add chave
         End If
+        vistos(chave) = linha
     End If
 Next linha
 
-total = linhasUnicas.Count
+total = chaves.Count
 If total = 0 Then Exit Sub
 
 ReDim arrayitems(1 To total, 1 To 22)
-For i = 1 To linhasUnicas.Count
-    linhaUsada = CLng(linhasUnicas(i))
+For i = 1 To chaves.Count
+    linhaUsada = CLng(vistos(CStr(chaves(i))))
     For Coluna = 1 To 22
         arrayitems(i, Coluna) = SafeListVal(wsEntInativas.Cells(linhaUsada, Coluna).Value)
     Next Coluna
@@ -795,7 +795,7 @@ Dim wsEmpInativas As Worksheet
 Dim total As Long
 Dim vistos As Object
 Dim chave As String
-Dim linhasUnicas As Collection
+Dim chaves As Collection
 Dim i As Long
 Dim linhaUsada As Long
 Dim linha As Long
@@ -816,23 +816,23 @@ End With
 If NLinhas < LINHA_DADOS Then Exit Sub
 
 Set vistos = CreateObject("Scripting.Dictionary")
-Set linhasUnicas = New Collection
+Set chaves = New Collection
 For linha = LINHA_DADOS To NLinhas
     If LinhaEmpresaInativosConsideravel(wsEmpInativas, linha) Then
         chave = EmpresaInativos_ChaveDedupeLinha(wsEmpInativas, linha)
         If Not vistos.Exists(chave) Then
-            vistos.Add chave, 1
-            linhasUnicas.Add linha
+            chaves.Add chave
         End If
+        vistos(chave) = linha
     End If
 Next linha
 
-total = linhasUnicas.Count
+total = chaves.Count
 If total = 0 Then Exit Sub
 
 ReDim arrayitems(1 To total, 1 To 19)
-For i = 1 To linhasUnicas.Count
-    linhaUsada = CLng(linhasUnicas(i))
+For i = 1 To chaves.Count
+    linhaUsada = CLng(vistos(CStr(chaves(i))))
     For Coluna = 1 To 19
         arrayitems(i, Coluna) = SafeListVal(wsEmpInativas.Cells(linhaUsada, Coluna).Value)
     Next Coluna

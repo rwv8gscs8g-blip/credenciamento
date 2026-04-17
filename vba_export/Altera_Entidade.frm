@@ -111,6 +111,13 @@ On Error GoTo erro_carregamento:
     Dim linhaFinal As Long
     Dim estEntInativProt As Boolean
     Dim senhaEntInativ As String
+    Dim coll As Collection
+    Dim cnpjEntidade As String
+    Dim linhasDel() As Long
+    Dim nDel As Long
+    Dim k As Long
+    Dim j As Long
+    Dim tmp As Long
 
     If m_entidadeId = "" Then
         MsgBox "ID da entidade n" & ChrW(227) & "o identificado. Feche e reabra o formul" & ChrW(225) & "rio.", _
@@ -138,6 +145,35 @@ On Error GoTo erro_carregamento:
     If EncontrarID Is Nothing Then
         MsgBox "Entidade n" & ChrW(227) & "o encontrada.", vbExclamation, "Inativação"
         Exit Sub
+    End If
+
+    cnpjEntidade = Trim$(CStr(EncontrarID.Offset(0, 1).Value))
+    Set coll = Util_EntidadeInativos_ColetarLinhasMesmaChave(wsEntInativas, LINHA_DADOS, CStr(EncontrarID.Value), cnpjEntidade)
+    If Not coll Is Nothing Then
+        nDel = coll.Count
+        If nDel > 0 Then
+            ReDim linhasDel(1 To nDel)
+            For k = 1 To nDel
+                linhasDel(k) = CLng(coll(k))
+            Next k
+            For k = 1 To nDel - 1
+                For j = k + 1 To nDel
+                    If linhasDel(k) < linhasDel(j) Then
+                        tmp = linhasDel(k)
+                        linhasDel(k) = linhasDel(j)
+                        linhasDel(j) = tmp
+                    End If
+                Next j
+            Next k
+
+            Call Util_PrepararAbaParaEscrita(wsEntInativas, estEntInativProt, senhaEntInativ)
+            For k = 1 To nDel
+                If Not Util_ExcluirLinhaSegura(wsEntInativas, linhasDel(k)) Then
+                    Err.Raise 1004, "Entidade_InativarSelecionada", "Nao foi possivel excluir linha " & CStr(linhasDel(k)) & " em ENTIDADE_INATIVOS."
+                End If
+            Next k
+            Call Util_RestaurarProtecaoAba(wsEntInativas, estEntInativProt, senhaEntInativ)
+        End If
     End If
 
     ' Copiar linha para aba de inativas (sem .Select)

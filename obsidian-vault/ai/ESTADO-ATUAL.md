@@ -3,14 +3,14 @@ titulo: Estado Atual do Sistema
 ultima-atualizacao: 2026-04-17
 autor-ultima-alteracao: GPT-5 (Codex)
 tags: [vivo, regra]
-versao-sistema: V12.0.0191
+versao-sistema: V12.0.0192
 ---
 
 # Estado Atual do Sistema
 
 ## Versao
 
-- **Versao**: V12.0.0191
+- **Versao**: V12.0.0192
 - **Data**: 2026-04-17
 - **Status**: EM_VALIDACAO
 - **Compila**: Pendente de validacao no Excel
@@ -37,6 +37,7 @@ versao-sistema: V12.0.0191
 - `Svc_OS` passou a validar `DT_PREV_TERMINO >= hoje` no proprio servico
 - `Svc_Avaliacao` passou a validar `QtExecutada > 0` e justificativa obrigatoria quando ha divergencia entre executado e orcado
 - Os cenarios `MIG_001`, `MIG_002` e `MIG_003` deixaram de ser manuais e passaram a ser assertivos no smoke da V2
+- Fluxos de inativacao/reativacao passaram a higienizar duplicidades nas abas `*_INATIVOS`, preferir a linha mais recente e bloquear reativacao quando houver conflito semantico na mesma chave
 - Terminologia MEI eliminada no codigo VBA e no `Menu_Principal` (designer); relatorio **Rel_OSEmpresa** abre sem crash
 - Exportacao de CSV de resultados de teste
 - Release metadata centralizada (App_Release.bas)
@@ -54,14 +55,15 @@ versao-sistema: V12.0.0191
 - ProximoId faz protect/unprotect por linha (performance em lotes grandes)
 - AtividadeJaExiste usa varredura O(n^2)
 - Ainda existem validacoes operacionais e defaults na interface; a `0191` migra apenas as tres guardas criticas aprovadas para o servico
+- Bases historicas com conflito real em `ENTIDADE_INATIVOS` ou `EMPRESAS_INATIVAS` podem agora ser bloqueadas na reativacao ate saneamento manual
 - A bateria V2 ainda nao substitui totalmente a legada: a base automatica ficou mais forte, mas ainda faltam atomicidade, edge cases e shadow mode
-- A `V12.0.0191` ainda precisa de homologacao no Excel para confirmar a migracao `UI -> servico` e os cenarios `MIG_*`
+- A `V12.0.0192` ainda precisa de homologacao no Excel para confirmar o endurecimento de inativacao/reativacao
 - Emergencia_CNAE, Emergencia_CNAE1/2/3 e Importar_Agora sao modulos temporarios — remover apos estabilizacao
 
 ## Proximos Passos
 
-1. Importar a V12.0.0191 no Excel e validar `CT2_ExecutarSmokeRapido`, `CT2_ExecutarSmokeAssistido`, `CT2_ExecutarStress` e `CT2_ExecutarStressAssistido`.
-2. Confirmar que `MIG_001`, `MIG_002` e `MIG_003` ficaram verdes no smoke V2 sem exportacao de CSV.
+1. Importar a V12.0.0192 no Excel e validar `CT2_ExecutarSmokeRapido`, `CT2_ExecutarSmokeAssistido`, `CT2_ExecutarStress` e `CT2_ExecutarStressAssistido`.
+2. Validar manualmente inativacao e reativacao de entidade e empresa sobre base limpa e sobre base com duplicidade historica.
 3. Iniciar a fase seguinte de atomicidade, edge cases e testes complementares sobre a V2.
 4. Manter a bateria legada em shadow mode ate a V2 cobrir o pacote minimo de aprovacao.
 5. Limpar modulos temporarios de importacao (`Emergencia_CNAE`, etc.) apos CNAE estavel.

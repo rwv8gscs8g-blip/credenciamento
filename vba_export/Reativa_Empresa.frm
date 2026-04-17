@@ -82,6 +82,54 @@ Private Function UI_LinhaEmpresaPassaFiltro(ByVal wsEmpInativas As Worksheet, By
     End If
 End Function
 
+Private Function UI_ChaveNormalizadaId(ByVal valor As Variant) As String
+    Dim txt As String
+
+    txt = Trim$(CStr(valor))
+    If txt = "" Then Exit Function
+
+    If IsNumeric(txt) Then
+        UI_ChaveNormalizadaId = CStr(CLng(Val(txt)))
+    Else
+        UI_ChaveNormalizadaId = UCase$(txt)
+    End If
+End Function
+
+Private Function UI_EmpresaInativosTemConflito(ByVal wsEmpInativas As Worksheet, ByVal coll As Collection) As Boolean
+    Dim ids As Object
+    Dim docs As Object
+    Dim nomes As Object
+    Dim i As Long
+    Dim linhaAtual As Long
+    Dim idAtual As String
+    Dim docAtual As String
+    Dim nomeAtual As String
+
+    Set ids = CreateObject("Scripting.Dictionary")
+    Set docs = CreateObject("Scripting.Dictionary")
+    Set nomes = CreateObject("Scripting.Dictionary")
+
+    For i = 1 To coll.Count
+        linhaAtual = CLng(coll(i))
+
+        idAtual = UI_ChaveNormalizadaId(wsEmpInativas.Cells(linhaAtual, COL_EMP_ID).Value)
+        docAtual = Util_NormalizarDocumentoChave(wsEmpInativas.Cells(linhaAtual, COL_EMP_CNPJ).Value)
+        nomeAtual = UCase$(Trim$(CStr(wsEmpInativas.Cells(linhaAtual, COL_EMP_RAZAO).Value)))
+
+        If idAtual <> "" Then
+            If Not ids.Exists(idAtual) Then ids.Add idAtual, True
+        End If
+        If docAtual <> "" Then
+            If Not docs.Exists(docAtual) Then docs.Add docAtual, True
+        End If
+        If nomeAtual <> "" Then
+            If Not nomes.Exists(nomeAtual) Then nomes.Add nomeAtual, True
+        End If
+    Next i
+
+    UI_EmpresaInativosTemConflito = (ids.Count > 1) Or (docs.Count > 1) Or (nomes.Count > 1)
+End Function
+
 Private Sub UI_PreencherListaEmpresasInativas(Optional ByVal filtro As String = "")
 On Error GoTo erro_carregamento
 Dim lst As Object
@@ -93,7 +141,7 @@ Dim filtroU As String
 Dim arrayitems() As Variant
 Dim vistos As Object
 Dim chave As String
-Dim linhasUnicas As Collection
+Dim chaves As Collection
 Dim i As Long
 Dim linhaUsada As Long
 
@@ -115,25 +163,25 @@ End With
 If NLinhas < LINHA_DADOS Then GoTo fimEmp
 
 Set vistos = CreateObject("Scripting.Dictionary")
-Set linhasUnicas = New Collection
+Set chaves = New Collection
 For linhaAtual = LINHA_DADOS To NLinhas
     If UI_LinhaEmpresaValida(wsEmpInativas, linhaAtual) Then
         If UI_LinhaEmpresaPassaFiltro(wsEmpInativas, linhaAtual, filtroU) Then
             chave = EmpresaInativos_ChaveDedupeLinha(wsEmpInativas, linhaAtual)
             If Not vistos.Exists(chave) Then
-                vistos.Add chave, 1
-                linhasUnicas.Add linhaAtual
+                chaves.Add chave
             End If
+            vistos(chave) = linhaAtual
         End If
     End If
 Next linhaAtual
 
-total = linhasUnicas.Count
+total = chaves.Count
 If total = 0 Then GoTo fimEmp
 
 ReDim arrayitems(1 To total, 1 To 19)
-For i = 1 To linhasUnicas.Count
-    linhaUsada = CLng(linhasUnicas(i))
+For i = 1 To chaves.Count
+    linhaUsada = CLng(vistos(CStr(chaves(i))))
     For colunaAtual = 1 To 19
         arrayitems(i, colunaAtual) = UI_SafeListVal(wsEmpInativas.Cells(linhaUsada, colunaAtual).Value)
     Next colunaAtual
@@ -211,9 +259,16 @@ On Error GoTo erro_carregamento:
     If coll Is Nothing Then GoTo nao_achou_emp
     If coll.Count = 0 Then GoTo nao_achou_emp
 
+    If UI_EmpresaInativosTemConflito(wsInativas, coll) Then
+        MsgBox "Reativacao bloqueada: existem linhas conflitantes para a mesma empresa em EMPRESAS_INATIVAS." & vbCrLf & _
+               "Faca o saneamento da base antes de reativar.", _
+               vbExclamation, "Integridade de Dados"
+        Exit Sub
+    End If
+
     linhaCopia = CLng(coll(1))
     For k = 2 To coll.Count
-        If CLng(coll(k)) < linhaCopia Then linhaCopia = CLng(coll(k))
+        If CLng(coll(k)) > linhaCopia Then linhaCopia = CLng(coll(k))
     Next k
 
     cnpjReativ = Trim$(CStr(wsInativas.Cells(linhaCopia, COL_EMP_CNPJ).Value))
@@ -294,5 +349,4 @@ nao_achou_emp:
 erro_carregamento:
     MsgBox "Erro ao reativar empresa: " & Err.Description, vbCritical, "Erro"
 End Sub
-
 

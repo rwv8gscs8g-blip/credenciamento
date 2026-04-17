@@ -3,8 +3,8 @@
 Data: 2026-04-17
 Projeto: `/Users/macbookpro/Projetos/Credenciamento`
 Branch atual: `codex/v180-stable-reset`
-Versao atual do codigo: `V12.0.0191`
-Status: Fase 1 validada no Excel; Fase 2 implementada e pendente de homologacao humana
+Versao atual do codigo: `V12.0.0192`
+Status: Fase 1 validada no Excel; Fase 2 implementada; endurecimento de inativos/reativacao pendente de homologacao humana
 
 ## 1. Objetivo deste handoff
 
@@ -238,6 +238,35 @@ Pendente:
 1. compilar a `V12.0.0191` no Excel
 2. validar `CT2_ExecutarSmokeRapido` e `CT2_ExecutarSmokeAssistido` com `MIG_*` verdes
 3. validar `CT2_ExecutarStress` e `CT2_ExecutarStressAssistido` para confirmar que a migracao nao abriu regressao lateral
+
+## Hotfix estrutural - V12.0.0192
+
+Objetivo:
+
+- evitar restauracao silenciosa de linhas antigas ou conflitantes em `ENTIDADE_INATIVOS` e `EMPRESAS_INATIVAS`
+
+Diagnostico:
+
+1. o problema observado em entidade nao apontou principalmente para formatacao de ID
+2. a fragilidade estava em duas escolhas operacionais:
+   - inativacao acumulando duplicidades antigas em `*_INATIVOS`
+   - reativacao escolhendo a linha mais antiga, nao a mais recente
+3. em base historica com resíduo, isso pode restaurar uma linha semanticamente errada
+
+Implementado na `V12.0.0192`:
+
+1. inativacao de entidade remove duplicidades antigas da mesma chave antes de copiar a linha atual
+2. inativacao de empresa recebe o mesmo endurecimento
+3. listas de inativos passam a preferir a linha mais recente por chave
+4. reativacao passa a usar a linha mais recente por chave
+5. reativacao bloqueia quando houver conflito semantico real entre linhas da mesma chave
+
+Critério de aceite:
+
+1. inativar e reativar entidade em base limpa preserva a linha correta
+2. inativar e reativar empresa em base limpa preserva a linha correta
+3. base com duplicidade historica nao restaura linha antiga silenciosamente
+4. conflito real em `*_INATIVOS` bloqueia com mensagem de integridade
 
 ## Fase 3 - V12.0.0192+
 
