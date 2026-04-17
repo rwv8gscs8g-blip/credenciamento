@@ -198,6 +198,9 @@ Public Sub TV2_AbrirHistorico()
 End Sub
 
 Public Sub TV2_PrepararNavegacaoHumana()
+    On Error Resume Next
+    Menu_Principal.Menu_RecolherParaBateria
+    On Error GoTo 0
     TV2_RecolherMenuPrincipal
     Application.Visible = True
     ThisWorkbook.Activate

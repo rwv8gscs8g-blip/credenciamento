@@ -53,6 +53,7 @@ Private Const PRAZO_PADRAO_OS_DIAS As Long = 30
 ' Chamada pela Central de Testes antes da bateria oficial: foco na planilha.
 Public Sub Menu_RecolherParaBateria()
     On Error Resume Next
+    Me.Hide
     Dim f As Object
     For Each f In VBA.UserForms
         If TypeName(f) = "Menu_Principal" Then
@@ -3539,6 +3540,7 @@ End Function
 Private Sub Menu_TelaInicial_AbrirCentralTestes()
     On Error GoTo falha
     If Not Treinamento_ConfirmarUso() Then Exit Sub
+    Call Menu_RecolherParaBateria
     Call CT_AbrirCentral
     Exit Sub
 falha:
@@ -3823,7 +3825,6 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
-
 
 
 
