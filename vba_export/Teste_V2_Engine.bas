@@ -58,11 +58,19 @@ End Sub
 Public Sub TV2_FinalizarExecucao(ByVal suite As String)
     Dim ws As Worksheet
     Dim nr As Long
-    Dim pathCsvCompleto As String
-    Dim pathCsvCorretivo As String
+    Dim pathCsvFalhas As String
+    Dim obsExportacao As String
 
-    pathCsvCompleto = TV2_ExportarResultadoCSV(gTV2ExecucaoId, False)
-    pathCsvCorretivo = TV2_ExportarResultadoCSV(gTV2ExecucaoId, True)
+    If gTV2Fail > 0 Then
+        pathCsvFalhas = TV2_ExportarFalhasCSV(gTV2ExecucaoId)
+        If pathCsvFalhas = "" Then
+            obsExportacao = "Falhas encontradas, mas o CSV nao foi gerado."
+        Else
+            obsExportacao = "CSV de falhas gerado."
+        End If
+    Else
+        obsExportacao = "Sem falhas; nenhum CSV exportado."
+    End If
 
     Set ws = TV2_EnsureHistoricoSheet()
     nr = TV2_NextRow(ws, 1, 2)
@@ -74,8 +82,8 @@ Public Sub TV2_FinalizarExecucao(ByVal suite As String)
     ws.Cells(nr, 5).Value = gTV2Fail
     ws.Cells(nr, 6).Value = gTV2Manual
     ws.Cells(nr, 7).Value = gTV2Ok + gTV2Fail + gTV2Manual
-    ws.Cells(nr, 8).Value = pathCsvCompleto
-    ws.Cells(nr, 9).Value = pathCsvCorretivo
+    ws.Cells(nr, 8).Value = pathCsvFalhas
+    ws.Cells(nr, 9).Value = obsExportacao
 
     TV2_FormatarResultadoSheet
     TV2_FormatarHistoricoSheet
@@ -85,8 +93,8 @@ Public Sub TV2_FinalizarExecucao(ByVal suite As String)
     MsgBox "Suite V2 concluida." & vbCrLf & _
            "Execucao: " & gTV2ExecucaoId & vbCrLf & _
            "OK=" & CStr(gTV2Ok) & " | FALHA=" & CStr(gTV2Fail) & " | MANUAL=" & CStr(gTV2Manual) & vbCrLf & vbCrLf & _
-           "CSV completo:" & vbCrLf & IIf(Len(pathCsvCompleto) > 0, pathCsvCompleto, "Nao gerado") & vbCrLf & vbCrLf & _
-           "CSV corretivo (FALHA + MANUAL):" & vbCrLf & IIf(Len(pathCsvCorretivo) > 0, pathCsvCorretivo, "Nao gerado"), _
+           "CSV de falhas:" & vbCrLf & IIf(Len(pathCsvFalhas) > 0, pathCsvFalhas, "Nao exportado") & vbCrLf & vbCrLf & _
+           obsExportacao, _
            IIf(gTV2Fail = 0, vbInformation, vbExclamation), "Testes V2"
 End Sub
 
@@ -209,8 +217,7 @@ End Sub
 
 Public Sub TV2_ExportarUltimaExecucaoCSVs()
     Dim execucaoId As String
-    Dim pathCsvCompleto As String
-    Dim pathCsvCorretivo As String
+    Dim pathCsvFalhas As String
 
     execucaoId = TV2_ExecucaoEmFoco()
     If execucaoId = "" Then
@@ -218,13 +225,15 @@ Public Sub TV2_ExportarUltimaExecucaoCSVs()
         Exit Sub
     End If
 
-    pathCsvCompleto = TV2_ExportarResultadoCSV(execucaoId, False)
-    pathCsvCorretivo = TV2_ExportarResultadoCSV(execucaoId, True)
+    pathCsvFalhas = TV2_ExportarFalhasCSV(execucaoId)
 
-    MsgBox "Execucao exportada: " & execucaoId & vbCrLf & vbCrLf & _
-           "CSV completo:" & vbCrLf & IIf(Len(pathCsvCompleto) > 0, pathCsvCompleto, "Nao gerado") & vbCrLf & vbCrLf & _
-           "CSV corretivo:" & vbCrLf & IIf(Len(pathCsvCorretivo) > 0, pathCsvCorretivo, "Nao gerado"), _
-           vbInformation, "Testes V2"
+    If pathCsvFalhas = "" Then
+        MsgBox "Execucao " & execucaoId & " sem falhas. Nenhum CSV exportado.", vbInformation, "Testes V2"
+    Else
+        MsgBox "Execucao exportada: " & execucaoId & vbCrLf & vbCrLf & _
+               "CSV de falhas:" & vbCrLf & pathCsvFalhas, _
+               vbInformation, "Testes V2"
+    End If
 End Sub
 
 Public Sub TV2_GerarCatalogoBase()
@@ -897,11 +906,11 @@ Private Function TV2_EnsureHistoricoSheet() As Worksheet
         ws.Cells(1, 5).Value = "FALHA"
         ws.Cells(1, 6).Value = "MANUAL"
         ws.Cells(1, 7).Value = "TOTAL"
-        ws.Cells(1, 8).Value = "CSV_COMPLETO"
-        ws.Cells(1, 9).Value = "CSV_CORRETIVO"
+        ws.Cells(1, 8).Value = "CSV_FALHAS"
+        ws.Cells(1, 9).Value = "OBS_EXPORTACAO"
     Else
-        If Trim$(CStr(ws.Cells(1, 8).Value)) = "" Then ws.Cells(1, 8).Value = "CSV_COMPLETO"
-        If Trim$(CStr(ws.Cells(1, 9).Value)) = "" Then ws.Cells(1, 9).Value = "CSV_CORRETIVO"
+        ws.Cells(1, 8).Value = "CSV_FALHAS"
+        ws.Cells(1, 9).Value = "OBS_EXPORTACAO"
     End If
 
     Set TV2_EnsureHistoricoSheet = ws
@@ -1044,7 +1053,7 @@ Private Sub TV2_AdicionarBotoes(ByVal ws As Worksheet)
     Set b = ws.Shapes.AddShape(msoShapeRoundedRectangle, leftCsv, topPos, 160, 22)
     With b
         .Name = "TV2_BTN_CSV_" & ws.Name
-        .TextFrame2.TextRange.Text = "Exportar CSVs V2"
+        .TextFrame2.TextRange.Text = "Exportar CSV de Falhas"
         .TextFrame2.TextRange.Font.Size = 9
         .TextFrame2.TextRange.Font.Bold = msoTrue
         .TextFrame2.TextRange.ParagraphFormat.Alignment = msoAlignCenter
@@ -1116,7 +1125,7 @@ Private Function TV2_ExecucaoEmFoco() As String
     TV2_ExecucaoEmFoco = TV2_UltimaExecucaoId()
 End Function
 
-Public Function TV2_ExportarResultadoCSV(ByVal execucaoId As String, Optional ByVal somenteCorretivo As Boolean = False) As String
+Public Function TV2_ExportarFalhasCSV(ByVal execucaoId As String) As String
     Dim wsSrc As Worksheet
     Dim pastaBase As String
     Dim caminho As String
@@ -1126,6 +1135,7 @@ Public Function TV2_ExportarResultadoCSV(ByVal execucaoId As String, Optional By
     Dim suite As String
     Dim stamp As String
     Dim statusAtual As String
+    Dim temFalha As Boolean
 
     On Error GoTo falha
 
@@ -1139,14 +1149,22 @@ Public Function TV2_ExportarResultadoCSV(ByVal execucaoId As String, Optional By
     If suite = "" Then suite = "V2"
 
     stamp = Replace$(Replace$(Replace$(execucaoId, ":", ""), "-", ""), " ", "_")
-    If somenteCorretivo Then
-        caminho = pastaBase & Application.PathSeparator & "TesteV2_" & suite & "_Corretivo_" & stamp & ".csv"
-    Else
-        caminho = pastaBase & Application.PathSeparator & "TesteV2_" & suite & "_" & stamp & ".csv"
-    End If
+    caminho = pastaBase & Application.PathSeparator & "TesteV2_" & suite & "_Falhas_" & stamp & ".csv"
 
     ultLinha = wsSrc.Cells(wsSrc.Rows.Count, 1).End(xlUp).Row
     If ultLinha < 2 Then Exit Function
+
+    For r = 2 To ultLinha
+        If Trim$(CStr(wsSrc.Cells(r, 1).Value)) = execucaoId Then
+            statusAtual = UCase$(Trim$(CStr(wsSrc.Cells(r, 8).Value)))
+            If statusAtual = TV2_STATUS_FAIL Then
+                temFalha = True
+                Exit For
+            End If
+        End If
+    Next r
+
+    If Not temFalha Then Exit Function
 
     fNum = FreeFile
     Open caminho For Output As #fNum
@@ -1155,20 +1173,20 @@ Public Function TV2_ExportarResultadoCSV(ByVal execucaoId As String, Optional By
     For r = 2 To ultLinha
         If Trim$(CStr(wsSrc.Cells(r, 1).Value)) = execucaoId Then
             statusAtual = UCase$(Trim$(CStr(wsSrc.Cells(r, 8).Value)))
-            If (Not somenteCorretivo) Or statusAtual = TV2_STATUS_FAIL Or statusAtual = TV2_STATUS_MANUAL Then
+            If statusAtual = TV2_STATUS_FAIL Then
                 Print #fNum, TV2_CsvLinha(wsSrc, r)
             End If
         End If
     Next r
 
     Close #fNum
-    TV2_ExportarResultadoCSV = caminho
+    TV2_ExportarFalhasCSV = caminho
     Exit Function
 
 falha:
     On Error Resume Next
     If fNum <> 0 Then Close #fNum
-    TV2_ExportarResultadoCSV = ""
+    TV2_ExportarFalhasCSV = ""
 End Function
 
 Private Function TV2_SuiteDaExecucao(ByVal execucaoId As String) As String
