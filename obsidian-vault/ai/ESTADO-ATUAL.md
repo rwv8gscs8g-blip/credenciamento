@@ -3,14 +3,14 @@ titulo: Estado Atual do Sistema
 ultima-atualizacao: 2026-04-17
 autor-ultima-alteracao: GPT-5 (Codex)
 tags: [vivo, regra]
-versao-sistema: V12.0.0190
+versao-sistema: V12.0.0191
 ---
 
 # Estado Atual do Sistema
 
 ## Versao
 
-- **Versao**: V12.0.0190
+- **Versao**: V12.0.0191
 - **Data**: 2026-04-17
 - **Status**: EM_VALIDACAO
 - **Compila**: Pendente de validacao no Excel
@@ -33,6 +33,10 @@ versao-sistema: V12.0.0190
 - V2 passou a validar cenario deterministico completo sobre reset operacional, configuracao canonica, servicos canonicos e contrato real da fila (ordem integra, nao renumeracao forcada)
 - V2 passou a medir registros por coluna-chave semantica e a validar imediatamente o reset das abas operacionais
 - Central V2 reorganizada em automatico + assistido: smoke rapido, smoke assistido, stress deterministico, stress assistido e roteiro humano dedicado
+- `Svc_PreOS` passou a validar `ENT_ID` ativo e `QT_ESTIMADA > 0` sem depender do formulario
+- `Svc_OS` passou a validar `DT_PREV_TERMINO >= hoje` no proprio servico
+- `Svc_Avaliacao` passou a validar `QtExecutada > 0` e justificativa obrigatoria quando ha divergencia entre executado e orcado
+- Os cenarios `MIG_001`, `MIG_002` e `MIG_003` deixaram de ser manuais e passaram a ser assertivos no smoke da V2
 - Terminologia MEI eliminada no codigo VBA e no `Menu_Principal` (designer); relatorio **Rel_OSEmpresa** abre sem crash
 - Exportacao de CSV de resultados de teste
 - Release metadata centralizada (App_Release.bas)
@@ -41,24 +45,24 @@ versao-sistema: V12.0.0190
 ## O que Precisa de Validacao
 
 - Rodizio por atividade (Svc_Rodizio) — depende de CNAEs + servicos corretos
-- Ordens de servico (Svc_PreOS, Svc_OS)
-- Migracao de guard rails da interface para os servicos (ENT_ID em Pre-OS, data de OS, justificativa de divergencia)
+- Ordens de servico (Svc_PreOS, Svc_OS, Svc_Avaliacao) apos a migracao das guardas para servico
+- Execucao no Excel dos cenarios `MIG_001`, `MIG_002` e `MIG_003` dentro do smoke V2
 - Importacao no Excel dos modulos V2 e execucao das macros `CT2_*`
 
 ## Riscos Conhecidos
 
 - ProximoId faz protect/unprotect por linha (performance em lotes grandes)
 - AtividadeJaExiste usa varredura O(n^2)
-- Parte das validacoes de negocio ainda mora na interface; os cenarios `MIG_*` da V2 continuam pendentes ate a migracao
-- A bateria V2 ainda nao substitui totalmente a legada: ela agora tem semantica mais clara e diagnostico melhor, mas a migracao UI -> servico segue como dependencia para fechamento completo
-- A `V12.0.0190` ainda precisa de homologacao no Excel para confirmar que o fatal estrutural de baseline foi eliminado
+- Ainda existem validacoes operacionais e defaults na interface; a `0191` migra apenas as tres guardas criticas aprovadas para o servico
+- A bateria V2 ainda nao substitui totalmente a legada: a base automatica ficou mais forte, mas ainda faltam atomicidade, edge cases e shadow mode
+- A `V12.0.0191` ainda precisa de homologacao no Excel para confirmar a migracao `UI -> servico` e os cenarios `MIG_*`
 - Emergencia_CNAE, Emergencia_CNAE1/2/3 e Importar_Agora sao modulos temporarios — remover apos estabilizacao
 
 ## Proximos Passos
 
-1. Importar a V12.0.0190 no Excel e validar `CT_IniciarBateria`, `CT2_AbrirCentral`, `CT2_ExecutarSmokeRapido`, `CT2_ExecutarSmokeAssistido`, `CT2_ExecutarStress` e `CT2_ExecutarStressAssistido`.
-2. Se o fatal estrutural da baseline desaparecer, iniciar a fase de migracao `UI -> servico` para `MIG_001`, `MIG_002` e `MIG_003`.
-3. Expandir o catalogo semantico e as suites combinatorias em cima da bateria V2.
+1. Importar a V12.0.0191 no Excel e validar `CT2_ExecutarSmokeRapido`, `CT2_ExecutarSmokeAssistido`, `CT2_ExecutarStress` e `CT2_ExecutarStressAssistido`.
+2. Confirmar que `MIG_001`, `MIG_002` e `MIG_003` ficaram verdes no smoke V2 sem exportacao de CSV.
+3. Iniciar a fase seguinte de atomicidade, edge cases e testes complementares sobre a V2.
 4. Manter a bateria legada em shadow mode ate a V2 cobrir o pacote minimo de aprovacao.
 5. Limpar modulos temporarios de importacao (`Emergencia_CNAE`, etc.) apos CNAE estavel.
 6. Migrar para SaaS (Next.js + NeonDB) — fase futura

@@ -3,8 +3,8 @@
 Data: 2026-04-17
 Projeto: `/Users/macbookpro/Projetos/Credenciamento`
 Branch atual: `codex/v180-stable-reset`
-Versao atual do codigo: `V12.0.0190`
-Status: Fase 1 implementada; validacao humana no Excel pendente
+Versao atual do codigo: `V12.0.0191`
+Status: Fase 1 validada no Excel; Fase 2 implementada e pendente de homologacao humana
 
 ## 1. Objetivo deste handoff
 
@@ -220,6 +220,24 @@ Critério de aceite:
 1. entradas invalidas falham no servico
 2. UI continua amigavel
 3. V2 passa a registrar `PASS/FAIL` assertivo nesses cenarios
+
+### Status da Fase 2
+
+Implementado na `V12.0.0191`:
+
+1. `Svc_PreOS.EmitirPreOS` passou a rejeitar `ENT_ID` inexistente/inativa
+2. `Svc_PreOS.EmitirPreOS` passou a rejeitar `QT_ESTIMADA <= 0`
+3. `Svc_OS.EmitirOS` passou a rejeitar `DT_PREV_TERMINO < Date`
+4. `Svc_Avaliacao.AvaliarOS` passou a rejeitar `QtExecutada <= 0`
+5. `Svc_Avaliacao.AvaliarOS` passou a exigir `justifDiv` quando houver divergencia entre executado e orcado
+6. `Teste_V2_Roteiros.TV2_RunSmoke` converteu `MIG_001`, `MIG_002` e `MIG_003` em cenarios automatizados
+7. `Teste_V2_Engine` atualizou catalogo e roteiro assistido para refletir a nova automacao
+
+Pendente:
+
+1. compilar a `V12.0.0191` no Excel
+2. validar `CT2_ExecutarSmokeRapido` e `CT2_ExecutarSmokeAssistido` com `MIG_*` verdes
+3. validar `CT2_ExecutarStress` e `CT2_ExecutarStressAssistido` para confirmar que a migracao nao abriu regressao lateral
 
 ## Fase 3 - V12.0.0192+
 

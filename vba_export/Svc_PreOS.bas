@@ -72,6 +72,20 @@ Public Function EmitirPreOS( _
         Exit Function
     End If
 
+    If Not EntidadeAtivaExiste(ENT_ID) Then
+        res.Sucesso = False
+        res.Mensagem = "Entidade inexistente ou inativa: ENT_ID=" & ENT_ID
+        EmitirPreOS = res
+        Exit Function
+    End If
+
+    If QT_ESTIMADA <= 0 Then
+        res.Sucesso = False
+        res.Mensagem = "QT_ESTIMADA deve ser maior que zero."
+        EmitirPreOS = res
+        Exit Function
+    End If
+
     ' 2. Buscar VALOR_UNIT em CAD_SERV (critério 2)
     If Not BuscarValorServico(ATIV_ID, SERV_ID, valorUnit) Then
         res.Sucesso = False
@@ -377,6 +391,26 @@ Private Function BuscarValorServico( _
             valorOut = CCur(Val(ws.Cells(i, COL_SERV_VALOR_UNIT).Value))
             BuscarValorServico = True
             Exit For
+        End If
+    Next i
+
+fim:
+End Function
+
+Private Function EntidadeAtivaExiste(ByVal entId As String) As Boolean
+    Dim ws As Worksheet
+    Dim i As Long
+
+    EntidadeAtivaExiste = False
+    If Trim$(entId) = "" Then Exit Function
+    On Error GoTo fim
+
+    Set ws = ThisWorkbook.Sheets(SHEET_ENTIDADE)
+
+    For i = LINHA_DADOS To UltimaLinhaAba(SHEET_ENTIDADE)
+        If IdsIguais(ws.Cells(i, COL_ENT_ID).Value, entId) Then
+            EntidadeAtivaExiste = True
+            Exit Function
         End If
     Next i
 

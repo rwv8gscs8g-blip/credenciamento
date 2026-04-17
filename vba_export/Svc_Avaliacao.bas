@@ -28,6 +28,8 @@ Public Function AvaliarOS( _
     Dim i As Long
     Dim resInsert As TResult
     Dim resSusp As TResult
+    Dim valorExecutado As Currency
+    Dim haDivergencia As Boolean
 
     On Error GoTo Erro
 
@@ -67,6 +69,24 @@ Public Function AvaliarOS( _
         End If
         soma = soma + notas(i)
     Next i
+
+    If QtExecutada <= 0 Then
+        res.Sucesso = False
+        res.Mensagem = "QtExecutada deve ser maior que zero."
+        AvaliarOS = res
+        Exit Function
+    End If
+
+    valorExecutado = CCur(QtExecutada * os.VALOR_UNIT)
+    haDivergencia = (Abs(QtExecutada - os.QT_ESTIMADA) > 0.0001) Or _
+                    (Abs(CDbl(valorExecutado) - CDbl(os.VALOR_TOTAL_OS)) > 0.0001)
+
+    If haDivergencia And Trim$(justifDiv) = "" Then
+        res.Sucesso = False
+        res.Mensagem = "Justificativa obrigatoria quando ha divergencia entre o executado e o orcado."
+        AvaliarOS = res
+        Exit Function
+    End If
 
     ' 5. Calcular média (critério 36)
     media = soma / 10#

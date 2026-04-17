@@ -113,21 +113,46 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
                   "Fecha o fluxo core ponta a ponta no nivel de servico", _
                   (resAval.Sucesso And TV2_StatusOS(osId) = "CONCLUIDA" And TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3))
 
-    TV2_LogManual "SMOKE", "MIG_001", _
-                  "Entidade inexistente deve falhar no servico de Pre-OS", _
-                  "Svc_PreOS retorna erro sem depender de validacao do formulario", _
-                  "Lacuna conhecida aprovada para migracao UI -> servico", _
-                  "Cobrir quando a guarda de ENT_ID for centralizada em Svc_PreOS"
-    TV2_LogManual "SMOKE", "MIG_002", _
-                  "Data prevista invalida deve falhar no servico de OS", _
-                  "Svc_OS rejeita data incoerente sem depender de validacao do formulario", _
-                  "Lacuna conhecida aprovada para migracao UI -> servico", _
-                  "Cobrir quando a guarda de data entrar em Svc_OS"
-    TV2_LogManual "SMOKE", "MIG_003", _
-                  "Divergencia sem justificativa deve falhar no servico de avaliacao", _
-                  "Svc_Avaliacao rejeita divergencia sem depender de validacao do formulario", _
-                  "Lacuna conhecida aprovada para migracao UI -> servico", _
-                  "Cobrir quando a regra de justificativa entrar em Svc_Avaliacao"
+    TV2_PrepararCenarioTriploCanonico
+    resPre = EmitirPreOS("999", TV2_CodServicoA(), 1)
+    TV2_LogAssert "SMOKE", "MIG_001", "AUTO", _
+                  "Rejeitar entidade inexistente no servico de Pre-OS", _
+                  "Svc_PreOS retorna erro sem gravar PRE_OS", _
+                  "SUCESSO_PREOS=" & CStr(resPre.Sucesso) & "; MSG=" & resPre.Mensagem & "; PRE_OS=" & CStr(TV2_CountRows(SHEET_PREOS)), _
+                  "Fecha a dependencia da interface para ENT_ID invalida", _
+                  (Not resPre.Sucesso And TV2_CountRows(SHEET_PREOS) = 0 And _
+                   InStr(1, resPre.Mensagem, "Entidade", vbTextCompare) > 0)
+
+    TV2_PrepararCenarioTriploCanonico
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    preosId = resPre.IdGerado
+    resOs = EmitirOS(preosId, Date - 1, "EMP-MIG-002")
+    TV2_LogAssert "SMOKE", "MIG_002", "AUTO", _
+                  "Rejeitar data invalida no servico de OS", _
+                  "Svc_OS retorna erro sem converter a PRE_OS e sem gravar OS", _
+                  "SUCESSO_PREOS=" & CStr(resPre.Sucesso) & "; SUCESSO_OS=" & CStr(resOs.Sucesso) & "; MSG=" & resOs.Mensagem & "; STATUS_PREOS=" & TV2_StatusPreOS(preosId) & "; OS=" & CStr(TV2_CountRows(SHEET_CAD_OS)), _
+                  "Fecha a dependencia da interface para DT_PREV_TERMINO incoerente", _
+                  (resPre.Sucesso And Not resOs.Sucesso And _
+                   TV2_StatusPreOS(preosId) = "AGUARDANDO_ACEITE" And _
+                   TV2_CountRows(SHEET_CAD_OS) = 0 And _
+                   InStr(1, resOs.Mensagem, "Data prevista", vbTextCompare) > 0)
+
+    TV2_PrepararCenarioTriploCanonico
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 2)
+    preosId = resPre.IdGerado
+    resOs = EmitirOS(preosId, Date + 5, "EMP-MIG-003")
+    osId = resOs.IdGerado
+    TV2_PreencherNotas notas, 8
+    resAval = AvaliarOS(osId, "QA V2", notas, 1, "Divergencia sem justificativa", "", Date + 6, Date + 15)
+    TV2_LogAssert "SMOKE", "MIG_003", "AUTO", _
+                  "Exigir justificativa de divergencia no servico de avaliacao", _
+                  "Svc_Avaliacao retorna erro e mantem a OS em execucao", _
+                  "SUCESSO_PREOS=" & CStr(resPre.Sucesso) & "; SUCESSO_OS=" & CStr(resOs.Sucesso) & "; SUCESSO_AVAL=" & CStr(resAval.Sucesso) & "; MSG=" & resAval.Mensagem & "; STATUS_OS=" & TV2_StatusOS(osId) & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()), _
+                  "Fecha a dependencia da interface para justificativa obrigatoria", _
+                  (resPre.Sucesso And resOs.Sucesso And Not resAval.Sucesso And _
+                   TV2_StatusOS(osId) = "EM_EXECUCAO" And _
+                   TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3) And _
+                   InStr(1, resAval.Mensagem, "Justificativa", vbTextCompare) > 0)
 
     TV2_FinalizarExecucao "SMOKE"
     Exit Sub

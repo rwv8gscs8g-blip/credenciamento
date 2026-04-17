@@ -54,6 +54,13 @@ Public Function EmitirOS( _
         Exit Function
     End If
 
+    If DT_PREV_TERMINO < Date Then
+        res.Sucesso = False
+        res.Mensagem = "Data prevista de termino nao pode ser anterior a hoje."
+        EmitirOS = res
+        Exit Function
+    End If
+
     ' 2. Montar TOS a partir da Pré-OS (critério 23)
     os.PREOS_ID = PREOS_ID
     os.EMP_ID = preos.EMP_ID
