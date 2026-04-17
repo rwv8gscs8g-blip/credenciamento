@@ -48,7 +48,7 @@ Public Sub TV2_InitExecucao(ByVal suite As String, Optional ByVal visual As Bool
     gTV2Fail = 0
     gTV2Manual = 0
 
-    TV2_RecolherMenuPrincipal
+    TV2_PrepararNavegacaoHumana
     Util_LimparFiltrosAba TV2_EnsureResultadoSheet()
     Util_LimparFiltrosAba TV2_EnsureHistoricoSheet()
     TV2_GerarCatalogoBase
@@ -172,6 +172,7 @@ End Sub
 
 Public Sub TV2_AbrirResultado()
     Dim ws As Worksheet
+    TV2_PrepararNavegacaoHumana
     Set ws = TV2_EnsureResultadoSheet()
     TV2_FormatarResultadoSheet
     ws.Activate
@@ -180,10 +181,27 @@ End Sub
 
 Public Sub TV2_AbrirCatalogo()
     Dim ws As Worksheet
+    TV2_PrepararNavegacaoHumana
     Set ws = TV2_EnsureCatalogoSheet()
     TV2_FormatarCatalogoSheet
     ws.Activate
     ws.Range("A2").Select
+End Sub
+
+Public Sub TV2_AbrirHistorico()
+    Dim ws As Worksheet
+    TV2_PrepararNavegacaoHumana
+    Set ws = TV2_EnsureHistoricoSheet()
+    TV2_FormatarHistoricoSheet
+    ws.Activate
+    ws.Range("A2").Select
+End Sub
+
+Public Sub TV2_PrepararNavegacaoHumana()
+    TV2_RecolherMenuPrincipal
+    Application.Visible = True
+    ThisWorkbook.Activate
+    DoEvents
 End Sub
 
 Public Sub TV2_ExportarUltimaExecucaoCSVs()
@@ -974,8 +992,6 @@ Private Sub TV2_RecolherMenuPrincipal()
             Exit For
         End If
     Next frmMP
-    Application.Visible = True
-    ThisWorkbook.Activate
     On Error GoTo 0
 End Sub
 

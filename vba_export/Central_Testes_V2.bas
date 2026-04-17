@@ -19,7 +19,8 @@ Public Sub CT2_AbrirCentral()
         "[3] Stress deterministico" & vbCrLf & _
         "[4] Gerar catalogo semantico" & vbCrLf & _
         "[5] Abrir RESULTADO_QA_V2" & vbCrLf & _
-        "[6] Abrir CATALOGO_CENARIOS_V2" & vbCrLf & vbCrLf & _
+        "[6] Abrir CATALOGO_CENARIOS_V2" & vbCrLf & _
+        "[7] Abrir HISTORICO_QA_V2" & vbCrLf & vbCrLf & _
         "Digite o numero:", _
         "Central de Testes V2", "1"))
 
@@ -39,6 +40,8 @@ Public Sub CT2_AbrirCentral()
             TV2_AbrirResultado
         Case "6"
             TV2_AbrirCatalogo
+        Case "7"
+            TV2_AbrirHistorico
         Case Else
             MsgBox "Opcao invalida.", vbInformation, "Central V2"
     End Select
@@ -49,17 +52,21 @@ falha:
 End Sub
 
 Public Sub CT2_ExecutarSmokeRapido()
+    TV2_PrepararNavegacaoHumana
     TV2_RunSmoke False
 End Sub
 
 Public Sub CT2_ExecutarSmokeAssistido()
+    TV2_PrepararNavegacaoHumana
     TV2_RunSmoke True
 End Sub
 
 Public Sub CT2_ExecutarStress()
+    TV2_PrepararNavegacaoHumana
     TV2_RunStress 12, False
 End Sub
 
 Public Sub CT2_ExecutarStressAssistido()
+    TV2_PrepararNavegacaoHumana
     TV2_RunStress 12, True
 End Sub
