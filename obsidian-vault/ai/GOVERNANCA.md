@@ -3,7 +3,7 @@ titulo: Governanca IA - Rastreabilidade de Autoria
 ultima-atualizacao: 2026-04-17
 autor-ultima-alteracao: GPT-5 (Codex)
 tags: [vivo, regra]
-versao-sistema: V12.0.0189
+versao-sistema: V12.0.0190
 ---
 
 # Governanca IA
@@ -16,6 +16,7 @@ Este documento rastreia qual IA fez cada alteracao no projeto. Toda IA com o bas
 
 | Versao | Data | IA Autor | Revisor | Status | Compila | Nota |
 |--------|------|----------|---------|--------|---------|------|
+| V12.0.0190 | 2026-04-17 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Pendente | Fix baseline V2: coluna-chave, clear expandido e assert pos-reset |
 | V12.0.0189 | 2026-04-17 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Pendente | V2 alinha invariantes ao contrato real da fila e adiciona roteiro assistido |
 | V12.0.0188 | 2026-04-17 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Sim | V2 descarrega a instancia real do Menu_Principal |
 | V12.0.0187 | 2026-04-17 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Sim | V2 exporta apenas CSV de falhas quando existir erro |

@@ -380,6 +380,7 @@ End Sub
 
 Private Sub TV2_ResetBaseOperacional()
     Dim nome As Variant
+    Dim nomeOperacional As Variant
 
     For Each nome In Array( _
         SHEET_EMPRESAS, _
@@ -393,6 +394,19 @@ Private Sub TV2_ResetBaseOperacional()
         SHEET_RELATORIO)
         TV2_ClearSheet CStr(nome)
     Next nome
+
+    For Each nomeOperacional In Array( _
+        SHEET_EMPRESAS, _
+        SHEET_ENTIDADE, _
+        SHEET_CREDENCIADOS, _
+        SHEET_PREOS, _
+        SHEET_CAD_OS)
+        If TV2_CountRows(CStr(nomeOperacional)) <> 0 Then
+            Err.Raise 1004, "TV2_ResetBaseOperacional", _
+                      "Aba " & CStr(nomeOperacional) & " nao zerou apos reset. " & _
+                      "Verificar ListObjects, protecao ou residuos fora da area operacional."
+        End If
+    Next nomeOperacional
 End Sub
 
 Private Sub TV2_ClearSheet(ByVal nomeAba As String)
@@ -403,6 +417,12 @@ Private Sub TV2_ClearSheet(ByVal nomeAba As String)
     Dim ultimaColuna As Long
     Dim primeiraLinha As Long
     Dim lo As ListObject
+    Dim ultimaLinhaColunaA As Long
+    Dim ultimaLinhaColunaChave As Long
+    Dim ultimaLinhaUsedRange As Long
+    Dim ultimaColunaCabecalho As Long
+    Dim ultimaColunaUsedRange As Long
+    Dim colunaChave As Long
 
     Set ws = ThisWorkbook.Sheets(nomeAba)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
@@ -417,9 +437,17 @@ Private Sub TV2_ClearSheet(ByVal nomeAba As String)
     Next lo
     On Error GoTo 0
 
-    ultimaLinha = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
-    ultimaColuna = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
     primeiraLinha = TV2_PrimeiraLinhaDados(nomeAba)
+    colunaChave = TV2_ColunaChave(nomeAba)
+
+    ultimaLinhaColunaA = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ultimaLinhaColunaChave = ws.Cells(ws.Rows.Count, colunaChave).End(xlUp).Row
+    ultimaLinhaUsedRange = ws.UsedRange.Row + ws.UsedRange.Rows.Count - 1
+    ultimaColunaCabecalho = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    ultimaColunaUsedRange = ws.UsedRange.Column + ws.UsedRange.Columns.Count - 1
+
+    ultimaLinha = Application.WorksheetFunction.Max(ultimaLinhaColunaA, ultimaLinhaColunaChave, ultimaLinhaUsedRange)
+    ultimaColuna = Application.WorksheetFunction.Max(ultimaColunaCabecalho, ultimaColunaUsedRange)
 
     If ultimaColuna < 1 Then ultimaColuna = 1
     If ultimaLinha >= primeiraLinha Then
@@ -439,11 +467,15 @@ Private Function TV2_PrimeiraLinhaDados(ByVal nomeAba As String) As Long
 End Function
 
 Private Function TV2_NextDataRow(ByVal nomeAba As String) As Long
+    Dim ws As Worksheet
+    Dim colunaChave As Long
     Dim ultima As Long
     Dim primeira As Long
 
+    Set ws = ThisWorkbook.Sheets(nomeAba)
     primeira = TV2_PrimeiraLinhaDados(nomeAba)
-    ultima = UltimaLinhaAba(nomeAba)
+    colunaChave = TV2_ColunaChave(nomeAba)
+    ultima = ws.Cells(ws.Rows.Count, colunaChave).End(xlUp).Row
 
     If ultima < primeira Then
         TV2_NextDataRow = primeira
@@ -826,14 +858,36 @@ Public Function TV2_CodServicoA() As String
 End Function
 
 Public Function TV2_CountRows(ByVal nomeAba As String) As Long
+    Dim ws As Worksheet
+    Dim colunaChave As Long
     Dim primeira As Long
-    Dim ultima As Long
+    Dim intervalo As Range
 
+    Set ws = ThisWorkbook.Sheets(nomeAba)
+    colunaChave = TV2_ColunaChave(nomeAba)
     primeira = TV2_PrimeiraLinhaDados(nomeAba)
-    ultima = UltimaLinhaAba(nomeAba)
-    If ultima < primeira Then Exit Function
+    Set intervalo = ws.Range(ws.Cells(primeira, colunaChave), ws.Cells(ws.Rows.Count, colunaChave))
 
-    TV2_CountRows = ultima - primeira + 1
+    TV2_CountRows = Application.WorksheetFunction.CountA(intervalo)
+End Function
+
+Private Function TV2_ColunaChave(ByVal nomeAba As String) As Long
+    Select Case UCase$(Trim$(nomeAba))
+        Case UCase$(SHEET_EMPRESAS), UCase$(SHEET_EMPRESAS_INATIVAS)
+            TV2_ColunaChave = COL_EMP_ID
+        Case UCase$(SHEET_ENTIDADE), UCase$(SHEET_ENTIDADE_INATIVOS)
+            TV2_ColunaChave = COL_ENT_ID
+        Case UCase$(SHEET_CREDENCIADOS)
+            TV2_ColunaChave = COL_CRED_ID
+        Case UCase$(SHEET_PREOS)
+            TV2_ColunaChave = COL_PREOS_ID
+        Case UCase$(SHEET_CAD_OS)
+            TV2_ColunaChave = COL_OS_ID
+        Case UCase$(SHEET_AUDIT)
+            TV2_ColunaChave = COL_AUDIT_ID
+        Case Else
+            TV2_ColunaChave = 1
+    End Select
 End Function
 
 Private Function TV2_MaxPosicaoFila(ByVal ativId As String) As Long
