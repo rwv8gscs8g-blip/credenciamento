@@ -1,16 +1,16 @@
 ---
 titulo: Estado Atual do Sistema
 ultima-atualizacao: 2026-04-17
-autor-ultima-alteracao: GPT-5.2 (Cursor)
+autor-ultima-alteracao: GPT-5 (Codex)
 tags: [vivo, regra]
-versao-sistema: V12.0.0180
+versao-sistema: V12.0.0182
 ---
 
 # Estado Atual do Sistema
 
 ## Versao
 
-- **Versao**: V12.0.0180
+- **Versao**: V12.0.0182
 - **Data**: 2026-04-17
 - **Status**: EM_VALIDACAO
 - **Compila**: Sim
@@ -27,32 +27,33 @@ versao-sistema: V12.0.0180
 - Filtros de busca (empresas, entidades)
 - Cadastro de servicos (CAD_SERV) com edicao (Alterar Dados)
 - Bateria oficial de testes (resultados em `RESULTADO_QA`; ultima execucao pode ter falhas pontuais — investigar antes de promover)
+- Bateria V2 independente (`Central_Testes_V2`, `Teste_V2_Engine`, `Teste_V2_Roteiros`) com `RESULTADO_QA_V2`, `CATALOGO_CENARIOS_V2` e stress deterministico
 - Terminologia MEI eliminada no codigo VBA e no `Menu_Principal` (designer); relatorio **Rel_OSEmpresa** abre sem crash
 - Exportacao de CSV de resultados de teste
 - Release metadata centralizada (App_Release.bas)
+- Rollback operacional para a base estavel da V12.0.0180 preservado em `backups/rollback-post-v180-2026-04-17/`
 
 ## O que Precisa de Validacao
 
-- Lista de servicos na SV_Lista (verificar se carrega sem duplicatas)
 - Rodizio por atividade (Svc_Rodizio) — depende de CNAEs + servicos corretos
 - Ordens de servico (Svc_PreOS, Svc_OS)
-- Relatorios (Rel_Emp_Serv, Rel_OSEmpresa)
-- CargaInicialCNAE_SeNecessario — comportamento apos importacao emergencial
+- Migracao de guard rails da interface para os servicos (ENT_ID em Pre-OS, data de OS, justificativa de divergencia)
+- Importacao no Excel dos modulos V2 e execucao das macros `CT2_*`
 
 ## Riscos Conhecidos
 
 - ProximoId faz protect/unprotect por linha (performance em lotes grandes)
 - AtividadeJaExiste usa varredura O(n^2)
-- CargaInicialCNAE_SeNecessario roda em todo PreenchimentoListaAtividade (linha 1555)
+- Parte das validacoes de negocio ainda mora na interface; os cenarios `MIG_*` da V2 continuam pendentes ate a migracao
 - Emergencia_CNAE, Emergencia_CNAE1/2/3 e Importar_Agora sao modulos temporarios — remover apos estabilizacao
 
 ## Proximos Passos
 
-1. **Homologacao**: na planilha `RESULTADO_QA`, tratar cada linha **FALHA** (ex.: filtro por status), reexecutar caso ou ajustar codigo/dados de teste; registrar versao no relatorio da Central.
-2. **MEI remanescente (opcional)**: no designer, renomear controles ainda legados em `Altera_Empresa` e labels em `Menu_Principal` conforme `auditoria/INSTRUCOES_RENOMEAR_DESIGNER.md` (secao Altera_Empresa + `R_TelMEI` / `AM_Empresamei`).
-3. Validar servicos e rodizio com dados reais (Svc_Rodizio, SV_Lista sem duplicatas).
-4. Limpar modulos temporarios de importacao (`Emergencia_CNAE`, etc.) apos CNAE estavel.
-5. Estabilizar fluxo completo: Empresa > Atividade > Servico > Rodizio > OS
+1. Importar a V12.0.0182 no Excel e validar `CT2_ExecutarSmokeRapido` e `CT2_ExecutarStress`.
+2. Migrar para servicos as guardas aprovadas no relatorio V2 (`MIG_001`, `MIG_002`, `MIG_003`).
+3. Expandir o catalogo semantico e as suites combinatorias em cima da bateria V2.
+4. Manter a bateria legada em shadow mode ate a V2 cobrir o pacote minimo de aprovacao.
+5. Limpar modulos temporarios de importacao (`Emergencia_CNAE`, etc.) apos CNAE estavel.
 6. Migrar para SaaS (Next.js + NeonDB) — fase futura
 
 ## Documentos Relacionados

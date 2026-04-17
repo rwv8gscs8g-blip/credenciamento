@@ -20,15 +20,16 @@ versao-sistema: V12.0.0145
 
 ## IA Atual com o Bastao
 
-- **IA**: Claude Opus 4.6 (Cowork)
-- **Desde**: 2026-04-12
-- **Sessao**: Reestruturacao documentacao + importacao CNAE
+- **IA**: GPT-5 (Codex)
+- **Desde**: 2026-04-17
+- **Sessao**: Retomada sobre V12.0.0180 + modulo V2 de testes
 
 ## Documentos Ativos
 
 | # | Data | Assunto | Status |
 |---|------|---------|--------|
 | 0001 | 2026-04-12 | Reestruturacao-Documentacao | Ativo |
+| 0002 | 2026-04-17 | Testes-V2-e-Retomada-V180 | Ativo |
 
 ## Documentos no Historico
 

@@ -40,6 +40,9 @@ module_order=(
   "032:Central_Testes_Relatorio.bas"
   "033:Treinamento_Painel.bas"
   "034:Teste_UI_Guiado.bas"
+  "035:Central_Testes_V2.bas"
+  "036:Teste_V2_Engine.bas"
+  "037:Teste_V2_Roteiros.bas"
 )
 
 form_order=(
@@ -233,6 +236,7 @@ IMPORTANTE:
 - IdsIguais CENTRALIZADA em Util_Planilha.bas. Removida de todos os modulos.
 - UltimaLinhaAba/ProximoId/PrimeiraLinhaDadosEmpresas MOVIDAS para Util_Planilha.bas.
 - Modulos de teste reincorporados (030-034). DiagnosticoV5 e Teste_Sprint3 removidos.
+- Modulos V2 adicionados (035-037) para execucao paralela ao legado.
 - Arquivos .frx mantem o nome original, sem prefixo numerico.
 
 ORDEM DOS MODULOS:
@@ -247,6 +251,9 @@ MODULOS DE TESTE INCLUIDOS:
 - 032-Central_Testes_Relatorio.bas (relatorios de teste)
 - 033-Treinamento_Painel.bas (painel de treinamento)
 - 034-Teste_UI_Guiado.bas (10 testes visuais com instrucoes manuais)
+- 035-Central_Testes_V2.bas (entrada isolada da bateria V2)
+- 036-Teste_V2_Engine.bas (baseline, catalogo e resultado estruturado)
+- 037-Teste_V2_Roteiros.bas (smoke e stress deterministico)
 
 MODULOS REMOVIDOS (NAO IMPORTAR):
 - DiagnosticoV5.bas (modulo de diagnostico descontinuado)

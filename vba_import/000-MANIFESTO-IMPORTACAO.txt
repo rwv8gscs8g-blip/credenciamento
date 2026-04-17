@@ -29,6 +29,9 @@ M|001-modulo/AAZ-Teste_Bateria_Oficial.bas
 M|001-modulo/ABA-Central_Testes_Relatorio.bas
 M|001-modulo/ABB-Treinamento_Painel.bas
 M|001-modulo/ABC-Teste_UI_Guiado.bas
+M|001-modulo/ABD-Central_Testes_V2.bas
+M|001-modulo/ABE-Teste_V2_Engine.bas
+M|001-modulo/ABF-Teste_V2_Roteiros.bas
 F|002-formularios/AAA-Fundo_Branco.frm
 F|002-formularios/AAB-ProgressBar.frm
 F|002-formularios/AAC-Configuracao_Inicial.frm
