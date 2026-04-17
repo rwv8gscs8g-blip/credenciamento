@@ -206,10 +206,17 @@ Public Sub TV2_AbrirHistorico()
 End Sub
 
 Public Sub TV2_PrepararNavegacaoHumana()
+    Dim i As Long
+
     On Error Resume Next
     Menu_Principal.Menu_RecolherParaBateria
+    For i = VBA.UserForms.Count - 1 To 0 Step -1
+        If TypeName(VBA.UserForms(i)) = "Menu_Principal" Then
+            VBA.UserForms(i).Hide
+            Unload VBA.UserForms(i)
+        End If
+    Next i
     On Error GoTo 0
-    TV2_RecolherMenuPrincipal
     Application.Visible = True
     ThisWorkbook.Activate
     DoEvents
@@ -992,19 +999,6 @@ End Sub
 Private Sub TV2_PausarVisual(ByVal segundos As Long)
     If segundos <= 0 Then Exit Sub
     Application.Wait Now + TimeSerial(0, 0, segundos)
-End Sub
-
-Private Sub TV2_RecolherMenuPrincipal()
-    Dim frmMP As Object
-
-    On Error Resume Next
-    For Each frmMP In VBA.UserForms
-        If TypeName(frmMP) = "Menu_Principal" Then
-            frmMP.Hide
-            Exit For
-        End If
-    Next frmMP
-    On Error GoTo 0
 End Sub
 
 Private Sub TV2_AdicionarBotoes(ByVal ws As Worksheet)

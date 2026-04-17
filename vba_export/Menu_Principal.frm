@@ -52,17 +52,20 @@ Private Const PRAZO_PADRAO_OS_DIAS As Long = 30
 
 ' Chamada pela Central de Testes antes da bateria oficial: foco na planilha.
 Public Sub Menu_RecolherParaBateria()
+    Dim i As Long
+
     On Error Resume Next
     Me.Hide
-    Dim f As Object
-    For Each f In VBA.UserForms
-        If TypeName(f) = "Menu_Principal" Then
-            f.Hide
-            Exit For
+    DoEvents
+    For i = VBA.UserForms.Count - 1 To 0 Step -1
+        If TypeName(VBA.UserForms(i)) = "Menu_Principal" Then
+            VBA.UserForms(i).Hide
+            Unload VBA.UserForms(i)
         End If
-    Next f
+    Next i
     Application.Visible = True
     ThisWorkbook.Activate
+    DoEvents
 End Sub
 
 Private Sub AlinharCabecalhosListaEmpresa()
@@ -3825,7 +3828,6 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
-
 
 
 

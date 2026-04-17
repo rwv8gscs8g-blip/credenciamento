@@ -12,6 +12,8 @@ Public Sub CT2_AbrirCentral()
 
     Dim op As String
 
+    TV2_PrepararNavegacaoHumana
+
     op = Trim$(InputBox( _
         "=== CENTRAL DE TESTES V2 ===" & vbCrLf & vbCrLf & _
         "[1] Smoke rapido" & vbCrLf & _

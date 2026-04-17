@@ -2,7 +2,7 @@
 titulo: Retomada do desenvolvimento na V12.0.0180 e fundacao da bateria V2
 data: 2026-04-17
 autor: GPT-5 (Codex)
-versao: V12.0.0187
+versao: V12.0.0188
 status: ativo
 tags: [bastao, testes, estabilizacao]
 ---
@@ -38,6 +38,7 @@ Havia tentativa local posterior a `0180` focada no importador VBA, sem commit pr
 - V2 passa a recolher o `Menu_Principal` tambem em toda navegacao assistida (`abrir resultado`, `abrir catalogo` e entradas `CT2_*`)
 - o proprio `Menu_Principal` passa a se recolher antes de abrir a `Central_Testes`, reduzindo interferencia do formulario modal
 - a V2 passa a exportar apenas CSV de falhas reais, e somente quando houver `FALHA` na execucao
+- o recolhimento passa a descarregar a instancia real criada por `VBA.UserForms.Add("Menu_Principal")`, corrigindo os casos em que o formulario permanecia visivel
 
 ## Pendencias
 
