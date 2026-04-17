@@ -143,16 +143,32 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     resOs = EmitirOS(preosId, Date + 5, "EMP-MIG-003")
     osId = resOs.IdGerado
     TV2_PreencherNotas notas, 8
-    resAval = AvaliarOS(osId, "QA V2", notas, 1, "Divergencia sem justificativa", "", Date + 6, Date + 15)
+    resAval = AvaliarOS(osId, "QA V2", notas, 1, "", "", Date + 6, Date + 15)
     TV2_LogAssert "SMOKE", "MIG_003", "AUTO", _
-                  "Exigir justificativa de divergencia no servico de avaliacao", _
+                  "Exigir motivo textual na divergencia do servico de avaliacao", _
                   "Svc_Avaliacao retorna erro e mantem a OS em execucao", _
                   "SUCESSO_PREOS=" & CStr(resPre.Sucesso) & "; SUCESSO_OS=" & CStr(resOs.Sucesso) & "; SUCESSO_AVAL=" & CStr(resAval.Sucesso) & "; MSG=" & resAval.Mensagem & "; STATUS_OS=" & TV2_StatusOS(osId) & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()), _
-                  "Fecha a dependencia da interface para justificativa obrigatoria", _
+                  "Fecha a dependencia da interface para a divergencia ficar sem motivo algum", _
                   (resPre.Sucesso And resOs.Sucesso And Not resAval.Sucesso And _
                    TV2_StatusOS(osId) = "EM_EXECUCAO" And _
                    TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3) And _
                    InStr(1, resAval.Mensagem, "Justificativa", vbTextCompare) > 0)
+
+    TV2_PrepararCenarioTriploCanonico
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 2)
+    preosId = resPre.IdGerado
+    resOs = EmitirOS(preosId, Date + 5, "EMP-MIG-004")
+    osId = resOs.IdGerado
+    TV2_PreencherNotas notas, 8
+    resAval = AvaliarOS(osId, "QA V2", notas, 1, "Observacao usada como justificativa", "", Date + 6, Date + 15)
+    TV2_LogAssert "SMOKE", "MIG_004", "AUTO", _
+                  "Aceitar observacao como motivo efetivo na divergencia", _
+                  "Svc_Avaliacao conclui a OS quando ha observacao textual", _
+                  "SUCESSO_PREOS=" & CStr(resPre.Sucesso) & "; SUCESSO_OS=" & CStr(resOs.Sucesso) & "; SUCESSO_AVAL=" & CStr(resAval.Sucesso) & "; STATUS_OS=" & TV2_StatusOS(osId) & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()), _
+                  "Preserva compatibilidade com a bateria oficial sem perder rastreabilidade", _
+                  (resPre.Sucesso And resOs.Sucesso And resAval.Sucesso And _
+                   TV2_StatusOS(osId) = "CONCLUIDA" And _
+                   TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3))
 
     TV2_FinalizarExecucao "SMOKE"
     Exit Sub

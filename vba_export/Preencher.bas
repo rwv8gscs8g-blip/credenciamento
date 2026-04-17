@@ -1709,6 +1709,42 @@ Private Function AtividadeJaExiste(ByVal wsAtiv As Worksheet, ByVal CNAE As Stri
     AtividadeJaExiste = False
 End Function
 
+Private Function ChaveAtividadeNormalizada(ByVal CNAE As Variant, ByVal descricao As Variant) As String
+    Dim cnaeNorm As String
+    Dim descNorm As String
+
+    cnaeNorm = SomenteDigitos(CNAE)
+    descNorm = NormalizarTextoBusca(descricao)
+
+    If cnaeNorm <> "" Then
+        ChaveAtividadeNormalizada = "C|" & cnaeNorm
+    ElseIf descNorm <> "" Then
+        ChaveAtividadeNormalizada = "D|" & descNorm
+    Else
+        ChaveAtividadeNormalizada = ""
+    End If
+End Function
+
+Private Function LinhaAtividadeDuplicadaAnterior(ByVal wsAtiv As Worksheet, ByVal linhaAtual As Long) As Boolean
+    Dim chaveAtual As String
+    Dim i As Long
+
+    chaveAtual = ChaveAtividadeNormalizada(wsAtiv.Cells(linhaAtual, COL_ATIV_CNAE).Value, _
+                                           wsAtiv.Cells(linhaAtual, COL_ATIV_DESCRICAO).Value)
+    If chaveAtual = "" Then
+        LinhaAtividadeDuplicadaAnterior = True
+        Exit Function
+    End If
+
+    For i = LINHA_DADOS To linhaAtual - 1
+        If ChaveAtividadeNormalizada(wsAtiv.Cells(i, COL_ATIV_CNAE).Value, _
+                                     wsAtiv.Cells(i, COL_ATIV_DESCRICAO).Value) = chaveAtual Then
+            LinhaAtividadeDuplicadaAnterior = True
+            Exit Function
+        End If
+    Next i
+End Function
+
 Private Function ExtrairServId(ByVal codServ As String, ByVal ativId As String) As String
     Dim p As Long
     Dim s As String
@@ -1770,7 +1806,7 @@ ultima = UltimaLinhaAba(SHEET_ATIVIDADES)
 If ultima < LINHA_DADOS Then Exit Sub
 
 For i = LINHA_DADOS To ultima
-    If LinhaAtividadeCombina(wsAtiv, i, filtro) Then qtd = qtd + 1
+    If LinhaAtividadeCombina(wsAtiv, i, filtro) And Not LinhaAtividadeDuplicadaAnterior(wsAtiv, i) Then qtd = qtd + 1
 Next i
 
 If qtd = 0 Then Exit Sub
@@ -1778,7 +1814,7 @@ If qtd = 0 Then Exit Sub
 ReDim itens(1 To qtd, 1 To 3)
 idx = 1
 For i = LINHA_DADOS To ultima
-    If LinhaAtividadeCombina(wsAtiv, i, filtro) Then
+    If LinhaAtividadeCombina(wsAtiv, i, filtro) And Not LinhaAtividadeDuplicadaAnterior(wsAtiv, i) Then
         itens(idx, 1) = wsAtiv.Cells(i, COL_ATIV_ID).Value
         itens(idx, 2) = wsAtiv.Cells(i, COL_ATIV_CNAE).Value
         itens(idx, 3) = wsAtiv.Cells(i, COL_ATIV_DESCRICAO).Value
@@ -2106,7 +2142,7 @@ End If
 etapa = "Pos-processamento"
 Application.StatusBar = "Reset CNAE: " & etapa & "..."
 Call InvalidarCacheCnaeAtividade
-qtdCadServ = LimparCadServParaAssociacaoManual()
+qtdCadServ = LIMPAR_CADSERV_EXECUTAR(True)
 Call PreenchimentoListaAtividade
 Call PreencherManutencaoValor
 
@@ -2120,8 +2156,8 @@ End If
 Application.StatusBar = False
 MsgBox "Reset e carga concluída com sucesso!" & vbCrLf & vbCrLf & _
        "Registros CNAE carregados: " & qtd & vbCrLf & _
-       "Associações removidas em CAD_SERV: " & qtdCadServ & vbCrLf & _
-       "Vinculação de serviços permanece manual." & vbCrLf & _
+       "CAD_SERV simplificada/reestruturada: " & qtdCadServ & vbCrLf & _
+       "Base pronta apenas com CNAEs sem duplicidade estrutural." & vbCrLf & _
        "Fonte: " & caminho, vbInformation, "Reset CNAE"
 Exit Sub
 
@@ -2492,6 +2528,136 @@ Private Function ImportarCNAE_Excel(ByVal caminhoExcel As String, Optional ByVal
         MsgBox "CNAEs importados do Excel: " & importados, vbInformation, "CNAE"
     End If
 End Function
+
+Private Function AtividadeChaveJaMantida(ByVal wsAtiv As Worksheet, ByVal ultimaLinhaMantida As Long, ByVal chave As String) As Boolean
+    Dim i As Long
+
+    If chave = "" Or ultimaLinhaMantida < LINHA_DADOS Then Exit Function
+
+    For i = LINHA_DADOS To ultimaLinhaMantida
+        If ChaveAtividadeNormalizada(wsAtiv.Cells(i, COL_ATIV_CNAE).Value, _
+                                     wsAtiv.Cells(i, COL_ATIV_DESCRICAO).Value) = chave Then
+            AtividadeChaveJaMantida = True
+            Exit Function
+        End If
+    Next i
+End Function
+
+Private Function SanitizarAtividadesSemDuplicidade() As Long
+    Dim wsAtiv As Worksheet
+    Dim ultima As Long
+    Dim linhaLeitura As Long
+    Dim linhaEscrita As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim chave As String
+    Dim idAtual As String
+    Dim cnaeAtual As String
+    Dim descAtual As String
+    Dim maxId As Long
+
+    On Error GoTo erro_carregamento
+
+    Set wsAtiv = ThisWorkbook.Sheets(SHEET_ATIVIDADES)
+    Call Util_LimparFiltrosAba(wsAtiv)
+    ultima = UltimaLinhaAba(SHEET_ATIVIDADES)
+    If ultima < LINHA_DADOS Then Exit Function
+
+    If Not Util_PrepararAbaParaEscrita(wsAtiv, estavaProtegida, senhaProtecao) Then Exit Function
+
+    For linhaLeitura = LINHA_DADOS To ultima
+        If CLng(Val(wsAtiv.Cells(linhaLeitura, COL_ATIV_ID).Value)) > maxId Then
+            maxId = CLng(Val(wsAtiv.Cells(linhaLeitura, COL_ATIV_ID).Value))
+        End If
+    Next linhaLeitura
+
+    linhaEscrita = LINHA_DADOS
+    For linhaLeitura = LINHA_DADOS To ultima
+        chave = ChaveAtividadeNormalizada(wsAtiv.Cells(linhaLeitura, COL_ATIV_CNAE).Value, _
+                                          wsAtiv.Cells(linhaLeitura, COL_ATIV_DESCRICAO).Value)
+
+        If chave = "" Then
+            If Trim$(SafeListVal(wsAtiv.Cells(linhaLeitura, COL_ATIV_ID).Value)) <> "" Or _
+               Trim$(SafeListVal(wsAtiv.Cells(linhaLeitura, COL_ATIV_CNAE).Value)) <> "" Or _
+               Trim$(SafeListVal(wsAtiv.Cells(linhaLeitura, COL_ATIV_DESCRICAO).Value)) <> "" Then
+                SanitizarAtividadesSemDuplicidade = SanitizarAtividadesSemDuplicidade + 1
+            End If
+        ElseIf Not AtividadeChaveJaMantida(wsAtiv, linhaEscrita - 1, chave) Then
+            If CLng(Val(wsAtiv.Cells(linhaLeitura, COL_ATIV_ID).Value)) > 0 Then
+                idAtual = Pad3(CLng(Val(wsAtiv.Cells(linhaLeitura, COL_ATIV_ID).Value)))
+            Else
+                maxId = maxId + 1
+                idAtual = Pad3(maxId)
+            End If
+            cnaeAtual = FormatarCodigoCNAE(wsAtiv.Cells(linhaLeitura, COL_ATIV_CNAE).Value)
+            descAtual = Trim$(CStr(wsAtiv.Cells(linhaLeitura, COL_ATIV_DESCRICAO).Value))
+
+            If linhaEscrita <> linhaLeitura Then
+                wsAtiv.Cells(linhaEscrita, COL_ATIV_ID).Value = idAtual
+                wsAtiv.Cells(linhaEscrita, COL_ATIV_CNAE).NumberFormat = "@"
+                wsAtiv.Cells(linhaEscrita, COL_ATIV_CNAE).Value = cnaeAtual
+                wsAtiv.Cells(linhaEscrita, COL_ATIV_DESCRICAO).Value = descAtual
+            End If
+
+            linhaEscrita = linhaEscrita + 1
+        Else
+            SanitizarAtividadesSemDuplicidade = SanitizarAtividadesSemDuplicidade + 1
+        End If
+    Next linhaLeitura
+
+    If linhaEscrita <= ultima Then
+        wsAtiv.Range(wsAtiv.Cells(linhaEscrita, COL_ATIV_ID), wsAtiv.Cells(ultima, COL_ATIV_DESCRICAO)).ClearContents
+    End If
+    wsAtiv.Cells(1, COL_CONTADOR_AR).Value = maxId
+
+saida:
+    On Error Resume Next
+    Call Util_RestaurarProtecaoAba(wsAtiv, estavaProtegida, senhaProtecao)
+    On Error GoTo 0
+    Exit Function
+
+erro_carregamento:
+    SanitizarAtividadesSemDuplicidade = 0
+    Resume saida
+End Function
+
+Private Function LIMPAR_CADSERV_EXECUTAR(Optional ByVal silencioso As Boolean = False) As Long
+    Dim removidosAtiv As Long
+    Dim removidosCadServ As Long
+    Dim reinstalados As Long
+    Dim msgSave As String
+
+    removidosAtiv = SanitizarAtividadesSemDuplicidade()
+    removidosCadServ = LimparCadServParaAssociacaoManual()
+    reinstalados = ReinstalarCadServEstruturalPorAtividades()
+
+    Call InvalidarCacheCnaeAtividade
+    Call PreenchimentoListaAtividade
+    Call PreenchimentoServico
+    Call PreencherManutencaoValor
+
+    LIMPAR_CADSERV_EXECUTAR = reinstalados
+
+    If silencioso Then Exit Function
+
+    If Not Util_SalvarWorkbookSeguro(msgSave) Then
+        MsgBox "CAD_SERV simplificada, mas houve falha ao salvar automaticamente." & vbCrLf & _
+               "Detalhe: " & msgSave & vbCrLf & _
+               "Use Ctrl+S para salvar manualmente.", vbExclamation, "Limpar CAD_SERV"
+    End If
+
+    MsgBox "Saneamento concluído." & vbCrLf & vbCrLf & _
+           "Duplicidades removidas em ATIVIDADES: " & removidosAtiv & vbCrLf & _
+           "Registros removidos em CAD_SERV: " & removidosCadServ & vbCrLf & _
+           "Linhas estruturais recriadas em CAD_SERV: " & reinstalados, _
+           vbInformation, "Limpar CAD_SERV"
+End Function
+
+Public Sub LIMPAR_CADSERV_AGORA()
+    Dim qtdEstrutural As Long
+
+    qtdEstrutural = LIMPAR_CADSERV_EXECUTAR(False)
+End Sub
 
 Private Function ReinstalarCadServEstruturalPorAtividades() As Long
     Dim wsAtiv As Worksheet
@@ -3077,10 +3243,12 @@ Sub Limpa_Base()
     Dim wsOS As Worksheet
     Dim msgErro As String
     Dim msgSave As String
+    Dim qtdCadServ As Long
 
     If MsgBox("Tem certeza que deseja ZERAR a Base Operacional?" & vbCrLf & _
               "(EMPRESAS, ENTIDADE, CREDENCIADOS, PRE_OS e CAD_OS)" & vbCrLf & _
-              "As abas ATIVIDADES (CNAE) e CAD_SERV serao PRESERVADAS.", _
+              "ATIVIDADES (CNAE) serão preservadas e saneadas." & vbCrLf & _
+              "CAD_SERV será simplificada para uma base estrutural sem duplicidades.", _
               vbQuestion + vbYesNo, "Limpar a Base de Dados") = vbYes Then
         Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
         If Not LimparAbaOperacional(wsEmp, "T", msgErro) Then
@@ -3112,6 +3280,8 @@ Sub Limpa_Base()
             Exit Sub
         End If
 
+        qtdCadServ = LIMPAR_CADSERV_EXECUTAR(True)
+
         Call PreenchimentoServico
         Call AtualizarListaEntidadeMenuAtual
         Call AtualizarListaEmpresaMenuAtual
@@ -3123,7 +3293,9 @@ Sub Limpa_Base()
                    "Detalhe: " & msgSave & vbCrLf & _
                    "Use Ctrl+S para salvar manualmente antes de continuar.", vbExclamation, "Limpar Base"
         End If
-        MsgBox "Base de Dados Limpa com Sucesso!", vbInformation, "Limpar Base"
+        MsgBox "Base de Dados limpa com sucesso!" & vbCrLf & _
+               "CAD_SERV reconstruída com " & qtdCadServ & " linhas estruturais sem duplicidade.", _
+               vbInformation, "Limpar Base"
     Else
         MsgBox "Base de dados não foi alterada.", vbInformation, "Base preservada"
     End If

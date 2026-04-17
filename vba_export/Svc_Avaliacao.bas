@@ -30,6 +30,7 @@ Public Function AvaliarOS( _
     Dim resSusp As TResult
     Dim valorExecutado As Currency
     Dim haDivergencia As Boolean
+    Dim justifEfetiva As String
 
     On Error GoTo Erro
 
@@ -77,11 +78,14 @@ Public Function AvaliarOS( _
         Exit Function
     End If
 
+    justifEfetiva = Trim$(justifDiv)
+    If justifEfetiva = "" Then justifEfetiva = Trim$(Observacao)
+
     valorExecutado = CCur(QtExecutada * os.VALOR_UNIT)
     haDivergencia = (Abs(QtExecutada - os.QT_ESTIMADA) > 0.0001) Or _
                     (Abs(CDbl(valorExecutado) - CDbl(os.VALOR_TOTAL_OS)) > 0.0001)
 
-    If haDivergencia And Trim$(justifDiv) = "" Then
+    If haDivergencia And justifEfetiva = "" Then
         res.Sucesso = False
         res.Mensagem = "Justificativa obrigatoria quando ha divergencia entre o executado e o orcado."
         AvaliarOS = res
@@ -103,7 +107,7 @@ Public Function AvaliarOS( _
     aval.DT_AVAL = Now
 
     ' 7. Persistir via Repo_Avaliacao
-    resInsert = RepoAvaliacaoInserir(aval, QtExecutada, os.VALOR_UNIT, justifDiv, dtFechamento, DtPagto)
+    resInsert = RepoAvaliacaoInserir(aval, QtExecutada, os.VALOR_UNIT, justifEfetiva, dtFechamento, DtPagto)
     If Not resInsert.Sucesso Then
         res.Sucesso = False
         res.Mensagem = "Falha ao salvar avaliacao: " & resInsert.Mensagem
