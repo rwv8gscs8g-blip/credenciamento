@@ -25,26 +25,15 @@ Attribute VB_Exposed = False
 
 
 
+
+
+
 Option Explicit
 
 ' =========================
 ' Acoes dinamicas na UI
 ' =========================
 ' Pre-OS/OS: BT_PREOS_* e BT_OS_CANCELAR sao fisicos no designer (sem Controls.Add).
-Private WithEvents mBtnCredenciarEmpresa As MSForms.CommandButton
-Attribute mBtnCredenciarEmpresa.VB_VarHelpID = -1
-Private WithEvents mBtnEmpresaCadastroNav As MSForms.CommandButton
-Attribute mBtnEmpresaCadastroNav.VB_VarHelpID = -1
-Private WithEvents mBtnEmpresaRodizioNav As MSForms.CommandButton
-Attribute mBtnEmpresaRodizioNav.VB_VarHelpID = -1
-Private WithEvents mBtnEmpresaAvaliacaoNav As MSForms.CommandButton
-Attribute mBtnEmpresaAvaliacaoNav.VB_VarHelpID = -1
-Private WithEvents mBtnReativaEmpresa As MSForms.CommandButton
-Attribute mBtnReativaEmpresa.VB_VarHelpID = -1
-Private WithEvents mTxtNomeResponsavelEmpresa As MSForms.TextBox
-Attribute mTxtNomeResponsavelEmpresa.VB_VarHelpID = -1
-Private WithEvents mTxtCpfResponsavelEmpresa As MSForms.TextBox
-Attribute mTxtCpfResponsavelEmpresa.VB_VarHelpID = -1
 
 ' Filtros Dinâmicos (MI-09 e MI-10 + busca Empresa/Entidade pós-14h)
 Private WithEvents mTxtFiltroRodizio As MSForms.TextBox
@@ -60,37 +49,6 @@ Attribute mTxtFiltroCadServ.VB_VarHelpID = -1
 Private mInicializando As Boolean
 Private Const SHEET_REL_UI As String = "RELATORIO"
 Private Const PRAZO_PADRAO_OS_DIAS As Long = 30
-
-' Camada de compatibilidade:
-' os nomes internos destes controles ainda sao legados no binario do formulario.
-' O codigo deve preferir os acessores semanticamente alinhados com Empresa.
-Private Property Get BtnEmpresaCadastro() As MSForms.CommandButton
-    Set BtnEmpresaCadastro = B_MEI
-End Property
-
-Private Property Get BtnEmpresaRodizio() As MSForms.CommandButton
-    Set BtnEmpresaRodizio = B_DesignarMEI
-End Property
-
-Private Property Get BtnEmpresaAvaliacao() As MSForms.CommandButton
-    Set BtnEmpresaAvaliacao = B_AvaliaMEI
-End Property
-
-Private Property Get CampoNomeResponsavelEmpresa() As MSForms.TextBox
-    Set CampoNomeResponsavelEmpresa = M_Nome_MEI
-End Property
-
-Private Property Get CampoCpfResponsavelEmpresa() As MSForms.TextBox
-    Set CampoCpfResponsavelEmpresa = M_CPF_MEI
-End Property
-
-Private Sub InicializarCompatibilidadeEmpresa()
-    Set mBtnEmpresaCadastroNav = BtnEmpresaCadastro
-    Set mBtnEmpresaRodizioNav = BtnEmpresaRodizio
-    Set mBtnEmpresaAvaliacaoNav = BtnEmpresaAvaliacao
-    Set mTxtNomeResponsavelEmpresa = CampoNomeResponsavelEmpresa
-    Set mTxtCpfResponsavelEmpresa = CampoCpfResponsavelEmpresa
-End Sub
 
 ' Chamada pela Central de Testes antes da bateria oficial: foco na planilha.
 Public Sub Menu_RecolherParaBateria()
@@ -117,10 +75,10 @@ On Error GoTo erro_carregamento:
     'Ativar Botes
         B_Home.BackStyle = fmBackStyleOpaque
         B_Entidade.BackStyle = fmBackStyleTransparent
-        BtnEmpresaCadastro.BackStyle = fmBackStyleTransparent
-        BtnEmpresaRodizio.BackStyle = fmBackStyleTransparent
+        B_Empresa_Cadastro.BackStyle = fmBackStyleTransparent
+        B_Empresa_Rodizio.BackStyle = fmBackStyleTransparent
         B_Emite_OS.BackStyle = fmBackStyleTransparent
-        BtnEmpresaAvaliacao.BackStyle = fmBackStyleTransparent
+        B_Empresa_Avaliacao.BackStyle = fmBackStyleTransparent
         B_Relatorios.BackStyle = fmBackStyleTransparent
         
         PAGINAS.Value = 0
@@ -150,10 +108,10 @@ On Error GoTo erro_carregamento:
     'Ativar Botes
         B_Home.BackStyle = fmBackStyleOpaque
         B_Entidade.BackStyle = fmBackStyleTransparent
-        BtnEmpresaCadastro.BackStyle = fmBackStyleTransparent
-        BtnEmpresaRodizio.BackStyle = fmBackStyleTransparent
+        B_Empresa_Cadastro.BackStyle = fmBackStyleTransparent
+        B_Empresa_Rodizio.BackStyle = fmBackStyleTransparent
         B_Emite_OS.BackStyle = fmBackStyleTransparent
-        BtnEmpresaAvaliacao.BackStyle = fmBackStyleTransparent
+        B_Empresa_Avaliacao.BackStyle = fmBackStyleTransparent
         B_CAD_SERV.BackStyle = fmBackStyleTransparent
         B_Relatorios.BackStyle = fmBackStyleTransparent
 
@@ -207,10 +165,10 @@ On Error GoTo erro_carregamento:
     'Ativar Botes
         B_Home.BackStyle = fmBackStyleTransparent
         B_Entidade.BackStyle = fmBackStyleOpaque
-        BtnEmpresaCadastro.BackStyle = fmBackStyleTransparent
-        BtnEmpresaRodizio.BackStyle = fmBackStyleTransparent
+        B_Empresa_Cadastro.BackStyle = fmBackStyleTransparent
+        B_Empresa_Rodizio.BackStyle = fmBackStyleTransparent
         B_Emite_OS.BackStyle = fmBackStyleTransparent
-        BtnEmpresaAvaliacao.BackStyle = fmBackStyleTransparent
+        B_Empresa_Avaliacao.BackStyle = fmBackStyleTransparent
         B_CAD_SERV.BackStyle = fmBackStyleTransparent
         B_Relatorios.BackStyle = fmBackStyleTransparent
 
@@ -232,16 +190,16 @@ Exit Sub
 erro_carregamento:
 End Sub
 
-Private Sub mBtnEmpresaCadastroNav_Click()
+Private Sub B_Empresa_Cadastro_Click()
 On Error GoTo erro_carregamento:
 
     'Ativar Botes
         B_Home.BackStyle = fmBackStyleTransparent
         B_Entidade.BackStyle = fmBackStyleTransparent
-        BtnEmpresaCadastro.BackStyle = fmBackStyleOpaque
-        BtnEmpresaRodizio.BackStyle = fmBackStyleTransparent
+        B_Empresa_Cadastro.BackStyle = fmBackStyleOpaque
+        B_Empresa_Rodizio.BackStyle = fmBackStyleTransparent
         B_Emite_OS.BackStyle = fmBackStyleTransparent
-        BtnEmpresaAvaliacao.BackStyle = fmBackStyleTransparent
+        B_Empresa_Avaliacao.BackStyle = fmBackStyleTransparent
         B_CAD_SERV.BackStyle = fmBackStyleTransparent
         B_Relatorios.BackStyle = fmBackStyleTransparent
 
@@ -252,16 +210,16 @@ Exit Sub
 erro_carregamento:
 End Sub
 
-Private Sub mBtnEmpresaRodizioNav_Click()
+Private Sub B_Empresa_Rodizio_Click()
 On Error GoTo erro_carregamento:
 
     'Ativar Botes
         B_Home.BackStyle = fmBackStyleTransparent
         B_Entidade.BackStyle = fmBackStyleTransparent
-        BtnEmpresaCadastro.BackStyle = fmBackStyleTransparent
-        BtnEmpresaRodizio.BackStyle = fmBackStyleOpaque
+        B_Empresa_Cadastro.BackStyle = fmBackStyleTransparent
+        B_Empresa_Rodizio.BackStyle = fmBackStyleOpaque
         B_Emite_OS.BackStyle = fmBackStyleTransparent
-        BtnEmpresaAvaliacao.BackStyle = fmBackStyleTransparent
+        B_Empresa_Avaliacao.BackStyle = fmBackStyleTransparent
         B_Relatorios.BackStyle = fmBackStyleTransparent
 
         PAGINAS.Value = 3
@@ -275,10 +233,10 @@ Private Sub B_Emite_OS_Click()
 'Ativar Botes
         B_Home.BackStyle = fmBackStyleTransparent
         B_Entidade.BackStyle = fmBackStyleTransparent
-        BtnEmpresaCadastro.BackStyle = fmBackStyleTransparent
-        BtnEmpresaRodizio.BackStyle = fmBackStyleTransparent
+        B_Empresa_Cadastro.BackStyle = fmBackStyleTransparent
+        B_Empresa_Rodizio.BackStyle = fmBackStyleTransparent
         B_Emite_OS.BackStyle = fmBackStyleOpaque
-        BtnEmpresaAvaliacao.BackStyle = fmBackStyleTransparent
+        B_Empresa_Avaliacao.BackStyle = fmBackStyleTransparent
         B_CAD_SERV.BackStyle = fmBackStyleTransparent
         B_Relatorios.BackStyle = fmBackStyleTransparent
 
@@ -287,15 +245,15 @@ Private Sub B_Emite_OS_Click()
 
 End Sub
 
-Private Sub mBtnEmpresaAvaliacaoNav_Click()
+Private Sub B_Empresa_Avaliacao_Click()
 On Error GoTo erro_carregamento:
    
         B_Home.BackStyle = fmBackStyleTransparent
         B_Entidade.BackStyle = fmBackStyleTransparent
-        BtnEmpresaCadastro.BackStyle = fmBackStyleTransparent
-        BtnEmpresaRodizio.BackStyle = fmBackStyleTransparent
+        B_Empresa_Cadastro.BackStyle = fmBackStyleTransparent
+        B_Empresa_Rodizio.BackStyle = fmBackStyleTransparent
         B_Emite_OS.BackStyle = fmBackStyleTransparent
-        BtnEmpresaAvaliacao.BackStyle = fmBackStyleOpaque
+        B_Empresa_Avaliacao.BackStyle = fmBackStyleOpaque
         B_CAD_SERV.BackStyle = fmBackStyleTransparent
         B_Relatorios.BackStyle = fmBackStyleTransparent
     
@@ -309,10 +267,10 @@ On Error GoTo erro_carregamento:
    
         B_Home.BackStyle = fmBackStyleTransparent
         B_Entidade.BackStyle = fmBackStyleTransparent
-        BtnEmpresaCadastro.BackStyle = fmBackStyleTransparent
-        BtnEmpresaRodizio.BackStyle = fmBackStyleTransparent
+        B_Empresa_Cadastro.BackStyle = fmBackStyleTransparent
+        B_Empresa_Rodizio.BackStyle = fmBackStyleTransparent
         B_Emite_OS.BackStyle = fmBackStyleTransparent
-        BtnEmpresaAvaliacao.BackStyle = fmBackStyleTransparent
+        B_Empresa_Avaliacao.BackStyle = fmBackStyleTransparent
         B_CAD_SERV.BackStyle = fmBackStyleOpaque
         B_Relatorios.BackStyle = fmBackStyleTransparent
 
@@ -331,10 +289,10 @@ On Error GoTo erro_carregamento:
    
         B_Home.BackStyle = fmBackStyleTransparent
         B_Entidade.BackStyle = fmBackStyleTransparent
-        BtnEmpresaCadastro.BackStyle = fmBackStyleTransparent
-        BtnEmpresaRodizio.BackStyle = fmBackStyleTransparent
+        B_Empresa_Cadastro.BackStyle = fmBackStyleTransparent
+        B_Empresa_Rodizio.BackStyle = fmBackStyleTransparent
         B_Emite_OS.BackStyle = fmBackStyleTransparent
-        BtnEmpresaAvaliacao.BackStyle = fmBackStyleTransparent
+        B_Empresa_Avaliacao.BackStyle = fmBackStyleTransparent
         B_CAD_SERV.BackStyle = fmBackStyleTransparent
         B_Relatorios.BackStyle = fmBackStyleOpaque
     
@@ -360,8 +318,10 @@ Private Sub B_ReativaEntidade_Click()
 On Error GoTo erro_carregamento:
     Dim frmReativaEntidade As Object
 
-    Call PreenchimentoEntidadeInativa
-    If NLinhas < LINHA_DADOS Then
+    ' Nao chamar PreenchimentoEntidadeInativa aqui: o UserForm ainda nao existe e
+    ' ControleFormulario pode acoplar a uma instancia antiga (nao visivel) do Reativa_Entidade,
+    ' gerando lista duplicada/inconsistente com a instancia exibida pelo UserForms.Add.
+    If ContarLinhasEntidadeInativasValidas() <= 0 Then
         MsgBox "N" & ChrW(227) & "o h" & ChrW(225) & " entidade inativa para reativar.", _
                vbInformation, "Reativa" & ChrW(231) & ChrW(227) & "o de Entidade"
     Else
@@ -373,6 +333,25 @@ On Error GoTo erro_carregamento:
     Exit Sub
 erro_carregamento:
     MsgBox "Erro ao abrir reativa" & ChrW(231) & ChrW(227) & "o de entidade: " & Err.Description, _
+           vbCritical, "Reativa" & ChrW(231) & ChrW(227) & "o"
+End Sub
+
+Private Sub B_Reativa_Empresa_Click()
+On Error GoTo erro_carregamento:
+    Dim frmReativaEmpresa As Object
+
+    If ContarLinhasEmpresaInativasValidas() <= 0 Then
+        MsgBox "N" & ChrW(227) & "o h" & ChrW(225) & " empresa inativa para reativar.", _
+               vbInformation, "Reativa" & ChrW(231) & ChrW(227) & "o de Empresa"
+    Else
+        Call UI_DescartarFormVisivel("Reativa_Empresa")
+        Set frmReativaEmpresa = VBA.UserForms.Add("Reativa_Empresa")
+        frmReativaEmpresa.Show vbModal
+        Call AtualizarListaEmpresaMenuAtual
+    End If
+    Exit Sub
+erro_carregamento:
+    MsgBox "Erro ao abrir reativa" & ChrW(231) & ChrW(227) & "o de empresa: " & Err.Description, _
            vbCritical, "Reativa" & ChrW(231) & ChrW(227) & "o"
 End Sub
 
@@ -443,7 +422,7 @@ Private Sub BE_ImprimeOS_Click()
     ' 4. Sucesso: preparar globais para template de impressao
     N_OS = res.IdGerado
     Empresa_CNPJ = OS_CNPJ
-    M_NomeEmpresa = OS_Empresa
+    M_NomeEmpresa = TXT_OS_NomeEmpresa
     Desc_entidade = OS_Demandante
     Desc_Ativi = OS_Atividade
     Desc_Serv = OS_Servico
@@ -491,7 +470,7 @@ Limpar:
     OS_QT_Estimada = Empty
     OS_DT_Fim = Empty
     OS_CNPJ = Empty
-    OS_Empresa = Empty
+    TXT_OS_NomeEmpresa = Empty
     OS_Demandante = Empty
     OS_Atividade = Empty
     OS_Servico = Empty
@@ -503,7 +482,7 @@ LimparFalha:
     OS_QT_Estimada = Empty
     OS_DT_Fim = Empty
     OS_CNPJ = Empty
-    OS_Empresa = Empty
+    TXT_OS_NomeEmpresa = Empty
     OS_Demandante = Empty
     OS_Atividade = Empty
     OS_Servico = Empty
@@ -638,15 +617,15 @@ On Error GoTo erro_carregamento:
     Dim frmCredenciamento As Object
     Dim frmExistente As Object
 
-    If M_Lista.ListCount = 0 Then
+    If EMP_Lista.ListCount = 0 Then
         MsgBox "Nenhuma empresa cadastrada. Cadastre uma empresa primeiro.", vbExclamation, "Credenciar Empresa"
         Exit Sub
     End If
 
-    If M_Lista.ListIndex >= 0 Then
-        empIdSel = SafeListVal(M_Lista.List(M_Lista.ListIndex, 0))
-        cnpjSel = SafeListVal(M_Lista.List(M_Lista.ListIndex, 1))
-        razaoSel = SafeListVal(M_Lista.List(M_Lista.ListIndex, 2))
+    If EMP_Lista.ListIndex >= 0 Then
+        empIdSel = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 0))
+        cnpjSel = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 1))
+        razaoSel = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 2))
     Else
         empIdSel = Trim$(CStr(M_ID_Empresa))
         cnpjSel = Trim$(CStr(Empresa_CNPJ))
@@ -1032,16 +1011,16 @@ M_Empresa.Value = Funcoes.NormalizarTextoPTBR(M_Empresa.Value)
 Exit Sub
 erro_carregamento:
 End Sub
-Private Sub mTxtNomeResponsavelEmpresa_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
+Private Sub M_Nome_Responsavel_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
 On Error GoTo erro_carregamento:
 
    ' Permitir acentuacao em PT-BR (V5)
 Exit Sub
 erro_carregamento:
 End Sub
-Private Sub mTxtNomeResponsavelEmpresa_AfterUpdate()
+Private Sub M_Nome_Responsavel_AfterUpdate()
 On Error GoTo erro_carregamento:
-CampoNomeResponsavelEmpresa.Value = Funcoes.NormalizarTextoPTBR(CampoNomeResponsavelEmpresa.Value)
+M_Nome_Responsavel.Value = Funcoes.NormalizarTextoPTBR(M_Nome_Responsavel.Value)
 Exit Sub
 erro_carregamento:
 End Sub
@@ -1465,51 +1444,51 @@ Call AtualizarListaEntidadeMenuAtual
 Exit Sub
 erro_carregamento:
 End Sub
-Private Sub M_Lista_Click()
+Private Sub EMP_Lista_Click()
 On Error GoTo erro_carregamento:
 
-    If M_Lista.ListIndex < 0 Then Exit Sub
+    If EMP_Lista.ListIndex < 0 Then Exit Sub
     Dim empIdSel As String
-    empIdSel = SafeListVal(M_Lista.List(M_Lista.ListIndex, 0))
+    empIdSel = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 0))
     If empIdSel = "" Then Exit Sub
 
     ' V12: eliminado .Select + Application.GoTo + ActiveCell (proibidos; causavam saida
     ' prematura via erro_carregamento dentro de formulario modal, zerando as variaveis).
     ' Leitura direta do ListBox — sem efeitos colaterais no workbook.
-    A_Cad = SafeListVal(M_Lista.List(M_Lista.ListIndex, 2))     ' Razao Social (legado)
+    A_Cad = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 2))     ' Razao Social (legado)
     C_Cad = CInt(Val(empIdSel))                                  ' ID numerico (legado)
     M_ID_Empresa = empIdSel
-    Empresa_CNPJ = SafeListVal(M_Lista.List(M_Lista.ListIndex, 1))
-    M_NomeEmpresa = SafeListVal(M_Lista.List(M_Lista.ListIndex, 2))
-    Empresa_endereco = SafeListVal(M_Lista.List(M_Lista.ListIndex, 6))
-    Empresa_email = SafeListVal(M_Lista.List(M_Lista.ListIndex, 13))
+    Empresa_CNPJ = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 1))
+    M_NomeEmpresa = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 2))
+    Empresa_endereco = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 6))
+    Empresa_email = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 13))
 
     ' V12.0.0008: popular controles visiveis ao selecionar empresa.
     ' Antes apenas as variaveis globais eram atualizadas; os TextBox permaneciam vazios.
-    ' Colunas do M_Lista (0-based) = colunas da aba EMPRESAS (1-based) deslocadas em -1.
-    M_CNPJ.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 1))
-    M_Empresa.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 2))
-    M_Insc_Mun.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 3))
-    CampoNomeResponsavelEmpresa.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 4))
-    CampoCpfResponsavelEmpresa.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 5))
-    M_Endereco.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 6))
-    M_Bairro.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 7))
-    M_Municipio.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 8))
-    M_CEP.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 9))
-    M_UF.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 10))
-    M_Tel_Fixo.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 11))
-    M_Tel_Cel.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 12))
-    M_Email.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 13))
-    M_Temp_Exper.Value = SafeListVal(M_Lista.List(M_Lista.ListIndex, 14))
+    ' Colunas do EMP_Lista (0-based) = colunas da aba EMPRESAS (1-based) deslocadas em -1.
+    M_CNPJ.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 1))
+    M_Empresa.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 2))
+    M_Insc_Mun.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 3))
+    M_Nome_Responsavel.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 4))
+    M_CPF_Responsavel.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 5))
+    M_Endereco.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 6))
+    M_Bairro.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 7))
+    M_Municipio.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 8))
+    M_CEP.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 9))
+    M_UF.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 10))
+    M_Tel_Fixo.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 11))
+    M_Tel_Cel.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 12))
+    M_Email.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 13))
+    M_Temp_Exper.Value = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 14))
 
 Exit Sub
 erro_carregamento:
 End Sub
 
-Private Sub M_Lista_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
+Private Sub EMP_Lista_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
 On Error GoTo erro_carregamento:
 
-    If M_Lista.ListIndex < 0 Then
+    If EMP_Lista.ListIndex < 0 Then
         MsgBox "Selecione uma empresa para alterar.", vbExclamation, "Cadastro de Empresa"
         Exit Sub
     End If
@@ -1520,22 +1499,22 @@ On Error GoTo erro_carregamento:
     ' V12.0.0010: corrigido — col 0 (ID) removido da CallByName.
     ' O ID e lido da global M_ID_Empresa.
     ' Garantia explicitamente definida aqui antes de chamar:
-    M_ID_Empresa = SafeListVal(M_Lista.List(M_Lista.ListIndex, 0))
+    M_ID_Empresa = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 0))
     CallByName frmAltera, "DefinirDadosEdicaoEmpresa", VbMethod, _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 1)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 2)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 3)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 4)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 5)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 6)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 7)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 8)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 9)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 10)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 11)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 12)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 13)), _
-        SafeListVal(M_Lista.List(M_Lista.ListIndex, 14))
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 1)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 2)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 3)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 4)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 5)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 6)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 7)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 8)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 9)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 10)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 11)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 12)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 13)), _
+        SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 14))
 
     frmAltera.Show
     Call AtualizarListaEmpresaMenuAtual
@@ -2127,9 +2106,7 @@ Erro_Cancelar:
     MsgBox "Falha sistêmica ao cancelar: " & Err.Description, vbCritical
 End Sub
 
-' Handler usa nome legado do controle no .frx (M_CadastrarMEI).
-' Semanticamente: cadastro de empresa.
-Private Sub M_CadastrarMEI_Click()
+Private Sub M_Cadastrar_Empresa_Click()
 On Error GoTo erro_carregamento:
 Dim wsEmpCad As Worksheet
 Dim linhaNovaEmp As Long
@@ -2198,8 +2175,8 @@ With wsEmpCad
     .Cells(linhaNovaEmp, COL_EMP_CNPJ).Value = Trim$(CStr(M_CNPJ.Value))
     .Cells(linhaNovaEmp, COL_EMP_RAZAO).Value = Funcoes.NormalizarTextoPTBR(M_Empresa.Value)
     .Cells(linhaNovaEmp, COL_EMP_INSCR_MUN).Value = Trim$(CStr(M_Insc_Mun.Value))
-    .Cells(linhaNovaEmp, COL_EMP_RESPONSAVEL).Value = Funcoes.NormalizarTextoPTBR(CampoNomeResponsavelEmpresa.Value)
-    .Cells(linhaNovaEmp, COL_EMP_CPF_RESP).Value = Trim$(CStr(CampoCpfResponsavelEmpresa.Value))
+    .Cells(linhaNovaEmp, COL_EMP_RESPONSAVEL).Value = Funcoes.NormalizarTextoPTBR(M_Nome_Responsavel.Value)
+    .Cells(linhaNovaEmp, COL_EMP_CPF_RESP).Value = Trim$(CStr(M_CPF_Responsavel.Value))
     .Cells(linhaNovaEmp, COL_EMP_ENDERECO).Value = Funcoes.NormalizarTextoPTBR(M_Endereco.Value)
     .Cells(linhaNovaEmp, COL_EMP_BAIRRO).Value = Funcoes.NormalizarTextoPTBR(M_Bairro.Value)
     .Cells(linhaNovaEmp, COL_EMP_MUNICIPIO).Value = Funcoes.NormalizarTextoPTBR(M_Municipio.Value)
@@ -2252,8 +2229,8 @@ Private Sub LimparCamposCadastroEmpresa()
     M_CNPJ.Value = Empty
     M_Empresa.Value = Empty
     M_Insc_Mun.Value = Empty
-    CampoNomeResponsavelEmpresa.Value = Empty
-    CampoCpfResponsavelEmpresa.Value = Empty
+    M_Nome_Responsavel.Value = Empty
+    M_CPF_Responsavel.Value = Empty
     M_Endereco.Value = Empty
     M_Bairro.Value = Empty
     M_Municipio.Value = Empty
@@ -2466,13 +2443,11 @@ End Sub
 Private Sub M_CNPJ_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
 M_CNPJ.Text = Funcoes.cnpj(KeyAscii, M_CNPJ.Text)
 End Sub
-Private Sub mTxtCpfResponsavelEmpresa_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
-CampoCpfResponsavelEmpresa.Text = Funcoes.cpf(KeyAscii, CampoCpfResponsavelEmpresa.Text)
+Private Sub M_CPF_Responsavel_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
+M_CPF_Responsavel.Text = Funcoes.cpf(KeyAscii, M_CPF_Responsavel.Text)
 End Sub
 
-' Handler usa nome legado do controle no .frx (MEIs_Cadastrados).
-' Semanticamente: relatorio de empresas cadastradas.
-Private Sub MEIs_Cadastrados_Click()
+Private Sub Btn_Empresas_Cadastradas_Click()
 Dim wsEmp As Worksheet
 Dim ultima As Long
 Dim primeiraLinhaEmp As Long
@@ -2492,7 +2467,7 @@ If Not Util_PrepararAbaParaEscrita(wsEmp, estEmp, senEmp) Then
     Exit Sub
 End If
 
-On Error GoTo falha_rel_meis_cad
+On Error GoTo falha_rel_emp_cad
 
 wsEmp.Columns("A:O").AutoFit
 With wsEmp.PageSetup
@@ -2550,16 +2525,14 @@ End With
 Call Util_RestaurarProtecaoAba(wsEmp, estEmp, senEmp)
 Exit Sub
 
-falha_rel_meis_cad:
+falha_rel_emp_cad:
 On Error Resume Next
 Call Util_RestaurarProtecaoAba(wsEmp, estEmp, senEmp)
 On Error GoTo 0
 MsgBox "Erro ao gerar relatório de empresas cadastradas: " & Err.Description, vbCritical, "Relatório"
 End Sub
 
-' Handler usa nome legado do controle no .frx (MEIs_Credenciados).
-' Semanticamente: relatorio de empresas credenciadas.
-Private Sub MEIs_Credenciados_Click()
+Private Sub Btn_Empresas_Credenciados_Click()
 Dim wsCred As Worksheet
 Dim wsServ As Worksheet
 Dim wsRel As Worksheet
@@ -2597,7 +2570,7 @@ If Not Util_PrepararAbaParaEscrita(wsRel, estRel, senRel) Then
     Exit Sub
 End If
 
-On Error GoTo falha_rel_meis_cred
+On Error GoTo falha_rel_emp_cred
 
 wsRel.Cells.ClearContents
 linhaRel = 1
@@ -2675,7 +2648,7 @@ wsRel.Range("A1:F" & (linhaRel - 1)).ClearContents
 Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
 Exit Sub
 
-falha_rel_meis_cred:
+falha_rel_emp_cred:
 On Error Resume Next
 Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
 On Error GoTo 0
@@ -2837,7 +2810,7 @@ Private Sub OS_Lista_Click()
     
     ' Preencher campos do formulrio a partir da linha selecionada na lista (SafeListVal evita erro 380)
     OS_CNPJ.Value = OSListaCol(7)        ' col 7 = CNPJ Empresa
-    OS_Empresa.Value = OSListaCol(3)     ' col 3 = Nome Empresa
+    TXT_OS_NomeEmpresa.Value = OSListaCol(3)     ' col 3 = Nome Empresa
     OS_Demandante.Value = OSListaCol(1)  ' col 1 = Nome Entidade
     OS_Atividade.Value = OSListaCol(5)   ' col 5 = Descricao Atividade
     OS_Servico.Value = OSListaCol(2)     ' col 2 = Descricao Servico
@@ -2896,7 +2869,7 @@ Private Sub OS_Lista_Click()
                 If IdsIguais(SafeListVal(wsEmp.Cells(jEmp, COL_EMP_ID).Value), _
                              SafeListVal(wsPreOS.Cells(linPre, COL_PREOS_EMP_ID).Value)) Then
                     OS_CNPJ.Value = SafeListVal(wsEmp.Cells(jEmp, COL_EMP_CNPJ).Value)
-                    OS_Empresa.Value = SafeListVal(wsEmp.Cells(jEmp, COL_EMP_RAZAO).Value)
+                    TXT_OS_NomeEmpresa.Value = SafeListVal(wsEmp.Cells(jEmp, COL_EMP_RAZAO).Value)
                     Exit For
                 End If
             Next jEmp
@@ -3155,9 +3128,14 @@ Private Function BuscarDescricaoServicoPorCod(ByVal codServRaw As Variant, ByVal
     End If
 End Function
 
-Private Sub OS_Empresa_Click()
-Call PreenchimentoRelatorioOSEmpresa
-Rel_OSEmpresa.Show
+Private Sub Btn_Rel_OS_Empresa_Click()
+    ' Relatorio "Ordens de Servico por Empresa" — nome separado do TextBox TXT_OS_NomeEmpresa (evita colisao OS_Empresa).
+    On Error GoTo falha
+    Call PreenchimentoRelatorioOSEmpresa
+    Rel_OSEmpresa.Show vbModal
+    Exit Sub
+falha:
+    MsgBox "Erro ao abrir relatorio OS por Empresa: " & Err.Description, vbCritical, "Relatorio"
 End Sub
 
 Private Sub PRE_OS_Vencidas_Click()
@@ -3461,12 +3439,8 @@ Private Sub UserForm_Initialize()
 
     Call InicializarAcoesPreOS
     Call InicializarAcoesOS
-    Call SubstituirCaptionsLegadoMEI
-    Call InicializarCompatibilidadeEmpresa
     Call Filtros_CriarDinamico
     Call AplicarFiltrosAtribuicao
-    Call Credenciamento_LigarBotao
-    Call ReativacaoEmpresa_LigarBotao
     Call UI_AjustarBotoesReativaComImagem
 
     mInicializando = False
@@ -3476,62 +3450,10 @@ End Sub
 
 Private Sub AplicarFiltrosAtribuicao()
     On Error Resume Next
-    Call PreenchimentoServico(TextBox18.Text)
-    Call PreenchimentoEntidadeRodizio(TextBox22.Text)
+    If Not mTxtFiltroServico Is Nothing Then Call PreenchimentoServico(mTxtFiltroServico.Text)
+    If Not mTxtFiltroRodizio Is Nothing Then Call PreenchimentoEntidadeRodizio(mTxtFiltroRodizio.Text)
     On Error GoTo 0
 End Sub
-
-Private Sub Credenciamento_LigarBotao()
-    ' Em algumas exportacoes o nome interno do botao de credenciar muda no .frx.
-    ' Para garantir funcionamento na validacao humana, ligamos o click via WithEvents
-    ' procurando pelo Caption do botao.
-    On Error Resume Next
-    Set mBtnCredenciarEmpresa = UI_EncontrarBotaoPorCaption("CREDENCIA")
-    On Error GoTo 0
-End Sub
-
-Private Function UI_EncontrarBotaoPorCaption(ByVal contemCaption As String) As MSForms.CommandButton
-    Dim ctl As Object
-    Dim mp As Object
-    Dim pg As Object
-    Dim cap As String
-    Dim alvo As String
-
-    alvo = UCase$(Trim$(contemCaption))
-    If alvo = "" Then Exit Function
-
-    On Error GoTo fim
-
-    ' 1) Controles diretos do form
-    For Each ctl In Me.Controls
-        If TypeName(ctl) = "CommandButton" Then
-            cap = UCase$(Trim$(CStr(ctl.caption)))
-            If cap <> "" And InStr(1, cap, alvo, vbTextCompare) > 0 Then
-                Set UI_EncontrarBotaoPorCaption = ctl
-                Exit Function
-            End If
-        End If
-    Next ctl
-
-    ' 2) Controles dentro do MultiPage (PAGINAS)
-    Set mp = Nothing
-    Set mp = Me.Controls("PAGINAS")
-    If Not mp Is Nothing Then
-        For Each pg In mp.Pages
-            For Each ctl In pg.Controls
-                If TypeName(ctl) = "CommandButton" Then
-                    cap = UCase$(Trim$(CStr(ctl.caption)))
-                    If cap <> "" And InStr(1, cap, alvo, vbTextCompare) > 0 Then
-                        Set UI_EncontrarBotaoPorCaption = ctl
-                        Exit Function
-                    End If
-                End If
-            Next ctl
-        Next pg
-    End If
-
-fim:
-End Function
 
 Private Function UI_CaptionContemTodos(ByVal caption As String, ByVal texto1 As String, Optional ByVal texto2 As String = "") As Boolean
     Dim alvo As String
@@ -3585,57 +3507,6 @@ Private Function UI_EncontrarBotaoPorTextos(ByVal texto1 As String, Optional ByV
 
 fim:
 End Function
-
-Private Sub mBtnCredenciarEmpresa_Click()
-    ' Encaminha para o handler legado (nome do controle pode variar no .frx).
-    Call Credencia_Empresa_Click
-End Sub
-
-Private Sub ReativacaoEmpresa_LigarBotao()
-    On Error Resume Next
-    Set mBtnReativaEmpresa = UI_EncontrarBotaoPorTextos("REATIVA", "EMPRESA")
-    On Error GoTo 0
-End Sub
-
-Private Sub mBtnReativaEmpresa_Click()
-On Error GoTo erro_carregamento:
-    Dim frmReativaEmpresa As Object
-
-    Call PreenchimentoEmpresa_Inativo
-    If NLinhas < LINHA_DADOS Then
-        MsgBox "N" & ChrW(227) & "o h" & ChrW(225) & " empresa inativa para reativar.", _
-               vbInformation, "Reativa" & ChrW(231) & ChrW(227) & "o de Empresa"
-    Else
-        Call UI_DescartarFormVisivel("Reativa_Empresa")
-        Set frmReativaEmpresa = VBA.UserForms.Add("Reativa_Empresa")
-        frmReativaEmpresa.Show vbModal
-        Call AtualizarListaEmpresaMenuAtual
-    End If
-    Exit Sub
-erro_carregamento:
-    MsgBox "Erro ao abrir reativa" & ChrW(231) & ChrW(227) & "o de empresa: " & Err.Description, _
-           vbCritical, "Reativa" & ChrW(231) & ChrW(227) & "o"
-End Sub
-
-Private Sub SubstituirCaptionsLegadoMEI()
-    Dim mp As MSForms.MultiPage
-
-    ' V12.0.0010: os controles no .frx ainda tem nomes legado com "MEI".
-    ' Aqui sobrescrevemos os captions visiveis ao usuario para "Empresa".
-    On Error Resume Next
-    B_MEI.caption = "CADASTRA" & vbCrLf & "EMPRESA"
-    B_DesignarMEI.caption = "INDICA" & vbCrLf & "EMPRESA" & vbCrLf & "P/ SERVI" & ChrW(199) & "O"
-    B_AvaliaMEI.caption = "AVALIA" & vbCrLf & "PRESTADOR" & vbCrLf & "DE SERVI" & ChrW(199) & "O"
-    Set mp = Me.Controls("PAGINAS")
-    If Not mp Is Nothing Then
-        If mp.Pages.count >= 6 Then
-            mp.Pages(2).caption = "Empresa"
-            mp.Pages(3).caption = "Atribui" & ChrW(231) & ChrW(227) & "o"
-            mp.Pages(5).caption = "Avaliação"
-        End If
-    End If
-    On Error GoTo 0
-End Sub
 
 Private Function AbrirURLExterna(ByVal url As String) As Boolean
     On Error Resume Next
@@ -3842,25 +3713,25 @@ End Function
 Private Sub Filtros_CriarDinamico()
     On Error GoTo falha
     Dim lblEmp As Object
-    Dim lblEnt As Object
     Dim lblServ As Object
+    Dim tbFiltroEnt As MSForms.TextBox
 
-    ' Busca na lista de Empresas (M_Lista)
-    Set mTxtFiltroEmpresa = UI_TextBoxSeExisteRecursivo(M_Lista.Parent, "TextBox17")
-    If mTxtFiltroEmpresa Is Nothing Then Set mTxtFiltroEmpresa = UI_PegarTextBoxBuscaDaLista(M_Lista)
-    If mTxtFiltroEmpresa Is Nothing Then Set mTxtFiltroEmpresa = UI_TextBoxSeExistePagina(M_Lista.Parent, "TxtFiltroEmpresaDin")
+    ' Busca na lista de Empresas (EMP_Lista)
+    Set mTxtFiltroEmpresa = UI_TextBoxSeExisteRecursivo(EMP_Lista.Parent, "TextBox17")
+    If mTxtFiltroEmpresa Is Nothing Then Set mTxtFiltroEmpresa = UI_PegarTextBoxBuscaDaLista(EMP_Lista)
+    If mTxtFiltroEmpresa Is Nothing Then Set mTxtFiltroEmpresa = UI_TextBoxSeExistePagina(EMP_Lista.Parent, "TxtFiltroEmpresaDin")
     If mTxtFiltroEmpresa Is Nothing Then
-        Set mTxtFiltroEmpresa = M_Lista.Parent.Controls.Add("Forms.TextBox.1", "TxtFiltroEmpresaDin", True)
+        Set mTxtFiltroEmpresa = EMP_Lista.Parent.Controls.Add("Forms.TextBox.1", "TxtFiltroEmpresaDin", True)
         With mTxtFiltroEmpresa
-            .Top = M_Lista.Top - 35
-            .Left = M_Lista.Left + 45
+            .Top = EMP_Lista.Top - 35
+            .Left = EMP_Lista.Left + 45
             .Width = 220
             .Height = 15
             .SpecialEffect = fmSpecialEffectSunken
             .Text = ""
             .Font.Size = 9
         End With
-        Set lblEmp = M_Lista.Parent.Controls.Add("Forms.Label.1", "LblFiltroEmpDin", True)
+        Set lblEmp = EMP_Lista.Parent.Controls.Add("Forms.Label.1", "LblFiltroEmpDin", True)
         With lblEmp
             .Top = mTxtFiltroEmpresa.Top + 2
             .Left = mTxtFiltroEmpresa.Left - 92
@@ -3872,32 +3743,21 @@ Private Sub Filtros_CriarDinamico()
         End With
     End If
 
-    ' Busca na lista de Entidades (C_Lista)
-    Set mTxtFiltroEntidade = UI_TextBoxSeExisteRecursivo(C_Lista.Parent, "TextBox16")
-    If mTxtFiltroEntidade Is Nothing Then Set mTxtFiltroEntidade = UI_PegarTextBoxBuscaDaLista(C_Lista)
-    If mTxtFiltroEntidade Is Nothing Then Set mTxtFiltroEntidade = UI_TextBoxSeExisteRecursivo(C_Lista.Parent, "TxtFiltroEntidadeDin")
-    If mTxtFiltroEntidade Is Nothing Then
-        Set mTxtFiltroEntidade = C_Lista.Parent.Controls.Add("Forms.TextBox.1", "TxtFiltroEntidadeDin", True)
-        With mTxtFiltroEntidade
-            .Top = C_Lista.Top - 35
-            .Left = C_Lista.Left + 45
-            .Width = 220
-            .Height = 15
-            .SpecialEffect = fmSpecialEffectSunken
-            .Text = ""
-            .Font.Size = 9
-        End With
-        Set lblEnt = C_Lista.Parent.Controls.Add("Forms.Label.1", "LblFiltroEntDin", True)
-        With lblEnt
-            .Top = mTxtFiltroEntidade.Top + 2
-            .Left = mTxtFiltroEntidade.Left - 102
-            .Width = 98
-            .Height = 15
-            .caption = "Buscar entidade:"
-            .BackStyle = fmBackStyleTransparent
-            .Font.Bold = True
-        End With
+    ' Busca Entidade (sem heuristica): preferir nome canonico, aceitar legado enquanto o .frx nao for reexportado.
+    ' Canonico: TxtFiltro_Entidade | Legado: TextBox16
+    Set tbFiltroEnt = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_Entidade")
+    If tbFiltroEnt Is Nothing Then Set tbFiltroEnt = UI_TextBoxSeExisteRecursivo(Me, "TextBox16")
+    If tbFiltroEnt Is Nothing Then
+        MsgBox "Filtro de Entidade ausente no designer." & vbCrLf & _
+               "Renomeie o TextBox para (Name)=TxtFiltro_Entidade (ou mantenha como TextBox16).", _
+               vbCritical, "Padronizacao UI"
+        GoTo falha
     End If
+    Set mTxtFiltroEntidade = tbFiltroEnt
+
+    ' Filtros do Rodizio/Atribuicao (pagina PAGINAS=3): deterministico, sem TextBox18/TextBox22.
+    Set mTxtFiltroServico = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_Servico")
+    Set mTxtFiltroRodizio = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_EntidadeRodizio")
 
     ' Busca na lista de manutencao de servicos (H_Lista)
     Set mTxtFiltroCadServ = UI_PegarTextBoxBuscaDaLista(H_Lista)
@@ -3937,18 +3797,25 @@ End Sub
 
 Private Sub mTxtFiltroEntidade_Change()
     If mInicializando Then Exit Sub
+    If mTxtFiltroEntidade Is Nothing Then Exit Sub
     Call PreenchimentoEntidade(mTxtFiltroEntidade.Text)
 End Sub
 
+
+Private Sub mTxtFiltroServico_Change()
+    If mInicializando Then Exit Sub
+    If mTxtFiltroServico Is Nothing Then Exit Sub
+    Call PreenchimentoServico(mTxtFiltroServico.Text)
+End Sub
+
+Private Sub mTxtFiltroRodizio_Change()
+    If mInicializando Then Exit Sub
+    If mTxtFiltroRodizio Is Nothing Then Exit Sub
+    Call PreenchimentoEntidadeRodizio(mTxtFiltroRodizio.Text)
+End Sub
 Private Sub mTxtFiltroCadServ_Change()
     If mInicializando Then Exit Sub
     Call PreencherManutencaoValor(mTxtFiltroCadServ.Text)
-End Sub
-
-Private Sub TextBox16_Change()
-    On Error Resume Next
-    Call PreenchimentoEntidade(TextBox16.Text)
-    On Error GoTo 0
 End Sub
 
 Private Sub TextBox17_Change()
@@ -3957,17 +3824,8 @@ Private Sub TextBox17_Change()
     On Error GoTo 0
 End Sub
 
-Private Sub TextBox18_Change()
-    On Error Resume Next
-    Call PreenchimentoServico(TextBox18.Text)
-    On Error GoTo 0
-End Sub
 
-Private Sub TextBox22_Change()
-    On Error Resume Next
-    Call PreenchimentoEntidadeRodizio(TextBox22.Text)
-    On Error GoTo 0
-End Sub
+
 
 
 

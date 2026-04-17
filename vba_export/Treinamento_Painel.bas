@@ -180,7 +180,7 @@ Private Sub MontarCabecalho(ByVal ws As Worksheet)
 
     ' Titulo
     ws.Range("A1:G1").Merge
-    ws.Range("A1").Value = "CHECKLIST DE TESTES V12 — Rodizio de Empresas Empresa"
+    ws.Range("A1").Value = "CHECKLIST DE TESTES V12 — Rodízio de Empresas"
     With ws.Range("A1")
         .Font.Bold = True
         .Font.Size = 14

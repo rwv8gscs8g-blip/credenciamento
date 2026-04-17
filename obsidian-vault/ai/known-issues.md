@@ -1,9 +1,9 @@
 ---
 titulo: Issues Conhecidos
-ultima-atualizacao: 2026-04-12
-autor-ultima-alteracao: Claude Opus 4.6
+ultima-atualizacao: 2026-04-16
+autor-ultima-alteracao: GPT-5.2 (Cursor)
 tags: [vivo, bug]
-versao-sistema: V12.0.0145
+versao-sistema: V12.0.0178
 ---
 
 # Issues Conhecidos

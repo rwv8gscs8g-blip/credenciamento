@@ -177,6 +177,144 @@ Public Function Util_LinhaDuplicadaIdOuDocumento( _
     Next linhaAtual
 End Function
 
+' Todas as linhas em ENTIDADE_INATIVOS que representam a mesma entidade selecionada na lista.
+' Cobre: varias linhas com o mesmo ID; linha "fantasma" com ID vazio mas mesmo CNPJ; duplicidade de inativacao.
+' Requer pelo menos ID ou CNPJ na linha (ignora nome solto).
+Public Function Util_EntidadeInativos_ColetarLinhasMesmaChave( _
+    ByVal wsInativas As Worksheet, _
+    ByVal primeiraLinha As Long, _
+    ByVal idLista As String, _
+    ByVal cnpjLista As String _
+) As Collection
+    Dim ult As Long
+    Dim r As Long
+    Dim cnpjNormLista As String
+    Dim coll As New Collection
+
+    If wsInativas Is Nothing Then GoTo fim
+
+    cnpjNormLista = Util_NormalizarDocumentoChave(cnpjLista)
+    ult = UltimaLinhaAba(wsInativas.Name)
+    If ult < primeiraLinha Then GoTo fim
+
+    For r = primeiraLinha To ult
+        If Util_EntidadeInativos_LinhaConsideravel(wsInativas, r) Then
+            If Util_EntidadeInativos_LinhaCombinaChave(wsInativas, r, idLista, cnpjNormLista) Then
+                coll.Add r
+            End If
+        End If
+    Next r
+
+fim:
+    Set Util_EntidadeInativos_ColetarLinhasMesmaChave = coll
+End Function
+
+Private Function Util_EntidadeInativos_LinhaConsideravel(ByVal ws As Worksheet, ByVal linha As Long) As Boolean
+    Dim idS As String
+    Dim docN As String
+
+    idS = Trim$(CStr(ws.Cells(linha, COL_ENT_ID).Value))
+    docN = Util_NormalizarDocumentoChave(ws.Cells(linha, COL_ENT_CNPJ).Value)
+    Util_EntidadeInativos_LinhaConsideravel = (Len(idS) > 0 Or Len(docN) > 0)
+End Function
+
+Private Function Util_EntidadeInativos_LinhaCombinaChave( _
+    ByVal ws As Worksheet, _
+    ByVal linha As Long, _
+    ByVal idLista As String, _
+    ByVal cnpjNormLista As String _
+) As Boolean
+    Dim idCell As String
+    Dim docLinha As String
+
+    idCell = Trim$(CStr(ws.Cells(linha, COL_ENT_ID).Value))
+    docLinha = Util_NormalizarDocumentoChave(ws.Cells(linha, COL_ENT_CNPJ).Value)
+
+    If Len(Trim$(idLista)) > 0 And Len(idCell) > 0 Then
+        If IdsIguais(idCell, idLista) Then
+            Util_EntidadeInativos_LinhaCombinaChave = True
+            Exit Function
+        End If
+    End If
+
+    If Len(cnpjNormLista) > 0 And Len(docLinha) > 0 Then
+        If StrComp(docLinha, cnpjNormLista, vbTextCompare) = 0 Then
+            Util_EntidadeInativos_LinhaCombinaChave = True
+            Exit Function
+        End If
+    End If
+
+    Util_EntidadeInativos_LinhaCombinaChave = False
+End Function
+
+' Mesmo padrao de Util_EntidadeInativos_* para EMPRESAS_INATIVAS (Reativa_Empresa).
+Public Function Util_EmpresaInativos_ColetarLinhasMesmaChave( _
+    ByVal wsInativas As Worksheet, _
+    ByVal primeiraLinha As Long, _
+    ByVal idLista As String, _
+    ByVal cnpjLista As String _
+) As Collection
+    Dim ult As Long
+    Dim r As Long
+    Dim cnpjNormLista As String
+    Dim coll As New Collection
+
+    If wsInativas Is Nothing Then GoTo fimEmp
+
+    cnpjNormLista = Util_NormalizarDocumentoChave(cnpjLista)
+    ult = UltimaLinhaAba(wsInativas.Name)
+    If ult < primeiraLinha Then GoTo fimEmp
+
+    For r = primeiraLinha To ult
+        If Util_EmpresaInativos_LinhaConsideravel(wsInativas, r) Then
+            If Util_EmpresaInativos_LinhaCombinaChave(wsInativas, r, idLista, cnpjNormLista) Then
+                coll.Add r
+            End If
+        End If
+    Next r
+
+fimEmp:
+    Set Util_EmpresaInativos_ColetarLinhasMesmaChave = coll
+End Function
+
+Private Function Util_EmpresaInativos_LinhaConsideravel(ByVal ws As Worksheet, ByVal linha As Long) As Boolean
+    Dim idS As String
+    Dim docN As String
+
+    idS = Trim$(CStr(ws.Cells(linha, COL_EMP_ID).Value))
+    docN = Util_NormalizarDocumentoChave(ws.Cells(linha, COL_EMP_CNPJ).Value)
+    Util_EmpresaInativos_LinhaConsideravel = (Len(idS) > 0 Or Len(docN) > 0)
+End Function
+
+Private Function Util_EmpresaInativos_LinhaCombinaChave( _
+    ByVal ws As Worksheet, _
+    ByVal linha As Long, _
+    ByVal idLista As String, _
+    ByVal cnpjNormLista As String _
+) As Boolean
+    Dim idCell As String
+    Dim docLinha As String
+
+    idCell = Trim$(CStr(ws.Cells(linha, COL_EMP_ID).Value))
+    docLinha = Util_NormalizarDocumentoChave(ws.Cells(linha, COL_EMP_CNPJ).Value)
+
+    If Len(Trim$(idLista)) > 0 And Len(idCell) > 0 Then
+        If IdsIguais(idCell, idLista) Then
+            Util_EmpresaInativos_LinhaCombinaChave = True
+            Exit Function
+        End If
+    End If
+
+    If Len(cnpjNormLista) > 0 And Len(docLinha) > 0 Then
+        If StrComp(docLinha, cnpjNormLista, vbTextCompare) = 0 Then
+            Util_EmpresaInativos_LinhaCombinaChave = True
+            Exit Function
+        End If
+    End If
+
+    Util_EmpresaInativos_LinhaCombinaChave = False
+End Function
+
 ' Salva o workbook com tratamento seguro de erro.
 ' Retorna False quando o save falhar, preenchendo mensagemErro.
 Public Function Util_SalvarWorkbookSeguro(Optional ByRef mensagemErro As String = "") As Boolean

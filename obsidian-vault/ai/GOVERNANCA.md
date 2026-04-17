@@ -1,9 +1,9 @@
 ---
 titulo: Governanca IA - Rastreabilidade de Autoria
-ultima-atualizacao: 2026-04-15
+ultima-atualizacao: 2026-04-16
 autor-ultima-alteracao: GPT-5.2 (Cursor)
 tags: [vivo, regra]
-versao-sistema: V12.0.0166
+versao-sistema: V12.0.0180
 ---
 
 # Governanca IA
@@ -16,6 +16,20 @@ Este documento rastreia qual IA fez cada alteracao no projeto. Toda IA com o bas
 
 | Versao | Data | IA Autor | Revisor | Status | Compila | Nota |
 |--------|------|----------|---------|--------|---------|------|
+| V12.0.0180 | 2026-04-17 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | AAA_ Entidade inclui Util_Planilha; Reativa_Empresa mesmo padrao multi-linha; doc Importador §4.1-4.2 |
+| V12.0.0179 | 2026-04-17 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Reativa Entidade: remove todas linhas duplicadas na ENTIDADE_INATIVOS; lista exige ID ou CNPJ |
+| V12.0.0173 | 2026-04-16 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Filtro Entidade: busca Me (fix Change); Reativa_Entidade TxtFiltro_ReativaEntidade |
+| V12.0.0174 | 2026-04-16 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Entidade deterministica: remove fallbacks/heuristica filtro |
+| V12.0.0175 | 2026-04-16 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Filtro Entidade inclui telefone contato1; Reativa_Entidade idem |
+| V12.0.0176 | 2026-04-16 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Rodizio filtros determinísticos: TxtFiltro_Servico/EntidadeRodizio |
+| V12.0.0177 | 2026-04-16 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Entidade filtro: aceita TextBox16 legado sem heurística |
+| V12.0.0178 | 2026-04-16 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Filtro Entidade inclui COL_ENT_TEL_CEL (buscar por 92/WhatsApp) |
+| V12.0.0172 | 2026-04-16 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | TxtFiltro_Entidade + doc ASCII abas; Preencher AtualizarLista |
+| V12.0.0171 | 2026-04-16 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Fix M_Lista→EMP_Lista em Preencher; doc PADRONIZACAO_MENU_PRINCIPAL |
+| V12.0.0170 | 2026-04-16 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Ingress Menu designer (EMP_Lista, TXT_OS, Btn_Rel); Rel OS Empresa OK |
+| V12.0.0169 | 2026-04-16 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | OS_Empresa → TXT_OS + Btn_Rel; Rel_OSEmpresa criar form; B_Reativa_Empresa |
+| V12.0.0168 | 2026-04-16 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Handler B_Reativa_Empresa + instruções designer |
+| V12.0.0167 | 2026-04-15 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Remoção total do termo MEI (Menu_Principal) |
 | V12.0.0166 | 2026-04-15 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Acentos MsgBox bateria + relatório RPT_BATERIA |
 | V12.0.0165 | 2026-04-15 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Acentos Roteiro + média impressão sem arredondar |
 | V12.0.0163 | 2026-04-14 | GPT-5.2 (Cursor) | Mauricio | EM_VALIDACAO | Sim | Importador VBA (remove+importa pelo manifesto) |

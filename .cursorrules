@@ -1,6 +1,6 @@
 # Sistema de Gestao de Credenciamento — Regras para Agentes de IA
 # Plataforma: VBA/Excel (.xlsm) | Idioma: PT-BR
-# Versao: V12.0.0145 | Atualizado: 2026-04-12
+# Versao: V12.0.0180 | Atualizado: 2026-04-17
 
 ## CONTEXTO OBRIGATORIO — LEIA NESTA ORDEM
 1. obsidian-vault/00-DASHBOARD.md         <- PONTO DE ENTRADA
@@ -10,11 +10,11 @@
 5. obsidian-vault/ai/handoffs/Cursor-Auto.md  <- HANDOFF CURSOR
 6. obsidian-vault/ai/known-issues.md      <- ISSUES CONHECIDOS
 
-## ESTADO ATUAL (V12.0.0145)
+## ESTADO ATUAL (V12.0.0180)
 - Planilha: PlanilhaCredenciamento-Homologacao.xlsm
 - Fonte de verdade: vba_export/ (28 .bas + 13 .frm)
 - Deploy: vba_import/
-- ESTADO: COMPILA. CNAEs importados (612). Validacao de servicos/rodizio pendente.
+- ESTADO: COMPILA. Legado MEI removido do codigo e do Menu_Principal designer; limpeza opcional em Altera_Empresa.frx. Homologacao: servicos, rodizio, OS, QA.
 
 ## REGRA CRITICA DE ESTABILIDADE
 - NUNCA modificar, renomear ou remover Public Type em Mod_Types.bas

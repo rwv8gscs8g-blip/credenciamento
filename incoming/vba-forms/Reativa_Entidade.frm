@@ -19,9 +19,6 @@ Attribute VB_Exposed = False
 Private WithEvents mTxtBusca As MSForms.TextBox
 Attribute mTxtBusca.VB_VarHelpID = -1
 
-' Evita reentrancia mTxtBusca_Change durante UI_PreencherListaEntidadesInativas.
-Private mListaEntInativCarregando As Boolean
-
 Private Function UI_TextBoxSeExiste(ByVal nome As String) As MSForms.TextBox
     On Error Resume Next
     Set UI_TextBoxSeExiste = Me.Controls(nome)
@@ -64,7 +61,9 @@ Private Function UI_SafeListVal(ByVal valor As Variant) As String
 End Function
 
 Private Function UI_LinhaEntidadeValida(ByVal wsEntInativas As Worksheet, ByVal linhaAtual As Long) As Boolean
-    UI_LinhaEntidadeValida = LinhaEntidadeInativosConsideravel(wsEntInativas, linhaAtual)
+    UI_LinhaEntidadeValida = (Trim$(UI_SafeListVal(wsEntInativas.Cells(linhaAtual, COL_ENT_ID).Value)) <> "" Or _
+                              Trim$(UI_SafeListVal(wsEntInativas.Cells(linhaAtual, COL_ENT_CNPJ).Value)) <> "" Or _
+                              Trim$(UI_SafeListVal(wsEntInativas.Cells(linhaAtual, COL_ENT_NOME).Value)) <> "")
 End Function
 
 Private Function UI_TextoEntidadeParaFiltro(ByVal wsEntInativas As Worksheet, ByVal linhaAtual As Long) As String
@@ -85,43 +84,24 @@ Private Function UI_LinhaEntidadePassaFiltro(ByVal wsEntInativas As Worksheet, B
     End If
 End Function
 
-Private Sub UI_AjustarAlturaListaEntInativ(ByVal lst As Object, ByVal qtdLinhas As Long)
-    On Error Resume Next
-    Dim hMax As Double
-    Dim hCalc As Double
-
-    hMax = Me.InsideHeight - CDbl(lst.Top) - 36
-    If hMax < 48 Then hMax = 48
-    hCalc = 16# + CDbl(qtdLinhas) * 14#
-    If hCalc < 56 Then hCalc = 56
-    If hCalc > hMax Then hCalc = hMax
-    lst.Height = hCalc
-    On Error GoTo 0
-End Sub
-
 Private Sub UI_PreencherListaEntidadesInativas(Optional ByVal filtro As String = "")
 On Error GoTo erro_carregamento
 Dim lst As Object
 Dim wsEntInativas As Worksheet
 Dim total As Long
+Dim idx As Long
 Dim linhaAtual As Long
 Dim colunaAtual As Long
 Dim filtroU As String
 Dim arrayitems() As Variant
-Dim vistos As Object
-Dim chave As String
-Dim linhasUnicas As Collection
-Dim i As Long
-Dim linhaUsada As Long
 
-mListaEntInativCarregando = True
 filtroU = UCase$(Trim$(filtro))
 Cont = 1
 NItem = 0
 Set wsEntInativas = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
 NLinhas = UltimaLinhaAba(SHEET_ENTIDADE_INATIVOS)
 Set lst = Me.Controls("R_Lista")
-If lst Is Nothing Then GoTo fim_silencioso
+If lst Is Nothing Then Exit Sub
 
 With lst
     .Clear
@@ -129,42 +109,36 @@ With lst
     .ColumnWidths = EntidadeLista_MontarColumnWidths(CDbl(.Width))
 End With
 
-If NLinhas < LINHA_DADOS Then GoTo fim_silencioso
+If NLinhas < LINHA_DADOS Then Exit Sub
 
-Set vistos = CreateObject("Scripting.Dictionary")
-Set linhasUnicas = New Collection
 For linhaAtual = LINHA_DADOS To NLinhas
     If UI_LinhaEntidadeValida(wsEntInativas, linhaAtual) Then
         If UI_LinhaEntidadePassaFiltro(wsEntInativas, linhaAtual, filtroU) Then
-            chave = EntidadeInativos_ChaveDedupeLinha(wsEntInativas, linhaAtual)
-            If Not vistos.Exists(chave) Then
-                vistos.Add chave, 1
-                linhasUnicas.Add linhaAtual
-            End If
+            total = total + 1
         End If
     End If
 Next linhaAtual
 
-total = linhasUnicas.Count
-If total = 0 Then GoTo fim_silencioso
+If total = 0 Then Exit Sub
 
 ReDim arrayitems(1 To total, 1 To 22)
-For i = 1 To linhasUnicas.Count
-    linhaUsada = CLng(linhasUnicas(i))
-    For colunaAtual = 1 To 22
-        arrayitems(i, colunaAtual) = UI_SafeListVal(wsEntInativas.Cells(linhaUsada, colunaAtual).Value)
-    Next colunaAtual
-Next i
+idx = 1
+For linhaAtual = LINHA_DADOS To NLinhas
+    If UI_LinhaEntidadeValida(wsEntInativas, linhaAtual) Then
+        If UI_LinhaEntidadePassaFiltro(wsEntInativas, linhaAtual, filtroU) Then
+            For colunaAtual = 1 To 22
+                arrayitems(idx, colunaAtual) = UI_SafeListVal(wsEntInativas.Cells(linhaAtual, colunaAtual).Value)
+            Next colunaAtual
+            idx = idx + 1
+        End If
+    End If
+Next linhaAtual
 
 lst.List = arrayitems()
-Call UI_AjustarAlturaListaEntInativ(lst, total)
 arrayitems = Empty
 
-fim_silencioso:
-mListaEntInativCarregando = False
 Exit Sub
 erro_carregamento:
-mListaEntInativCarregando = False
 End Sub
 
 Private Sub UserForm_Initialize()
@@ -182,7 +156,6 @@ End Sub
 
 Private Sub mTxtBusca_Change()
 On Error GoTo fim
-    If mListaEntInativCarregando Then Exit Sub
     If mTxtBusca Is Nothing Then Exit Sub
     Call UI_PreencherListaEntidadesInativas(CStr(mTxtBusca.Text))
 fim:
@@ -190,57 +163,48 @@ End Sub
 
 Private Sub R_Lista_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
 On Error GoTo erro_carregamento:
-    ' Copia uma linha canonica para ENTIDADE e remove TODAS as linhas correspondentes em ENTIDADE_INATIVOS
-    ' (duplicatas com mesmo ID; fantasma com ID vazio e mesmo CNPJ).
+    ' V12: eliminado .Select + Application.GoTo + ActiveCell + Selection (proibidos; formulario modal).
+    ' Usa referencia direta via .Find, .Copy Destination:= e .Delete.
     Dim wsInativas As Worksheet
     Dim wsEntidade As Worksheet
     Dim linhaDestino As Long
+    Dim linhaReativAtual As Long
+    Dim linhaFinalInativas As Long
     Dim estProt As Boolean
     Dim Senha As String
     Dim entidadeIdReativ As String
-    Dim cnpjLista As String
     Dim cnpjReativ As String
     Dim linhaDuplicada As Long
-    Dim coll As Collection
-    Dim linhaCopia As Long
-    Dim k As Long
-    Dim j As Long
-    Dim nDel As Long
-    Dim linhasDel() As Long
-    Dim tmp As Long
-    Dim idParaDup As String
 
-    If R_Lista.ListIndex < 0 Then Exit Sub
-
-    entidadeIdReativ = Trim$(CStr(R_Lista.List(R_Lista.ListIndex, 0)))
-    cnpjLista = Trim$(CStr(R_Lista.List(R_Lista.ListIndex, 1)))
-
-    If Len(entidadeIdReativ) = 0 And Len(Util_NormalizarDocumentoChave(cnpjLista)) = 0 Then
-        MsgBox "Selecione uma linha com ID ou CNPJ para reativar.", vbExclamation, "Reativa" & ChrW(231) & ChrW(227) & "o"
-        Exit Sub
-    End If
+    entidadeIdReativ = Trim$(CStr(R_Lista.Column(0)))
+    If entidadeIdReativ = "" Then Exit Sub
 
     Set wsInativas = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
     Set wsEntidade = ThisWorkbook.Sheets(SHEET_ENTIDADE)
 
-    Set coll = Util_EntidadeInativos_ColetarLinhasMesmaChave(wsInativas, LINHA_DADOS, entidadeIdReativ, cnpjLista)
-    If coll Is Nothing Then GoTo nao_achou
-    If coll.Count = 0 Then GoTo nao_achou
+    ' V12.0.0007: loop normalizado em vez de Range.Find (elimina mismatch de tipo "001" texto vs 1 numerico).
+    ' CLng(Val("0" & CStr(x))) converte "001", "1" e 1 ao mesmo valor Long = 1.
+    linhaFinalInativas = UltimaLinhaAba(SHEET_ENTIDADE_INATIVOS)
+    Set EncontrarID = Nothing
+    For linhaReativAtual = LINHA_DADOS To linhaFinalInativas
+        If Trim$(CStr(wsInativas.Cells(linhaReativAtual, COL_ENT_ID).Value)) <> "" Then
+            If CLng(Val("0" & Trim$(CStr(wsInativas.Cells(linhaReativAtual, COL_ENT_ID).Value)))) = CLng(Val("0" & entidadeIdReativ)) Then
+                Set EncontrarID = wsInativas.Cells(linhaReativAtual, COL_ENT_ID)
+                Exit For
+            End If
+        End If
+    Next linhaReativAtual
+    If EncontrarID Is Nothing Then
+        MsgBox "Entidade n" & ChrW(227) & "o encontrada nas inativas.", vbExclamation, "Reativa" & ChrW(231) & ChrW(227) & "o"
+        Exit Sub
+    End If
 
-    linhaCopia = CLng(coll(1))
-    For k = 2 To coll.Count
-        If CLng(coll(k)) < linhaCopia Then linhaCopia = CLng(coll(k))
-    Next k
-
-    cnpjReativ = Trim$(CStr(wsInativas.Cells(linhaCopia, COL_ENT_CNPJ).Value))
-    idParaDup = Trim$(CStr(wsInativas.Cells(linhaCopia, COL_ENT_ID).Value))
-    If Len(idParaDup) = 0 Then idParaDup = entidadeIdReativ
-
+    cnpjReativ = Trim$(CStr(wsInativas.Cells(EncontrarID.row, COL_ENT_CNPJ).Value))
     linhaDuplicada = Util_LinhaDuplicadaIdOuDocumento( _
                         wsEntidade, _
                         LINHA_DADOS, _
                         COL_ENT_ID, _
-                        idParaDup, _
+                        entidadeIdReativ, _
                         COL_ENT_CNPJ, _
                         cnpjReativ)
     If linhaDuplicada > 0 Then
@@ -253,43 +217,24 @@ On Error GoTo erro_carregamento:
 
     If MsgBox("Tem certeza que deseja REATIVAR esta Entidade?", vbQuestion + vbYesNo, "Reativa" & ChrW(231) & ChrW(227) & "o") <> vbYes Then Exit Sub
 
+    ' Copiar linha para aba de entidades ativas
     linhaDestino = wsEntidade.Cells(wsEntidade.Rows.count, 1).End(xlUp).row + 1
     Call Util_PrepararAbaParaEscrita(wsEntidade, estProt, Senha)
-    wsInativas.Rows(linhaCopia).Copy Destination:=wsEntidade.Cells(linhaDestino, 1)
+    EncontrarID.EntireRow.Copy Destination:=wsEntidade.Cells(linhaDestino, 1)
     Call Util_RestaurarProtecaoAba(wsEntidade, estProt, Senha)
     Application.CutCopyMode = False
 
-    nDel = coll.Count
-    ReDim linhasDel(1 To nDel)
-    For k = 1 To nDel
-        linhasDel(k) = CLng(coll(k))
-    Next k
-    For k = 1 To nDel - 1
-        For j = k + 1 To nDel
-            If linhasDel(k) < linhasDel(j) Then
-                tmp = linhasDel(k)
-                linhasDel(k) = linhasDel(j)
-                linhasDel(j) = tmp
-            End If
-        Next j
-    Next k
-
+    ' Remover linha da aba de inativas
     Call Util_PrepararAbaParaEscrita(wsInativas, estProt, Senha)
-    For k = 1 To nDel
-        If Not Util_ExcluirLinhaSegura(wsInativas, linhasDel(k)) Then
-            Err.Raise 1004, "Reativar_Entidade", "Nao foi possivel excluir linha " & CStr(linhasDel(k)) & " em ENTIDADE_INATIVOS."
-        End If
-    Next k
+    If Not Util_ExcluirLinhaSegura(wsInativas, EncontrarID.row) Then
+        Err.Raise 1004, "Reativar_Entidade", "Nao foi possivel excluir a linha da entidade na aba ENTIDADE_INATIVOS."
+    End If
     Call Util_RestaurarProtecaoAba(wsInativas, estProt, Senha)
 
     Call ClassificaEntidade
     MsgBox "Entidade Reativada com sucesso!", vbExclamation, "Reativa" & ChrW(231) & ChrW(227) & "o"
     Unload Me
-    Exit Sub
-
-nao_achou:
-    MsgBox "Entidade n" & ChrW(227) & "o encontrada nas inativas.", vbExclamation, "Reativa" & ChrW(231) & ChrW(227) & "o"
-    Exit Sub
+Exit Sub
 erro_carregamento:
     MsgBox "Erro ao reativar entidade: " & Err.Description, vbCritical, "Erro"
 End Sub

@@ -81,7 +81,7 @@ Public Function EntidadeLista_MontarColumnWidths(Optional ByVal largListaPts As 
     EntidadeLista_MontarColumnWidths = "0;" & CStr(w1) & ";" & CStr(w2) & ";0;0;0;0;0;0;0;0;" & CStr(w3) & ";" & CStr(w4) & ";0;0;0;0;0;0;0;0;0;0"
 End Function
 
-' M_Lista / RM_Lista: 1=CNPJ, 2=Razao, 4=Nome empresario, 12=Tel. celular (mesma proporcao que Entidade).
+' EMP_Lista / RM_Lista: 1=CNPJ, 2=Razao, 4=Nome empresario, 12=Tel. celular (mesma proporcao que Entidade).
 Public Function EmpresaLista_MontarColumnWidths(Optional ByVal largListaPts As Double = 0) As String
     Dim lim As Long
     Dim w1 As Long, w2 As Long, w3 As Long, w4 As Long
@@ -111,7 +111,9 @@ Private Function TextoEntidadeParaFiltro(ByVal wsEnt As Worksheet, ByVal linha A
         SafeListVal(wsEnt.Cells(linha, COL_ENT_ID).Value) & " " & _
         SafeListVal(wsEnt.Cells(linha, COL_ENT_CNPJ).Value) & " " & _
         SafeListVal(wsEnt.Cells(linha, COL_ENT_NOME).Value) & " " & _
-        SafeListVal(wsEnt.Cells(linha, COL_ENT_CONT1_NOME).Value))
+        SafeListVal(wsEnt.Cells(linha, COL_ENT_TEL_CEL).Value) & " " & _
+        SafeListVal(wsEnt.Cells(linha, COL_ENT_CONT1_NOME).Value) & " " & _
+        SafeListVal(wsEnt.Cells(linha, COL_ENT_CONT1_FONE).Value))
 End Function
 
 Private Function EntidadeLinhaPassaFiltro(ByVal wsEnt As Worksheet, ByVal linha As Long, ByVal filtroU As String) As Boolean
@@ -256,8 +258,8 @@ End Function
 Public Sub AtualizarListaEntidadeMenuAtual()
     Dim filtroAtual As String
 
-    filtroAtual = TextoControleFormulario("Menu_Principal", "TextBox16")
-    If Trim$(filtroAtual) = "" Then filtroAtual = TextoControleFormulario("Menu_Principal", "TxtFiltroEntidadeDin")
+    filtroAtual = TextoControleFormulario("Menu_Principal", "TxtFiltro_Entidade")
+    If Trim$(filtroAtual) = "" Then filtroAtual = TextoControleFormulario("Menu_Principal", "TextBox16")
     Call PreenchimentoEntidade(filtroAtual)
 End Sub
 
@@ -275,10 +277,118 @@ Private Function LinhaEntidadeValida(ByVal ws As Worksheet, ByVal linhaAtual As 
                            Trim$(SafeListVal(ws.Cells(linhaAtual, COL_ENT_NOME).Value)) <> "")
 End Function
 
+' ENTIDADE_INATIVOS: exige ID ou CNPJ documentado (evita linha so com nome / teste sem documento).
+Public Function LinhaEntidadeInativosConsideravel(ByVal ws As Worksheet, ByVal linhaAtual As Long) As Boolean
+    Dim idS As String
+    Dim docN As String
+
+    idS = Trim$(SafeListVal(ws.Cells(linhaAtual, COL_ENT_ID).Value))
+    docN = Util_NormalizarDocumentoChave(ws.Cells(linhaAtual, COL_ENT_CNPJ).Value)
+    LinhaEntidadeInativosConsideravel = (Len(idS) > 0 Or Len(docN) > 0)
+End Function
+
+' Chave estavel para deduplicar linhas na aba ENTIDADE_INATIVOS (evita lista duplicada no Reativa).
+Public Function EntidadeInativos_ChaveDedupeLinha(ByVal ws As Worksheet, ByVal linhaAtual As Long) As String
+    Dim idS As String
+    Dim cnpj As String
+    Dim i As Long
+    Dim dig As String
+    Dim ch As String
+
+    idS = Trim$(Replace$(CStr(ws.Cells(linhaAtual, COL_ENT_ID).Value), " ", ""))
+    cnpj = Trim$(CStr(ws.Cells(linhaAtual, COL_ENT_CNPJ).Value))
+
+    If Len(idS) > 0 And IsNumeric(idS) Then
+        EntidadeInativos_ChaveDedupeLinha = "I" & CStr(CLng(Val("0" & idS)))
+        Exit Function
+    End If
+    If Len(idS) > 0 Then
+        EntidadeInativos_ChaveDedupeLinha = "T" & UCase$(idS)
+        Exit Function
+    End If
+    For i = 1 To Len(cnpj)
+        ch = Mid$(cnpj, i, 1)
+        If ch >= "0" And ch <= "9" Then dig = dig & ch
+    Next i
+    If Len(dig) >= 11 Then
+        EntidadeInativos_ChaveDedupeLinha = "C" & dig
+        Exit Function
+    End If
+    EntidadeInativos_ChaveDedupeLinha = "U" & CStr(linhaAtual)
+End Function
+
+' Conta linhas com dados na aba de inativas (para abrir o form sem depender de NLinhas / form visivel).
+Public Function ContarLinhasEntidadeInativasValidas() As Long
+    Dim ws As Worksheet
+    Dim ult As Long
+    Dim r As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
+    ult = UltimaLinhaAba(SHEET_ENTIDADE_INATIVOS)
+    If ult < LINHA_DADOS Then Exit Function
+
+    For r = LINHA_DADOS To ult
+        If LinhaEntidadeInativosConsideravel(ws, r) Then ContarLinhasEntidadeInativasValidas = ContarLinhasEntidadeInativasValidas + 1
+    Next r
+End Function
+
 Private Function LinhaEmpresaValida(ByVal ws As Worksheet, ByVal linhaAtual As Long) As Boolean
     LinhaEmpresaValida = (Trim$(SafeListVal(ws.Cells(linhaAtual, COL_EMP_ID).Value)) <> "" Or _
                           Trim$(SafeListVal(ws.Cells(linhaAtual, COL_EMP_CNPJ).Value)) <> "" Or _
                           Trim$(SafeListVal(ws.Cells(linhaAtual, COL_EMP_RAZAO).Value)) <> "")
+End Function
+
+' EMPRESAS_INATIVAS: exige ID ou CNPJ (evita ruido so com razao social).
+Public Function LinhaEmpresaInativosConsideravel(ByVal ws As Worksheet, ByVal linhaAtual As Long) As Boolean
+    Dim idS As String
+    Dim docN As String
+
+    idS = Trim$(SafeListVal(ws.Cells(linhaAtual, COL_EMP_ID).Value))
+    docN = Util_NormalizarDocumentoChave(ws.Cells(linhaAtual, COL_EMP_CNPJ).Value)
+    LinhaEmpresaInativosConsideravel = (Len(idS) > 0 Or Len(docN) > 0)
+End Function
+
+Public Function EmpresaInativos_ChaveDedupeLinha(ByVal ws As Worksheet, ByVal linhaAtual As Long) As String
+    Dim idS As String
+    Dim cnpj As String
+    Dim i As Long
+    Dim dig As String
+    Dim ch As String
+
+    idS = Trim$(Replace$(CStr(ws.Cells(linhaAtual, COL_EMP_ID).Value), " ", ""))
+    cnpj = Trim$(CStr(ws.Cells(linhaAtual, COL_EMP_CNPJ).Value))
+
+    If Len(idS) > 0 And IsNumeric(idS) Then
+        EmpresaInativos_ChaveDedupeLinha = "I" & CStr(CLng(Val("0" & idS)))
+        Exit Function
+    End If
+    If Len(idS) > 0 Then
+        EmpresaInativos_ChaveDedupeLinha = "T" & UCase$(idS)
+        Exit Function
+    End If
+    For i = 1 To Len(cnpj)
+        ch = Mid$(cnpj, i, 1)
+        If ch >= "0" And ch <= "9" Then dig = dig & ch
+    Next i
+    If Len(dig) >= 11 Then
+        EmpresaInativos_ChaveDedupeLinha = "C" & dig
+        Exit Function
+    End If
+    EmpresaInativos_ChaveDedupeLinha = "U" & CStr(linhaAtual)
+End Function
+
+Public Function ContarLinhasEmpresaInativasValidas() As Long
+    Dim ws As Worksheet
+    Dim ult As Long
+    Dim r As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
+    ult = UltimaLinhaAba(SHEET_EMPRESAS_INATIVAS)
+    If ult < LINHA_DADOS Then Exit Function
+
+    For r = LINHA_DADOS To ult
+        If LinhaEmpresaInativosConsideravel(ws, r) Then ContarLinhasEmpresaInativasValidas = ContarLinhasEmpresaInativasValidas + 1
+    Next r
 End Function
 
 Private Function LinhaServicoValida(ByVal ws As Worksheet, ByVal linhaAtual As Long) As Boolean
@@ -420,12 +530,14 @@ On Error GoTo erro_carregamento
 Dim lst As Object
 Dim wsEntInativas As Worksheet
 Dim total As Long
-Dim idx As Long
+Dim vistos As Object
+Dim chave As String
+Dim linhasUnicas As Collection
+Dim i As Long
+Dim linhaUsada As Long
 
 Cont = 1
 NItem = 0
-' V12.0.0006: NLinhas definido ANTES do guard do form para que B_ReativaEntidade_Click
-' possa usar NLinhas para decidir se exibe a mensagem ou abre o formulario.
 Set wsEntInativas = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
 NLinhas = UltimaLinhaAba(SHEET_ENTIDADE_INATIVOS)
 Set lst = ControleFormulario("Reativa_Entidade", "R_Lista")
@@ -439,22 +551,28 @@ End With
 
 If NLinhas < LINHA_DADOS Then Exit Sub
 
+Set vistos = CreateObject("Scripting.Dictionary")
+Set linhasUnicas = New Collection
 For linha = LINHA_DADOS To NLinhas
-    If LinhaEntidadeValida(wsEntInativas, linha) Then total = total + 1
+    If LinhaEntidadeInativosConsideravel(wsEntInativas, linha) Then
+        chave = EntidadeInativos_ChaveDedupeLinha(wsEntInativas, linha)
+        If Not vistos.Exists(chave) Then
+            vistos.Add chave, 1
+            linhasUnicas.Add linha
+        End If
+    End If
 Next linha
 
+total = linhasUnicas.Count
 If total = 0 Then Exit Sub
 
 ReDim arrayitems(1 To total, 1 To 22)
-idx = 1
-For linha = LINHA_DADOS To NLinhas
-    If LinhaEntidadeValida(wsEntInativas, linha) Then
-        For Coluna = 1 To 22
-            arrayitems(idx, Coluna) = SafeListVal(wsEntInativas.Cells(linha, Coluna).Value)
-        Next Coluna
-        idx = idx + 1
-    End If
-Next linha
+For i = 1 To linhasUnicas.Count
+    linhaUsada = CLng(linhasUnicas(i))
+    For Coluna = 1 To 22
+        arrayitems(i, Coluna) = SafeListVal(wsEntInativas.Cells(linhaUsada, Coluna).Value)
+    Next Coluna
+Next i
 
 lst.List = arrayitems()
 arrayitems = Empty
@@ -629,7 +747,7 @@ filtroU = UCase$(Trim$(filtro))
 Cont = 1
 NItem = 0
 Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
-Set lst = ControleFormulario("Menu_Principal", "M_Lista")
+Set lst = ControleFormulario("Menu_Principal", "EMP_Lista")
 If lst Is Nothing Then Exit Sub
 
 With lst
@@ -675,12 +793,15 @@ On Error GoTo erro_carregamento
 Dim lst As Object
 Dim wsEmpInativas As Worksheet
 Dim total As Long
-Dim idx As Long
+Dim vistos As Object
+Dim chave As String
+Dim linhasUnicas As Collection
+Dim i As Long
+Dim linhaUsada As Long
+Dim linha As Long
 
 Cont = 1
 NItem = 0
-' V12.0.0006: NLinhas definido ANTES do guard do form para que o handler de reativacao
-' possa usar NLinhas para decidir se exibe a mensagem ou abre o formulario.
 Set wsEmpInativas = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
 NLinhas = UltimaLinhaAba(SHEET_EMPRESAS_INATIVAS)
 Set lst = ControleFormulario("Reativa_Empresa", "RM_Lista")
@@ -694,22 +815,28 @@ End With
 
 If NLinhas < LINHA_DADOS Then Exit Sub
 
+Set vistos = CreateObject("Scripting.Dictionary")
+Set linhasUnicas = New Collection
 For linha = LINHA_DADOS To NLinhas
-    If LinhaEmpresaValida(wsEmpInativas, linha) Then total = total + 1
+    If LinhaEmpresaInativosConsideravel(wsEmpInativas, linha) Then
+        chave = EmpresaInativos_ChaveDedupeLinha(wsEmpInativas, linha)
+        If Not vistos.Exists(chave) Then
+            vistos.Add chave, 1
+            linhasUnicas.Add linha
+        End If
+    End If
 Next linha
 
+total = linhasUnicas.Count
 If total = 0 Then Exit Sub
 
 ReDim arrayitems(1 To total, 1 To 19)
-idx = 1
-For linha = LINHA_DADOS To NLinhas
-    If LinhaEmpresaValida(wsEmpInativas, linha) Then
-        For Coluna = 1 To 19
-            arrayitems(idx, Coluna) = SafeListVal(wsEmpInativas.Cells(linha, Coluna).Value)
-        Next Coluna
-        idx = idx + 1
-    End If
-Next linha
+For i = 1 To linhasUnicas.Count
+    linhaUsada = CLng(linhasUnicas(i))
+    For Coluna = 1 To 19
+        arrayitems(i, Coluna) = SafeListVal(wsEmpInativas.Cells(linhaUsada, Coluna).Value)
+    Next Coluna
+Next i
 
 lst.List = arrayitems()
 arrayitems = Empty
@@ -1266,7 +1393,7 @@ Dim idx As Long
 
 Cont = 1
 NItem = 0
-Set lst = ControleFormulario("Rel_OSEmpresa", "RO_Lista")
+Set lst = ControleFormulario("Rel_OSEmpresa", "RO_Lista", True)
 If lst Is Nothing Then Exit Sub
 Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
 primeiraLinhaEmp = PrimeiraLinhaDadosEmpresas()

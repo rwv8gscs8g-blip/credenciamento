@@ -1,6 +1,6 @@
 # Mapeamento de Botoes — Heuristicos vs Fisicos
 
-**Versao**: V12.0.0149
+**Versao**: V12.0.0170 (atualizado — nomes de navegação já migrados no `Menu_Principal`: `B_Empresa_Cadastro`, `B_Empresa_Rodizio`, `B_Empresa_Avaliacao`)
 **Objetivo**: Eliminar botoes criados por heuristica e vincular todos aos botoes fisicos do formulario.
 
 ---
@@ -26,9 +26,9 @@ Estes botoes EXISTEM fisicamente no form, mas sao localizados em runtime por bus
 |---|--------------|-------------------|------|
 | 7 | mBtnCredenciarEmpresa | "CREDENCIA" | Credencia_Empresa_Click() |
 | 8 | mBtnReativaEmpresa | "REATIVA" + "EMPRESA" | Abre Reativa_Empresa form |
-| 9 | mBtnEmpresaCadastroNav | texto MEI > EMPRESA | Navega para pag. cadastro |
-| 10 | mBtnEmpresaRodizioNav | texto MEI > EMPRESA | Navega para pag. rodizio |
-| 11 | mBtnEmpresaAvaliacaoNav | texto MEI > EMPRESA | Navega para pag. avaliacao |
+| 9 | mBtnEmpresaCadastroNav | (legado) caption MEI | Substituído por `B_Empresa_Cadastro_Click` com nome fixo |
+| 10 | mBtnEmpresaRodizioNav | idem | Substituído por `B_Empresa_Rodizio_Click` |
+| 11 | mBtnEmpresaAvaliacaoNav | idem | Substituído por `B_Empresa_Avaliacao_Click` |
 
 **Padrao de migracao (Name fixo recomendado)**:
 - Credenciar: `BT_CREDENCIAR_EMPRESA`
@@ -43,10 +43,10 @@ Estes botoes EXISTEM fisicamente no form, mas sao localizados em runtime por bus
 | 1 | B_Home | Home/Inicial | B_Home_Click() | 0 |
 | 2 | B_Config_Inicial | Config. Inicial | B_Config_Inicial_Click() | modal |
 | 3 | B_Entidade | Entidades | B_Entidade_Click() | 1 |
-| 4 | B_MEI (renomeado) | CADASTRA EMPRESA | via mBtnEmpresaCadastroNav | 2 |
-| 5 | B_DesignarMEI (renomeado) | INDICA EMPRESA P/ SERVICO | via mBtnEmpresaRodizioNav | 3 |
+| 4 | `B_Empresa_Cadastro` | CADASTRA EMPRESA | `B_Empresa_Cadastro_Click()` | 2 |
+| 5 | `B_Empresa_Rodizio` | INDICA EMPRESA P/ SERVICO | `B_Empresa_Rodizio_Click()` | 3 |
 | 6 | B_Emite_OS | Emite OS | B_Emite_OS_Click() | 4 |
-| 7 | B_AvaliaMEI (renomeado) | AVALIA PRESTADOR | via mBtnEmpresaAvaliacaoNav | 5 |
+| 7 | `B_Empresa_Avaliacao` | AVALIA PRESTADOR | `B_Empresa_Avaliacao_Click()` | 5 |
 | 8 | B_CAD_SERV | Cad. Servicos | B_CAD_SERV_Click() | 6 |
 | 9 | B_Relatorios | Relatorios | B_Relatorios_Click() | 7 |
 | 10 | B_PreOS | Emitir Pre-OS | B_PreOS_Click() | acao |
