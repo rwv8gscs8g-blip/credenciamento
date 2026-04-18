@@ -3,14 +3,14 @@ titulo: Estado Atual do Sistema
 ultima-atualizacao: 2026-04-17
 autor-ultima-alteracao: GPT-5 (Codex)
 tags: [vivo, regra]
-versao-sistema: V12.0.0195
+versao-sistema: V12.0.0196
 ---
 
 # Estado Atual do Sistema
 
 ## Versao
 
-- **Versao**: V12.0.0195
+- **Versao**: V12.0.0196
 - **Data**: 2026-04-17
 - **Status**: EM_VALIDACAO
 - **Compila**: Pendente de validacao no Excel
@@ -48,6 +48,7 @@ versao-sistema: V12.0.0195
 - `Util_Planilha.ProximoId` agora restaura protecao mesmo quando ocorre erro
 - A V2 ganhou o cenario `ATM_001`, que simula falha controlada na segunda escrita e valida rollback com rastro de auditoria
 - A V2 passou a gerar um snapshot unico das 5 abas operacionais antes do primeiro reset da execucao
+- A `0196` corrigiu a compatibilidade de compilacao VBA removendo a qualificacao `Audit_Log.` das chamadas `RegistrarEvento`
 - Terminologia MEI eliminada no codigo VBA e no `Menu_Principal` (designer); relatorio **Rel_OSEmpresa** abre sem crash
 - Exportacao de CSV de resultados de teste
 - Release metadata centralizada (App_Release.bas)
@@ -60,6 +61,7 @@ versao-sistema: V12.0.0195
 - Execucao no Excel dos cenarios `MIG_001`, `MIG_002`, `MIG_003` e `MIG_004` dentro do smoke V2
 - Execucao no Excel do cenario `ATM_001` dentro do smoke V2
 - Validacao da criacao dos snapshots `SNAPV2_*` na primeira execucao da suite V2
+- Revalidacao da compilacao da `V12.0.0196` no Excel
 - Revalidacao da bateria oficial nos casos `BO_330*`
 - Validacao no Excel da `V12.0.0194` apos o rollback cirurgico de `CNAE/CAD_SERV`
 - Importacao no Excel dos modulos V2 e execucao das macros `CT2_*`
@@ -77,7 +79,7 @@ versao-sistema: V12.0.0195
 
 ## Proximos Passos
 
-1. Importar a `V12.0.0195` no Excel e validar a compilacao.
+1. Importar a `V12.0.0196` no Excel e validar a compilacao.
 2. Reexecutar a bateria oficial.
 3. Rodar `CT2_ExecutarSmokeRapido`, `CT2_ExecutarSmokeAssistido`, `CT2_ExecutarStress` e `CT2_ExecutarStressAssistido`, com foco em `ATM_001`.
 4. Verificar a criacao dos snapshots `SNAPV2_*` durante a primeira execucao da V2.

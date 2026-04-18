@@ -129,7 +129,7 @@ Public Function AvaliarOS( _
     resAvancar = AvancarFila(os.EMP_ID, os.ATIV_ID, False, "AVALIACAO_CONCLUIDA")
     ' Se falhar, nao bloqueia a avaliacao — apenas loga.
     If Not resAvancar.Sucesso Then
-        Audit_Log.RegistrarEvento _
+        RegistrarEvento _
             EVT_AVALIACAO, ENT_OS, OS_ID, _
             "", _
             "AVISO: Falha ao avancar fila apos avaliacao: " & resAvancar.Mensagem, _
@@ -137,7 +137,7 @@ Public Function AvaliarOS( _
     End If
 
     ' 9. Auditoria (critério 37)
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_OS_FECHADA, ENT_OS, OS_ID, _
         "STATUS=EM_EXECUCAO", _
         "STATUS=CONCLUIDA; MEDIA=" & Format$(media, "0.00") & _

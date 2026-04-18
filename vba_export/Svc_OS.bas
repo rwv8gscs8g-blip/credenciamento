@@ -99,7 +99,7 @@ Public Function EmitirOS( _
     ws.Cells(linhaPreOS, COL_PREOS_DT_EM_OS).Value = Now
 
     ' 5. Auditoria ANTES de AvancarFila (critério 27)
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_OS_EMITIDA, ENT_OS, os.OS_ID, _
         "", _
         "STATUS=EM_EXECUCAO; PREOS_ID=" & PREOS_ID & _
@@ -194,7 +194,7 @@ Public Function CancelarOS( _
     ws.Cells(linhaOS, COL_OS_JUSTIF_DIV).Value = motivo
     ws.Cells(linhaOS, COL_OS_DT_FECHAMENTO).Value = Now
 
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_OS_CANCELADA, ENT_OS, OS_ID, _
         "STATUS=EM_EXECUCAO", _
         "STATUS=CANCELADA; MOTIVO=" & motivo & _

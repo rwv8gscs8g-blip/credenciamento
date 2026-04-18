@@ -169,7 +169,7 @@ For i = LINHA_DADOS To UltimaLinhaAba(SHEET_CAD_SERV)
             wsCred.Cells(linhaNova, COL_CRED_DT_ULT_IND).Value = ""
             wsCred.Cells(linhaNova, COL_CRED_DT_CRED).Value = CDate(Now)
 
-            Audit_Log.RegistrarEvento _
+            RegistrarEvento _
                 EVT_CRED_ATIV, ENT_CRED, credId, _
                 "", _
                 "EMP_ID=" & empId & "; ATIV_ID=" & ativId & "; SERV_ID=" & servId & "; POS=" & CStr(posNova), _
@@ -391,6 +391,5 @@ Private Function Pad3(ByVal v As Variant) As String
         Pad3 = s
     End If
 End Function
-
 
 

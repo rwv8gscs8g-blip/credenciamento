@@ -17,7 +17,7 @@ Public Sub Transacao_Iniciar(Optional ByVal idOperacao As String = "")
         gTransacaoId = "TX_" & Format$(Now, "yyyymmdd_hhnnss")
     End If
     Set gTransacaoWrites = New Collection
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_TRANSACAO, ENT_CRED, gTransacaoId, _
         "STATUS=NOVA; WRITES=0", _
         "STATUS=ABERTA", _
@@ -51,7 +51,7 @@ End Sub
 
 Public Sub Transacao_Commit()
     If gTransacaoAtiva Then
-        Audit_Log.RegistrarEvento _
+        RegistrarEvento _
             EVT_TRANSACAO, ENT_CRED, gTransacaoId, _
             "STATUS=ABERTA; WRITES=" & CStr(Transacao_QtdWrites()), _
             "STATUS=COMMIT", _
@@ -95,7 +95,7 @@ Public Function Transacao_Rollback() As Boolean
     Next i
 
     Transacao_Rollback = True
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_TRANSACAO, ENT_CRED, gTransacaoId, _
         "STATUS=ABERTA; WRITES=" & CStr(Transacao_QtdWrites()), _
         "STATUS=ROLLBACK; SUCESSO=SIM", _
@@ -105,7 +105,7 @@ Public Function Transacao_Rollback() As Boolean
 falha:
     On Error Resume Next
     If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_TRANSACAO, ENT_CRED, gTransacaoId, _
         "STATUS=ABERTA; WRITES=" & CStr(Transacao_QtdWrites()), _
         "STATUS=ROLLBACK; SUCESSO=NAO; MSG=" & Err.Description, _

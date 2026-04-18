@@ -343,7 +343,7 @@ Erro:
     rollbackOk = False
     If Transacao_EstaAtiva() Then rollbackOk = Transacao_Rollback()
 
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_TRANSACAO, ENT_CRED, EMP_ID, _
         "TX=" & txId & "; EMP=" & EMP_ID & "; ATIV=" & ATIV_ID, _
         "ROLLBACK=" & IIf(rollbackOk, "OK", "FALHOU") & "; ERRO=" & mensagemErro, _

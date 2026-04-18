@@ -143,7 +143,7 @@ Public Function EmitirPreOS( _
     ws.Cells(linha, COL_PREOS_OS_ID).Value = ""
 
     ' 6. Auditoria (critério 9)
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_PREOS_EMITIDA, ENT_PREOS, preosId, _
         "", _
         "STATUS=AGUARDANDO_ACEITE; EMP_ID=" & rodizio.Empresa.EMP_ID & _
@@ -236,7 +236,7 @@ Public Function RecusarPreOS( _
     ws.Cells(linhaPreOS, COL_PREOS_MOTIVO).Value = motivo
 
     ' 5. Auditoria (critério 15)
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_PREOS_RECUSADA, ENT_PREOS, PREOS_ID, _
         "STATUS=AGUARDANDO_ACEITE", _
         "STATUS=RECUSADA; MOTIVO=" & motivo & _
@@ -315,7 +315,7 @@ Public Function ExpirarPreOS(ByVal PREOS_ID As String) As TResult
     ws.Cells(linhaPreOS, COL_PREOS_MOTIVO).Value = "PRAZO_EXPIRADO"
 
     ' Auditoria (critério 19)
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_PREOS_EXPIRADA, ENT_PREOS, PREOS_ID, _
         "STATUS=AGUARDANDO_ACEITE", _
         "STATUS=EXPIRADA; MOTIVO=PRAZO_EXPIRADO; EMP_ID=" & empId & _

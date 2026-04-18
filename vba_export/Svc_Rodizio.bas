@@ -207,7 +207,7 @@ Public Function AvancarFila( _
         If Not resRec.Sucesso Then
             If linhaCredOriginal > 0 Then
                 resRollbackFila = RestaurarPosicaoFila(EMP_ID, ATIV_ID, posicaoOriginal, credOriginal.DT_ULTIMA_IND)
-                Audit_Log.RegistrarEvento _
+                RegistrarEvento _
                     EVT_TRANSACAO, ENT_CRED, EMP_ID, _
                     "EMP=" & EMP_ID & "; ATIV=" & ATIV_ID & "; POS_ANTES=" & CStr(posicaoOriginal), _
                     "ROLLBACK_FILA=" & IIf(resRollbackFila.Sucesso, "OK", "FALHOU") & _
@@ -246,7 +246,7 @@ Public Function AvancarFila( _
                 tipoEvento = EVT_PREOS_RECUSADA
             End If
 
-            Audit_Log.RegistrarEvento _
+            RegistrarEvento _
                 tipoEvento, ENT_CRED, EMP_ID, _
                 "QTD_RECUSAS_ANTERIOR=" & CStr(novaRecusaGlobal - 1), _
                 "MOTIVO=" & motivo & "; QTD_RECUSAS_GLOBAL=" & novaRecusaGlobal & "; ATIV=" & ATIV_ID, _
@@ -308,7 +308,7 @@ Public Function Suspender(ByVal EMP_ID As String) As TResult
     GravarStatusEmpresa linhaEmp, STATUS_EMP_SUSPENSA, dtFimSusp, -1
 
     ' Auditoria
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_SUSPENSAO, ENT_EMP, EMP_ID, _
         "STATUS=" & emp.STATUS_GLOBAL, _
         "STATUS=SUSPENSA_GLOBAL; DT_FIM_SUSP=" & Format$(dtFimSusp, "DD/MM/YYYY") & _
@@ -355,7 +355,7 @@ Public Function Reativar(ByVal EMP_ID As String) As TResult
     GravarStatusEmpresa linhaEmp, STATUS_EMP_ATIVA, CDate(0), 0
 
     ' Auditoria
-    Audit_Log.RegistrarEvento _
+    RegistrarEvento _
         EVT_REATIVACAO, ENT_EMP, EMP_ID, _
         "STATUS=" & statusAnterior & "; QTD_RECUSAS=" & emp.QTD_RECUSAS, _
         "STATUS=ATIVA; QTD_RECUSAS_GLOBAL=0; DT_FIM_SUSP=(limpa)", _
