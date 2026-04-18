@@ -180,7 +180,7 @@ Public Function AvancarFila( _
     Dim cfg As TConfig
     Dim resSusp As TResult
     Dim novaRecusaGlobal As Long
-    Dim tipoEvento As eTipoEvento
+    Dim tipoEvento As Long
     Dim linhaCredOriginal As Long
     Dim credOriginal As TCredenciamento
     Dim posicaoOriginal As Long
