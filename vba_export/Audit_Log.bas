@@ -18,6 +18,7 @@ Public Enum eTipoEvento
     EVT_INATIVACAO = 12
     EVT_CAD_ENT = 13
     EVT_CRED_REMOVIDO = 14
+    EVT_TRANSACAO = 15
 End Enum
 
 Public Enum eEntidadeAfetada
@@ -47,6 +48,7 @@ Private Function DescricaoEvento(ByVal tipo As eTipoEvento) As String
         Case EVT_INATIVACAO:     DescricaoEvento = "Empresa Inativada"
         Case EVT_CAD_ENT:        DescricaoEvento = "Cadastro de Entidade"
         Case EVT_CRED_REMOVIDO:  DescricaoEvento = "Credenciamento Removido"
+        Case EVT_TRANSACAO:      DescricaoEvento = "Rollback/Transacao"
         Case Else:               DescricaoEvento = "Evento Desconhecido"
     End Select
 End Function
@@ -76,10 +78,15 @@ Public Sub RegistrarEvento( _
 )
     Dim ws As Worksheet
     Dim linha As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim abaPreparada As Boolean
 
     On Error GoTo fim
 
     Set ws = ThisWorkbook.Sheets(SHEET_AUDIT)
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then GoTo fim
+    abaPreparada = True
     linha = UltimaLinhaAba(SHEET_AUDIT) + 1
 
     ws.Cells(linha, COL_AUDIT_ID).Value = linha - 1
@@ -91,8 +98,13 @@ Public Sub RegistrarEvento( _
     ws.Cells(linha, COL_AUDIT_ID_AFETADO).Value = IdAfetado
     ws.Cells(linha, COL_AUDIT_ANTES).Value = Antes
     ws.Cells(linha, COL_AUDIT_DEPOIS).Value = Depois
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    abaPreparada = False
 
 fim:
+    On Error Resume Next
+    If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
 End Sub
 
 ' --- Helpers para serializar tipos ---

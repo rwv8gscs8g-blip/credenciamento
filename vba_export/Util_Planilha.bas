@@ -492,18 +492,33 @@ Public Function ProximoId(ByVal nomeAba As String) As String
     Dim atual As Long
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
+    Dim abaPreparada As Boolean
+    Dim numeroErro As Long
+    Dim mensagemErro As String
 
+    On Error GoTo falha
     Set ws = ThisWorkbook.Sheets(nomeAba)
 
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
         Err.Raise 1004, "ProximoId", "Nao foi possivel preparar a aba '" & nomeAba & "' para escrita."
     End If
+    abaPreparada = True
 
     atual = CLng(Val(ws.Cells(1, COL_CONTADOR_AR).Value))
     atual = atual + 1
     ws.Cells(1, COL_CONTADOR_AR).Value = atual
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    abaPreparada = False
     ProximoId = Format$(atual, "000")
+    Exit Function
+
+falha:
+    numeroErro = Err.Number
+    mensagemErro = Err.Description
+    On Error Resume Next
+    If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    Err.Raise numeroErro, "Util_Planilha.ProximoId", mensagemErro
 End Function
 
 ' ============================================================

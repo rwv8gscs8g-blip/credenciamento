@@ -3,8 +3,8 @@
 Data: 2026-04-17
 Projeto: `/Users/macbookpro/Projetos/Credenciamento`
 Branch atual: `codex/v180-stable-reset`
-Versao atual do codigo: `V12.0.0192`
-Status: Fase 1 validada no Excel; Fase 2 implementada; endurecimento de inativos/reativacao pendente de homologacao humana
+Versao atual do codigo: `V12.0.0195`
+Status: Fase 1 validada no Excel; Fase 2 validada funcionalmente; Fase 3 iniciada com atomicidade minima em recusa/avanco
 
 ## 1. Objetivo deste handoff
 
@@ -258,8 +258,32 @@ Implementado na `V12.0.0192`:
 1. inativacao de entidade remove duplicidades antigas da mesma chave antes de copiar a linha atual
 2. inativacao de empresa recebe o mesmo endurecimento
 3. listas de inativos passam a preferir a linha mais recente por chave
-4. reativacao passa a usar a linha mais recente por chave
-5. reativacao bloqueia quando houver conflito semantico real entre linhas da mesma chave
+
+## Fase 3 - V12.0.0195
+
+Objetivo:
+
+- reduzir o principal risco confirmado de mutacao parcial entre abas
+
+Escopo implementado na `V12.0.0195`:
+
+1. novo `Svc_Transacao.bas` para registrar writes e executar rollback minimo
+2. `Repo_Credenciamento.IncrementarRecusa` agora faz rollback se a segunda escrita falhar
+3. `Svc_Rodizio.AvancarFila` agora restaura a fila se a recusa falhar apos o movimento
+4. `Audit_Log.RegistrarEvento` passou a preparar/restaurar `AUDIT_LOG`
+5. `Util_Planilha.ProximoId` ganhou cleanup explicito
+6. `Teste_V2_Roteiros.TV2_RunSmoke` ganhou `ATM_001`
+7. `Svc_Transacao` passou a registrar abertura, commit e rollback em `AUDIT_LOG`
+8. `Teste_V2_Engine` passou a gerar snapshot unico das 5 abas operacionais antes do primeiro reset V2 da execucao
+
+Pendente:
+
+1. compilar a `V12.0.0195` no Excel
+2. validar `ATM_001` no smoke rapido/assistido
+3. validar a criacao dos snapshots `SNAPV2_*`
+4. ampliar atomicidade para `PreOS`, `OS` e `Avaliacao` em release seguinte
+5. reativacao passa a usar a linha mais recente por chave
+6. reativacao bloqueia quando houver conflito semantico real entre linhas da mesma chave
 
 Critério de aceite:
 

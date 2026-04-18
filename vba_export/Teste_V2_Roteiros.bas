@@ -19,10 +19,12 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     Dim preosId As String
     Dim osId As String
     Dim i As Long
+    Dim senhaFalhaAba As String
 
     On Error GoTo falha
 
     TV2_InitExecucao "SMOKE", visual
+    senhaFalhaAba = "TV2_ATM_EMP"
 
     TV2_PrepararCenarioTriploCanonico
     fila = TV2_FilaCsv(TV2_AtivCanonA())
@@ -170,10 +172,30 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
                    TV2_StatusOS(osId) = "CONCLUIDA" And _
                    TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3))
 
+    TV2_PrepararCenarioTriploCanonico
+    TV2_ProtegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
+    resRec = AvancarFila("001", TV2_AtivCanonA(), True, "ATM_001_FALHA_CONTROLADA")
+    TV2_DesprotegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
+    TV2_LogAssert "SMOKE", "ATM_001", "AUTO", _
+                  "Reverter mutacao parcial quando a segunda escrita falha", _
+                  "Avanco punido falha; fila volta ao estado anterior; recusas ficam zeradas; auditoria registra rollback", _
+                  "SUCESSO_AVANCO=" & CStr(resRec.Sucesso) & "; MSG=" & resRec.Mensagem & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & "; POS_001=" & CStr(TV2_PosicaoFila("001", TV2_AtivCanonA())) & "; REC_EMP=" & CStr(TV2_QtdRecusasEmpresa("001")) & "; REC_CRED=" & CStr(TV2_QtdRecusasCredenciamento("001", TV2_AtivCanonA())) & "; AUDIT=" & CStr(TV2_CountRows(SHEET_AUDIT)), _
+                  "Prova atomicidade minima entre CREDENCIADOS e EMPRESAS no fluxo punido", _
+                  (Not resRec.Sucesso And _
+                   TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003" And _
+                   TV2_PosicaoFila("001", TV2_AtivCanonA()) = 1 And _
+                   TV2_QtdRecusasEmpresa("001") = 0 And _
+                   TV2_QtdRecusasCredenciamento("001", TV2_AtivCanonA()) = 0 And _
+                   TV2_CountRows(SHEET_AUDIT) >= 1 And _
+                   TV2_AuditContemTrecho("ROLLBACK"))
+
     TV2_FinalizarExecucao "SMOKE"
     Exit Sub
 
 falha:
+    On Error Resume Next
+    TV2_DesprotegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
+    On Error GoTo 0
     TV2_LogAssert "SMOKE", "FATAL", "AUTO", _
                   "Executar suite sem erro fatal", _
                   "Nenhum erro fatal", _

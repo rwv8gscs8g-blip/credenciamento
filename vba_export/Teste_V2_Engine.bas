@@ -34,6 +34,7 @@ Private gTV2Visual As Boolean
 Private gTV2Ok As Long
 Private gTV2Fail As Long
 Private gTV2Manual As Long
+Private gTV2SnapshotExecutado As Boolean
 
 Private gTV2AtivCanonA As String
 Private gTV2AtivCanonB As String
@@ -48,6 +49,7 @@ Public Sub TV2_InitExecucao(ByVal suite As String, Optional ByVal visual As Bool
     gTV2Ok = 0
     gTV2Fail = 0
     gTV2Manual = 0
+    gTV2SnapshotExecutado = False
 
     TV2_PrepararNavegacaoHumana
     Util_LimparFiltrosAba TV2_EnsureResultadoSheet()
@@ -290,6 +292,7 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "MIG_002", "MIGRACAO", "RAPIDO", "AUTO", "OS", "Data prevista invalida deve falhar no servico", "Guarda de DT_PREV_TERMINO migrada da interface para o servico", "Validar rejeicao de data incoerente sem converter PRE_OS", "Servico rejeita data incoerente", "Torna automacao sem UI confiavel", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "MIG_003", "MIGRACAO", "RAPIDO", "AUTO", "Avaliacao", "Divergencia sem motivo textual deve falhar", "Regra de justificativa/observacao migrada da interface para o servico", "Validar rejeicao de divergencia sem justificativa e sem observacao", "Servico rejeita divergencia sem motivo", "Fecha lacuna de regra de negocio", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "MIG_004", "MIGRACAO", "RAPIDO", "AUTO", "Avaliacao", "Observacao textual pode sustentar a divergencia", "Compatibilidade com a bateria oficial em divergencia com observacao preenchida", "Validar conclusao da OS quando ha observacao mesmo sem campo dedicado", "Servico conclui a OS e registra a divergencia", "Preserva legado sem abrir silencio semantico", "AUTOMATIZADO_ATUAL", "Executado no smoke"
+    TV2_AddCatalogo ws, nr, "ATM_001", "ATOMICIDADE", "RAPIDO", "AUTO", "Rodizio", "Falha na segunda escrita reverte a primeira", "EMPRESAS protegida com senha desconhecida durante o fluxo punido de avancar fila", "Validar rollback de fila e recusas quando a atualizacao cruzada falha", "Avanco punido falha, fila volta ao estado anterior e recusas permanecem zeradas", "Evita estado parcial entre CREDENCIADOS e EMPRESAS", "AUTOMATIZADO_ATUAL", "Executado no smoke"
 
     TV2_FormatarCatalogoSheet
     TV2_GerarRoteiroAssistido
@@ -383,6 +386,11 @@ Private Sub TV2_ResetBaseOperacional()
     Dim nome As Variant
     Dim nomeOperacional As Variant
 
+    If Not gTV2SnapshotExecutado Then
+        TV2_GerarSnapshotOperacional
+        gTV2SnapshotExecutado = True
+    End If
+
     For Each nome In Array( _
         SHEET_EMPRESAS, _
         SHEET_EMPRESAS_INATIVAS, _
@@ -409,6 +417,83 @@ Private Sub TV2_ResetBaseOperacional()
         End If
     Next nomeOperacional
 End Sub
+
+Private Sub TV2_GerarSnapshotOperacional()
+    Dim nome As Variant
+    Dim encontrouDados As Boolean
+    Dim sufixo As String
+
+    For Each nome In Array( _
+        SHEET_EMPRESAS, _
+        SHEET_ENTIDADE, _
+        SHEET_CREDENCIADOS, _
+        SHEET_PREOS, _
+        SHEET_CAD_OS)
+        If TV2_CountRows(CStr(nome)) > 0 Then
+            encontrouDados = True
+            Exit For
+        End If
+    Next nome
+
+    If Not encontrouDados Then
+        TV2_LogInfo "CORE", "SNAPSHOT", "Snapshot antes do reset", "Base operacional inicial ja estava vazia"
+        Exit Sub
+    End If
+
+    sufixo = Format$(Now, "mmdd_hhnnss")
+
+    For Each nome In Array( _
+        SHEET_EMPRESAS, _
+        SHEET_ENTIDADE, _
+        SHEET_CREDENCIADOS, _
+        SHEET_PREOS, _
+        SHEET_CAD_OS)
+        TV2_CopiarSnapshotAba CStr(nome), sufixo
+    Next nome
+
+    TV2_LogInfo "CORE", "SNAPSHOT", "Snapshot antes do reset", "Abas operacionais copiadas com sufixo " & sufixo
+End Sub
+
+Private Sub TV2_CopiarSnapshotAba(ByVal nomeOrigem As String, ByVal sufixo As String)
+    Dim wsOrigem As Worksheet
+    Dim wsDestino As Worksheet
+    Dim nomeDestino As String
+
+    Set wsOrigem = ThisWorkbook.Sheets(nomeOrigem)
+    nomeDestino = TV2_NomeSnapshot(nomeOrigem, sufixo)
+
+    On Error Resume Next
+    Application.DisplayAlerts = False
+    ThisWorkbook.Sheets(nomeDestino).Delete
+    Application.DisplayAlerts = True
+    On Error GoTo 0
+
+    Set wsDestino = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+    wsDestino.Name = nomeDestino
+    wsOrigem.UsedRange.Copy Destination:=wsDestino.Cells(1, 1)
+    wsDestino.Tab.Color = RGB(191, 191, 191)
+End Sub
+
+Private Function TV2_NomeSnapshot(ByVal nomeOrigem As String, ByVal sufixo As String) As String
+    Dim codigo As String
+
+    Select Case UCase$(Trim$(nomeOrigem))
+        Case UCase$(SHEET_EMPRESAS)
+            codigo = "EMP"
+        Case UCase$(SHEET_ENTIDADE)
+            codigo = "ENT"
+        Case UCase$(SHEET_CREDENCIADOS)
+            codigo = "CRD"
+        Case UCase$(SHEET_PREOS)
+            codigo = "PRE"
+        Case UCase$(SHEET_CAD_OS)
+            codigo = "OS"
+        Case Else
+            codigo = "GEN"
+    End Select
+
+    TV2_NomeSnapshot = "SNAPV2_" & codigo & "_" & sufixo
+End Function
 
 Private Sub TV2_ClearSheet(ByVal nomeAba As String)
     Dim ws As Worksheet
@@ -750,6 +835,20 @@ Public Function TV2_QtdRecusasEmpresa(ByVal empId As String) As Long
     End If
 End Function
 
+Public Function TV2_QtdRecusasCredenciamento(ByVal empId As String, ByVal ativId As String) As Long
+    Dim ws As Worksheet
+    Dim linha As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_CREDENCIADOS)
+        If IdsIguais(ws.Cells(linha, COL_CRED_EMP_ID).Value, empId) And _
+           IdsIguais(ws.Cells(linha, COL_CRED_ATIV_ID).Value, ativId) Then
+            TV2_QtdRecusasCredenciamento = CLng(Val(ws.Cells(linha, COL_CRED_RECUSAS).Value))
+            Exit Function
+        End If
+    Next linha
+End Function
+
 Public Function TV2_StatusEmpresa(ByVal empId As String) As String
     Dim linhaEmp As Long
     Dim emp As TEmpresa
@@ -871,6 +970,44 @@ Public Function TV2_CountRows(ByVal nomeAba As String) As Long
 
     TV2_CountRows = Application.WorksheetFunction.CountA(intervalo)
 End Function
+
+Public Function TV2_AuditContemTrecho(ByVal trecho As String) As Boolean
+    Dim ws As Worksheet
+    Dim linha As Long
+    Dim textoBusca As String
+
+    Set ws = ThisWorkbook.Sheets(SHEET_AUDIT)
+    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_AUDIT)
+        textoBusca = CStr(ws.Cells(linha, COL_AUDIT_TIPO_DESC).Value) & " " & _
+                     CStr(ws.Cells(linha, COL_AUDIT_ANTES).Value) & " " & _
+                     CStr(ws.Cells(linha, COL_AUDIT_DEPOIS).Value)
+        If InStr(1, textoBusca, trecho, vbTextCompare) > 0 Then
+            TV2_AuditContemTrecho = True
+            Exit Function
+        End If
+    Next linha
+End Function
+
+Public Sub TV2_ProtegerAbaTeste(ByVal nomeAba As String, ByVal senha As String)
+    Dim ws As Worksheet
+
+    Set ws = ThisWorkbook.Sheets(nomeAba)
+    On Error Resume Next
+    ws.Unprotect Password:=""
+    ws.Unprotect Password:="sebrae2024"
+    ws.Unprotect Password:="SEBRAE2024"
+    On Error GoTo 0
+    ws.Protect Password:=senha, UserInterfaceOnly:=False
+End Sub
+
+Public Sub TV2_DesprotegerAbaTeste(ByVal nomeAba As String, ByVal senha As String)
+    Dim ws As Worksheet
+
+    Set ws = ThisWorkbook.Sheets(nomeAba)
+    On Error Resume Next
+    ws.Unprotect Password:=senha
+    On Error GoTo 0
+End Sub
 
 Private Function TV2_ColunaChave(ByVal nomeAba As String) As Long
     Select Case UCase$(Trim$(nomeAba))
@@ -1141,6 +1278,7 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "MIG_002", "AUTO", "Validar rejeicao de data invalida de OS", "Apenas conferir o resultado automatizado do cenario", "Servico falha e mantem a PRE_OS aguardando aceite", "Linha do cenario MIG_002", "Confirma a migracao da guarda de data para o servico", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "MIG_003", "AUTO", "Validar que divergencia sem motivo falha", "Apenas conferir o resultado automatizado do cenario", "Servico falha e mantem a OS em execucao", "Linha do cenario MIG_003", "Fecha a lacuna de regra de negocio na avaliacao", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "MIG_004", "AUTO", "Validar compatibilidade da observacao como motivo", "Apenas conferir o resultado automatizado do cenario", "Servico conclui a OS mesmo sem campo dedicado quando ha observacao textual", "Linha do cenario MIG_004", "Evita regressao na bateria oficial e mantem rastreabilidade", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "ATM_001", "AUTO", "Validar rollback do avancar punido", "Apenas conferir o resultado automatizado do cenario", "Falha controlada sem alterar fila nem recusas, com rastro de auditoria", "Linha do cenario ATM_001", "Prova atomicidade minima no fluxo de recusa", "AUTOMATIZADO"
 
     TV2_FormatarRoteiroSheet
 End Sub

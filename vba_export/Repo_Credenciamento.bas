@@ -119,6 +119,9 @@ Public Function MoverFinal( _
     Dim linhaAlvo As Long
     Dim novaPos As Long
     Dim cred As TCredenciamento
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim abaPreparada As Boolean
 
     On Error GoTo Erro
 
@@ -133,11 +136,22 @@ Public Function MoverFinal( _
     End If
 
     novaPos = MaxPosicaoFila(ATIV_ID) + 1
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        res.Sucesso = False
+        res.Mensagem = "Nao foi possivel preparar CREDENCIADOS para escrita."
+        MoverFinal = res
+        Exit Function
+    End If
+    abaPreparada = True
+
     ws.Cells(linhaAlvo, COL_CRED_POSICAO).Value = novaPos
 
     If dtIndicacao > 0 Then
         ws.Cells(linhaAlvo, COL_CRED_DT_ULT_IND).Value = dtIndicacao
     End If
+
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    abaPreparada = False
 
     res.Sucesso = True
     res.Mensagem = "Empresa EMP_ID=" & EMP_ID & " movida para posicao " & novaPos & " na fila ATIV=" & ATIV_ID
@@ -146,10 +160,75 @@ Public Function MoverFinal( _
     Exit Function
 
 Erro:
+    On Error Resume Next
+    If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
     res.Sucesso = False
     res.Mensagem = "Erro em MoverFinal: " & Err.Description
     res.CodigoErro = Err.Number
     MoverFinal = res
+End Function
+
+Public Function RestaurarPosicaoFila( _
+    ByVal EMP_ID As String, _
+    ByVal ATIV_ID As String, _
+    ByVal posicaoOriginal As Long, _
+    Optional ByVal dtUltimaIndicacaoOriginal As Variant _
+) As TResult
+    Dim res As TResult
+    Dim ws As Worksheet
+    Dim linhaAlvo As Long
+    Dim cred As TCredenciamento
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim abaPreparada As Boolean
+
+    On Error GoTo Erro
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    cred = BuscarPorEmpresaAtividade(EMP_ID, ATIV_ID, linhaAlvo)
+
+    If linhaAlvo = 0 Then
+        res.Sucesso = False
+        res.Mensagem = "Credenciamento nao encontrado para restaurar fila: EMP=" & EMP_ID & " ATIV=" & ATIV_ID
+        RestaurarPosicaoFila = res
+        Exit Function
+    End If
+
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        res.Sucesso = False
+        res.Mensagem = "Nao foi possivel preparar CREDENCIADOS para restaurar fila."
+        RestaurarPosicaoFila = res
+        Exit Function
+    End If
+    abaPreparada = True
+
+    ws.Cells(linhaAlvo, COL_CRED_POSICAO).Value = posicaoOriginal
+    If IsMissing(dtUltimaIndicacaoOriginal) Then
+        ' manter valor atual
+    ElseIf IsDate(dtUltimaIndicacaoOriginal) And CDate(dtUltimaIndicacaoOriginal) > CDate(0) Then
+        ws.Cells(linhaAlvo, COL_CRED_DT_ULT_IND).Value = CDate(dtUltimaIndicacaoOriginal)
+    Else
+        ws.Cells(linhaAlvo, COL_CRED_DT_ULT_IND).Value = ""
+    End If
+
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    abaPreparada = False
+
+    res.Sucesso = True
+    res.Mensagem = "Posicao restaurada para " & posicaoOriginal
+    res.IdGerado = EMP_ID
+    RestaurarPosicaoFila = res
+    Exit Function
+
+Erro:
+    On Error Resume Next
+    If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    res.Sucesso = False
+    res.Mensagem = "Erro em RestaurarPosicaoFila: " & Err.Description
+    res.CodigoErro = Err.Number
+    RestaurarPosicaoFila = res
 End Function
 
 ' Incrementa QTD_RECUSAS_ATIV em CREDENCIADOS (+1).
@@ -164,48 +243,51 @@ Public Function IncrementarRecusa( _
     Dim wsCred As Worksheet
     Dim wsEmp As Worksheet
     Dim i As Long
+    Dim linhaCred As Long
     Dim linhaEmp As Long
     Dim novaRecusaAtiv As Long
     Dim novaRecusaGlobal As Long
-    Dim achouCred As Boolean
-    Dim achouEmp As Boolean
+    Dim valorAnteriorCred As Variant
+    Dim valorAnteriorEmp As Variant
+    Dim valorAnteriorDtAlt As Variant
+    Dim estavaProtegidaCred As Boolean
+    Dim senhaProtecaoCred As String
+    Dim estavaProtegidaEmp As Boolean
+    Dim senhaProtecaoEmp As String
+    Dim credPreparada As Boolean
+    Dim empPreparada As Boolean
+    Dim rollbackOk As Boolean
+    Dim txId As String
+    Dim numeroErro As Long
+    Dim mensagemErro As String
 
     On Error GoTo Erro
 
     Set wsCred = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
     Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
-    achouCred = False
-    achouEmp = False
+    linhaCred = 0
+    linhaEmp = 0
 
-    ' Incrementar QTD_RECUSAS_ATIV em CREDENCIADOS
     For i = LINHA_DADOS To UltimaLinhaAba(SHEET_CREDENCIADOS)
         If IdsIguais(wsCred.Cells(i, COL_CRED_EMP_ID).Value, EMP_ID) And _
            IdsIguais(wsCred.Cells(i, COL_CRED_ATIV_ID).Value, ATIV_ID) Then
-            achouCred = True
-            novaRecusaAtiv = CLng(Val(wsCred.Cells(i, COL_CRED_RECUSAS).Value)) + 1
-            wsCred.Cells(i, COL_CRED_RECUSAS).Value = novaRecusaAtiv
+            linhaCred = i
             Exit For
         End If
     Next i
 
-    ' Incrementar QTD_RECUSAS_GLOBAL em EMPRESAS
     For i = PrimeiraLinhaDadosEmpresas() To UltimaLinhaAba(SHEET_EMPRESAS)
         If IdsIguais(wsEmp.Cells(i, COL_EMP_ID).Value, EMP_ID) Then
-            achouEmp = True
             linhaEmp = i
-            novaRecusaGlobal = CLng(Val(wsEmp.Cells(i, COL_EMP_QTD_RECUSAS).Value)) + 1
-            wsEmp.Cells(i, COL_EMP_QTD_RECUSAS).Value = novaRecusaGlobal
-            wsEmp.Cells(i, COL_EMP_DT_ULT_ALT).Value = Now
             Exit For
         End If
     Next i
 
-    ' Validar que ambos os registros foram encontrados
-    If Not achouCred Or Not achouEmp Then
+    If linhaCred = 0 Or linhaEmp = 0 Then
         res.Sucesso = False
-        If Not achouCred And Not achouEmp Then
+        If linhaCred = 0 And linhaEmp = 0 Then
             res.Mensagem = "Credenciamento e empresa nao encontrados: EMP=" & EMP_ID & " ATIV=" & ATIV_ID
-        ElseIf Not achouCred Then
+        ElseIf linhaCred = 0 Then
             res.Mensagem = "Credenciamento nao encontrado: EMP=" & EMP_ID & " ATIV=" & ATIV_ID
         Else
             res.Mensagem = "Empresa nao encontrada: EMP=" & EMP_ID
@@ -214,6 +296,36 @@ Public Function IncrementarRecusa( _
         Exit Function
     End If
 
+    txId = "INC_RECUSA_" & EMP_ID & "_" & ATIV_ID & "_" & Format$(Now, "yyyymmddhhnnss")
+    Transacao_Iniciar txId
+
+    If Not Util_PrepararAbaParaEscrita(wsCred, estavaProtegidaCred, senhaProtecaoCred) Then
+        Err.Raise 1004, "IncrementarRecusa", "Nao foi possivel preparar CREDENCIADOS para escrita."
+    End If
+    credPreparada = True
+    valorAnteriorCred = wsCred.Cells(linhaCred, COL_CRED_RECUSAS).Value
+    Transacao_RegistrarWrite SHEET_CREDENCIADOS, linhaCred, COL_CRED_RECUSAS, valorAnteriorCred
+    novaRecusaAtiv = CLng(Val(valorAnteriorCred)) + 1
+    wsCred.Cells(linhaCred, COL_CRED_RECUSAS).Value = novaRecusaAtiv
+    Util_RestaurarProtecaoAba wsCred, estavaProtegidaCred, senhaProtecaoCred
+    credPreparada = False
+
+    If Not Util_PrepararAbaParaEscrita(wsEmp, estavaProtegidaEmp, senhaProtecaoEmp) Then
+        Err.Raise 1004, "IncrementarRecusa", "Nao foi possivel preparar EMPRESAS para escrita."
+    End If
+    empPreparada = True
+    valorAnteriorEmp = wsEmp.Cells(linhaEmp, COL_EMP_QTD_RECUSAS).Value
+    valorAnteriorDtAlt = wsEmp.Cells(linhaEmp, COL_EMP_DT_ULT_ALT).Value
+    Transacao_RegistrarWrite SHEET_EMPRESAS, linhaEmp, COL_EMP_QTD_RECUSAS, valorAnteriorEmp
+    Transacao_RegistrarWrite SHEET_EMPRESAS, linhaEmp, COL_EMP_DT_ULT_ALT, valorAnteriorDtAlt
+    novaRecusaGlobal = CLng(Val(valorAnteriorEmp)) + 1
+    wsEmp.Cells(linhaEmp, COL_EMP_QTD_RECUSAS).Value = novaRecusaGlobal
+    wsEmp.Cells(linhaEmp, COL_EMP_DT_ULT_ALT).Value = Now
+    Util_RestaurarProtecaoAba wsEmp, estavaProtegidaEmp, senhaProtecaoEmp
+    empPreparada = False
+
+    Transacao_Commit
+
     res.Sucesso = True
     res.Mensagem = "Recusas: ATIV=" & novaRecusaAtiv & " GLOBAL=" & novaRecusaGlobal
     res.IdGerado = CStr(novaRecusaGlobal)   ' Svc_Rodizio usa para verificar suspensão
@@ -221,9 +333,25 @@ Public Function IncrementarRecusa( _
     Exit Function
 
 Erro:
+    numeroErro = Err.Number
+    mensagemErro = Err.Description
+    On Error Resume Next
+    If credPreparada Then Util_RestaurarProtecaoAba wsCred, estavaProtegidaCred, senhaProtecaoCred
+    If empPreparada Then Util_RestaurarProtecaoAba wsEmp, estavaProtegidaEmp, senhaProtecaoEmp
+    On Error GoTo 0
+
+    rollbackOk = False
+    If Transacao_EstaAtiva() Then rollbackOk = Transacao_Rollback()
+
+    Audit_Log.RegistrarEvento _
+        EVT_TRANSACAO, ENT_CRED, EMP_ID, _
+        "TX=" & txId & "; EMP=" & EMP_ID & "; ATIV=" & ATIV_ID, _
+        "ROLLBACK=" & IIf(rollbackOk, "OK", "FALHOU") & "; ERRO=" & mensagemErro, _
+        "Repo_Credenciamento"
+
     res.Sucesso = False
-    res.Mensagem = "Erro em IncrementarRecusa: " & Err.Description
-    res.CodigoErro = Err.Number
+    res.Mensagem = "Erro em IncrementarRecusa: " & mensagemErro
+    res.CodigoErro = numeroErro
     IncrementarRecusa = res
 End Function
 

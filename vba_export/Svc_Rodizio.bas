@@ -176,12 +176,19 @@ Public Function AvancarFila( _
     Dim res As TResult
     Dim resMove As TResult
     Dim resRec As TResult
+    Dim resRollbackFila As TResult
     Dim cfg As TConfig
     Dim resSusp As TResult
     Dim novaRecusaGlobal As Long
     Dim tipoEvento As eTipoEvento
+    Dim linhaCredOriginal As Long
+    Dim credOriginal As TCredenciamento
+    Dim posicaoOriginal As Long
 
     On Error GoTo Erro
+
+    credOriginal = BuscarPorEmpresaAtividade(EMP_ID, ATIV_ID, linhaCredOriginal)
+    If linhaCredOriginal > 0 Then posicaoOriginal = credOriginal.POSICAO_FILA
 
     ' 1. Mover para o fim da fila
     resMove = MoverFinal(EMP_ID, ATIV_ID, Now)
@@ -198,6 +205,15 @@ Public Function AvancarFila( _
         resRec = IncrementarRecusa(EMP_ID, ATIV_ID)
 
         If Not resRec.Sucesso Then
+            If linhaCredOriginal > 0 Then
+                resRollbackFila = RestaurarPosicaoFila(EMP_ID, ATIV_ID, posicaoOriginal, credOriginal.DT_ULTIMA_IND)
+                Audit_Log.RegistrarEvento _
+                    EVT_TRANSACAO, ENT_CRED, EMP_ID, _
+                    "EMP=" & EMP_ID & "; ATIV=" & ATIV_ID & "; POS_ANTES=" & CStr(posicaoOriginal), _
+                    "ROLLBACK_FILA=" & IIf(resRollbackFila.Sucesso, "OK", "FALHOU") & _
+                    "; MOTIVO=INCREMENTAR_RECUSA_FALHOU; MSG=" & resRec.Mensagem, _
+                    "Svc_Rodizio"
+            End If
             res.Sucesso = False
             res.Mensagem = "Falha ao incrementar recusa: " & resRec.Mensagem
             AvancarFila = res
@@ -371,10 +387,15 @@ Private Sub RegistrarIndicacao( _
 )
     Dim ws As Worksheet
     Dim i As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim abaPreparada As Boolean
 
     On Error GoTo fim
 
     Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then GoTo fim
+    abaPreparada = True
 
     For i = LINHA_DADOS To UltimaLinhaAba(SHEET_CREDENCIADOS)
         If IdsIguais(ws.Cells(i, COL_CRED_EMP_ID).Value, EMP_ID) And _
@@ -384,7 +405,13 @@ Private Sub RegistrarIndicacao( _
         End If
     Next i
 
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    abaPreparada = False
+
 fim:
+    On Error Resume Next
+    If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
 End Sub
 
 ' IdsIguais removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
