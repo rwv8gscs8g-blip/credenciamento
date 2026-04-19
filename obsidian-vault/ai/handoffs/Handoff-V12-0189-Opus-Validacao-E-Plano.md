@@ -3,7 +3,7 @@
 Data: 2026-04-17
 Projeto: `/Users/macbookpro/Projetos/Credenciamento`
 Branch atual: `codex/v180-stable-reset`
-Versao atual do codigo: `V12.0.0200`
+Versao atual do codigo: `V12.0.0201`
 Status: Fase 1 validada no Excel; Fase 2 validada funcionalmente; Fase 3 iniciada com atomicidade minima em recusa/avanco
 
 ## 1. Objetivo deste handoff

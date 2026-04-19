@@ -3,7 +3,7 @@ titulo: Governanca IA - Rastreabilidade de Autoria
 ultima-atualizacao: 2026-04-19
 autor-ultima-alteracao: GPT-5 (Codex)
 tags: [vivo, regra]
-versao-sistema: V12.0.0200
+versao-sistema: V12.0.0201
 ---
 
 # Governanca IA
@@ -16,6 +16,7 @@ Este documento rastreia qual IA fez cada alteracao no projeto. Toda IA com o bas
 
 | Versao | Data | IA Autor | Revisor | Status | Compila | Nota |
 |--------|------|----------|---------|--------|---------|------|
+| V12.0.0201 | 2026-04-19 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Pendente | Hotfix do importador: remove dependencia do tipo Collection e preserva ordem deterministica |
 | V12.0.0200 | 2026-04-19 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Pendente | Hotfix do importador: remove excesso de continuacoes de linha e consolida a verificacao estrutural |
 | V12.0.0199 | 2026-04-19 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Pendente | Estabilizacao do importador: verifica modulos obrigatorios antes da compilacao |
 | V12.0.0198 | 2026-04-19 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Pendente | Hotfix de compilacao: qualifica chamadas como Svc_Avaliacao.AvaliarOS |

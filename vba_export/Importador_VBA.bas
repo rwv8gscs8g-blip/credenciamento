@@ -296,8 +296,9 @@ Private Sub ExecutarImportacaoIncremental(ByVal pastaImport As String, ByVal lis
                "Itens solicitados: " & CStr(UBound(itens) - LBound(itens) + 1) & vbCrLf & vbCrLf
 
     ' --- Resolver cada item em fullPath + vbName ---------------------------
-    Dim resolvidos As Collection
-    Set resolvidos = New Collection
+    Dim resolvidos() As Variant
+    Dim totalResolvidos As Long
+    totalResolvidos = 0
 
     Dim i As Long
     Dim item As String
@@ -321,11 +322,13 @@ Private Sub ExecutarImportacaoIncremental(ByVal pastaImport As String, ByVal lis
             GoTo proxItem
         End If
 
-        resolvidos.Add Array(vbName, fullPath)
+        ReDim Preserve resolvidos(0 To totalResolvidos)
+        resolvidos(totalResolvidos) = Array(vbName, fullPath)
+        totalResolvidos = totalResolvidos + 1
 proxItem:
     Next i
 
-    If resolvidos.Count = 0 Then
+    If totalResolvidos = 0 Then
         GravarLog pastaBackup, logTexto & vbCrLf & "Nada a importar."
         MsgBox "Nenhum item resolvido a partir da lista." & vbCrLf & _
                "Verifique os nomes/caminhos.", vbExclamation, "Importador V12 - Incremental"
@@ -334,22 +337,22 @@ proxItem:
 
     ' --- Se Mod_Types estiver na lista, importar primeiro ------------------
     Dim indiceModTypes As Long
-    indiceModTypes = IndiceModTypesNaColecao(resolvidos)
+    indiceModTypes = IndiceModTypesNaColecao(resolvidos, totalResolvidos)
 
     Application.StatusBar = "Importador V12 [Incremental]..."
     logTexto = logTexto & "== IMPORTACAO ==" & vbCrLf
 
-    If indiceModTypes > 0 Then
+    If indiceModTypes >= 0 Then
         Dim parTypes As Variant
-        parTypes = resolvidos.Item(indiceModTypes)
+        parTypes = resolvidos(indiceModTypes)
         logTexto = logTexto & "  " & CStr(parTypes(0)) & " (Mod_Types primeiro)" & vbCrLf
         logTexto = logTexto & SubstituirComponente(CStr(parTypes(0)), CStr(parTypes(1)), pastaBackup)
     End If
 
-    For i = 1 To resolvidos.Count
+    For i = 0 To totalResolvidos - 1
         If i <> indiceModTypes Then
             Dim par As Variant
-            par = resolvidos.Item(i)
+            par = resolvidos(i)
             logTexto = logTexto & "  " & CStr(par(0)) & vbCrLf
             logTexto = logTexto & SubstituirComponente(CStr(par(0)), CStr(par(1)), pastaBackup)
         End If
@@ -359,7 +362,7 @@ proxItem:
     Application.StatusBar = False
     GravarLog pastaBackup, logTexto
 
-    MsgBox "Importacao incremental concluida (" & CStr(resolvidos.Count) & " item(ns))." & vbCrLf & vbCrLf & _
+    MsgBox "Importacao incremental concluida (" & CStr(totalResolvidos) & " item(ns))." & vbCrLf & vbCrLf & _
            "Backup/log: " & pastaBackup & vbCrLf & vbCrLf & _
            "Proximos passos:" & vbCrLf & _
            "  1. Execute: Verificar_ModulosObrigatorios" & vbCrLf & _
@@ -419,16 +422,15 @@ Private Function PurgarSufixosDeUmNome(ByVal vbName As String, ByVal pastaBackup
     Dim log As String
     Dim comp As Object
     Dim alvo As String
-    Dim acharVariantes As Collection
-    Set acharVariantes = New Collection
+    Dim acharVariantes(0 To 11) As String
 
     Dim n As Long
     For n = 1 To 9
-        acharVariantes.Add vbName & CStr(n)
+        acharVariantes(n - 1) = vbName & CStr(n)
     Next n
-    acharVariantes.Add vbName & "_BKP"
-    acharVariantes.Add vbName & "_OLD"
-    acharVariantes.Add vbName & "_old"
+    acharVariantes(9) = vbName & "_BKP"
+    acharVariantes(10) = vbName & "_OLD"
+    acharVariantes(11) = vbName & "_old"
 
     Dim v As Variant
     For Each v In acharVariantes
@@ -957,17 +959,17 @@ Private Function DiagTipoComp(ByVal t As Long) As String
     End Select
 End Function
 
-Private Function IndiceModTypesNaColecao(ByVal col As Collection) As Long
+Private Function IndiceModTypesNaColecao(ByRef col() As Variant, ByVal totalItens As Long) As Long
     Dim i As Long
-    For i = 1 To col.Count
+    For i = 0 To totalItens - 1
         Dim par As Variant
-        par = col.Item(i)
+        par = col(i)
         If StrComp(CStr(par(0)), MOD_TYPES_VBNAME, vbTextCompare) = 0 Then
             IndiceModTypesNaColecao = i
             Exit Function
         End If
     Next i
-    IndiceModTypesNaColecao = 0
+    IndiceModTypesNaColecao = -1
 End Function
 
 ' =============================================================================

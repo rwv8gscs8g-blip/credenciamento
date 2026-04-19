@@ -3,14 +3,14 @@ titulo: Estado Atual do Sistema
 ultima-atualizacao: 2026-04-19
 autor-ultima-alteracao: GPT-5 (Codex)
 tags: [vivo, regra]
-versao-sistema: V12.0.0200
+versao-sistema: V12.0.0201
 ---
 
 # Estado Atual do Sistema
 
 ## Versao
 
-- **Versao**: V12.0.0200
+- **Versao**: V12.0.0201
 - **Data**: 2026-04-19
 - **Status**: EM_VALIDACAO
 - **Compila**: Pendente de validacao no Excel
@@ -53,6 +53,7 @@ versao-sistema: V12.0.0200
 - A `0198` qualificou as chamadas de avaliacao como `Svc_Avaliacao.AvaliarOS` para evitar ambiguidade de nome em projetos reimportados
 - A `0199` endureceu o `Importador_VBA` com verificacao de modulos obrigatorios antes da compilacao
 - A `0200` corrigiu o excesso de continuacoes de linha no `Importador_VBA` e preservou a checagem estrutural do pacote
+- A `0201` removeu a dependencia do tipo nativo `Collection` dentro do `Importador_VBA`, tornando o importador mais tolerante a projetos contaminados
 - Terminologia MEI eliminada no codigo VBA e no `Menu_Principal` (designer); relatorio **Rel_OSEmpresa** abre sem crash
 - Exportacao de CSV de resultados de teste
 - Release metadata centralizada (App_Release.bas)
@@ -70,6 +71,7 @@ versao-sistema: V12.0.0200
 - Revalidacao da compilacao da `V12.0.0198` no Excel
 - Revalidacao da compilacao da `V12.0.0199` no Excel
 - Revalidacao da compilacao da `V12.0.0200` no Excel
+- Revalidacao da compilacao da `V12.0.0201` no Excel
 - Revalidacao da bateria oficial nos casos `BO_330*`
 - Validacao no Excel da `V12.0.0194` apos o rollback cirurgico de `CNAE/CAD_SERV`
 - Importacao no Excel dos modulos V2 e execucao das macros `CT2_*`
@@ -88,7 +90,7 @@ versao-sistema: V12.0.0200
 ## Proximos Passos
 
 1. Importar `Repo_Avaliacao.bas` no workbook atual e validar a compilacao.
-2. Atualizar o importador para a `V12.0.0200`.
+2. Atualizar o importador para a `V12.0.0201`.
 2. Reexecutar a bateria oficial.
 3. Rodar `CT2_ExecutarSmokeRapido`, `CT2_ExecutarSmokeAssistido`, `CT2_ExecutarStress` e `CT2_ExecutarStressAssistido`, com foco em `ATM_001`.
 4. Verificar a criacao dos snapshots `SNAPV2_*` durante a primeira execucao da V2.
