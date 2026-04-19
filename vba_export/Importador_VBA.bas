@@ -15,6 +15,10 @@ Option Explicit
 '                                           (mantido alias: ImportarPacoteCredenciamentoV12)
 '   - ImportarIncremental(lista)            Importa somente os itens informados
 '   - ImportarIncremental_Prompt            Abre InputBox para colar a lista
+'   - Verificar_ModulosObrigatorios         Checa se os modulos-base do pacote
+'                                           existem no projeto antes da compilacao
+'   - AAA_Verificar_Estabilizacao_PosImportacao
+'                                           Roda verificacao de modulos + duplicidade
 '   - BackupVBAProject_Completo             Exporta TODOS os componentes (seguranca)
 '   - Verificar_SemDuplicidade              Checa nomes duplicados / Public Types repetidos
 '   - Diagnostico_TConfig                   Varre o projeto procurando TConfig
@@ -128,6 +132,11 @@ End Sub
 Public Sub AAA_ImportarIncremental_Prompt()
     ' Mesmo do ImportarIncremental_Prompt, mas com prefixo AAA_ para ficar no topo.
     Call ImportarIncremental_Prompt
+End Sub
+
+Public Sub AAA_Verificar_Estabilizacao_PosImportacao()
+    Call Verificar_ModulosObrigatorios
+    Call Verificar_SemDuplicidade
 End Sub
 
 Public Sub BackupVBAProject_Completo()
@@ -252,8 +261,9 @@ proxima:
     MsgBox "Importacao completa concluida." & vbCrLf & vbCrLf & _
            "Backup/log: " & pastaBackup & vbCrLf & vbCrLf & _
            "Proximos passos:" & vbCrLf & _
-           "  1. Execute: Depurar > Compilar VBAProject" & vbCrLf & _
-           "  2. Execute: Verificar_SemDuplicidade", _
+           "  1. Execute: Verificar_ModulosObrigatorios" & vbCrLf & _
+           "  2. Execute: Verificar_SemDuplicidade" & vbCrLf & _
+           "  3. Execute: Depurar > Compilar VBAProject", _
            vbInformation, "Importador V12 - Completo"
 End Sub
 
@@ -352,8 +362,9 @@ proxItem:
     MsgBox "Importacao incremental concluida (" & CStr(resolvidos.Count) & " item(ns))." & vbCrLf & vbCrLf & _
            "Backup/log: " & pastaBackup & vbCrLf & vbCrLf & _
            "Proximos passos:" & vbCrLf & _
-           "  1. Execute: Depurar > Compilar VBAProject" & vbCrLf & _
-           "  2. Execute: Verificar_SemDuplicidade", _
+           "  1. Execute: Verificar_ModulosObrigatorios" & vbCrLf & _
+           "  2. Execute: Verificar_SemDuplicidade" & vbCrLf & _
+           "  3. Execute: Depurar > Compilar VBAProject", _
            vbInformation, "Importador V12 - Incremental"
 End Sub
 
@@ -657,6 +668,43 @@ End Function
 ' Verificar_SemDuplicidade e Diagnostico_TConfig
 ' =============================================================================
 
+Public Sub Verificar_ModulosObrigatorios()
+    Dim proj As Object
+    Dim presentes As Object
+    Dim esperados As Variant
+    Dim i As Long
+    Dim faltando As String
+    Dim nome As String
+
+    Set proj = Application.VBE.ActiveVBProject
+    Set presentes = CreateObject("Scripting.Dictionary")
+    esperados = ListaVBNamesObrigatorios()
+
+    Dim comp As Object
+    For Each comp In proj.VBComponents
+        presentes(comp.Name) = True
+    Next comp
+
+    For i = LBound(esperados) To UBound(esperados)
+        nome = CStr(esperados(i))
+        If Not presentes.Exists(nome) Then
+            faltando = faltando & " - " & nome & vbCrLf
+        End If
+    Next i
+
+    If Len(faltando) = 0 Then
+        MsgBox "OK: todos os modulos obrigatorios do pacote estao presentes." & vbCrLf & _
+               "Agora execute Verificar_SemDuplicidade e depois compile.", _
+               vbInformation, "Importador V12 - Estrutura OK"
+    Else
+        MsgBox "MODULOS OBRIGATORIOS AUSENTES:" & vbCrLf & vbCrLf & _
+               faltando & vbCrLf & _
+               "Importe os modulos faltantes antes de compilar." & vbCrLf & _
+               "Exemplo: Repo_Avaliacao ausente causa erro em Svc_Avaliacao.", _
+               vbCritical, "Importador V12 - Estrutura incompleta"
+    End If
+End Sub
+
 Public Sub Verificar_SemDuplicidade()
     Dim proj As Object
     Set proj = Application.VBE.ActiveVBProject
@@ -746,6 +794,43 @@ Public Sub Verificar_SemDuplicidade()
                " para resolver.", vbCritical, "Verificacao FALHOU"
     End If
 End Sub
+
+Private Function ListaVBNamesObrigatorios() As Variant
+    ListaVBNamesObrigatorios = Array( _
+        "Mod_Types", _
+        "Const_Colunas", _
+        "Util_Conversao", _
+        "Util_Config", _
+        "Util_Planilha", _
+        "Funcoes", _
+        "Audit_Log", _
+        "AppContext", _
+        "ErrorBoundary", _
+        "Svc_Transacao", _
+        "Repo_Credenciamento", _
+        "Repo_PreOS", _
+        "Repo_OS", _
+        "Repo_Avaliacao", _
+        "Repo_Empresa", _
+        "Svc_Rodizio", _
+        "Svc_PreOS", _
+        "Svc_OS", _
+        "Svc_Avaliacao", _
+        "Classificar", _
+        "Preencher", _
+        "Variaveis", _
+        "Emergencia_CNAE", _
+        "App_Release", _
+        "Auto_Open", _
+        "Central_Testes", _
+        "Teste_Bateria_Oficial", _
+        "Central_Testes_Relatorio", _
+        "Treinamento_Painel", _
+        "Teste_UI_Guiado", _
+        "Central_Testes_V2", _
+        "Teste_V2_Engine", _
+        "Teste_V2_Roteiros")
+End Function
 
 Public Sub Diagnostico_TConfig()
     Dim proj As Object
