@@ -107,7 +107,7 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     For i = 1 To 10
         notas(i) = 8
     Next i
-    resAval = AvaliarOS(osId, "QA V2", notas, 2, "Cenario smoke V2", "", Date + 6, Date + 15)
+    resAval = Svc_Avaliacao.AvaliarOS(osId, "QA V2", notas, 2, "Cenario smoke V2", "", Date + 6, Date + 15)
     TV2_LogAssert "SMOKE", "SMK_007", "AUTO", _
                   "Avaliar OS e concluir o ciclo", _
                   "OS concluida e fila com ordem integra", _
@@ -145,7 +145,7 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     resOs = EmitirOS(preosId, Date + 5, "EMP-MIG-003")
     osId = resOs.IdGerado
     TV2_PreencherNotas notas, 8
-    resAval = AvaliarOS(osId, "QA V2", notas, 1, "", "", Date + 6, Date + 15)
+    resAval = Svc_Avaliacao.AvaliarOS(osId, "QA V2", notas, 1, "", "", Date + 6, Date + 15)
     TV2_LogAssert "SMOKE", "MIG_003", "AUTO", _
                   "Exigir motivo textual na divergencia do servico de avaliacao", _
                   "Svc_Avaliacao retorna erro e mantem a OS em execucao", _
@@ -162,7 +162,7 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     resOs = EmitirOS(preosId, Date + 5, "EMP-MIG-004")
     osId = resOs.IdGerado
     TV2_PreencherNotas notas, 8
-    resAval = AvaliarOS(osId, "QA V2", notas, 1, "Observacao usada como justificativa", "", Date + 6, Date + 15)
+    resAval = Svc_Avaliacao.AvaliarOS(osId, "QA V2", notas, 1, "Observacao usada como justificativa", "", Date + 6, Date + 15)
     TV2_LogAssert "SMOKE", "MIG_004", "AUTO", _
                   "Aceitar observacao como motivo efetivo na divergencia", _
                   "Svc_Avaliacao conclui a OS quando ha observacao textual", _
@@ -240,7 +240,7 @@ Public Sub TV2_RunStress(Optional ByVal iteracoes As Long = 12, Optional ByVal v
 
                 If resOs.Sucesso Then
                     TV2_PreencherNotas notas, 7 + (i Mod 2)
-                    resAval = AvaliarOS(osId, "QA STRESS V2", notas, qtd, "Stress V2", "", Date + 4 + i, Date + 20 + i)
+                    resAval = Svc_Avaliacao.AvaliarOS(osId, "QA STRESS V2", notas, qtd, "Stress V2", "", Date + 4 + i, Date + 20 + i)
                     detalhe = "ITER=" & CStr(i) & "; ETAPA=OS+AVAL; PREOS=" & preosId & "; OS=" & osId & "; SUCESSO_OS=" & CStr(resOs.Sucesso) & "; SUCESSO_AVAL=" & CStr(resAval.Sucesso)
                     ok = resAval.Sucesso
                 Else
