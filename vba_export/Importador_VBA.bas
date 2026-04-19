@@ -796,40 +796,43 @@ Public Sub Verificar_SemDuplicidade()
 End Sub
 
 Private Function ListaVBNamesObrigatorios() As Variant
-    ListaVBNamesObrigatorios = Array( _
-        "Mod_Types", _
-        "Const_Colunas", _
-        "Util_Conversao", _
-        "Util_Config", _
-        "Util_Planilha", _
-        "Funcoes", _
-        "Audit_Log", _
-        "AppContext", _
-        "ErrorBoundary", _
-        "Svc_Transacao", _
-        "Repo_Credenciamento", _
-        "Repo_PreOS", _
-        "Repo_OS", _
-        "Repo_Avaliacao", _
-        "Repo_Empresa", _
-        "Svc_Rodizio", _
-        "Svc_PreOS", _
-        "Svc_OS", _
-        "Svc_Avaliacao", _
-        "Classificar", _
-        "Preencher", _
-        "Variaveis", _
-        "Emergencia_CNAE", _
-        "App_Release", _
-        "Auto_Open", _
-        "Central_Testes", _
-        "Teste_Bateria_Oficial", _
-        "Central_Testes_Relatorio", _
-        "Treinamento_Painel", _
-        "Teste_UI_Guiado", _
-        "Central_Testes_V2", _
-        "Teste_V2_Engine", _
-        "Teste_V2_Roteiros")
+    Dim itens(0 To 32) As String
+
+    itens(0) = "Mod_Types"
+    itens(1) = "Const_Colunas"
+    itens(2) = "Util_Conversao"
+    itens(3) = "Util_Config"
+    itens(4) = "Util_Planilha"
+    itens(5) = "Funcoes"
+    itens(6) = "Audit_Log"
+    itens(7) = "AppContext"
+    itens(8) = "ErrorBoundary"
+    itens(9) = "Svc_Transacao"
+    itens(10) = "Repo_Credenciamento"
+    itens(11) = "Repo_PreOS"
+    itens(12) = "Repo_OS"
+    itens(13) = "Repo_Avaliacao"
+    itens(14) = "Repo_Empresa"
+    itens(15) = "Svc_Rodizio"
+    itens(16) = "Svc_PreOS"
+    itens(17) = "Svc_OS"
+    itens(18) = "Svc_Avaliacao"
+    itens(19) = "Classificar"
+    itens(20) = "Preencher"
+    itens(21) = "Variaveis"
+    itens(22) = "Emergencia_CNAE"
+    itens(23) = "App_Release"
+    itens(24) = "Auto_Open"
+    itens(25) = "Central_Testes"
+    itens(26) = "Teste_Bateria_Oficial"
+    itens(27) = "Central_Testes_Relatorio"
+    itens(28) = "Treinamento_Painel"
+    itens(29) = "Teste_UI_Guiado"
+    itens(30) = "Central_Testes_V2"
+    itens(31) = "Teste_V2_Engine"
+    itens(32) = "Teste_V2_Roteiros"
+
+    ListaVBNamesObrigatorios = itens
 End Function
 
 Public Sub Diagnostico_TConfig()
