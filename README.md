@@ -98,4 +98,4 @@ Linha oficial: `V12.0.0202`
 - bateria oficial recente sem falhas bloqueantes
 - evidência pública da bateria oficial já publicada nesta linha
 - evidência fresca da V2 validada por operador humano e publicada em `auditoria/evidencias/V12.0.0202/`
-- repositório em fase de consolidação documental para nova auditoria externa
+- linha pública oficial já promovida no `main`, com fechamento institucional residual voltado à nova auditoria externa

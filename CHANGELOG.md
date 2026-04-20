@@ -22,5 +22,5 @@ tratam apenas da linha pública oficial.
 ### Observações
 
 - linha oficial registrada em [obsidian-vault/releases/STATUS-OFICIAL.md](obsidian-vault/releases/STATUS-OFICIAL.md)
-- base pública em processo de consolidação documental para nova auditoria externa
-- a árvore limpa segue pronta para promoção da linha pública após fechamento jurídico e de publicação
+- linha pública oficial promovida no `main`
+- fechamento residual concentrado em homologação jurídica humana e automação adicional de governança
