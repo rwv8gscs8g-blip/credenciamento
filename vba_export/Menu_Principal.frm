@@ -800,7 +800,7 @@ Private Sub EncerraOS_Click()
 
     avaliador = Trim$(SafeListVal(AVListaCol(1)))
     If avaliador = "" Then avaliador = Trim$(SafeListVal(Desc_entidade))
-    res = Svc_Avaliacao.AvaliarOS(osId, avaliador, notas, qtExec, SafeListVal(AV_OBS.Value), justifDiv)
+    res = AvaliarOS(osId, avaliador, notas, qtExec, SafeListVal(AV_OBS.Value), justifDiv)
     If Not res.Sucesso Then
         MsgBox "Erro ao avaliar OS: " & res.mensagem, vbCritical, "Avaliação"
         GoTo Limpar
@@ -3828,7 +3828,6 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
-
 
 
 

@@ -383,7 +383,7 @@ Private Sub BA_Bloco1_CenarioLiteral()
     BA_LogAssert "BO_115_FluxoCompleto_OS_StatusExecucao", BA_StatusOS(osId) = BA_STATUS_OS_EXEC, "STATUS da OS = EM_EXECUCAO apos emissao", BA_StatusOS(osId) & " | OS_ID=" & osId, "Contrato antes da avaliacao e do cancelamento paralelo", "Conferir status da OS apos EmitirOS"
 
     BA_MontarNotas 8, notas
-    res = Svc_Avaliacao.AvaliarOS(osId, "Gestor Auditoria V12", notas, 2, "Fluxo completo OK", "")
+    res = AvaliarOS(osId, "Gestor Auditoria V12", notas, 2, "Fluxo completo OK", "")
     BA_LogAssert "BO_120_FluxoCompleto_Avaliacao", res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "OS concluida e avaliada", res.Mensagem & " | STATUS=" & BA_StatusOS(osId), "Validar fechamento completo do servico", "Avaliar fornecedor e encerrar fluxo"
 
     preId = BA_EmitirPreOS("002", "002", "001", 1)
@@ -530,7 +530,7 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     osId = BA_EmitirOS(preId, DateAdd("d", 3, Date), "EMP-BO330")
     notas(1) = 8: notas(2) = 8: notas(3) = 8: notas(4) = 8: notas(5) = 8
     notas(6) = 8: notas(7) = 8: notas(8) = 8: notas(9) = 8: notas(10) = 8
-    r = Svc_Avaliacao.AvaliarOS(osId, "Gestor QA", notas, 10, "Media oito", "")
+    r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media oito", "")
     BA_LogAssert "BO_330_AvaliacaoValida", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "Avaliacao valida conclui OS", BA_StatusOS(osId) & " | MSG=" & r.Mensagem, "Validar servico de avaliacao com media calculada", "Avaliar OS com notas 8"
 
     BA_PrepararCenarioBase
@@ -541,7 +541,7 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     osId = BA_EmitirOS(preId, DateAdd("d", 3, Date), "EMP-BO330b")
     notas(1) = 5: notas(2) = 5: notas(3) = 5: notas(4) = 5: notas(5) = 5
     notas(6) = 5: notas(7) = 5: notas(8) = 5: notas(9) = 5: notas(10) = 5
-    r = Svc_Avaliacao.AvaliarOS(osId, "Gestor QA", notas, 10, "Media cinco", "")
+    r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media cinco", "")
     BA_LogAssert "BO_330b_NotaMin_5_NaoSuspende", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_ATIVA, _
         "Media 5 conclui OS e NAO suspende (limite inclusivo)", _
         BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.Mensagem, _
@@ -553,7 +553,7 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     osId = BA_EmitirOS(preId, DateAdd("d", 3, Date), "EMP-BO330c")
     notas(1) = 4: notas(2) = 4: notas(3) = 4: notas(4) = 4: notas(5) = 4
     notas(6) = 4: notas(7) = 4: notas(8) = 4: notas(9) = 4: notas(10) = 4
-    r = Svc_Avaliacao.AvaliarOS(osId, "Gestor QA", notas, 10, "Media quatro", "")
+    r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media quatro", "")
     BA_LogAssert "BO_330c_NotaMin_4_Suspende", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA, _
         "Media 4 conclui OS e SUSPENDE (4 < 5)", _
         BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.Mensagem, _
@@ -565,7 +565,7 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     osId = BA_EmitirOS(preId, DateAdd("d", 3, Date), "EMP-BO330d")
     notas(1) = 0: notas(2) = 0: notas(3) = 0: notas(4) = 0: notas(5) = 0
     notas(6) = 0: notas(7) = 0: notas(8) = 0: notas(9) = 0: notas(10) = 0
-    r = Svc_Avaliacao.AvaliarOS(osId, "Gestor QA", notas, 10, "Media zero", "")
+    r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media zero", "")
     BA_LogAssert "BO_330d_NotaMin_0_Suspende", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA, _
         "Media 0 conclui OS e SUSPENDE (0 < 5)", _
         BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.Mensagem, _
@@ -577,7 +577,7 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     osId = BA_EmitirOS(preId, DateAdd("d", 3, Date), "EMP-BO330e")
     notas(1) = 10: notas(2) = 10: notas(3) = 10: notas(4) = 10: notas(5) = 10
     notas(6) = 10: notas(7) = 10: notas(8) = 10: notas(9) = 10: notas(10) = 10
-    r = Svc_Avaliacao.AvaliarOS(osId, "Gestor QA", notas, 10, "Media dez", "")
+    r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media dez", "")
     BA_LogAssert "BO_330e_NotaMin_10_NaoSuspende", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_ATIVA, _
         "Media 10 conclui OS e NAO suspende", _
         BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.Mensagem, _
@@ -589,7 +589,7 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     osId = BA_EmitirOS(preId, DateAdd("d", 3, Date), "EMP-BO330f")
     notas(1) = 5: notas(2) = 5: notas(3) = 5: notas(4) = 5: notas(5) = 5
     notas(6) = 5: notas(7) = 5: notas(8) = 5: notas(9) = 4: notas(10) = 5
-    r = Svc_Avaliacao.AvaliarOS(osId, "Gestor QA", notas, 10, "Media quatro ponto nove", "")
+    r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media quatro ponto nove", "")
     BA_LogAssert "BO_330f_NotaMin_4_9_Suspende", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA, _
         "Media 4,9 conclui OS e SUSPENDE (4,9 < 5)", _
         BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.Mensagem, _
@@ -603,7 +603,7 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     notas(6) = 4: notas(7) = 4: notas(8) = 4: notas(9) = 4: notas(10) = 4
     Dim empAfter As TEmpresa
     Dim linhaEmpAfter As Long
-    r = Svc_Avaliacao.AvaliarOS(osId, "Gestor QA", notas, 10, "DT_FIM_SUSP esperado", "")
+    r = AvaliarOS(osId, "Gestor QA", notas, 10, "DT_FIM_SUSP esperado", "")
     empAfter = LerEmpresa("003", linhaEmpAfter)
     BA_LogAssert "BO_330g_DtFimSusp", r.Sucesso And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA And linhaEmpAfter > 0 And empAfter.DT_FIM_SUSP > Date, _
         "Ao suspender por nota, DT_FIM_SUSP deve ser hoje + meses de suspensao", _
@@ -676,7 +676,7 @@ Private Sub BA_Bloco4_Combinatoria()
     preId = BA_EmitirPreOS("001", "182", "001", 1)
     osId = BA_EmitirOS(preId, DateAdd("d", 5, Date), "EMP-BO430A")
     BA_MontarNotas 10, notas
-    res = Svc_Avaliacao.AvaliarOS(osId, "Gestor Auditoria V12", notas, 1, "Matriz concluida", "")
+    res = AvaliarOS(osId, "Gestor Auditoria V12", notas, 1, "Matriz concluida", "")
     BA_LogAssert "BO_430_MatrizTransicaoOS_Concluida", res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "Transicao EM_EXECUCAO -> CONCLUIDA", BA_StatusOS(osId), "Validar transicao final da OS por avaliacao", "Concluir OS"
     res = CancelarOS(osId, "Cancelar OS concluida (invalida)")
     BA_LogAssert "BO_430_CancelConcluida", Not res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "Cancelar OS CONCLUIDA deve falhar", res.Mensagem & " | STATUS=" & BA_StatusOS(osId), "Validar transicao invalida (CONCLUIDA -> CANCELADA)", "Tentar cancelar OS ja concluida"
@@ -687,7 +687,7 @@ Private Sub BA_Bloco4_Combinatoria()
     res = CancelarOS(osId, "Matriz cancelada")
     BA_LogAssert "BO_430_MatrizTransicaoOS_Cancelada", res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CANCELADA, "Transicao EM_EXECUCAO -> CANCELADA", BA_StatusOS(osId), "Validar transicao de cancelamento da OS", "Cancelar OS em execucao"
     BA_MontarNotas 10, notas
-    res = Svc_Avaliacao.AvaliarOS(osId, "Gestor QA", notas, 1, "Avaliar OS cancelada (invalida)", "")
+    res = AvaliarOS(osId, "Gestor QA", notas, 1, "Avaliar OS cancelada (invalida)", "")
     BA_LogAssert "BO_430_ConcluirCancelada", Not res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CANCELADA, "Avaliar OS CANCELADA deve falhar", res.Mensagem & " | STATUS=" & BA_StatusOS(osId), "Validar transicao invalida (CANCELADA -> CONCLUIDA)", "Tentar avaliar OS cancelada"
 
     BA_PrepararCenarioBase
@@ -2121,7 +2121,7 @@ Private Sub BA_ValidarAvaliacaoInvalida(ByVal casoId As String, ByVal notaInvali
         notas(i) = 8
     Next i
     notas(3) = notaInvalida
-    res = Svc_Avaliacao.AvaliarOS(osId, "Gestor QA", notas, 10, "Teste invalido", "")
+    res = AvaliarOS(osId, "Gestor QA", notas, 10, "Teste invalido", "")
     BA_LogAssert casoId, Not res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_EXEC, "Avaliacao invalida nao conclui OS", BA_StatusOS(osId) & " | MSG=" & res.Mensagem, "Blindar validacao de notas fora do intervalo", "Aplicar nota invalida=" & CStr(notaInvalida)
 End Sub
 
@@ -2137,7 +2137,7 @@ Private Sub BA_ValidarAvaliacaoArrayInvalido(ByVal casoId As String)
     For i = 1 To 9
         notas(i) = 8
     Next i
-    res = Svc_Avaliacao.AvaliarOS(osId, "Gestor QA", notas, 10, "Array curto", "")
+    res = AvaliarOS(osId, "Gestor QA", notas, 10, "Array curto", "")
     BA_LogAssert casoId, Not res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_EXEC, "Array de notas invalido nao conclui OS", BA_StatusOS(osId) & " | MSG=" & res.Mensagem, "Blindar contrato do vetor de notas", "Executar AvaliarOS com vetor 1..9"
 End Sub
 
@@ -2411,5 +2411,4 @@ End Function
 Private Function BA_Pad3(ByVal valor As Variant) As String
     BA_Pad3 = Format$(CLng(Val(valor)), "000")
 End Function
-
 

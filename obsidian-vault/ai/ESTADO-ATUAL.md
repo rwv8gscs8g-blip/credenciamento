@@ -3,14 +3,14 @@ titulo: Estado Atual do Sistema
 ultima-atualizacao: 2026-04-19
 autor-ultima-alteracao: GPT-5 (Codex)
 tags: [vivo, regra]
-versao-sistema: V12.0.0201
+versao-sistema: V12.0.0202
 ---
 
 # Estado Atual do Sistema
 
 ## Versao
 
-- **Versao**: V12.0.0201
+- **Versao**: V12.0.0202
 - **Data**: 2026-04-19
 - **Status**: EM_VALIDACAO
 - **Compila**: Pendente de validacao no Excel
@@ -54,6 +54,7 @@ versao-sistema: V12.0.0201
 - A `0199` endureceu o `Importador_VBA` com verificacao de modulos obrigatorios antes da compilacao
 - A `0200` corrigiu o excesso de continuacoes de linha no `Importador_VBA` e preservou a checagem estrutural do pacote
 - A `0201` removeu a dependencia do tipo nativo `Collection` dentro do `Importador_VBA`, tornando o importador mais tolerante a projetos contaminados
+- A `0202` removeu a qualificacao `Svc_Avaliacao.` das chamadas de `AvaliarOS`, estabilizando a compilacao em workbooks que rejeitam acesso qualificado a membro de modulo padrao
 - Terminologia MEI eliminada no codigo VBA e no `Menu_Principal` (designer); relatorio **Rel_OSEmpresa** abre sem crash
 - Exportacao de CSV de resultados de teste
 - Release metadata centralizada (App_Release.bas)
@@ -72,6 +73,7 @@ versao-sistema: V12.0.0201
 - Revalidacao da compilacao da `V12.0.0199` no Excel
 - Revalidacao da compilacao da `V12.0.0200` no Excel
 - Revalidacao da compilacao da `V12.0.0201` no Excel
+- Revalidacao da compilacao da `V12.0.0202` no Excel
 - Revalidacao da bateria oficial nos casos `BO_330*`
 - Validacao no Excel da `V12.0.0194` apos o rollback cirurgico de `CNAE/CAD_SERV`
 - Importacao no Excel dos modulos V2 e execucao das macros `CT2_*`
