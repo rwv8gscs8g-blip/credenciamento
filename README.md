@@ -29,10 +29,10 @@ O foco deste repositorio e manter a versao oficial do codigo VBA, a estrategia d
 
 ## Estrutura Logica
 
-- Codigo VBA fonte do sistema
-- Auditorias tecnicas e matrizes de teste
-- Notas de release e status oficial das versoes
-- Dados estruturais de apoio
+- `src/vba/` — codigo VBA fonte do sistema
+- `auditoria/` — auditorias publicas e matriz de testes
+- `obsidian-vault/releases/` — status oficial e release validada atual
+- `doc/` — dados estruturais de apoio
 
 ## Como usar
 
@@ -46,6 +46,7 @@ O foco deste repositorio e manter a versao oficial do codigo VBA, a estrategia d
 A documentacao canônica para leitura do projeto esta concentrada em:
 
 - `auditoria/` — auditorias, matriz mestre de testes e cobertura
+- `src/vba/` — codigo VBA puro para leitura e compilacao
 - `obsidian-vault/releases/STATUS-OFICIAL.md` — situacao oficial das versoes
 - `obsidian-vault/releases/` — notas de release
 - `doc/` — dados de referencia

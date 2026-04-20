@@ -2,7 +2,7 @@ Attribute VB_Name = "App_Release"
 Option Explicit
 
 ' Metadata centralizada da release atual.
-' Fonte de verdade: vba_export/. O Menu_Principal apenas consome estas funcoes.
+' O Menu_Principal apenas consome estas funcoes.
 
 Public Const APP_RELEASE_ATUAL As String = "V12.0.0202"
 Public Const APP_RELEASE_STATUS As String = "VALIDADO"

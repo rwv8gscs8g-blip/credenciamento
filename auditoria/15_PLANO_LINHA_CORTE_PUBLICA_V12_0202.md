@@ -23,17 +23,13 @@ Objetivo: preparar a publicacao do `main` oficial a partir da `V12.0.0202`, mant
 
 ## 3. Itens candidatos a permanecer apenas localmente
 
-- `vba_import/`
-- `scripts/publicar_vba_import.sh`
-- `obsidian-vault/ai/bastao/`
-- `obsidian-vault/ai/handoffs/`
-- `obsidian-vault/handoff/`
-- `obsidian-vault/01-CONTEXTO-IA.md`
-- `obsidian-vault/ai/prompt-*`
-- `obsidian-vault/templates/Template-Iteracao.md`
-- `incoming/`
-- `BKP_forms/`
-- `backups/`
+- prompts de IA
+- handoffs operacionais
+- espelhos locais de sincronizacao/importacao
+- scripts internos de automacao
+- material de onboarding do time de IA
+- incoming de formularios e pacotes auxiliares
+- backups e espelhos locais
 
 ## 4. Itens candidatos a permanecer publicos
 
@@ -57,7 +53,7 @@ Condicoes para o corte:
 2. bateria oficial validada
 3. senha sem exposicao literal no repositorio
 4. status canonico das versoes consolidado
-5. leitura publica sem dependencia de `vba_import` / `vba_export` como explicacao central
+5. leitura publica sem dependencia de workflow privado de sincronizacao como explicacao central
 
 ## 6. Passos recomendados da publicacao
 

@@ -1,6 +1,6 @@
 # Sistema de Credenciamento — .gitignore
 
-# Excel binarios (fonte de verdade e vba_export/)
+# Excel binarios
 *.xlsm
 *.xlsx
 
@@ -44,11 +44,7 @@ local-only/
 # Ollama
 *.gguf
 
-# Obsidian cache (config do vault vai no git, cache nao)
-obsidian-vault/.obsidian/workspace.json
-obsidian-vault/.obsidian/cache
-obsidian-vault/.obsidian/plugins/
-obsidian-vault/.obsidian/core-plugins-migration.json
+# Obsidian local
+obsidian-vault/.obsidian/
 
 # Artefatos locais de automacao/importacao
-vba_import/

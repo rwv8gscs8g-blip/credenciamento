@@ -18,11 +18,13 @@ versao-sistema: V12.0.0202
 
 ## Documentos Canonicos
 
-1. **[[ai/ESTADO-ATUAL]]** — situacao funcional consolidada da versao atual
-2. **[[releases/STATUS-OFICIAL]]** — status oficial das versoes para publicacao
-3. **[[releases/V12.0.0202]]** — release validada atual
-4. `auditoria/00_SUMARIO_EXECUTIVO.md` — visao executiva
-5. `auditoria/04_MATRIZ_MESTRE_DE_TESTES.md` — matriz de testes
+1. **[[releases/STATUS-OFICIAL]]** — status oficial das versoes para publicacao
+2. **[[releases/V12.0.0202]]** — release validada atual
+3. `README.md` — visao geral publica do projeto
+4. `auditoria/00_SUMARIO_EXECUTIVO.md` — visao executiva atual
+5. `auditoria/03_AUDITORIA_REGRAS_DE_NEGOCIO.md` — regras de negocio consolidadas
+6. `auditoria/04_MATRIZ_MESTRE_DE_TESTES.md` — estrategia oficial de testes
+7. `auditoria/14_FECHAMENTO_BACKLOG_OPUS_V12_0202.md` — fechamento do backlog da auditoria
 
 ## Checkpoint da Versao Atual
 
@@ -61,4 +63,4 @@ versao-sistema: V12.0.0202
 
 ---
 **Ultima Verificacao**: 2026-04-19
-**Mantido por**: Mauricio Zanin + Time IA
+**Mantido por**: Mauricio Zanin
