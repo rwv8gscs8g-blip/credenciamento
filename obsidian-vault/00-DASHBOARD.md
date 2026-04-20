@@ -1,7 +1,7 @@
 ---
 titulo: Dashboard - Credenciamento
 ultima-atualizacao: 2026-04-19
-autor-ultima-alteracao: Mauricio Zanin
+autor-ultima-alteracao: Maurício Zanin
 tags: [vivo]
 versao-sistema: V12.0.0202
 ---
@@ -10,7 +10,7 @@ versao-sistema: V12.0.0202
 
 ## Status Atual
 
-**Versao**: V12.0.0202
+**Versão**: V12.0.0202
 **Data**: 2026-04-19
 **Status**: VALIDADO
 **Ambiente**: Windows 10+, Excel 2019/2021/365
@@ -26,7 +26,7 @@ versao-sistema: V12.0.0202
 6. `SECURITY.md` — politica publica de seguranca
 7. `auditoria/14_FECHAMENTO_BACKLOG_OPUS_V12_0202.md` — fechamento do backlog tecnico
 
-## Checkpoint da Versao Atual
+## Checkpoint da Versão Atual
 
 ### Nucleo do Sistema
 - [x] Autenticacao e Contexto (AppContext)
@@ -52,12 +52,12 @@ versao-sistema: V12.0.0202
 - [x] Fluxo oficial validado pela bateria automatizada
 
 ### Testes e Evidencias
-- [x] Compilacao limpa validada por operador humano
+- [x] Compilação limpa validada por operador humano
 - [x] Bateria oficial recente sem falhas
 - [ ] Nova rodada de smoke/stress V2 para reauditoria externa
 
 ### Governanca publica
-- [x] Licenca publica formalizada em TPGL v1.1
+- [x] Licença pública formalizada em TPGL v1.1
 - [x] CLA exigido para contribuicoes publicas
 - [x] Politica publica de seguranca
 - [x] Linha publica source-available e auditavel
@@ -69,4 +69,4 @@ versao-sistema: V12.0.0202
 
 ---
 **Ultima Verificacao**: 2026-04-19
-**Mantido por**: Mauricio Zanin
+**Mantido por**: Maurício Zanin

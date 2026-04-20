@@ -1,6 +1,6 @@
 # 17. Parecer Técnico-Jurídico — Licença TPGL v1.1
 
-**Objeto:** Transparent Public Governance License (TPGL) v1.0, proposta como licença customizada inspirada na Business Source License 1.1 (BSL), aplicável ao Sistema de Credenciamento e Rodízio (V12.0.0202).
+**Objeto:** Licença TPGL v1.0, proposta como licença customizada inspirada na Business Source License 1.1 (BSL), aplicável ao Sistema de Credenciamento e Rodízio (V12.0.0202).
 **Natureza:** insumo técnico-jurídico preliminar para homologação humana.
 **Data:** 2026-04-19.
 **Disclaimer:** Este documento não constitui aconselhamento jurídico formal. A versão final da licença deve ser homologada por advogado(a) brasileiro(a) com prática em propriedade intelectual antes de uso institucional.
@@ -56,7 +56,7 @@ A TPGL v1.0 tem o **conceito correto** (modelo BSL com Change Date e Change Lice
 
 - **Problema:** O nome "Public Governance License" sugere licença pública/aberta. A licença, contudo, **não é open source** (a própria cláusula 6 reconhece isto). O nome induz a erro o leitor.
 - **Risco:** Falsa apresentação pode (a) atrair críticas reputacionais quando a comunidade open source perceber a divergência; (b) gerar confusão em servidores públicos que assumem licença aberta sem ler.
-- **Correção sugerida:** "Transparent Public Governance Source License" (TPGSL) ou manter TPGL mas com subtítulo explícito "Source-available, not open source", em destaque no preâmbulo.
+- **Correção sugerida:** manter apenas TPGL, com subtítulo explícito "source-available, not open source", em destaque no preâmbulo.
 
 #### Cláusula 1 — Definições
 
@@ -400,15 +400,15 @@ A v1.1 corrige todos os quatro.
 ---
 
 ```text
-TRANSPARENT PUBLIC GOVERNANCE LICENSE (TPGL)
-Versao 1.1 — 2026-04-19
+LICENÇA TPGL v1.1
+Versão 1.1 — 2026-04-19
 
 Source-available license for public-interest software.
 This is NOT an open source license per OSI definition.
 This license converts to Apache License 2.0 four years
 after each release date.
 
-Copyright (C) 2026 Luis Mauricio Junqueira Zanin e contribuintes.
+Copyright (C) 2026 Luís Maurício Junqueira Zanin e contribuintes.
 Todos os direitos reservados.
 
 PREAMBULO

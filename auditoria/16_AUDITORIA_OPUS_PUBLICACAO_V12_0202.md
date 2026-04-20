@@ -299,7 +299,7 @@ hash SHA-256 contra o publicado em release notes, abra no Excel
 ## Creditos
 
 - Concepcao original: Sergio Cintra
-- Engenharia atual: Luis Mauricio Junqueira Zanin
+- Engenharia atual: Luís Maurício Junqueira Zanin
 
 ## Licenca
 

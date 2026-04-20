@@ -1,9 +1,9 @@
 # Manifest — Redirecionamento
 
-O indice publico vigente do repositorio passou a ser
+O índice público vigente do repositório passou a ser
 `docs/INDEX.md`.
 
-Use este arquivo apenas como ponte historica para o vault.
+Use este arquivo apenas como ponte histórica para o vault.
 
 ## Leituras canônicas
 
