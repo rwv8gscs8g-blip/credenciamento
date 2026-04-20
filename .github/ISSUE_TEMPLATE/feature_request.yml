@@ -1,0 +1,25 @@
+name: Feature request
+description: Propor melhoria controlada
+title: "[FEATURE] "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problema
+    attributes:
+      label: Problema
+      description: Qual problema real precisa ser resolvido?
+    validations:
+      required: true
+  - type: textarea
+    id: proposta
+    attributes:
+      label: Proposta
+      description: Descreva a solução sugerida.
+    validations:
+      required: true
+  - type: textarea
+    id: impacto
+    attributes:
+      label: Impacto esperado
+    validations:
+      required: false

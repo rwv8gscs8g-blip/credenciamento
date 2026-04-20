@@ -1,7 +1,7 @@
 ---
 titulo: Dashboard - Credenciamento
 ultima-atualizacao: 2026-04-19
-autor-ultima-alteracao: GPT-5 (Codex)
+autor-ultima-alteracao: Mauricio Zanin
 tags: [vivo]
 versao-sistema: V12.0.0202
 ---
@@ -21,10 +21,10 @@ versao-sistema: V12.0.0202
 1. **[[releases/STATUS-OFICIAL]]** — status oficial das versoes para publicacao
 2. **[[releases/V12.0.0202]]** — release validada atual
 3. `README.md` — visao geral publica do projeto
-4. `auditoria/00_SUMARIO_EXECUTIVO.md` — visao executiva atual
-5. `auditoria/03_AUDITORIA_REGRAS_DE_NEGOCIO.md` — regras de negocio consolidadas
-6. `auditoria/04_MATRIZ_MESTRE_DE_TESTES.md` — estrategia oficial de testes
-7. `auditoria/14_FECHAMENTO_BACKLOG_OPUS_V12_0202.md` — fechamento do backlog da auditoria
+4. `docs/INDEX.md` — indice publico de documentacao
+5. `LICENSE` — TPGL v1.1
+6. `SECURITY.md` — politica publica de seguranca
+7. `auditoria/14_FECHAMENTO_BACKLOG_OPUS_V12_0202.md` — fechamento do backlog tecnico
 
 ## Checkpoint da Versao Atual
 
@@ -55,6 +55,12 @@ versao-sistema: V12.0.0202
 - [x] Compilacao limpa validada por operador humano
 - [x] Bateria oficial recente sem falhas
 - [ ] Nova rodada de smoke/stress V2 para reauditoria externa
+
+### Governanca publica
+- [x] Licenca publica formalizada em TPGL v1.1
+- [x] CLA exigido para contribuicoes publicas
+- [x] Politica publica de seguranca
+- [x] Linha publica source-available e auditavel
 
 ### Relatorios
 - [x] Relatorio de empresas por servico (Rel_Emp_Serv)

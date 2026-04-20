@@ -7,7 +7,7 @@ Objetivo: registrar, de forma objetiva, o que foi efetivamente resolvido, o que 
 - **Base tecnica atual:** `V12.0.0202`
 - **Compilacao:** validada por operador humano
 - **Bateria oficial:** validada, sem falhas recentes
-- **Situacao geral:** backlog critico do parecer Opus foi majoritariamente equacionado para estabilizacao; pendencias remanescentes concentram-se em cobertura V2 complementar, importador oficial e racionalizacao do repositorio publico
+- **Situacao geral:** backlog critico do parecer Opus foi majoritariamente equacionado para estabilizacao; pendencias remanescentes concentram-se em cobertura V2 complementar, consolidacao publica da governanca e maturidade adicional de testes
 
 ## Matriz de Fechamento
 
@@ -31,15 +31,15 @@ Objetivo: registrar, de forma objetiva, o que foi efetivamente resolvido, o que 
 | H2 | Centralizacao de caminhos hardcoded | ABERTO | Nao priorizado nesta estabilizacao |
 | H3 | Senha padrao sem exposicao literal | RESOLVIDO | Senha removida de texto explicito e centralizada em helper |
 | H4 | Hash/versao no cabecalho dos CSVs | ABERTO | Ainda nao implementado |
-| H5 | Atualizacao de regras/pipeline/docs | PARCIAL | Documentos canonicos atualizados; ainda falta racionalizacao final da arvore publica |
+| H5 | Atualizacao de regras/pipeline/docs | PARCIAL | Linha publica foi racionalizada e a politica de licenca foi formalizada em TPGL v1.1; ainda falta evidenciacao fresca da V2 e fechamento da nova auditoria |
 
 ## Conclusao para Nova Auditoria
 
 Uma nova auditoria externa ja faz sentido, **desde que** os seguintes itens sejam fechados antes:
 
 1. rodada fresca da V2 com evidencias (`smoke`, `stress`, `assistido`)
-2. linha de corte do repositorio publico
-3. separacao entre material interno de IA e superficie publicada
+2. fechamento da governanca publica minima (`LICENSE`, `CLA`, `SECURITY`, `CONTRIBUTING`, `CHANGELOG`)
+3. consolidacao final da linha oficial no `main`
 4. normalizacao final do historico e dos status de release
 
 Sem isso, a nova auditoria tende a ser positiva na engenharia, mas ainda critica na governanca e na higiene do repositorio.

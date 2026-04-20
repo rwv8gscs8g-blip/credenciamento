@@ -23,12 +23,13 @@ Objetivo: registrar, em formato curto e publico, a situacao tecnica da linha ofi
 - racionalizacao final do repositorio para leitura externa
 - nova auditoria independente sobre a arvore publica limpa
 - evolucao incremental da estrategia de testes para aumentar confiabilidade e rastreabilidade
+- consolidacao final da trilha publica em `main`
 
 ## Riscos remanescentes
 
 - a V2 ainda precisa de evidencia fresca antes da auditoria final
 - o importador VBA permanece fora da superficie publica oficial
-- a politica de licenca publica ainda precisa ser formalizada
+- a licenca publica ja foi formalizada em TPGL v1.1, mas ainda depende de homologacao juridica humana para publicacao institucional definitiva
 - o backlog de maturidade de testes e compliance ainda tem espaco de melhoria, embora a base ja esteja estabilizada
 
 ## Decisao Recomendada

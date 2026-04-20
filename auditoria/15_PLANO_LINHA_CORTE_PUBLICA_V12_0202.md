@@ -13,21 +13,21 @@ Objetivo: preparar a publicacao do `main` oficial a partir da `V12.0.0202`, mant
 
 ## 2. O que deve sair da superficie publica
 
-- prompts de IA
-- handoffs operacionais
-- documentos de bastao
+- materiais operacionais internos
+- documentos de transicao de trabalho
+- instrucoes privadas de operacao
 - instrucoes de upload/importacao pessoais
 - artefatos locais de automacao
 - backups e espelhos locais
-- documentos voltados ao workflow interno com IA, e nao ao sistema em si
+- documentos voltados a workflows internos, e nao ao sistema em si
 
 ## 3. Itens candidatos a permanecer apenas localmente
 
-- prompts de IA
-- handoffs operacionais
+- materiais operacionais internos
+- documentos de transicao de trabalho
 - espelhos locais de sincronizacao/importacao
 - scripts internos de automacao
-- material de onboarding do time de IA
+- material de onboarding interno
 - incoming de formularios e pacotes auxiliares
 - backups e espelhos locais
 
@@ -39,7 +39,7 @@ Objetivo: preparar a publicacao do `main` oficial a partir da `V12.0.0202`, mant
 - `obsidian-vault/releases/`
 - `obsidian-vault/00-DASHBOARD.md`
 - `obsidian-vault/MANIFEST.md`
-- documentacao de arquitetura e regras de negocio que nao dependa do workflow privado de IA
+- documentacao de arquitetura e regras de negocio que nao dependa de workflow privado
 
 ## 5. Regra para o novo `main`
 
@@ -68,8 +68,8 @@ Condicoes para o corte:
 O repositório publico deve poder ser lido por um programador externo sem precisar entender:
 
 - seu fluxo pessoal de importacao VBA
-- sua rotina de trabalho com IA
-- seus prompts
+- sua rotina operacional interna
+- seus procedimentos privados de trabalho
 - sua estrategia de upload ou compilacao local
 
 Ele deve enxergar apenas:

@@ -48,3 +48,6 @@ local-only/
 obsidian-vault/.obsidian/
 
 # Artefatos locais de automacao/importacao
+tests/evidencias/
+evidence/
+*.log
