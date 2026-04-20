@@ -635,7 +635,7 @@ notadamente a Lei 9.609/98 (Lei de Software) e a Lei 9.610/98
     especifica e expressa do Licenciante.
 
 7.2 Solicitacoes de licenca comercial devem ser enviadas para
-    licenciamento@<dominio>, com resposta do Licenciante em
+    canal institucional privado de licenciamento, com resposta do Licenciante em
     ate quinze (15) dias uteis. A nao-resposta no prazo nao
     constitui aceite tacito.
 
@@ -735,8 +735,8 @@ notadamente a Lei 9.609/98 (Lei de Software) e a Lei 9.610/98
      do Brasil, em especial pelas Leis 9.609/98, 9.610/98,
      12.527/11 e 13.709/18.
 
-13.2 As partes elegem o foro da Comarca de [CIDADE/UF DO
-     LICENCIANTE] para dirimir quaisquer controversias
+13.2 As partes elegem o foro da comarca do domicilio do
+     Licenciante para dirimir quaisquer controversias
      decorrentes desta licenca, ressalvada a competencia
      constitucional ou legal de outro foro quando o Licenciado
      for ente publico.
@@ -815,7 +815,7 @@ A previsibilidade contratual é requisito implícito de vários PA's CMMI nível
 ### 10.1 Passos imediatos pelo mantenedor
 
 1. Substituir a TPGL v1.0 pela v1.1 em rascunho.
-2. Preencher placeholders (`<domínio>`, `[CIDADE/UF DO LICENCIANTE]`).
+2. Confirmar o canal institucional privado de licenciamento e a política jurídica aplicável do Licenciante.
 3. Anexar `CLA.md` com texto formal de cessão (modelo a desenvolver em sprint subsequente).
 4. Levar a v1.1 a advogado(a) brasileiro(a) com prática em PI/software para homologação formal.
 5. Após homologação, salvar como `LICENSE` na raiz do repositório.
