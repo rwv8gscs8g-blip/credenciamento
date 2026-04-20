@@ -26,7 +26,7 @@ Uso:
 
 Estado atual:
 - baseline estabilizada
-- precisa de rodada fresca antes da nova auditoria externa
+- rodada fresca validada em 20/04/2026 com evidencia publica da V2
 
 ### Testes assistidos
 
@@ -59,16 +59,15 @@ O repositório publico deve caminhar para uma esteira em camadas:
 
 ## 4. Pendencias abertas para proxima auditoria
 
-- rodada fresca de `smoke`, `stress` e `assistido`
-- aumento da evidenciacao publica da V2
 - comparador automatizado entre suites
 - chaves de evolucao e rastreabilidade mais fortes por release
+- checagens automaticas de coerencia entre release, status oficial e evidencias
 
 ## 5. Conclusao
 
 A estrategia de testes ja e suficiente para sustentar a linha oficial estabilizada, mas ainda nao representa o teto de maturidade desejado. A proxima auditoria deve olhar principalmente para:
 
 - cobertura incremental
-- confiabilidade da V2
+- automacao adicional de coerencia e gate
 - mecanismos de gate antes de release
 - rastreabilidade de evolucao do sistema de testes

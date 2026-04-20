@@ -27,15 +27,16 @@ Ele **não** afirma certificação formal.
 - versão oficial com status explícito
 - release validada por operador humano
 - bateria oficial consolidada
+- V2 validada com evidência pública recente
 - trilha pública de auditoria
 - pacote mínimo público de licença, contribuição e segurança
 
 ## Pontos ainda abertos
 
-- nova evidência fresca da V2 antes da próxima auditoria externa
 - maior rastreabilidade pública de evidências por release
+- automação de coerência entre release, status oficial e pacote de evidências
 - evolução do hardening de testes e invariantes
-- fechamento da estratégia pública de publicação em `main`
+- homologação jurídica humana final da TPGL v1.1
 
 ## Uso correto deste documento
 

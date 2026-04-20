@@ -1,6 +1,6 @@
 ---
 titulo: Dashboard - Credenciamento
-ultima-atualizacao: 2026-04-19
+ultima-atualizacao: 2026-04-20
 autor-ultima-alteracao: Maurício Zanin
 tags: [vivo]
 versao-sistema: V12.0.0202
@@ -11,7 +11,7 @@ versao-sistema: V12.0.0202
 ## Status Atual
 
 **Versão**: V12.0.0202
-**Data**: 2026-04-19
+**Data**: 2026-04-20
 **Status**: VALIDADO
 **Ambiente**: Windows 10+, Excel 2019/2021/365
 **Planilha**: PlanilhaCredenciamento-Homologacao.xlsm
@@ -54,7 +54,7 @@ versao-sistema: V12.0.0202
 ### Testes e Evidencias
 - [x] Compilação limpa validada por operador humano
 - [x] Bateria oficial recente sem falhas
-- [ ] Nova rodada de smoke/stress V2 para reauditoria externa
+- [x] V2 smoke, stress e assistido validados com evidência pública em 2026-04-20
 
 ### Governanca publica
 - [x] Licença pública formalizada em TPGL v1.1
@@ -68,5 +68,5 @@ versao-sistema: V12.0.0202
 - [x] Central de testes com cobertura (Central_Testes_Relatorio)
 
 ---
-**Ultima Verificacao**: 2026-04-19
+**Ultima Verificacao**: 2026-04-20
 **Mantido por**: Maurício Zanin

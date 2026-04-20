@@ -1,6 +1,6 @@
 # 17. Parecer Técnico-Jurídico — Licença TPGL v1.1
 
-**Objeto:** Licença TPGL v1.0, proposta como licença customizada inspirada na Business Source License 1.1 (BSL), aplicável ao Sistema de Credenciamento e Rodízio (V12.0.0202).
+**Objeto:** Análise crítica da TPGL v1.0 e proposição da TPGL v1.1 como licença customizada inspirada na Business Source License 1.1 (BSL), aplicável ao Sistema de Credenciamento e Rodízio (V12.0.0202).
 **Natureza:** insumo técnico-jurídico preliminar para homologação humana.
 **Data:** 2026-04-19.
 **Disclaimer:** Este documento não constitui aconselhamento jurídico formal. A versão final da licença deve ser homologada por advogado(a) brasileiro(a) com prática em propriedade intelectual antes de uso institucional.
