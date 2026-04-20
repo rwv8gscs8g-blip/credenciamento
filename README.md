@@ -97,5 +97,5 @@ Linha oficial: `V12.0.0202`
 - compilação limpa validada por operador humano
 - bateria oficial recente sem falhas bloqueantes
 - evidência pública da bateria oficial já publicada nesta linha
-- evidência fresca da V2 ainda pendente para a auditoria externa final
+- evidência fresca da V2 validada por operador humano e publicada em `auditoria/evidencias/V12.0.0202/`
 - repositório em fase de consolidação documental para nova auditoria externa

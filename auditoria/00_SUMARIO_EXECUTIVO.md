@@ -16,11 +16,11 @@ Objetivo: registrar, em formato curto e público, a situação técnica da linha
 - baseline determinística da V2
 - fechamento da bateria oficial sem falhas recentes
 - evidência pública da bateria oficial publicada em `auditoria/evidencias/V12.0.0202/`
+- evidência fresca da V2 validada por operador humano e publicada no mesmo diretório
 - status oficial de release consolidado em `obsidian-vault/releases/STATUS-OFICIAL.md`
 
 ## O que permanece como trabalho seguinte
 
-- nova rodada fresca da V2 (`smoke`, `stress`, `assistido`) para evidenciar a linha publica
 - racionalização final do repositório para leitura externa
 - nova auditoria independente sobre a arvore publica limpa
 - evolução incremental da estratégia de testes para aumentar confiabilidade e rastreabilidade
@@ -28,7 +28,6 @@ Objetivo: registrar, em formato curto e público, a situação técnica da linha
 
 ## Riscos remanescentes
 
-- a V2 ainda precisa de evidencia fresca antes da auditoria final
 - o importador VBA permanece fora da superficie publica oficial
 - a licença pública já foi formalizada em TPGL v1.1, mas ainda depende de homologação jurídica humana para publicação institucional definitiva
 - o backlog de maturidade de testes e compliance ainda tem espaco de melhoria, embora a base ja esteja estabilizada
@@ -37,4 +36,4 @@ Objetivo: registrar, em formato curto e público, a situação técnica da linha
 
 - **Sim** para consolidar a `V12.0.0202` como linha oficial inicial do `main` publico
 - **Sim** para seguir com a sprint de faxina e padronizacao
-- **Sim** para pedir nova auditoria externa somente depois da revalidacao da V2 e da revisao da estrutura publica
+- **Sim** para pedir nova auditoria externa sobre a arvore publica limpa e a evidência já consolidada da Bateria Oficial e da V2

@@ -15,9 +15,10 @@ tratam apenas da linha pública oficial.
 - compilação limpa por operador humano
 - bateria oficial recente sem falhas bloqueantes
 - evidência pública da bateria oficial publicada em `auditoria/evidencias/V12.0.0202/`
+- evidência fresca da V2 validada por operador humano e publicada no mesmo diretório
 
 ### Observações
 
 - linha oficial registrada em [obsidian-vault/releases/STATUS-OFICIAL.md](obsidian-vault/releases/STATUS-OFICIAL.md)
 - base pública em processo de consolidação documental para nova auditoria externa
-- evidência fresca da V2 permanece como pendência explícita antes da auditoria externa final
+- a árvore limpa segue pronta para promoção da linha pública após fechamento jurídico e de publicação
