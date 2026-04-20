@@ -9,19 +9,11 @@ Public Function Util_SenhaProtecaoPadrao() As String
         ChrW$(117) & ChrW$(98)
 End Function
 
-Private Function Util_SenhaProtecaoLegadaMigracao() As String
-    Util_SenhaProtecaoLegadaMigracao = _
-        ChrW$(115) & ChrW$(101) & ChrW$(98) & ChrW$(114) & ChrW$(97) & _
-        ChrW$(101) & ChrW$(50) & ChrW$(48) & ChrW$(50) & ChrW$(52)
-End Function
-
 Public Function Util_SenhasTentativaProtecao() As Variant
     Util_SenhasTentativaProtecao = Array( _
         vbNullString, _
         Util_SenhaProtecaoPadrao(), _
-        UCase$(Util_SenhaProtecaoPadrao()), _
-        Util_SenhaProtecaoLegadaMigracao(), _
-        UCase$(Util_SenhaProtecaoLegadaMigracao()) _
+        UCase$(Util_SenhaProtecaoPadrao()) _
     )
 End Function
 

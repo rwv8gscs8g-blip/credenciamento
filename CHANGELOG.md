@@ -9,6 +9,7 @@ tratam apenas da linha pública oficial.
 
 - estabilização da chamada `AvaliarOS(...)` em workbooks restritivos
 - consolidação da compilação após a linha de hotfixes da série `0194-0202`
+- neutralização final do helper público de proteção de abas na árvore publicada
 
 ### Validado
 
@@ -16,6 +17,7 @@ tratam apenas da linha pública oficial.
 - bateria oficial recente sem falhas bloqueantes
 - evidência pública da bateria oficial publicada em `auditoria/evidencias/V12.0.0202/`
 - evidência fresca da V2 validada por operador humano e publicada no mesmo diretório
+- auditoria positiva de pontos fortes consolidada em `auditoria/19_AUDITORIA_PONTOS_FORTES_V12_0202.md`
 
 ### Observações
 

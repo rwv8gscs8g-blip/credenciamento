@@ -45,8 +45,7 @@ workbook. Ela não deve ser tratada como mecanismo criptográfico ou controle de
 segurança forte.
 
 O token público atual é neutro e não deve carregar referência institucional ou
-valor semântico de segredo. Workbooks legados podem aceitar token de migração
-somente para fins de compatibilidade operacional, sem alterar a política acima.
+valor semântico de segredo.
 
 ## Divulgação coordenada
 
