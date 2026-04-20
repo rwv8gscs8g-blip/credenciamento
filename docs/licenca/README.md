@@ -24,6 +24,10 @@ Características essenciais:
 Contribuições externas só podem ser incorporadas com aceite rastreável do
 [CLA.md](../../CLA.md).
 
+O guia detalhado de importação do código-fonte e o vídeo tutorial operacional
+são materiais complementares fornecidos em canal controlado após aceite
+rastreável do CLA e validação do enquadramento do solicitante.
+
 ## Licenciamento comercial
 
 Solicitações de uso fora do escopo da TPGL v1.1 devem ser encaminhadas aos

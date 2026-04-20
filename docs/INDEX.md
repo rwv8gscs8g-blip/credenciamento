@@ -15,7 +15,9 @@ Este é o índice canônico de leitura pública do repositório.
 
 - [docs/ARQUITETURA.md](ARQUITETURA.md)
 - [docs/COMPLIANCE_CMMI_ISO.md](COMPLIANCE_CMMI_ISO.md)
+- [docs/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
 - [docs/licenca/README.md](licenca/README.md)
+- [docs/legal/CLA_INSTITUCIONAL_TEMPLATE.md](legal/CLA_INSTITUCIONAL_TEMPLATE.md)
 
 ## Auditoria e testes
 
@@ -26,6 +28,8 @@ Este é o índice canônico de leitura pública do repositório.
 - [auditoria/15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md](../auditoria/15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md)
 - [auditoria/16_AUDITORIA_OPUS_PUBLICACAO_V12_0202.md](../auditoria/16_AUDITORIA_OPUS_PUBLICACAO_V12_0202.md)
 - [auditoria/17_PARECER_LICENCIAMENTO_TPGL_v1_1.md](../auditoria/17_PARECER_LICENCIAMENTO_TPGL_v1_1.md)
+- [auditoria/18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md](../auditoria/18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md)
+- [auditoria/evidencias/V12.0.0202/MANIFEST.md](../auditoria/evidencias/V12.0.0202/MANIFEST.md)
 - [auditoria/INDEX.md](../auditoria/INDEX.md)
 
 ## Releases e status

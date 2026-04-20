@@ -1,368 +1,368 @@
 LICENÇA TPGL v1.1
 Versão 1.1 — 2026-04-19
 
-Source-available license for public-interest software.
-This is NOT an open source license per OSI definition.
-This license converts to Apache License 2.0 four years
-after each release date.
+Licença source-available para software de interesse público.
+Esta NÃO é uma licença open source sob a definição da OSI.
+Esta licença se converte em Apache License 2.0 quatro anos
+após a data de publicação de cada release.
 
 Copyright (C) 2026 Luís Maurício Junqueira Zanin e contribuintes.
 Todos os direitos reservados.
 
-PREAMBULO
+PREÂMBULO
 
-Esta licenca foi desenhada para um sistema de interesse publico,
-voltado a municipios brasileiros, com tres compromissos
-simultaneos:
+Esta licença foi desenhada para um sistema de interesse público,
+voltado a municípios brasileiros, com três compromissos
+simultâneos:
 
-(i) Transparencia e auditabilidade publica do codigo, em
-    alinhamento com a Lei 12.527/11 (Lei de Acesso a Informacao);
-(ii) Sustentabilidade economica do mantenedor, mediante reserva
+(i) Transparência e auditabilidade pública do código, em
+    alinhamento com a Lei 12.527/11 (Lei de Acesso à Informação);
+(ii) Sustentabilidade econômica do mantenedor, mediante reserva
      de uso comercial competitivo;
-(iii) Conversao automatica para Apache License 2.0 quatro anos
-      apos cada publicacao de versao, garantindo abertura futura.
+(iii) Conversão automática para Apache License 2.0 quatro anos
+      após cada publicação de versão, garantindo abertura futura.
 
-Esta licenca e inspirada na Business Source License 1.1
-(MariaDB), adaptada ao ordenamento juridico brasileiro,
-notadamente a Lei 9.609/98 (Lei de Software) e a Lei 9.610/98
+Esta licença é inspirada na Business Source License 1.1
+(MariaDB), adaptada ao ordenamento jurídico brasileiro,
+notadamente à Lei 9.609/98 (Lei de Software) e à Lei 9.610/98
 (Direitos Autorais).
 
-1. DEFINICOES
+1. DEFINIÇÕES
 
 1.1 "Licenciante" significa o titular dos direitos patrimoniais
     sobre o Software, conforme identificado no aviso de copyright.
 
-1.2 "Software" ou "Obra Licenciada" significa o codigo-fonte,
-    documentacao, planilhas, esquemas de dados e demais artefatos
-    tecnicos identificados pelo identificador de versao
+1.2 "Software" ou "Obra Licenciada" significa o código-fonte,
+    documentação, planilhas, esquemas de dados e demais artefatos
+    técnicos identificados pelo identificador de versão
     (`APP_RELEASE_VERSION`) e respectivo hash de commit
-    publicado pelo Licenciante. A presente licenca aplica-se a
-    cada versao isoladamente, com sua propria Data de Conversao.
+    publicado pelo Licenciante. A presente licença aplica-se a
+    cada versão isoladamente, com sua própria Data de Conversão.
 
-1.3 "Uso" significa qualquer ato de instalacao, execucao, copia,
-    modificacao, traducao, adaptacao, derivacao, distribuicao
-    ou disponibilizacao a terceiros do Software.
+1.3 "Uso" significa qualquer ato de instalação, execução, cópia,
+    modificação, tradução, adaptação, derivação, distribuição
+    ou disponibilização a terceiros do Software.
 
-1.4 "Inspecao" significa o ato de leitura, analise estatica ou
-    dinamica nao executada, e auditoria de conformidade do
-    Software, sem instalacao, execucao ou distribuicao.
-    Inspecao nao depende de aceite desta licenca.
+1.4 "Inspeção" significa o ato de leitura, análise estática ou
+    dinâmica não executada, e auditoria de conformidade do
+    Software, sem instalação, execução ou distribuição.
+    Inspeção não depende de aceite desta licença.
 
 1.5 "Uso Interno" significa o Uso do Software pelo Licenciado
-    ou por orgao publico, dentro de sua propria estrutura
-    organizacional, para gestao de suas proprias atividades.
+    ou por órgão público, dentro de sua própria estrutura
+    organizacional, para gestão de suas próprias atividades.
 
-1.6 "Uso em Producao" significa o Uso Interno em ambiente
+1.6 "Uso em Produção" significa o Uso Interno em ambiente
     operacional, processando dados reais.
 
 1.7 "Uso Comercial" significa o Uso do Software no qual o
     Licenciado, de forma direta, oferece, comercializa, licencia
-    a terceiros, ou presta servicos a terceiros tendo o Software
-    como componente material da oferta. Para evitar duvidas,
-    nao se considera Uso Comercial:
-    (a) o Uso Interno por orgao publico, ainda que este orgao
-        cobre taxas, emolumentos ou prestacoes administrativas
-        pelos servicos publicos prestados a terceiros, desde
-        que o Software em si nao seja a oferta cobrada;
-    (b) o Uso por organizacao privada para gestao interna de
-        suas proprias atividades.
+    a terceiros, ou presta serviços a terceiros tendo o Software
+    como componente material da oferta. Para evitar dúvidas,
+    não se considera Uso Comercial:
+    (a) o Uso Interno por órgão público, ainda que este órgão
+        cobre taxas, emolumentos ou prestações administrativas
+        pelos serviços públicos prestados a terceiros, desde
+        que o Software em si não seja a oferta cobrada;
+    (b) o Uso por organização privada para gestão interna de
+        suas próprias atividades.
 
 1.8 "Uso Restrito" significa qualquer Uso fora do escopo
-    expressamente concedido por esta licenca, incluindo
+    expressamente concedido por esta licença, incluindo
     notadamente o Uso Comercial e o Uso Concorrente.
 
 1.9 "Uso Concorrente" significa qualquer dos seguintes:
     (a) oferecer a terceiros, mediante pagamento ou
-        contrapartida economica, servico (incluindo SaaS, PaaS,
+        contrapartida econômica, serviço (incluindo SaaS, PaaS,
         hosting, ASP ou qualquer modelo `as-a-Service`,
-        hospedado ou nao) que tenha o Software como componente
+        hospedado ou não) que tenha o Software como componente
         material;
     (b) revender, sublicenciar ou distribuir o Software a
-        terceiros mediante remuneracao;
+        terceiros mediante remuneração;
     (c) utilizar o Software como base para criar, oferecer ou
         operar produto que substitua, total ou parcialmente, o
-        Software ou suas funcionalidades nucleares (selecao de
-        prestadores por rodizio, gestao de credenciamento,
-        emissao de pre-ordens e ordens de servico, e avaliacao
+        Software ou suas funcionalidades nucleares (seleção de
+        prestadores por rodízio, gestão de credenciamento,
+        emissão de pré-ordens e ordens de serviço, e avaliação
         de prestadores), com finalidade comercial.
 
-1.10 "Orgaos Autorizados" significa os entes da administracao
-     publica direta ou indireta, nos tres niveis federativos,
-     no exercicio de competencia legal relacionada a
-     contratacoes, credenciamento, ou fiscalizacao, incluindo
-     notadamente municipios, Tribunais de Contas, Controladorias,
-     Ministerio Publico, Ministerio da Gestao e Inovacao em
-     Servicos Publicos (MGI), e o Servico Brasileiro de Apoio as
+1.10 "Órgãos Autorizados" significa os entes da administração
+     pública direta ou indireta, nos três níveis federativos,
+     no exercício de competência legal relacionada a
+     contratações, credenciamento, ou fiscalização, incluindo
+     notadamente municípios, Tribunais de Contas, Controladorias,
+     Ministério Público, Ministério da Gestão e Inovação em
+     Serviços Públicos (MGI), e o Serviço Brasileiro de Apoio às
      Micro e Pequenas Empresas (SEBRAE).
 
-1.11 "Data de Conversao" significa a data correspondente a
-     quatro (4) anos apos a publicacao oficial de cada versao
+1.11 "Data de Conversão" significa a data correspondente a
+     quatro (4) anos após a publicação oficial de cada versão
      do Software pelo Licenciante.
 
-1.12 "Licenca de Conversao" significa a Apache License,
-     versao 2.0, conforme publicada pela Apache Software
+1.12 "Licença de Conversão" significa a Apache License,
+     versão 2.0, conforme publicada pela Apache Software
      Foundation (https://www.apache.org/licenses/LICENSE-2.0).
 
-2. CONCESSAO DE DIREITOS
+2. CONCESSÃO DE DIREITOS
 
 2.1 O Licenciante concede ao Licenciado, sujeito ao cumprimento
-    integral desta licenca, uma licenca mundial, nao-exclusiva,
-    nao-transferivel, gratuita e irrevogavel enquanto cumpridas
-    as condicoes desta licenca, para:
+    integral desta licença, uma licença mundial, não exclusiva,
+    não transferível, gratuita e irrevogável enquanto cumpridas
+    as condições desta licença, para:
 
     (a) Inspecionar o Software publicamente, sem necessidade de
         aceite formal;
-    (b) Acessar o codigo-fonte completo;
-    (c) Realizar auditoria tecnica, de seguranca e de
+    (b) Acessar o código-fonte completo;
+    (c) Realizar auditoria técnica, de segurança e de
         conformidade;
     (d) Executar o Software para Uso Interno;
     (e) Modificar o Software para Uso Interno;
-    (f) Distribuir o Software, modificado ou nao, a Orgaos
-        Autorizados, desde que cada destinatario aceite os
-        termos desta licenca.
+    (f) Distribuir o Software, modificado ou não, a Órgãos
+        Autorizados, desde que cada destinatário aceite os
+        termos desta licença.
 
-2.2 A presente licenca opera por inheritance: cada distribuicao
-    do Software a terceiro autorizado se da sob esta mesma
+2.2 A presente licença opera por inheritance: cada distribuição
+    do Software a terceiro autorizado se dá sob esta mesma
     TPGL, sem possibilidade de relicenciamento sob termos
-    diferentes pelo Licenciado, ate a Data de Conversao.
+    diferentes pelo Licenciado, até a Data de Conversão.
 
-2.3 Concessao de Patente. O Licenciante concede ao Licenciado
-    uma licenca perpetua, mundial, nao-exclusiva, gratuita e
-    irrevogavel (exceto na forma do item 11.2) sobre todas as
-    reivindicacoes patentarias do Licenciante necessariamente
-    infringidas pelo Software em sua forma distribuida pelo
+2.3 Concessão de Patente. O Licenciante concede ao Licenciado
+    uma licença perpétua, mundial, não exclusiva, gratuita e
+    irrevogável (exceto na forma do item 11.2) sobre todas as
+    reivindicações patentárias do Licenciante necessariamente
+    infringidas pelo Software em sua forma distribuída pelo
     Licenciante, exclusivamente para Uso permitido por esta
-    licenca. Esta concessao de patente e cessada
-    automaticamente caso o Licenciado inicie acao judicial
-    alegando que o Software, isoladamente ou em combinacao,
+    licença. Esta concessão de patente é cessada
+    automaticamente caso o Licenciado inicie ação judicial
+    alegando que o Software, isoladamente ou em combinação,
     infringe patente do Licenciado.
 
 3. ADDITIONAL USE GRANT
 
-3.1 Para fins de evitar qualquer duvida sobre o escopo permitido
-    em Uso em Producao, o Licenciante concede expressamente o
+3.1 Para fins de evitar qualquer dúvida sobre o escopo permitido
+    em Uso em Produção, o Licenciante concede expressamente o
     direito de:
 
-    (a) Uso em Producao por orgaos publicos, no exercicio de
-        suas atividades administrativas, ainda que estes orgaos
+    (a) Uso em Produção por órgãos públicos, no exercício de
+        suas atividades administrativas, ainda que estes órgãos
         cobrem taxas administrativas dos administrados pelos
-        servicos publicos prestados;
-    (b) Uso em Producao por organizacao privada exclusivamente
-        para gestao interna de suas proprias atividades, sem
+        serviços públicos prestados;
+    (b) Uso em Produção por organização privada exclusivamente
+        para gestão interna de suas próprias atividades, sem
         oferta a terceiros;
-    (c) Uso para fins academicos, de pesquisa, de ensino e de
-        avaliacao tecnica, ainda que em ambiente de producao
+    (c) Uso para fins acadêmicos, de pesquisa, de ensino e de
+        avaliação técnica, ainda que em ambiente de produção
         controlado;
-    (d) Distribuicao gratuita do Software, modificado ou nao,
-        entre Orgaos Autorizados.
+    (d) Distribuição gratuita do Software, modificado ou não,
+        entre Órgãos Autorizados.
 
 3.2 Qualquer Uso fora do escopo do item 3.1 constitui Uso
-    Restrito e exige licenca comercial especifica conforme
-    clausula 7.
+    Restrito e exige licença comercial específica conforme
+    cláusula 7.
 
-4. RESTRICOES
+4. RESTRIÇÕES
 
-4.1 E expressamente vedado, sem licenca comercial especifica:
+4.1 É expressamente vedado, sem licença comercial específica:
 
     (a) Uso Concorrente, conforme definido no item 1.9;
     (b) Oferecer o Software como SaaS, PaaS ou qualquer modelo
-        `as-a-Service`, hospedado ou nao, a terceiros;
+        `as-a-Service`, hospedado ou não, a terceiros;
     (c) Comercializar, sublicenciar ou revender o Software;
     (d) Utilizar o Software como base para produto que
         substitua, total ou parcialmente, suas funcionalidades
         nucleares com finalidade comercial;
-    (e) Distribuir o Software a terceiros nao autorizados;
+    (e) Distribuir o Software a terceiros não autorizados;
     (f) Remover, alterar ou ocultar avisos de copyright,
-        notas de licenca, atribuicao de autoria, ou
-        identificadores de versao;
+        notas de licença, atribuição de autoria, ou
+        identificadores de versão;
     (g) Utilizar marcas, logos, nomes ou identidade visual do
-        Licenciante sem autorizacao formal e por escrito.
+        Licenciante sem autorização formal e por escrito.
 
-4.2 As proibicoes do item 4.1 nao se aplicam a usos
+4.2 As proibições do item 4.1 não se aplicam a usos
     expressamente permitidos pelo Additional Use Grant
-    (clausula 3) nem a usos para os quais foi obtida licenca
-    comercial especifica (clausula 7).
+    (cláusula 3) nem a usos para os quais foi obtida licença
+    comercial específica (cláusula 7).
 
-4.3 Esta licenca nao restringe direitos garantidos por norma
+4.3 Esta licença não restringe direitos garantidos por norma
     cogente brasileira, incluindo notadamente os direitos de
-    decompilacao para fins de interoperabilidade previstos no
+    decompilação para fins de interoperabilidade previstos no
     art. 6, I, da Lei 9.609/98.
 
-5. ACESSO AO CODIGO-FONTE E TRANSPARENCIA
+5. ACESSO AO CÓDIGO-FONTE E TRANSPARÊNCIA
 
-5.1 O Licenciante mantem o Software publicamente disponivel
-    em repositorio identificado, com codigo-fonte integral
-    acessivel para Inspecao por qualquer pessoa, sem
-    necessidade de identificacao previa nem aceite formal
-    desta licenca para o ato de leitura.
+5.1 O Licenciante mantém o Software publicamente disponível
+    em repositório identificado, com código-fonte integral
+    acessível para Inspeção por qualquer pessoa, sem
+    necessidade de identificação prévia nem aceite formal
+    desta licença para o ato de leitura.
 
-5.2 O aceite desta licenca e necessario para qualquer Uso
-    (instalacao, execucao, modificacao, distribuicao). O aceite
-    se da por: (a) clonagem ou download do repositorio para uso
-    operacional; (b) execucao do Software; (c) submissao formal
-    de aceite eletronico; ou (d) atos inequivocos de uso.
+5.2 O aceite desta licença é necessário para qualquer Uso
+    (instalação, execução, modificação, distribuição). O aceite
+    se dá por: (a) clonagem ou download do repositório para uso
+    operacional; (b) execução do Software; (c) submissão formal
+    de aceite eletrônico; ou (d) atos inequívocos de uso.
 
-5.3 Auditoria por Orgaos Autorizados e por cidadaos no
-    exercicio do direito previsto na Lei 12.527/11 e expressamente
-    permitida e nao depende de autorizacao previa do
+5.3 Auditoria por Órgãos Autorizados e por cidadãos no
+    exercício do direito previsto na Lei 12.527/11 é expressamente
+    permitida e não depende de autorização prévia do
     Licenciante.
 
-6. CONTRIBUICOES
+6. CONTRIBUIÇÕES
 
-6.1 Toda contribuicao ao Software, incluindo correcoes, novas
-    funcionalidades, documentacao e testes, e submetida sob os
+6.1 Toda contribuição ao Software, incluindo correções, novas
+    funcionalidades, documentação e testes, é submetida sob os
     termos do Contributor License Agreement (CLA) anexo
-    (`CLA.md`), o qual estabelece, no maximo permitido pela Lei
-    9.610/98 art. 49: (a) cessao das modalidades patrimoniais
+    (`CLA.md`), o qual estabelece, no máximo permitido pela Lei
+    9.610/98 art. 49: (a) cessão das modalidades patrimoniais
     do contribuinte ao Licenciante para todas as modalidades
     conhecidas de uso; (b) garantia de autoria e originalidade;
-    (c) concessao expressa de licenca de patente do contribuinte
-    ao Licenciante e usuarios da TPGL.
+    (c) concessão expressa de licença de patente do contribuinte
+    ao Licenciante e usuários da TPGL.
 
-6.2 Direitos morais do contribuinte (autoria, integridade) sao
-    inalienaveis e expressamente preservados (Lei 9.610 art. 24).
+6.2 Direitos morais do contribuinte (autoria, integridade) são
+    inalienáveis e expressamente preservados (Lei 9.610 art. 24).
 
-6.3 Contribuicoes sem CLA aceito por meio rastreavel
-    (signed-off-by no commit, ou aceite eletronico em pull
-    request) nao serao incorporadas ao Software.
+6.3 Contribuições sem CLA aceito por meio rastreável
+    (`signed-off-by` no commit, ou aceite eletrônico em pull
+    request) não serão incorporadas ao Software.
 
-7. LICENCA COMERCIAL
+7. LICENÇA COMERCIAL
 
-7.1 Qualquer uso fora do escopo desta licenca, incluindo Uso
-    Concorrente e Uso Comercial, requer licenca comercial
-    especifica e expressa do Licenciante.
+7.1 Qualquer uso fora do escopo desta licença, incluindo Uso
+    Concorrente e Uso Comercial, requer licença comercial
+    específica e expressa do Licenciante.
 
-7.2 Solicitacoes de licenca comercial devem ser encaminhadas
+7.2 Solicitações de licença comercial devem ser encaminhadas
     pelo canal institucional de licenciamento indicado em
     `docs/licenca/README.md`, com resposta do Licenciante em
-    ate quinze (15) dias uteis. A nao-resposta no prazo nao
-    constitui aceite tacito.
+    até quinze (15) dias úteis. A não resposta no prazo não
+    constitui aceite tácito.
 
-7.3 O Licenciante reserva-se o direito de definir condicoes
-    comerciais (tabela de precos, escopo de uso permitido,
-    duracao) em cada caso.
+7.3 O Licenciante reserva-se o direito de definir condições
+    comerciais (tabela de preços, escopo de uso permitido,
+    duração) em cada caso.
 
 8. PROPRIEDADE INTELECTUAL E MARCAS
 
-8.1 Esta licenca nao concede ao Licenciado:
+8.1 Esta licença não concede ao Licenciado:
     (a) qualquer direito sobre marcas, logos, identidade visual
         ou trade dress associados ao Software ou ao Licenciante;
     (b) qualquer direito sobre segredos comerciais ou
-        know-how nao publicado;
+        know-how não publicado;
     (c) qualquer direito de uso do nome do Licenciante para
-        fins de endosso ou promocao.
+        fins de endosso ou promoção.
 
 8.2 O uso da marca ou identidade visual do Software e do
-    Licenciante depende de autorizacao formal e por escrito.
+    Licenciante depende de autorização formal e por escrito.
 
-9. AUSENCIA DE TRATAMENTO DE DADOS PESSOAIS PELO LICENCIANTE
+9. AUSÊNCIA DE TRATAMENTO DE DADOS PESSOAIS PELO LICENCIANTE
 
-9.1 O Software, na sua forma distribuida, nao envia dados ao
-    Licenciante. O Licenciante nao opera nem controla, em
-    razao desta licenca, qualquer tratamento de dados pessoais
+9.1 O Software, na sua forma distribuída, não envia dados ao
+    Licenciante. O Licenciante não opera nem controla, em
+    razão desta licença, qualquer tratamento de dados pessoais
     realizado pelos Licenciados.
 
-9.2 Cada Licenciado e o controlador (ou operador, conforme o
+9.2 Cada Licenciado é o controlador (ou operador, conforme o
     caso) dos dados pessoais que tratar com o Software, sendo
-    responsavel pelo cumprimento integral da Lei 13.709/18 (LGPD)
-    em sua operacao.
+    responsável pelo cumprimento integral da Lei 13.709/18 (LGPD)
+    em sua operação.
 
 9.3 O Licenciante coopera com o Licenciado no atendimento de
-    relatorios de impacto a protecao de dados (RIPD) e
-    requisitos analogos, nas condicoes razoaveis a serem
+    relatórios de impacto à proteção de dados (RIPD) e
+    requisitos análogos, nas condições razoáveis a serem
     acordadas.
 
-10. DATA DE CONVERSAO E LICENCA DE CONVERSAO
+10. DATA DE CONVERSÃO E LICENÇA DE CONVERSÃO
 
-10.1 A partir da Data de Conversao de cada versao do Software
-     (4 anos apos a respectiva publicacao oficial pelo
-     Licenciante), aquela versao especifica sera
-     automaticamente disponibilizada sob a Licenca de
-     Conversao (Apache License 2.0).
+10.1 A partir da Data de Conversão de cada versão do Software
+     (4 anos após a respectiva publicação oficial pelo
+     Licenciante), aquela versão específica será
+     automaticamente disponibilizada sob a Licença de
+     Conversão (Apache License 2.0).
 
-10.2 A partir da Data de Conversao de uma versao:
-     (a) todas as restricoes desta TPGL deixam de se aplicar a
-         essa versao;
-     (b) a versao passa a ser open source nos termos da Apache
+10.2 A partir da Data de Conversão de uma versão:
+     (a) todas as restrições desta TPGL deixam de se aplicar a
+         essa versão;
+     (b) a versão passa a ser open source nos termos da Apache
          License 2.0;
-     (c) versoes posteriores ainda sob TPGL nao sao afetadas.
+     (c) versões posteriores ainda sob TPGL não são afetadas.
 
-10.3 O Licenciante mantem registro publico das datas de
-     publicacao de cada versao, para fins de calculo da Data
-     de Conversao.
+10.3 O Licenciante mantém registro público das datas de
+     publicação de cada versão, para fins de cálculo da Data
+     de Conversão.
 
-11. RESCISAO E CURA
+11. RESCISÃO E CURA
 
-11.1 Em caso de violacao desta licenca pelo Licenciado, o
-     Licenciante notificara por escrito a violacao identificada.
+11.1 Em caso de violação desta licença pelo Licenciado, o
+     Licenciante notificará por escrito a violação identificada.
 
-11.2 O Licenciado tera prazo de trinta (30) dias corridos,
-     contados do recebimento da notificacao, para sanar a
-     violacao ou apresentar justificativa fundamentada.
+11.2 O Licenciado terá prazo de trinta (30) dias corridos,
+     contados do recebimento da notificação, para sanar a
+     violação ou apresentar justificativa fundamentada.
 
-11.3 Saneada a violacao no prazo, a licenca permanece em vigor.
+11.3 Saneada a violação no prazo, a licença permanece em vigor.
 
-11.4 Nao saneada a violacao no prazo, esta licenca e
-     automaticamente rescindida em relacao ao Licenciado
+11.4 Não saneada a violação no prazo, esta licença é
+     automaticamente rescindida em relação ao Licenciado
      infrator, cessando todos os direitos concedidos, sem
-     prejuizo da reparacao civil cabivel.
+     prejuízo da reparação civil cabível.
 
-11.5 O Licenciado que, antes de qualquer notificacao,
-     identificar uso em violacao e cessar voluntariamente o
-     uso violador, nao sera considerado em violacao para fins
-     desta clausula.
+11.5 O Licenciado que, antes de qualquer notificação,
+     identificar uso em violação e cessar voluntariamente o
+     uso violador, não será considerado em violação para fins
+     desta cláusula.
 
-12. ISENCAO DE GARANTIA E LIMITACAO DE RESPONSABILIDADE
+12. ISENÇÃO DE GARANTIA E LIMITAÇÃO DE RESPONSABILIDADE
 
-12.1 O Software e fornecido "NO ESTADO EM QUE SE ENCONTRA",
-     sem garantias de qualquer tipo, expressas ou implicitas,
-     incluindo, sem limitacao, garantias de comerciabilidade,
-     adequacao a finalidade especifica, e nao infracao.
+12.1 O Software é fornecido "NO ESTADO EM QUE SE ENCONTRA",
+     sem garantias de qualquer tipo, expressas ou implícitas,
+     incluindo, sem limitação, garantias de comerciabilidade,
+     adequação a finalidade específica, e não infração.
 
-12.2 Em nenhuma hipotese, o Licenciante respondera por danos
+12.2 Em nenhuma hipótese, o Licenciante responderá por danos
      indiretos, incidentais, consequenciais, especiais ou
      punitivos decorrentes do Uso ou impossibilidade de Uso do
      Software, ainda que avisado da possibilidade de tais
      danos.
 
-12.3 A presente clausula e aplicavel no maximo permitido pelo
+12.3 A presente cláusula é aplicável no máximo permitido pelo
      direito brasileiro.
 
-13. LEGISLACAO APLICAVEL E FORO
+13. LEGISLAÇÃO APLICÁVEL E FORO
 
-13.1 Esta licenca e regida pelas leis da Republica Federativa
+13.1 Esta licença é regida pelas leis da República Federativa
      do Brasil, em especial pelas Leis 9.609/98, 9.610/98,
      12.527/11 e 13.709/18.
 
-13.2 As partes elegem o foro da comarca do domicilio do
-     Licenciante para dirimir quaisquer controversias
-     decorrentes desta licenca, ressalvada a competencia
+13.2 As partes elegem o foro da comarca do domicílio do
+     Licenciante para dirimir quaisquer controvérsias
+     decorrentes desta licença, ressalvada a competência
      constitucional ou legal de outro foro quando o Licenciado
-     for ente publico.
+     for ente público.
 
-13.3 As partes podem, antes de propor acao judicial, submeter
-     a controversia a mediacao nos termos da Lei 13.140/15.
+13.3 As partes podem, antes de propor ação judicial, submeter
+     a controvérsia à mediação nos termos da Lei 13.140/15.
 
-14. DISPOSICOES FINAIS
+14. DISPOSIÇÕES FINAIS
 
-14.1 Esta licenca, juntamente com o CLA anexo, constitui o
+14.1 Esta licença, juntamente com o CLA anexo, constitui o
      acordo integral entre as partes quanto ao licenciamento
      do Software.
 
-14.2 Caso qualquer clausula desta licenca seja declarada
-     invalida ou inexequivel, as demais permanecem em vigor.
+14.2 Caso qualquer cláusula desta licença seja declarada
+     inválida ou inexequível, as demais permanecem em vigor.
 
-14.3 Em caso de divergencia entre versoes em diferentes idiomas,
-     prevalece esta versao em portugues.
+14.3 Em caso de divergência entre versões em diferentes idiomas,
+     prevalece esta versão em português.
 
-14.4 O Licenciante pode publicar versoes futuras desta licenca
-     com numeracao crescente. Versoes ja publicadas do Software
-     permanecem regidas pela versao da licenca vigente na sua
-     data de publicacao.
+14.4 O Licenciante pode publicar versões futuras desta licença
+     com numeração crescente. Versões já publicadas do Software
+     permanecem regidas pela versão da licença vigente na sua
+     data de publicação.
 
-14.5 Esta licenca nao caracteriza software open source sob
-     a definicao da Open Source Initiative (OSI), embora se
+14.5 Esta licença não caracteriza software open source sob
+     a definição da Open Source Initiative (OSI), embora se
      converta em open source (Apache License 2.0) na Data de
-     Conversao de cada versao.
+     Conversão de cada versão.
 
 — FIM DA TPGL v1.1 —

@@ -6,7 +6,7 @@ Objetivo: registrar, em formato curto e público, a situação técnica da linha
 
 - **Versão base:** `V12.0.0202`
 - **Compilação:** validada por operador humano
-- **Bateria oficial:** validada sem falhas recentes
+- **Bateria oficial:** validada sem falhas recentes e com evidência pública exportada
 - **Situação geral:** apta para corte público, racionalização documental e nova auditoria externa
 
 ## O que esta validado
@@ -15,6 +15,7 @@ Objetivo: registrar, em formato curto e público, a situação técnica da linha
 - migração das guardas críticas da interface para serviços
 - baseline determinística da V2
 - fechamento da bateria oficial sem falhas recentes
+- evidência pública da bateria oficial publicada em `auditoria/evidencias/V12.0.0202/`
 - status oficial de release consolidado em `obsidian-vault/releases/STATUS-OFICIAL.md`
 
 ## O que permanece como trabalho seguinte

@@ -6,7 +6,7 @@ Este arquivo e a fonte canonica para o status de publicacao das versoes. As rele
 
 | Versao | Status | Compila | Testes | Observacao |
 |--------|--------|---------|--------|------------|
-| V12.0.0202 | VALIDADA | Sim | Bateria oficial verde | Base tecnica estabilizada para faxina, padronizacao e republicacao do `main` |
+| V12.0.0202 | VALIDADA | Sim | Bateria oficial verde | Base técnica estabilizada; evidência pública da bateria oficial publicada; V2 pública ainda pendente |
 
 ## Marcos validados
 

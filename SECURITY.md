@@ -44,6 +44,10 @@ Essa proteção existe como barreira operacional e de integridade de uso do
 workbook. Ela não deve ser tratada como mecanismo criptográfico ou controle de
 segurança forte.
 
+O token público atual é neutro e não deve carregar referência institucional ou
+valor semântico de segredo. Workbooks legados podem aceitar token de migração
+somente para fins de compatibilidade operacional, sem alterar a política acima.
+
 ## Divulgação coordenada
 
 Pedimos que vulnerabilidades não sejam divulgadas publicamente antes de:

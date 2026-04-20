@@ -1,15 +1,28 @@
 Attribute VB_Name = "Util_Planilha"
 Option Explicit
 
-' Mantem a senha fora de texto explicito no repositorio publicado.
+' Mantém a senha fora de texto explícito no repositório publicado.
 Public Function Util_SenhaProtecaoPadrao() As String
     Util_SenhaProtecaoPadrao = _
+        ChrW$(99) & ChrW$(114) & ChrW$(101) & ChrW$(100) & ChrW$(95) & _
+        ChrW$(118) & ChrW$(49) & ChrW$(50) & ChrW$(95) & ChrW$(112) & _
+        ChrW$(117) & ChrW$(98)
+End Function
+
+Private Function Util_SenhaProtecaoLegadaMigracao() As String
+    Util_SenhaProtecaoLegadaMigracao = _
         ChrW$(115) & ChrW$(101) & ChrW$(98) & ChrW$(114) & ChrW$(97) & _
         ChrW$(101) & ChrW$(50) & ChrW$(48) & ChrW$(50) & ChrW$(52)
 End Function
 
 Public Function Util_SenhasTentativaProtecao() As Variant
-    Util_SenhasTentativaProtecao = Array(vbNullString, Util_SenhaProtecaoPadrao(), UCase$(Util_SenhaProtecaoPadrao()))
+    Util_SenhasTentativaProtecao = Array( _
+        vbNullString, _
+        Util_SenhaProtecaoPadrao(), _
+        UCase$(Util_SenhaProtecaoPadrao()), _
+        Util_SenhaProtecaoLegadaMigracao(), _
+        UCase$(Util_SenhaProtecaoLegadaMigracao()) _
+    )
 End Function
 
 Public Sub Util_DesprotegerAbaComTentativas(ByVal ws As Worksheet)

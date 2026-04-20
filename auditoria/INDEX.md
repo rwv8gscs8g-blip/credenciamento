@@ -9,6 +9,11 @@
 - [15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md](15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md) — critérios do corte público
 - [16_AUDITORIA_OPUS_PUBLICACAO_V12_0202.md](16_AUDITORIA_OPUS_PUBLICACAO_V12_0202.md) — auditoria estrutural de publicação
 - [17_PARECER_LICENCIAMENTO_TPGL_v1_1.md](17_PARECER_LICENCIAMENTO_TPGL_v1_1.md) — parecer técnico-jurídico da licença pública
+- [18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md](18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md) — auditoria consolidada de prontidão para a linha oficial pública
+
+## Evidências públicas
+
+- [evidencias/V12.0.0202/MANIFEST.md](evidencias/V12.0.0202/MANIFEST.md) — manifesto hashado da evidência pública da release `V12.0.0202`
 
 ## Regra de leitura
 

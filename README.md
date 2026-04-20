@@ -61,11 +61,25 @@ Integradores podem:
 3. revisar a matriz de testes em [auditoria/04_MATRIZ_MESTRE_DE_TESTES.md](auditoria/04_MATRIZ_MESTRE_DE_TESTES.md)
 4. compilar/incorporar o VBA no processo que julgarem adequado
 
+## Materiais operacionais complementares
+
+O guia detalhado de importação do código-fonte e o vídeo tutorial operacional
+não fazem parte da superfície pública deste repositório.
+
+Esses materiais são fornecidos em canal controlado aos:
+
+- contribuidores públicos com aceite rastreável de [CLA.md](CLA.md)
+- municípios usuários formalmente vinculados ao projeto
+
+O objetivo é preservar a pureza da árvore pública e separar documentação
+operacional controlada da documentação institucional auditável.
+
 ## Leitura recomendada
 
 - [docs/INDEX.md](docs/INDEX.md)
 - [docs/ARQUITETURA.md](docs/ARQUITETURA.md)
 - [docs/COMPLIANCE_CMMI_ISO.md](docs/COMPLIANCE_CMMI_ISO.md)
+- [docs/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](docs/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
 - [SECURITY.md](SECURITY.md)
 - [CONTRIBUTING.md](CONTRIBUTING.md)
 - [CLA.md](CLA.md)
@@ -82,4 +96,6 @@ Linha oficial: `V12.0.0202`
 
 - compilação limpa validada por operador humano
 - bateria oficial recente sem falhas bloqueantes
+- evidência pública da bateria oficial já publicada nesta linha
+- evidência fresca da V2 ainda pendente para a auditoria externa final
 - repositório em fase de consolidação documental para nova auditoria externa

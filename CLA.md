@@ -61,6 +61,11 @@ Quando a contribuição vier de empresa, órgão público ou terceiro contratado
 o mantenedor poderá exigir instrumento complementar assinado pelo representante
 legal da instituição.
 
+Materiais operacionais complementares, como guia detalhado de importação do
+código-fonte e vídeo tutorial, podem ser disponibilizados por canal controlado
+após aceite rastreável deste CLA e validação do enquadramento do solicitante
+como contribuinte ou município usuário.
+
 ## 8. Lei aplicável
 
 Este CLA segue a legislação brasileira e deve ser lido em conjunto com a

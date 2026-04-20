@@ -15,6 +15,10 @@ Toda contribuição pública exige aceite do
 
 Sem CLA rastreável, a contribuição pode ser recusada.
 
+Materiais operacionais complementares, incluindo guia detalhado de importação
+do código-fonte e vídeo tutorial de incorporação ao workbook, são fornecidos
+em canal controlado somente após aceite rastreável do CLA.
+
 ## Fluxo recomendado
 
 1. abra uma issue, se a mudança alterar comportamento, documentação estrutural
