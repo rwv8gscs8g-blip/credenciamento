@@ -35,6 +35,11 @@ backup_bateria_oficial/
 
 # Backups
 *.bak
+BKP_forms/
+backups/
+local-ai/
+local-only/
+.local/
 
 # Ollama
 *.gguf
@@ -45,5 +50,5 @@ obsidian-vault/.obsidian/cache
 obsidian-vault/.obsidian/plugins/
 obsidian-vault/.obsidian/core-plugins-migration.json
 
-# Deploy package (gerado por script, nao versionado)
+# Artefatos locais de automacao/importacao
 vba_import/

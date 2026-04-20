@@ -12,8 +12,8 @@ versao-sistema: V12.0.0202
 
 - **Versao**: V12.0.0202
 - **Data**: 2026-04-19
-- **Status**: EM_VALIDACAO
-- **Compila**: Pendente de validacao no Excel
+- **Status**: VALIDADO
+- **Compila**: Sim
 - **Arquivo**: PlanilhaCredenciamento-Homologacao.xlsm
 
 ## O que Funciona
@@ -26,7 +26,7 @@ versao-sistema: V12.0.0202
 - Gestao de entidades (Altera_Entidade, Reativa_Entidade)
 - Filtros de busca (empresas, entidades)
 - Cadastro de servicos (CAD_SERV) com edicao (Alterar Dados)
-- Bateria oficial de testes (resultados em `RESULTADO_QA`; a regressao de divergencia na avaliacao foi enderecada na `0193`, pendente revalidacao no Excel)
+- Bateria oficial de testes (compilacao limpa e CSVs de falha recentes sem ocorrencias)
 - Bateria V2 independente (`Central_Testes_V2`, `Teste_V2_Engine`, `Teste_V2_Roteiros`) com `RESULTADO_QA_V2`, `CATALOGO_CENARIOS_V2`, `ROTEIRO_ASSISTIDO_V2` e stress deterministico
 - `Central_Testes` simplificada para a transicao: apenas bateria legada + entrada da V2
 - V2 descarrega a instancia real do `Menu_Principal` em toda execucao e navegacao da bateria, inclusive antes de abrir a central V2, e exporta apenas CSV de falhas quando existir erro
@@ -55,28 +55,19 @@ versao-sistema: V12.0.0202
 - A `0200` corrigiu o excesso de continuacoes de linha no `Importador_VBA` e preservou a checagem estrutural do pacote
 - A `0201` removeu a dependencia do tipo nativo `Collection` dentro do `Importador_VBA`, tornando o importador mais tolerante a projetos contaminados
 - A `0202` removeu a qualificacao `Svc_Avaliacao.` das chamadas de `AvaliarOS`, estabilizando a compilacao em workbooks que rejeitam acesso qualificado a membro de modulo padrao
+- A `0202` foi recompilada e revalidada por operador humano com bateria oficial verde em 2026-04-19
 - Terminologia MEI eliminada no codigo VBA e no `Menu_Principal` (designer); relatorio **Rel_OSEmpresa** abre sem crash
 - Exportacao de CSV de resultados de teste
 - Release metadata centralizada (App_Release.bas)
 - Rollback operacional para a base estavel da V12.0.0180 preservado em `backups/rollback-post-v180-2026-04-17/`
 
-## O que Precisa de Validacao
+## O que Ainda Precisa de Fechamento
 
-- Rodizio por atividade (Svc_Rodizio) — depende de CNAEs + servicos corretos
-- Ordens de servico (Svc_PreOS, Svc_OS, Svc_Avaliacao) apos a migracao das guardas para servico
-- Execucao no Excel dos cenarios `MIG_001`, `MIG_002`, `MIG_003` e `MIG_004` dentro do smoke V2
-- Execucao no Excel do cenario `ATM_001` dentro do smoke V2
-- Validacao da criacao dos snapshots `SNAPV2_*` na primeira execucao da suite V2
-- Revalidacao da compilacao da `V12.0.0196` no Excel
-- Revalidacao da compilacao da `V12.0.0197` no Excel
-- Revalidacao da compilacao da `V12.0.0198` no Excel
-- Revalidacao da compilacao da `V12.0.0199` no Excel
-- Revalidacao da compilacao da `V12.0.0200` no Excel
-- Revalidacao da compilacao da `V12.0.0201` no Excel
-- Revalidacao da compilacao da `V12.0.0202` no Excel
-- Revalidacao da bateria oficial nos casos `BO_330*`
-- Validacao no Excel da `V12.0.0194` apos o rollback cirurgico de `CNAE/CAD_SERV`
-- Importacao no Excel dos modulos V2 e execucao das macros `CT2_*`
+- Nova rodada documentada da V2 (`smoke`, `stress`, `assistido`) antes de uma auditoria externa final
+- Limpeza estrutural do repositorio para publicacao do `main` oficial
+- Remocao da exposicao explicita da senha e de artefatos internos da superficie publica
+- Consolidacao do status oficial de todas as releases no historico
+- Evolucao do importador para fluxo oficial simples e deterministico (apos a faxina da arvore)
 
 ## Riscos Conhecidos
 
@@ -87,17 +78,15 @@ versao-sistema: V12.0.0202
 - A bateria V2 ainda nao substitui totalmente a legada: a base automatica ficou mais forte, mas ainda faltam atomicidade, edge cases e shadow mode
 - O desenho definitivo de `CNAE/CAD_SERV` foi explicitamente adiado como debito tecnico para nao interromper a estabilizacao das fases do Opus
 - A atomicidade desta iteracao cobre o fluxo minimo de recusa/avanco; `PreOS`, `OS` e `Avaliacao` ainda nao migraram para transacao ampla
-- Emergencia_CNAE, Emergencia_CNAE1/2/3 e Importar_Agora sao modulos temporarios — remover apos estabilizacao
+- O repositorio ainda mistura codigo vivo, historico interno e artefatos de automacao; a separacao publico/interno e a proxima fase
 
 ## Proximos Passos
 
-1. Importar `Repo_Avaliacao.bas` no workbook atual e validar a compilacao.
-2. Atualizar o importador para a `V12.0.0201`.
-2. Reexecutar a bateria oficial.
-3. Rodar `CT2_ExecutarSmokeRapido`, `CT2_ExecutarSmokeAssistido`, `CT2_ExecutarStress` e `CT2_ExecutarStressAssistido`, com foco em `ATM_001`.
-4. Verificar a criacao dos snapshots `SNAPV2_*` durante a primeira execucao da V2.
-5. Seguir para a proxima fatia da fase 3: ampliar atomicidade para `PreOS/OS/Avaliacao`, edge cases e shadow mode.
-6. Tratar `CNAE/CAD_SERV` apenas no backlog dedicado documentado em `DEBITO-TECNICO-CNAE-CADSERV.md`.
+1. Fechar a faxina do repositorio e a linha de corte publica do `main`.
+2. Reexecutar a V2 (`smoke`, `stress`, `assistido`) e registrar evidencias atualizadas.
+3. Pedir nova auditoria externa independente em cima da arvore limpa.
+4. Voltar ao reforco de atomicidade para `PreOS/OS/Avaliacao`, edge cases e shadow mode.
+5. Tratar `CNAE/CAD_SERV` apenas no backlog dedicado documentado em `DEBITO-TECNICO-CNAE-CADSERV.md`.
 
 ## Documentos Relacionados
 

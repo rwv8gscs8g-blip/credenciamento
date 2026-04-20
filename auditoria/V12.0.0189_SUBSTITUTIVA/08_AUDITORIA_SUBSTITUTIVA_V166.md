@@ -72,7 +72,7 @@ Legenda:
 - Atomicidade multi-aba.
 - `ProximoId` com protect/unprotect por chamada.
 - Módulos de emergência ainda presentes.
-- Senha `sebrae2024` hardcoded.
+- Senha padrão da planilha hardcoded.
 
 ### 3.4 Dívida nova (específica da V2)
 - Fragilidade da baseline determinística (doc 02 e 07).

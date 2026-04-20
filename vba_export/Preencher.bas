@@ -3208,11 +3208,7 @@ Public Sub ImportarCNAE_Emergencia()
     Set ws = ThisWorkbook.Sheets(SHEET_ATIVIDADES)
 
     ' 3) Desproteger.
-    On Error Resume Next
-    ws.Unprotect Password:=""
-    ws.Unprotect Password:="sebrae2024"
-    ws.Unprotect Password:="SEBRAE2024"
-    On Error GoTo 0
+    Util_DesprotegerAbaComTentativas ws
 
     ' 4) Limpar filtros.
     On Error Resume Next
@@ -3290,7 +3286,7 @@ proxLinha:
 
     ' 8) Reproteger.
     On Error Resume Next
-    ws.Protect Password:="sebrae2024", UserInterfaceOnly:=True
+    ws.Protect Password:=Util_SenhaProtecaoPadrao(), UserInterfaceOnly:=True
     On Error GoTo 0
 
     ' 9) Invalidar cache e atualizar listas.

@@ -109,7 +109,7 @@ Com esses quatro pontos, a V2 cobre o pacote mínimo e se torna candidata a subs
 |---|---------|----------|
 | 02 | `02_AUDITORIA_TECNICA_DO_CODIGO.md` | rastreio linha-a-linha da falha V2 e dos pontos críticos do core |
 | 03 | `03_MATRIZ_REGRAS_DE_NEGOCIO.md` | regras domínio por domínio, com local atual × local correto |
-| 04 | `04_AUDITORIA_SEGURANCA_E_INTEGRIDADE.md` | senha `sebrae2024`, atomicidade, módulos destrutivos |
+| 04 | `04_AUDITORIA_SEGURANCA_E_INTEGRIDADE.md` | senha padrao exposta, atomicidade, módulos destrutivos |
 | 05 | `05_ANALISE_COMPARATIVA_V1_V2.md` | V1 vs V2 em cobertura, precisão e custo humano |
 | 06 | `06_ANALISE_COMBINATORIA_E_COBERTURA.md` | matriz de casos cobertos vs lacunas combinatórias |
 | 07 | `07_PLANO_BATERIAS_COMPLEMENTARES.md` | baterias B1..B5 detalhadas |

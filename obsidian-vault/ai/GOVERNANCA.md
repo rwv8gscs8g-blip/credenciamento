@@ -14,9 +14,11 @@ Este documento rastreia qual IA fez cada alteracao no projeto. Toda IA com o bas
 
 ## Tabela de Releases
 
+Status canonico de publicacao: `obsidian-vault/releases/STATUS-OFICIAL.md`
+
 | Versao | Data | IA Autor | Revisor | Status | Compila | Nota |
 |--------|------|----------|---------|--------|---------|------|
-| V12.0.0202 | 2026-04-19 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Pendente | Hotfix de compilacao: remove qualificacao Svc_Avaliacao.AvaliarOS |
+| V12.0.0202 | 2026-04-19 | GPT-5 (Codex) | Mauricio | VALIDADO | Sim | Hotfix final de compilacao com bateria oficial verde |
 | V12.0.0201 | 2026-04-19 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Pendente | Hotfix do importador: remove dependencia do tipo Collection e preserva ordem deterministica |
 | V12.0.0200 | 2026-04-19 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Pendente | Hotfix do importador: remove excesso de continuacoes de linha e consolida a verificacao estrutural |
 | V12.0.0199 | 2026-04-19 | GPT-5 (Codex) | Mauricio | EM_VALIDACAO | Pendente | Estabilizacao do importador: verifica modulos obrigatorios antes da compilacao |
@@ -83,7 +85,7 @@ Ao criar uma release, adicionar uma linha no TOPO da tabela com:
 - Data no formato YYYY-MM-DD
 - Nome completo da IA (incluindo modelo)
 - Nome do revisor humano
-- Status: RASCUNHO / EM_VALIDACAO / VALIDADO / REVERTIDO
+- Status: RASCUNHO / EM_VALIDACAO / VALIDADO / REVERTIDO / SUPERADA
 - Se compila ou nao
 - Nota breve (max 60 caracteres)
 
@@ -92,7 +94,7 @@ Ao criar uma release, adicionar uma linha no TOPO da tabela com:
 Para gerar hashes de integridade dos arquivos VBA:
 
 ```bash
-cd vba_export/
+cd <diretorio-do-codigo-vba>/
 sha256sum *.bas *.frm > ../obsidian-vault/ai/HASHES.md
 ```
 

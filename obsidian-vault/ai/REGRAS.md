@@ -69,7 +69,7 @@ Todos devem retornar VAZIO.
 ## 5. Protecao de Abas
 
 - Usar `Util_PrepararAbaParaEscrita` / `Util_RestaurarProtecaoAba`
-- Senhas tentadas em ordem: "", "sebrae2024", "SEBRAE2024"
+- Senhas tentadas em ordem: vazia, padrao interna e variacao em caixa alta
 - `ProximoId` faz proprio ciclo protect/unprotect (nao chamar Util_ junto)
 
 ## 6. Modulos e Types

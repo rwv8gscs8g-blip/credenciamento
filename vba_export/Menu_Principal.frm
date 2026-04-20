@@ -2392,7 +2392,7 @@ Private Sub AtualizarPosCadastroEmpresa(ByRef aviso As String)
 End Sub
 
 Private Function PrepararAbaParaEscrita(ByVal ws As Worksheet, ByRef estavaProtegida As Boolean, ByRef senhaUsada As String) As Boolean
-    Dim tentativas(1 To 3) As String
+    Dim tentativas As Variant
     Dim i As Long
 
     senhaUsada = ""
@@ -2403,15 +2403,13 @@ Private Function PrepararAbaParaEscrita(ByVal ws As Worksheet, ByRef estavaProte
         Exit Function
     End If
 
-    tentativas(1) = ""
-    tentativas(2) = "sebrae2024"
-    tentativas(3) = "SEBRAE2024"
+    tentativas = Util_SenhasTentativaProtecao()
 
     On Error Resume Next
     For i = LBound(tentativas) To UBound(tentativas)
-        ws.Unprotect Password:=tentativas(i)
+        ws.Unprotect Password:=CStr(tentativas(i))
         If Not ws.ProtectContents Then
-            senhaUsada = tentativas(i)
+            senhaUsada = CStr(tentativas(i))
             PrepararAbaParaEscrita = True
             Exit Function
         End If
@@ -3828,7 +3826,6 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
-
 
 
 

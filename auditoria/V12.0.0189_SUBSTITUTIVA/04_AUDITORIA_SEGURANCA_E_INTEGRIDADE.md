@@ -6,13 +6,13 @@ Escopo: superfícies de risco não-funcionais — proteção de planilha, atomic
 
 ## 1. Proteção de planilha
 
-**Senha:** `sebrae2024`, visível em comentários e chamadas diretas a `ws.Unprotect "sebrae2024"` em vários pontos (ex.: `Util_Planilha.bas`, `Repo_*`, `Emergencia_CNAE*`).
+**Senha:** a senha padrão da planilha estava visível em comentários e chamadas diretas de `Unprotect` em vários pontos (ex.: `Util_Planilha.bas`, `Repo_*`, `Emergencia_CNAE*`).
 
 **Avaliação honesta:** proteção de planilha Excel é uma **barreira ergonômica**, não um controle de segurança. Contra ator motivado ela não resiste. Contra usuário final operador ela reduz o risco de edição acidental. Manter a senha hardcoded é tolerável enquanto o sistema é desktop-only, **mas** é uma dívida a liquidar antes de qualquer publicação pública do workbook.
 
 **Recomendação:**
 
-1. Centralizar a senha em uma constante em `Const_Colunas.bas` (ou módulo novo `Const_Seguranca.bas`) para facilitar troca.
+1. Centralizar a senha em um helper único (ou módulo dedicado de segurança) para facilitar troca e evitar exposição literal.
 2. Documentar explicitamente em `REGRAS.md` que essa senha **não é um segredo criptográfico**, apenas um gate de UX.
 3. Se o workbook for compartilhado fora da equipe, trocar a senha a cada entrega.
 
@@ -151,7 +151,7 @@ Pontos onde o VBA escreve ou lê arquivos fora do workbook:
 - [ ] Nenhum `On Error Resume Next` sem tratamento explícito nos `Svc_*`.
 - [ ] Módulos `Emergencia_*` isolados ou removidos.
 - [ ] Snapshot pré-reset implementado em V2 ou confirmação explícita.
-- [ ] Senha `sebrae2024` centralizada em constante.
+- [ ] Senha padrão centralizada e sem exposição literal no repositório.
 - [ ] CSV de teste inclui hash + versão no cabeçalho.
 - [ ] Backup do workbook commitado em `backups/`.
 

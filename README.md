@@ -2,7 +2,7 @@
 
 Sistema Excel VBA (.xlsm) para gestao de credenciamento, rodizio e ordens de servico de empresas prestadoras em instalacoes publicas municipais. Funciona como porta de entrada e de saida do SaaS de rodizio de credenciamento da metodologia do Sebrae.
 
-O sistema implementa controle rigoroso de seguranca, compliance e validacao automatizada. Municipios que adotarem o sistema terao acesso ao codigo-fonte completo para auditoria e validacao independente.
+O foco deste repositorio e manter a versao oficial do codigo VBA, a estrategia de testes, a trilha de auditoria e a evolucao progressiva dos procedimentos. A intencao e oferecer leitura objetiva, codigo auditavel e historico tecnico consistente.
 
 ## Funcionalidades
 
@@ -22,24 +22,17 @@ O sistema implementa controle rigoroso de seguranca, compliance e validacao auto
 
 - Codigo-fonte aberto e auditavel no GitHub
 - Bateria automatizada de testes com relatorio detalhado
-- Protecao de abas com senhas configuradas por aba
+- Protecao de abas com senha centralizada e nao exposta em texto literal no repositorio
 - Audit log de todas as operacoes criticas
 - Validacao de dados em todos os formularios de entrada
 - Anti-regressao: checklist de verificacao em cada release
 
-## Estrutura do Repositorio
+## Estrutura Logica
 
-```
-vba_export/            Codigo-fonte VBA — FONTE DE VERDADE
-vba_import/            Artefato de deploy (copia para importacao no VBA Editor)
-obsidian-vault/        Documentacao centralizada (Obsidian vault)
-  00-DASHBOARD.md      Ponto de entrada para IAs e humanos
-  ai/                  Governanca IA, regras, prompts, estado atual
-  releases/            Release notes de cada versao
-  backlog/             Tarefas pendentes
-  historico/           Decisoes e artefatos arquivados
-doc/                   Dados estruturais (CSVs CNAE, fontes IBGE)
-```
+- Codigo VBA fonte do sistema
+- Auditorias tecnicas e matrizes de teste
+- Notas de release e status oficial das versoes
+- Dados estruturais de apoio
 
 ## Como usar
 
@@ -50,18 +43,14 @@ doc/                   Dados estruturais (CSVs CNAE, fontes IBGE)
 
 ## Documentacao
 
-A documentacao completa esta em `obsidian-vault/`. Abra a pasta no Obsidian para navegacao com backlinks, ou leia os arquivos .md diretamente.
+A documentacao canônica para leitura do projeto esta concentrada em:
 
-Ponto de entrada: `obsidian-vault/00-DASHBOARD.md`
+- `auditoria/` — auditorias, matriz mestre de testes e cobertura
+- `obsidian-vault/releases/STATUS-OFICIAL.md` — situacao oficial das versoes
+- `obsidian-vault/releases/` — notas de release
+- `doc/` — dados de referencia
 
-## Para desenvolvedores / IAs
-
-Leia obrigatoriamente antes de modificar qualquer codigo:
-1. `obsidian-vault/ai/REGRAS.md` — Regras inviolaveis
-2. `obsidian-vault/ai/PIPELINE.md` — Ciclo de iteracao
-3. `obsidian-vault/ai/ESTADO-ATUAL.md` — Versao e status
-4. `obsidian-vault/ai/GOVERNANCA.md` — Rastreabilidade de autoria
-5. `obsidian-vault/ai/prompt-iteracao-segura.md` — Processo de iteracao anti-regressao
+O material operacional de IA e automacao interna nao faz parte da superficie publica recomendada do projeto.
 
 ## Creditos
 
@@ -74,4 +63,4 @@ Codigo-fonte aberto e auditavel. A planilha e ferramenta autonoma gratuita, disp
 
 ## Versao
 
-V12.0.0149 — Relatorios profissionais, dashboard QA, rodizio fix, iteracao segura
+V12.0.0202 — Estabilizacao tecnica validada com compilacao limpa e bateria oficial verde

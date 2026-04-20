@@ -33,7 +33,7 @@ Voce esta trabalhando em uma planilha Excel (.xlsm) de **Sistema de Credenciamen
 6. **NUNCA** usar `.Select`, `.Activate`, `ActiveCell`, `ActiveSheet` (formularios modais)
 7. **SEMPRE** usar `Util_PrepararAbaParaEscrita` / `Util_RestaurarProtecaoAba` para desproteger/reproteger
 8. **SEMPRE** usar `ChrW$()` para acentos em VBA: ChrW$(231)=c, ChrW$(227)=a, ChrW$(233)=e, ChrW$(225)=a, ChrW$(243)=o, ChrW$(250)=u, ChrW$(211)=O, ChrW$(199)=C, ChrW$(195)=A
-9. Senhas de protecao: "", "sebrae2024", "SEBRAE2024"
+9. Senhas de protecao: vazia, padrao interna e variacao em caixa alta
 
 ## TAREFA 1: MELHORAR RELATORIOS DE IMPRESSAO
 

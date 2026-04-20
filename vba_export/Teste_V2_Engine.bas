@@ -992,11 +992,7 @@ Public Sub TV2_ProtegerAbaTeste(ByVal nomeAba As String, ByVal senha As String)
     Dim ws As Worksheet
 
     Set ws = ThisWorkbook.Sheets(nomeAba)
-    On Error Resume Next
-    ws.Unprotect Password:=""
-    ws.Unprotect Password:="sebrae2024"
-    ws.Unprotect Password:="SEBRAE2024"
-    On Error GoTo 0
+    Util_DesprotegerAbaComTentativas ws
     ws.Protect Password:=senha, UserInterfaceOnly:=False
 End Sub
 

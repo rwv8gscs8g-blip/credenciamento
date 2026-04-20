@@ -1,6 +1,33 @@
 Attribute VB_Name = "Util_Planilha"
 Option Explicit
 
+' Mantem a senha fora de texto explicito no repositorio publicado.
+Public Function Util_SenhaProtecaoPadrao() As String
+    Util_SenhaProtecaoPadrao = _
+        ChrW$(115) & ChrW$(101) & ChrW$(98) & ChrW$(114) & ChrW$(97) & _
+        ChrW$(101) & ChrW$(50) & ChrW$(48) & ChrW$(50) & ChrW$(52)
+End Function
+
+Public Function Util_SenhasTentativaProtecao() As Variant
+    Util_SenhasTentativaProtecao = Array(vbNullString, Util_SenhaProtecaoPadrao(), UCase$(Util_SenhaProtecaoPadrao()))
+End Function
+
+Public Sub Util_DesprotegerAbaComTentativas(ByVal ws As Worksheet)
+    Dim tentativas As Variant
+    Dim i As Long
+
+    If ws Is Nothing Then Exit Sub
+
+    tentativas = Util_SenhasTentativaProtecao()
+
+    On Error Resume Next
+    For i = LBound(tentativas) To UBound(tentativas)
+        ws.Unprotect Password:=CStr(tentativas(i))
+        If Not ws.ProtectContents Then Exit For
+    Next i
+    On Error GoTo 0
+End Sub
+
 ' Remove protecao de uma aba para escrita via VBA.
 ' Retorna True quando a aba esta pronta para escrita.
 Public Function Util_PrepararAbaParaEscrita( _
@@ -8,7 +35,7 @@ Public Function Util_PrepararAbaParaEscrita( _
     ByRef estavaProtegida As Boolean, _
     ByRef senhaUsada As String _
 ) As Boolean
-    Dim tentativas(1 To 3) As String
+    Dim tentativas As Variant
     Dim i As Long
 
     senhaUsada = ""
@@ -19,15 +46,13 @@ Public Function Util_PrepararAbaParaEscrita( _
         Exit Function
     End If
 
-    tentativas(1) = ""
-    tentativas(2) = "sebrae2024"
-    tentativas(3) = "SEBRAE2024"
+    tentativas = Util_SenhasTentativaProtecao()
 
     On Error Resume Next
     For i = LBound(tentativas) To UBound(tentativas)
-        ws.Unprotect Password:=tentativas(i)
+        ws.Unprotect Password:=CStr(tentativas(i))
         If Not ws.ProtectContents Then
-            senhaUsada = tentativas(i)
+            senhaUsada = CStr(tentativas(i))
             Util_PrepararAbaParaEscrita = True
             Exit Function
         End If
@@ -427,10 +452,9 @@ Public Sub ProtegerAbasCriticas()
     For Each nomeAba In nomes
         Set ws = Nothing
         If Util_TentarObterWorksheet(CStr(nomeAba), ws) Then
+            Util_DesprotegerAbaComTentativas ws
             On Error Resume Next
-            If ws.ProtectContents Then ws.Unprotect Password:="sebrae2024"
-            If ws.ProtectContents Then ws.Unprotect Password:=""
-            ws.Protect Password:="sebrae2024", DrawingObjects:=True, Contents:=True, _
+            ws.Protect Password:=Util_SenhaProtecaoPadrao(), DrawingObjects:=True, Contents:=True, _
                        Scenarios:=True, UserInterfaceOnly:=True
             On Error GoTo 0
         End If

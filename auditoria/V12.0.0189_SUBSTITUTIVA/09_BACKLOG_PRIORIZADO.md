@@ -145,10 +145,10 @@ Ordenação por **impacto × prerrequisito**. Itens sem prerrequisito e com alto
 - **Arquivos:** `Const_Colunas.bas` ou novo `Const_Caminhos.bas`
 - **Esforço:** ~1h
 
-### H3 — Senha `sebrae2024` em constante
+### H3 — Senha padrao em helper centralizado
 - **Prioridade:** Baixa
 - **Arquivos:** `Const_Colunas.bas` ou novo `Const_Seguranca.bas`
-- **Mudanças:** `Public Const SENHA_PLANILHA As String = "sebrae2024"`. Substituir todas as ocorrências.
+- **Mudanças:** centralizar a senha padrão em helper/constante e substituir todas as ocorrências literais.
 - **Esforço:** ~30min
 
 ### H4 — Hash + versão no cabeçalho dos CSVs de teste
