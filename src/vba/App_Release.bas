@@ -6,6 +6,9 @@ Option Explicit
 
 Public Const APP_RELEASE_ATUAL As String = "V12.0.0202"
 Public Const APP_RELEASE_STATUS As String = "VALIDADO"
+Public Const APP_RELEASE_TAG As String = "v12.0.0202"
+Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0202"
+Public Const APP_RELEASE_TEST_KEY As String = "bo-2026-04-20+v2-2026-04-20"
 Public Const APP_GITHUB_REPO_URL As String = "https://github.com/rwv8gscs8g-blip/credenciamento"
 Public Const APP_GITHUB_RELEASE_NOTES_URL As String = APP_GITHUB_REPO_URL & "/tree/main/obsidian-vault/releases"
 
@@ -15,6 +18,18 @@ End Function
 
 Public Function AppRelease_Status() As String
     AppRelease_Status = APP_RELEASE_STATUS
+End Function
+
+Public Function AppRelease_Tag() As String
+    AppRelease_Tag = APP_RELEASE_TAG
+End Function
+
+Public Function AppRelease_EvidenceDir() As String
+    AppRelease_EvidenceDir = APP_RELEASE_EVIDENCE_DIR
+End Function
+
+Public Function AppRelease_TestKey() As String
+    AppRelease_TestKey = APP_RELEASE_TEST_KEY
 End Function
 
 Public Function AppRelease_Iteracao() As String
@@ -54,4 +69,16 @@ End Function
 
 Public Function GetGitHubReleaseNotesUrl() As String
     GetGitHubReleaseNotesUrl = AppRelease_GitHubReleaseNotesUrl()
+End Function
+
+Public Function GetReleaseTag() As String
+    GetReleaseTag = AppRelease_Tag()
+End Function
+
+Public Function GetReleaseEvidenceDir() As String
+    GetReleaseEvidenceDir = AppRelease_EvidenceDir()
+End Function
+
+Public Function GetReleaseTestKey() As String
+    GetReleaseTestKey = AppRelease_TestKey()
 End Function

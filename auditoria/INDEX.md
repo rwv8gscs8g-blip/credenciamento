@@ -11,6 +11,7 @@
 - [17_PARECER_LICENCIAMENTO_TPGL_v1_1.md](17_PARECER_LICENCIAMENTO_TPGL_v1_1.md) — parecer técnico-jurídico da licença pública
 - [18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md](18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md) — auditoria consolidada de prontidão para a linha oficial pública
 - [19_AUDITORIA_PONTOS_FORTES_V12_0202.md](19_AUDITORIA_PONTOS_FORTES_V12_0202.md) — auditoria positiva dos pontos fortes e da maturidade da linha pública
+- [20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md](20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md) — backlog executável da próxima rodada de testes e desacoplamento da interface
 
 ## Evidências públicas
 

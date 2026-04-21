@@ -15,6 +15,7 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     Dim resRec As TResult
     Dim resOs As TResult
     Dim resAval As TResult
+    Dim resAval2 As TResult
     Dim notas(1 To 10) As Integer
     Dim preosId As String
     Dim osId As String
@@ -171,6 +172,25 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
                   (resPre.Sucesso And resOs.Sucesso And resAval.Sucesso And _
                    TV2_StatusOS(osId) = "CONCLUIDA" And _
                    TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3))
+
+    TV2_PrepararCenarioTriploCanonico
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 2)
+    preosId = resPre.IdGerado
+    resOs = EmitirOS(preosId, Date + 5, "EMP-MUT-001")
+    osId = resOs.IdGerado
+    TV2_PreencherNotas notas, 8
+    resAval = AvaliarOS(osId, "QA V2", notas, 2, "Primeira avaliacao valida", "", Date + 6, Date + 15)
+    resAval2 = AvaliarOS(osId, "QA V2", notas, 2, "Segunda avaliacao indevida", "", Date + 6, Date + 15)
+    TV2_LogAssert "SMOKE", "MUT_001", "AUTO", _
+                  "Rejeitar segunda avaliacao de OS ja concluida", _
+                  "Svc_Avaliacao falha, OS permanece CONCLUIDA e a fila continua integra", _
+                  "SUCESSO_PREOS=" & CStr(resPre.Sucesso) & "; SUCESSO_OS=" & CStr(resOs.Sucesso) & "; SUCESSO_AVAL_1=" & CStr(resAval.Sucesso) & "; SUCESSO_AVAL_2=" & CStr(resAval2.Sucesso) & "; MSG2=" & resAval2.Mensagem & "; STATUS_OS=" & TV2_StatusOS(osId) & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()), _
+                  "Fecha uma transicao invalida importante sem depender do comportamento visual da interface", _
+                  (resPre.Sucesso And resOs.Sucesso And resAval.Sucesso And _
+                   Not resAval2.Sucesso And _
+                   TV2_StatusOS(osId) = "CONCLUIDA" And _
+                   TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3) And _
+                   InStr(1, resAval2.Mensagem, "STATUS=CONCLUIDA", vbTextCompare) > 0)
 
     TV2_PrepararCenarioTriploCanonico
     TV2_ProtegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba

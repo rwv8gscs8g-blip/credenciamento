@@ -5,7 +5,7 @@ on:
   push:
     branches:
       - main
-      - codex/v180-stable-reset
+      - 'codex/**'
 
 jobs:
   verify-docs:
@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Check required files
         run: |
@@ -30,3 +32,6 @@ jobs:
             name="$(basename "$f")"
             grep -q "$name" auditoria/INDEX.md
           done
+
+      - name: Validate release consistency
+        run: bash .github/scripts/verify_release_consistency.sh

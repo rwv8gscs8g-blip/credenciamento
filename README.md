@@ -14,6 +14,14 @@ matriz de testes e a documentação mínima de governança da linha oficial do
 sistema. O foco é preservar leitura objetiva, rastreabilidade e capacidade de
 auditoria externa.
 
+Também mantém uma checagem automatizada de coerência entre:
+
+- versão declarada no código
+- status oficial publicado
+- release note vigente
+- tag da release
+- pacote público de evidências
+
 ## Posicionamento público
 
 - **Licença pública:** TPGL v1.1
@@ -99,3 +107,4 @@ Linha oficial: `V12.0.0202`
 - evidência pública da bateria oficial já publicada nesta linha
 - evidência fresca da V2 validada por operador humano e publicada em `auditoria/evidencias/V12.0.0202/`
 - linha pública oficial já promovida no `main`, com fechamento institucional residual voltado à nova auditoria externa
+- governança documental e de release agora endurecida por checagens automáticas de coerência

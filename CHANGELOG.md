@@ -3,6 +3,19 @@
 Este projeto adota o espírito do Keep a Changelog. As mudanças aqui registradas
 tratam apenas da linha pública oficial.
 
+## [Unreleased]
+
+### Adicionado
+
+- contrato explícito de release com tag, diretório de evidência e chave pública de teste em `src/vba/App_Release.bas`
+- workflow de governança ampliado para verificar coerência entre versão, status oficial, tag, changelog e pacote de evidências
+- documentação pública da esteira de release e evidência em `docs/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`
+- plano executável da Sprint 2 para fortalecimento incremental dos testes e redução de dependência da interface
+
+### Alterado
+
+- endurecimento do `verify-docs.yml` para a linha pública pós-lançamento da `V12.0.0202`
+
 ## [V12.0.0202] - 2026-04-19
 
 ### Corrigido
