@@ -266,17 +266,21 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
     Dim qtdPreDepois As Long
     Dim descServico As String
     Dim resPre As TResult
+    Dim resOs As TResult
     Dim resAval As TResult
     Dim preosIdA As String
     Dim osIdA As String
     Dim preosIdB As String
     Dim preosIdC As String
+    Dim osIdB As String
+    Dim osIdC As String
     Dim preosId22A As String
     Dim preosId22B As String
     Dim preosId22C As String
     Dim notas(1 To 10) As Integer
     Dim resPre2 As TResult
     Dim resPre3 As TResult
+    Dim resAval2 As TResult
     Dim pre22A As TPreOS
     Dim pre22B As TPreOS
     Dim pre22C As TPreOS
@@ -286,13 +290,27 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
     Dim resSusp As TResult
     Dim empA As TEmpresa
     Dim linhaEmpA As Long
+    Dim empB As TEmpresa
+    Dim linhaEmpB As Long
     Dim posA As Long
     Dim auditSusp As Long
     Dim auditReat As Long
+    Dim auditSuspAntes As Long
+    Dim auditSuspDepois As Long
+    Dim auditReatAntes As Long
+    Dim auditReatDepois As Long
+    Dim auditInatAntes As Long
+    Dim auditInatDepois As Long
     Dim obtido11 As String
     Dim obtido13 As String
+    Dim obtido14 As String
+    Dim obtido16 As String
+    Dim obtido20 As String
     Dim ok11 As Boolean
     Dim ok13 As Boolean
+    Dim ok14 As Boolean
+    Dim ok16 As Boolean
+    Dim ok20 As Boolean
 
     On Error GoTo falha
 
@@ -534,6 +552,103 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
                   "Prova o retorno automático sem perda de turno", _
                   ok13
 
+    TV2_CS_PrepararEstadoAteCS14 preosIdA, osIdA, preosIdB, osIdB
+    auditSuspAntes = TV2_AuditCount("Empresa Suspensa", "STATUS=SUSPENSA_GLOBAL")
+    TV2_PreencherNotas notas, 4
+    resAval = AvaliarOS(osIdB, "QA CANONICO", notas, 1, "CS_14_NOTA_BAIXA_B", "", Date + 1, Date + 7)
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    empB = LerEmpresa("002", linhaEmpB)
+    auditSuspDepois = TV2_AuditCount("Empresa Suspensa", "STATUS=SUSPENSA_GLOBAL")
+    obtido14 = "SUCESSO_AVAL=" & CStr(resAval.Sucesso) & _
+               "; STATUS_OS_B=" & TV2_StatusOS(osIdB) & _
+               "; SUCESSO_PREOS=" & CStr(resPre.Sucesso) & _
+               "; EMP_PREOS=" & TV2_EmpIdPreOS(resPre.IdGerado) & _
+               "; STATUS_B=" & empB.STATUS_GLOBAL & _
+               "; DT_FIM_B=" & Format$(empB.DT_FIM_SUSP, "dd/mm/yyyy") & _
+               "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+               "; AUDIT_SUSP=" & CStr(auditSuspDepois - auditSuspAntes)
+    ok14 = resAval.Sucesso And TV2_StatusOS(osIdB) = "CONCLUIDA"
+    ok14 = ok14 And resPre.Sucesso And IdsIguais(TV2_EmpIdPreOS(resPre.IdGerado), "003")
+    ok14 = ok14 And empB.STATUS_GLOBAL = "SUSPENSA_GLOBAL"
+    ok14 = ok14 And empB.DT_FIM_SUSP > Date
+    ok14 = ok14 And TV2_FilaCsv(TV2_AtivCanonA()) = "003,001,002"
+    ok14 = ok14 And (auditSuspDepois - auditSuspAntes) = 1
+    TV2_LogAssert "CANONICO", "CS_14", "AUTO", _
+                  "Validar suspensão automática por nota baixa", _
+                  "B suspensa; C escolhida; DT_FIM_SUSP preenchida", _
+                  obtido14, _
+                  "Costura avaliação abaixo da média com bloqueio operacional e novo giro da fila", _
+                  ok14
+
+    TV2_CS_PrepararEstadoAteCS14 preosIdA, osIdA, preosIdB, osIdB
+    TV2_PreencherNotas notas, 4
+    resAval = AvaliarOS(osIdB, "QA CANONICO", notas, 1, "CS_16_NOTA_BAIXA_B", "", Date + 1, Date + 7)
+    empB = LerEmpresa("002", linhaEmpB)
+    GravarStatusEmpresa linhaEmpB, "SUSPENSA_GLOBAL", Date - 1, empB.QTD_RECUSAS
+    auditReatAntes = TV2_AuditCount("Empresa Reativada", "STATUS=ATIVA")
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    preosIdC = resPre.IdGerado
+    resOs = EmitirOS(preosIdC, Date + 7, "EMP-CS-16-C")
+    osIdC = resOs.IdGerado
+    TV2_PreencherNotas notas, 8
+    resAval2 = AvaliarOS(osIdC, "QA CANONICO", notas, 1, "CS_16_CONCLUIR_C", "", Date + 2, Date + 8)
+    resPre2 = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    empB = LerEmpresa("002", linhaEmpB)
+    auditReatDepois = TV2_AuditCount("Empresa Reativada", "STATUS=ATIVA")
+    obtido16 = "SUCESSO_AVAL_B=" & CStr(resAval.Sucesso) & _
+               "; SUCESSO_PREOS_C=" & CStr(resPre.Sucesso) & _
+               "; EMP_PREOS_C=" & TV2_EmpIdPreOS(preosIdC) & _
+               "; SUCESSO_OS_C=" & CStr(resOs.Sucesso) & _
+               "; SUCESSO_AVAL_C=" & CStr(resAval2.Sucesso) & _
+               "; SUCESSO_PREOS_RETORNO=" & CStr(resPre2.Sucesso) & _
+               "; EMP_RETORNO=" & TV2_EmpIdPreOS(resPre2.IdGerado) & _
+               "; STATUS_B=" & empB.STATUS_GLOBAL & _
+               "; DT_FIM_B=" & IIf(TV2_DtFimSuspEmpresa("002") > CDate(0), Format$(TV2_DtFimSuspEmpresa("002"), "dd/mm/yyyy"), "(limpa)") & _
+               "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+               "; AUDIT_REAT=" & CStr(auditReatDepois - auditReatAntes)
+    ok16 = resAval.Sucesso And resPre.Sucesso And IdsIguais(TV2_EmpIdPreOS(preosIdC), "003")
+    ok16 = ok16 And resOs.Sucesso And resAval2.Sucesso
+    ok16 = ok16 And resPre2.Sucesso And IdsIguais(TV2_EmpIdPreOS(resPre2.IdGerado), "002")
+    ok16 = ok16 And empB.STATUS_GLOBAL = "ATIVA"
+    ok16 = ok16 And TV2_DtFimSuspEmpresa("002") = CDate(0)
+    ok16 = ok16 And TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003"
+    ok16 = ok16 And (auditReatDepois - auditReatAntes) = 1
+    TV2_LogAssert "CANONICO", "CS_16", "AUTO", _
+                  "Validar retorno ordenado após suspensão por nota", _
+                  "C consome o turno livre; B volta na emissão seguinte", _
+                  obtido16, _
+                  "Prova que a suspensão temporária não faz a empresa perder o turno duas vezes", _
+                  ok16
+
+    TV2_PrepararCenarioTriploCanonico
+    empA = LerEmpresa("001", linhaEmpA)
+    auditInatAntes = TV2_AuditCount("Empresa Inativada", "STATUS=INATIVA")
+    GravarStatusEmpresa linhaEmpA, "INATIVA", CDate(0), empA.QTD_RECUSAS
+    RegistrarEvento EVT_INATIVACAO, ENT_EMP, "001", _
+                    "STATUS=" & empA.STATUS_GLOBAL, _
+                    "STATUS=INATIVA; ORIGEM=Teste_V2_Roteiros", _
+                    "Teste_V2_Roteiros"
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    empA = LerEmpresa("001", linhaEmpA)
+    posA = TV2_PosicaoFila("001", TV2_AtivCanonA())
+    auditInatDepois = TV2_AuditCount("Empresa Inativada", "STATUS=INATIVA")
+    obtido20 = "SUCESSO_PREOS=" & CStr(resPre.Sucesso) & _
+               "; EMP_PREOS=" & TV2_EmpIdPreOS(resPre.IdGerado) & _
+               "; STATUS_A=" & empA.STATUS_GLOBAL & _
+               "; POS_A=" & CStr(posA) & _
+               "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+               "; AUDIT_INAT=" & CStr(auditInatDepois - auditInatAntes)
+    ok20 = resPre.Sucesso And IdsIguais(TV2_EmpIdPreOS(resPre.IdGerado), "002")
+    ok20 = ok20 And empA.STATUS_GLOBAL = "INATIVA"
+    ok20 = ok20 And posA = 1 And TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003"
+    ok20 = ok20 And (auditInatDepois - auditInatAntes) = 1
+    TV2_LogAssert "CANONICO", "CS_20", "AUTO", _
+                  "Validar filtro de empresa inativa no cadastro", _
+                  "A inativa; B escolhida; posição de A preservada", _
+                  obtido20, _
+                  "Isola o efeito do status global INATIVA no item canônico", _
+                  ok20
+
     TV2_FinalizarExecucao "CANONICO"
     Exit Sub
 
@@ -671,4 +786,27 @@ Private Sub TV2_CS_PrepararEstadoAteCS06( _
         Err.Raise 1004, "TV2_CS_PrepararEstadoAteCS06", "Falha ao emitir PRE_OS de C."
     End If
     preosIdC = resPre.IdGerado
+End Sub
+
+Private Sub TV2_CS_PrepararEstadoAteCS14( _
+    ByRef preosIdA As String, _
+    ByRef osIdA As String, _
+    ByRef preosIdB As String, _
+    ByRef osIdB As String)
+    Dim resPre As TResult
+    Dim resOs As TResult
+
+    TV2_CS_PrepararEstadoAteCS04 preosIdA, osIdA
+
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    If Not resPre.Sucesso Then
+        Err.Raise 1004, "TV2_CS_PrepararEstadoAteCS14", "Falha ao emitir PRE_OS de B."
+    End If
+    preosIdB = resPre.IdGerado
+
+    resOs = EmitirOS(preosIdB, Date + 7, "EMP-CS-14-B")
+    If Not resOs.Sucesso Then
+        Err.Raise 1004, "TV2_CS_PrepararEstadoAteCS14", "Falha ao emitir OS de B."
+    End If
+    osIdB = resOs.IdGerado
 End Sub
