@@ -313,6 +313,20 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
     Dim ok20 As Boolean
     Dim filaAntesRetorno As String
     Dim filaDepoisRetorno As String
+    Dim i As Long
+    Dim qtdLoop As Double
+    Dim preosIdLoop As String
+    Dim osIdLoop As String
+    Dim empLoop As String
+    Dim seqObtida As String
+    Dim auditPreAntes17 As Long
+    Dim auditPreDepois17 As Long
+    Dim auditOsAntes17 As Long
+    Dim auditOsDepois17 As Long
+    Dim auditFechaAntes17 As Long
+    Dim auditFechaDepois17 As Long
+    Dim obtido17 As String
+    Dim ok17 As Boolean
 
     On Error GoTo falha
 
@@ -625,6 +639,62 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
                   obtido16, _
                   "Prova que a suspensão temporária não faz a empresa perder o turno duas vezes", _
                   ok16
+
+    TV2_PrepararCenarioTriploCanonico
+    auditPreAntes17 = TV2_AuditCount("Pre-OS Emitida", "ATIV_ID=" & TV2_AtivCanonA())
+    auditOsAntes17 = TV2_AuditCount("OS Emitida", "ATIV_ID=" & TV2_AtivCanonA())
+    auditFechaAntes17 = TV2_AuditCount("OS Fechada/Avaliada", "STATUS=CONCLUIDA")
+    TV2_PreencherNotas notas, 8
+    For i = 1 To 7
+        qtdLoop = 1 + ((i - 1) Mod 3)
+        resPre = EmitirPreOS("001", TV2_CodServicoA(), qtdLoop)
+        If Not resPre.Sucesso Then
+            Err.Raise 1004, "TV2_RunCanonicoFundacao.CS_17", "Falha ao emitir PRE_OS no ciclo " & CStr(i) & "."
+        End If
+        preosIdLoop = resPre.IdGerado
+        empLoop = TV2_EmpIdPreOS(preosIdLoop)
+        If seqObtida <> "" Then seqObtida = seqObtida & ","
+        seqObtida = seqObtida & empLoop
+
+        resOs = EmitirOS(preosIdLoop, Date + 7 + i, "EMP-CS-17-" & CStr(i))
+        If Not resOs.Sucesso Then
+            Err.Raise 1004, "TV2_RunCanonicoFundacao.CS_17", "Falha ao emitir OS no ciclo " & CStr(i) & "."
+        End If
+        osIdLoop = resOs.IdGerado
+
+        resAval = AvaliarOS(osIdLoop, "QA CANONICO", notas, qtdLoop, "CS_17_LOOP_" & CStr(i), "", Date + 8 + i, Date + 14 + i)
+        If Not resAval.Sucesso Then
+            Err.Raise 1004, "TV2_RunCanonicoFundacao.CS_17", "Falha ao avaliar OS no ciclo " & CStr(i) & "."
+        End If
+
+        If Not TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3) Then
+            Err.Raise 1004, "TV2_RunCanonicoFundacao.CS_17", "Fila perdeu integridade no ciclo " & CStr(i) & "."
+        End If
+    Next i
+    auditPreDepois17 = TV2_AuditCount("Pre-OS Emitida", "ATIV_ID=" & TV2_AtivCanonA())
+    auditOsDepois17 = TV2_AuditCount("OS Emitida", "ATIV_ID=" & TV2_AtivCanonA())
+    auditFechaDepois17 = TV2_AuditCount("OS Fechada/Avaliada", "STATUS=CONCLUIDA")
+    obtido17 = "SEQ=" & seqObtida & _
+               "; FILA_FINAL=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+               "; POSICOES=" & TV2_FilaComPosicoesCsv(TV2_AtivCanonA()) & _
+               "; PREOS=" & CStr(TV2_CountRows(SHEET_PREOS)) & _
+               "; OS=" & CStr(TV2_CountRows(SHEET_CAD_OS)) & _
+               "; AUDIT_PREOS=" & CStr(auditPreDepois17 - auditPreAntes17) & _
+               "; AUDIT_OS=" & CStr(auditOsDepois17 - auditOsAntes17) & _
+               "; AUDIT_FECH=" & CStr(auditFechaDepois17 - auditFechaAntes17)
+    ok17 = (seqObtida = "001,002,003,001,002,003,001")
+    ok17 = ok17 And TV2_FilaCsv(TV2_AtivCanonA()) = "002,003,001"
+    ok17 = ok17 And TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3)
+    ok17 = ok17 And TV2_CountRows(SHEET_PREOS) = 7 And TV2_CountRows(SHEET_CAD_OS) = 7
+    ok17 = ok17 And (auditPreDepois17 - auditPreAntes17) = 7
+    ok17 = ok17 And (auditOsDepois17 - auditOsAntes17) = 7
+    ok17 = ok17 And (auditFechaDepois17 - auditFechaAntes17) = 7
+    TV2_LogAssert "CANONICO", "CS_17", "AUTO", _
+                  "Validar giro longo A-B-C sem travamento", _
+                  "Sequência 001,002,003,001,002,003,001 e fila íntegra ao final", _
+                  obtido17, _
+                  "Prova a volta ao início da fila em ciclo longo sem travamento", _
+                  ok17
 
     TV2_PrepararCenarioTriploCanonico
     empA = LerEmpresa("001", linhaEmpA)

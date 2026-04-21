@@ -27,7 +27,8 @@ Status atual:
 - proposta aprovada e consolidada em [docs/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md](../docs/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md)
 - implementação iniciada e primeiro lote já executável na branch `codex/v12-0-0203-governanca-testes`
 - lote de suspensão inicial (`CS_11` e `CS_13`) já validado em workbook
-- segundo lote (`CS_14`, `CS_16`, `CS_20`) em implementação incremental na mesma branch
+- segundo lote (`CS_14`, `CS_16` e `CS_20`) já validado em workbook
+- terceiro lote (`CS_17`) aberto como teste de vida do giro longo na mesma branch
 
 Objetivo:
 
@@ -49,12 +50,17 @@ Segundo lote recomendado:
 - `CS_16`
 - `CS_20`
 
+Terceiro lote recomendado:
+
+- `CS_17`
+
 Critério de aceite:
 
 - suíte `CANONICO` executável pela Central V2
 - catálogo e roteiro assistido exibem a família `CS_*`
 - setup canônico, fluxo nominal, bloqueio total, retomada e integridade de associação ficam automatizados
 - suspensão manual, reativação automática, suspensão por nota, retorno ordenado e filtro cadastral passam a ter cobertura canônica explícita
+- o giro longo `A,B,C,A,B,C,A` prova vida útil da fila e ausência de travamento ao voltar ao início
 - a suíte roda sem regressão no `SMOKE`
 
 ### A1. Expiração de Pre-OS e retomada correta da fila

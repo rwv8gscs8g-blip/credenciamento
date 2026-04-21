@@ -16,6 +16,7 @@ tratam apenas da linha pública oficial.
 - cenário canônico `CS_22` automatizado para validar associação estável entre atividade e serviço em emissões repetidas
 - cenários canônicos `CS_11` e `CS_13` automatizados para validar suspensão manual e reativação automática por prazo vencido
 - cenários canônicos `CS_14`, `CS_16` e `CS_20` automatizados para validar suspensão por nota, retorno ordenado após prazo vencido e filtro cadastral de empresa inativa
+- cenário canônico `CS_17` automatizado para validar giro longo `A,B,C,A,B,C,A` sem travamento e com integridade da fila
 - workflow de governança ampliado para verificar coerência entre versão, status oficial, tag, changelog e pacote de evidências
 - documentação pública da esteira de release e evidência em `docs/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`
 - plano executável da Sprint 2 para fortalecimento incremental dos testes e redução de dependência da interface
