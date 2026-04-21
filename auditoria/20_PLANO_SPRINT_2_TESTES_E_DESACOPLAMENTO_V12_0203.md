@@ -22,6 +22,10 @@ Ou seja:
 
 ### A1. Expiração de Pre-OS e retomada correta da fila
 
+Status atual:
+
+- `EXP_001` incorporado à V2 na branch `codex/v12-0-0203-governanca-testes`
+
 Criar cenário automatizado para provar:
 
 - Pre-OS expirada não vira OS

@@ -10,6 +10,7 @@ tratam apenas da linha pública oficial.
 - contrato explícito de release com tag, diretório de evidência e chave pública de teste em `src/vba/App_Release.bas`
 - camada de versionamento seguro com `release oficial`, `canal ativo`, `próxima release alvo` e `assinatura do build`
 - rastreabilidade visual do pacote importado com `build importado`, `origem do build` e `pacote gerado em`
+- novo cenário V2 `EXP_001` para validar expiração de Pre-OS com punição e retomada correta da fila
 - workflow de governança ampliado para verificar coerência entre versão, status oficial, tag, changelog e pacote de evidências
 - documentação pública da esteira de release e evidência em `docs/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`
 - plano executável da Sprint 2 para fortalecimento incremental dos testes e redução de dependência da interface

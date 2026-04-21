@@ -10,9 +10,14 @@ Option Explicit
 
 Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     Dim fila As String
+    Dim filaAntes As String
+    Dim filaDepois As String
     Dim rodizio As TRodizioResultado
+    Dim rodizioPosPendente As TRodizioResultado
+    Dim rodizioPosExpiracao As TRodizioResultado
     Dim resPre As TResult
     Dim resRec As TResult
+    Dim resExp As TResult
     Dim resOs As TResult
     Dim resAval As TResult
     Dim resAval2 As TResult
@@ -83,6 +88,33 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
                   "SUCESSO_RECUSA=" & CStr(resRec.Sucesso) & "; STATUS_PREOS=" & TV2_StatusPreOS(preosId) & "; FILA=" & fila & "; RECUSAS_EMP_001=" & CStr(TV2_QtdRecusasEmpresa("001")), _
                   "Garante giro correto e punicao minima apos recusa explicita", _
                   (resRec.Sucesso And TV2_StatusPreOS(preosId) = "RECUSADA" And fila = "002,003,001" And TV2_QtdRecusasEmpresa("001") = 1)
+
+    TV2_PrepararCenarioTriploCanonico
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    preosId = resPre.IdGerado
+    filaAntes = TV2_FilaCsv(TV2_AtivCanonA())
+    rodizioPosPendente = SelecionarEmpresa(TV2_AtivCanonA())
+    resExp = ExpirarPreOS(preosId)
+    filaDepois = TV2_FilaCsv(TV2_AtivCanonA())
+    rodizioPosExpiracao = SelecionarEmpresa(TV2_AtivCanonA())
+    TV2_LogAssert "SMOKE", "EXP_001", "AUTO", _
+                  "Expirar Pre-OS pendente e retomar a fila corretamente", _
+                  "PRE_OS expirada; fila 002,003,001; nova indicacao retorna EMP_ID=002", _
+                  "SUCESSO_PREOS=" & CStr(resPre.Sucesso) & _
+                  "; FILA_ANTES=" & filaAntes & _
+                  "; EMP_COM_PENDENCIA=" & TV2_FormatEmpId(rodizioPosPendente.Empresa.EMP_ID) & _
+                  "; SUCESSO_EXP=" & CStr(resExp.Sucesso) & _
+                  "; STATUS_PREOS=" & TV2_StatusPreOS(preosId) & _
+                  "; FILA_DEPOIS=" & filaDepois & _
+                  "; EMP_APOS_EXP=" & TV2_FormatEmpId(rodizioPosExpiracao.Empresa.EMP_ID) & _
+                  "; RECUSAS_EMP_001=" & CStr(TV2_QtdRecusasEmpresa("001")), _
+                  "Prova que a expiracao remove o bloqueio por pendencia, pune a empresa e preserva a integridade da fila", _
+                  (resPre.Sucesso And filaAntes = "001,002,003" And _
+                   rodizioPosPendente.encontrou And IdsIguais(rodizioPosPendente.Empresa.EMP_ID, "002") And _
+                   resExp.Sucesso And TV2_StatusPreOS(preosId) = "EXPIRADA" And _
+                   filaDepois = "002,003,001" And _
+                   rodizioPosExpiracao.encontrou And IdsIguais(rodizioPosExpiracao.Empresa.EMP_ID, "002") And _
+                   TV2_QtdRecusasEmpresa("001") = 1)
 
     TV2_PrepararCenarioTriploCanonico
     resPre = EmitirPreOS("001", TV2_CodServicoA(), 3)
