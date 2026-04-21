@@ -136,6 +136,12 @@ Ampliação desejada:
 - validar rastro mínimo de auditoria
 - validar que a empresa não fica suspensa quando a média é suficiente
 
+Status atual:
+
+- reforço incorporado ao `SMK_007` na branch `codex/v12-0-0203-governanca-testes`
+- agora o cenário também prova `OS Fechada/Avaliada` no `AUDIT_LOG`
+- agora o cenário também prova ausência de suspensão indevida e `DT_FIM_SUSP` limpa
+
 ### B2. Enriquecer `ATM_001`
 
 Hoje ele prova rollback mínimo.

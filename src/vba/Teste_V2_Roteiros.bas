@@ -13,6 +13,10 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     Dim fila As String
     Dim filaAntes As String
     Dim filaDepois As String
+    Dim auditFechAntes As Long
+    Dim auditFechDepois As Long
+    Dim auditSuspAntes As Long
+    Dim auditSuspDepois As Long
     Dim rodizio As TRodizioResultado
     Dim rodizioPosPendente As TRodizioResultado
     Dim rodizioPosExpiracao As TRodizioResultado
@@ -138,16 +142,35 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     preosId = resPre.IdGerado
     resOs = EmitirOS(preosId, Date + 5, "EMP-002")
     osId = resOs.IdGerado
+    auditFechAntes = TV2_AuditCount("OS Fechada/Avaliada", "STATUS=CONCLUIDA")
+    auditSuspAntes = TV2_AuditCount("Empresa Suspensa", "STATUS=SUSPENSA_GLOBAL")
     For i = 1 To 10
         notas(i) = 8
     Next i
     resAval = AvaliarOS(osId, "QA V2", notas, 2, "Cenario smoke V2", "", Date + 6, Date + 15)
+    auditFechDepois = TV2_AuditCount("OS Fechada/Avaliada", "STATUS=CONCLUIDA")
+    auditSuspDepois = TV2_AuditCount("Empresa Suspensa", "STATUS=SUSPENSA_GLOBAL")
     TV2_LogAssert "SMOKE", "SMK_007", "AUTO", _
                   "Avaliar OS e concluir o ciclo", _
-                  "OS concluida e fila com ordem integra", _
-                  "SUCESSO_AVAL=" & CStr(resAval.Sucesso) & "; STATUS_OS=" & TV2_StatusOS(osId) & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & "; POSICOES=" & TV2_FilaComPosicoesCsv(TV2_AtivCanonA()), _
+                  "OS concluida, auditoria registrada e empresa sem suspensão indevida", _
+                  "SUCESSO_AVAL=" & CStr(resAval.Sucesso) & _
+                  "; STATUS_OS=" & TV2_StatusOS(osId) & _
+                  "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+                  "; POSICOES=" & TV2_FilaComPosicoesCsv(TV2_AtivCanonA()) & _
+                  "; STATUS_EMP_001=" & TV2_StatusEmpresa("001") & _
+                  "; DT_FIM_001=" & IIf(TV2_DtFimSuspEmpresa("001") > CDate(0), Format$(TV2_DtFimSuspEmpresa("001"), "dd/mm/yyyy"), "(limpa)") & _
+                  "; AUDIT_FECH=" & CStr(auditFechDepois - auditFechAntes) & _
+                  "; AUDIT_SUSP=" & CStr(auditSuspDepois - auditSuspAntes) & _
+                  "; RECUSAS_EMP_001=" & CStr(TV2_QtdRecusasEmpresa("001")), _
                   "Fecha o fluxo core ponta a ponta no nivel de servico", _
-                  (resAval.Sucesso And TV2_StatusOS(osId) = "CONCLUIDA" And TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3))
+                  (resAval.Sucesso And _
+                   TV2_StatusOS(osId) = "CONCLUIDA" And _
+                   TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3) And _
+                   TV2_StatusEmpresa("001") = "ATIVA" And _
+                   TV2_DtFimSuspEmpresa("001") = CDate(0) And _
+                   (auditFechDepois - auditFechAntes) = 1 And _
+                   (auditSuspDepois - auditSuspAntes) = 0 And _
+                   TV2_QtdRecusasEmpresa("001") = 0)
 
     TV2_PrepararCenarioTriploCanonico
     resPre = EmitirPreOS("999", TV2_CodServicoA(), 1)
