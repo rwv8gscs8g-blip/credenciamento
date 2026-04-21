@@ -3550,33 +3550,33 @@ End Sub
 
 Private Sub Menu_TelaInicial_MostrarSobre()
     Dim msg As String
-    msg = "Sistema de Credenciamento e Rodízio de Pequenos Reparos" & vbCrLf & vbCrLf & _
-          "Linha pública source-available, auditável e orientada a evidências" & vbCrLf & _
-          "para gestão municipal de credenciamento, rodízio, Pre-OS, OS," & vbCrLf & _
-          "avaliação de prestadores e rastreabilidade operacional." & vbCrLf & vbCrLf & _
-          "Release oficial: " & AppRelease_Atual() & vbCrLf & _
-          "Status oficial: " & AppRelease_Status() & vbCrLf & _
-          "Canal ativo: " & AppRelease_Canal() & vbCrLf & _
-          "Próxima release alvo: " & AppRelease_Alvo() & vbCrLf & _
-          "Assinatura do build: " & AppRelease_BuildKey() & vbCrLf & vbCrLf & _
-          "Objetivo:" & vbCrLf & _
-          "Promover o rodízio de forma auditável e segura. O sistema escolhe" & vbCrLf & _
-          "a empresa apta da vez e pula quem está inativo, suspenso, com OS" & vbCrLf & _
-          "aberta ou com Pré-OS pendente." & vbCrLf & vbCrLf & _
-          "Licença pública disponível:" & vbCrLf & _
-          "TPGL v1.1" & vbCrLf & _
-          "Modelo: source-available e auditável" & vbCrLf & _
-          "Conversão automática para Apache License 2.0 após 4 anos" & vbCrLf & _
-          "Licença:" & vbCrLf & _
-          "https://github.com/rwv8gscs8g-blip/credenciamento/blob/main/LICENSE" & vbCrLf & vbCrLf & _
-          "Autor: Sérgio Cintra" & vbCrLf & _
-          "Co-autoria, Desenvolvimento e Evolução: Luís Maurício Junqueira Zanin" & vbCrLf & vbCrLf & _
-          "Repositório GitHub:" & vbCrLf & _
-          AppRelease_GitHubRepoUrl() & vbCrLf & vbCrLf & _
-          "Notas de versão:" & vbCrLf & _
-          AppRelease_GitHubReleaseNotesUrl() & vbCrLf & vbCrLf & _
-          "Para abrir o repositório use o botão 'GitHub'." & vbCrLf & _
-          "Clique em OK para voltar ao sistema."
+    msg = "Sistema de Credenciamento e Rodízio de Pequenos Reparos"
+    msg = msg & vbCrLf & vbCrLf & "Linha pública source-available, auditável e orientada a evidências"
+    msg = msg & vbCrLf & "para gestão municipal de credenciamento, rodízio, Pre-OS, OS,"
+    msg = msg & vbCrLf & "avaliação de prestadores e rastreabilidade operacional."
+    msg = msg & vbCrLf & vbCrLf & "Release oficial: " & AppRelease_Atual()
+    msg = msg & vbCrLf & "Status oficial: " & AppRelease_Status()
+    msg = msg & vbCrLf & "Canal ativo: " & AppRelease_Canal()
+    msg = msg & vbCrLf & "Próxima release alvo: " & AppRelease_Alvo()
+    msg = msg & vbCrLf & "Assinatura do build: " & AppRelease_BuildKey()
+    msg = msg & vbCrLf & vbCrLf & "Objetivo:"
+    msg = msg & vbCrLf & "Promover o rodízio de forma auditável e segura. O sistema escolhe"
+    msg = msg & vbCrLf & "a empresa apta da vez e pula quem está inativo, suspenso, com OS"
+    msg = msg & vbCrLf & "aberta ou com Pré-OS pendente."
+    msg = msg & vbCrLf & vbCrLf & "Licença pública disponível:"
+    msg = msg & vbCrLf & "TPGL v1.1"
+    msg = msg & vbCrLf & "Modelo: source-available e auditável"
+    msg = msg & vbCrLf & "Conversão automática para Apache License 2.0 após 4 anos"
+    msg = msg & vbCrLf & "Licença:"
+    msg = msg & vbCrLf & "https://github.com/rwv8gscs8g-blip/credenciamento/blob/main/LICENSE"
+    msg = msg & vbCrLf & vbCrLf & "Autor: Sérgio Cintra"
+    msg = msg & vbCrLf & "Co-autoria, Desenvolvimento e Evolução: Luís Maurício Junqueira Zanin"
+    msg = msg & vbCrLf & vbCrLf & "Repositório GitHub:"
+    msg = msg & vbCrLf & AppRelease_GitHubRepoUrl()
+    msg = msg & vbCrLf & vbCrLf & "Notas de versão:"
+    msg = msg & vbCrLf & AppRelease_GitHubReleaseNotesUrl()
+    msg = msg & vbCrLf & vbCrLf & "Para abrir o repositório use o botão 'GitHub'."
+    msg = msg & vbCrLf & "Clique em OK para voltar ao sistema."
 
     MsgBox msg, vbInformation + vbOKOnly, "Sobre"
 End Sub
@@ -3841,7 +3841,6 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
-
 
 
 
