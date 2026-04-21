@@ -5,6 +5,7 @@ Option Explicit
 ' Teste_V2_Roteiros
 ' Suites executaveis da bateria V2:
 ' - smoke rapido / assistido
+' - canonico profundo por blocos (`CS_*`)
 ' - stress deterministico
 ' ============================================================
 
@@ -256,6 +257,175 @@ falha:
     TV2_FinalizarExecucao "SMOKE"
 End Sub
 
+Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
+    Dim fila As String
+    Dim qtdServAntes As Long
+    Dim qtdServDepois As Long
+    Dim qtdCred As Long
+    Dim qtdPreAntes As Long
+    Dim qtdPreDepois As Long
+    Dim descServico As String
+    Dim resPre As TResult
+    Dim resAval As TResult
+    Dim preosIdA As String
+    Dim osIdA As String
+    Dim preosIdB As String
+    Dim preosIdC As String
+    Dim notas(1 To 10) As Integer
+
+    On Error GoTo falha
+
+    TV2_InitExecucao "CANONICO", visual
+
+    TV2_PrepararCenarioTriploCanonico
+    fila = TV2_FilaCsv(TV2_AtivCanonA())
+    qtdCred = TV2_QtdCredenciadosNoItem(TV2_AtivCanonA(), "001")
+    TV2_LogAssert "CANONICO", "CS_00", "AUTO", _
+                  "Montar o setup canônico com 3 empresas no item", _
+                  "3 empresas; serviço único; fila 001,002,003", _
+                  "EMP=" & CStr(TV2_CountRows(SHEET_EMPRESAS)) & _
+                  "; ENT=" & CStr(TV2_CountRows(SHEET_ENTIDADE)) & _
+                  "; SERV=" & CStr(TV2_QtdServicosAtivServ(TV2_AtivCanonA(), "001")) & _
+                  "; CRED_ITEM=" & CStr(qtdCred) & _
+                  "; FILA=" & fila, _
+                  "Abre a família canônica sobre base determinística e auditável", _
+                  (TV2_CountRows(SHEET_EMPRESAS) = 3 And _
+                   TV2_CountRows(SHEET_ENTIDADE) = 3 And _
+                   TV2_QtdServicosAtivServ(TV2_AtivCanonA(), "001") = 1 And _
+                   qtdCred = 3 And _
+                   fila = "001,002,003")
+
+    TV2_PrepararCenarioTriploCanonico
+    qtdServAntes = TV2_QtdServicosAtivServ(TV2_AtivCanonA(), "001")
+    descServico = TV2_DescricaoServico(TV2_AtivCanonA(), "001")
+    TV2_PrepararBaselineCanonica
+    qtdServDepois = TV2_QtdServicosAtivServ(TV2_AtivCanonA(), "001")
+    TV2_LogAssert "CANONICO", "CS_01", "AUTO", _
+                  "Reaplicar a baseline sem duplicar o serviço canônico", _
+                  "Continua apenas 1 serviço 001 vinculado à atividade canônica", _
+                  "SERV_ANTES=" & CStr(qtdServAntes) & _
+                  "; SERV_DEPOIS=" & CStr(qtdServDepois) & _
+                  "; DESC=" & descServico & _
+                  "; VALOR=" & Format$(TV2_ValorUnitServico(TV2_AtivCanonA(), "001"), "0.00"), _
+                  "Protege a suíte contra duplicidade silenciosa em CAD_SERV", _
+                  (qtdServAntes = 1 And qtdServDepois = 1 And descServico <> "")
+
+    TV2_PrepararCenarioTriploCanonico
+    qtdPreAntes = TV2_CountRows(SHEET_PREOS)
+    resPre = EmitirPreOS("001", TV2_CodServico(TV2_AtivCanonA(), "999"), 1)
+    qtdPreDepois = TV2_CountRows(SHEET_PREOS)
+    TV2_LogAssert "CANONICO", "CS_02", "AUTO", _
+                  "Rejeitar emissão com vínculo atividade/serviço inexistente", _
+                  "Falha explícita sem gravar nova PRE_OS", _
+                  "SUCESSO=" & CStr(resPre.Sucesso) & _
+                  "; MSG=" & resPre.Mensagem & _
+                  "; PREOS_ANTES=" & CStr(qtdPreAntes) & _
+                  "; PREOS_DEPOIS=" & CStr(qtdPreDepois), _
+                  "Protege o item canônico contra associação inválida em CAD_SERV", _
+                  (Not resPre.Sucesso And qtdPreAntes = 0 And qtdPreDepois = 0 And _
+                   InStr(1, resPre.Mensagem, "Servico nao encontrado", vbTextCompare) > 0)
+
+    TV2_PrepararCenarioTriploCanonico
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    TV2_LogAssert "CANONICO", "CS_03", "AUTO", _
+                  "Emitir a primeira PRE_OS para a empresa A", _
+                  "PRE_OS para EMP_ID=001 em AGUARDANDO_ACEITE", _
+                  "SUCESSO=" & CStr(resPre.Sucesso) & _
+                  "; PREOS_ID=" & resPre.IdGerado & _
+                  "; EMP_ID=" & TV2_EmpIdPreOS(resPre.IdGerado) & _
+                  "; STATUS=" & TV2_StatusPreOS(resPre.IdGerado), _
+                  "Abre o fluxo nominal A -> B -> C do item canônico", _
+                  (resPre.Sucesso And IdsIguais(TV2_EmpIdPreOS(resPre.IdGerado), "001") And _
+                   TV2_StatusPreOS(resPre.IdGerado) = "AGUARDANDO_ACEITE")
+
+    TV2_CS_PrepararEstadoAteCS04 preosIdA, osIdA
+    fila = TV2_FilaCsv(TV2_AtivCanonA())
+    TV2_LogAssert "CANONICO", "CS_04", "AUTO", _
+                  "Converter a PRE_OS de A em OS e avançar a fila", _
+                  "OS para A; fila 002,003,001", _
+                  "PREOS_A=" & preosIdA & _
+                  "; OS_A=" & osIdA & _
+                  "; STATUS_PREOS=" & TV2_StatusPreOS(preosIdA) & _
+                  "; STATUS_OS=" & TV2_StatusOS(osIdA) & _
+                  "; FILA=" & fila, _
+                  "Prova o primeiro giro da fila do item canônico", _
+                  (osIdA <> "" And TV2_StatusPreOS(preosIdA) = "CONVERTIDA_OS" And _
+                   TV2_StatusOS(osIdA) = "EM_EXECUCAO" And _
+                   fila = "002,003,001")
+
+    TV2_CS_PrepararEstadoAteCS04 preosIdA, osIdA
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    TV2_LogAssert "CANONICO", "CS_05", "AUTO", _
+                  "Emitir a segunda PRE_OS para a empresa B", _
+                  "PRE_OS para EMP_ID=002", _
+                  "SUCESSO=" & CStr(resPre.Sucesso) & _
+                  "; PREOS_B=" & resPre.IdGerado & _
+                  "; EMP_ID=" & TV2_EmpIdPreOS(resPre.IdGerado) & _
+                  "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()), _
+                  "Prova o pulo técnico de A por OS aberta", _
+                  (resPre.Sucesso And IdsIguais(TV2_EmpIdPreOS(resPre.IdGerado), "002"))
+
+    TV2_CS_PrepararEstadoAteCS06 preosIdA, osIdA, preosIdB, preosIdC
+    TV2_LogAssert "CANONICO", "CS_06", "AUTO", _
+                  "Emitir a terceira PRE_OS para a empresa C", _
+                  "PRE_OS para EMP_ID=003", _
+                  "PREOS_A=" & preosIdA & _
+                  "; OS_A=" & osIdA & _
+                  "; PREOS_B=" & preosIdB & _
+                  "; PREOS_C=" & preosIdC & _
+                  "; EMP_C=" & TV2_EmpIdPreOS(preosIdC) & _
+                  "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()), _
+                  "Fecha o núcleo nominal do item canônico com bloqueios acumulados", _
+                  (preosIdC <> "" And IdsIguais(TV2_EmpIdPreOS(preosIdC), "003") And _
+                   TV2_StatusPreOS(preosIdB) = "AGUARDANDO_ACEITE" And _
+                   TV2_StatusPreOS(preosIdC) = "AGUARDANDO_ACEITE")
+
+    TV2_CS_PrepararEstadoAteCS06 preosIdA, osIdA, preosIdB, preosIdC
+    qtdPreAntes = TV2_CountRows(SHEET_PREOS)
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    qtdPreDepois = TV2_CountRows(SHEET_PREOS)
+    TV2_LogAssert "CANONICO", "CS_07", "AUTO", _
+                  "Bloquear o rodízio quando não há nenhuma empresa apta", _
+                  "SEM_CREDENCIADOS_APTOS sem nova PRE_OS e sem travar a fila", _
+                  "SUCESSO=" & CStr(resPre.Sucesso) & _
+                  "; MSG=" & resPre.Mensagem & _
+                  "; PREOS_ANTES=" & CStr(qtdPreAntes) & _
+                  "; PREOS_DEPOIS=" & CStr(qtdPreDepois) & _
+                  "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()), _
+                  "É o teste crítico de não travamento do cenário canônico", _
+                  (Not resPre.Sucesso And qtdPreAntes = 2 And qtdPreDepois = 2 And _
+                   InStr(1, resPre.Mensagem, "SEM_CREDENCIADOS_APTOS", vbTextCompare) > 0 And _
+                   TV2_FilaCsv(TV2_AtivCanonA()) = "002,003,001")
+
+    TV2_CS_PrepararEstadoAteCS06 preosIdA, osIdA, preosIdB, preosIdC
+    TV2_PreencherNotas notas, 8
+    resAval = AvaliarOS(osIdA, "QA CANONICO", notas, 1, "CS_08_CONCLUIR_A", "", Date + 1, Date + 7)
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    TV2_LogAssert "CANONICO", "CS_08", "AUTO", _
+                  "Retomar o rodízio após a conclusão da OS de A", _
+                  "Nova PRE_OS para EMP_ID=001", _
+                  "SUCESSO_AVAL=" & CStr(resAval.Sucesso) & _
+                  "; STATUS_OS_A=" & TV2_StatusOS(osIdA) & _
+                  "; SUCESSO_PREOS=" & CStr(resPre.Sucesso) & _
+                  "; PREOS_NOVA=" & resPre.IdGerado & _
+                  "; EMP_ID=" & TV2_EmpIdPreOS(resPre.IdGerado) & _
+                  "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()), _
+                  "Prova que a fila retoma do ponto correto após resolução parcial do bloqueio", _
+                  (resAval.Sucesso And TV2_StatusOS(osIdA) = "CONCLUIDA" And _
+                   resPre.Sucesso And IdsIguais(TV2_EmpIdPreOS(resPre.IdGerado), "001"))
+
+    TV2_FinalizarExecucao "CANONICO"
+    Exit Sub
+
+falha:
+    TV2_LogAssert "CANONICO", "FATAL", "AUTO", _
+                  "Executar suíte canônica sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(Err.Number) & ": " & Err.Description, _
+                  "Toda falha fatal precisa ficar rastreável na família CS_*", False
+    TV2_FinalizarExecucao "CANONICO"
+End Sub
+
 Public Sub TV2_RunStress(Optional ByVal iteracoes As Long = 12, Optional ByVal visual As Boolean = False)
     Dim i As Long
     Dim resPre As TResult
@@ -341,3 +511,44 @@ Private Function TV2_FormatEmpId(ByVal valor As String) As String
         TV2_FormatEmpId = Format$(CLng(Val(valor)), "000")
     End If
 End Function
+
+Private Sub TV2_CS_PrepararEstadoAteCS04(ByRef preosIdA As String, ByRef osIdA As String)
+    Dim resPre As TResult
+    Dim resOs As TResult
+
+    TV2_PrepararCenarioTriploCanonico
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    If Not resPre.Sucesso Then
+        Err.Raise 1004, "TV2_CS_PrepararEstadoAteCS04", "Falha ao emitir PRE_OS inicial de A."
+    End If
+
+    preosIdA = resPre.IdGerado
+    resOs = EmitirOS(preosIdA, Date + 7, "EMP-CS-04")
+    If Not resOs.Sucesso Then
+        Err.Raise 1004, "TV2_CS_PrepararEstadoAteCS04", "Falha ao emitir OS inicial de A."
+    End If
+
+    osIdA = resOs.IdGerado
+End Sub
+
+Private Sub TV2_CS_PrepararEstadoAteCS06( _
+    ByRef preosIdA As String, _
+    ByRef osIdA As String, _
+    ByRef preosIdB As String, _
+    ByRef preosIdC As String)
+    Dim resPre As TResult
+
+    TV2_CS_PrepararEstadoAteCS04 preosIdA, osIdA
+
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    If Not resPre.Sucesso Then
+        Err.Raise 1004, "TV2_CS_PrepararEstadoAteCS06", "Falha ao emitir PRE_OS de B."
+    End If
+    preosIdB = resPre.IdGerado
+
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    If Not resPre.Sucesso Then
+        Err.Raise 1004, "TV2_CS_PrepararEstadoAteCS06", "Falha ao emitir PRE_OS de C."
+    End If
+    preosIdC = resPre.IdGerado
+End Sub

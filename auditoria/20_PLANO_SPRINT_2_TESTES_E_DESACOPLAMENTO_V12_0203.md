@@ -20,6 +20,32 @@ Ou seja:
 
 ## Frente A — Novos cenários de teste
 
+### A0. Família V2 canônica `CS_*`
+
+Status atual:
+
+- proposta aprovada e consolidada em [docs/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md](../docs/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md)
+- implementação iniciada na branch `codex/v12-0-0203-governanca-testes`
+
+Objetivo:
+
+- abrir uma suíte V2 própria para cenários canônicos profundos
+- manter `SMK_*` como bateria rápida de saúde
+- evitar inflar o smoke com cenários longos e combinatórios
+- implementar o primeiro lote obrigatório como base da `0203`
+
+Primeiro lote recomendado:
+
+- `CS_00` a `CS_08`
+- `CS_22`
+
+Critério de aceite:
+
+- suíte `CANONICO` executável pela Central V2
+- catálogo e roteiro assistido exibem a família `CS_*`
+- setup canônico, fluxo nominal, bloqueio total e retomada ficam automatizados
+- a suíte roda sem regressão no `SMOKE`
+
 ### A1. Expiração de Pre-OS e retomada correta da fila
 
 Status atual:
@@ -141,16 +167,17 @@ Objetivo:
 
 ## Ordem recomendada
 
-1. A1
-2. A2
-3. A4
-4. B1
-5. B3
-6. C1
-7. A3
-8. C2
-9. B2
-10. C3
+1. A0
+2. A1
+3. A2
+4. A4
+5. B1
+6. B3
+7. C1
+8. A3
+9. C2
+10. B2
+11. C3
 
 ## Critério de saída da Sprint 2
 
@@ -160,6 +187,7 @@ A Sprint 2 deve ser considerada concluída quando:
 2. pelo menos 3 cenários existentes tiverem sido fortalecidos
 3. uma fatia concreta de lógica tiver saído do `Menu_Principal.frm`
 4. a Bateria Oficial e a V2 continuarem verdes após a ampliação
+5. a família `CS_*` já tiver pelo menos um lote executável e determinístico
 
 ## Resultado esperado
 

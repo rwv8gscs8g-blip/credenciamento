@@ -20,10 +20,11 @@ Public Sub CT2_AbrirCentral()
         "[2] Smoke assistido" & vbCrLf & _
         "[3] Stress deterministico" & vbCrLf & _
         "[4] Stress assistido" & vbCrLf & _
-        "[5] Abrir roteiro assistido V2" & vbCrLf & _
-        "[6] Abrir RESULTADO_QA_V2" & vbCrLf & _
-        "[7] Abrir CATALOGO_CENARIOS_V2" & vbCrLf & _
-        "[8] Abrir HISTORICO_QA_V2" & vbCrLf & vbCrLf & _
+        "[5] Suite canonica (fundacao)" & vbCrLf & _
+        "[6] Abrir roteiro assistido V2" & vbCrLf & _
+        "[7] Abrir RESULTADO_QA_V2" & vbCrLf & _
+        "[8] Abrir CATALOGO_CENARIOS_V2" & vbCrLf & _
+        "[9] Abrir HISTORICO_QA_V2" & vbCrLf & vbCrLf & _
         "Digite o numero:", _
         "Central de Testes V2", "1"))
 
@@ -39,12 +40,14 @@ Public Sub CT2_AbrirCentral()
         Case "4"
             CT2_ExecutarStressAssistido
         Case "5"
-            TV2_AbrirRoteiroAssistido
+            CT2_ExecutarCanonicoFundacao
         Case "6"
-            TV2_AbrirResultado
+            TV2_AbrirRoteiroAssistido
         Case "7"
-            TV2_AbrirCatalogo
+            TV2_AbrirResultado
         Case "8"
+            TV2_AbrirCatalogo
+        Case "9"
             TV2_AbrirHistorico
         Case Else
             MsgBox "Opcao invalida.", vbInformation, "Central V2"
@@ -73,4 +76,9 @@ End Sub
 Public Sub CT2_ExecutarStressAssistido()
     TV2_PrepararNavegacaoHumana
     TV2_RunStress 12, True
+End Sub
+
+Public Sub CT2_ExecutarCanonicoFundacao()
+    TV2_PrepararNavegacaoHumana
+    TV2_RunCanonicoFundacao False
 End Sub

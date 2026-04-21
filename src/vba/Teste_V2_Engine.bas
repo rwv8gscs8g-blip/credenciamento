@@ -285,6 +285,16 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "EXP_001", "SMOKE", "RAPIDO", "AUTO", "Pre-OS", "Expiracao retoma a fila corretamente", "PRE_OS aguardando aceite para a empresa do topo", "Validar expiracao com punicao e retomada correta da fila", "PRE_OS expirada; fila 002,003,001; nova indicacao retorna EMP_ID=002", "Evita bloqueio residual por pendencia vencida", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "SMK_006", "SMOKE", "RAPIDO", "AUTO", "OS", "Emitir OS converte PRE_OS", "PRE_OS valida aguardando aceite", "Validar conversao minima Pre-OS -> OS", "PRE_OS convertida; OS em execucao", "Confirma integracao entre servicos", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "SMK_007", "SMOKE", "RAPIDO", "AUTO", "Avaliacao", "Avaliar OS e concluir", "OS em execucao com notas validas", "Validar fechamento minimo da OS", "OS concluida e fila continua consistente", "Fecha o ciclo core ponta a ponta", "AUTOMATIZADO_ATUAL", "Executado no smoke"
+    TV2_AddCatalogo ws, nr, "CS_00", "CANONICO", "COMPLETO", "AUTO", "Setup", "Setup canônico do item triplo", "1 entidade; 1 atividade canônica; 1 serviço; 3 empresas credenciadas no item", "Validar o chão comum da suíte canônica", "Fila 001,002,003; 3 credenciamentos; serviço único", "Abre a família CS_* sobre base determinística", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_01", "CANONICO", "COMPLETO", "AUTO", "Catalogo", "Reaplicar baseline sem duplicar o serviço", "Serviço canônico já existente na atividade canônica", "Validar unicidade estrutural do item canônico", "Permanece 1 serviço 001 vinculado à atividade", "Evita duplicidade silenciosa em CAD_SERV", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_02", "CANONICO", "COMPLETO", "AUTO", "Catalogo", "Rejeitar emissão com vínculo atividade/serviço inexistente", "Entidade válida; atividade canônica; serviço inexistente", "Validar associação correta entre atividade e serviço", "Emissão falha; nenhuma PRE_OS nova", "Protege o item canônico contra associação inválida", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_03", "CANONICO", "COMPLETO", "AUTO", "Fluxo nominal", "Primeira emissão aponta para A", "Fila canônica sem bloqueios", "Validar primeira indicação do cenário canônico", "PRE_OS para EMP_ID=001", "Abre o fluxo nominal A -> B -> C", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_04", "CANONICO", "COMPLETO", "AUTO", "Fluxo nominal", "Converter a PRE_OS de A em OS", "PRE_OS emitida para A", "Validar avanço da fila após OS aberta", "OS para A; fila 002,003,001", "Prova que OS aberta desloca A para o fim", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_05", "CANONICO", "COMPLETO", "AUTO", "Fluxo nominal", "Segunda emissão aponta para B", "A com OS aberta e B/C livres", "Validar pulo técnico de A por OS aberta", "PRE_OS para EMP_ID=002", "Costura o segundo passo do fluxo nominal", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_06", "CANONICO", "COMPLETO", "AUTO", "Fluxo nominal", "Terceira emissão aponta para C", "A com OS aberta; B com PRE_OS pendente", "Validar bloqueios acumulados sem mover indevidamente a fila", "PRE_OS para EMP_ID=003", "Fecha o núcleo A -> B -> C do item canônico", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_07", "CANONICO", "COMPLETO", "AUTO", "Bloqueio", "Rodízio bloqueado por falta de aptos", "A com OS aberta; B e C com PRE_OS pendente", "Validar resposta controlada SEM_CREDENCIADOS_APTOS", "Sem nova PRE_OS; fila preservada", "É o teste crítico de não travamento do item canônico", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_08", "CANONICO", "COMPLETO", "AUTO", "Retomada", "Conclusão de A libera nova emissão", "Estado bloqueado do CS_07 com A em OS aberta", "Validar retomada correta após conclusão da OS", "Nova PRE_OS para EMP_ID=001", "Prova que a fila retoma do ponto certo", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_22", "CANONICO", "COMPLETO", "AUTO", "Integridade", "Associação da atividade preservada em múltiplas emissões", "Item canônico emitido repetidamente", "Validar vínculo estável entre atividade e serviço", "ATIV_ID e SERV_ID corretos em todas as emissões", "Protege contra regressão de CNAE/CAD_SERV", "PLANEJADO_0203", "Implementação prevista para o próximo lote"
     TV2_AddCatalogo ws, nr, "STR_001", "STRESS", "COMPLETO", "AUTO", "Integridade", "Giros repetidos com recusa e conclusao", "Sequencia deterministica de 12 iteracoes", "Verificar invariantes de fila em repeticao", "IDs unicos; ordem relativa integra e posicoes estritamente crescentes", "Captura regressao estrutural em lote", "AUTOMATIZADO_ATUAL", "Executado no stress"
     TV2_AddCatalogo ws, nr, "ASS_001", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do smoke assistido", "Humano acompanha fechamento do menu, status bar e abertura do resultado", "Dar leitura operacional do smoke", "Operador entende o que esta sendo testado", "Suporta homologacao observada", "PREVISTO_V2", "Executar smoke assistido"
     TV2_AddCatalogo ws, nr, "ASS_002", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do stress assistido", "Humano acompanha lote deterministico sem precisar abrir o menu", "Dar leitura operacional do stress", "Operador acompanha o teste de repeticao sem perder contexto", "Suporta homologacao observada", "PREVISTO_V2", "Executar stress assistido"
@@ -958,6 +968,54 @@ Public Function TV2_CodServicoA() As String
     TV2_CodServicoA = gTV2AtivCanonA & "|001"
 End Function
 
+Public Function TV2_CodServico(ByVal ativId As String, Optional ByVal servId As String = "001") As String
+    TV2_CodServico = TV2_Pad3(ativId) & "|" & TV2_Pad3(servId)
+End Function
+
+Public Function TV2_QtdServicosAtivServ(ByVal ativId As String, Optional ByVal servId As String = "") As Long
+    Dim ws As Worksheet
+    Dim linha As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_SERV)
+    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_CAD_SERV)
+        If IdsIguais(ws.Cells(linha, COL_SERV_ATIV_ID).Value, ativId) Then
+            If servId = "" Or IdsIguais(ws.Cells(linha, COL_SERV_ID).Value, servId) Then
+                TV2_QtdServicosAtivServ = TV2_QtdServicosAtivServ + 1
+            End If
+        End If
+    Next linha
+End Function
+
+Public Function TV2_DescricaoServico(ByVal ativId As String, ByVal servId As String) As String
+    Dim ws As Worksheet
+    Dim linha As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_SERV)
+    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_CAD_SERV)
+        If IdsIguais(ws.Cells(linha, COL_SERV_ATIV_ID).Value, ativId) And _
+           IdsIguais(ws.Cells(linha, COL_SERV_ID).Value, servId) Then
+            TV2_DescricaoServico = Trim$(CStr(ws.Cells(linha, COL_SERV_DESCRICAO).Value))
+            Exit Function
+        End If
+    Next linha
+End Function
+
+Public Function TV2_QtdCredenciadosNoItem(ByVal ativId As String, Optional ByVal servId As String = "001") As Long
+    Dim ws As Worksheet
+    Dim linha As Long
+    Dim codItem As String
+
+    codItem = TV2_Pad3(ativId) & TV2_Pad3(servId)
+    Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+
+    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_CREDENCIADOS)
+        If IdsIguais(ws.Cells(linha, COL_CRED_ATIV_ID).Value, ativId) And _
+           Trim$(CStr(ws.Cells(linha, COL_CRED_COD_ATIV_SERV).Value)) = codItem Then
+            TV2_QtdCredenciadosNoItem = TV2_QtdCredenciadosNoItem + 1
+        End If
+    Next linha
+End Function
+
 Public Function TV2_CountRows(ByVal nomeAba As String) As Long
     Dim ws As Worksheet
     Dim colunaChave As Long
@@ -1268,6 +1326,16 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "EXP_001", "AUTO", "Validar expiracao com retomada correta da fila", "Apenas conferir o resultado automatizado do cenario", "PRE_OS expirada; fila 002,003,001; nova indicacao retorna EMP_ID=002", "Linha do cenario EXP_001", "Confirma que a expiracao remove o bloqueio residual e preserva a fila", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "SMK_006", "AUTO", "Validar conversao de Pre-OS em OS", "Apenas conferir o resultado automatizado do cenario", "PRE_OS convertida; OS em execucao; fila gira", "Linha do cenario SMK_006", "Confirma integracao entre servicos", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "SMK_007", "AUTO", "Validar conclusao de OS", "Apenas conferir o resultado automatizado do cenario", "Avaliacao bem-sucedida; STATUS_OS=CONCLUIDA; fila continua integra", "Linha do cenario SMK_007", "Fecha o ciclo ponta a ponta", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_00", "AUTO", "Validar setup canônico do item triplo", "Executar a suíte canônica e conferir a primeira linha automatizada", "3 empresas, serviço único e fila 001,002,003", "Linhas CS_00 no resultado", "Abre a família canônica sobre base determinística", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_01", "AUTO", "Validar unicidade estrutural do serviço canônico", "Executar a suíte canônica e conferir a linha CS_01", "Permanece apenas 1 serviço 001 vinculado à atividade canônica", "Linhas CS_01 no resultado", "Evita duplicidade silenciosa em CAD_SERV", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_02", "AUTO", "Validar rejeição de associação inválida atividade/serviço", "Executar a suíte canônica e conferir a linha CS_02", "Emissão falha e não grava PRE_OS", "Linhas CS_02 no resultado", "Protege o item canônico contra vínculo inválido", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_03", "AUTO", "Validar primeira emissão do fluxo nominal", "Executar a suíte canônica e conferir a linha CS_03", "PRE_OS para EMP_ID=001", "Linhas CS_03 no resultado", "Abre o fluxo A -> B -> C", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_04", "AUTO", "Validar OS aberta deslocando A para o fim", "Executar a suíte canônica e conferir a linha CS_04", "Fila 002,003,001 após emissão da OS", "Linhas CS_04 no resultado", "Confirma o primeiro giro da fila", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_05", "AUTO", "Validar segunda emissão apontando para B", "Executar a suíte canônica e conferir a linha CS_05", "PRE_OS para EMP_ID=002", "Linhas CS_05 no resultado", "Costura o segundo passo do fluxo nominal", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_06", "AUTO", "Validar terceira emissão apontando para C", "Executar a suíte canônica e conferir a linha CS_06", "PRE_OS para EMP_ID=003", "Linhas CS_06 no resultado", "Fecha o núcleo nominal do item canônico", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_07", "AUTO", "Validar bloqueio total sem travamento", "Executar a suíte canônica e conferir a linha CS_07", "SEM_CREDENCIADOS_APTOS sem nova PRE_OS", "Linhas CS_07 no resultado", "É o teste mais crítico de aptidão do item canônico", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_08", "AUTO", "Validar retomada correta após conclusão da OS", "Executar a suíte canônica e conferir a linha CS_08", "Nova PRE_OS para EMP_ID=001", "Linhas CS_08 no resultado", "Prova que a fila retoma do ponto certo", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_22", "AUTO", "Validar associação preservada em emissões múltiplas", "Aguardando próximo lote da suíte canônica", "ATIV_ID e SERV_ID corretos em todas as emissões", "Catálogo e plano da sprint", "Fecha a proteção contra regressão de associação atividade/serviço", "PLANEJADO"
     TV2_AddRoteiro ws, nr, "STR_001", "AUTO", "Validar repeticao deterministica do rodizio", "Executar Stress deterministico e acompanhar somente se houver falha", "Fila sem duplicidade e em ordem integra apos cada iteracao", "Linhas STR_001 no resultado", "Captura degradacao estrutural em lote", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "ASS_001", "ASSISTIDO", "Acompanhar visualmente o smoke assistido", "Executar a opcao 2 da central V2 e observar a tela durante toda a execucao", "Menu principal fechado; status bar evoluindo; aba de resultado assumindo o foco ao final", "Fechamento do menu, transicao para planilha e feedback visual", "Prova que o operador consegue assistir ao smoke sem interferencia do formulario", "ASSISTIDO"
     TV2_AddRoteiro ws, nr, "ASS_002", "ASSISTIDO", "Acompanhar visualmente o stress assistido", "Executar a opcao 4 da central V2 e acompanhar apenas o giro da fila e a abertura do resultado ao final", "Sem erro fatal; resultados STR_001 visiveis; menu principal fechado durante toda a bateria", "Status bar, aba RESULTADO_QA_V2 e ausencia do formulario do menu", "Permite homologacao assistida do lote deterministico", "ASSISTIDO"
@@ -1338,7 +1406,7 @@ Private Function TV2_AcumularFalhaEstrutural(ByVal atual As String, ByVal trecho
     End If
 End Function
 
-Private Function TV2_ValorUnitServico(ByVal ativId As String, ByVal servId As String) As Currency
+Public Function TV2_ValorUnitServico(ByVal ativId As String, ByVal servId As String) As Currency
     Dim ws As Worksheet
     Dim linha As Long
 
