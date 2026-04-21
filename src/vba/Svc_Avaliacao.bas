@@ -45,6 +45,11 @@ Public Function AvaliarOS( _
 
     ' 2. Validar STATUS (critério 33)
     If os.STATUS_OS <> STATUS_OS_EXEC Then
+        RegistrarEvento _
+            EVT_VALIDACAO_REJEITADA, ENT_OS, OS_ID, _
+            "OPERACAO=AVALIAR; STATUS=" & os.STATUS_OS, _
+            "REJEITADA; MOTIVO=STATUS_INVALIDO", _
+            "Svc_Avaliacao"
         res.Sucesso = False
         res.Mensagem = "OS nao pode ser avaliada. STATUS=" & os.STATUS_OS
         AvaliarOS = res
@@ -137,6 +142,15 @@ Public Function AvaliarOS( _
     End If
 
     ' 9. Auditoria (critério 37)
+    RegistrarEvento _
+        EVT_AVALIACAO, ENT_OS, OS_ID, _
+        "STATUS=EM_EXECUCAO", _
+        "MEDIA=" & Format$(media, "0.00") & _
+        "; AVALIADOR=" & avaliador & _
+        "; QT_EXEC=" & CStr(QtExecutada) & _
+        "; NOTA_MIN=" & Format$(notaMin, "0.00"), _
+        "Svc_Avaliacao"
+
     RegistrarEvento _
         EVT_OS_FECHADA, ENT_OS, OS_ID, _
         "STATUS=EM_EXECUCAO", _

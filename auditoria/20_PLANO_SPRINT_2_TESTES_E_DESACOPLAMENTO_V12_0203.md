@@ -28,7 +28,9 @@ Status atual:
 - implementação iniciada e primeiro lote já executável na branch `codex/v12-0-0203-governanca-testes`
 - lote de suspensão inicial (`CS_11` e `CS_13`) já validado em workbook
 - segundo lote (`CS_14`, `CS_16` e `CS_20`) já validado em workbook
-- terceiro lote (`CS_17`) aberto como teste de vida do giro longo na mesma branch
+- terceiro lote (`CS_17`) já validado como teste de vida do giro longo
+- `CS_18` já validado para transições inválidas de OS concluída
+- `CS_21` já validado para completude mínima das famílias críticas do `AUDIT_LOG`
 
 Objetivo:
 
@@ -83,6 +85,10 @@ Critério de aceite:
 
 ### A2. Transições inválidas de OS concluída
 
+Status atual:
+
+- `CS_18` incorporado e validado em workbook
+
 Criar cenário automatizado para provar:
 
 - OS concluída não pode ser reavaliada
@@ -110,6 +116,11 @@ Critério de aceite:
 
 ### A4. Completude do `AUDIT_LOG`
 
+Status atual:
+
+- `CS_21` incorporado e validado em workbook
+- `TESTE_TRILHA` e `AUDIT_TESTES` abertos como trilha cumulativa própria da suíte
+
 Criar cenário para provar que eventos críticos realmente deixam rastro:
 
 - emissão de Pre-OS
@@ -123,6 +134,24 @@ Critério de aceite:
 
 - suíte automatizada valida presença mínima de eventos esperados
 - comparação por tipo de evento, não apenas por contagem bruta
+
+### A5. Trilha cumulativa própria da suíte
+
+Status atual:
+
+- entregue com as abas `TESTE_TRILHA` e `AUDIT_TESTES`
+
+Objetivo:
+
+- preservar a narrativa cumulativa da execução V2
+- congelar, por cenário, o `AUDIT_LOG` operacional antes do reset determinístico
+- separar evidência da suíte de auditoria operacional do negócio
+
+Critério de aceite:
+
+- cada assert V2 gera linha sequencial em `TESTE_TRILHA`
+- cada cenário capturado gera espelho congelado em `AUDIT_TESTES`
+- `RPT_TESTES_V2` consegue explicar a diferença entre `AUDIT_LOG` operacional e trilha de execução
 
 ## Frente B — Ampliação dos cenários já existentes
 
@@ -211,6 +240,7 @@ A Sprint 2 deve ser considerada concluída quando:
 3. uma fatia concreta de lógica tiver saído do `Menu_Principal.frm`
 4. a Bateria Oficial e a V2 continuarem verdes após a ampliação
 5. a família `CS_*` já tiver pelo menos um lote executável e determinístico
+6. a trilha cumulativa `TESTE_TRILHA` / `AUDIT_TESTES` estiver funcionando sem quebrar o reset determinístico
 
 ## Resultado esperado
 

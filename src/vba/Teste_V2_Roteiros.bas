@@ -289,7 +289,10 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
     Dim qtdPreDepois As Long
     Dim descServico As String
     Dim resPre As TResult
+    Dim resRec As TResult
+    Dim resExp As TResult
     Dim resOs As TResult
+    Dim resCanc As TResult
     Dim resAval As TResult
     Dim preosIdA As String
     Dim osIdA As String
@@ -350,9 +353,36 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
     Dim auditFechaDepois17 As Long
     Dim obtido17 As String
     Dim ok17 As Boolean
+    Dim auditRejAntes As Long
+    Dim auditRejDepois As Long
+    Dim obtido18 As String
+    Dim ok18 As Boolean
+    Dim auditPreEmitAntes21 As Long
+    Dim auditPreEmitDepois21 As Long
+    Dim auditPreRecAntes21 As Long
+    Dim auditPreRecDepois21 As Long
+    Dim auditPreExpAntes21 As Long
+    Dim auditPreExpDepois21 As Long
+    Dim auditOsEmitAntes21 As Long
+    Dim auditOsEmitDepois21 As Long
+    Dim auditAvalAntes21 As Long
+    Dim auditAvalDepois21 As Long
+    Dim auditFechAntes21 As Long
+    Dim auditFechDepois21 As Long
+    Dim auditSuspAntes21 As Long
+    Dim auditSuspDepois21 As Long
+    Dim auditInatAntes21 As Long
+    Dim auditInatDepois21 As Long
+    Dim auditTransAntes21 As Long
+    Dim auditTransDepois21 As Long
+    Dim resRollback As TResult
+    Dim obtido21 As String
+    Dim ok21 As Boolean
+    Dim senhaFalhaAba As String
 
     On Error GoTo falha
 
+    senhaFalhaAba = "TV2_CAN_AUDIT"
     TV2_InitExecucao "CANONICO", visual
 
     TV2_PrepararCenarioTriploCanonico
@@ -719,6 +749,35 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
                   "Prova a volta ao início da fila em ciclo longo sem travamento", _
                   ok17
 
+    TV2_CS_PrepararEstadoAteCS04 preosIdA, osIdA
+    TV2_PreencherNotas notas, 8
+    resAval = AvaliarOS(osIdA, "QA CANONICO", notas, 1, "CS_18_CONCLUIR_A", "", Date + 1, Date + 7)
+    auditRejAntes = TV2_AuditCount("Validacao Rejeitada")
+    resAval2 = AvaliarOS(osIdA, "QA CANONICO", notas, 1, "CS_18_REAVALIAR_A", "", Date + 2, Date + 8)
+    resCanc = CancelarOS(osIdA, "CS_18_CANCELAR_OS_CONCLUIDA")
+    auditRejDepois = TV2_AuditCount("Validacao Rejeitada")
+    obtido18 = "SUCESSO_AVAL_1=" & CStr(resAval.Sucesso) & _
+               "; SUCESSO_AVAL_2=" & CStr(resAval2.Sucesso) & _
+               "; MSG_AVAL_2=" & resAval2.Mensagem & _
+               "; SUCESSO_CANCEL=" & CStr(resCanc.Sucesso) & _
+               "; MSG_CANCEL=" & resCanc.Mensagem & _
+               "; STATUS_OS=" & TV2_StatusOS(osIdA) & _
+               "; AUDIT_REJEICAO=" & CStr(auditRejDepois - auditRejAntes)
+    ok18 = resAval.Sucesso
+    ok18 = ok18 And TV2_StatusOS(osIdA) = "CONCLUIDA"
+    ok18 = ok18 And Not resAval2.Sucesso
+    ok18 = ok18 And InStr(1, resAval2.Mensagem, "STATUS=CONCLUIDA", vbTextCompare) > 0
+    ok18 = ok18 And Not resCanc.Sucesso
+    ok18 = ok18 And InStr(1, resCanc.Mensagem, "STATUS=CONCLUIDA", vbTextCompare) > 0
+    ok18 = ok18 And TV2_StatusOS(osIdA) = "CONCLUIDA"
+    ok18 = ok18 And (auditRejDepois - auditRejAntes) = 2
+    TV2_LogAssert "CANONICO", "CS_18", "AUTO", _
+                  "Validar transições inválidas de OS concluída", _
+                  "Reavaliação e cancelamento rejeitados; OS permanece CONCLUIDA", _
+                  obtido18, _
+                  "Fecha regressão de estado e torna a rejeição auditável", _
+                  ok18
+
     TV2_PrepararCenarioTriploCanonico
     empA = LerEmpresa("001", linhaEmpA)
     auditInatAntes = TV2_AuditCount("Empresa Inativada", "STATUS=INATIVA")
@@ -748,10 +807,94 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
                   "Isola o efeito do status global INATIVA no item canônico", _
                   ok20
 
+    TV2_PrepararCenarioTriploCanonico
+    auditPreEmitAntes21 = TV2_AuditCount("Pre-OS Emitida")
+    auditPreRecAntes21 = TV2_AuditCount("Pre-OS Recusada")
+    auditPreExpAntes21 = TV2_AuditCount("Pre-OS Expirada")
+    auditOsEmitAntes21 = TV2_AuditCount("OS Emitida")
+    auditAvalAntes21 = TV2_AuditCount("Avaliacao Registrada")
+    auditFechAntes21 = TV2_AuditCount("OS Fechada/Avaliada", "STATUS=CONCLUIDA")
+    auditSuspAntes21 = TV2_AuditCount("Empresa Suspensa", "STATUS=SUSPENSA_GLOBAL")
+    auditInatAntes21 = TV2_AuditCount("Empresa Inativada", "STATUS=INATIVA")
+    auditTransAntes21 = TV2_AuditCount("Rollback/Transacao")
+
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    preosIdA = resPre.IdGerado
+    resRec = RecusarPreOS(preosIdA, "CS_21_RECUSA_A")
+
+    resPre2 = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    preosIdB = resPre2.IdGerado
+    resExp = ExpirarPreOS(preosIdB)
+
+    resPre3 = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    preosIdC = resPre3.IdGerado
+    resOs = EmitirOS(preosIdC, Date + 7, "EMP-CS-21-C")
+    osIdC = resOs.IdGerado
+    TV2_PreencherNotas notas, 4
+    resAval = AvaliarOS(osIdC, "QA CANONICO", notas, 1, "CS_21_NOTA_BAIXA_C", "", Date + 1, Date + 7)
+
+    empA = LerEmpresa("001", linhaEmpA)
+    GravarStatusEmpresa linhaEmpA, "INATIVA", CDate(0), empA.QTD_RECUSAS
+    RegistrarEvento EVT_INATIVACAO, ENT_EMP, "001", _
+                    "STATUS=" & empA.STATUS_GLOBAL, _
+                    "STATUS=INATIVA; ORIGEM=Teste_V2_Roteiros", _
+                    "Teste_V2_Roteiros"
+
+    TV2_ProtegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
+    resRollback = AvancarFila("002", TV2_AtivCanonA(), True, "CS_21_ROLLBACK")
+    TV2_DesprotegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
+
+    auditPreEmitDepois21 = TV2_AuditCount("Pre-OS Emitida")
+    auditPreRecDepois21 = TV2_AuditCount("Pre-OS Recusada")
+    auditPreExpDepois21 = TV2_AuditCount("Pre-OS Expirada")
+    auditOsEmitDepois21 = TV2_AuditCount("OS Emitida")
+    auditAvalDepois21 = TV2_AuditCount("Avaliacao Registrada")
+    auditFechDepois21 = TV2_AuditCount("OS Fechada/Avaliada", "STATUS=CONCLUIDA")
+    auditSuspDepois21 = TV2_AuditCount("Empresa Suspensa", "STATUS=SUSPENSA_GLOBAL")
+    auditInatDepois21 = TV2_AuditCount("Empresa Inativada", "STATUS=INATIVA")
+    auditTransDepois21 = TV2_AuditCount("Rollback/Transacao")
+
+    obtido21 = "PRE_EMIT=" & CStr(auditPreEmitDepois21 - auditPreEmitAntes21) & _
+               "; PRE_REC=" & CStr(auditPreRecDepois21 - auditPreRecAntes21) & _
+               "; PRE_EXP=" & CStr(auditPreExpDepois21 - auditPreExpAntes21) & _
+               "; OS_EMIT=" & CStr(auditOsEmitDepois21 - auditOsEmitAntes21) & _
+               "; AVAL=" & CStr(auditAvalDepois21 - auditAvalAntes21) & _
+               "; FECH=" & CStr(auditFechDepois21 - auditFechAntes21) & _
+               "; SUSP=" & CStr(auditSuspDepois21 - auditSuspAntes21) & _
+               "; INAT=" & CStr(auditInatDepois21 - auditInatAntes21) & _
+               "; ROLLBACK=" & CStr(auditTransDepois21 - auditTransAntes21) & _
+               "; SUCESSO_REC=" & CStr(resRec.Sucesso) & _
+               "; SUCESSO_EXP=" & CStr(resExp.Sucesso) & _
+               "; SUCESSO_OS=" & CStr(resOs.Sucesso) & _
+               "; SUCESSO_AVAL=" & CStr(resAval.Sucesso) & _
+               "; SUCESSO_RB=" & CStr(resRollback.Sucesso)
+    ok21 = resPre.Sucesso And resRec.Sucesso
+    ok21 = ok21 And resPre2.Sucesso And resExp.Sucesso
+    ok21 = ok21 And resPre3.Sucesso And resOs.Sucesso And resAval.Sucesso
+    ok21 = ok21 And Not resRollback.Sucesso
+    ok21 = ok21 And (auditPreEmitDepois21 - auditPreEmitAntes21) >= 3
+    ok21 = ok21 And (auditPreRecDepois21 - auditPreRecAntes21) = 1
+    ok21 = ok21 And (auditPreExpDepois21 - auditPreExpAntes21) = 1
+    ok21 = ok21 And (auditOsEmitDepois21 - auditOsEmitAntes21) = 1
+    ok21 = ok21 And (auditAvalDepois21 - auditAvalAntes21) = 1
+    ok21 = ok21 And (auditFechDepois21 - auditFechAntes21) = 1
+    ok21 = ok21 And (auditSuspDepois21 - auditSuspAntes21) = 1
+    ok21 = ok21 And (auditInatDepois21 - auditInatAntes21) = 1
+    ok21 = ok21 And (auditTransDepois21 - auditTransAntes21) >= 1
+    TV2_LogAssert "CANONICO", "CS_21", "AUTO", _
+                  "Validar completude mínima do AUDIT_LOG por família", _
+                  "Famílias críticas presentes e capturadas por cenário", _
+                  obtido21, _
+                  "Fecha a lacuna de completude mínima das famílias críticas de evento", _
+                  ok21
+
     TV2_FinalizarExecucao "CANONICO"
     Exit Sub
 
 falha:
+    On Error Resume Next
+    TV2_DesprotegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
+    On Error GoTo 0
     TV2_LogAssert "CANONICO", "FATAL", "AUTO", _
                   "Executar suíte canônica sem erro fatal", _
                   "Nenhum erro fatal", _

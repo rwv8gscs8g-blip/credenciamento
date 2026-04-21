@@ -17,9 +17,12 @@ tratam apenas da linha pública oficial.
 - cenários canônicos `CS_11` e `CS_13` automatizados para validar suspensão manual e reativação automática por prazo vencido
 - cenários canônicos `CS_14`, `CS_16` e `CS_20` automatizados para validar suspensão por nota, retorno ordenado após prazo vencido e filtro cadastral de empresa inativa
 - cenário canônico `CS_17` automatizado para validar giro longo `A,B,C,A,B,C,A` sem travamento e com integridade da fila
+- cenário canônico `CS_18` automatizado para validar transições inválidas de OS concluída com rejeição auditável
+- cenário canônico `CS_21` automatizado para validar completude mínima das famílias críticas do `AUDIT_LOG`
 - cenário `SMK_007` reforçado para validar auditoria mínima de fechamento e ausência de suspensão indevida em avaliação satisfatória
 - relatório imprimível da última execução V2 em `RPT_TESTES_V2`, com impressão opcional
 - área documental `docs/testes/` para padronizar a narrativa humana das baterias de teste
+- trilha cumulativa da suíte V2 em `TESTE_TRILHA` e `AUDIT_TESTES`
 - limpeza opcional dos artefatos anteriores da V1 antes da nova execução
 - fluxo da V1 unificado para um único ponto de impressão e sem exportação lateral no relatório
 - limpeza opcional ampliada para remover artefatos V1/V2 e snapshots `SNAPV2_*`
@@ -38,6 +41,8 @@ tratam apenas da linha pública oficial.
 - `CHECKLIST_136` passa a ser tratada como planilha manual opcional, desacoplada da bateria automatizada
 - modo `ASSISTIDA` da V1 com delay reduzido e rolagem reposicionada para manter a linha atual mais abaixo na tela
 - mensagens finais e relatório da V1 deixam de destacar `MANUAL` quando a execução é 100% automática
+- `Audit_Log` ganha a família `Validacao Rejeitada`
+- `Svc_Avaliacao` passa a registrar `Avaliacao Registrada` de forma explícita e sempre auditável
 
 ## [V12.0.0202] - 2026-04-19
 

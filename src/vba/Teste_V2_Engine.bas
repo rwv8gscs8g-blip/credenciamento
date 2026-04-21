@@ -16,6 +16,8 @@ Public Const TV2_SHEET_CATALOGO As String = "CATALOGO_CENARIOS_V2"
 Public Const TV2_SHEET_HIST As String = "HISTORICO_QA_V2"
 Public Const TV2_SHEET_ROTEIRO As String = "ROTEIRO_ASSISTIDO_V2"
 Public Const TV2_SHEET_RPT As String = "RPT_TESTES_V2"
+Public Const TV2_SHEET_TRILHA As String = "TESTE_TRILHA"
+Public Const TV2_SHEET_AUDIT_TESTES As String = "AUDIT_TESTES"
 
 Public Const TV2_STATUS_OK As String = "OK"
 Public Const TV2_STATUS_FAIL As String = "FALHA"
@@ -36,6 +38,7 @@ Private gTV2Ok As Long
 Private gTV2Fail As Long
 Private gTV2Manual As Long
 Private gTV2SnapshotExecutado As Boolean
+Private gTV2TrailSeq As Long
 
 Private gTV2AtivCanonA As String
 Private gTV2AtivCanonB As String
@@ -51,10 +54,13 @@ Public Sub TV2_InitExecucao(ByVal suite As String, Optional ByVal visual As Bool
     gTV2Fail = 0
     gTV2Manual = 0
     gTV2SnapshotExecutado = False
+    gTV2TrailSeq = 0
 
     TV2_PrepararNavegacaoHumana
     Util_LimparFiltrosAba TV2_EnsureResultadoSheet()
     Util_LimparFiltrosAba TV2_EnsureHistoricoSheet()
+    Util_LimparFiltrosAba TV2_EnsureTrilhaSheet()
+    Util_LimparFiltrosAba TV2_EnsureAuditTestesSheet()
     TV2_GerarCatalogoBase
     TV2_LogInfo suite, "BOOT", "Inicializar a suite V2", "Suite pronta para execucao"
 End Sub
@@ -91,6 +97,8 @@ Public Sub TV2_FinalizarExecucao(ByVal suite As String)
 
     TV2_FormatarResultadoSheet
     TV2_FormatarHistoricoSheet
+    TV2_FormatarTrilhaSheet
+    TV2_FormatarAuditTestesSheet
     TV2_AbrirResultadoExecucao gTV2ExecucaoId
     Application.StatusBar = False
 
@@ -116,9 +124,11 @@ Public Sub TV2_LogAssert( _
     If condicao Then
         gTV2Ok = gTV2Ok + 1
         TV2_LogLinha suite, cenarioId, automacao, objetivo, esperado, obtido, TV2_STATUS_OK, significado, observacao
+        TV2_CapturarAuditOperacional suite, cenarioId, TV2_STATUS_OK
     Else
         gTV2Fail = gTV2Fail + 1
         TV2_LogLinha suite, cenarioId, automacao, objetivo, esperado, obtido, TV2_STATUS_FAIL, significado, observacao
+        TV2_CapturarAuditOperacional suite, cenarioId, TV2_STATUS_FAIL
     End If
 End Sub
 
@@ -173,6 +183,7 @@ Private Sub TV2_LogLinha( _
     ws.Cells(nr, 11).Value = Now
 
     TV2_ApplyStatusColor ws.Cells(nr, 8), statusTeste
+    TV2_AppendTrilha suite, cenarioId, automacao, objetivo, esperado, obtido, statusTeste, significado, observacao
 
     If gTV2Visual Then
         ws.Activate
@@ -180,6 +191,84 @@ Private Sub TV2_LogLinha( _
         Application.StatusBar = "Testes V2: " & suite & " -> " & cenarioId & " = " & statusTeste
         TV2_PausarVisual 1
     End If
+End Sub
+
+Private Sub TV2_AppendTrilha( _
+    ByVal suite As String, _
+    ByVal cenarioId As String, _
+    ByVal automacao As String, _
+    ByVal objetivo As String, _
+    ByVal esperado As String, _
+    ByVal obtido As String, _
+    ByVal statusTeste As String, _
+    ByVal significado As String, _
+    ByVal observacao As String _
+)
+    Dim ws As Worksheet
+    Dim nr As Long
+
+    Set ws = TV2_EnsureTrilhaSheet()
+    nr = TV2_NextRow(ws, 1, 2)
+    gTV2TrailSeq = gTV2TrailSeq + 1
+
+    ws.Cells(nr, 1).Value = gTV2ExecucaoId
+    ws.Cells(nr, 2).Value = gTV2TrailSeq
+    ws.Cells(nr, 3).Value = AppRelease_BuildImportado()
+    ws.Cells(nr, 4).Value = suite
+    ws.Cells(nr, 5).Value = cenarioId
+    ws.Cells(nr, 6).Value = automacao
+    ws.Cells(nr, 7).Value = objetivo
+    ws.Cells(nr, 8).Value = esperado
+    ws.Cells(nr, 9).Value = obtido
+    ws.Cells(nr, 10).Value = statusTeste
+    ws.Cells(nr, 11).Value = significado
+    ws.Cells(nr, 12).Value = observacao
+    ws.Cells(nr, 13).Value = Now
+
+    TV2_ApplyStatusColor ws.Cells(nr, 10), statusTeste
+End Sub
+
+Private Sub TV2_CapturarAuditOperacional( _
+    ByVal suite As String, _
+    ByVal cenarioId As String, _
+    ByVal statusTeste As String _
+)
+    Dim wsSrc As Worksheet
+    Dim wsDst As Worksheet
+    Dim ultSrc As Long
+    Dim nr As Long
+    Dim r As Long
+    Dim ordemEvento As Long
+
+    Set wsSrc = ThisWorkbook.Sheets(SHEET_AUDIT)
+    ultSrc = UltimaLinhaAba(SHEET_AUDIT)
+    If ultSrc < LINHA_DADOS Then Exit Sub
+
+    Set wsDst = TV2_EnsureAuditTestesSheet()
+
+    For r = LINHA_DADOS To ultSrc
+        If Trim$(CStr(wsSrc.Cells(r, COL_AUDIT_ID).Value)) <> "" Then
+            nr = TV2_NextRow(wsDst, 1, 2)
+            ordemEvento = ordemEvento + 1
+
+            wsDst.Cells(nr, 1).Value = gTV2ExecucaoId
+            wsDst.Cells(nr, 2).Value = AppRelease_BuildImportado()
+            wsDst.Cells(nr, 3).Value = suite
+            wsDst.Cells(nr, 4).Value = cenarioId
+            wsDst.Cells(nr, 5).Value = statusTeste
+            wsDst.Cells(nr, 6).Value = ordemEvento
+            wsDst.Cells(nr, 7).Value = wsSrc.Cells(r, COL_AUDIT_ID).Value
+            wsDst.Cells(nr, 8).Value = wsSrc.Cells(r, COL_AUDIT_DT).Value
+            wsDst.Cells(nr, 9).Value = wsSrc.Cells(r, COL_AUDIT_USUARIO).Value
+            wsDst.Cells(nr, 10).Value = wsSrc.Cells(r, COL_AUDIT_TIPO).Value
+            wsDst.Cells(nr, 11).Value = wsSrc.Cells(r, COL_AUDIT_TIPO_DESC).Value
+            wsDst.Cells(nr, 12).Value = wsSrc.Cells(r, COL_AUDIT_ENTIDADE).Value
+            wsDst.Cells(nr, 13).Value = wsSrc.Cells(r, COL_AUDIT_ID_AFETADO).Value
+            wsDst.Cells(nr, 14).Value = wsSrc.Cells(r, COL_AUDIT_ANTES).Value
+            wsDst.Cells(nr, 15).Value = wsSrc.Cells(r, COL_AUDIT_DEPOIS).Value
+            wsDst.Cells(nr, 16).Value = Now
+        End If
+    Next r
 End Sub
 
 Public Sub TV2_AbrirResultado()
@@ -215,6 +304,24 @@ Public Sub TV2_AbrirHistorico()
     TV2_PrepararNavegacaoHumana
     Set ws = TV2_EnsureHistoricoSheet()
     TV2_FormatarHistoricoSheet
+    ws.Activate
+    ws.Range("A2").Select
+End Sub
+
+Public Sub TV2_AbrirTrilha()
+    Dim ws As Worksheet
+    TV2_PrepararNavegacaoHumana
+    Set ws = TV2_EnsureTrilhaSheet()
+    TV2_FormatarTrilhaSheet
+    ws.Activate
+    ws.Range("A2").Select
+End Sub
+
+Public Sub TV2_AbrirAuditTestes()
+    Dim ws As Worksheet
+    TV2_PrepararNavegacaoHumana
+    Set ws = TV2_EnsureAuditTestesSheet()
+    TV2_FormatarAuditTestesSheet
     ws.Activate
     ws.Range("A2").Select
 End Sub
@@ -261,9 +368,9 @@ Public Sub TV2_GerarRelatorioUltimaExecucao()
     Dim execucaoId As String
     Dim wsRpt As Worksheet
     Dim wsHist As Worksheet
-    Dim wsRes As Worksheet
+    Dim wsTrail As Worksheet
     Dim ultHist As Long
-    Dim ultRes As Long
+    Dim ultTrail As Long
     Dim r As Long
     Dim linhaHist As Long
     Dim nr As Long
@@ -277,7 +384,7 @@ Public Sub TV2_GerarRelatorioUltimaExecucao()
 
     Set wsRpt = TV2_EnsureRelatorioSheet()
     Set wsHist = TV2_EnsureHistoricoSheet()
-    Set wsRes = TV2_EnsureResultadoSheet()
+    Set wsTrail = TV2_EnsureTrilhaSheet()
 
     wsRpt.Cells.Clear
 
@@ -312,7 +419,8 @@ Public Sub TV2_GerarRelatorioUltimaExecucao()
 
     wsRpt.Range("A11").Value = "Observação"
     wsRpt.Range("B11").Value = "A suíte V2 reconstrói a base por cenário e limpa a AUDIT_LOG operacional a cada reset determinístico. " & _
-                               "Este relatório preserva a trilha cumulativa humana da execução; a aba AUDIT_LOG mostra apenas o último cenário executado."
+                               "Use TESTE_TRILHA para a narrativa cumulativa da execução e AUDIT_TESTES para o rastro operacional congelado por cenário. " & _
+                               "A aba AUDIT_LOG mostra apenas o último cenário executado."
 
     wsRpt.Range("A13").Value = "EXECUCAO_ID"
     wsRpt.Range("B13").Value = "SUITE"
@@ -327,11 +435,21 @@ Public Sub TV2_GerarRelatorioUltimaExecucao()
     wsRpt.Range("K13").Value = "DATA_HORA"
 
     nr = 14
-    ultRes = wsRes.Cells(wsRes.Rows.Count, 1).End(xlUp).Row
-    For r = 2 To ultRes
-        If Trim$(CStr(wsRes.Cells(r, 1).Value)) = execucaoId Then
-            wsRpt.Cells(nr, 1).Resize(1, 11).Value = wsRes.Cells(r, 1).Resize(1, 11).Value
-            TV2_ApplyStatusColor wsRpt.Cells(nr, 8), CStr(wsRes.Cells(r, 8).Value)
+    ultTrail = wsTrail.Cells(wsTrail.Rows.Count, 1).End(xlUp).Row
+    For r = 2 To ultTrail
+        If Trim$(CStr(wsTrail.Cells(r, 1).Value)) = execucaoId Then
+            wsRpt.Cells(nr, 1).Value = wsTrail.Cells(r, 1).Value
+            wsRpt.Cells(nr, 2).Value = wsTrail.Cells(r, 4).Value
+            wsRpt.Cells(nr, 3).Value = wsTrail.Cells(r, 5).Value
+            wsRpt.Cells(nr, 4).Value = wsTrail.Cells(r, 6).Value
+            wsRpt.Cells(nr, 5).Value = wsTrail.Cells(r, 7).Value
+            wsRpt.Cells(nr, 6).Value = wsTrail.Cells(r, 8).Value
+            wsRpt.Cells(nr, 7).Value = wsTrail.Cells(r, 9).Value
+            wsRpt.Cells(nr, 8).Value = wsTrail.Cells(r, 10).Value
+            wsRpt.Cells(nr, 9).Value = wsTrail.Cells(r, 11).Value
+            wsRpt.Cells(nr, 10).Value = wsTrail.Cells(r, 12).Value
+            wsRpt.Cells(nr, 11).Value = wsTrail.Cells(r, 13).Value
+            TV2_ApplyStatusColor wsRpt.Cells(nr, 8), CStr(wsTrail.Cells(r, 10).Value)
             nr = nr + 1
         End If
     Next r
@@ -395,7 +513,9 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "CS_14", "CANONICO", "COMPLETO", "AUTO", "Suspensão", "Avaliação abaixo da média suspende B", "A com OS aberta; B com OS concluída por nota baixa", "Validar suspensão automática por nota e bloqueio operacional subsequente", "B suspensa; C escolhida; DT_FIM_SUSP preenchida", "Costura avaliação, suspensão e novo rodízio no item canônico", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_16", "CANONICO", "COMPLETO", "AUTO", "Suspensão", "Retorno ordenado de B após fim da suspensão", "B suspensa por nota com prazo vencido; A ainda com OS aberta", "Validar reativação automática sem perda dupla de turno", "Fila volta a 001,002,003; A é pulada por OS aberta; B volta na emissão seguinte", "Prova retorno justo após penalidade temporária", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_17", "CANONICO", "COMPLETO", "AUTO", "Loop", "Giro longo da fila sem travamento", "Base canônica limpa com 7 ciclos completos de emissão, OS e avaliação", "Validar sequência A,B,C,A,B,C,A sem perda de integridade", "7 giros concluídos; fila íntegra; sequência preservada", "É o teste de vida do item canônico", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_18", "CANONICO", "COMPLETO", "AUTO", "Integridade", "OS concluída rejeita novas mutações", "OS concluída com avaliação já registrada", "Validar reavaliação e cancelamento inválidos sem regressão de estado", "Tentativas rejeitadas; OS permanece CONCLUIDA; auditoria registra a rejeição", "Fecha as transições inválidas de OS concluída", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_20", "CANONICO", "COMPLETO", "AUTO", "Cadastro", "Empresa inativa fica fora do rodízio", "Base canônica limpa com A marcada como INATIVA", "Validar filtro cadastral terminal no item canônico", "B escolhida; A inativa; posição preservada", "Isola o efeito do status global INATIVA", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_21", "CANONICO", "COMPLETO", "AUTO", "Auditoria", "Completude mínima das famílias de evento", "Base canônica limpa com fluxo controlado de recusa, expiração, OS, avaliação, suspensão, inativação e rollback", "Validar presença mínima das famílias críticas no AUDIT_LOG", "Famílias críticas presentes e capturadas por cenário", "Fecha a lacuna de completude do Audit_Log", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_22", "CANONICO", "COMPLETO", "AUTO", "Integridade", "Associação da atividade preservada em múltiplas emissões", "Item canônico emitido repetidamente", "Validar vínculo estável entre atividade e serviço", "ATIV_ID e SERV_ID corretos em todas as emissões", "Protege contra regressão de CNAE/CAD_SERV", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "STR_001", "STRESS", "COMPLETO", "AUTO", "Integridade", "Giros repetidos com recusa e conclusao", "Sequencia deterministica de 12 iteracoes", "Verificar invariantes de fila em repeticao", "IDs unicos; ordem relativa integra e posicoes estritamente crescentes", "Captura regressao estrutural em lote", "AUTOMATIZADO_ATUAL", "Executado no stress"
     TV2_AddCatalogo ws, nr, "ASS_001", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do smoke assistido", "Humano acompanha fechamento do menu, status bar e abertura do resultado", "Dar leitura operacional do smoke", "Operador entende o que esta sendo testado", "Suporta homologacao observada", "PREVISTO_V2", "Executar smoke assistido"
@@ -1339,6 +1459,71 @@ Private Function TV2_EnsureRelatorioSheet() As Worksheet
     Set TV2_EnsureRelatorioSheet = ws
 End Function
 
+Private Function TV2_EnsureTrilhaSheet() As Worksheet
+    Dim ws As Worksheet
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Sheets(TV2_SHEET_TRILHA)
+    On Error GoTo 0
+
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        ws.Name = TV2_SHEET_TRILHA
+    End If
+
+    If Trim$(CStr(ws.Cells(1, 1).Value)) = "" Then
+        ws.Cells(1, 1).Value = "EXECUCAO_ID"
+        ws.Cells(1, 2).Value = "ORDEM_EXECUCAO"
+        ws.Cells(1, 3).Value = "BUILD_IMPORTADO"
+        ws.Cells(1, 4).Value = "SUITE"
+        ws.Cells(1, 5).Value = "CENARIO_ID"
+        ws.Cells(1, 6).Value = "AUTOMACAO"
+        ws.Cells(1, 7).Value = "OBJETIVO"
+        ws.Cells(1, 8).Value = "RESULTADO_ESPERADO"
+        ws.Cells(1, 9).Value = "RESULTADO_OBTIDO"
+        ws.Cells(1, 10).Value = "STATUS"
+        ws.Cells(1, 11).Value = "SIGNIFICADO"
+        ws.Cells(1, 12).Value = "OBSERVACAO"
+        ws.Cells(1, 13).Value = "DATA_HORA"
+    End If
+
+    Set TV2_EnsureTrilhaSheet = ws
+End Function
+
+Private Function TV2_EnsureAuditTestesSheet() As Worksheet
+    Dim ws As Worksheet
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Sheets(TV2_SHEET_AUDIT_TESTES)
+    On Error GoTo 0
+
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        ws.Name = TV2_SHEET_AUDIT_TESTES
+    End If
+
+    If Trim$(CStr(ws.Cells(1, 1).Value)) = "" Then
+        ws.Cells(1, 1).Value = "EXECUCAO_ID"
+        ws.Cells(1, 2).Value = "BUILD_IMPORTADO"
+        ws.Cells(1, 3).Value = "SUITE"
+        ws.Cells(1, 4).Value = "CENARIO_ID"
+        ws.Cells(1, 5).Value = "STATUS_TESTE"
+        ws.Cells(1, 6).Value = "ORDEM_EVENTO"
+        ws.Cells(1, 7).Value = "AUDIT_ID"
+        ws.Cells(1, 8).Value = "DATA_EVENTO"
+        ws.Cells(1, 9).Value = "USUARIO"
+        ws.Cells(1, 10).Value = "TIPO"
+        ws.Cells(1, 11).Value = "TIPO_DESCRICAO"
+        ws.Cells(1, 12).Value = "ENTIDADE"
+        ws.Cells(1, 13).Value = "ID_AFETADO"
+        ws.Cells(1, 14).Value = "ANTES"
+        ws.Cells(1, 15).Value = "DEPOIS"
+        ws.Cells(1, 16).Value = "CAPTURADO_EM"
+    End If
+
+    Set TV2_EnsureAuditTestesSheet = ws
+End Function
+
 Private Function TV2_EnsureHistoricoSheet() As Worksheet
     Dim ws As Worksheet
 
@@ -1474,6 +1659,45 @@ Private Sub TV2_FormatarRelatorioSheet()
     TV2_AdicionarBotoes ws
 End Sub
 
+Private Sub TV2_FormatarTrilhaSheet()
+    Dim ws As Worksheet
+    Dim ultima As Long
+
+    Set ws = TV2_EnsureTrilhaSheet()
+    ws.Rows(1).Font.Bold = True
+    ws.Rows(1).Interior.Color = RGB(0, 51, 102)
+    ws.Rows(1).Font.Color = RGB(255, 255, 255)
+    ws.Columns("A:M").EntireColumn.AutoFit
+    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    If ultima >= 1 Then
+        On Error Resume Next
+        If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
+        On Error GoTo 0
+        ws.Range(ws.Cells(1, 1), ws.Cells(ultima, 13)).AutoFilter
+    End If
+    TV2_AdicionarBotoes ws
+End Sub
+
+Private Sub TV2_FormatarAuditTestesSheet()
+    Dim ws As Worksheet
+    Dim ultima As Long
+
+    Set ws = TV2_EnsureAuditTestesSheet()
+    ws.Rows(1).Font.Bold = True
+    ws.Rows(1).Interior.Color = RGB(0, 51, 102)
+    ws.Rows(1).Font.Color = RGB(255, 255, 255)
+    ws.Columns("A:P").EntireColumn.AutoFit
+    ws.Columns("N:O").ColumnWidth = 42
+    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    If ultima >= 1 Then
+        On Error Resume Next
+        If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
+        On Error GoTo 0
+        ws.Range(ws.Cells(1, 1), ws.Cells(ultima, 16)).AutoFilter
+    End If
+    TV2_AdicionarBotoes ws
+End Sub
+
 Private Sub TV2_GerarRoteiroAssistido()
     Dim ws As Worksheet
     Dim nr As Long
@@ -1513,7 +1737,9 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "CS_14", "AUTO", "Validar suspensão automática por nota baixa", "Executar a suíte canônica e conferir a linha CS_14", "B suspensa; C escolhida; DT_FIM_SUSP preenchida", "Linhas CS_14 no resultado", "Liga avaliação abaixo da média ao bloqueio operacional", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_16", "AUTO", "Validar retorno ordenado após suspensão por nota", "Executar a suíte canônica e conferir a linha CS_16", "Fila volta a 001,002,003; A é pulada por OS aberta; B volta na emissão seguinte", "Linhas CS_16 no resultado", "Prova que a suspensão temporária não causa perda dupla de turno", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_17", "AUTO", "Validar giro longo A-B-C sem travamento", "Executar a suíte canônica e conferir a linha CS_17", "Sequência 001,002,003,001,002,003,001 e fila íntegra ao final", "Linhas CS_17 no resultado", "Prova a volta ao início da fila em ciclo longo", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_18", "AUTO", "Validar transições inválidas de OS concluída", "Executar a suíte canônica e conferir a linha CS_18", "Reavaliação e cancelamento rejeitados; OS permanece concluída", "Linhas CS_18 no resultado", "Fecha a defesa contra regressão de estado em OS concluída", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_20", "AUTO", "Validar filtro de empresa inativa no cadastro", "Executar a suíte canônica e conferir a linha CS_20", "A inativa; B escolhida; posição de A preservada", "Linhas CS_20 no resultado", "Isola o efeito do status global INATIVA", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_21", "AUTO", "Validar completude mínima do AUDIT_LOG por família", "Executar a suíte canônica e conferir a linha CS_21", "Famílias críticas presentes no rastro operacional do cenário", "Linhas CS_21 no resultado e AUDIT_TESTES", "Dá cobertura auditável mínima às famílias críticas de evento", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_22", "AUTO", "Validar associação preservada em emissões múltiplas", "Executar a suíte canônica e conferir a linha CS_22", "ATIV_ID e SERV_ID corretos em todas as emissões", "Linhas CS_22 no resultado", "Fecha a proteção contra regressão de associação atividade/serviço", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "STR_001", "AUTO", "Validar repeticao deterministica do rodizio", "Executar Stress deterministico e acompanhar somente se houver falha", "Fila sem duplicidade e em ordem integra apos cada iteracao", "Linhas STR_001 no resultado", "Captura degradacao estrutural em lote", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "ASS_001", "ASSISTIDO", "Acompanhar visualmente o smoke assistido", "Executar a opcao 2 da central V2 e observar a tela durante toda a execucao", "Menu principal fechado; status bar evoluindo; aba de resultado assumindo o foco ao final", "Fechamento do menu, transicao para planilha e feedback visual", "Prova que o operador consegue assistir ao smoke sem interferencia do formulario", "ASSISTIDO"
@@ -1730,7 +1956,7 @@ Private Function TV2_ExecucaoEmFoco() As String
     End If
 
     Select Case UCase$(ws.Name)
-        Case UCase$(TV2_SHEET_RESULTADO), UCase$(TV2_SHEET_HIST)
+        Case UCase$(TV2_SHEET_RESULTADO), UCase$(TV2_SHEET_HIST), UCase$(TV2_SHEET_TRILHA), UCase$(TV2_SHEET_AUDIT_TESTES)
             linhaAtual = ActiveCell.Row
             If linhaAtual >= 2 Then
                 TV2_ExecucaoEmFoco = Trim$(CStr(ws.Cells(linhaAtual, 1).Value))

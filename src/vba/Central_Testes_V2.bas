@@ -24,7 +24,9 @@ Public Sub CT2_AbrirCentral()
         "[6] Abrir roteiro assistido V2" & vbCrLf & _
         "[7] Abrir RESULTADO_QA_V2" & vbCrLf & _
         "[8] Abrir CATALOGO_CENARIOS_V2" & vbCrLf & _
-        "[9] Abrir HISTORICO_QA_V2" & vbCrLf & vbCrLf & _
+        "[9] Abrir HISTORICO_QA_V2" & vbCrLf & _
+        "[10] Abrir TESTE_TRILHA" & vbCrLf & _
+        "[11] Abrir AUDIT_TESTES" & vbCrLf & vbCrLf & _
         "Digite o numero:", _
         "Central de Testes V2", "1"))
 
@@ -49,6 +51,10 @@ Public Sub CT2_AbrirCentral()
             TV2_AbrirCatalogo
         Case "9"
             TV2_AbrirHistorico
+        Case "10"
+            TV2_AbrirTrilha
+        Case "11"
+            TV2_AbrirAuditTestes
         Case Else
             MsgBox "Opcao invalida.", vbInformation, "Central V2"
     End Select

@@ -19,6 +19,7 @@ Public Enum eTipoEvento
     EVT_CAD_ENT = 13
     EVT_CRED_REMOVIDO = 14
     EVT_TRANSACAO = 15
+    EVT_VALIDACAO_REJEITADA = 16
 End Enum
 
 Public Enum eEntidadeAfetada
@@ -49,6 +50,7 @@ Private Function DescricaoEvento(ByVal tipo As eTipoEvento) As String
         Case EVT_CAD_ENT:        DescricaoEvento = "Cadastro de Entidade"
         Case EVT_CRED_REMOVIDO:  DescricaoEvento = "Credenciamento Removido"
         Case EVT_TRANSACAO:      DescricaoEvento = "Rollback/Transacao"
+        Case EVT_VALIDACAO_REJEITADA: DescricaoEvento = "Validacao Rejeitada"
         Case Else:               DescricaoEvento = "Evento Desconhecido"
     End Select
 End Function

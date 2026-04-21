@@ -177,6 +177,11 @@ Public Function CancelarOS( _
     End If
 
     If statusAtual <> STATUS_OS_EXEC Then
+        RegistrarEvento _
+            EVT_VALIDACAO_REJEITADA, ENT_OS, OS_ID, _
+            "OPERACAO=CANCELAR; STATUS=" & statusAtual, _
+            "REJEITADA; MOTIVO=STATUS_INVALIDO", _
+            "Svc_OS"
         res.Sucesso = False
         res.Mensagem = "OS nao pode ser cancelada. STATUS=" & statusAtual
         CancelarOS = res
