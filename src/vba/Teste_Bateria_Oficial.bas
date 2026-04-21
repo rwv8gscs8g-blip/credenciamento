@@ -713,12 +713,8 @@ Private Sub BA_Bloco5_ExportacaoEReset()
         "Todos os logs da bateria ja estao em TESTE_OFICIAL; relatorio e opcional na Central", _
         "OK=" & gOk & " | FALHA=" & gFail & " | MANUAL=" & gManual
 
-    ' --- RELATORIO: gerar ANTES do reset para preservar dados ---
-    On Error Resume Next
-    Call CTR_GerarRelatorioBateria
-    On Error GoTo 0
-    BA_LogInfo "BO_506_PosRelatorio", "Após tentativa de relatório RPT_BATERIA / CSV", _
-        "Verifique aba RPT_BATERIA e arquivo CSV na pasta do workbook (se gerados)", _
+    BA_LogInfo "BO_506_PosRelatorio", "Relatório humano disponível sob demanda na Central", _
+        "A bateria não força impressão nem exportação adicional durante a execução", _
         "OK=" & gOk & " | FALHA=" & gFail & " | MANUAL=" & gManual
 
     ' --- RESET CONDICIONAL: só executa com confirmação do operador ---

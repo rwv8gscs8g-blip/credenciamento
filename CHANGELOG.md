@@ -20,6 +20,8 @@ tratam apenas da linha pública oficial.
 - cenário `SMK_007` reforçado para validar auditoria mínima de fechamento e ausência de suspensão indevida em avaliação satisfatória
 - relatório imprimível da última execução V2 em `RPT_TESTES_V2`, com impressão opcional
 - área documental `docs/testes/` para padronizar a narrativa humana das baterias de teste
+- limpeza opcional dos artefatos anteriores da V1 antes da nova execução
+- fluxo da V1 unificado para um único ponto de impressão e sem exportação lateral no relatório
 - workflow de governança ampliado para verificar coerência entre versão, status oficial, tag, changelog e pacote de evidências
 - documentação pública da esteira de release e evidência em `docs/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`
 - plano executável da Sprint 2 para fortalecimento incremental dos testes e redução de dependência da interface
@@ -30,6 +32,7 @@ tratam apenas da linha pública oficial.
 - tela `Sobre` do sistema para diferenciar visualmente a release oficial `V12.0.0202` da próxima release alvo `V12.0.0203`
 - tela `Sobre` reduzida para evitar truncamento do `MsgBox` do VBA e exibir o commit exato do pacote importado
 - bateria oficial V1 passa a exportar CSV automático apenas quando houver falhas
+- modo de execução da V1 renomeado na interface para distinguir `RÁPIDA` de `ASSISTIDA`, mantendo a mesma bateria com diferença apenas de pausa visual
 
 ## [V12.0.0202] - 2026-04-19
 

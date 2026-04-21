@@ -182,8 +182,6 @@ Public Sub CTR_GerarRelatorioBateria()
     Dim errN As Long
     Dim errD As String
     Dim errS As String
-    Dim pathCsvFalha As String
-    Dim msgCaminhoCsv As String
     Dim wsSrc As Worksheet
     Dim wsRpt As Worksheet
     Dim ultLinha As Long
@@ -195,9 +193,6 @@ Public Sub CTR_GerarRelatorioBateria()
     Dim r As Long
     Dim status As String
     Dim stMan As String
-    Dim pathCsv As String
-    Dim pathCsvFalhasOk As String
-    Dim msgCsv As String
     Dim resp As Long
     Dim estImp As Boolean
     Dim senImp As String
@@ -341,19 +336,7 @@ Public Sub CTR_GerarRelatorioBateria()
     Err.Clear
     On Error GoTo falha
 
-    pathCsv = CTR_ExportarTesteOficialCSV()
-    pathCsvFalhasOk = CTR_ExportarTesteOficialFalhasCSV()
-
-    If Len(pathCsv) > 0 Then
-        msgCsv = "CSV completo:" & vbCrLf & pathCsv & vbCrLf & vbCrLf
-        If Len(pathCsvFalhasOk) > 0 Then
-            msgCsv = msgCsv & "CSV somente falhas:" & vbCrLf & pathCsvFalhasOk & vbCrLf & vbCrLf
-        End If
-    Else
-        msgCsv = "Não foi possível gravar o CSV (salve a planilha e tente novamente)." & vbCrLf & vbCrLf
-    End If
-
-    resp = MsgBox("Relatório da Bateria na aba " & ABA_RPT_BATERIA & "." & vbCrLf & vbCrLf & msgCsv & _
+    resp = MsgBox("Relatório da Bateria gerado na aba " & ABA_RPT_BATERIA & "." & vbCrLf & vbCrLf & _
                   "Deseja imprimir agora?", vbQuestion + vbYesNo, "Relatório Bateria V12")
 
     If resp = vbYes Then
@@ -363,8 +346,7 @@ Public Sub CTR_GerarRelatorioBateria()
             On Error Resume Next
             wsRpt.PrintOut
             If Err.Number <> 0 Then
-                MsgBox "Impressão indisponível. Use o CSV acima ou Arquivo > Imprimir manualmente." & vbCrLf & vbCrLf & _
-                       "Em caso de erro, encaminhe print para contato@mauriciozanin.com.", vbInformation, "Relatório Bateria V12"
+                MsgBox "Impressão indisponível. Use Arquivo > Imprimir manualmente.", vbInformation, "Relatório Bateria V12"
             End If
             On Error GoTo falha
             Call Util_RestaurarProtecaoAba(wsRpt, estImp, senImp)
@@ -383,24 +365,9 @@ falha:
 
     Application.ScreenUpdating = True
 
-    pathCsvFalha = ""
-    On Error Resume Next
-    pathCsvFalha = CTR_ExportarTesteOficialFalhasCSV()
-    On Error GoTo 0
-
-    If Len(pathCsvFalha) > 0 Then
-        msgCaminhoCsv = pathCsvFalha
-    Else
-        msgCaminhoCsv = "(caminho não disponível)"
-    End If
-
     MsgBox "Erro ao gerar relatório da bateria:" & vbCrLf & vbCrLf & _
            CStr(errN) & " - " & errD & vbCrLf & _
-           "Origem: " & errS & vbCrLf & vbCrLf & _
-           "Um CSV somente falhas foi gerado (se possível) na pasta do arquivo." & vbCrLf & _
-           msgCaminhoCsv & vbCrLf & vbCrLf & _
-           "Caso tenha ocorrido erro, encaminhe print desta mensagem e o CSV para contato@mauriciozanin.com para avaliação." & vbCrLf & _
-           "Planilha e histórico de versões: página inicial do repositório no GitHub.", _
+           "Origem: " & errS, _
            vbExclamation, "Relatório Bateria V12"
 End Sub
 
@@ -1096,6 +1063,5 @@ Private Sub CTR_ColorirResumo(ByVal ws As Worksheet, ByVal startRow As Long, ByV
     ws.Cells(startRow + 2, 2).Font.Bold = True
     ws.Range(ws.Cells(startRow, 1), ws.Cells(startRow + 2, 2)).Borders.LineStyle = xlContinuous
 End Sub
-
 
 

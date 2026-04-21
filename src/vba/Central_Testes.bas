@@ -16,6 +16,10 @@ Private Const ABA_ROTEIRO As String = "ROTEIRO_RAPIDO"
 Private Const ABA_CK136 As String = "CHECKLIST_136"
 Private Const ABA_HIST As String = "HISTORICO_TESTES"
 Private Const ABA_TESTE_OF As String = "RESULTADO_QA"
+Private Const ABA_RPT_ROTEIRO As String = "RPT_ROTEIRO"
+Private Const ABA_RPT_BATERIA As String = "RPT_BATERIA"
+Private Const ABA_RPT_CK136 As String = "RPT_CK136"
+Private Const ABA_RPT_CONSOLIDADO As String = "RPT_CONSOLIDADO"
 Private Const RR_TOTAL As Long = 16
 Private Const RR_L1PASSO As Long = 4
 Private Const CT_CK_MAX_LINHAS As Long = 200
@@ -112,13 +116,22 @@ Private Sub CT_IniciarBateria()
 
     If MsgBox("Executar a BATERIA OFICIAL completa?" & vbCrLf & vbCrLf & _
               "Durante a execução, o Menu Principal será recolhido." & vbCrLf & _
-              "Acompanhe pela barra inferior do Excel (macroprocesso em execução) e pela planilha TESTE_OFICIAL." & vbCrLf & vbCrLf & _
-              "Ao final, um CSV de resultados será gerado (se possível).", _
+              "Acompanhe pela barra inferior do Excel (macroprocesso em execução) e pela planilha RESULTADO_QA.", _
               vbQuestion + vbYesNo, "Bateria Oficial V12") = vbNo Then Exit Sub
 
+    If MsgBox("Deseja limpar os testes anteriores?" & vbCrLf & vbCrLf & _
+              "Isso limpa os artefatos de teste da V1:" & vbCrLf & _
+              "- RESULTADO_QA" & vbCrLf & _
+              "- CHECKLIST_136" & vbCrLf & _
+              "- HISTORICO_TESTES" & vbCrLf & _
+              "- relatórios RPT_*", _
+              vbQuestion + vbYesNo, "Limpeza Pré-Teste V12") = vbYes Then
+        CT_LimparArtefatosTesteV1
+    End If
+
     opModo = MsgBox("Escolha o modo de execução:" & vbCrLf & vbCrLf & _
-                    "SIM  = LENTA (mais fácil de acompanhar na tela)" & vbCrLf & _
-                    "NÃO  = RÁPIDA" & vbCrLf & _
+                    "SIM  = ASSISTIDA (mesma bateria, mais lenta e mostrando a evolução na tela)" & vbCrLf & _
+                    "NÃO  = RÁPIDA (mesma bateria, sem pausas visuais)" & vbCrLf & _
                     "CANCELAR = não executar agora", _
                     vbQuestion + vbYesNoCancel, "Modo de Execução")
     If opModo = vbCancel Then Exit Sub
@@ -143,9 +156,7 @@ Private Sub CT_IniciarBateria()
     ' Chamada direta para evitar "Metodo ou membro de dados nao encontrado"
     Call RunBateriaOficial
 
-    If MsgBox("Gerar relatório imprimível (e CSV) da bateria?", vbQuestion + vbYesNo, "Central V12") = vbYes Then
-        Call CTR_GerarRelatorioBateria
-    End If
+    Call CTR_GerarRelatorioBateria
     If MsgBox("Abrir o RESULTADO_QA (funil unificado)?", vbQuestion + vbYesNo, "Central V12") = vbYes Then
         Call CT_AbrirResultadoQA
     End If
@@ -160,6 +171,33 @@ falha:
            "Codigo: " & CStr(Err.Number) & vbCrLf & _
            "Origem: " & Err.Source, _
            vbExclamation, "Bateria V12"
+End Sub
+
+Private Sub CT_LimparArtefatosTesteV1()
+    Dim nome As Variant
+    Dim ws As Worksheet
+
+    On Error Resume Next
+    Application.DisplayAlerts = False
+
+    For Each nome In Array(ABA_RPT_ROTEIRO, ABA_RPT_BATERIA, ABA_RPT_CK136, ABA_RPT_CONSOLIDADO)
+        Set ws = Nothing
+        Set ws = ThisWorkbook.Sheets(CStr(nome))
+        If Not ws Is Nothing Then ws.Delete
+    Next nome
+
+    For Each nome In Array(ABA_TESTE_OF, ABA_CK136, ABA_HIST)
+        Set ws = Nothing
+        Set ws = ThisWorkbook.Sheets(CStr(nome))
+        If Not ws Is Nothing Then ws.Cells.Clear
+    Next nome
+
+    Set ws = Nothing
+    Set ws = ThisWorkbook.Sheets(ABA_ROTEIRO)
+    If Not ws Is Nothing Then ws.Cells.Clear
+
+    Application.DisplayAlerts = True
+    On Error GoTo 0
 End Sub
 
 ' ============================================================
@@ -727,6 +765,5 @@ Private Function ObterUsr() As String
     On Error GoTo 0
     If ObterUsr = "" Then ObterUsr = "OPERADOR"
 End Function
-
 
 
