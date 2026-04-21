@@ -6,6 +6,9 @@ Option Explicit
 
 Public Const APP_RELEASE_ATUAL As String = "V12.0.0202"
 Public Const APP_RELEASE_STATUS As String = "VALIDADO"
+Public Const APP_RELEASE_CANAL As String = "DESENVOLVIMENTO"
+Public Const APP_RELEASE_ALVO As String = "V12.0.0203"
+Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0202|DESENVOLVIMENTO|V12.0.0203"
 Public Const APP_RELEASE_TAG As String = "v12.0.0202"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0202"
 Public Const APP_RELEASE_TEST_KEY As String = "bo-2026-04-20+v2-2026-04-20"
@@ -18,6 +21,18 @@ End Function
 
 Public Function AppRelease_Status() As String
     AppRelease_Status = APP_RELEASE_STATUS
+End Function
+
+Public Function AppRelease_Canal() As String
+    AppRelease_Canal = APP_RELEASE_CANAL
+End Function
+
+Public Function AppRelease_Alvo() As String
+    AppRelease_Alvo = APP_RELEASE_ALVO
+End Function
+
+Public Function AppRelease_BuildKey() As String
+    AppRelease_BuildKey = APP_RELEASE_BUILD_KEY
 End Function
 
 Public Function AppRelease_Tag() As String
@@ -57,6 +72,18 @@ End Function
 
 Public Function GetReleaseStatus() As String
     GetReleaseStatus = AppRelease_Status()
+End Function
+
+Public Function GetReleaseCanal() As String
+    GetReleaseCanal = AppRelease_Canal()
+End Function
+
+Public Function GetReleaseAlvo() As String
+    GetReleaseAlvo = AppRelease_Alvo()
+End Function
+
+Public Function GetReleaseBuildKey() As String
+    GetReleaseBuildKey = AppRelease_BuildKey()
 End Function
 
 Public Function GetIteracaoAtual() As String

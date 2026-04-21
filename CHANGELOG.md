@@ -8,6 +8,7 @@ tratam apenas da linha pública oficial.
 ### Adicionado
 
 - contrato explícito de release com tag, diretório de evidência e chave pública de teste em `src/vba/App_Release.bas`
+- camada de versionamento seguro com `release oficial`, `canal ativo`, `próxima release alvo` e `assinatura do build`
 - workflow de governança ampliado para verificar coerência entre versão, status oficial, tag, changelog e pacote de evidências
 - documentação pública da esteira de release e evidência em `docs/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`
 - plano executável da Sprint 2 para fortalecimento incremental dos testes e redução de dependência da interface
@@ -15,6 +16,7 @@ tratam apenas da linha pública oficial.
 ### Alterado
 
 - endurecimento do `verify-docs.yml` para a linha pública pós-lançamento da `V12.0.0202`
+- tela `Sobre` do sistema para diferenciar visualmente a release oficial `V12.0.0202` da próxima release alvo `V12.0.0203`
 
 ## [V12.0.0202] - 2026-04-19
 

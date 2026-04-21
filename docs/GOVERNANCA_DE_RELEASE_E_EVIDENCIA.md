@@ -16,11 +16,41 @@ O arquivo [src/vba/App_Release.bas](../src/vba/App_Release.bas) concentra:
 
 - `APP_RELEASE_ATUAL`
 - `APP_RELEASE_STATUS`
+- `APP_RELEASE_CANAL`
+- `APP_RELEASE_ALVO`
+- `APP_RELEASE_BUILD_KEY`
 - `APP_RELEASE_TAG`
 - `APP_RELEASE_EVIDENCE_DIR`
 - `APP_RELEASE_TEST_KEY`
 
 Essas chaves formam o contrato mínimo da release publicada.
+
+## Regra de versionamento seguro
+
+O projeto distingue explicitamente:
+
+- **release oficial**: última linha pública validada e publicada
+- **canal ativo**: estágio operacional da cópia em uso (`DESENVOLVIMENTO`, `CANDIDATA`, `OFICIAL`)
+- **próxima release alvo**: versão em preparação
+- **assinatura do build**: combinação curta que permite ao operador confirmar visualmente se importou o pacote correto
+
+Exemplo de microevolução segura:
+
+- `APP_RELEASE_ATUAL = V12.0.0202`
+- `APP_RELEASE_STATUS = VALIDADO`
+- `APP_RELEASE_CANAL = DESENVOLVIMENTO`
+- `APP_RELEASE_ALVO = V12.0.0203`
+
+Nesse modelo, a cópia em uso continua ancorada na release pública oficial, mas a interface já informa claramente qual é a próxima versão em trabalho.
+
+O bump da versão oficial só deve acontecer no fechamento do ciclo, quando:
+
+1. a evolução compilar
+2. smoke passar
+3. stress passar
+4. assistido passar
+5. evidências forem publicadas
+6. changelog, release note, status oficial e tag forem atualizados
 
 ## Fonte primária do status oficial
 

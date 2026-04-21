@@ -3551,9 +3551,11 @@ End Sub
 Private Sub Menu_TelaInicial_MostrarSobre()
     Dim msg As String
     msg = "Sistema de controle de rodízio (credenciamento de prestadores)" & vbCrLf & _
-          "Release atual: " & AppRelease_Atual() & vbCrLf & _
-          "Status da release: " & AppRelease_Status() & vbCrLf & _
-          "Iteração ativa: " & AppRelease_Iteracao() & vbCrLf & vbCrLf & _
+          "Release oficial: " & AppRelease_Atual() & vbCrLf & _
+          "Status oficial: " & AppRelease_Status() & vbCrLf & _
+          "Canal ativo: " & AppRelease_Canal() & vbCrLf & _
+          "Próxima release alvo: " & AppRelease_Alvo() & vbCrLf & _
+          "Assinatura do build: " & AppRelease_BuildKey() & vbCrLf & vbCrLf & _
           "Objetivo: garantir rodízio justo, rastreabilidade e operação segura" & vbCrLf & _
           "na emissão de Pre-OS, OS, avaliações e relatórios." & vbCrLf & vbCrLf & _
           "Repositório GitHub:" & vbCrLf & _
@@ -3826,7 +3828,6 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
-
 
 
 
