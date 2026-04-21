@@ -311,6 +311,8 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
     Dim ok14 As Boolean
     Dim ok16 As Boolean
     Dim ok20 As Boolean
+    Dim filaAntesRetorno As String
+    Dim filaDepoisRetorno As String
 
     On Error GoTo falha
 
@@ -592,30 +594,34 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
     osIdC = resOs.IdGerado
     TV2_PreencherNotas notas, 8
     resAval2 = AvaliarOS(osIdC, "QA CANONICO", notas, 1, "CS_16_CONCLUIR_C", "", Date + 2, Date + 8)
+    filaAntesRetorno = TV2_FilaCsv(TV2_AtivCanonA())
     resPre2 = EmitirPreOS("001", TV2_CodServicoA(), 1)
     empB = LerEmpresa("002", linhaEmpB)
     auditReatDepois = TV2_AuditCount("Empresa Reativada", "STATUS=ATIVA")
+    filaDepoisRetorno = TV2_FilaCsv(TV2_AtivCanonA())
     obtido16 = "SUCESSO_AVAL_B=" & CStr(resAval.Sucesso) & _
                "; SUCESSO_PREOS_C=" & CStr(resPre.Sucesso) & _
                "; EMP_PREOS_C=" & TV2_EmpIdPreOS(preosIdC) & _
                "; SUCESSO_OS_C=" & CStr(resOs.Sucesso) & _
                "; SUCESSO_AVAL_C=" & CStr(resAval2.Sucesso) & _
+               "; FILA_ANTES_RETORNO=" & filaAntesRetorno & _
                "; SUCESSO_PREOS_RETORNO=" & CStr(resPre2.Sucesso) & _
                "; EMP_RETORNO=" & TV2_EmpIdPreOS(resPre2.IdGerado) & _
                "; STATUS_B=" & empB.STATUS_GLOBAL & _
                "; DT_FIM_B=" & IIf(TV2_DtFimSuspEmpresa("002") > CDate(0), Format$(TV2_DtFimSuspEmpresa("002"), "dd/mm/yyyy"), "(limpa)") & _
-               "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+               "; FILA_APOS_RETORNO=" & filaDepoisRetorno & _
                "; AUDIT_REAT=" & CStr(auditReatDepois - auditReatAntes)
     ok16 = resAval.Sucesso And resPre.Sucesso And IdsIguais(TV2_EmpIdPreOS(preosIdC), "003")
     ok16 = ok16 And resOs.Sucesso And resAval2.Sucesso
+    ok16 = ok16 And filaAntesRetorno = "001,002,003"
     ok16 = ok16 And resPre2.Sucesso And IdsIguais(TV2_EmpIdPreOS(resPre2.IdGerado), "002")
     ok16 = ok16 And empB.STATUS_GLOBAL = "ATIVA"
     ok16 = ok16 And TV2_DtFimSuspEmpresa("002") = CDate(0)
-    ok16 = ok16 And TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003"
+    ok16 = ok16 And filaDepoisRetorno = "002,003,001"
     ok16 = ok16 And (auditReatDepois - auditReatAntes) = 1
     TV2_LogAssert "CANONICO", "CS_16", "AUTO", _
                   "Validar retorno ordenado após suspensão por nota", _
-                  "C consome o turno livre; B volta na emissão seguinte", _
+                  "Fila volta a 001,002,003; A é pulada por OS aberta; B volta na emissão seguinte", _
                   obtido16, _
                   "Prova que a suspensão temporária não faz a empresa perder o turno duas vezes", _
                   ok16
