@@ -9,6 +9,9 @@ Public Const APP_RELEASE_STATUS As String = "VALIDADO"
 Public Const APP_RELEASE_CANAL As String = "DESENVOLVIMENTO"
 Public Const APP_RELEASE_ALVO As String = "V12.0.0203"
 Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0202|DESENVOLVIMENTO|V12.0.0203"
+Public Const APP_BUILD_IMPORTADO As String = "PACOTE_NAO_CARIMBADO"
+Public Const APP_BUILD_BRANCH As String = "PACOTE_NAO_CARIMBADO"
+Public Const APP_BUILD_GERADO_EM As String = "PACOTE_NAO_CARIMBADO"
 Public Const APP_RELEASE_TAG As String = "v12.0.0202"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0202"
 Public Const APP_RELEASE_TEST_KEY As String = "bo-2026-04-20+v2-2026-04-20"
@@ -33,6 +36,18 @@ End Function
 
 Public Function AppRelease_BuildKey() As String
     AppRelease_BuildKey = APP_RELEASE_BUILD_KEY
+End Function
+
+Public Function AppRelease_BuildImportado() As String
+    AppRelease_BuildImportado = APP_BUILD_IMPORTADO
+End Function
+
+Public Function AppRelease_BuildBranch() As String
+    AppRelease_BuildBranch = APP_BUILD_BRANCH
+End Function
+
+Public Function AppRelease_BuildGeradoEm() As String
+    AppRelease_BuildGeradoEm = APP_BUILD_GERADO_EM
 End Function
 
 Public Function AppRelease_Tag() As String
@@ -84,6 +99,18 @@ End Function
 
 Public Function GetReleaseBuildKey() As String
     GetReleaseBuildKey = AppRelease_BuildKey()
+End Function
+
+Public Function GetBuildImportado() As String
+    GetBuildImportado = AppRelease_BuildImportado()
+End Function
+
+Public Function GetBuildBranch() As String
+    GetBuildBranch = AppRelease_BuildBranch()
+End Function
+
+Public Function GetBuildGeradoEm() As String
+    GetBuildGeradoEm = AppRelease_BuildGeradoEm()
 End Function
 
 Public Function GetIteracaoAtual() As String

@@ -3551,31 +3551,23 @@ End Sub
 Private Sub Menu_TelaInicial_MostrarSobre()
     Dim msg As String
     msg = "Sistema de Credenciamento e Rodízio de Pequenos Reparos"
-    msg = msg & vbCrLf & vbCrLf & "Linha pública source-available, auditável e orientada a evidências"
-    msg = msg & vbCrLf & "para gestão municipal de credenciamento, rodízio, Pre-OS, OS,"
-    msg = msg & vbCrLf & "avaliação de prestadores e rastreabilidade operacional."
+    msg = msg & vbCrLf & vbCrLf & "Linha pública source-available e auditável para gestão municipal"
+    msg = msg & vbCrLf & "de credenciamento, rodízio, Pre-OS, OS e avaliação de prestadores."
     msg = msg & vbCrLf & vbCrLf & "Release oficial: " & AppRelease_Atual()
     msg = msg & vbCrLf & "Status oficial: " & AppRelease_Status()
     msg = msg & vbCrLf & "Canal ativo: " & AppRelease_Canal()
     msg = msg & vbCrLf & "Próxima release alvo: " & AppRelease_Alvo()
-    msg = msg & vbCrLf & "Assinatura do build: " & AppRelease_BuildKey()
+    msg = msg & vbCrLf & "Build importado: " & AppRelease_BuildImportado()
+    msg = msg & vbCrLf & "Origem do build: " & AppRelease_BuildBranch()
+    msg = msg & vbCrLf & "Pacote gerado em: " & AppRelease_BuildGeradoEm()
     msg = msg & vbCrLf & vbCrLf & "Objetivo:"
     msg = msg & vbCrLf & "Promover o rodízio de forma auditável e segura. O sistema escolhe"
     msg = msg & vbCrLf & "a empresa apta da vez e pula quem está inativo, suspenso, com OS"
     msg = msg & vbCrLf & "aberta ou com Pré-OS pendente."
-    msg = msg & vbCrLf & vbCrLf & "Licença pública disponível:"
-    msg = msg & vbCrLf & "TPGL v1.1"
-    msg = msg & vbCrLf & "Modelo: source-available e auditável"
-    msg = msg & vbCrLf & "Conversão automática para Apache License 2.0 após 4 anos"
-    msg = msg & vbCrLf & "Licença:"
-    msg = msg & vbCrLf & "https://github.com/rwv8gscs8g-blip/credenciamento/blob/main/LICENSE"
+    msg = msg & vbCrLf & vbCrLf & "Licença pública: TPGL v1.1 (veja LICENSE no GitHub oficial)"
     msg = msg & vbCrLf & vbCrLf & "Autor: Sérgio Cintra"
     msg = msg & vbCrLf & "Co-autoria, Desenvolvimento e Evolução: Luís Maurício Junqueira Zanin"
-    msg = msg & vbCrLf & vbCrLf & "Repositório GitHub:"
-    msg = msg & vbCrLf & AppRelease_GitHubRepoUrl()
-    msg = msg & vbCrLf & vbCrLf & "Notas de versão:"
-    msg = msg & vbCrLf & AppRelease_GitHubReleaseNotesUrl()
-    msg = msg & vbCrLf & vbCrLf & "Para abrir o repositório use o botão 'GitHub'."
+    msg = msg & vbCrLf & vbCrLf & "Use o botão 'GitHub' para abrir o repositório oficial."
     msg = msg & vbCrLf & "Clique em OK para voltar ao sistema."
 
     MsgBox msg, vbInformation + vbOKOnly, "Sobre"
@@ -3841,7 +3833,6 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
-
 
 
 

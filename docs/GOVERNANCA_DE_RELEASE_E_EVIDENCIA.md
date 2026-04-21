@@ -19,6 +19,9 @@ O arquivo [src/vba/App_Release.bas](../src/vba/App_Release.bas) concentra:
 - `APP_RELEASE_CANAL`
 - `APP_RELEASE_ALVO`
 - `APP_RELEASE_BUILD_KEY`
+- `APP_BUILD_IMPORTADO`
+- `APP_BUILD_BRANCH`
+- `APP_BUILD_GERADO_EM`
 - `APP_RELEASE_TAG`
 - `APP_RELEASE_EVIDENCE_DIR`
 - `APP_RELEASE_TEST_KEY`
@@ -32,7 +35,10 @@ O projeto distingue explicitamente:
 - **release oficial**: última linha pública validada e publicada
 - **canal ativo**: estágio operacional da cópia em uso (`DESENVOLVIMENTO`, `CANDIDATA`, `OFICIAL`)
 - **próxima release alvo**: versão em preparação
-- **assinatura do build**: combinação curta que permite ao operador confirmar visualmente se importou o pacote correto
+- **build importado**: commit exato do pacote levado ao Excel
+- **origem do build**: branch de onde o pacote foi gerado
+- **pacote gerado em**: data e hora do carimbo operacional do pacote
+- **assinatura do build**: combinação curta que mantém legibilidade da linha em evolução
 
 Exemplo de microevolução segura:
 
@@ -40,8 +46,21 @@ Exemplo de microevolução segura:
 - `APP_RELEASE_STATUS = VALIDADO`
 - `APP_RELEASE_CANAL = DESENVOLVIMENTO`
 - `APP_RELEASE_ALVO = V12.0.0203`
+- `APP_BUILD_IMPORTADO = 733782c`
+- `APP_BUILD_BRANCH = codex/v12-0-0203-governanca-testes`
+- `APP_BUILD_GERADO_EM = 2026-04-21 06:03`
 
-Nesse modelo, a cópia em uso continua ancorada na release pública oficial, mas a interface já informa claramente qual é a próxima versão em trabalho.
+Nesse modelo, a cópia em uso continua ancorada na release pública oficial, mas a interface já informa claramente qual é a próxima versão em trabalho e qual commit exato foi importado no Excel.
+
+## Regra do pacote local
+
+O pacote operacional em `local-ai/vba_import/` deve ser gerado a partir de `src/vba/` e carimbar automaticamente:
+
+- commit curto atual
+- branch atual
+- data e hora da geração do pacote
+
+O operador deve sempre reimportar `App_Release.bas` junto com qualquer microevolução que precise de rastreabilidade visual imediata no Excel.
 
 O bump da versão oficial só deve acontecer no fechamento do ciclo, quando:
 
