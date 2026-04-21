@@ -83,19 +83,19 @@ Public Sub RunBateriaOficial()
 
     csvPath = ""
     csvPathFalhas = ""
-    If gRegistrarEmPlanilha Then
+    If gRegistrarEmPlanilha And gFail > 0 Then
         On Error Resume Next
-        csvPath = CTR_ExportarTesteOficialCSV()
         csvPathFalhas = CTR_ExportarTesteOficialFalhasCSV()
         On Error GoTo Erro
     End If
 
     msgFim = "Bateria Oficial concluída. OK=" & gOk & " | FALHA=" & gFail & " | MANUAL=" & gManual
-    If Len(csvPath) > 0 Then
-        msgFim = msgFim & vbCrLf & vbCrLf & "CSV completo:" & vbCrLf & csvPath
-    End If
-    If Len(csvPathFalhas) > 0 Then
+    If gFail = 0 Then
+        msgFim = msgFim & vbCrLf & vbCrLf & "Sem falhas; nenhum CSV exportado."
+    ElseIf Len(csvPathFalhas) > 0 Then
         msgFim = msgFim & vbCrLf & vbCrLf & "CSV somente falhas:" & vbCrLf & csvPathFalhas
+    ElseIf gRegistrarEmPlanilha Then
+        msgFim = msgFim & vbCrLf & vbCrLf & "Falhas encontradas, mas o CSV somente falhas não pôde ser gerado."
     ElseIf Not gRegistrarEmPlanilha Then
         msgFim = msgFim & vbCrLf & vbCrLf & "Obs.: não foi possível registrar em RESULTADO_QA (possível proteção)."
     End If
@@ -126,14 +126,12 @@ Erro:
         "A bateria precisa falhar de forma rastreável"
     BA_AtualizarResumo
     If gRegistrarEmPlanilha Then
-        csvPath = CTR_ExportarTesteOficialCSV()
         csvPathFalhas = CTR_ExportarTesteOficialFalhasCSV()
     End If
     BA_FinalizarExecucao
     MsgBox "Erro fatal na bateria oficial:" & vbCrLf & _
            CStr(fatalNumero) & " - " & fatalDescricao & vbCrLf & _
            "Origem: " & fatalOrigem & _
-           IIf(Len(csvPath) > 0, vbCrLf & vbCrLf & "CSV completo:" & vbCrLf & csvPath, "") & _
            IIf(Len(csvPathFalhas) > 0, vbCrLf & vbCrLf & "CSV somente falhas:" & vbCrLf & csvPathFalhas, ""), _
            vbCritical, "Bateria Oficial"
 End Sub
@@ -2411,4 +2409,3 @@ End Function
 Private Function BA_Pad3(ByVal valor As Variant) As String
     BA_Pad3 = Format$(CLng(Val(valor)), "000")
 End Function
-

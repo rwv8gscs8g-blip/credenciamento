@@ -15,6 +15,7 @@ Public Const TV2_SHEET_RESULTADO As String = "RESULTADO_QA_V2"
 Public Const TV2_SHEET_CATALOGO As String = "CATALOGO_CENARIOS_V2"
 Public Const TV2_SHEET_HIST As String = "HISTORICO_QA_V2"
 Public Const TV2_SHEET_ROTEIRO As String = "ROTEIRO_ASSISTIDO_V2"
+Public Const TV2_SHEET_RPT As String = "RPT_TESTES_V2"
 
 Public Const TV2_STATUS_OK As String = "OK"
 Public Const TV2_STATUS_FAIL As String = "FALHA"
@@ -253,6 +254,101 @@ Public Sub TV2_ExportarUltimaExecucaoCSVs()
         MsgBox "Execucao exportada: " & execucaoId & vbCrLf & vbCrLf & _
                "CSV de falhas:" & vbCrLf & pathCsvFalhas, _
                vbInformation, "Testes V2"
+    End If
+End Sub
+
+Public Sub TV2_GerarRelatorioUltimaExecucao()
+    Dim execucaoId As String
+    Dim wsRpt As Worksheet
+    Dim wsHist As Worksheet
+    Dim wsRes As Worksheet
+    Dim ultHist As Long
+    Dim ultRes As Long
+    Dim r As Long
+    Dim linhaHist As Long
+    Dim nr As Long
+    Dim resp As VbMsgBoxResult
+
+    execucaoId = TV2_ExecucaoEmFoco()
+    If execucaoId = "" Then
+        MsgBox "Nenhuma execucao V2 encontrada para gerar relatorio.", vbInformation, "Testes V2"
+        Exit Sub
+    End If
+
+    Set wsRpt = TV2_EnsureRelatorioSheet()
+    Set wsHist = TV2_EnsureHistoricoSheet()
+    Set wsRes = TV2_EnsureResultadoSheet()
+
+    wsRpt.Cells.Clear
+
+    wsRpt.Range("A1").Value = "RELATÓRIO DA ÚLTIMA EXECUÇÃO V2"
+    wsRpt.Range("A1").Font.Bold = True
+    wsRpt.Range("A1").Font.Size = 16
+    wsRpt.Range("A3").Value = "EXECUÇÃO_ID"
+    wsRpt.Range("B3").Value = execucaoId
+
+    ultHist = wsHist.Cells(wsHist.Rows.Count, 1).End(xlUp).Row
+    For r = 2 To ultHist
+        If Trim$(CStr(wsHist.Cells(r, 1).Value)) = execucaoId Then
+            linhaHist = r
+            Exit For
+        End If
+    Next r
+
+    If linhaHist > 0 Then
+        wsRpt.Range("A4").Value = "SUITE"
+        wsRpt.Range("B4").Value = wsHist.Cells(linhaHist, 2).Value
+        wsRpt.Range("A5").Value = "DATA_HORA"
+        wsRpt.Range("B5").Value = wsHist.Cells(linhaHist, 3).Value
+        wsRpt.Range("A6").Value = "OK"
+        wsRpt.Range("B6").Value = wsHist.Cells(linhaHist, 4).Value
+        wsRpt.Range("A7").Value = "FALHA"
+        wsRpt.Range("B7").Value = wsHist.Cells(linhaHist, 5).Value
+        wsRpt.Range("A8").Value = "MANUAL"
+        wsRpt.Range("B8").Value = wsHist.Cells(linhaHist, 6).Value
+        wsRpt.Range("A9").Value = "OBS_EXPORTACAO"
+        wsRpt.Range("B9").Value = wsHist.Cells(linhaHist, 9).Value
+    End If
+
+    wsRpt.Range("A11").Value = "Observação"
+    wsRpt.Range("B11").Value = "A suíte V2 reconstrói a base por cenário e limpa a AUDIT_LOG operacional a cada reset determinístico. " & _
+                               "Este relatório preserva a trilha cumulativa humana da execução; a aba AUDIT_LOG mostra apenas o último cenário executado."
+
+    wsRpt.Range("A13").Value = "EXECUCAO_ID"
+    wsRpt.Range("B13").Value = "SUITE"
+    wsRpt.Range("C13").Value = "CENARIO_ID"
+    wsRpt.Range("D13").Value = "AUTOMACAO"
+    wsRpt.Range("E13").Value = "OBJETIVO"
+    wsRpt.Range("F13").Value = "RESULTADO_ESPERADO"
+    wsRpt.Range("G13").Value = "RESULTADO_OBTIDO"
+    wsRpt.Range("H13").Value = "STATUS"
+    wsRpt.Range("I13").Value = "SIGNIFICADO"
+    wsRpt.Range("J13").Value = "OBSERVACAO"
+    wsRpt.Range("K13").Value = "DATA_HORA"
+
+    nr = 14
+    ultRes = wsRes.Cells(wsRes.Rows.Count, 1).End(xlUp).Row
+    For r = 2 To ultRes
+        If Trim$(CStr(wsRes.Cells(r, 1).Value)) = execucaoId Then
+            wsRpt.Cells(nr, 1).Resize(1, 11).Value = wsRes.Cells(r, 1).Resize(1, 11).Value
+            TV2_ApplyStatusColor wsRpt.Cells(nr, 8), CStr(wsRes.Cells(r, 8).Value)
+            nr = nr + 1
+        End If
+    Next r
+
+    TV2_FormatarRelatorioSheet
+    wsRpt.Activate
+    wsRpt.Range("A1").Select
+
+    resp = MsgBox("Relatório V2 gerado na aba " & TV2_SHEET_RPT & "." & vbCrLf & vbCrLf & _
+                  "Deseja imprimir agora?", vbQuestion + vbYesNo, "Relatório Testes V2")
+    If resp = vbYes Then
+        On Error Resume Next
+        wsRpt.PrintOut
+        If Err.Number <> 0 Then
+            MsgBox "Não foi possível imprimir. Use Arquivo > Imprimir manualmente.", vbInformation, "Relatório Testes V2"
+        End If
+        On Error GoTo 0
     End If
 End Sub
 
@@ -1228,6 +1324,21 @@ Private Function TV2_EnsureRoteiroSheet() As Worksheet
     Set TV2_EnsureRoteiroSheet = ws
 End Function
 
+Private Function TV2_EnsureRelatorioSheet() As Worksheet
+    Dim ws As Worksheet
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Sheets(TV2_SHEET_RPT)
+    On Error GoTo 0
+
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        ws.Name = TV2_SHEET_RPT
+    End If
+
+    Set TV2_EnsureRelatorioSheet = ws
+End Function
+
 Private Function TV2_EnsureHistoricoSheet() As Worksheet
     Dim ws As Worksheet
 
@@ -1333,6 +1444,32 @@ Private Sub TV2_FormatarHistoricoSheet()
         If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
         On Error GoTo 0
         ws.Range(ws.Cells(1, 1), ws.Cells(ultima, 9)).AutoFilter
+    End If
+    TV2_AdicionarBotoes ws
+End Sub
+
+Private Sub TV2_FormatarRelatorioSheet()
+    Dim ws As Worksheet
+    Dim ultima As Long
+
+    Set ws = TV2_EnsureRelatorioSheet()
+    ws.Columns("A:K").EntireColumn.AutoFit
+    ws.Columns("B:B").ColumnWidth = 45
+    ws.Columns("E:G").ColumnWidth = 40
+    ws.Rows(13).Font.Bold = True
+    ws.Rows(13).Interior.Color = RGB(0, 51, 102)
+    ws.Rows(13).Font.Color = RGB(255, 255, 255)
+    ws.Range("A3:A11").Font.Bold = True
+    ws.Range("A11:B11").WrapText = True
+    ws.Range("A11:B11").Interior.Color = RGB(255, 242, 204)
+    ws.Range("A1:K1").Merge
+    ws.Range("A1:K1").HorizontalAlignment = xlCenter
+    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    If ultima >= 13 Then
+        On Error Resume Next
+        If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
+        On Error GoTo 0
+        ws.Range(ws.Cells(13, 1), ws.Cells(ultima, 11)).AutoFilter
     End If
     TV2_AdicionarBotoes ws
 End Sub
@@ -1486,6 +1623,7 @@ Private Sub TV2_AdicionarBotoes(ByVal ws As Worksheet)
     Dim topPos As Double
     Dim leftMenu As Double
     Dim leftCentral As Double
+    Dim leftReport As Double
     Dim leftCsv As Double
 
     On Error Resume Next
@@ -1497,7 +1635,8 @@ Private Sub TV2_AdicionarBotoes(ByVal ws As Worksheet)
     topPos = ws.Cells(1, TV2_COLUNA_BOTOES_INICIO).Top + 2
     leftMenu = ws.Cells(1, TV2_COLUNA_BOTOES_INICIO).Left
     leftCentral = ws.Cells(1, TV2_COLUNA_BOTOES_INICIO + 3).Left
-    leftCsv = ws.Cells(1, TV2_COLUNA_BOTOES_INICIO + 6).Left
+    leftReport = ws.Cells(1, TV2_COLUNA_BOTOES_INICIO + 6).Left
+    leftCsv = ws.Cells(1, TV2_COLUNA_BOTOES_INICIO + 9).Left
 
     Set b = ws.Shapes.AddShape(msoShapeRoundedRectangle, leftMenu, topPos, 180, 22)
     With b
@@ -1523,7 +1662,19 @@ Private Sub TV2_AdicionarBotoes(ByVal ws As Worksheet)
         .OnAction = "CT2_AbrirCentral"
     End With
 
-    Set b = ws.Shapes.AddShape(msoShapeRoundedRectangle, leftCsv, topPos, 160, 22)
+    Set b = ws.Shapes.AddShape(msoShapeRoundedRectangle, leftReport, topPos, 140, 22)
+    With b
+        .Name = "TV2_BTN_RPT_" & ws.Name
+        .TextFrame2.TextRange.Text = "Gerar Relatório V2"
+        .TextFrame2.TextRange.Font.Size = 9
+        .TextFrame2.TextRange.Font.Bold = msoTrue
+        .TextFrame2.TextRange.ParagraphFormat.Alignment = msoAlignCenter
+        .Fill.ForeColor.RGB = RGB(91, 155, 213)
+        .TextFrame2.TextRange.Font.Fill.ForeColor.RGB = RGB(255, 255, 255)
+        .OnAction = "TV2_GerarRelatorioUltimaExecucao"
+    End With
+
+    Set b = ws.Shapes.AddShape(msoShapeRoundedRectangle, leftCsv, topPos, 150, 22)
     With b
         .Name = "TV2_BTN_CSV_" & ws.Name
         .TextFrame2.TextRange.Text = "Exportar CSV de Falhas"
