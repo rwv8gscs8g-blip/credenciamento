@@ -283,6 +283,16 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
     Dim auditEmissoes As Long
     Dim obtido22 As String
     Dim ok22 As Boolean
+    Dim resSusp As TResult
+    Dim empA As TEmpresa
+    Dim linhaEmpA As Long
+    Dim posA As Long
+    Dim auditSusp As Long
+    Dim auditReat As Long
+    Dim obtido11 As String
+    Dim obtido13 As String
+    Dim ok11 As Boolean
+    Dim ok13 As Boolean
 
     On Error GoTo falha
 
@@ -468,6 +478,61 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
                   obtido22, _
                   "Protege contra regressão de associação atividade/serviço em emissões repetidas", _
                   ok22
+
+    TV2_PrepararCenarioTriploCanonico
+    resSusp = Suspender("001")
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    empA = LerEmpresa("001", linhaEmpA)
+    posA = TV2_PosicaoFila("001", TV2_AtivCanonA())
+    auditSusp = TV2_AuditCount("Empresa Suspensa", "STATUS=SUSPENSA_GLOBAL")
+    obtido11 = "SUCESSO_SUSP=" & CStr(resSusp.Sucesso) & _
+               "; SUCESSO_PREOS=" & CStr(resPre.Sucesso) & _
+               "; EMP_PREOS=" & TV2_EmpIdPreOS(resPre.IdGerado) & _
+               "; STATUS_A=" & empA.STATUS_GLOBAL & _
+               "; DT_FIM_A=" & Format$(empA.DT_FIM_SUSP, "dd/mm/yyyy") & _
+               "; POS_A=" & CStr(posA) & _
+               "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+               "; AUDIT_SUSP=" & CStr(auditSusp)
+    ok11 = resSusp.Sucesso And resPre.Sucesso
+    ok11 = ok11 And IdsIguais(TV2_EmpIdPreOS(resPre.IdGerado), "002")
+    ok11 = ok11 And empA.STATUS_GLOBAL = "SUSPENSA_GLOBAL"
+    ok11 = ok11 And posA = 1 And TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003"
+    ok11 = ok11 And empA.DT_FIM_SUSP > Date And auditSusp = 1
+    TV2_LogAssert "CANONICO", "CS_11", "AUTO", _
+                  "Validar suspensão manual global de A", _
+                  "A suspensa; B escolhida; posição 1 preservada", _
+                  obtido11, _
+                  "Separa aptidão operacional de posição absoluta na fila", _
+                  ok11
+
+    TV2_PrepararCenarioTriploCanonico
+    resSusp = Suspender("001")
+    empA = LerEmpresa("001", linhaEmpA)
+    GravarStatusEmpresa linhaEmpA, "SUSPENSA_GLOBAL", Date - 1, empA.QTD_RECUSAS
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    empA = LerEmpresa("001", linhaEmpA)
+    auditSusp = TV2_AuditCount("Empresa Suspensa", "STATUS=SUSPENSA_GLOBAL")
+    auditReat = TV2_AuditCount("Empresa Reativada", "STATUS=ATIVA")
+    obtido13 = "SUCESSO_SUSP=" & CStr(resSusp.Sucesso) & _
+               "; SUCESSO_PREOS=" & CStr(resPre.Sucesso) & _
+               "; EMP_PREOS=" & TV2_EmpIdPreOS(resPre.IdGerado) & _
+               "; STATUS_A=" & empA.STATUS_GLOBAL & _
+               "; DT_FIM_A=" & IIf(TV2_DtFimSuspEmpresa("001") > CDate(0), Format$(TV2_DtFimSuspEmpresa("001"), "dd/mm/yyyy"), "(limpa)") & _
+               "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+               "; AUDIT_SUSP=" & CStr(auditSusp) & _
+               "; AUDIT_REAT=" & CStr(auditReat)
+    ok13 = resSusp.Sucesso And resPre.Sucesso
+    ok13 = ok13 And IdsIguais(TV2_EmpIdPreOS(resPre.IdGerado), "001")
+    ok13 = ok13 And empA.STATUS_GLOBAL = "ATIVA"
+    ok13 = ok13 And TV2_DtFimSuspEmpresa("001") = CDate(0)
+    ok13 = ok13 And TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003"
+    ok13 = ok13 And auditSusp = 1 And auditReat = 1
+    TV2_LogAssert "CANONICO", "CS_13", "AUTO", _
+                  "Validar reativação automática por prazo vencido", _
+                  "A reativada automaticamente e escolhida na próxima emissão", _
+                  obtido13, _
+                  "Prova o retorno automático sem perda de turno", _
+                  ok13
 
     TV2_FinalizarExecucao "CANONICO"
     Exit Sub

@@ -26,6 +26,7 @@ Status atual:
 
 - proposta aprovada e consolidada em [docs/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md](../docs/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md)
 - implementação iniciada e primeiro lote já executável na branch `codex/v12-0-0203-governanca-testes`
+- lote de suspensão inicial (`CS_11` e `CS_13`) em implementação incremental na mesma branch
 
 Objetivo:
 
