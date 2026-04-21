@@ -20,6 +20,11 @@ Private Const ABA_RPT_ROTEIRO As String = "RPT_ROTEIRO"
 Private Const ABA_RPT_BATERIA As String = "RPT_BATERIA"
 Private Const ABA_RPT_CK136 As String = "RPT_CK136"
 Private Const ABA_RPT_CONSOLIDADO As String = "RPT_CONSOLIDADO"
+Private Const ABA_V2_RESULTADO As String = "RESULTADO_QA_V2"
+Private Const ABA_V2_HIST As String = "HISTORICO_QA_V2"
+Private Const ABA_V2_ROTEIRO As String = "ROTEIRO_ASSISTIDO_V2"
+Private Const ABA_V2_CATALOGO As String = "CATALOGO_CENARIOS_V2"
+Private Const ABA_V2_RELATORIO As String = "RPT_TESTES_V2"
 Private Const RR_TOTAL As Long = 16
 Private Const RR_L1PASSO As Long = 4
 Private Const CT_CK_MAX_LINHAS As Long = 200
@@ -96,7 +101,6 @@ Public Sub CT_AbrirChecklist136()
     Dim ws As Worksheet, nova As Boolean
     Set ws = PegarOuCriarAba(ABA_CK136, nova)
     If nova Then Call MontarChecklist136(ws)
-    Call ImportarResultadosBateria(ws)
     Application.ScreenUpdating = True
     ws.Activate
     ws.Range("H4").Select
@@ -120,11 +124,11 @@ Private Sub CT_IniciarBateria()
               vbQuestion + vbYesNo, "Bateria Oficial V12") = vbNo Then Exit Sub
 
     If MsgBox("Deseja limpar os testes anteriores?" & vbCrLf & vbCrLf & _
-              "Isso limpa os artefatos de teste da V1:" & vbCrLf & _
-              "- RESULTADO_QA" & vbCrLf & _
-              "- CHECKLIST_136" & vbCrLf & _
-              "- HISTORICO_TESTES" & vbCrLf & _
-              "- relatórios RPT_*", _
+              "Isso limpa os artefatos de teste da V1 e V2:" & vbCrLf & _
+              "- RESULTADO_QA / RESULTADO_QA_V2" & vbCrLf & _
+              "- CHECKLIST_136 / ROTEIRO_RAPIDO / HISTORICO_*" & vbCrLf & _
+              "- relatórios RPT_*" & vbCrLf & _
+              "- snapshots SNAPV2_*", _
               vbQuestion + vbYesNo, "Limpeza Pré-Teste V12") = vbYes Then
         CT_LimparArtefatosTesteV1
     End If
@@ -174,31 +178,51 @@ falha:
 End Sub
 
 Private Sub CT_LimparArtefatosTesteV1()
+    Dim idx As Long
     Dim nome As Variant
     Dim ws As Worksheet
+    Dim nomeAba As String
 
     On Error Resume Next
     Application.DisplayAlerts = False
 
-    For Each nome In Array(ABA_RPT_ROTEIRO, ABA_RPT_BATERIA, ABA_RPT_CK136, ABA_RPT_CONSOLIDADO)
-        Set ws = Nothing
-        Set ws = ThisWorkbook.Sheets(CStr(nome))
-        If Not ws Is Nothing Then ws.Delete
-    Next nome
+    For idx = ThisWorkbook.Worksheets.Count To 1 Step -1
+        Set ws = ThisWorkbook.Worksheets(idx)
+        nomeAba = ws.Name
+        If CT_EhArtefatoTeste(nomeAba) Then
+            ws.Delete
+        End If
+    Next idx
 
-    For Each nome In Array(ABA_TESTE_OF, ABA_CK136, ABA_HIST)
+    For Each nome In Array(ABA_TESTE_OF, ABA_CK136, ABA_HIST, ABA_ROTEIRO, ABA_V2_RESULTADO, ABA_V2_HIST, ABA_V2_ROTEIRO, ABA_V2_CATALOGO, ABA_V2_RELATORIO)
         Set ws = Nothing
-        Set ws = ThisWorkbook.Sheets(CStr(nome))
-        If Not ws Is Nothing Then ws.Cells.Clear
+        Set ws = ThisWorkbook.Sheets(nome)
+        If Not ws Is Nothing Then
+            ws.Cells.Clear
+            ws.Cells.ClearFormats
+        End If
     Next nome
-
-    Set ws = Nothing
-    Set ws = ThisWorkbook.Sheets(ABA_ROTEIRO)
-    If Not ws Is Nothing Then ws.Cells.Clear
 
     Application.DisplayAlerts = True
     On Error GoTo 0
 End Sub
+
+Private Function CT_EhArtefatoTeste(ByVal nomeAba As String) As Boolean
+    Select Case UCase$(Trim$(nomeAba))
+        Case UCase$(ABA_ROTEIRO), UCase$(ABA_CK136), UCase$(ABA_HIST), UCase$(ABA_TESTE_OF), _
+             UCase$(ABA_RPT_ROTEIRO), UCase$(ABA_RPT_BATERIA), UCase$(ABA_RPT_CK136), UCase$(ABA_RPT_CONSOLIDADO), _
+             UCase$(ABA_V2_RESULTADO), UCase$(ABA_V2_HIST), UCase$(ABA_V2_ROTEIRO), UCase$(ABA_V2_CATALOGO), UCase$(ABA_V2_RELATORIO)
+            CT_EhArtefatoTeste = True
+            Exit Function
+    End Select
+
+    If Left$(UCase$(nomeAba), 7) = "SNAPV2_" Then
+        CT_EhArtefatoTeste = True
+        Exit Function
+    End If
+
+    CT_EhArtefatoTeste = False
+End Function
 
 ' ============================================================
 ' MENU DE RELATORIOS
@@ -415,13 +439,13 @@ Private Sub MontarChecklist136(ByVal ws As Worksheet)
 
     ws.Range("A1:K1").Merge
     With ws.Range("A1")
-        .Value = "VALIDACAO HUMANA — " & CStr(0) & " linhas (AUTO=0 | MANUAL=0) — ao vivo + CSV — V12"
+        .Value = "BATERIA MANUAL DE APOIO — " & CStr(CT_CK_MAX_LINHAS) & " linhas (uso opcional) — V12"
         .Font.Bold = True: .Font.Size = 13: .HorizontalAlignment = xlCenter
         .Interior.Color = RGB(255, 192, 0): .RowHeight = 30
     End With
     ws.Range("A2:K2").Merge
     With ws.Range("A2")
-        .Value = "Opção 4 na Central: a checklist atualiza linha a linha (EXECUTANDO em azul). Valide na coluna H. CSV é gerado ao fim da bateria e ao gerar relatório."
+        .Value = "Planilha manual opcional. A bateria automatizada V1 usa RESULTADO_QA; esta aba deve ser preenchida apenas em homologação humana dedicada."
         .Font.Italic = True: .Font.Size = 9: .WrapText = True: .RowHeight = 28
     End With
 
@@ -439,7 +463,7 @@ Private Sub MontarChecklist136(ByVal ws As Worksheet)
         Dim rw As Long
         rw = 3 + i
         ws.Cells(rw, 1).Value = i: ws.Cells(rw, 1).HorizontalAlignment = xlCenter
-        ws.Cells(rw, 2).Value = IIf(i <= CT_CK_MAX_LINHAS - 4, "AUTO", "MANUAL"): ws.Cells(rw, 2).HorizontalAlignment = xlCenter
+        ws.Cells(rw, 2).Value = "MANUAL": ws.Cells(rw, 2).HorizontalAlignment = xlCenter
         ws.Cells(rw, 4).Value = "(aguardando bateria)"
         ws.Cells(rw, 7).Value = "PENDENTE": ws.Cells(rw, 7).HorizontalAlignment = xlCenter
         ws.Cells(rw, 8).Value = "PENDENTE": ws.Cells(rw, 8).HorizontalAlignment = xlCenter
@@ -546,7 +570,7 @@ Private Sub CT_AtualizarTituloChecklist136(ByVal ws As Worksheet)
         End If
     Next r
 
-    ws.Range("A1").Value = "VALIDACAO HUMANA — " & CStr(total) & " linhas (AUTO=" & CStr(nAuto) & " | MANUAL=" & CStr(nManual) & ") — ao vivo + CSV — V12"
+    ws.Range("A1").Value = "BATERIA MANUAL DE APOIO — " & CStr(total) & " linhas preenchidas — V12"
 
 sair:
 End Sub
@@ -765,5 +789,3 @@ Private Function ObterUsr() As String
     On Error GoTo 0
     If ObterUsr = "" Then ObterUsr = "OPERADOR"
 End Function
-
-

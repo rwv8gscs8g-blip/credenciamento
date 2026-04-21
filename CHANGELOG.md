@@ -22,6 +22,7 @@ tratam apenas da linha pública oficial.
 - área documental `docs/testes/` para padronizar a narrativa humana das baterias de teste
 - limpeza opcional dos artefatos anteriores da V1 antes da nova execução
 - fluxo da V1 unificado para um único ponto de impressão e sem exportação lateral no relatório
+- limpeza opcional ampliada para remover artefatos V1/V2 e snapshots `SNAPV2_*`
 - workflow de governança ampliado para verificar coerência entre versão, status oficial, tag, changelog e pacote de evidências
 - documentação pública da esteira de release e evidência em `docs/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`
 - plano executável da Sprint 2 para fortalecimento incremental dos testes e redução de dependência da interface
@@ -33,6 +34,10 @@ tratam apenas da linha pública oficial.
 - tela `Sobre` reduzida para evitar truncamento do `MsgBox` do VBA e exibir o commit exato do pacote importado
 - bateria oficial V1 passa a exportar CSV automático apenas quando houver falhas
 - modo de execução da V1 renomeado na interface para distinguir `RÁPIDA` de `ASSISTIDA`, mantendo a mesma bateria com diferença apenas de pausa visual
+- V1 automatizada deixa de sincronizar `CHECKLIST_136` ao vivo e passa a usar apenas `RESULTADO_QA` como saída automática
+- `CHECKLIST_136` passa a ser tratada como planilha manual opcional, desacoplada da bateria automatizada
+- modo `ASSISTIDA` da V1 com delay reduzido e rolagem reposicionada para manter a linha atual mais abaixo na tela
+- mensagens finais e relatório da V1 deixam de destacar `MANUAL` quando a execução é 100% automática
 
 ## [V12.0.0202] - 2026-04-19
 

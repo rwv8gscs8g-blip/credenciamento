@@ -262,16 +262,24 @@ Public Sub CTR_GerarRelatorioBateria()
     wsRpt.Cells(r + 1, 2).Font.Bold = True
     wsRpt.Cells(r + 1, 2).Font.Color = RGB(200, 0, 0)
     
-    wsRpt.Cells(r + 2, 1).Value = "MANUAL:"
-    wsRpt.Cells(r + 2, 2).Value = cManual
-    wsRpt.Cells(r + 2, 2).Font.Bold = True
-    wsRpt.Cells(r + 2, 2).Font.Color = RGB(128, 128, 0)
-    
-    wsRpt.Cells(r + 3, 1).Value = "TOTAL:"
-    wsRpt.Cells(r + 3, 2).Value = cTotal
-    wsRpt.Cells(r + 3, 2).Font.Bold = True
-    
-    wsRpt.Range(wsRpt.Cells(r, 1), wsRpt.Cells(r + 3, 2)).Borders.LineStyle = xlContinuous
+    If cManual > 0 Then
+        wsRpt.Cells(r + 2, 1).Value = "MANUAL:"
+        wsRpt.Cells(r + 2, 2).Value = cManual
+        wsRpt.Cells(r + 2, 2).Font.Bold = True
+        wsRpt.Cells(r + 2, 2).Font.Color = RGB(128, 128, 0)
+
+        wsRpt.Cells(r + 3, 1).Value = "TOTAL:"
+        wsRpt.Cells(r + 3, 2).Value = cTotal
+        wsRpt.Cells(r + 3, 2).Font.Bold = True
+
+        wsRpt.Range(wsRpt.Cells(r, 1), wsRpt.Cells(r + 3, 2)).Borders.LineStyle = xlContinuous
+    Else
+        wsRpt.Cells(r + 2, 1).Value = "TOTAL:"
+        wsRpt.Cells(r + 2, 2).Value = cTotal
+        wsRpt.Cells(r + 2, 2).Font.Bold = True
+
+        wsRpt.Range(wsRpt.Cells(r, 1), wsRpt.Cells(r + 2, 2)).Borders.LineStyle = xlContinuous
+    End If
     
     ' Listar testes com falha
     r = 10
@@ -293,20 +301,22 @@ Public Sub CTR_GerarRelatorioBateria()
         r = r + 1
     End If
     
-    ' Listar testes manuais
-    wsRpt.Cells(r, 1).Value = "TESTES MANUAL_ASSISTIDO (validação humana pendente):"
-    wsRpt.Cells(r, 1).Font.Bold = True
-    r = r + 1
-    
-    For i = 7 To ultLinha
-        stMan = UCase$(Trim$(CStr(wsSrc.Cells(i, 7).Value)))
-        If stMan = "MANUAL_ASSISTIDO" Or stMan = "MANUAL" Then
-            wsRpt.Cells(r, 1).Value = wsSrc.Cells(i, 3).Value
-            wsRpt.Cells(r, 2).Value = wsSrc.Cells(i, 5).Value
-            wsRpt.Cells(r, 1).Interior.Color = RGB(255, 235, 156)
-            r = r + 1
-        End If
-    Next i
+    ' Listar testes manuais apenas se existirem
+    If cManual > 0 Then
+        wsRpt.Cells(r, 1).Value = "TESTES MANUAL_ASSISTIDO (validação humana pendente):"
+        wsRpt.Cells(r, 1).Font.Bold = True
+        r = r + 1
+
+        For i = 7 To ultLinha
+            stMan = UCase$(Trim$(CStr(wsSrc.Cells(i, 7).Value)))
+            If stMan = "MANUAL_ASSISTIDO" Or stMan = "MANUAL" Then
+                wsRpt.Cells(r, 1).Value = wsSrc.Cells(i, 3).Value
+                wsRpt.Cells(r, 2).Value = wsSrc.Cells(i, 5).Value
+                wsRpt.Cells(r, 1).Interior.Color = RGB(255, 235, 156)
+                r = r + 1
+            End If
+        Next i
+    End If
     
     ' Rodape
     r = r + 2
@@ -1063,5 +1073,4 @@ Private Sub CTR_ColorirResumo(ByVal ws As Worksheet, ByVal startRow As Long, ByV
     ws.Cells(startRow + 2, 2).Font.Bold = True
     ws.Range(ws.Cells(startRow, 1), ws.Cells(startRow + 2, 2)).Borders.LineStyle = xlContinuous
 End Sub
-
 

@@ -43,7 +43,7 @@ Private gAtivDescC As String
 
 Public Sub BA_SetModoExecucaoVisual(ByVal execucaoLenta As Boolean)
     If execucaoLenta Then
-        gDelayVisualMs = 1800
+        gDelayVisualMs = 900
     Else
         gDelayVisualMs = 0
     End If
@@ -89,7 +89,7 @@ Public Sub RunBateriaOficial()
         On Error GoTo Erro
     End If
 
-    msgFim = "Bateria Oficial concluída. OK=" & gOk & " | FALHA=" & gFail & " | MANUAL=" & gManual
+    msgFim = "Bateria Oficial concluída. " & BA_ResumoExecucaoTexto()
     If gFail = 0 Then
         msgFim = msgFim & vbCrLf & vbCrLf & "Sem falhas; nenhum CSV exportado."
     ElseIf Len(csvPathFalhas) > 0 Then
@@ -391,11 +391,6 @@ Private Sub BA_Bloco1_CenarioLiteral()
 
     BA_LogAssert "BO_116_AposDoisFluxos_ContagemPreOS", BA_CountLinhas(SHEET_PREOS) = 2, "Duas Pre-OS persistidas no cenario", CStr(BA_CountLinhas(SHEET_PREOS)), "Fluxo completo + fluxo de cancelamento geram duas linhas", "Contar PRE_OS apos BO_120 e BO_121"
     BA_LogAssert "BO_117_AposDoisFluxos_ContagemOS", BA_CountLinhas(SHEET_CAD_OS) = 2, "Duas OS persistidas no cenario", CStr(BA_CountLinhas(SHEET_CAD_OS)), "Uma OS concluida e uma cancelada", "Contar CAD_OS apos BO_120 e BO_121"
-
-    BA_LogManual "BO_130_RelatorioEmpresasPorServico", "Emitir e analisar relatorio de empresas por servico", "Relatorio com dados corretos de cadastro, credenciamento e classificacao", "Validar leitura humana do relatorio de empresas por servico"
-    BA_LogManual "BO_131_RelatorioOSPorEmpresa", "Emitir e analisar relatorio de OS por empresa", "Relatorio com dados corretos de execucao e avaliacao", "Validar leitura humana do relatorio de OS por empresa"
-    BA_LogManual "BO_140_ImpressaoPreOS", "Imprimir Pre-OS do fluxo completo", "Template preenchido corretamente", "Validar impressao e layout humano da Pre-OS"
-    BA_LogManual "BO_150_ImpressaoOS", "Imprimir OS do fluxo completo", "Template preenchido corretamente", "Validar impressao e layout humano da OS"
 
     BA_ResetBaseOperacional
     BA_GarantirBaselineEstrutural
@@ -706,20 +701,20 @@ Private Sub BA_Bloco5_ExportacaoEReset()
         "Aba TESTE_OFICIAL preenchida com resultado detalhado e resumo executivo", _
         "Execução=" & gExecucaoId
     BA_LogInfo "BO_501_ExportarResumoHumano", "Resumo humano consolidado na aba TESTE_OFICIAL", _
-        "Aba TESTE_OFICIAL pode ser usada como trilha de auditoria e checklist humano", _
-        "OK=" & gOk & " | FALHA=" & gFail & " | MANUAL=" & gManual
+        "Aba TESTE_OFICIAL pode ser usada como trilha de auditoria automatizada", _
+        BA_ResumoExecucaoTexto()
 
     BA_LogInfo "BO_505_PreRelatorio", "Checkpoint antes do relatorio impresso/CSV", _
         "Todos os logs da bateria ja estao em TESTE_OFICIAL; relatorio e opcional na Central", _
-        "OK=" & gOk & " | FALHA=" & gFail & " | MANUAL=" & gManual
+        BA_ResumoExecucaoTexto()
 
     BA_LogInfo "BO_506_PosRelatorio", "Relatório humano disponível sob demanda na Central", _
         "A bateria não força impressão nem exportação adicional durante a execução", _
-        "OK=" & gOk & " | FALHA=" & gFail & " | MANUAL=" & gManual
+        BA_ResumoExecucaoTexto()
 
     ' --- RESET CONDICIONAL: só executa com confirmação do operador ---
     Dim respReset As Long
-    respReset = MsgBox("Bateria concluída. OK=" & gOk & " | FALHA=" & gFail & " | MANUAL=" & gManual & vbCrLf & vbCrLf & _
+    respReset = MsgBox("Bateria concluída. " & BA_ResumoExecucaoTexto() & vbCrLf & vbCrLf & _
         "Deseja LIMPAR a base operacional agora?" & vbCrLf & _
         "(Dados de teste serão removidos. A aba RESULTADO_QA será preservada.)", _
         vbQuestion + vbYesNo, "Reset Pós-Bateria V12")
@@ -1140,10 +1135,12 @@ Private Sub BA_InitExecucao()
         On Error Resume Next
 
         ' --- Linha 1: Titulo (merge A1:J1, laranja) ---
+        Application.DisplayAlerts = False
         With ws.Range(ws.Cells(1, 1), ws.Cells(1, 10))
             .UnMerge
             .Merge
         End With
+        Application.DisplayAlerts = True
         With ws.Cells(1, 1)
             .Value = "BATERIA OFICIAL DE TESTES " & ChrW(8212) & " RODIZIO V12"
             .Font.Bold = True
@@ -1269,14 +1266,11 @@ Private Sub BA_InitExecucao()
         ActiveWindow.FreezePanes = True
 
         If gDelayVisualMs > 0 Then Application.ScreenUpdating = True
-        Application.Goto ws.Cells(1, 1), True
+        Application.Goto ws.Cells(1, 1), False
         DoEvents
         On Error GoTo 0
     End If
 
-    On Error Resume Next
-    Call CT_PrepararChecklistParaBateriaAoVivo
-    On Error GoTo 0
 End Sub
 
 Private Sub BA_FormatacaoFinal()
@@ -1309,9 +1303,6 @@ Private Sub BA_FormatacaoFinal()
             Case STATUS_FAIL
                 ' Linha inteira vermelha
                 ws.Range(ws.Cells(r, 1), ws.Cells(r, 10)).Interior.Color = RGB(255, 199, 206)
-            Case STATUS_MANUAL
-                ' Linha inteira amarela
-                ws.Range(ws.Cells(r, 1), ws.Cells(r, 10)).Interior.Color = RGB(255, 235, 156)
             Case Else
                 ' INFO ou vazio: sem cor
         End Select
@@ -1320,8 +1311,7 @@ Private Sub BA_FormatacaoFinal()
     ' --- Resumo no rodape ---
     Dim linhaResumo As Long
     linhaResumo = ultimaLinha + 2
-    ws.Cells(linhaResumo, 1).Value = "RESUMO: " & gOk & " OK | " & gFail & " FALHA | " & _
-        gManual & " MANUAL | TOTAL " & (gOk + gFail + gManual)
+    ws.Cells(linhaResumo, 1).Value = "RESUMO: " & BA_ResumoExecucaoTexto() & " | TOTAL " & (gOk + gFail)
     ws.Cells(linhaResumo, 1).Font.Bold = True
     ws.Cells(linhaResumo, 1).Font.Size = 12
     If gFail > 0 Then
@@ -1426,10 +1416,6 @@ Private Sub BA_LogInfo(ByVal nomeTeste As String, ByVal aplicacao As String, ByV
     BA_Log STATUS_INFO, BA_BlocoDe(nomeTeste), nomeTeste, aplicacao, esperado, obtido, "Registrar marco operacional da auditoria"
 End Sub
 
-Private Sub BA_LogManual(ByVal nomeTeste As String, ByVal aplicacao As String, ByVal esperado As String, ByVal importancia As String)
-    BA_Log STATUS_MANUAL, BA_BlocoDe(nomeTeste), nomeTeste, aplicacao, esperado, "Pendente de validacao humana", importancia
-End Sub
-
 Private Sub BA_Log(ByVal statusTeste As String, ByVal bloco As String, ByVal nomeTeste As String, ByVal aplicacao As String, ByVal esperado As String, ByVal obtido As String, ByVal importancia As String)
     Dim ws As Worksheet
     Dim dh As Date
@@ -1468,11 +1454,6 @@ Private Sub BA_Log(ByVal statusTeste As String, ByVal bloco As String, ByVal nom
             gManual = gManual + 1
     End Select
 
-    ' CHECKLIST_136 desacoplada de TESTE_OFICIAL: sempre registra ao vivo.
-    On Error Resume Next
-    Call CT_BateriaLive_Registrar(nomeTeste, bloco, aplicacao, esperado, obtido, statusTeste, dh)
-    On Error GoTo 0
-
     Debug.Print statusTeste & " | " & nomeTeste & " | " & obtido
 
     ' Atualizar contadores no topo da aba (modo visual ou nao)
@@ -1492,7 +1473,7 @@ Private Sub BA_Log(ByVal statusTeste As String, ByVal bloco As String, ByVal nom
             nomeTeste & " " & ChrW(8212) & " " & statusTeste
 
         ' Colorir linha conforme resultado
-        ' OK: apenas celula STATUS (col G) fica verde; FALHA/MANUAL: linha inteira colorida
+        ' OK: apenas celula STATUS (col G) fica verde; FALHA: linha inteira colorida
         If gRegistrarEmPlanilha And Not ws Is Nothing Then
             Dim corFundo As Long
             Select Case statusTeste
@@ -1502,15 +1483,11 @@ Private Sub BA_Log(ByVal statusTeste As String, ByVal bloco As String, ByVal nom
                 Case STATUS_FAIL
                     corFundo = RGB(255, 199, 206)    ' vermelho claro — linha inteira
                     ws.Range(ws.Cells(gLinhaResultado, 1), ws.Cells(gLinhaResultado, 10)).Interior.Color = corFundo
-                Case STATUS_MANUAL
-                    corFundo = RGB(255, 235, 156)    ' amarelo claro — linha inteira
-                    ws.Range(ws.Cells(gLinhaResultado, 1), ws.Cells(gLinhaResultado, 10)).Interior.Color = corFundo
                 Case Else
                     ' INFO: sem cor (fundo branco padrao)
             End Select
 
-            ' Scroll para linha atual
-            Application.Goto ws.Cells(gLinhaResultado, 1), True
+            BA_PosicionarLinhaVisual ws, gLinhaResultado
         End If
         On Error GoTo 0
 
@@ -1522,6 +1499,31 @@ Private Sub BA_Log(ByVal statusTeste As String, ByVal bloco As String, ByVal nom
     End If
 
     gLinhaResultado = gLinhaResultado + 1
+End Sub
+
+Private Function BA_ResumoExecucaoTexto() As String
+    BA_ResumoExecucaoTexto = "OK=" & gOk & " | FALHA=" & gFail
+    If gManual > 0 Then
+        BA_ResumoExecucaoTexto = BA_ResumoExecucaoTexto & " | MANUAL=" & gManual
+    End If
+End Function
+
+Private Sub BA_PosicionarLinhaVisual(ByVal ws As Worksheet, ByVal linhaAtual As Long)
+    Dim linhasVisiveis As Long
+    Dim scrollRow As Long
+
+    On Error Resume Next
+    ws.Activate
+    linhasVisiveis = ActiveWindow.VisibleRange.Rows.Count
+    If linhasVisiveis <= 0 Then linhasVisiveis = 20
+
+    scrollRow = linhaAtual - (linhasVisiveis - 6)
+    If scrollRow < 1 Then scrollRow = 1
+
+    ActiveWindow.ScrollColumn = 1
+    ActiveWindow.ScrollRow = scrollRow
+    ws.Cells(linhaAtual, 1).Select
+    On Error GoTo 0
 End Sub
 
 Private Function BA_BlocoDe(ByVal nomeTeste As String) As String
