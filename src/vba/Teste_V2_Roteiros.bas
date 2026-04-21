@@ -642,7 +642,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
 
     TV2_PrepararCenarioTriploCanonico
     auditPreAntes17 = TV2_AuditCount("Pre-OS Emitida", "ATIV_ID=" & TV2_AtivCanonA())
-    auditOsAntes17 = TV2_AuditCount("OS Emitida", "ATIV_ID=" & TV2_AtivCanonA())
+    auditOsAntes17 = TV2_AuditCount("OS Emitida")
     auditFechaAntes17 = TV2_AuditCount("OS Fechada/Avaliada", "STATUS=CONCLUIDA")
     TV2_PreencherNotas notas, 8
     For i = 1 To 7
@@ -672,7 +672,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
         End If
     Next i
     auditPreDepois17 = TV2_AuditCount("Pre-OS Emitida", "ATIV_ID=" & TV2_AtivCanonA())
-    auditOsDepois17 = TV2_AuditCount("OS Emitida", "ATIV_ID=" & TV2_AtivCanonA())
+    auditOsDepois17 = TV2_AuditCount("OS Emitida")
     auditFechaDepois17 = TV2_AuditCount("OS Fechada/Avaliada", "STATUS=CONCLUIDA")
     obtido17 = "SEQ=" & seqObtida & _
                "; FILA_FINAL=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
