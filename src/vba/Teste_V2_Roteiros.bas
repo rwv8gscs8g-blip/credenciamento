@@ -391,10 +391,18 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
                   "; MSG=" & resPre.Mensagem & _
                   "; PREOS_ANTES=" & CStr(qtdPreAntes) & _
                   "; PREOS_DEPOIS=" & CStr(qtdPreDepois) & _
+                  "; STATUS_PREOS_A=" & TV2_StatusPreOS(preosIdA) & _
+                  "; STATUS_OS_A=" & TV2_StatusOS(osIdA) & _
+                  "; STATUS_PREOS_B=" & TV2_StatusPreOS(preosIdB) & _
+                  "; STATUS_PREOS_C=" & TV2_StatusPreOS(preosIdC) & _
                   "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()), _
                   "É o teste crítico de não travamento do cenário canônico", _
-                  (Not resPre.Sucesso And qtdPreAntes = 2 And qtdPreDepois = 2 And _
+                  (Not resPre.Sucesso And qtdPreDepois = qtdPreAntes And _
                    InStr(1, resPre.Mensagem, "SEM_CREDENCIADOS_APTOS", vbTextCompare) > 0 And _
+                   TV2_StatusPreOS(preosIdA) = "CONVERTIDA_OS" And _
+                   TV2_StatusOS(osIdA) = "EM_EXECUCAO" And _
+                   TV2_StatusPreOS(preosIdB) = "AGUARDANDO_ACEITE" And _
+                   TV2_StatusPreOS(preosIdC) = "AGUARDANDO_ACEITE" And _
                    TV2_FilaCsv(TV2_AtivCanonA()) = "002,003,001")
 
     TV2_CS_PrepararEstadoAteCS06 preosIdA, osIdA, preosIdB, preosIdC
