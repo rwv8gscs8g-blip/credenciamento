@@ -294,7 +294,7 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "CS_06", "CANONICO", "COMPLETO", "AUTO", "Fluxo nominal", "Terceira emissão aponta para C", "A com OS aberta; B com PRE_OS pendente", "Validar bloqueios acumulados sem mover indevidamente a fila", "PRE_OS para EMP_ID=003", "Fecha o núcleo A -> B -> C do item canônico", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_07", "CANONICO", "COMPLETO", "AUTO", "Bloqueio", "Rodízio bloqueado por falta de aptos", "A com OS aberta; B e C com PRE_OS pendente", "Validar resposta controlada SEM_CREDENCIADOS_APTOS", "Sem nova PRE_OS; fila preservada", "É o teste crítico de não travamento do item canônico", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_08", "CANONICO", "COMPLETO", "AUTO", "Retomada", "Conclusão de A libera nova emissão", "Estado bloqueado do CS_07 com A em OS aberta", "Validar retomada correta após conclusão da OS", "Nova PRE_OS para EMP_ID=001", "Prova que a fila retoma do ponto certo", "AUTOMATIZADO_0203", "Executado na suíte canônica"
-    TV2_AddCatalogo ws, nr, "CS_22", "CANONICO", "COMPLETO", "AUTO", "Integridade", "Associação da atividade preservada em múltiplas emissões", "Item canônico emitido repetidamente", "Validar vínculo estável entre atividade e serviço", "ATIV_ID e SERV_ID corretos em todas as emissões", "Protege contra regressão de CNAE/CAD_SERV", "PLANEJADO_0203", "Implementação prevista para o próximo lote"
+    TV2_AddCatalogo ws, nr, "CS_22", "CANONICO", "COMPLETO", "AUTO", "Integridade", "Associação da atividade preservada em múltiplas emissões", "Item canônico emitido repetidamente", "Validar vínculo estável entre atividade e serviço", "ATIV_ID e SERV_ID corretos em todas as emissões", "Protege contra regressão de CNAE/CAD_SERV", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "STR_001", "STRESS", "COMPLETO", "AUTO", "Integridade", "Giros repetidos com recusa e conclusao", "Sequencia deterministica de 12 iteracoes", "Verificar invariantes de fila em repeticao", "IDs unicos; ordem relativa integra e posicoes estritamente crescentes", "Captura regressao estrutural em lote", "AUTOMATIZADO_ATUAL", "Executado no stress"
     TV2_AddCatalogo ws, nr, "ASS_001", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do smoke assistido", "Humano acompanha fechamento do menu, status bar e abertura do resultado", "Dar leitura operacional do smoke", "Operador entende o que esta sendo testado", "Suporta homologacao observada", "PREVISTO_V2", "Executar smoke assistido"
     TV2_AddCatalogo ws, nr, "ASS_002", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do stress assistido", "Humano acompanha lote deterministico sem precisar abrir o menu", "Dar leitura operacional do stress", "Operador acompanha o teste de repeticao sem perder contexto", "Suporta homologacao observada", "PREVISTO_V2", "Executar stress assistido"
@@ -1047,6 +1047,26 @@ Public Function TV2_AuditContemTrecho(ByVal trecho As String) As Boolean
     Next linha
 End Function
 
+Public Function TV2_AuditCount(Optional ByVal tipoDesc As String = "", Optional ByVal trecho As String = "") As Long
+    Dim ws As Worksheet
+    Dim linha As Long
+    Dim tipoAtual As String
+    Dim textoBusca As String
+
+    Set ws = ThisWorkbook.Sheets(SHEET_AUDIT)
+    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_AUDIT)
+        tipoAtual = Trim$(CStr(ws.Cells(linha, COL_AUDIT_TIPO_DESC).Value))
+        textoBusca = CStr(ws.Cells(linha, COL_AUDIT_ANTES).Value) & " " & _
+                     CStr(ws.Cells(linha, COL_AUDIT_DEPOIS).Value)
+
+        If (tipoDesc = "" Or StrComp(tipoAtual, tipoDesc, vbTextCompare) = 0) Then
+            If trecho = "" Or InStr(1, textoBusca, trecho, vbTextCompare) > 0 Then
+                TV2_AuditCount = TV2_AuditCount + 1
+            End If
+        End If
+    Next linha
+End Function
+
 Public Sub TV2_ProtegerAbaTeste(ByVal nomeAba As String, ByVal senha As String)
     Dim ws As Worksheet
 
@@ -1335,7 +1355,7 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "CS_06", "AUTO", "Validar terceira emissão apontando para C", "Executar a suíte canônica e conferir a linha CS_06", "PRE_OS para EMP_ID=003", "Linhas CS_06 no resultado", "Fecha o núcleo nominal do item canônico", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_07", "AUTO", "Validar bloqueio total sem travamento", "Executar a suíte canônica e conferir a linha CS_07", "SEM_CREDENCIADOS_APTOS sem nova PRE_OS", "Linhas CS_07 no resultado", "É o teste mais crítico de aptidão do item canônico", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_08", "AUTO", "Validar retomada correta após conclusão da OS", "Executar a suíte canônica e conferir a linha CS_08", "Nova PRE_OS para EMP_ID=001", "Linhas CS_08 no resultado", "Prova que a fila retoma do ponto certo", "AUTOMATIZADO"
-    TV2_AddRoteiro ws, nr, "CS_22", "AUTO", "Validar associação preservada em emissões múltiplas", "Aguardando próximo lote da suíte canônica", "ATIV_ID e SERV_ID corretos em todas as emissões", "Catálogo e plano da sprint", "Fecha a proteção contra regressão de associação atividade/serviço", "PLANEJADO"
+    TV2_AddRoteiro ws, nr, "CS_22", "AUTO", "Validar associação preservada em emissões múltiplas", "Executar a suíte canônica e conferir a linha CS_22", "ATIV_ID e SERV_ID corretos em todas as emissões", "Linhas CS_22 no resultado", "Fecha a proteção contra regressão de associação atividade/serviço", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "STR_001", "AUTO", "Validar repeticao deterministica do rodizio", "Executar Stress deterministico e acompanhar somente se houver falha", "Fila sem duplicidade e em ordem integra apos cada iteracao", "Linhas STR_001 no resultado", "Captura degradacao estrutural em lote", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "ASS_001", "ASSISTIDO", "Acompanhar visualmente o smoke assistido", "Executar a opcao 2 da central V2 e observar a tela durante toda a execucao", "Menu principal fechado; status bar evoluindo; aba de resultado assumindo o foco ao final", "Fechamento do menu, transicao para planilha e feedback visual", "Prova que o operador consegue assistir ao smoke sem interferencia do formulario", "ASSISTIDO"
     TV2_AddRoteiro ws, nr, "ASS_002", "ASSISTIDO", "Acompanhar visualmente o stress assistido", "Executar a opcao 4 da central V2 e acompanhar apenas o giro da fila e a abertura do resultado ao final", "Sem erro fatal; resultados STR_001 visiveis; menu principal fechado durante toda a bateria", "Status bar, aba RESULTADO_QA_V2 e ausencia do formulario do menu", "Permite homologacao assistida do lote deterministico", "ASSISTIDO"

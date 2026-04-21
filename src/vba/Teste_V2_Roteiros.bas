@@ -271,7 +271,18 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
     Dim osIdA As String
     Dim preosIdB As String
     Dim preosIdC As String
+    Dim preosId22A As String
+    Dim preosId22B As String
+    Dim preosId22C As String
     Dim notas(1 To 10) As Integer
+    Dim resPre2 As TResult
+    Dim resPre3 As TResult
+    Dim pre22A As TPreOS
+    Dim pre22B As TPreOS
+    Dim pre22C As TPreOS
+    Dim auditEmissoes As Long
+    Dim obtido22 As String
+    Dim ok22 As Boolean
 
     On Error GoTo falha
 
@@ -421,6 +432,42 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
                   "Prova que a fila retoma do ponto correto após resolução parcial do bloqueio", _
                   (resAval.Sucesso And TV2_StatusOS(osIdA) = "CONCLUIDA" And _
                    resPre.Sucesso And IdsIguais(TV2_EmpIdPreOS(resPre.IdGerado), "001"))
+
+    TV2_PrepararCenarioTriploCanonico
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    resPre2 = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    resPre3 = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    preosId22A = resPre.IdGerado
+    preosId22B = resPre2.IdGerado
+    preosId22C = resPre3.IdGerado
+    pre22A = Repo_PreOS.BuscarPorId(preosId22A)
+    pre22B = Repo_PreOS.BuscarPorId(preosId22B)
+    pre22C = Repo_PreOS.BuscarPorId(preosId22C)
+    auditEmissoes = TV2_AuditCount("Pre-OS Emitida", "ATIV_ID=" & TV2_AtivCanonA())
+    obtido22 = "SUCESSO_A=" & CStr(resPre.Sucesso) & _
+               "; SUCESSO_B=" & CStr(resPre2.Sucesso) & _
+               "; SUCESSO_C=" & CStr(resPre3.Sucesso) & _
+               "; PREOS_A=" & preosId22A & _
+               "; PREOS_B=" & preosId22B & _
+               "; PREOS_C=" & preosId22C & _
+               "; A=" & pre22A.ATIV_ID & "|" & pre22A.SERV_ID & "|" & pre22A.STATUS_PREOS & _
+               "; B=" & pre22B.ATIV_ID & "|" & pre22B.SERV_ID & "|" & pre22B.STATUS_PREOS & _
+               "; C=" & pre22C.ATIV_ID & "|" & pre22C.SERV_ID & "|" & pre22C.STATUS_PREOS & _
+               "; COD_A=" & TV2_CodServicoA() & _
+               "; AUDIT_PREOS=" & CStr(auditEmissoes) & _
+               "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA())
+    ok22 = resPre.Sucesso And resPre2.Sucesso And resPre3.Sucesso
+    ok22 = ok22 And IdsIguais(pre22A.ATIV_ID, TV2_AtivCanonA()) And IdsIguais(pre22B.ATIV_ID, TV2_AtivCanonA()) And IdsIguais(pre22C.ATIV_ID, TV2_AtivCanonA())
+    ok22 = ok22 And IdsIguais(pre22A.SERV_ID, "001") And IdsIguais(pre22B.SERV_ID, "001") And IdsIguais(pre22C.SERV_ID, "001")
+    ok22 = ok22 And pre22A.STATUS_PREOS = "AGUARDANDO_ACEITE" And pre22B.STATUS_PREOS = "AGUARDANDO_ACEITE" And pre22C.STATUS_PREOS = "AGUARDANDO_ACEITE"
+    ok22 = ok22 And TV2_CountRows(SHEET_PREOS) = 3 And auditEmissoes = 3
+    ok22 = ok22 And TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003"
+    TV2_LogAssert "CANONICO", "CS_22", "AUTO", _
+                  "Validar associação preservada em emissões múltiplas", _
+                  "ATIV_ID e SERV_ID corretos em todas as emissões", _
+                  obtido22, _
+                  "Protege contra regressão de associação atividade/serviço em emissões repetidas", _
+                  ok22
 
     TV2_FinalizarExecucao "CANONICO"
     Exit Sub

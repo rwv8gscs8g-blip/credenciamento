@@ -25,7 +25,7 @@ Ou seja:
 Status atual:
 
 - proposta aprovada e consolidada em [docs/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md](../docs/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md)
-- implementação iniciada na branch `codex/v12-0-0203-governanca-testes`
+- implementação iniciada e primeiro lote já executável na branch `codex/v12-0-0203-governanca-testes`
 
 Objetivo:
 
@@ -43,7 +43,7 @@ Critério de aceite:
 
 - suíte `CANONICO` executável pela Central V2
 - catálogo e roteiro assistido exibem a família `CS_*`
-- setup canônico, fluxo nominal, bloqueio total e retomada ficam automatizados
+- setup canônico, fluxo nominal, bloqueio total, retomada e integridade de associação ficam automatizados
 - a suíte roda sem regressão no `SMOKE`
 
 ### A1. Expiração de Pre-OS e retomada correta da fila
