@@ -167,7 +167,12 @@ Public Function MontarPayloadAvaliacao( _
     ByVal QtExecutadaTexto As Variant, _
     ByVal ObservacaoTexto As Variant, _
     ByVal JustifTexto As Variant, _
-    ByRef payload As TAvaliacaoPayload _
+    ByRef payloadOSID As String, _
+    ByRef payloadAvaliador As String, _
+    ByRef payloadQtExecutada As Double, _
+    ByRef payloadObservacao As String, _
+    ByRef payloadJustifDivergencia As String, _
+    ByRef payloadMediaNotas As Double _
 ) As TResult
     Dim res As TResult
     Dim i As Long
@@ -180,34 +185,33 @@ Public Function MontarPayloadAvaliacao( _
         Exit Function
     End If
 
-    payload.OS_ID = Trim$(OS_ID)
-    payload.avaliador = Trim$(avaliador)
-    payload.QtExecutada = Util_Conversao.ToDouble(SafeListVal(QtExecutadaTexto))
-    payload.Observacao = SafeListVal(ObservacaoTexto)
-    payload.JustifDivergencia = Funcoes.NormalizarTextoPTBR(SafeListVal(JustifTexto))
+    payloadOSID = Trim$(OS_ID)
+    payloadAvaliador = Trim$(avaliador)
+    payloadQtExecutada = Util_Conversao.ToDouble(SafeListVal(QtExecutadaTexto))
+    payloadObservacao = SafeListVal(ObservacaoTexto)
+    payloadJustifDivergencia = Funcoes.NormalizarTextoPTBR(SafeListVal(JustifTexto))
 
     For i = 1 To 10
-        payload.notas(i) = notas(i)
         soma = soma + notas(i)
     Next i
 
-    payload.MediaNotas = MediaAvaliacaoDeterministica(soma)
+    payloadMediaNotas = MediaAvaliacaoDeterministica(soma)
 
-    If payload.OS_ID = "" Then
+    If payloadOSID = "" Then
         res.Sucesso = False
         res.Mensagem = "OS_ID obrigatorio para montar payload de avaliacao."
         MontarPayloadAvaliacao = res
         Exit Function
     End If
 
-    If payload.avaliador = "" Then
+    If payloadAvaliador = "" Then
         res.Sucesso = False
         res.Mensagem = "Avaliador obrigatorio para montar payload de avaliacao."
         MontarPayloadAvaliacao = res
         Exit Function
     End If
 
-    If payload.QtExecutada <= 0 Then
+    If payloadQtExecutada <= 0 Then
         res.Sucesso = False
         res.Mensagem = "QtExecutada deve ser maior que zero."
         MontarPayloadAvaliacao = res

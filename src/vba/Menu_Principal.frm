@@ -762,7 +762,6 @@ Private Sub EncerraOS_Click()
     On Error GoTo erro_carregamento
     Dim osId As String
     Dim notas(1 To 10) As Integer
-    Dim payload As TAvaliacaoPayload
     Dim mediaLocal As Double
     Dim mediaTexto As String
     Dim qtExec As Double
@@ -783,6 +782,12 @@ Private Sub EncerraOS_Click()
     Dim osAtual As TOS
     Dim dtFechamentoInformado As Variant
     Dim dtPagtoInformado As Variant
+    Dim payloadOSID As String
+    Dim payloadAvaliador As String
+    Dim payloadQtExecutada As Double
+    Dim payloadObservacao As String
+    Dim payloadJustifDivergencia As String
+    Dim payloadMediaNotas As Double
 
     If AV_Lista.ListIndex < 0 Then
         MsgBox "Selecione uma OS para avaliar!", vbExclamation, "Avaliação"
@@ -902,15 +907,27 @@ Private Sub EncerraOS_Click()
 
     avaliador = Trim$(SafeListVal(AVListaCol(1)))
     If avaliador = "" Then avaliador = Trim$(SafeListVal(Desc_entidade))
-    resPayload = MontarPayloadAvaliacao(osId, avaliador, notas, AV_QtHoras.Value, SafeListVal(AV_OBS.Value), justifDiv, payload)
+    resPayload = MontarPayloadAvaliacao( _
+        osId, _
+        avaliador, _
+        notas, _
+        AV_QtHoras.Value, _
+        SafeListVal(AV_OBS.Value), _
+        justifDiv, _
+        payloadOSID, _
+        payloadAvaliador, _
+        payloadQtExecutada, _
+        payloadObservacao, _
+        payloadJustifDivergencia, _
+        payloadMediaNotas)
     If Not resPayload.Sucesso Then
         MsgBox "Erro ao montar payload da avaliação: " & resPayload.Mensagem, vbExclamation, "Avaliação"
         GoTo Limpar
     End If
 
-    qtExec = payload.QtExecutada
-    media = payload.MediaNotas
-    res = AvaliarOS(payload.OS_ID, payload.avaliador, payload.notas, payload.QtExecutada, payload.Observacao, payload.JustifDivergencia, dtFechamentoInformado, dtPagtoInformado, AV_Vl_OS.Value, CStr(AV_N_Empenho.Value))
+    qtExec = payloadQtExecutada
+    media = payloadMediaNotas
+    res = AvaliarOS(payloadOSID, payloadAvaliador, notas, payloadQtExecutada, payloadObservacao, payloadJustifDivergencia, dtFechamentoInformado, dtPagtoInformado, AV_Vl_OS.Value, CStr(AV_N_Empenho.Value))
     If Not res.Sucesso Then
         MsgBox "Erro ao avaliar OS: " & res.mensagem, vbCritical, "Avaliação"
         GoTo Limpar
@@ -938,7 +955,7 @@ Private Sub EncerraOS_Click()
         AvN08 = CStr(AV_Nota8.Value)
         AvN09 = CStr(AV_Nota9.Value)
         AvN10 = CStr(AV_Nota10.Value)
-        AvOb = AV_MontarObservacaoImpressao(CStr(AV_OBS.Value), payload.JustifDivergencia)
+        AvOb = AV_MontarObservacaoImpressao(CStr(AV_OBS.Value), payloadJustifDivergencia)
         On Error GoTo errPrint
         Call PreencherAvaliacaoOS
         Call Imprimir_AvaliacaoOS
@@ -3943,4 +3960,3 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
-
