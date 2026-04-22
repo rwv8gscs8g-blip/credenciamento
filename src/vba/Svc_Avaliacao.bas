@@ -22,7 +22,12 @@ End Function
 
 Public Function MontarDefaultsAvaliacao( _
     ByVal os As TOS, _
-    ByRef defaults As TAvaliacaoDefaults _
+    ByRef osId As String, _
+    ByRef numEmpenho As String, _
+    ByRef dtFechamento As String, _
+    ByRef dtPagamento As String, _
+    ByRef qtExecutada As Double, _
+    ByRef valorExecutado As Currency _
 ) As TResult
     Dim res As TResult
 
@@ -33,20 +38,20 @@ Public Function MontarDefaultsAvaliacao( _
         Exit Function
     End If
 
-    defaults.OS_ID = Trim$(os.OS_ID)
-    defaults.NumEmpenho = Trim$(os.NUM_EMPENHO)
+    osId = Trim$(os.OS_ID)
+    numEmpenho = Trim$(os.NUM_EMPENHO)
     If os.DT_PREV_TERMINO > 0 Then
-        defaults.DtFechamento = Format$(os.DT_PREV_TERMINO, "DD/MM/YYYY")
+        dtFechamento = Format$(os.DT_PREV_TERMINO, "DD/MM/YYYY")
     Else
-        defaults.DtFechamento = Format$(Date, "DD/MM/YYYY")
+        dtFechamento = Format$(Date, "DD/MM/YYYY")
     End If
-    defaults.DtPagamento = ""
+    dtPagamento = ""
     If os.QT_CONFIRMADA > 0 Then
-        defaults.QtExecutada = os.QT_CONFIRMADA
+        qtExecutada = os.QT_CONFIRMADA
     Else
-        defaults.QtExecutada = os.QT_ESTIMADA
+        qtExecutada = os.QT_ESTIMADA
     End If
-    defaults.ValorExecutado = os.VALOR_TOTAL_OS
+    valorExecutado = os.VALOR_TOTAL_OS
 
     res.Sucesso = True
     res.Mensagem = "Defaults da avaliacao montados."
@@ -54,7 +59,10 @@ Public Function MontarDefaultsAvaliacao( _
 End Function
 
 Public Function DescreverMudancasAvaliacao( _
-    ByRef defaults As TAvaliacaoDefaults, _
+    ByVal defaultNumEmpenho As String, _
+    ByVal defaultDtFechamento As String, _
+    ByVal defaultQtExecutada As Double, _
+    ByVal defaultValorExecutado As Currency, _
     ByVal numEmpenhoAtual As Variant, _
     ByVal dtFechamentoAtual As Variant, _
     ByVal qtExecutadaAtual As Variant, _
@@ -73,26 +81,26 @@ Public Function DescreverMudancasAvaliacao( _
     qtAtual = Util_Conversao.ToDouble(qtExecutadaAtual)
     vlAtual = Util_Conversao.ToCurrency(valorAtual)
 
-    If StrComp(defaults.NumEmpenho, empAtual, vbTextCompare) <> 0 Then
+    If StrComp(defaultNumEmpenho, empAtual, vbTextCompare) <> 0 Then
         houveMudanca = True
-        resumoMudancas = resumoMudancas & "- Empenho: '" & defaults.NumEmpenho & "' -> '" & empAtual & "'" & vbCrLf
+        resumoMudancas = resumoMudancas & "- Empenho: '" & defaultNumEmpenho & "' -> '" & empAtual & "'" & vbCrLf
     End If
 
-    If StrComp(defaults.DtFechamento, dtAtual, vbTextCompare) <> 0 Then
+    If StrComp(defaultDtFechamento, dtAtual, vbTextCompare) <> 0 Then
         houveMudanca = True
-        resumoMudancas = resumoMudancas & "- Data de fechamento: '" & defaults.DtFechamento & "' -> '" & dtAtual & "'" & vbCrLf
+        resumoMudancas = resumoMudancas & "- Data de fechamento: '" & defaultDtFechamento & "' -> '" & dtAtual & "'" & vbCrLf
     End If
 
-    If Abs(qtAtual - defaults.QtExecutada) > 0.0001 Then
+    If Abs(qtAtual - defaultQtExecutada) > 0.0001 Then
         houveMudanca = True
         resumoMudancas = resumoMudancas & "- Quantidade executada: " & _
-                         Format$(defaults.QtExecutada, "0.00") & " -> " & Format$(qtAtual, "0.00") & vbCrLf
+                         Format$(defaultQtExecutada, "0.00") & " -> " & Format$(qtAtual, "0.00") & vbCrLf
     End If
 
-    If Abs(CDbl(vlAtual) - CDbl(defaults.ValorExecutado)) > 0.0001 Then
+    If Abs(CDbl(vlAtual) - CDbl(defaultValorExecutado)) > 0.0001 Then
         houveMudanca = True
         resumoMudancas = resumoMudancas & "- Valor executado: R$ " & _
-                         Format$(defaults.ValorExecutado, "#,##0.00") & " -> R$ " & Format$(vlAtual, "#,##0.00") & vbCrLf
+                         Format$(defaultValorExecutado, "#,##0.00") & " -> R$ " & Format$(vlAtual, "#,##0.00") & vbCrLf
     End If
 
     If Right$(resumoMudancas, 2) = vbCrLf Then

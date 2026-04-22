@@ -47,7 +47,12 @@ Attribute mTxtFiltroEntidade.VB_VarHelpID = -1
 Private WithEvents mTxtFiltroCadServ As MSForms.TextBox
 Attribute mTxtFiltroCadServ.VB_VarHelpID = -1
 Private mInicializando As Boolean
-Private mAvaliacaoDefaults As TAvaliacaoDefaults
+Private mAvaliacaoDefaultsOSID As String
+Private mAvaliacaoDefaultsEmpenho As String
+Private mAvaliacaoDefaultsDtFechamento As String
+Private mAvaliacaoDefaultsDtPagamento As String
+Private mAvaliacaoDefaultsQtExecutada As Double
+Private mAvaliacaoDefaultsValorExecutado As Currency
 Private Const SHEET_REL_UI As String = "RELATORIO"
 Private Const PRAZO_PADRAO_OS_DIAS As Long = 30
 
@@ -102,13 +107,20 @@ AVCNPJ = AVListaCol(8)
 AVEmpresa = AVListaCol(3)
 os = Repo_OS.BuscarPorId(AVListaCol(0))
 If os.OS_ID <> "" Then
-    resDefaults = MontarDefaultsAvaliacao(os, mAvaliacaoDefaults)
+    resDefaults = MontarDefaultsAvaliacao( _
+        os, _
+        mAvaliacaoDefaultsOSID, _
+        mAvaliacaoDefaultsEmpenho, _
+        mAvaliacaoDefaultsDtFechamento, _
+        mAvaliacaoDefaultsDtPagamento, _
+        mAvaliacaoDefaultsQtExecutada, _
+        mAvaliacaoDefaultsValorExecutado)
     If resDefaults.Sucesso Then
-        AV_N_Empenho.Value = mAvaliacaoDefaults.NumEmpenho
-        AV_DataFechamento.Value = mAvaliacaoDefaults.DtFechamento
-        AV_QtHoras.Value = Format$(mAvaliacaoDefaults.QtExecutada, "0.00")
-        AV_Vl_OS.Value = Format$(mAvaliacaoDefaults.ValorExecutado, "Currency")
-        AV_Dt_Pagto.Value = mAvaliacaoDefaults.DtPagamento
+        AV_N_Empenho.Value = mAvaliacaoDefaultsEmpenho
+        AV_DataFechamento.Value = mAvaliacaoDefaultsDtFechamento
+        AV_QtHoras.Value = Format$(mAvaliacaoDefaultsQtExecutada, "0.00")
+        AV_Vl_OS.Value = Format$(mAvaliacaoDefaultsValorExecutado, "Currency")
+        AV_Dt_Pagto.Value = mAvaliacaoDefaultsDtPagamento
     End If
 End If
 AV_DataFechamento.SetFocus
@@ -814,9 +826,16 @@ Private Sub EncerraOS_Click()
     qtOrcada = Util_Conversao.ToDouble(AVListaCol(5))
     vlOrcado = Util_Conversao.ToDouble(AVListaCol(6))
 
-    If Trim$(mAvaliacaoDefaults.OS_ID) <> Trim$(osId) Then
+    If Trim$(mAvaliacaoDefaultsOSID) <> Trim$(osId) Then
         osAtual = Repo_OS.BuscarPorId(osId)
-        resDefaults = MontarDefaultsAvaliacao(osAtual, mAvaliacaoDefaults)
+        resDefaults = MontarDefaultsAvaliacao( _
+            osAtual, _
+            mAvaliacaoDefaultsOSID, _
+            mAvaliacaoDefaultsEmpenho, _
+            mAvaliacaoDefaultsDtFechamento, _
+            mAvaliacaoDefaultsDtPagamento, _
+            mAvaliacaoDefaultsQtExecutada, _
+            mAvaliacaoDefaultsValorExecutado)
         If Not resDefaults.Sucesso Then
             MsgBox "Erro ao carregar defaults da avaliação: " & resDefaults.Mensagem, vbExclamation, "Avaliação"
             GoTo Limpar
@@ -838,7 +857,17 @@ Private Sub EncerraOS_Click()
     End If
 
     justifDiv = Funcoes.NormalizarTextoPTBR(SafeListVal(AV_OBS.Value))
-    resMudancas = DescreverMudancasAvaliacao(mAvaliacaoDefaults, AV_N_Empenho.Value, AV_DataFechamento.Value, AV_QtHoras.Value, AV_Vl_OS.Value, houveEdicaoDefaults, resumoEdicoes)
+    resMudancas = DescreverMudancasAvaliacao( _
+        mAvaliacaoDefaultsEmpenho, _
+        mAvaliacaoDefaultsDtFechamento, _
+        mAvaliacaoDefaultsQtExecutada, _
+        mAvaliacaoDefaultsValorExecutado, _
+        AV_N_Empenho.Value, _
+        AV_DataFechamento.Value, _
+        AV_QtHoras.Value, _
+        AV_Vl_OS.Value, _
+        houveEdicaoDefaults, _
+        resumoEdicoes)
     If Not resMudancas.Sucesso Then
         MsgBox "Erro ao comparar valores pré-preenchidos: " & resMudancas.Mensagem, vbExclamation, "Avaliação"
         GoTo Limpar
@@ -3914,5 +3943,4 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
-
 

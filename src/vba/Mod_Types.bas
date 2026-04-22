@@ -157,16 +157,6 @@ Public Type TAvaliacaoPayload
     MediaNotas          As Double
 End Type
 
-' Defaults carregados da OS em execução para facilitar a avaliação pela UI.
-Public Type TAvaliacaoDefaults
-    OS_ID           As String
-    NumEmpenho      As String
-    DtFechamento    As String
-    DtPagamento     As String
-    QtExecutada     As Double
-    ValorExecutado  As Currency
-End Type
-
 ' Configuração global (prazo, limites etc.)
 Public Type TConfig
     DIAS_DECISAO            As Long
