@@ -9,6 +9,129 @@ Option Explicit
 Private Const STATUS_OS_EXEC      As String = "EM_EXECUCAO"
 Private Const STATUS_OS_CONCLUIDA As String = "CONCLUIDA"
 
+Public Function MontarNotasAvaliacao( _
+    ByVal nota1 As Variant, _
+    ByVal nota2 As Variant, _
+    ByVal nota3 As Variant, _
+    ByVal nota4 As Variant, _
+    ByVal nota5 As Variant, _
+    ByVal nota6 As Variant, _
+    ByVal nota7 As Variant, _
+    ByVal nota8 As Variant, _
+    ByVal nota9 As Variant, _
+    ByVal nota10 As Variant, _
+    ByRef notas() As Integer, _
+    ByRef mediaNotas As Double _
+) As TResult
+    Dim res As TResult
+    Dim valores(1 To 10) As Variant
+    Dim i As Long
+    Dim soma As Long
+
+    If LBound(notas) <> 1 Or UBound(notas) <> 10 Then
+        res.Sucesso = False
+        res.Mensagem = "Array Notas deve ter indices 1 a 10."
+        MontarNotasAvaliacao = res
+        Exit Function
+    End If
+
+    valores(1) = nota1
+    valores(2) = nota2
+    valores(3) = nota3
+    valores(4) = nota4
+    valores(5) = nota5
+    valores(6) = nota6
+    valores(7) = nota7
+    valores(8) = nota8
+    valores(9) = nota9
+    valores(10) = nota10
+
+    For i = 1 To 10
+        notas(i) = SvcAvaliacao_NotaSegura(valores(i))
+        soma = soma + notas(i)
+    Next i
+
+    mediaNotas = Round(soma / 10#, 2)
+    res.Sucesso = True
+    res.Mensagem = "Notas normalizadas com sucesso."
+    MontarNotasAvaliacao = res
+End Function
+
+Public Function MontarPayloadAvaliacao( _
+    ByVal OS_ID As String, _
+    ByVal avaliador As String, _
+    ByRef notas() As Integer, _
+    ByVal QtExecutadaTexto As Variant, _
+    ByVal ObservacaoTexto As Variant, _
+    ByVal JustifTexto As Variant, _
+    ByRef payload As TAvaliacaoPayload _
+) As TResult
+    Dim res As TResult
+    Dim i As Long
+    Dim soma As Long
+
+    If LBound(notas) <> 1 Or UBound(notas) <> 10 Then
+        res.Sucesso = False
+        res.Mensagem = "Array Notas deve ter indices 1 a 10."
+        MontarPayloadAvaliacao = res
+        Exit Function
+    End If
+
+    payload.OS_ID = Trim$(OS_ID)
+    payload.avaliador = Trim$(avaliador)
+    payload.QtExecutada = Util_Conversao.ToDouble(SafeListVal(QtExecutadaTexto))
+    payload.Observacao = SafeListVal(ObservacaoTexto)
+    payload.JustifDivergencia = Funcoes.NormalizarTextoPTBR(SafeListVal(JustifTexto))
+
+    For i = 1 To 10
+        payload.notas(i) = notas(i)
+        soma = soma + notas(i)
+    Next i
+
+    payload.MediaNotas = Round(soma / 10#, 2)
+
+    If payload.OS_ID = "" Then
+        res.Sucesso = False
+        res.Mensagem = "OS_ID obrigatorio para montar payload de avaliacao."
+        MontarPayloadAvaliacao = res
+        Exit Function
+    End If
+
+    If payload.avaliador = "" Then
+        res.Sucesso = False
+        res.Mensagem = "Avaliador obrigatorio para montar payload de avaliacao."
+        MontarPayloadAvaliacao = res
+        Exit Function
+    End If
+
+    If payload.QtExecutada <= 0 Then
+        res.Sucesso = False
+        res.Mensagem = "QtExecutada deve ser maior que zero."
+        MontarPayloadAvaliacao = res
+        Exit Function
+    End If
+
+    res.Sucesso = True
+    res.Mensagem = "Payload de avaliacao montado com sucesso."
+    MontarPayloadAvaliacao = res
+End Function
+
+Private Function SvcAvaliacao_NotaSegura(ByVal valor As Variant) As Integer
+    Dim texto As String
+    Dim numero As Long
+
+    texto = Trim$(CStr(valor))
+    If texto = "" Then
+        SvcAvaliacao_NotaSegura = 0
+        Exit Function
+    End If
+
+    numero = CLng(Val(texto))
+    If numero < 0 Then numero = 0
+    If numero > 10 Then numero = 10
+    SvcAvaliacao_NotaSegura = CInt(numero)
+End Function
+
 Public Function AvaliarOS( _
     ByVal OS_ID As String, _
     ByVal avaliador As String, _

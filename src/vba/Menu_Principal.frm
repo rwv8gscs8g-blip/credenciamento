@@ -719,7 +719,7 @@ Private Sub EncerraOS_Click()
     On Error GoTo erro_carregamento
     Dim osId As String
     Dim notas(1 To 10) As Integer
-    Dim somaNotas As Long
+    Dim payload As TAvaliacaoPayload
     Dim mediaLocal As Double
     Dim qtExec As Double
     Dim vlOS As Double
@@ -729,6 +729,8 @@ Private Sub EncerraOS_Click()
     Dim justfInput As String
     Dim avaliador As String
     Dim res As TResult
+    Dim resNotas As TResult
+    Dim resPayload As TResult
 
     If AV_Lista.ListIndex < 0 Then
         MsgBox "Selecione uma OS para avaliar!", vbExclamation, "Avaliação"
@@ -741,23 +743,15 @@ Private Sub EncerraOS_Click()
         GoTo Limpar
     End If
 
-    notas(1) = NotaSegura(AV_Nota1.Value)
-    notas(2) = NotaSegura(AV_Nota2.Value)
-    notas(3) = NotaSegura(AV_Nota3.Value)
-    notas(4) = NotaSegura(AV_Nota4.Value)
-    notas(5) = NotaSegura(AV_Nota5.Value)
-    notas(6) = NotaSegura(AV_Nota6.Value)
-    notas(7) = NotaSegura(AV_Nota7.Value)
-    notas(8) = NotaSegura(AV_Nota8.Value)
-    notas(9) = NotaSegura(AV_Nota9.Value)
-    notas(10) = NotaSegura(AV_Nota10.Value)
+    resNotas = MontarNotasAvaliacao( _
+        AV_Nota1.Value, AV_Nota2.Value, AV_Nota3.Value, AV_Nota4.Value, AV_Nota5.Value, _
+        AV_Nota6.Value, AV_Nota7.Value, AV_Nota8.Value, AV_Nota9.Value, AV_Nota10.Value, _
+        notas, mediaLocal)
+    If Not resNotas.Sucesso Then
+        MsgBox "Erro ao montar notas da avaliação: " & resNotas.Mensagem, vbExclamation, "Avaliação"
+        GoTo Limpar
+    End If
 
-    somaNotas = 0
-    Dim iNota As Long
-    For iNota = 1 To 10
-        somaNotas = somaNotas + notas(iNota)
-    Next iNota
-    mediaLocal = Round(somaNotas / 10#, 2)
     media = mediaLocal  ' Atribuir a variavel publica usada por PreencherAvaliacaoOS
     AV_Total.Value = mediaLocal
 
@@ -800,7 +794,14 @@ Private Sub EncerraOS_Click()
 
     avaliador = Trim$(SafeListVal(AVListaCol(1)))
     If avaliador = "" Then avaliador = Trim$(SafeListVal(Desc_entidade))
-    res = AvaliarOS(osId, avaliador, notas, qtExec, SafeListVal(AV_OBS.Value), justifDiv)
+    resPayload = MontarPayloadAvaliacao(osId, avaliador, notas, AV_QtHoras.Value, SafeListVal(AV_OBS.Value), justifDiv, payload)
+    If Not resPayload.Sucesso Then
+        MsgBox "Erro ao montar payload da avaliação: " & resPayload.Mensagem, vbExclamation, "Avaliação"
+        GoTo Limpar
+    End If
+
+    qtExec = payload.QtExecutada
+    res = AvaliarOS(payload.OS_ID, payload.avaliador, payload.notas, payload.QtExecutada, payload.Observacao, payload.JustifDivergencia)
     If Not res.Sucesso Then
         MsgBox "Erro ao avaliar OS: " & res.mensagem, vbCritical, "Avaliação"
         GoTo Limpar
@@ -3833,7 +3834,6 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
-
 
 
 

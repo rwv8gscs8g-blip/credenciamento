@@ -203,6 +203,15 @@ Ampliação desejada:
 
 ### C1. Extrair montagem da avaliação para helper/serviço
 
+Status atual:
+
+- primeira extração incorporada ao `codex/v12-0-0203-governanca-testes`
+- `Menu_Principal.frm` deixa de montar sozinho todo o payload da avaliação
+- `Svc_Avaliacao.bas` passa a oferecer:
+  - normalização das 10 notas
+  - montagem do `TAvaliacaoPayload`
+  - cálculo da média já no helper
+
 O formulário principal ainda concentra montagem de dados da avaliação.
 
 Objetivo:
@@ -225,6 +234,24 @@ Objetivo:
 
 - separar melhor geração de dados e renderização visual
 - facilitar testes estruturais dos relatórios
+
+### D1. Revisar a UX dos testes assistidos antes do fechamento da versão
+
+Status atual:
+
+- postergado de propósito para não misturar UX com estabilização da suíte
+
+Objetivo:
+
+- tornar `assistido` realmente observável por um humano
+- manter a mesma lógica do modo automático, mas com leitura progressiva melhor
+- avaliar painel mais visual ou fluxo interativo assistido
+
+Critério de aceite:
+
+- diferença entre `rápido` e `assistido` fica evidente para o operador
+- a linha/ação atual aparece em posição legível e com histórico visível
+- a revisão não altera a lógica de negócio nem a cobertura das baterias
 
 ## Ordem recomendada
 

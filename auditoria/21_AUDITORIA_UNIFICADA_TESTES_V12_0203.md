@@ -1270,8 +1270,8 @@ B3 (`STR_001` ampliado — AM-03): incorporado com checagem explícita de IDs ca
 B2 (`ATM_001` ampliado — AM-02): fica para a Sprint 3 junto com AR-02.
 
 **Frente C — Desacoplamento da interface.**
-C1 (helper avaliação — AR-03): próxima extração obrigatória;
-primeira fatia concreta saindo de `Menu_Principal.frm`.
+C1 (helper avaliação — AR-03): primeira extração incorporada;
+normalização das notas e montagem do payload já saíram parcialmente de `Menu_Principal.frm`.
 C2 e C3 (orquestrador de emissão, relatórios): prospectados na
 Sprint 3.
 
