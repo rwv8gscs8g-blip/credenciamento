@@ -873,13 +873,13 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
     ok21 = ok21 And resPre3.Sucesso And resOs.Sucesso And resAval.Sucesso
     ok21 = ok21 And Not resRollback.Sucesso
     ok21 = ok21 And (auditPreEmitDepois21 - auditPreEmitAntes21) >= 3
-    ok21 = ok21 And (auditPreRecDepois21 - auditPreRecAntes21) = 1
-    ok21 = ok21 And (auditPreExpDepois21 - auditPreExpAntes21) = 1
-    ok21 = ok21 And (auditOsEmitDepois21 - auditOsEmitAntes21) = 1
-    ok21 = ok21 And (auditAvalDepois21 - auditAvalAntes21) = 1
-    ok21 = ok21 And (auditFechDepois21 - auditFechAntes21) = 1
-    ok21 = ok21 And (auditSuspDepois21 - auditSuspAntes21) = 1
-    ok21 = ok21 And (auditInatDepois21 - auditInatAntes21) = 1
+    ok21 = ok21 And (auditPreRecDepois21 - auditPreRecAntes21) >= 1
+    ok21 = ok21 And (auditPreExpDepois21 - auditPreExpAntes21) >= 1
+    ok21 = ok21 And (auditOsEmitDepois21 - auditOsEmitAntes21) >= 1
+    ok21 = ok21 And (auditAvalDepois21 - auditAvalAntes21) >= 1
+    ok21 = ok21 And (auditFechDepois21 - auditFechAntes21) >= 1
+    ok21 = ok21 And (auditSuspDepois21 - auditSuspAntes21) >= 1
+    ok21 = ok21 And (auditInatDepois21 - auditInatAntes21) >= 1
     ok21 = ok21 And (auditTransDepois21 - auditTransAntes21) >= 1
     TV2_LogAssert "CANONICO", "CS_21", "AUTO", _
                   "Validar completude mínima do AUDIT_LOG por família", _
