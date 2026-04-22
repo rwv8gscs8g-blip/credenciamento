@@ -517,7 +517,7 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "CS_20", "CANONICO", "COMPLETO", "AUTO", "Cadastro", "Empresa inativa fica fora do rodízio", "Base canônica limpa com A marcada como INATIVA", "Validar filtro cadastral terminal no item canônico", "B escolhida; A inativa; posição preservada", "Isola o efeito do status global INATIVA", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_21", "CANONICO", "COMPLETO", "AUTO", "Auditoria", "Completude mínima das famílias de evento", "Base canônica limpa com fluxo controlado de recusa, expiração, OS, avaliação, suspensão, inativação e rollback", "Validar presença mínima das famílias críticas no AUDIT_LOG", "Famílias críticas presentes e capturadas por cenário", "Fecha a lacuna de completude do Audit_Log", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_22", "CANONICO", "COMPLETO", "AUTO", "Integridade", "Associação da atividade preservada em múltiplas emissões", "Item canônico emitido repetidamente", "Validar vínculo estável entre atividade e serviço", "ATIV_ID e SERV_ID corretos em todas as emissões", "Protege contra regressão de CNAE/CAD_SERV", "AUTOMATIZADO_0203", "Executado na suíte canônica"
-    TV2_AddCatalogo ws, nr, "STR_001", "STRESS", "COMPLETO", "AUTO", "Integridade", "Giros repetidos com recusa e conclusao", "Sequencia deterministica de 12 iteracoes", "Verificar invariantes de fila em repeticao", "IDs unicos; ordem relativa integra e posicoes estritamente crescentes", "Captura regressao estrutural em lote", "AUTOMATIZADO_ATUAL", "Executado no stress"
+    TV2_AddCatalogo ws, nr, "STR_001", "STRESS", "COMPLETO", "AUTO", "Integridade", "Giros repetidos com recusa e conclusao", "Sequencia deterministica de 12 iteracoes", "Verificar invariantes de fila em repeticao", "IDs 001,002,003 sem duplicidade; 3 credenciamentos no item; ordem relativa integra e posicoes estritamente crescentes", "Captura regressao estrutural em lote", "AUTOMATIZADO_ATUAL", "Executado no stress"
     TV2_AddCatalogo ws, nr, "ASS_001", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do smoke assistido", "Humano acompanha fechamento do menu, status bar e abertura do resultado", "Dar leitura operacional do smoke", "Operador entende o que esta sendo testado", "Suporta homologacao observada", "PREVISTO_V2", "Executar smoke assistido"
     TV2_AddCatalogo ws, nr, "ASS_002", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do stress assistido", "Humano acompanha lote deterministico sem precisar abrir o menu", "Dar leitura operacional do stress", "Operador acompanha o teste de repeticao sem perder contexto", "Suporta homologacao observada", "PREVISTO_V2", "Executar stress assistido"
     TV2_AddCatalogo ws, nr, "ASS_003", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Botoes de retorno e central", "Humano valida navegacao pelos botoes das abas V2", "Garantir navegacao humana assistida", "Botoes reabrem menu e central corretamente", "Fecha o ciclo operacional da homologacao", "PREVISTO_V2", "Validar apos smoke ou stress"
@@ -1176,6 +1176,31 @@ Public Function TV2_FilaTemOrdemIntegra(ByVal ativId As String, ByVal qtdEsperad
     TV2_FilaTemOrdemIntegra = True
 End Function
 
+Public Function TV2_FilaTemIdsCanonicos(ByVal ativId As String, Optional ByVal qtdEsperada As Long = 3) As Boolean
+    Dim fila() As TCredenciamento
+    Dim dictEmp As Object
+    Dim i As Long
+    Dim empId As String
+
+    fila = BuscarFila(ativId)
+    If fila(LBound(fila)).CRED_ID = "" Then Exit Function
+    If (UBound(fila) - LBound(fila) + 1) <> qtdEsperada Then Exit Function
+
+    Set dictEmp = CreateObject("Scripting.Dictionary")
+
+    For i = LBound(fila) To UBound(fila)
+        empId = TV2_Pad3(fila(i).EMP_ID)
+        If dictEmp.Exists(empId) Then Exit Function
+        dictEmp.Add empId, True
+    Next i
+
+    If Not dictEmp.Exists("001") Then Exit Function
+    If Not dictEmp.Exists("002") Then Exit Function
+    If Not dictEmp.Exists("003") Then Exit Function
+
+    TV2_FilaTemIdsCanonicos = True
+End Function
+
 Public Function TV2_FilaComPosicoesCsv(ByVal ativId As String) As String
     Dim fila() As TCredenciamento
     Dim i As Long
@@ -1741,7 +1766,7 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "CS_20", "AUTO", "Validar filtro de empresa inativa no cadastro", "Executar a suíte canônica e conferir a linha CS_20", "A inativa; B escolhida; posição de A preservada", "Linhas CS_20 no resultado", "Isola o efeito do status global INATIVA", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_21", "AUTO", "Validar completude mínima do AUDIT_LOG por família", "Executar a suíte canônica e conferir a linha CS_21", "Famílias críticas presentes no rastro operacional do cenário", "Linhas CS_21 no resultado e AUDIT_TESTES", "Dá cobertura auditável mínima às famílias críticas de evento", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_22", "AUTO", "Validar associação preservada em emissões múltiplas", "Executar a suíte canônica e conferir a linha CS_22", "ATIV_ID e SERV_ID corretos em todas as emissões", "Linhas CS_22 no resultado", "Fecha a proteção contra regressão de associação atividade/serviço", "AUTOMATIZADO"
-    TV2_AddRoteiro ws, nr, "STR_001", "AUTO", "Validar repeticao deterministica do rodizio", "Executar Stress deterministico e acompanhar somente se houver falha", "Fila sem duplicidade e em ordem integra apos cada iteracao", "Linhas STR_001 no resultado", "Captura degradacao estrutural em lote", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "STR_001", "AUTO", "Validar repeticao deterministica do rodizio", "Executar Stress deterministico e acompanhar somente se houver falha", "Fila com IDs 001,002,003 sem duplicidade, 3 credenciamentos no item e ordem integra apos cada iteracao", "Linhas STR_001 no resultado", "Captura degradacao estrutural em lote", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "ASS_001", "ASSISTIDO", "Acompanhar visualmente o smoke assistido", "Executar a opcao 2 da central V2 e observar a tela durante toda a execucao", "Menu principal fechado; status bar evoluindo; aba de resultado assumindo o foco ao final", "Fechamento do menu, transicao para planilha e feedback visual", "Prova que o operador consegue assistir ao smoke sem interferencia do formulario", "ASSISTIDO"
     TV2_AddRoteiro ws, nr, "ASS_002", "ASSISTIDO", "Acompanhar visualmente o stress assistido", "Executar a opcao 4 da central V2 e acompanhar apenas o giro da fila e a abertura do resultado ao final", "Sem erro fatal; resultados STR_001 visiveis; menu principal fechado durante toda a bateria", "Status bar, aba RESULTADO_QA_V2 e ausencia do formulario do menu", "Permite homologacao assistida do lote deterministico", "ASSISTIDO"
     TV2_AddRoteiro ws, nr, "ASS_003", "ASSISTIDO", "Confirmar retorno ao menu e botoes da V2", "Ao fim do smoke ou stress, clicar nos botoes de retorno e central de testes", "Botoes funcionam e reabrem o fluxo correto", "Topo das abas V2", "Confirma operacao humana sem perder contexto", "ASSISTIDO"

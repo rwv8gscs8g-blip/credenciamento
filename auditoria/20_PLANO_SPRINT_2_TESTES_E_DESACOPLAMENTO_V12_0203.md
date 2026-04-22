@@ -182,6 +182,15 @@ Ampliação desejada:
 
 ### B3. Enriquecer `STR_001`
 
+Status atual:
+
+- reforço incorporado ao `STR_001` na branch `codex/v12-0-0203-governanca-testes`
+- agora o cenário também prova explicitamente:
+  - presença apenas dos IDs `001,002,003` na fila canônica
+  - ausência de duplicidade semântica no item
+  - quantidade final estável de `3` credenciamentos no item
+  - posições estritamente crescentes em cada iteração
+
 Hoje ele valida invariantes de fila repetidamente.
 
 Ampliação desejada:

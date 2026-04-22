@@ -20,6 +20,7 @@ tratam apenas da linha pública oficial.
 - cenário canônico `CS_18` automatizado para validar transições inválidas de OS concluída com rejeição auditável
 - cenário canônico `CS_21` automatizado para validar completude mínima das famílias críticas do `AUDIT_LOG`
 - cenário `SMK_007` reforçado para validar auditoria mínima de fechamento e ausência de suspensão indevida em avaliação satisfatória
+- cenário `STR_001` reforçado para validar IDs canônicos `001,002,003`, ausência de duplicidade semântica no item e quantidade final estável de credenciamentos
 - relatório imprimível da última execução V2 em `RPT_TESTES_V2`, com impressão opcional
 - área documental `docs/testes/` para padronizar a narrativa humana das baterias de teste
 - trilha cumulativa da suíte V2 em `TESTE_TRILHA` e `AUDIT_TESTES`

@@ -915,6 +915,7 @@ Public Sub TV2_RunStress(Optional ByVal iteracoes As Long = 12, Optional ByVal v
     Dim detalhe As String
     Dim ok As Boolean
     Dim qtd As Double
+    Dim qtdCredItem As Long
 
     On Error GoTo falha
 
@@ -952,12 +953,16 @@ Public Sub TV2_RunStress(Optional ByVal iteracoes As Long = 12, Optional ByVal v
             ok = False
         End If
 
+        qtdCredItem = TV2_QtdCredenciadosNoItem(TV2_AtivCanonA())
+
         ok = ok And TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3)
+        ok = ok And TV2_FilaTemIdsCanonicos(TV2_AtivCanonA(), 3)
+        ok = ok And qtdCredItem = 3
 
         TV2_LogAssert "STRESS", "STR_001", "AUTO", _
                       "Manter invariantes de fila em repeticao controlada", _
-                      "Fila com IDs unicos, ordem integra e posicoes estritamente crescentes", _
-                      detalhe & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & "; POSICOES=" & TV2_FilaComPosicoesCsv(TV2_AtivCanonA()), _
+                      "Fila com IDs 001,002,003 sem duplicidade, 3 credenciamentos no item e posicoes estritamente crescentes", _
+                      detalhe & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & "; POSICOES=" & TV2_FilaComPosicoesCsv(TV2_AtivCanonA()) & "; QTD_ITEM=" & CStr(qtdCredItem), _
                       "Busca regressao estrutural sob repeticao", ok
     Next i
 

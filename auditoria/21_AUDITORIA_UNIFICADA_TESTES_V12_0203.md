@@ -1266,7 +1266,7 @@ determinístico da `AUDIT_LOG` operacional.
 
 **Frente B — Ampliação de cenários existentes.**
 B1 (`SMK_007` reforçado — AM-01): incorporado.
-B3 (`STR_001` ampliado — AM-03): próxima ampliação obrigatória.
+B3 (`STR_001` ampliado — AM-03): incorporado com checagem explícita de IDs canônicos, quantidade final do item e posições crescentes.
 B2 (`ATM_001` ampliado — AM-02): fica para a Sprint 3 junto com AR-02.
 
 **Frente C — Desacoplamento da interface.**
