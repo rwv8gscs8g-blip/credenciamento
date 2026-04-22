@@ -19,6 +19,7 @@ tratam apenas da linha pública oficial.
 - cenário canônico `CS_17` automatizado para validar giro longo `A,B,C,A,B,C,A` sem travamento e com integridade da fila
 - cenário canônico `CS_18` automatizado para validar transições inválidas de OS concluída com rejeição auditável
 - cenário canônico `CS_21` automatizado para validar completude mínima das famílias críticas do `AUDIT_LOG`
+- cenários canônicos `CS_23` e `CS_24` automatizados para validar ida e volta de empresa e entidade entre cadastros ativos/inativos sem duplicidade semântica
 - cenário `SMK_007` reforçado para validar auditoria mínima de fechamento e ausência de suspensão indevida em avaliação satisfatória
 - cenário `STR_001` reforçado para validar IDs canônicos `001,002,003`, ausência de duplicidade semântica no item e quantidade final estável de credenciamentos
 - extração inicial da montagem do payload de avaliação para `Svc_Avaliacao.bas`, reduzindo acoplamento no `Menu_Principal.frm`
@@ -46,6 +47,7 @@ tratam apenas da linha pública oficial.
 - modo `ASSISTIDA` da V1 com delay reduzido e rolagem reposicionada para manter a linha atual mais abaixo na tela
 - mensagens finais e relatório da V1 deixam de destacar `MANUAL` quando a execução é 100% automática
 - `Audit_Log` ganha a família `Validacao Rejeitada`
+- `Audit_Log` passa a diferenciar inativação e reativação de empresa vs entidade na descrição legível do evento
 - `Svc_Avaliacao` passa a registrar `Avaliacao Registrada` de forma explícita e sempre auditável
 - backlog explícito para revisão futura da UX dos testes assistidos antes do fechamento da versão
 

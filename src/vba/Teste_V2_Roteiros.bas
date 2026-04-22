@@ -375,8 +375,24 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
     Dim auditInatDepois21 As Long
     Dim auditTransAntes21 As Long
     Dim auditTransDepois21 As Long
+    Dim auditEntInatAntes As Long
+    Dim auditEntInatDepois As Long
+    Dim auditEntReatAntes As Long
+    Dim auditEntReatDepois As Long
     Dim resRollback As TResult
+    Dim resInatEmp As TResult
+    Dim resReatEmp As TResult
+    Dim resInatEnt As TResult
+    Dim resReatEnt As TResult
+    Dim qtdEmpAtivas23 As Long
+    Dim qtdEmpInativas23 As Long
+    Dim qtdEntAtivas24 As Long
+    Dim qtdEntInativas24 As Long
+    Dim obtido23 As String
+    Dim obtido24 As String
     Dim obtido21 As String
+    Dim ok23 As Boolean
+    Dim ok24 As Boolean
     Dim ok21 As Boolean
     Dim senhaFalhaAba As String
 
@@ -806,6 +822,89 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
                   obtido20, _
                   "Isola o efeito do status global INATIVA no item canônico", _
                   ok20
+
+    TV2_PrepararCenarioTriploCanonico
+    auditInatAntes = TV2_AuditCount("Empresa Inativada", "STATUS=INATIVA")
+    auditReatAntes = TV2_AuditCount("Empresa Reativada", "STATUS=ATIVA")
+    resInatEmp = TV2_InativarEmpresaCadastro("001")
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    resReatEmp = TV2_ReativarEmpresaCadastro("001")
+    resPre2 = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    auditInatDepois = TV2_AuditCount("Empresa Inativada", "STATUS=INATIVA")
+    auditReatDepois = TV2_AuditCount("Empresa Reativada", "STATUS=ATIVA")
+    qtdEmpAtivas23 = TV2_CountOcorrenciasRegistro(SHEET_EMPRESAS, PrimeiraLinhaDadosEmpresas(), COL_EMP_ID, "001", COL_EMP_CNPJ, TV2_CNPJEmpresa("001"))
+    qtdEmpInativas23 = TV2_CountOcorrenciasRegistro(SHEET_EMPRESAS_INATIVAS, LINHA_DADOS, COL_EMP_ID, "001", COL_EMP_CNPJ, TV2_CNPJEmpresa("001"))
+    obtido23 = "SUCESSO_INAT=" & CStr(resInatEmp.Sucesso) & _
+               "; SUCESSO_PREOS_B=" & CStr(resPre.Sucesso) & _
+               "; EMP_PREOS_B=" & TV2_EmpIdPreOS(resPre.IdGerado) & _
+               "; SUCESSO_REAT=" & CStr(resReatEmp.Sucesso) & _
+               "; SUCESSO_PREOS_A=" & CStr(resPre2.Sucesso) & _
+               "; EMP_PREOS_A=" & TV2_EmpIdPreOS(resPre2.IdGerado) & _
+               "; STATUS_A=" & TV2_StatusEmpresa("001") & _
+               "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+               "; ATIVAS=" & CStr(qtdEmpAtivas23) & _
+               "; INATIVAS=" & CStr(qtdEmpInativas23) & _
+               "; TOTAL=" & CStr(TV2_CountOcorrenciasEmpresa("001")) & _
+               "; AUDIT_INAT=" & CStr(auditInatDepois - auditInatAntes) & _
+               "; AUDIT_REAT=" & CStr(auditReatDepois - auditReatAntes)
+    ok23 = resInatEmp.Sucesso And resPre.Sucesso And resReatEmp.Sucesso And resPre2.Sucesso
+    ok23 = ok23 And IdsIguais(TV2_EmpIdPreOS(resPre.IdGerado), "002")
+    ok23 = ok23 And IdsIguais(TV2_EmpIdPreOS(resPre2.IdGerado), "001")
+    ok23 = ok23 And TV2_StatusEmpresa("001") = "ATIVA"
+    ok23 = ok23 And TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003"
+    ok23 = ok23 And TV2_QtdCredenciadosNoItem(TV2_AtivCanonA(), "001") = 3
+    ok23 = ok23 And qtdEmpAtivas23 = 1 And qtdEmpInativas23 = 0 And TV2_CountOcorrenciasEmpresa("001") = 1
+    ok23 = ok23 And (auditInatDepois - auditInatAntes) = 1
+    ok23 = ok23 And (auditReatDepois - auditReatAntes) = 1
+    TV2_LogAssert "CANONICO", "CS_23", "AUTO", _
+                  "Validar ida e volta de empresa entre ativo e inativo", _
+                  "A some da seleção enquanto inativa e volta a ser escolhida após reativação, sem duplicidade cadastral", _
+                  obtido23, _
+                  "Fecha ida e volta de empresa com preservação da fila lógica", _
+                  ok23
+
+    TV2_PrepararCenarioTriploCanonico
+    auditEntInatAntes = TV2_AuditCount("Entidade Inativada")
+    auditEntReatAntes = TV2_AuditCount("Entidade Reativada")
+    qtdPreAntes = TV2_CountRows(SHEET_PREOS)
+    resInatEnt = TV2_InativarEntidadeCadastro("001")
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    qtdPreDepois = TV2_CountRows(SHEET_PREOS)
+    resReatEnt = TV2_ReativarEntidadeCadastro("001")
+    resPre2 = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    auditEntInatDepois = TV2_AuditCount("Entidade Inativada")
+    auditEntReatDepois = TV2_AuditCount("Entidade Reativada")
+    qtdEntAtivas24 = TV2_CountOcorrenciasRegistro(SHEET_ENTIDADE, LINHA_DADOS, COL_ENT_ID, "001", COL_ENT_CNPJ, TV2_CNPJEntidade("001"))
+    qtdEntInativas24 = TV2_CountOcorrenciasRegistro(SHEET_ENTIDADE_INATIVOS, LINHA_DADOS, COL_ENT_ID, "001", COL_ENT_CNPJ, TV2_CNPJEntidade("001"))
+    obtido24 = "SUCESSO_INAT=" & CStr(resInatEnt.Sucesso) & _
+               "; SUCESSO_PREOS_FALHA=" & CStr(resPre.Sucesso) & _
+               "; MSG=" & resPre.Mensagem & _
+               "; PREOS_ANTES=" & CStr(qtdPreAntes) & _
+               "; PREOS_DEPOIS=" & CStr(qtdPreDepois) & _
+               "; SUCESSO_REAT=" & CStr(resReatEnt.Sucesso) & _
+               "; SUCESSO_PREOS_OK=" & CStr(resPre2.Sucesso) & _
+               "; EMP_PREOS=" & TV2_EmpIdPreOS(resPre2.IdGerado) & _
+               "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+               "; ATIVAS=" & CStr(qtdEntAtivas24) & _
+               "; INATIVAS=" & CStr(qtdEntInativas24) & _
+               "; TOTAL=" & CStr(TV2_CountOcorrenciasEntidade("001")) & _
+               "; AUDIT_INAT=" & CStr(auditEntInatDepois - auditEntInatAntes) & _
+               "; AUDIT_REAT=" & CStr(auditEntReatDepois - auditEntReatAntes)
+    ok24 = resInatEnt.Sucesso And Not resPre.Sucesso And qtdPreDepois = qtdPreAntes
+    ok24 = ok24 And InStr(1, resPre.Mensagem, "Entidade", vbTextCompare) > 0
+    ok24 = ok24 And resReatEnt.Sucesso And resPre2.Sucesso
+    ok24 = ok24 And IdsIguais(TV2_EmpIdPreOS(resPre2.IdGerado), "001")
+    ok24 = ok24 And TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003"
+    ok24 = ok24 And TV2_QtdCredenciadosNoItem(TV2_AtivCanonA(), "001") = 3
+    ok24 = ok24 And qtdEntAtivas24 = 1 And qtdEntInativas24 = 0 And TV2_CountOcorrenciasEntidade("001") = 1
+    ok24 = ok24 And (auditEntInatDepois - auditEntInatAntes) = 1
+    ok24 = ok24 And (auditEntReatDepois - auditEntReatAntes) = 1
+    TV2_LogAssert "CANONICO", "CS_24", "AUTO", _
+                  "Validar ida e volta de entidade entre ativo e inativo", _
+                  "Emissão falha com entidade inativa e volta a funcionar após reativação, sem duplicidade cadastral", _
+                  obtido24, _
+                  "Fecha ida e volta de entidade com rastreabilidade explícita", _
+                  ok24
 
     TV2_PrepararCenarioTriploCanonico
     auditPreEmitAntes21 = TV2_AuditCount("Pre-OS Emitida")

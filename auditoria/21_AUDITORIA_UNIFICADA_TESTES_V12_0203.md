@@ -346,8 +346,8 @@ teste falha?".
 
 | Regra | Tema | Cenário(s) | Observação |
 |---|---|---|---|
-| R-58 | Inativação cadastral é terminal até reativação | BO_210, CS-20 | crítico |
-| R-59 | Reativação preserva posição absoluta | BO_220 | crítico (ampliar A3) |
+| R-58 | Inativação cadastral é terminal até reativação | BO_210, CS-20, CS-24 | crítico |
+| R-59 | Reativação preserva posição absoluta | BO_220, CS-23 | crítico |
 
 ### 03.3 Lacunas de cobertura identificadas
 
@@ -777,7 +777,7 @@ evidência cumulativa sem inflar o catálogo.
 |---|---|---|---|---|
 | NV-01 | V2 Canônico | entregue | R-31, R-32, R-43 | `CS-18` rejeita mutações inválidas e protege o registro de avaliação |
 | NV-02 | V2 Canônico | entregue | R-57 | `CS-21` valida presença mínima das famílias críticas no `Audit_Log` |
-| NV-03 | V2 Canônico | novo | R-58 complementa, R-59 reforça | ida e volta de inativação/reativação de empresa e entidade |
+| NV-03 | V2 Canônico | entregue | R-58 complementa, R-59 reforça | `CS-23` e `CS-24` fecham ida e volta de inativação/reativação de empresa e entidade |
 | AM-01 | Smoke V2 | ampliação | R-36, R-50, R-54 | `SMK_007` valida contagem de avaliações + ausência de suspensão indevida (já incorporado) |
 | AM-02 | V2 Atomicidade | ampliação | R-47, R-49 | `ATM_001` valida ausência de mutação em mais de uma aba + mensagem legível de rollback |
 | AM-03 | V2 Stress | ampliação | R-08, R-10, R-11 | `STR_001` valida ausência de duplicidade e posições estritamente crescentes |
@@ -806,13 +806,14 @@ categorias.
 
 **NV-03 — Inativação/reativação de empresa e entidade.**
 Pré-condição: base canônica limpa.
-Ação: inativar empresa; reativar; inativar entidade; reativar;
-repetir em ordem trocada.
-Resultado esperado: `STATUS_GLOBAL` e `POSICAO_FILA` preservados em
-cada ciclo; sem reaparição de registro semântico incorreto;
-`Audit_Log` registra cada transição.
-Razão: reforça R-58 e R-59; endereça regressão histórica da série
-`0193`.
+Ação: executar `CS-23` para ida e volta de empresa e `CS-24` para ida
+e volta de entidade, ambos com reaproveitamento do item canônico.
+Resultado esperado: `STATUS_GLOBAL` e `POSICAO_FILA` preservados na
+empresa; emissão bloqueada e retomada corretamente na entidade; sem
+reaparição de registro semântico incorreto; `Audit_Log` registra cada
+transição com diferenciação entre empresa e entidade.
+Razão: já implementado por `CS-23` e `CS-24`; fecha a regressão
+histórica da série `0193` sem reabrir a fragilidade do `Mod_Types`.
 
 ### 09.4 Decomposição das ampliações
 

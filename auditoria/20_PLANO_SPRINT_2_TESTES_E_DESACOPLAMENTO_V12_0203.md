@@ -102,6 +102,12 @@ Critério de aceite:
 
 ### A3. Cobertura de inativação/reativação de empresa e entidade
 
+Status atual:
+
+- `CS_23` incorporado para validar ida e volta de empresa entre `EMPRESAS` e `EMPRESAS_INATIVAS`
+- `CS_24` incorporado para validar ida e volta de entidade entre `ENTIDADE` e `ENTIDADE_INATIVOS`
+- asserts de integridade semântica do cadastro restaurado e ausência de duplicidade incorporados na suíte canônica
+
 Criar cenários para proteger os fluxos que já sofreram regressão histórica:
 
 - inativar e reativar empresa

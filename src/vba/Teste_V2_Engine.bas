@@ -517,6 +517,8 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "CS_20", "CANONICO", "COMPLETO", "AUTO", "Cadastro", "Empresa inativa fica fora do rodízio", "Base canônica limpa com A marcada como INATIVA", "Validar filtro cadastral terminal no item canônico", "B escolhida; A inativa; posição preservada", "Isola o efeito do status global INATIVA", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_21", "CANONICO", "COMPLETO", "AUTO", "Auditoria", "Completude mínima das famílias de evento", "Base canônica limpa com fluxo controlado de recusa, expiração, OS, avaliação, suspensão, inativação e rollback", "Validar presença mínima das famílias críticas no AUDIT_LOG", "Famílias críticas presentes e capturadas por cenário", "Fecha a lacuna de completude do Audit_Log", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_22", "CANONICO", "COMPLETO", "AUTO", "Integridade", "Associação da atividade preservada em múltiplas emissões", "Item canônico emitido repetidamente", "Validar vínculo estável entre atividade e serviço", "ATIV_ID e SERV_ID corretos em todas as emissões", "Protege contra regressão de CNAE/CAD_SERV", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_23", "CANONICO", "COMPLETO", "AUTO", "Cadastro", "Empresa faz ida e volta entre ativo e inativo", "Base canônica limpa; empresa A inativada e depois reativada", "Validar inativação terminal até reativação sem duplicidade semântica", "A some da seleção; volta a ser escolhida após reativação; cadastro permanece único", "Fecha ida e volta cadastral de empresa com preservação da fila lógica", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_24", "CANONICO", "COMPLETO", "AUTO", "Cadastro", "Entidade faz ida e volta entre ativo e inativo", "Base canônica limpa; entidade 001 inativada e depois reativada", "Validar bloqueio e retomada de emissão por entidade inativa", "Emissão falha com entidade inativa e volta a funcionar após reativação", "Fecha ida e volta cadastral de entidade com rastreabilidade explícita", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "STR_001", "STRESS", "COMPLETO", "AUTO", "Integridade", "Giros repetidos com recusa e conclusao", "Sequencia deterministica de 12 iteracoes", "Verificar invariantes de fila em repeticao", "IDs 001,002,003 sem duplicidade; 3 credenciamentos no item; ordem relativa integra e posicoes estritamente crescentes", "Captura regressao estrutural em lote", "AUTOMATIZADO_ATUAL", "Executado no stress"
     TV2_AddCatalogo ws, nr, "ASS_001", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do smoke assistido", "Humano acompanha fechamento do menu, status bar e abertura do resultado", "Dar leitura operacional do smoke", "Operador entende o que esta sendo testado", "Suporta homologacao observada", "PREVISTO_V2", "Executar smoke assistido"
     TV2_AddCatalogo ws, nr, "ASS_002", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do stress assistido", "Humano acompanha lote deterministico sem precisar abrir o menu", "Dar leitura operacional do stress", "Operador acompanha o teste de repeticao sem perder contexto", "Suporta homologacao observada", "PREVISTO_V2", "Executar stress assistido"
@@ -1273,6 +1275,54 @@ Public Function TV2_QtdCredenciadosNoItem(ByVal ativId As String, Optional ByVal
     Next linha
 End Function
 
+Public Function TV2_CountOcorrenciasRegistro( _
+    ByVal nomeAba As String, _
+    ByVal primeiraLinha As Long, _
+    ByVal colId As Long, _
+    ByVal idBusca As String, _
+    ByVal colDocumento As Long, _
+    Optional ByVal documentoBusca As String = "" _
+) As Long
+    Dim ws As Worksheet
+    Dim linha As Long
+    Dim docBuscaNorm As String
+    Dim docAtualNorm As String
+
+    Set ws = ThisWorkbook.Sheets(nomeAba)
+    docBuscaNorm = Util_NormalizarDocumentoChave(documentoBusca)
+
+    For linha = primeiraLinha To UltimaLinhaAba(nomeAba)
+        If IdsIguais(ws.Cells(linha, colId).Value, idBusca) Then
+            TV2_CountOcorrenciasRegistro = TV2_CountOcorrenciasRegistro + 1
+        ElseIf docBuscaNorm <> "" Then
+            docAtualNorm = Util_NormalizarDocumentoChave(ws.Cells(linha, colDocumento).Value)
+            If docAtualNorm <> "" Then
+                If StrComp(docAtualNorm, docBuscaNorm, vbTextCompare) = 0 Then
+                    TV2_CountOcorrenciasRegistro = TV2_CountOcorrenciasRegistro + 1
+                End If
+            End If
+        End If
+    Next linha
+End Function
+
+Public Function TV2_CountOcorrenciasEmpresa(ByVal empId As String) As Long
+    Dim cnpj As String
+
+    cnpj = TV2_CNPJEmpresa(empId)
+    TV2_CountOcorrenciasEmpresa = _
+        TV2_CountOcorrenciasRegistro(SHEET_EMPRESAS, PrimeiraLinhaDadosEmpresas(), COL_EMP_ID, empId, COL_EMP_CNPJ, cnpj) + _
+        TV2_CountOcorrenciasRegistro(SHEET_EMPRESAS_INATIVAS, LINHA_DADOS, COL_EMP_ID, empId, COL_EMP_CNPJ, cnpj)
+End Function
+
+Public Function TV2_CountOcorrenciasEntidade(ByVal entId As String) As Long
+    Dim cnpj As String
+
+    cnpj = TV2_CNPJEntidade(entId)
+    TV2_CountOcorrenciasEntidade = _
+        TV2_CountOcorrenciasRegistro(SHEET_ENTIDADE, LINHA_DADOS, COL_ENT_ID, entId, COL_ENT_CNPJ, cnpj) + _
+        TV2_CountOcorrenciasRegistro(SHEET_ENTIDADE_INATIVOS, LINHA_DADOS, COL_ENT_ID, entId, COL_ENT_CNPJ, cnpj)
+End Function
+
 Public Function TV2_CountRows(ByVal nomeAba As String) As Long
     Dim ws As Worksheet
     Dim colunaChave As Long
@@ -1388,6 +1438,24 @@ Private Function TV2_LinhaCred(ByVal empId As String, ByVal ativId As String) As
     Next linha
 End Function
 
+Private Function TV2_LinhaPorIdAba( _
+    ByVal nomeAba As String, _
+    ByVal primeiraLinha As Long, _
+    ByVal colId As Long, _
+    ByVal idBusca As String _
+) As Long
+    Dim ws As Worksheet
+    Dim linha As Long
+
+    Set ws = ThisWorkbook.Sheets(nomeAba)
+    For linha = primeiraLinha To UltimaLinhaAba(nomeAba)
+        If IdsIguais(ws.Cells(linha, colId).Value, idBusca) Then
+            TV2_LinhaPorIdAba = linha
+            Exit Function
+        End If
+    Next linha
+End Function
+
 Private Sub TV2_ObterEmpresa(ByVal empId As String, ByRef cnpjOut As String, ByRef razaoOut As String)
     Dim ws As Worksheet
     Dim linha As Long
@@ -1402,8 +1470,339 @@ Private Sub TV2_ObterEmpresa(ByVal empId As String, ByRef cnpjOut As String, ByR
     Next linha
 End Sub
 
-Private Function TV2_CNPJEmpresa(ByVal empId As String) As String
+Private Sub TV2_ObterEntidade(ByVal entId As String, ByRef cnpjOut As String, ByRef nomeOut As String)
+    Dim ws As Worksheet
+    Dim linha As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_ENTIDADE)
+    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_ENTIDADE)
+        If IdsIguais(ws.Cells(linha, COL_ENT_ID).Value, entId) Then
+            cnpjOut = CStr(ws.Cells(linha, COL_ENT_CNPJ).Value)
+            nomeOut = CStr(ws.Cells(linha, COL_ENT_NOME).Value)
+            Exit Sub
+        End If
+    Next linha
+End Sub
+
+Public Function TV2_CNPJEmpresa(ByVal empId As String) As String
     TV2_CNPJEmpresa = Right$("00" & empId, 3) & "." & Right$("00" & empId, 3) & "." & Right$("00" & empId, 3) & "/0001-" & Right$("0" & empId, 2)
+End Function
+
+Public Function TV2_CNPJEntidade(ByVal entId As String) As String
+    TV2_CNPJEntidade = "10.000.000/000" & Right$(entId, 1) & "-0" & Right$(entId, 1)
+End Function
+
+Private Sub TV2_CopiarLinhaValores( _
+    ByVal wsOrigem As Worksheet, _
+    ByVal linhaOrigem As Long, _
+    ByVal wsDestino As Worksheet, _
+    ByVal linhaDestino As Long, _
+    ByVal ultimaColuna As Long _
+)
+    wsDestino.Range(wsDestino.Cells(linhaDestino, 1), wsDestino.Cells(linhaDestino, ultimaColuna)).Value = _
+        wsOrigem.Range(wsOrigem.Cells(linhaOrigem, 1), wsOrigem.Cells(linhaOrigem, ultimaColuna)).Value
+End Sub
+
+Public Function TV2_InativarEmpresaCadastro(ByVal empId As String) As TResult
+    Dim res As TResult
+    Dim wsOrigem As Worksheet
+    Dim wsDestino As Worksheet
+    Dim linhaOrigem As Long
+    Dim linhaDestino As Long
+    Dim linhaDuplicada As Long
+    Dim estavaProtegidaOrigem As Boolean
+    Dim estavaProtegidaDestino As Boolean
+    Dim senhaOrigem As String
+    Dim senhaDestino As String
+    Dim cnpj As String
+    Dim razao As String
+    Dim copiou As Boolean
+
+    Set wsOrigem = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+    Set wsDestino = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
+    linhaOrigem = TV2_LinhaPorIdAba(SHEET_EMPRESAS, PrimeiraLinhaDadosEmpresas(), COL_EMP_ID, empId)
+    If linhaOrigem = 0 Then
+        res.Mensagem = "Empresa não encontrada em EMPRESAS: " & empId
+        TV2_InativarEmpresaCadastro = res
+        Exit Function
+    End If
+
+    cnpj = CStr(wsOrigem.Cells(linhaOrigem, COL_EMP_CNPJ).Value)
+    razao = CStr(wsOrigem.Cells(linhaOrigem, COL_EMP_RAZAO).Value)
+    linhaDuplicada = Util_LinhaDuplicadaIdOuDocumento(wsDestino, LINHA_DADOS, COL_EMP_ID, empId, COL_EMP_CNPJ, cnpj)
+    If linhaDuplicada > 0 Then
+        res.Mensagem = "Empresa já existe em EMPRESAS_INATIVAS: " & empId
+        TV2_InativarEmpresaCadastro = res
+        Exit Function
+    End If
+
+    On Error GoTo erro
+    If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
+    If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
+
+    linhaDestino = TV2_NextDataRow(SHEET_EMPRESAS_INATIVAS)
+    TV2_CopiarLinhaValores wsOrigem, linhaOrigem, wsDestino, linhaDestino, COL_EMP_DT_ULT_ALT
+    wsDestino.Cells(linhaDestino, COL_EMP_STATUS_GLOBAL).Value = "INATIVA"
+    wsDestino.Cells(linhaDestino, COL_EMP_DT_FIM_SUSP).Value = ""
+    wsDestino.Cells(linhaDestino, COL_EMP_DT_ULT_ALT).Value = Now
+    copiou = True
+
+    If Not Util_ExcluirLinhaSegura(wsOrigem, linhaOrigem) Then
+        Err.Raise 1004, "TV2_InativarEmpresaCadastro", "Falha ao remover empresa da aba ativa."
+    End If
+
+    Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
+    Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
+    copiou = False
+
+    ClassificaEmpresa
+    RegistrarEvento EVT_INATIVACAO, ENT_EMP, empId, _
+                    "STATUS=ATIVA", _
+                    "STATUS=INATIVA; ORIGEM=Teste_V2_Engine", _
+                    "Teste_V2_Engine"
+
+    res.Sucesso = True
+    res.Mensagem = "Empresa inativada com sucesso: " & razao
+    TV2_InativarEmpresaCadastro = res
+    Exit Function
+
+erroPreparacao:
+    Err.Raise 1004, "TV2_InativarEmpresaCadastro", "Não foi possível preparar as abas de empresa."
+
+erro:
+    On Error Resume Next
+    If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
+    Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
+    Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
+    On Error GoTo 0
+    res.Sucesso = False
+    res.Mensagem = "Erro ao inativar empresa: " & Err.Description
+    res.CodigoErro = Err.Number
+    TV2_InativarEmpresaCadastro = res
+End Function
+
+Public Function TV2_ReativarEmpresaCadastro(ByVal empId As String) As TResult
+    Dim res As TResult
+    Dim wsOrigem As Worksheet
+    Dim wsDestino As Worksheet
+    Dim linhaOrigem As Long
+    Dim linhaDestino As Long
+    Dim linhaDuplicada As Long
+    Dim estavaProtegidaOrigem As Boolean
+    Dim estavaProtegidaDestino As Boolean
+    Dim senhaOrigem As String
+    Dim senhaDestino As String
+    Dim cnpj As String
+    Dim copiou As Boolean
+
+    Set wsOrigem = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
+    Set wsDestino = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+    linhaOrigem = TV2_LinhaPorIdAba(SHEET_EMPRESAS_INATIVAS, LINHA_DADOS, COL_EMP_ID, empId)
+    If linhaOrigem = 0 Then
+        res.Mensagem = "Empresa não encontrada em EMPRESAS_INATIVAS: " & empId
+        TV2_ReativarEmpresaCadastro = res
+        Exit Function
+    End If
+
+    cnpj = CStr(wsOrigem.Cells(linhaOrigem, COL_EMP_CNPJ).Value)
+    linhaDuplicada = Util_LinhaDuplicadaIdOuDocumento(wsDestino, PrimeiraLinhaDadosEmpresas(), COL_EMP_ID, empId, COL_EMP_CNPJ, cnpj)
+    If linhaDuplicada > 0 Then
+        res.Mensagem = "Empresa já existe em EMPRESAS: " & empId
+        TV2_ReativarEmpresaCadastro = res
+        Exit Function
+    End If
+
+    On Error GoTo erro
+    If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
+    If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
+
+    linhaDestino = TV2_NextDataRow(SHEET_EMPRESAS)
+    TV2_CopiarLinhaValores wsOrigem, linhaOrigem, wsDestino, linhaDestino, COL_EMP_DT_ULT_ALT
+    wsDestino.Cells(linhaDestino, COL_EMP_STATUS_GLOBAL).Value = TV2_EMP_STATUS_ATIVA
+    wsDestino.Cells(linhaDestino, COL_EMP_DT_FIM_SUSP).Value = ""
+    wsDestino.Cells(linhaDestino, COL_EMP_DT_ULT_ALT).Value = Now
+    copiou = True
+
+    If Not Util_ExcluirLinhaSegura(wsOrigem, linhaOrigem) Then
+        Err.Raise 1004, "TV2_ReativarEmpresaCadastro", "Falha ao remover empresa da aba inativa."
+    End If
+
+    Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
+    Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
+    copiou = False
+
+    ClassificaEmpresa
+    RegistrarEvento EVT_REATIVACAO, ENT_EMP, empId, _
+                    "STATUS=INATIVA", _
+                    "STATUS=ATIVA; ORIGEM=Teste_V2_Engine", _
+                    "Teste_V2_Engine"
+
+    res.Sucesso = True
+    res.Mensagem = "Empresa reativada com sucesso: " & empId
+    TV2_ReativarEmpresaCadastro = res
+    Exit Function
+
+erroPreparacao:
+    Err.Raise 1004, "TV2_ReativarEmpresaCadastro", "Não foi possível preparar as abas de empresa."
+
+erro:
+    On Error Resume Next
+    If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
+    Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
+    Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
+    On Error GoTo 0
+    res.Sucesso = False
+    res.Mensagem = "Erro ao reativar empresa: " & Err.Description
+    res.CodigoErro = Err.Number
+    TV2_ReativarEmpresaCadastro = res
+End Function
+
+Public Function TV2_InativarEntidadeCadastro(ByVal entId As String) As TResult
+    Dim res As TResult
+    Dim wsOrigem As Worksheet
+    Dim wsDestino As Worksheet
+    Dim linhaOrigem As Long
+    Dim linhaDestino As Long
+    Dim linhaDuplicada As Long
+    Dim estavaProtegidaOrigem As Boolean
+    Dim estavaProtegidaDestino As Boolean
+    Dim senhaOrigem As String
+    Dim senhaDestino As String
+    Dim cnpj As String
+    Dim nomeEnt As String
+    Dim copiou As Boolean
+
+    Set wsOrigem = ThisWorkbook.Sheets(SHEET_ENTIDADE)
+    Set wsDestino = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
+    linhaOrigem = TV2_LinhaPorIdAba(SHEET_ENTIDADE, LINHA_DADOS, COL_ENT_ID, entId)
+    If linhaOrigem = 0 Then
+        res.Mensagem = "Entidade não encontrada em ENTIDADE: " & entId
+        TV2_InativarEntidadeCadastro = res
+        Exit Function
+    End If
+
+    cnpj = CStr(wsOrigem.Cells(linhaOrigem, COL_ENT_CNPJ).Value)
+    nomeEnt = CStr(wsOrigem.Cells(linhaOrigem, COL_ENT_NOME).Value)
+    linhaDuplicada = Util_LinhaDuplicadaIdOuDocumento(wsDestino, LINHA_DADOS, COL_ENT_ID, entId, COL_ENT_CNPJ, cnpj)
+    If linhaDuplicada > 0 Then
+        res.Mensagem = "Entidade já existe em ENTIDADE_INATIVOS: " & entId
+        TV2_InativarEntidadeCadastro = res
+        Exit Function
+    End If
+
+    On Error GoTo erro
+    If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
+    If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
+
+    linhaDestino = TV2_NextDataRow(SHEET_ENTIDADE_INATIVOS)
+    TV2_CopiarLinhaValores wsOrigem, linhaOrigem, wsDestino, linhaDestino, COL_ENT_DT_CAD
+    copiou = True
+
+    If Not Util_ExcluirLinhaSegura(wsOrigem, linhaOrigem) Then
+        Err.Raise 1004, "TV2_InativarEntidadeCadastro", "Falha ao remover entidade da aba ativa."
+    End If
+
+    Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
+    Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
+    copiou = False
+
+    ClassificaEntidade
+    RegistrarEvento EVT_INATIVACAO, ENT_ENTIDADE, entId, _
+                    "ABA=ENTIDADE", _
+                    "ABA=ENTIDADE_INATIVOS; ORIGEM=Teste_V2_Engine", _
+                    "Teste_V2_Engine"
+
+    res.Sucesso = True
+    res.Mensagem = "Entidade inativada com sucesso: " & nomeEnt
+    TV2_InativarEntidadeCadastro = res
+    Exit Function
+
+erroPreparacao:
+    Err.Raise 1004, "TV2_InativarEntidadeCadastro", "Não foi possível preparar as abas de entidade."
+
+erro:
+    On Error Resume Next
+    If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
+    Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
+    Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
+    On Error GoTo 0
+    res.Sucesso = False
+    res.Mensagem = "Erro ao inativar entidade: " & Err.Description
+    res.CodigoErro = Err.Number
+    TV2_InativarEntidadeCadastro = res
+End Function
+
+Public Function TV2_ReativarEntidadeCadastro(ByVal entId As String) As TResult
+    Dim res As TResult
+    Dim wsOrigem As Worksheet
+    Dim wsDestino As Worksheet
+    Dim linhaOrigem As Long
+    Dim linhaDestino As Long
+    Dim linhaDuplicada As Long
+    Dim estavaProtegidaOrigem As Boolean
+    Dim estavaProtegidaDestino As Boolean
+    Dim senhaOrigem As String
+    Dim senhaDestino As String
+    Dim cnpj As String
+    Dim copiou As Boolean
+
+    Set wsOrigem = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
+    Set wsDestino = ThisWorkbook.Sheets(SHEET_ENTIDADE)
+    linhaOrigem = TV2_LinhaPorIdAba(SHEET_ENTIDADE_INATIVOS, LINHA_DADOS, COL_ENT_ID, entId)
+    If linhaOrigem = 0 Then
+        res.Mensagem = "Entidade não encontrada em ENTIDADE_INATIVOS: " & entId
+        TV2_ReativarEntidadeCadastro = res
+        Exit Function
+    End If
+
+    cnpj = CStr(wsOrigem.Cells(linhaOrigem, COL_ENT_CNPJ).Value)
+    linhaDuplicada = Util_LinhaDuplicadaIdOuDocumento(wsDestino, LINHA_DADOS, COL_ENT_ID, entId, COL_ENT_CNPJ, cnpj)
+    If linhaDuplicada > 0 Then
+        res.Mensagem = "Entidade já existe em ENTIDADE: " & entId
+        TV2_ReativarEntidadeCadastro = res
+        Exit Function
+    End If
+
+    On Error GoTo erro
+    If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
+    If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
+
+    linhaDestino = TV2_NextDataRow(SHEET_ENTIDADE)
+    TV2_CopiarLinhaValores wsOrigem, linhaOrigem, wsDestino, linhaDestino, COL_ENT_DT_CAD
+    copiou = True
+
+    If Not Util_ExcluirLinhaSegura(wsOrigem, linhaOrigem) Then
+        Err.Raise 1004, "TV2_ReativarEntidadeCadastro", "Falha ao remover entidade da aba inativa."
+    End If
+
+    Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
+    Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
+    copiou = False
+
+    ClassificaEntidade
+    RegistrarEvento EVT_REATIVACAO, ENT_ENTIDADE, entId, _
+                    "ABA=ENTIDADE_INATIVOS", _
+                    "ABA=ENTIDADE; ORIGEM=Teste_V2_Engine", _
+                    "Teste_V2_Engine"
+
+    res.Sucesso = True
+    res.Mensagem = "Entidade reativada com sucesso: " & entId
+    TV2_ReativarEntidadeCadastro = res
+    Exit Function
+
+erroPreparacao:
+    Err.Raise 1004, "TV2_ReativarEntidadeCadastro", "Não foi possível preparar as abas de entidade."
+
+erro:
+    On Error Resume Next
+    If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
+    Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
+    Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
+    On Error GoTo 0
+    res.Sucesso = False
+    res.Mensagem = "Erro ao reativar entidade: " & Err.Description
+    res.CodigoErro = Err.Number
+    TV2_ReativarEntidadeCadastro = res
 End Function
 
 Private Function TV2_Pad3(ByVal valor As Variant) As String
@@ -1766,6 +2165,8 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "CS_20", "AUTO", "Validar filtro de empresa inativa no cadastro", "Executar a suíte canônica e conferir a linha CS_20", "A inativa; B escolhida; posição de A preservada", "Linhas CS_20 no resultado", "Isola o efeito do status global INATIVA", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_21", "AUTO", "Validar completude mínima do AUDIT_LOG por família", "Executar a suíte canônica e conferir a linha CS_21", "Famílias críticas presentes no rastro operacional do cenário", "Linhas CS_21 no resultado e AUDIT_TESTES", "Dá cobertura auditável mínima às famílias críticas de evento", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_22", "AUTO", "Validar associação preservada em emissões múltiplas", "Executar a suíte canônica e conferir a linha CS_22", "ATIV_ID e SERV_ID corretos em todas as emissões", "Linhas CS_22 no resultado", "Fecha a proteção contra regressão de associação atividade/serviço", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_23", "AUTO", "Validar ida e volta de empresa entre ativo e inativo", "Executar a suíte canônica e conferir a linha CS_23", "A sai da seleção enquanto inativa e volta a ser escolhida após reativação, sem duplicidade cadastral", "Linhas CS_23 no resultado", "Fecha ida e volta de empresa com preservação da fila lógica", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_24", "AUTO", "Validar ida e volta de entidade entre ativo e inativo", "Executar a suíte canônica e conferir a linha CS_24", "Emissão falha com entidade inativa e volta a funcionar após reativação, sem duplicidade cadastral", "Linhas CS_24 no resultado", "Fecha ida e volta de entidade com rastreabilidade explícita", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "STR_001", "AUTO", "Validar repeticao deterministica do rodizio", "Executar Stress deterministico e acompanhar somente se houver falha", "Fila com IDs 001,002,003 sem duplicidade, 3 credenciamentos no item e ordem integra apos cada iteracao", "Linhas STR_001 no resultado", "Captura degradacao estrutural em lote", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "ASS_001", "ASSISTIDO", "Acompanhar visualmente o smoke assistido", "Executar a opcao 2 da central V2 e observar a tela durante toda a execucao", "Menu principal fechado; status bar evoluindo; aba de resultado assumindo o foco ao final", "Fechamento do menu, transicao para planilha e feedback visual", "Prova que o operador consegue assistir ao smoke sem interferencia do formulario", "ASSISTIDO"
     TV2_AddRoteiro ws, nr, "ASS_002", "ASSISTIDO", "Acompanhar visualmente o stress assistido", "Executar a opcao 4 da central V2 e acompanhar apenas o giro da fila e a abertura do resultado ao final", "Sem erro fatal; resultados STR_001 visiveis; menu principal fechado durante toda a bateria", "Status bar, aba RESULTADO_QA_V2 e ausencia do formulario do menu", "Permite homologacao assistida do lote deterministico", "ASSISTIDO"
