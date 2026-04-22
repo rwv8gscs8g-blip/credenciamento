@@ -146,17 +146,6 @@ Public Type TAvaliacao
     DT_AVAL      As Date
 End Type
 
-' Payload normalizado para submissão de avaliação a partir da UI.
-Public Type TAvaliacaoPayload
-    OS_ID               As String
-    avaliador           As String
-    notas(1 To 10)      As Integer
-    QtExecutada         As Double
-    Observacao          As String
-    JustifDivergencia   As String
-    MediaNotas          As Double
-End Type
-
 ' Configuração global (prazo, limites etc.)
 Public Type TConfig
     DIAS_DECISAO            As Long
