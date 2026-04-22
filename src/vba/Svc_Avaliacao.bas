@@ -21,7 +21,7 @@ Public Function FormatarMediaAvaliacao(ByVal mediaNotas As Variant) As String
 End Function
 
 Public Function MontarDefaultsAvaliacao( _
-    ByVal os As TOS, _
+    ByRef os As TOS, _
     ByRef osId As String, _
     ByRef numEmpenho As String, _
     ByRef dtFechamento As String, _
