@@ -2875,15 +2875,7 @@ ws.Range("N34").Value = Format(AvN08, "##,#")
 ws.Range("N35").Value = Format(AvN09, "##,#")
 ws.Range("N36").Value = Format(AvN10, "##,#")
 ws.Range("D37").Value = AvNEmp
-Dim media2 As Double
-' Regra crítica: a impressão deve refletir exatamente a pontuação obtida,
-' com 2 casas decimais e sem arredondar para cima (evita punições indevidas).
-If media >= 0 Then
-    media2 = Fix(media * 100) / 100
-Else
-    media2 = -Fix(Abs(media) * 100) / 100
-End If
-ws.Range("N37").Value = media2
+ws.Range("N37").Value = Util_Conversao.ToCurrency(FormatarMediaAvaliacao(media))
 ws.Range("N37").NumberFormat = "0.00"
 ws.Range("B40").Value = AvOb
 End Sub

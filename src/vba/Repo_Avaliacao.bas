@@ -10,10 +10,11 @@ Private Const STATUS_OS_CONCLUIDA As String = "CONCLUIDA"
 Public Function Inserir( _
     ByRef a As TAvaliacao, _
     ByVal QtExecutada As Double, _
-    ByVal valorUnit As Currency, _
+    ByVal valorExecutado As Currency, _
     ByVal justifDiv As String, _
     Optional ByVal dtFechamento As Variant, _
-    Optional ByVal DtPagto As Variant _
+    Optional ByVal DtPagto As Variant, _
+    Optional ByVal numEmpenho As String = "" _
 ) As TResult
     Dim res As TResult
     Dim ws As Worksheet
@@ -68,9 +69,12 @@ Public Function Inserir( _
         ws.Cells(linhaOS, COL_OS_DT_FECHAMENTO).Value = a.DT_AVAL
     End If
     ws.Cells(linhaOS, COL_OS_QT_EXEC).Value = QtExecutada
-    ws.Cells(linhaOS, COL_OS_VL_EXEC).Value = QtExecutada * valorUnit
+    ws.Cells(linhaOS, COL_OS_VL_EXEC).Value = valorExecutado
     If IsDate(DtPagto) Then
         ws.Cells(linhaOS, COL_OS_DT_PAGTO).Value = CDate(DtPagto)
+    End If
+    If Trim$(numEmpenho) <> "" Then
+        ws.Cells(linhaOS, COL_OS_EMPENHO).Value = Trim$(numEmpenho)
     End If
     ws.Cells(linhaOS, COL_OS_JUSTIF_DIV).Value = justifDiv
 
@@ -95,12 +99,13 @@ End Function
 Public Function RepoAvaliacaoInserir( _
     ByRef a As TAvaliacao, _
     ByVal QtExecutada As Double, _
-    ByVal valorUnit As Currency, _
+    ByVal valorExecutado As Currency, _
     ByVal justifDiv As String, _
     Optional ByVal dtFechamento As Variant, _
-    Optional ByVal DtPagto As Variant _
+    Optional ByVal DtPagto As Variant, _
+    Optional ByVal numEmpenho As String = "" _
 ) As TResult
-    RepoAvaliacaoInserir = Inserir(a, QtExecutada, valorUnit, justifDiv, dtFechamento, DtPagto)
+    RepoAvaliacaoInserir = Inserir(a, QtExecutada, valorExecutado, justifDiv, dtFechamento, DtPagto, numEmpenho)
 End Function
 
 ' IdsIguais removida — usar Util_Planilha.IdsIguais (V12-CLEAN).

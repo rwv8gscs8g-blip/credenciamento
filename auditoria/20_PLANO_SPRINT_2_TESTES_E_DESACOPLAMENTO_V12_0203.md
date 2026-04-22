@@ -153,6 +153,20 @@ Critério de aceite:
 - cada cenário capturado gera espelho congelado em `AUDIT_TESTES`
 - `RPT_TESTES_V2` consegue explicar a diferença entre `AUDIT_LOG` operacional e trilha de execução
 
+### A6. Consistência da avaliação entre UI, persistência e impressão
+
+Objetivo:
+
+- garantir que a média confirmada ao operador seja exatamente a mesma persistida e impressa
+- garantir que a avaliação carregue defaults reais da `CAD_OS`
+- exigir justificativa quando os defaults pré-preenchidos forem editados
+
+Critério de aceite:
+
+- confirmação da avaliação mostra a mesma média que aparece em `CAD_OS` e `IMP_AVALIA`
+- edição de empenho, data de fechamento, quantidade ou valor exige justificativa
+- novos cenários automatizados cobrem consistência da média e edição dos defaults
+
 ## Frente B — Ampliação dos cenários já existentes
 
 ### B1. Enriquecer `SMK_007`
@@ -211,6 +225,8 @@ Status atual:
   - normalização das 10 notas
   - montagem do `TAvaliacaoPayload`
   - cálculo da média já no helper
+  - montagem dos defaults da avaliação a partir da `CAD_OS`
+  - comparação entre defaults pré-preenchidos e edição feita na UI
 
 O formulário principal ainda concentra montagem de dados da avaliação.
 

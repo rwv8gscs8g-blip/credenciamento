@@ -22,6 +22,8 @@ tratam apenas da linha pública oficial.
 - cenário `SMK_007` reforçado para validar auditoria mínima de fechamento e ausência de suspensão indevida em avaliação satisfatória
 - cenário `STR_001` reforçado para validar IDs canônicos `001,002,003`, ausência de duplicidade semântica no item e quantidade final estável de credenciamentos
 - extração inicial da montagem do payload de avaliação para `Svc_Avaliacao.bas`, reduzindo acoplamento no `Menu_Principal.frm`
+- defaults da avaliação carregados diretamente da `CAD_OS`, com justificativa obrigatória quando houver edição de empenho, data, quantidade ou valor pré-preenchidos
+- consistência da média da avaliação entre confirmação, persistência e impressão, usando um único cálculo canônico com duas casas decimais
 - relatório imprimível da última execução V2 em `RPT_TESTES_V2`, com impressão opcional
 - área documental `docs/testes/` para padronizar a narrativa humana das baterias de teste
 - trilha cumulativa da suíte V2 em `TESTE_TRILHA` e `AUDIT_TESTES`

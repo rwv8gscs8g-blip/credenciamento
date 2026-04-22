@@ -9,6 +9,101 @@ Option Explicit
 Private Const STATUS_OS_EXEC      As String = "EM_EXECUCAO"
 Private Const STATUS_OS_CONCLUIDA As String = "CONCLUIDA"
 
+Public Function MediaAvaliacaoDeterministica(ByVal somaNotas As Long) As Double
+    Dim mediaExata As Currency
+
+    mediaExata = CCur(CLng(somaNotas) * 10) / CCur(100)
+    MediaAvaliacaoDeterministica = CDbl(mediaExata)
+End Function
+
+Public Function FormatarMediaAvaliacao(ByVal mediaNotas As Variant) As String
+    FormatarMediaAvaliacao = Format$(Util_Conversao.ToCurrency(mediaNotas), "0.00")
+End Function
+
+Public Function MontarDefaultsAvaliacao( _
+    ByVal os As TOS, _
+    ByRef defaults As TAvaliacaoDefaults _
+) As TResult
+    Dim res As TResult
+
+    If Trim$(os.OS_ID) = "" Then
+        res.Sucesso = False
+        res.Mensagem = "OS obrigatoria para montar defaults da avaliacao."
+        MontarDefaultsAvaliacao = res
+        Exit Function
+    End If
+
+    defaults.OS_ID = Trim$(os.OS_ID)
+    defaults.NumEmpenho = Trim$(os.NUM_EMPENHO)
+    If os.DT_PREV_TERMINO > 0 Then
+        defaults.DtFechamento = Format$(os.DT_PREV_TERMINO, "DD/MM/YYYY")
+    Else
+        defaults.DtFechamento = Format$(Date, "DD/MM/YYYY")
+    End If
+    defaults.DtPagamento = ""
+    If os.QT_CONFIRMADA > 0 Then
+        defaults.QtExecutada = os.QT_CONFIRMADA
+    Else
+        defaults.QtExecutada = os.QT_ESTIMADA
+    End If
+    defaults.ValorExecutado = os.VALOR_TOTAL_OS
+
+    res.Sucesso = True
+    res.Mensagem = "Defaults da avaliacao montados."
+    MontarDefaultsAvaliacao = res
+End Function
+
+Public Function DescreverMudancasAvaliacao( _
+    ByRef defaults As TAvaliacaoDefaults, _
+    ByVal numEmpenhoAtual As Variant, _
+    ByVal dtFechamentoAtual As Variant, _
+    ByVal qtExecutadaAtual As Variant, _
+    ByVal valorAtual As Variant, _
+    ByRef houveMudanca As Boolean, _
+    ByRef resumoMudancas As String _
+) As TResult
+    Dim res As TResult
+    Dim empAtual As String
+    Dim dtAtual As String
+    Dim qtAtual As Double
+    Dim vlAtual As Currency
+
+    empAtual = Trim$(SafeListVal(numEmpenhoAtual))
+    dtAtual = SvcAvaliacao_NormalizarDataTexto(dtFechamentoAtual)
+    qtAtual = Util_Conversao.ToDouble(qtExecutadaAtual)
+    vlAtual = Util_Conversao.ToCurrency(valorAtual)
+
+    If StrComp(defaults.NumEmpenho, empAtual, vbTextCompare) <> 0 Then
+        houveMudanca = True
+        resumoMudancas = resumoMudancas & "- Empenho: '" & defaults.NumEmpenho & "' -> '" & empAtual & "'" & vbCrLf
+    End If
+
+    If StrComp(defaults.DtFechamento, dtAtual, vbTextCompare) <> 0 Then
+        houveMudanca = True
+        resumoMudancas = resumoMudancas & "- Data de fechamento: '" & defaults.DtFechamento & "' -> '" & dtAtual & "'" & vbCrLf
+    End If
+
+    If Abs(qtAtual - defaults.QtExecutada) > 0.0001 Then
+        houveMudanca = True
+        resumoMudancas = resumoMudancas & "- Quantidade executada: " & _
+                         Format$(defaults.QtExecutada, "0.00") & " -> " & Format$(qtAtual, "0.00") & vbCrLf
+    End If
+
+    If Abs(CDbl(vlAtual) - CDbl(defaults.ValorExecutado)) > 0.0001 Then
+        houveMudanca = True
+        resumoMudancas = resumoMudancas & "- Valor executado: R$ " & _
+                         Format$(defaults.ValorExecutado, "#,##0.00") & " -> R$ " & Format$(vlAtual, "#,##0.00") & vbCrLf
+    End If
+
+    If Right$(resumoMudancas, 2) = vbCrLf Then
+        resumoMudancas = Left$(resumoMudancas, Len(resumoMudancas) - 2)
+    End If
+
+    res.Sucesso = True
+    res.Mensagem = "Mudancas da avaliacao comparadas."
+    DescreverMudancasAvaliacao = res
+End Function
+
 Public Function MontarNotasAvaliacao( _
     ByVal nota1 As Variant, _
     ByVal nota2 As Variant, _
@@ -51,7 +146,7 @@ Public Function MontarNotasAvaliacao( _
         soma = soma + notas(i)
     Next i
 
-    mediaNotas = Round(soma / 10#, 2)
+    mediaNotas = MediaAvaliacaoDeterministica(soma)
     res.Sucesso = True
     res.Mensagem = "Notas normalizadas com sucesso."
     MontarNotasAvaliacao = res
@@ -88,7 +183,7 @@ Public Function MontarPayloadAvaliacao( _
         soma = soma + notas(i)
     Next i
 
-    payload.MediaNotas = Round(soma / 10#, 2)
+    payload.MediaNotas = MediaAvaliacaoDeterministica(soma)
 
     If payload.OS_ID = "" Then
         res.Sucesso = False
@@ -132,6 +227,14 @@ Private Function SvcAvaliacao_NotaSegura(ByVal valor As Variant) As Integer
     SvcAvaliacao_NotaSegura = CInt(numero)
 End Function
 
+Private Function SvcAvaliacao_NormalizarDataTexto(ByVal valor As Variant) As String
+    If IsDate(valor) Then
+        SvcAvaliacao_NormalizarDataTexto = Format$(CDate(valor), "DD/MM/YYYY")
+    Else
+        SvcAvaliacao_NormalizarDataTexto = Trim$(CStr(valor))
+    End If
+End Function
+
 Public Function AvaliarOS( _
     ByVal OS_ID As String, _
     ByVal avaliador As String, _
@@ -140,7 +243,9 @@ Public Function AvaliarOS( _
     ByVal Observacao As String, _
     ByVal justifDiv As String, _
     Optional ByVal dtFechamento As Variant, _
-    Optional ByVal DtPagto As Variant _
+    Optional ByVal DtPagto As Variant, _
+    Optional ByVal valorExecutadoInformado As Variant, _
+    Optional ByVal numEmpenho As String = "" _
 ) As TResult
     Dim res As TResult
     Dim os As TOS
@@ -209,7 +314,8 @@ Public Function AvaliarOS( _
     justifEfetiva = Trim$(justifDiv)
     If justifEfetiva = "" Then justifEfetiva = Trim$(Observacao)
 
-    valorExecutado = CCur(QtExecutada * os.VALOR_UNIT)
+    valorExecutado = Util_Conversao.ToCurrency(valorExecutadoInformado)
+    If valorExecutado <= 0 Then valorExecutado = CCur(QtExecutada * os.VALOR_UNIT)
     haDivergencia = (Abs(QtExecutada - os.QT_ESTIMADA) > 0.0001) Or _
                     (Abs(CDbl(valorExecutado) - CDbl(os.VALOR_TOTAL_OS)) > 0.0001)
 
@@ -221,7 +327,7 @@ Public Function AvaliarOS( _
     End If
 
     ' 5. Calcular média (critério 36)
-    media = soma / 10#
+    media = MediaAvaliacaoDeterministica(soma)
 
     ' 6. Montar TAvaliacao
     aval.OS_ID = OS_ID
@@ -235,7 +341,7 @@ Public Function AvaliarOS( _
     aval.DT_AVAL = Now
 
     ' 7. Persistir via Repo_Avaliacao
-    resInsert = RepoAvaliacaoInserir(aval, QtExecutada, os.VALOR_UNIT, justifEfetiva, dtFechamento, DtPagto)
+    resInsert = RepoAvaliacaoInserir(aval, QtExecutada, valorExecutado, justifEfetiva, dtFechamento, DtPagto, numEmpenho)
     If Not resInsert.Sucesso Then
         res.Sucesso = False
         res.Mensagem = "Falha ao salvar avaliacao: " & resInsert.Mensagem
@@ -268,7 +374,7 @@ Public Function AvaliarOS( _
     RegistrarEvento _
         EVT_AVALIACAO, ENT_OS, OS_ID, _
         "STATUS=EM_EXECUCAO", _
-        "MEDIA=" & Format$(media, "0.00") & _
+        "MEDIA=" & FormatarMediaAvaliacao(media) & _
         "; AVALIADOR=" & avaliador & _
         "; QT_EXEC=" & CStr(QtExecutada) & _
         "; NOTA_MIN=" & Format$(notaMin, "0.00"), _
@@ -277,12 +383,12 @@ Public Function AvaliarOS( _
     RegistrarEvento _
         EVT_OS_FECHADA, ENT_OS, OS_ID, _
         "STATUS=EM_EXECUCAO", _
-        "STATUS=CONCLUIDA; MEDIA=" & Format$(media, "0.00") & _
+        "STATUS=CONCLUIDA; MEDIA=" & FormatarMediaAvaliacao(media) & _
         "; AVALIADOR=" & avaliador & "; QT_EXEC=" & CStr(QtExecutada), _
         "Svc_Avaliacao"
 
     res.Sucesso = True
-    res.Mensagem = "OS " & OS_ID & " avaliada. MEDIA=" & Format$(media, "0.00")
+    res.Mensagem = "OS " & OS_ID & " avaliada. MEDIA=" & FormatarMediaAvaliacao(media)
     res.IdGerado = OS_ID
     AvaliarOS = res
     Exit Function

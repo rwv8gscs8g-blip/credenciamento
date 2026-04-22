@@ -47,6 +47,7 @@ Attribute mTxtFiltroEntidade.VB_VarHelpID = -1
 Private WithEvents mTxtFiltroCadServ As MSForms.TextBox
 Attribute mTxtFiltroCadServ.VB_VarHelpID = -1
 Private mInicializando As Boolean
+Private mAvaliacaoDefaults As TAvaliacaoDefaults
 Private Const SHEET_REL_UI As String = "RELATORIO"
 Private Const PRAZO_PADRAO_OS_DIAS As Long = 30
 
@@ -92,15 +93,45 @@ erro_carregamento:
 End Sub
 Private Sub AV_Lista_Click()
 On Error GoTo erro_carregamento
+Dim os As TOS
+Dim resDefaults As TResult
+
 If AV_Lista.ListIndex < 0 Then Exit Sub
 
 AVCNPJ = AVListaCol(8)
 AVEmpresa = AVListaCol(3)
+os = Repo_OS.BuscarPorId(AVListaCol(0))
+If os.OS_ID <> "" Then
+    resDefaults = MontarDefaultsAvaliacao(os, mAvaliacaoDefaults)
+    If resDefaults.Sucesso Then
+        AV_N_Empenho.Value = mAvaliacaoDefaults.NumEmpenho
+        AV_DataFechamento.Value = mAvaliacaoDefaults.DtFechamento
+        AV_QtHoras.Value = Format$(mAvaliacaoDefaults.QtExecutada, "0.00")
+        AV_Vl_OS.Value = Format$(mAvaliacaoDefaults.ValorExecutado, "Currency")
+        AV_Dt_Pagto.Value = mAvaliacaoDefaults.DtPagamento
+    End If
+End If
 AV_DataFechamento.SetFocus
 
 Exit Sub
 erro_carregamento:
 End Sub
+Private Function AV_MontarObservacaoImpressao(ByVal observacaoTexto As String, ByVal justificativaTexto As String) As String
+    Dim obs As String
+
+    obs = Trim$(observacaoTexto)
+    If Trim$(justificativaTexto) = "" Then
+        AV_MontarObservacaoImpressao = obs
+        Exit Function
+    End If
+
+    If obs <> "" Then
+        AV_MontarObservacaoImpressao = obs & vbCrLf & "Justificativa: " & justificativaTexto
+    Else
+        AV_MontarObservacaoImpressao = "Justificativa: " & justificativaTexto
+    End If
+End Function
+
 Private Sub AV_Vl_OS_AfterUpdate()
 On Error GoTo erro_carregamento:
 AV_Vl_OS = Format(AV_Vl_OS, "currency")
@@ -721,6 +752,7 @@ Private Sub EncerraOS_Click()
     Dim notas(1 To 10) As Integer
     Dim payload As TAvaliacaoPayload
     Dim mediaLocal As Double
+    Dim mediaTexto As String
     Dim qtExec As Double
     Dim vlOS As Double
     Dim qtOrcada As Double
@@ -728,9 +760,17 @@ Private Sub EncerraOS_Click()
     Dim justifDiv As String
     Dim justfInput As String
     Dim avaliador As String
+    Dim precisaJustificativa As Boolean
+    Dim houveEdicaoDefaults As Boolean
+    Dim resumoEdicoes As String
+    Dim resMudancas As TResult
     Dim res As TResult
     Dim resNotas As TResult
     Dim resPayload As TResult
+    Dim resDefaults As TResult
+    Dim osAtual As TOS
+    Dim dtFechamentoInformado As Variant
+    Dim dtPagtoInformado As Variant
 
     If AV_Lista.ListIndex < 0 Then
         MsgBox "Selecione uma OS para avaliar!", vbExclamation, "Avaliação"
@@ -753,12 +793,13 @@ Private Sub EncerraOS_Click()
     End If
 
     media = mediaLocal  ' Atribuir a variavel publica usada por PreencherAvaliacaoOS
-    AV_Total.Value = mediaLocal
+    mediaTexto = FormatarMediaAvaliacao(mediaLocal)
+    AV_Total.Value = mediaTexto
 
     ' V12.0.0010: resumo detalhado antes de confirmar
     If MsgBox("Confirma a avaliação?" & vbCrLf & vbCrLf & _
               "OS: " & osId & vbCrLf & _
-              "Média das notas: " & CStr(mediaLocal) & vbCrLf & _
+              "Média das notas: " & mediaTexto & vbCrLf & _
               "Notas: " & CStr(notas(1)) & "/" & CStr(notas(2)) & "/" & CStr(notas(3)) & "/" & _
               CStr(notas(4)) & "/" & CStr(notas(5)) & "/" & CStr(notas(6)) & "/" & _
               CStr(notas(7)) & "/" & CStr(notas(8)) & "/" & CStr(notas(9)) & "/" & CStr(notas(10)), _
@@ -773,18 +814,56 @@ Private Sub EncerraOS_Click()
     qtOrcada = Util_Conversao.ToDouble(AVListaCol(5))
     vlOrcado = Util_Conversao.ToDouble(AVListaCol(6))
 
+    If Trim$(mAvaliacaoDefaults.OS_ID) <> Trim$(osId) Then
+        osAtual = Repo_OS.BuscarPorId(osId)
+        resDefaults = MontarDefaultsAvaliacao(osAtual, mAvaliacaoDefaults)
+        If Not resDefaults.Sucesso Then
+            MsgBox "Erro ao carregar defaults da avaliação: " & resDefaults.Mensagem, vbExclamation, "Avaliação"
+            GoTo Limpar
+        End If
+    End If
+
+    If Trim$(SafeListVal(AV_DataFechamento.Value)) <> "" Then
+        If Not TryParseDataBR(CStr(AV_DataFechamento.Value), dtFechamentoInformado) Then
+            MsgBox "Data de fechamento inválida. Use o formato DD/MM/AAAA.", vbExclamation, "Avaliação"
+            GoTo Limpar
+        End If
+    End If
+
+    If Trim$(SafeListVal(AV_Dt_Pagto.Value)) <> "" Then
+        If Not TryParseDataBR(CStr(AV_Dt_Pagto.Value), dtPagtoInformado) Then
+            MsgBox "Data de pagamento inválida. Use o formato DD/MM/AAAA.", vbExclamation, "Avaliação"
+            GoTo Limpar
+        End If
+    End If
+
     justifDiv = Funcoes.NormalizarTextoPTBR(SafeListVal(AV_OBS.Value))
+    resMudancas = DescreverMudancasAvaliacao(mAvaliacaoDefaults, AV_N_Empenho.Value, AV_DataFechamento.Value, AV_QtHoras.Value, AV_Vl_OS.Value, houveEdicaoDefaults, resumoEdicoes)
+    If Not resMudancas.Sucesso Then
+        MsgBox "Erro ao comparar valores pré-preenchidos: " & resMudancas.Mensagem, vbExclamation, "Avaliação"
+        GoTo Limpar
+    End If
+
+    precisaJustificativa = (Abs(vlOS - vlOrcado) > 0.0001 Or Abs(qtExec - qtOrcada) > 0.0001 Or houveEdicaoDefaults)
+
     ' V12.0.0010: validacao reforçada — justificativa obrigatoria quando diverge
-    If Abs(vlOS - vlOrcado) > 0.0001 Or Abs(qtExec - qtOrcada) > 0.0001 Then
+    If precisaJustificativa Then
+        justfInput = ""
+        If houveEdicaoDefaults Then
+            justfInput = justfInput & "Foram detectadas alterações nos valores pré-preenchidos da OS:" & vbCrLf & _
+                         resumoEdicoes & vbCrLf & vbCrLf
+        End If
+        If Abs(vlOS - vlOrcado) > 0.0001 Or Abs(qtExec - qtOrcada) > 0.0001 Then
+            justfInput = justfInput & "Os valores realizados divergem dos orçados:" & vbCrLf & _
+                         "  Qtd orçada: " & CStr(qtOrcada) & " | Qtd executada: " & CStr(qtExec) & vbCrLf & _
+                         "  Valor orçado: R$ " & Format$(vlOrcado, "#,##0.00") & _
+                         " | Valor realizado: R$ " & Format$(vlOS, "#,##0.00") & vbCrLf & vbCrLf
+        End If
         justfInput = InputBox( _
-            "Os valores realizados divergem dos orçados:" & vbCrLf & _
-            "  Qtd orçada: " & CStr(qtOrcada) & " | Qtd executada: " & CStr(qtExec) & vbCrLf & _
-            "  Valor orçado: R$ " & Format$(vlOrcado, "#,##0.00") & _
-            " | Valor realizado: R$ " & Format$(vlOS, "#,##0.00") & vbCrLf & vbCrLf & _
-            "Informe a justificativa (campo obrigat" & ChrW(243) & "rio):", _
+            justfInput & "Informe a justificativa (campo obrigat" & ChrW(243) & "rio):", _
             "Justificativa de Diverg" & ChrW(234) & "ncia")
         If Trim$(justfInput) = "" Then
-            MsgBox "Justificativa obrigatória quando valores divergem." & vbCrLf & _
+            MsgBox "Justificativa obrigatória quando há divergência ou edição dos valores pré-preenchidos." & vbCrLf & _
                    "Avaliação não registrada.", _
                    vbExclamation, "Avaliação"
             GoTo Limpar
@@ -801,7 +880,8 @@ Private Sub EncerraOS_Click()
     End If
 
     qtExec = payload.QtExecutada
-    res = AvaliarOS(payload.OS_ID, payload.avaliador, payload.notas, payload.QtExecutada, payload.Observacao, payload.JustifDivergencia)
+    media = payload.MediaNotas
+    res = AvaliarOS(payload.OS_ID, payload.avaliador, payload.notas, payload.QtExecutada, payload.Observacao, payload.JustifDivergencia, dtFechamentoInformado, dtPagtoInformado, AV_Vl_OS.Value, CStr(AV_N_Empenho.Value))
     If Not res.Sucesso Then
         MsgBox "Erro ao avaliar OS: " & res.mensagem, vbCritical, "Avaliação"
         GoTo Limpar
@@ -829,7 +909,7 @@ Private Sub EncerraOS_Click()
         AvN08 = CStr(AV_Nota8.Value)
         AvN09 = CStr(AV_Nota9.Value)
         AvN10 = CStr(AV_Nota10.Value)
-        AvOb = CStr(AV_OBS.Value)
+        AvOb = AV_MontarObservacaoImpressao(CStr(AV_OBS.Value), payload.JustifDivergencia)
         On Error GoTo errPrint
         Call PreencherAvaliacaoOS
         Call Imprimir_AvaliacaoOS
@@ -3834,10 +3914,5 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
-
-
-
-
-
 
 
