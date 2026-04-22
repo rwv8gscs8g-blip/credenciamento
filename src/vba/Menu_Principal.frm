@@ -782,6 +782,8 @@ Private Sub EncerraOS_Click()
     Dim osAtual As TOS
     Dim dtFechamentoInformado As Variant
     Dim dtPagtoInformado As Variant
+    Dim dtFechamentoTmp As Date
+    Dim dtPagtoTmp As Date
     Dim payloadOSID As String
     Dim payloadAvaliador As String
     Dim payloadQtExecutada As Double
@@ -848,17 +850,19 @@ Private Sub EncerraOS_Click()
     End If
 
     If Trim$(SafeListVal(AV_DataFechamento.Value)) <> "" Then
-        If Not TryParseDataBR(CStr(AV_DataFechamento.Value), dtFechamentoInformado) Then
+        If Not TryParseDataBR(CStr(AV_DataFechamento.Value), dtFechamentoTmp) Then
             MsgBox "Data de fechamento inválida. Use o formato DD/MM/AAAA.", vbExclamation, "Avaliação"
             GoTo Limpar
         End If
+        dtFechamentoInformado = dtFechamentoTmp
     End If
 
     If Trim$(SafeListVal(AV_Dt_Pagto.Value)) <> "" Then
-        If Not TryParseDataBR(CStr(AV_Dt_Pagto.Value), dtPagtoInformado) Then
+        If Not TryParseDataBR(CStr(AV_Dt_Pagto.Value), dtPagtoTmp) Then
             MsgBox "Data de pagamento inválida. Use o formato DD/MM/AAAA.", vbExclamation, "Avaliação"
             GoTo Limpar
         End If
+        dtPagtoInformado = dtPagtoTmp
     End If
 
     justifDiv = Funcoes.NormalizarTextoPTBR(SafeListVal(AV_OBS.Value))
