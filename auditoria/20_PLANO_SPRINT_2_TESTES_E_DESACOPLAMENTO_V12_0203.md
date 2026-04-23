@@ -253,6 +253,13 @@ Objetivo:
 
 ### C2. Extrair orquestração de emissão de Pre-OS / OS
 
+Status atual:
+
+- primeira extração incorporada ao `codex/v12-0-0203-governanca-testes`
+- `Svc_PreOS.bas` agora monta e valida os parâmetros mínimos de emissão da Pre-OS
+- `Svc_OS.bas` agora monta e valida os parâmetros mínimos de emissão da OS
+- `Menu_Principal.frm` deixa de fazer sozinho parsing, defaults e coerência básica desses fluxos
+
 Objetivo:
 
 - reduzir regras colaterais no formulário

@@ -24,6 +24,7 @@ tratam apenas da linha pública oficial.
 - cenário `ATM_001` reforçado para validar rollback multi-aba sem mutação residual em `EMPRESAS` e `CREDENCIADOS`, com mensagem legível de rollback
 - cenário `STR_001` reforçado para validar IDs canônicos `001,002,003`, ausência de duplicidade semântica no item e quantidade final estável de credenciamentos
 - extração inicial da montagem do payload de avaliação para `Svc_Avaliacao.bas`, reduzindo acoplamento no `Menu_Principal.frm`
+- primeira extração da orquestração de emissão para `Svc_PreOS.bas` e `Svc_OS.bas`, reduzindo parsing e defaults locais no `Menu_Principal.frm`
 - defaults da avaliação carregados diretamente da `CAD_OS`, com justificativa obrigatória quando houver edição de empenho, data, quantidade ou valor pré-preenchidos
 - consistência da média da avaliação entre confirmação, persistência e impressão, usando um único cálculo canônico com duas casas decimais
 - relatório imprimível da última execução V2 em `RPT_TESTES_V2`, com impressão opcional

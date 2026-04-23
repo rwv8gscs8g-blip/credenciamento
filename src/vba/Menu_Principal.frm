@@ -422,20 +422,9 @@ Private Sub BE_ImprimeOS_Click()
         Exit Sub
     End If
 
-    ' 2. Preparar parametros  validacao explicita
+    ' 2. Preparar parametros da emissao
     Dim dtPrev As Date
-    If Trim$(CStr(OS_DT_Fim.Value)) = "" Then
-        dtPrev = DateAdd("d", PrazoPadraoOSDias(), Date)
-        OS_DT_Fim.Value = Format$(dtPrev, "DD/MM/YYYY")
-    ElseIf Not TryParseDataBR(CStr(OS_DT_Fim.Value), dtPrev) Then
-        MsgBox "Data prevista de término inválida. Use o formato DD/MM/AAAA.", vbExclamation, "Emitir OS"
-        ErrorBoundary.RollbackWrite silent:=True
-        Exit Sub
-    ElseIf dtPrev < Date Then
-        MsgBox "Data prevista de término não pode ser anterior a hoje.", vbExclamation, "Emitir OS"
-        ErrorBoundary.RollbackWrite silent:=True
-        Exit Sub
-    End If
+    Dim resPrepOS As TResult
 
     If Trim$(CStr(OS_QT_Estimada.Value)) = "" Or _
        Util_Conversao.ToDouble(CStr(OS_QT_Estimada.Value)) <= 0 Then
@@ -443,11 +432,20 @@ Private Sub BE_ImprimeOS_Click()
     End If
 
     Dim numEmp As String
-    numEmp = Trim$(CStr(N_Empenho.Value))
-    If numEmp = "" Then
-        numEmp = GerarEmpenhoPadrao(preosId)
-        N_Empenho.Value = numEmp
+    numEmp = ""
+    resPrepOS = MontarParametrosEmissaoOS( _
+        preosId, _
+        CStr(OS_DT_Fim.Value), _
+        CStr(N_Empenho.Value), _
+        dtPrev, _
+        numEmp)
+    If Not resPrepOS.Sucesso Then
+        MsgBox resPrepOS.mensagem, vbExclamation, "Emitir OS"
+        ErrorBoundary.RollbackWrite silent:=True
+        Exit Sub
     End If
+    OS_DT_Fim.Value = Format$(dtPrev, "DD/MM/YYYY")
+    N_Empenho.Value = numEmp
 
     If MsgBox("A ação 'Aceitar e Emitir OS' vai converter a Pre-OS e avançar a fila agora." & vbCrLf & _
               "Esta operação não depende da impressão." & vbCrLf & vbCrLf & _
@@ -1835,6 +1833,9 @@ Private Sub B_PreOS_Click()
     Dim descAtivSel As String
     Dim descServSel As String
     Dim totalServicosNaLista As Long
+    Dim resPrep As TResult
+    Dim qtdPreparada As Double
+    Dim valorEstimadoPrep As Currency
 
     totalServicosNaLista = 0
     On Error Resume Next
@@ -1879,8 +1880,6 @@ Private Sub B_PreOS_Click()
         Exit Sub
     End If
 
-    codServico = ativIDSel & "|" & servIDSel
-
     ' A1: fallback de Entidade pela selecao atual da C_ListaRodizio
     If Trim$(CStr(Entidade)) = "" Then
         If C_ListaRodizio.ListIndex >= 0 Then
@@ -1909,27 +1908,21 @@ Private Sub B_PreOS_Click()
         Exit Sub
     End If
 
-    ' 2. Solicitar quantidade (mantem InputBox como V9)  validacao explicita, sem On Error Resume Next
+    ' 2. Preparar emissão para exibir valor unitário coerente na UI
     Dim strQtd As String
     Dim valorUnit As Double
-    valorUnit = 0
-    Dim wsServ As Worksheet
-    Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
-    Dim servId As String
-    servId = servIDSel
-    Dim ativIDServ As String
-    ativIDServ = ativIDSel
-    Dim jj As Long
-    For jj = LINHA_DADOS To UltimaLinhaAba(SHEET_CAD_SERV)
-        If Pad3Id(wsServ.Cells(jj, COL_SERV_ID).Value) = servId And _
-           Pad3Id(wsServ.Cells(jj, COL_SERV_ATIV_ID).Value) = ativIDServ Then
-            valorUnit = Util_Conversao.ToDouble(CStr(wsServ.Cells(jj, COL_SERV_VALOR_UNIT).Value))
-            Exit For
-        End If
-    Next jj
-
-    If valorUnit <= 0 Then
-        MsgBox "Valor do serviço não encontrado no cadastro de serviços.", vbExclamation, "Pre-OS"
+    valorUnit = 0#
+    resPrep = MontarParametrosEmissaoPreOS( _
+        CStr(Entidade), _
+        ativIDSel, _
+        servIDSel, _
+        "1", _
+        codServico, _
+        qtdPreparada, _
+        valorUnit, _
+        valorEstimadoPrep)
+    If Not resPrep.Sucesso Then
+        MsgBox MensagemAmigavelPreOS(resPrep.mensagem), vbExclamation, "Pre-OS"
         ErrorBoundary.RollbackWrite silent:=True
         Exit Sub
     End If
@@ -1945,10 +1938,20 @@ Private Sub B_PreOS_Click()
         ErrorBoundary.RollbackWrite silent:=True
         Exit Sub
     End If
-    QT_ESTIMADA = Util_Conversao.ToDouble(strQtd)
-    If QT_ESTIMADA <= 0 Then QT_ESTIMADA = 1
-    VL_Pagto = valorUnit
-    Vl_estimado = QT_ESTIMADA * VL_Pagto
+    resPrep = MontarParametrosEmissaoPreOS( _
+        CStr(Entidade), _
+        ativIDSel, _
+        servIDSel, _
+        strQtd, _
+        codServico, _
+        QT_ESTIMADA, _
+        VL_Pagto, _
+        Vl_estimado)
+    If Not resPrep.Sucesso Then
+        MsgBox MensagemAmigavelPreOS(resPrep.mensagem), vbExclamation, "Pre-OS"
+        ErrorBoundary.RollbackWrite silent:=True
+        Exit Sub
+    End If
 
     ' 3. Chamar EmitirPreOS (logica de rodizio encapsulada em modulo de servico)
     Dim res As TResult

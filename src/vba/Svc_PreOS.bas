@@ -20,6 +20,66 @@ Private Const STATUS_EXPIRADA   As String = "EXPIRADA"
 Private Const STATUS_CONVERTIDA As String = "CONVERTIDA_OS"
 
 ' ============================================================
+' SEÇÃO 0: PREPARAÇÃO DE EMISSÃO
+' ============================================================
+
+Public Function MontarParametrosEmissaoPreOS( _
+    ByVal ENT_ID As String, _
+    ByVal ATIV_ID As String, _
+    ByVal SERV_ID As String, _
+    ByVal QT_TEXTO As String, _
+    ByRef COD_SERVICO As String, _
+    ByRef QT_ESTIMADA As Double, _
+    ByRef VALOR_UNIT As Currency, _
+    ByRef VALOR_ESTIMADO As Currency _
+) As TResult
+    Dim res As TResult
+    Dim ativNorm As String
+    Dim servNorm As String
+
+    ativNorm = Trim$(ATIV_ID)
+    servNorm = Trim$(SERV_ID)
+
+    If ativNorm = "" Or servNorm = "" Then
+        res.Sucesso = False
+        res.Mensagem = "Selecione um servico valido antes de emitir a Pre-OS."
+        MontarParametrosEmissaoPreOS = res
+        Exit Function
+    End If
+
+    If Trim$(ENT_ID) = "" Then
+        res.Sucesso = False
+        res.Mensagem = "Selecione uma entidade para emissao da Pre-OS."
+        MontarParametrosEmissaoPreOS = res
+        Exit Function
+    End If
+
+    If Not EntidadeAtivaExiste(ENT_ID) Then
+        res.Sucesso = False
+        res.Mensagem = "Entidade inexistente ou inativa: ENT_ID=" & ENT_ID
+        MontarParametrosEmissaoPreOS = res
+        Exit Function
+    End If
+
+    If Not BuscarValorServico(ativNorm, servNorm, VALOR_UNIT) Then
+        res.Sucesso = False
+        res.Mensagem = "Servico nao encontrado em CAD_SERV: ATIV=" & ativNorm & " SERV=" & servNorm
+        MontarParametrosEmissaoPreOS = res
+        Exit Function
+    End If
+
+    QT_ESTIMADA = Util_Conversao.ToDouble(QT_TEXTO)
+    If QT_ESTIMADA <= 0 Then QT_ESTIMADA = 1
+
+    COD_SERVICO = ativNorm & "|" & servNorm
+    VALOR_ESTIMADO = VALOR_UNIT * QT_ESTIMADA
+
+    res.Sucesso = True
+    res.Mensagem = "Parametros da Pre-OS montados com sucesso."
+    MontarParametrosEmissaoPreOS = res
+End Function
+
+' ============================================================
 ' SEÇÃO 1: EMISSÃO
 ' ============================================================
 

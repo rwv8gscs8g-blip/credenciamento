@@ -1151,6 +1151,11 @@ Resultado esperado: emissão testável sem formulário aberto;
 comportamento de emissão auditável independente da UI.
 Razão: é a frente C2 do plano Sprint 2.
 
+Estado na `V12.0.0203`: primeira fatia já entregue sem criar módulo
+novo. `Svc_PreOS` e `Svc_OS` passaram a montar/validar parâmetros
+mínimos de emissão, e o `Menu_Principal` ficou restrito à seleção,
+confirmação e impressão.
+
 ### 13.4 Catálogo de benefícios por peça
 
 - **AR-01** fecha lacuna R-57, permite auditoria completa por
