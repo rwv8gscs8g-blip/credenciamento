@@ -374,7 +374,7 @@ Public Sub TV2_GerarRelatorioUltimaExecucao()
     Dim r As Long
     Dim linhaHist As Long
     Dim nr As Long
-    Dim resp As VbMsgBoxResult
+    Dim resp As Long
 
     execucaoId = TV2_ExecucaoEmFoco()
     If execucaoId = "" Then
