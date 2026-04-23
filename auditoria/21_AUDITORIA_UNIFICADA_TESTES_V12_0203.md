@@ -825,12 +825,13 @@ Resultado esperado: evento `OS_Fechada` em `Audit_Log`; evento
 ativa; `DT_FIM_SUSPENSAO` permanece nula.
 Razão: prova que o fechamento feliz não produz suspensão indevida.
 
-**AM-02 — `ATM_001` ampliado.**
+**AM-02 — `ATM_001` ampliado (já incorporado na linha `0203`).**
 Pré-condição: transação aberta em cenário de Pré-OS → OS.
 Ação: injetar falha após mutação parcial em mais de uma aba
 operacional.
 Resultado esperado: rollback completo; ausência de mutação residual
-em qualquer aba afetada; mensagem de rollback legível em
+em `EMPRESAS` e `CREDENCIADOS`; quantidade do item canônico
+preservada; mensagem de rollback legível no retorno e em
 `Audit_Log`.
 Razão: prova que a atomicidade não é ilusória em escrita multi-aba.
 
@@ -1268,7 +1269,7 @@ determinístico da `AUDIT_LOG` operacional.
 **Frente B — Ampliação de cenários existentes.**
 B1 (`SMK_007` reforçado — AM-01): incorporado.
 B3 (`STR_001` ampliado — AM-03): incorporado com checagem explícita de IDs canônicos, quantidade final do item e posições crescentes.
-B2 (`ATM_001` ampliado — AM-02): fica para a Sprint 3 junto com AR-02.
+B2 (`ATM_001` ampliado — AM-02): incorporado com checagem explícita de ausência de mutação residual em `EMPRESAS` e `CREDENCIADOS`, preservação da contagem do item canônico e mensagem legível de rollback.
 
 **Frente C — Desacoplamento da interface.**
 C1 (helper avaliação — AR-03): primeira extração incorporada;
@@ -1300,7 +1301,7 @@ documento.
 - AR-03: helper `Svc_Avaliacao_Payload` concluído. Critério de
   pronto: `Menu_Principal.frm` não contém mais montagem de avaliação;
   o payload é testável isoladamente.
-- Ampliação AM-02 (`ATM_001` multi-aba + mensagem legível).
+- Ampliação AM-02 (`ATM_001` multi-aba + mensagem legível) incorporada.
 
 **Critério de saída da Sprint 3.** Trilha cumulativa vigente;
 comparador produz relatório assinável; primeira fatia grande do

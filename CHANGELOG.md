@@ -21,6 +21,7 @@ tratam apenas da linha pública oficial.
 - cenário canônico `CS_21` automatizado para validar completude mínima das famílias críticas do `AUDIT_LOG`
 - cenários canônicos `CS_23` e `CS_24` automatizados para validar ida e volta de empresa e entidade entre cadastros ativos/inativos sem duplicidade semântica
 - cenário `SMK_007` reforçado para validar auditoria mínima de fechamento e ausência de suspensão indevida em avaliação satisfatória
+- cenário `ATM_001` reforçado para validar rollback multi-aba sem mutação residual em `EMPRESAS` e `CREDENCIADOS`, com mensagem legível de rollback
 - cenário `STR_001` reforçado para validar IDs canônicos `001,002,003`, ausência de duplicidade semântica no item e quantidade final estável de credenciamentos
 - extração inicial da montagem do payload de avaliação para `Svc_Avaliacao.bas`, reduzindo acoplamento no `Menu_Principal.frm`
 - defaults da avaliação carregados diretamente da `CAD_OS`, com justificativa obrigatória quando houver edição de empenho, data, quantidade ou valor pré-preenchidos

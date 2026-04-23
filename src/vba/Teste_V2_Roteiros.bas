@@ -13,10 +13,14 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     Dim fila As String
     Dim filaAntes As String
     Dim filaDepois As String
+    Dim statusEmpAntes As String
+    Dim statusEmpDepois As String
     Dim auditFechAntes As Long
     Dim auditFechDepois As Long
     Dim auditSuspAntes As Long
     Dim auditSuspDepois As Long
+    Dim auditRollbackAntes As Long
+    Dim auditRollbackDepois As Long
     Dim rodizio As TRodizioResultado
     Dim rodizioPosPendente As TRodizioResultado
     Dim rodizioPosExpiracao As TRodizioResultado
@@ -31,6 +35,12 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     Dim osId As String
     Dim i As Long
     Dim senhaFalhaAba As String
+    Dim qtdEmpAntes As Long
+    Dim qtdEmpDepois As Long
+    Dim qtdCredAntes As Long
+    Dim qtdCredDepois As Long
+    Dim qtdItemAntes As Long
+    Dim qtdItemDepois As Long
 
     On Error GoTo falha
 
@@ -249,21 +259,51 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
                    InStr(1, resAval2.Mensagem, "STATUS=CONCLUIDA", vbTextCompare) > 0)
 
     TV2_PrepararCenarioTriploCanonico
+    qtdEmpAntes = TV2_CountRows(SHEET_EMPRESAS)
+    qtdCredAntes = TV2_CountRows(SHEET_CREDENCIADOS)
+    qtdItemAntes = TV2_QtdCredenciadosNoItem(TV2_AtivCanonA(), "001")
+    statusEmpAntes = TV2_StatusEmpresa("001")
+    auditRollbackAntes = TV2_AuditCount("Rollback/Transacao")
     TV2_ProtegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
     resRec = AvancarFila("001", TV2_AtivCanonA(), True, "ATM_001_FALHA_CONTROLADA")
     TV2_DesprotegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
+    qtdEmpDepois = TV2_CountRows(SHEET_EMPRESAS)
+    qtdCredDepois = TV2_CountRows(SHEET_CREDENCIADOS)
+    qtdItemDepois = TV2_QtdCredenciadosNoItem(TV2_AtivCanonA(), "001")
+    statusEmpDepois = TV2_StatusEmpresa("001")
+    auditRollbackDepois = TV2_AuditCount("Rollback/Transacao")
     TV2_LogAssert "SMOKE", "ATM_001", "AUTO", _
                   "Reverter mutacao parcial quando a segunda escrita falha", _
-                  "Avanco punido falha; fila volta ao estado anterior; recusas ficam zeradas; auditoria registra rollback", _
-                  "SUCESSO_AVANCO=" & CStr(resRec.Sucesso) & "; MSG=" & resRec.Mensagem & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & "; POS_001=" & CStr(TV2_PosicaoFila("001", TV2_AtivCanonA())) & "; REC_EMP=" & CStr(TV2_QtdRecusasEmpresa("001")) & "; REC_CRED=" & CStr(TV2_QtdRecusasCredenciamento("001", TV2_AtivCanonA())) & "; AUDIT=" & CStr(TV2_CountRows(SHEET_AUDIT)), _
-                  "Prova atomicidade minima entre CREDENCIADOS e EMPRESAS no fluxo punido", _
+                  "Avanco punido falha; fila volta ao estado anterior; recusas ficam zeradas; cadastros e credenciamentos nao sofrem mutacao residual; auditoria registra rollback legivel", _
+                  "SUCESSO_AVANCO=" & CStr(resRec.Sucesso) & _
+                  "; MSG=" & resRec.Mensagem & _
+                  "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+                  "; POS_001=" & CStr(TV2_PosicaoFila("001", TV2_AtivCanonA())) & _
+                  "; STATUS_ANTES=" & statusEmpAntes & _
+                  "; STATUS_DEPOIS=" & statusEmpDepois & _
+                  "; EMP_ANTES=" & CStr(qtdEmpAntes) & _
+                  "; EMP_DEPOIS=" & CStr(qtdEmpDepois) & _
+                  "; CRED_ANTES=" & CStr(qtdCredAntes) & _
+                  "; CRED_DEPOIS=" & CStr(qtdCredDepois) & _
+                  "; ITEM_ANTES=" & CStr(qtdItemAntes) & _
+                  "; ITEM_DEPOIS=" & CStr(qtdItemDepois) & _
+                  "; REC_EMP=" & CStr(TV2_QtdRecusasEmpresa("001")) & _
+                  "; REC_CRED=" & CStr(TV2_QtdRecusasCredenciamento("001", TV2_AtivCanonA())) & _
+                  "; AUDIT_ROLLBACK=" & CStr(auditRollbackDepois - auditRollbackAntes), _
+                  "Prova atomicidade ampliada entre CREDENCIADOS e EMPRESAS no fluxo punido", _
                   (Not resRec.Sucesso And _
                    TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003" And _
                    TV2_PosicaoFila("001", TV2_AtivCanonA()) = 1 And _
+                   statusEmpAntes = "ATIVA" And _
+                   statusEmpDepois = "ATIVA" And _
+                   qtdEmpAntes = qtdEmpDepois And _
+                   qtdCredAntes = qtdCredDepois And _
+                   qtdItemAntes = 3 And qtdItemDepois = 3 And _
                    TV2_QtdRecusasEmpresa("001") = 0 And _
                    TV2_QtdRecusasCredenciamento("001", TV2_AtivCanonA()) = 0 And _
-                   TV2_CountRows(SHEET_AUDIT) >= 1 And _
-                   TV2_AuditContemTrecho("ROLLBACK"))
+                   (auditRollbackDepois - auditRollbackAntes) >= 1 And _
+                   TV2_AuditContemTrecho("ROLLBACK") And _
+                   InStr(1, resRec.Mensagem, "ROLLBACK", vbTextCompare) > 0)
 
     TV2_FinalizarExecucao "SMOKE"
     Exit Sub

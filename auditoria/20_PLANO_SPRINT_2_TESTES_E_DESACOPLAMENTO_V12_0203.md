@@ -193,6 +193,15 @@ Status atual:
 
 ### B2. Enriquecer `ATM_001`
 
+Status atual:
+
+- reforço incorporado ao `ATM_001` na branch `codex/v12-0-0203-governanca-testes`
+- agora o cenário também prova explicitamente:
+  - ausência de mutação residual em `EMPRESAS`
+  - ausência de mutação residual em `CREDENCIADOS`
+  - quantidade estável do item canônico após rollback
+  - mensagem legível de rollback tanto no retorno quanto no `AUDIT_LOG`
+
 Hoje ele prova rollback mínimo.
 
 Ampliação desejada:
