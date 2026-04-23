@@ -30,12 +30,13 @@ Public Function MontarParametrosEmissaoPreOS( _
     ByVal QT_TEXTO As String, _
     ByRef COD_SERVICO As String, _
     ByRef QT_ESTIMADA As Double, _
-    ByRef VALOR_UNIT As Currency, _
-    ByRef VALOR_ESTIMADO As Currency _
+    ByRef VALOR_UNIT As Double, _
+    ByRef VALOR_ESTIMADO As Double _
 ) As TResult
     Dim res As TResult
     Dim ativNorm As String
     Dim servNorm As String
+    Dim valorUnitMoeda As Currency
 
     ativNorm = Trim$(ATIV_ID)
     servNorm = Trim$(SERV_ID)
@@ -61,7 +62,7 @@ Public Function MontarParametrosEmissaoPreOS( _
         Exit Function
     End If
 
-    If Not BuscarValorServico(ativNorm, servNorm, VALOR_UNIT) Then
+    If Not BuscarValorServico(ativNorm, servNorm, valorUnitMoeda) Then
         res.Sucesso = False
         res.Mensagem = "Servico nao encontrado em CAD_SERV: ATIV=" & ativNorm & " SERV=" & servNorm
         MontarParametrosEmissaoPreOS = res
@@ -72,6 +73,7 @@ Public Function MontarParametrosEmissaoPreOS( _
     If QT_ESTIMADA <= 0 Then QT_ESTIMADA = 1
 
     COD_SERVICO = ativNorm & "|" & servNorm
+    VALOR_UNIT = CDbl(valorUnitMoeda)
     VALOR_ESTIMADO = VALOR_UNIT * QT_ESTIMADA
 
     res.Sucesso = True
