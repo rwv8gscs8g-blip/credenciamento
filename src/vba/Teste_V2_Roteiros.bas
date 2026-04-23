@@ -41,6 +41,8 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     Dim qtdCredDepois As Long
     Dim qtdItemAntes As Long
     Dim qtdItemDepois As Long
+    Dim obtidoAtm As String
+    Dim okAtm As Boolean
 
     On Error GoTo falha
 
@@ -272,38 +274,40 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     qtdItemDepois = TV2_QtdCredenciadosNoItem(TV2_AtivCanonA(), "001")
     statusEmpDepois = TV2_StatusEmpresa("001")
     auditRollbackDepois = TV2_AuditCount("Rollback/Transacao")
+    obtidoAtm = "SUCESSO_AVANCO=" & CStr(resRec.Sucesso)
+    obtidoAtm = obtidoAtm & "; MSG=" & resRec.Mensagem
+    obtidoAtm = obtidoAtm & "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA())
+    obtidoAtm = obtidoAtm & "; POS_001=" & CStr(TV2_PosicaoFila("001", TV2_AtivCanonA()))
+    obtidoAtm = obtidoAtm & "; STATUS_ANTES=" & statusEmpAntes
+    obtidoAtm = obtidoAtm & "; STATUS_DEPOIS=" & statusEmpDepois
+    obtidoAtm = obtidoAtm & "; EMP_ANTES=" & CStr(qtdEmpAntes)
+    obtidoAtm = obtidoAtm & "; EMP_DEPOIS=" & CStr(qtdEmpDepois)
+    obtidoAtm = obtidoAtm & "; CRED_ANTES=" & CStr(qtdCredAntes)
+    obtidoAtm = obtidoAtm & "; CRED_DEPOIS=" & CStr(qtdCredDepois)
+    obtidoAtm = obtidoAtm & "; ITEM_ANTES=" & CStr(qtdItemAntes)
+    obtidoAtm = obtidoAtm & "; ITEM_DEPOIS=" & CStr(qtdItemDepois)
+    obtidoAtm = obtidoAtm & "; REC_EMP=" & CStr(TV2_QtdRecusasEmpresa("001"))
+    obtidoAtm = obtidoAtm & "; REC_CRED=" & CStr(TV2_QtdRecusasCredenciamento("001", TV2_AtivCanonA()))
+    obtidoAtm = obtidoAtm & "; AUDIT_ROLLBACK=" & CStr(auditRollbackDepois - auditRollbackAntes)
+    okAtm = Not resRec.Sucesso
+    okAtm = okAtm And TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003"
+    okAtm = okAtm And TV2_PosicaoFila("001", TV2_AtivCanonA()) = 1
+    okAtm = okAtm And statusEmpAntes = "ATIVA"
+    okAtm = okAtm And statusEmpDepois = "ATIVA"
+    okAtm = okAtm And qtdEmpAntes = qtdEmpDepois
+    okAtm = okAtm And qtdCredAntes = qtdCredDepois
+    okAtm = okAtm And qtdItemAntes = 3 And qtdItemDepois = 3
+    okAtm = okAtm And TV2_QtdRecusasEmpresa("001") = 0
+    okAtm = okAtm And TV2_QtdRecusasCredenciamento("001", TV2_AtivCanonA()) = 0
+    okAtm = okAtm And (auditRollbackDepois - auditRollbackAntes) >= 1
+    okAtm = okAtm And TV2_AuditContemTrecho("ROLLBACK")
+    okAtm = okAtm And InStr(1, resRec.Mensagem, "ROLLBACK", vbTextCompare) > 0
     TV2_LogAssert "SMOKE", "ATM_001", "AUTO", _
                   "Reverter mutacao parcial quando a segunda escrita falha", _
                   "Avanco punido falha; fila volta ao estado anterior; recusas ficam zeradas; cadastros e credenciamentos nao sofrem mutacao residual; auditoria registra rollback legivel", _
-                  "SUCESSO_AVANCO=" & CStr(resRec.Sucesso) & _
-                  "; MSG=" & resRec.Mensagem & _
-                  "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
-                  "; POS_001=" & CStr(TV2_PosicaoFila("001", TV2_AtivCanonA())) & _
-                  "; STATUS_ANTES=" & statusEmpAntes & _
-                  "; STATUS_DEPOIS=" & statusEmpDepois & _
-                  "; EMP_ANTES=" & CStr(qtdEmpAntes) & _
-                  "; EMP_DEPOIS=" & CStr(qtdEmpDepois) & _
-                  "; CRED_ANTES=" & CStr(qtdCredAntes) & _
-                  "; CRED_DEPOIS=" & CStr(qtdCredDepois) & _
-                  "; ITEM_ANTES=" & CStr(qtdItemAntes) & _
-                  "; ITEM_DEPOIS=" & CStr(qtdItemDepois) & _
-                  "; REC_EMP=" & CStr(TV2_QtdRecusasEmpresa("001")) & _
-                  "; REC_CRED=" & CStr(TV2_QtdRecusasCredenciamento("001", TV2_AtivCanonA())) & _
-                  "; AUDIT_ROLLBACK=" & CStr(auditRollbackDepois - auditRollbackAntes), _
+                  obtidoAtm, _
                   "Prova atomicidade ampliada entre CREDENCIADOS e EMPRESAS no fluxo punido", _
-                  (Not resRec.Sucesso And _
-                   TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003" And _
-                   TV2_PosicaoFila("001", TV2_AtivCanonA()) = 1 And _
-                   statusEmpAntes = "ATIVA" And _
-                   statusEmpDepois = "ATIVA" And _
-                   qtdEmpAntes = qtdEmpDepois And _
-                   qtdCredAntes = qtdCredDepois And _
-                   qtdItemAntes = 3 And qtdItemDepois = 3 And _
-                   TV2_QtdRecusasEmpresa("001") = 0 And _
-                   TV2_QtdRecusasCredenciamento("001", TV2_AtivCanonA()) = 0 And _
-                   (auditRollbackDepois - auditRollbackAntes) >= 1 And _
-                   TV2_AuditContemTrecho("ROLLBACK") And _
-                   InStr(1, resRec.Mensagem, "ROLLBACK", vbTextCompare) > 0)
+                  okAtm
 
     TV2_FinalizarExecucao "SMOKE"
     Exit Sub
