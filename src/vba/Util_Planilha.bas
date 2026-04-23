@@ -215,11 +215,12 @@ Public Function Util_EntidadeInativos_ColetarLinhasMesmaChave( _
     ByVal primeiraLinha As Long, _
     ByVal idLista As String, _
     ByVal cnpjLista As String _
-) As Collection
+) As Variant
     Dim ult As Long
     Dim r As Long
     Dim cnpjNormLista As String
-    Dim coll As New Collection
+    Dim linhas() As Long
+    Dim qtdLinhas As Long
 
     If wsInativas Is Nothing Then GoTo fim
 
@@ -230,13 +231,15 @@ Public Function Util_EntidadeInativos_ColetarLinhasMesmaChave( _
     For r = primeiraLinha To ult
         If Util_EntidadeInativos_LinhaConsideravel(wsInativas, r) Then
             If Util_EntidadeInativos_LinhaCombinaChave(wsInativas, r, idLista, cnpjNormLista) Then
-                coll.Add r
+                qtdLinhas = qtdLinhas + 1
+                ReDim Preserve linhas(1 To qtdLinhas)
+                linhas(qtdLinhas) = r
             End If
         End If
     Next r
 
 fim:
-    Set Util_EntidadeInativos_ColetarLinhasMesmaChave = coll
+    If qtdLinhas > 0 Then Util_EntidadeInativos_ColetarLinhasMesmaChave = linhas
 End Function
 
 Private Function Util_EntidadeInativos_LinhaConsideravel(ByVal ws As Worksheet, ByVal linha As Long) As Boolean
@@ -283,11 +286,12 @@ Public Function Util_EmpresaInativos_ColetarLinhasMesmaChave( _
     ByVal primeiraLinha As Long, _
     ByVal idLista As String, _
     ByVal cnpjLista As String _
-) As Collection
+) As Variant
     Dim ult As Long
     Dim r As Long
     Dim cnpjNormLista As String
-    Dim coll As New Collection
+    Dim linhas() As Long
+    Dim qtdLinhas As Long
 
     If wsInativas Is Nothing Then GoTo fimEmp
 
@@ -298,13 +302,15 @@ Public Function Util_EmpresaInativos_ColetarLinhasMesmaChave( _
     For r = primeiraLinha To ult
         If Util_EmpresaInativos_LinhaConsideravel(wsInativas, r) Then
             If Util_EmpresaInativos_LinhaCombinaChave(wsInativas, r, idLista, cnpjNormLista) Then
-                coll.Add r
+                qtdLinhas = qtdLinhas + 1
+                ReDim Preserve linhas(1 To qtdLinhas)
+                linhas(qtdLinhas) = r
             End If
         End If
     Next r
 
 fimEmp:
-    Set Util_EmpresaInativos_ColetarLinhasMesmaChave = coll
+    If qtdLinhas > 0 Then Util_EmpresaInativos_ColetarLinhasMesmaChave = linhas
 End Function
 
 Private Function Util_EmpresaInativos_LinhaConsideravel(ByVal ws As Worksheet, ByVal linha As Long) As Boolean

@@ -7,7 +7,8 @@ Option Explicit
 
 Private gTransacaoAtiva As Boolean
 Private gTransacaoId As String
-Private gTransacaoWrites As Collection
+Private gTransacaoWrites() As Variant
+Private gTransacaoWriteCount As Long
 
 Public Sub Transacao_Iniciar(Optional ByVal idOperacao As String = "")
     gTransacaoAtiva = True
@@ -16,7 +17,8 @@ Public Sub Transacao_Iniciar(Optional ByVal idOperacao As String = "")
     Else
         gTransacaoId = "TX_" & Format$(Now, "yyyymmdd_hhnnss")
     End If
-    Set gTransacaoWrites = New Collection
+    Erase gTransacaoWrites
+    gTransacaoWriteCount = 0
     RegistrarEvento _
         EVT_TRANSACAO, ENT_CRED, gTransacaoId, _
         "STATUS=NOVA; WRITES=0", _
@@ -46,7 +48,9 @@ Public Sub Transacao_RegistrarWrite( _
     payload(2) = linha
     payload(3) = coluna
     payload(4) = valorAnterior
-    gTransacaoWrites.Add payload
+    gTransacaoWriteCount = gTransacaoWriteCount + 1
+    ReDim Preserve gTransacaoWrites(1 To gTransacaoWriteCount)
+    gTransacaoWrites(gTransacaoWriteCount) = payload
 End Sub
 
 Public Sub Transacao_Commit()
@@ -60,7 +64,8 @@ Public Sub Transacao_Commit()
 
     gTransacaoAtiva = False
     gTransacaoId = ""
-    Set gTransacaoWrites = Nothing
+    Erase gTransacaoWrites
+    gTransacaoWriteCount = 0
 End Sub
 
 Public Function Transacao_Rollback() As Boolean
@@ -73,12 +78,12 @@ Public Function Transacao_Rollback() As Boolean
 
     On Error GoTo falha
 
-    If gTransacaoWrites Is Nothing Then
+    If gTransacaoWriteCount = 0 Then
         Transacao_Rollback = True
         GoTo finalizar
     End If
 
-    For i = gTransacaoWrites.Count To 1 Step -1
+    For i = gTransacaoWriteCount To 1 Step -1
         payload = gTransacaoWrites(i)
         Set ws = ThisWorkbook.Sheets(CStr(payload(1)))
         abaPreparada = False
@@ -116,10 +121,10 @@ falha:
 finalizar:
     gTransacaoAtiva = False
     gTransacaoId = ""
-    Set gTransacaoWrites = Nothing
+    Erase gTransacaoWrites
+    gTransacaoWriteCount = 0
 End Function
 
 Private Function Transacao_QtdWrites() As Long
-    If gTransacaoWrites Is Nothing Then Exit Function
-    Transacao_QtdWrites = gTransacaoWrites.Count
+    Transacao_QtdWrites = gTransacaoWriteCount
 End Function

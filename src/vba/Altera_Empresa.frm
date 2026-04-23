@@ -394,7 +394,9 @@ On Error GoTo erro_carregamento:
     Dim senhaInativas As String
     Dim estProtCred As Boolean
     Dim senhaCred As String
-    Dim coll As Collection
+    Dim linhasMesmaChave As Variant
+    Dim qtdLinhasMesmaChave As Long
+    Dim baseLinhas As Long
     Dim cnpjEmpresa As String
     Dim linhasDel() As Long
     Dim nDelDup As Long
@@ -434,13 +436,15 @@ On Error GoTo erro_carregamento:
     End If
 
     cnpjEmpresa = Trim$(CStr(EncontrarID.Offset(0, 1).Value))
-    Set coll = Util_EmpresaInativos_ColetarLinhasMesmaChave(wsInativas, LINHA_DADOS, CStr(EncontrarID.Value), cnpjEmpresa)
-    If Not coll Is Nothing Then
-        nDelDup = coll.Count
+    linhasMesmaChave = Util_EmpresaInativos_ColetarLinhasMesmaChave(wsInativas, LINHA_DADOS, CStr(EncontrarID.Value), cnpjEmpresa)
+    If IsArray(linhasMesmaChave) Then
+        baseLinhas = LBound(linhasMesmaChave)
+        qtdLinhasMesmaChave = UBound(linhasMesmaChave) - baseLinhas + 1
+        nDelDup = qtdLinhasMesmaChave
         If nDelDup > 0 Then
             ReDim linhasDel(1 To nDelDup)
             For kDup = 1 To nDelDup
-                linhasDel(kDup) = CLng(coll(kDup))
+                linhasDel(kDup) = CLng(linhasMesmaChave(baseLinhas + kDup - 1))
             Next kDup
             For kDup = 1 To nDelDup - 1
                 For jDup = kDup + 1 To nDelDup

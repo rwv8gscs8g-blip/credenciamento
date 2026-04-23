@@ -111,7 +111,9 @@ On Error GoTo erro_carregamento:
     Dim linhaFinal As Long
     Dim estEntInativProt As Boolean
     Dim senhaEntInativ As String
-    Dim coll As Collection
+    Dim linhasMesmaChave As Variant
+    Dim qtdLinhasMesmaChave As Long
+    Dim baseLinhas As Long
     Dim cnpjEntidade As String
     Dim linhasDel() As Long
     Dim nDel As Long
@@ -148,13 +150,15 @@ On Error GoTo erro_carregamento:
     End If
 
     cnpjEntidade = Trim$(CStr(EncontrarID.Offset(0, 1).Value))
-    Set coll = Util_EntidadeInativos_ColetarLinhasMesmaChave(wsEntInativas, LINHA_DADOS, CStr(EncontrarID.Value), cnpjEntidade)
-    If Not coll Is Nothing Then
-        nDel = coll.Count
+    linhasMesmaChave = Util_EntidadeInativos_ColetarLinhasMesmaChave(wsEntInativas, LINHA_DADOS, CStr(EncontrarID.Value), cnpjEntidade)
+    If IsArray(linhasMesmaChave) Then
+        baseLinhas = LBound(linhasMesmaChave)
+        qtdLinhasMesmaChave = UBound(linhasMesmaChave) - baseLinhas + 1
+        nDel = qtdLinhasMesmaChave
         If nDel > 0 Then
             ReDim linhasDel(1 To nDel)
             For k = 1 To nDel
-                linhasDel(k) = CLng(coll(k))
+                linhasDel(k) = CLng(linhasMesmaChave(baseLinhas + k - 1))
             Next k
             For k = 1 To nDel - 1
                 For j = k + 1 To nDel

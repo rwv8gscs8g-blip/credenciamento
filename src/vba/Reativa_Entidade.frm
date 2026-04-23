@@ -98,7 +98,7 @@ Private Function UI_ChaveNormalizadaId(ByVal valor As Variant) As String
     End If
 End Function
 
-Private Function UI_EntidadeInativasTemConflito(ByVal wsEntInativas As Worksheet, ByVal coll As Collection) As Boolean
+Private Function UI_EntidadeInativasTemConflito(ByVal wsEntInativas As Worksheet, ByRef linhas As Variant) As Boolean
     Dim ids As Object
     Dim docs As Object
     Dim nomes As Object
@@ -112,8 +112,10 @@ Private Function UI_EntidadeInativasTemConflito(ByVal wsEntInativas As Worksheet
     Set docs = CreateObject("Scripting.Dictionary")
     Set nomes = CreateObject("Scripting.Dictionary")
 
-    For i = 1 To coll.Count
-        linhaAtual = CLng(coll(i))
+    If Not IsArray(linhas) Then Exit Function
+
+    For i = LBound(linhas) To UBound(linhas)
+        linhaAtual = CLng(linhas(i))
 
         idAtual = UI_ChaveNormalizadaId(wsEntInativas.Cells(linhaAtual, COL_ENT_ID).Value)
         docAtual = Util_NormalizarDocumentoChave(wsEntInativas.Cells(linhaAtual, COL_ENT_CNPJ).Value)
@@ -158,7 +160,8 @@ Dim filtroU As String
 Dim arrayitems() As Variant
 Dim vistos As Object
 Dim chave As String
-Dim chaves As Collection
+Dim chaves() As String
+Dim qtdChaves As Long
 Dim i As Long
 Dim linhaUsada As Long
 
@@ -180,24 +183,25 @@ End With
 If NLinhas < LINHA_DADOS Then GoTo fim_silencioso
 
 Set vistos = CreateObject("Scripting.Dictionary")
-Set chaves = New Collection
 For linhaAtual = LINHA_DADOS To NLinhas
     If UI_LinhaEntidadeValida(wsEntInativas, linhaAtual) Then
         If UI_LinhaEntidadePassaFiltro(wsEntInativas, linhaAtual, filtroU) Then
             chave = EntidadeInativos_ChaveDedupeLinha(wsEntInativas, linhaAtual)
             If Not vistos.Exists(chave) Then
-                chaves.Add chave
+                qtdChaves = qtdChaves + 1
+                ReDim Preserve chaves(1 To qtdChaves)
+                chaves(qtdChaves) = chave
             End If
             vistos(chave) = linhaAtual
         End If
     End If
 Next linhaAtual
 
-total = chaves.Count
+total = qtdChaves
 If total = 0 Then GoTo fim_silencioso
 
 ReDim arrayitems(1 To total, 1 To 22)
-For i = 1 To chaves.Count
+For i = 1 To qtdChaves
     linhaUsada = CLng(vistos(CStr(chaves(i))))
     For colunaAtual = 1 To 22
         arrayitems(i, colunaAtual) = UI_SafeListVal(wsEntInativas.Cells(linhaUsada, colunaAtual).Value)
@@ -249,7 +253,9 @@ On Error GoTo erro_carregamento:
     Dim cnpjLista As String
     Dim cnpjReativ As String
     Dim linhaDuplicada As Long
-    Dim coll As Collection
+    Dim linhasMesmaChave As Variant
+    Dim qtdLinhasMesmaChave As Long
+    Dim baseLinhas As Long
     Dim linhaCopia As Long
     Dim k As Long
     Dim j As Long
@@ -271,20 +277,22 @@ On Error GoTo erro_carregamento:
     Set wsInativas = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
     Set wsEntidade = ThisWorkbook.Sheets(SHEET_ENTIDADE)
 
-    Set coll = Util_EntidadeInativos_ColetarLinhasMesmaChave(wsInativas, LINHA_DADOS, entidadeIdReativ, cnpjLista)
-    If coll Is Nothing Then GoTo nao_achou
-    If coll.Count = 0 Then GoTo nao_achou
+    linhasMesmaChave = Util_EntidadeInativos_ColetarLinhasMesmaChave(wsInativas, LINHA_DADOS, entidadeIdReativ, cnpjLista)
+    If Not IsArray(linhasMesmaChave) Then GoTo nao_achou
+    baseLinhas = LBound(linhasMesmaChave)
+    qtdLinhasMesmaChave = UBound(linhasMesmaChave) - baseLinhas + 1
+    If qtdLinhasMesmaChave <= 0 Then GoTo nao_achou
 
-    If UI_EntidadeInativasTemConflito(wsInativas, coll) Then
+    If UI_EntidadeInativasTemConflito(wsInativas, linhasMesmaChave) Then
         MsgBox "Reativacao bloqueada: existem linhas conflitantes para a mesma entidade em ENTIDADE_INATIVOS." & vbCrLf & _
                "Faca o saneamento da base antes de reativar.", _
                vbExclamation, "Integridade de Dados"
         Exit Sub
     End If
 
-    linhaCopia = CLng(coll(1))
-    For k = 2 To coll.Count
-        If CLng(coll(k)) > linhaCopia Then linhaCopia = CLng(coll(k))
+    linhaCopia = CLng(linhasMesmaChave(baseLinhas))
+    For k = baseLinhas + 1 To UBound(linhasMesmaChave)
+        If CLng(linhasMesmaChave(k)) > linhaCopia Then linhaCopia = CLng(linhasMesmaChave(k))
     Next k
 
     cnpjReativ = Trim$(CStr(wsInativas.Cells(linhaCopia, COL_ENT_CNPJ).Value))
@@ -314,10 +322,10 @@ On Error GoTo erro_carregamento:
     Call Util_RestaurarProtecaoAba(wsEntidade, estProt, Senha)
     Application.CutCopyMode = False
 
-    nDel = coll.Count
+    nDel = qtdLinhasMesmaChave
     ReDim linhasDel(1 To nDel)
     For k = 1 To nDel
-        linhasDel(k) = CLng(coll(k))
+        linhasDel(k) = CLng(linhasMesmaChave(baseLinhas + k - 1))
     Next k
     For k = 1 To nDel - 1
         For j = k + 1 To nDel
@@ -348,4 +356,3 @@ nao_achou:
 erro_carregamento:
     MsgBox "Erro ao reativar entidade: " & Err.Description, vbCritical, "Erro"
 End Sub
-
