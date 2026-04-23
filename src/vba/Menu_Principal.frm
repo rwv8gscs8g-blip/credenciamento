@@ -1835,7 +1835,7 @@ Private Sub B_PreOS_Click()
     Dim totalServicosNaLista As Long
     Dim resPrep As TResult
     Dim qtdPreparada As Double
-    Dim valorEstimadoPrep As Currency
+    Dim valorEstimadoPrep As Double
 
     totalServicosNaLista = 0
     On Error Resume Next
