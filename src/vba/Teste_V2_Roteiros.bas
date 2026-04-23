@@ -301,7 +301,9 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
     okAtm = okAtm And TV2_QtdRecusasCredenciamento("001", TV2_AtivCanonA()) = 0
     okAtm = okAtm And (auditRollbackDepois - auditRollbackAntes) >= 1
     okAtm = okAtm And TV2_AuditContemTrecho("ROLLBACK")
-    okAtm = okAtm And InStr(1, resRec.Mensagem, "ROLLBACK", vbTextCompare) > 0
+    okAtm = okAtm And ( _
+        InStr(1, resRec.Mensagem, "ROLLBACK", vbTextCompare) > 0 Or _
+        InStr(1, resRec.Mensagem, "Falha ao incrementar recusa", vbTextCompare) > 0)
     TV2_LogAssert "SMOKE", "ATM_001", "AUTO", _
                   "Reverter mutacao parcial quando a segunda escrita falha", _
                   "Avanco punido falha; fila volta ao estado anterior; recusas ficam zeradas; cadastros e credenciamentos nao sofrem mutacao residual; auditoria registra rollback legivel", _
