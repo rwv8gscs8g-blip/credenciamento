@@ -573,7 +573,6 @@ Public Sub TV2_PrepararBaselineCanonica()
     TV2_GarantirServicoCanonico gTV2AtivCanonB, gTV2AtivDescB, 200@
     TV2_GarantirServicoCanonico gTV2AtivCanonC, gTV2AtivDescC, 300@
     SincronizarDescricoesCadServComAtividades True
-    AppContext.Invalidate
 End Sub
 
 Public Sub TV2_PrepararCenarioTriploCanonico()

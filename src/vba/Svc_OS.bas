@@ -162,8 +162,6 @@ Public Function EmitirOS( _
     ' 6. AvancarFila SEM punição (critério 26) — falha = AVISO (critério 48)
     resAv = AvancarFila(preos.EMP_ID, preos.ATIV_ID, False, "ACEITE_OS_EMITIDA")
 
-    AppContext.SetOS os
-
     res.Sucesso = True
     res.IdGerado = os.OS_ID
     If resAv.Sucesso Then
@@ -329,8 +327,6 @@ Public Function CancelarOS( _
         "STATUS=CANCELADA; MOTIVO=" & motivo & _
         "; EMP_ID=" & empId & "; ATIV_ID=" & ativId, _
         "Svc_OS"
-
-    AppContext.Invalidate
 
     res.Sucesso = True
     res.Mensagem = "OS " & OS_ID & " cancelada."
