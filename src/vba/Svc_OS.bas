@@ -15,6 +15,7 @@ Private Const STATUS_OS_EXEC    As String = "EM_EXECUCAO"
 Private Const STATUS_OS_CANCEL  As String = "CANCELADA"
 Private Const STATUS_PREOS_AGU  As String = "AGUARDANDO_ACEITE"
 Private Const STATUS_PREOS_CONV As String = "CONVERTIDA_OS"
+Private Const PRAZO_PADRAO_OS_DIAS As Long = 30
 
 ' ============================================================
 ' SEÇÃO 0: PREPARAÇÃO DE EMISSÃO
