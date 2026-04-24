@@ -112,9 +112,14 @@ On Error GoTo erro_carregamento:
     Dim Copia As String, NomeArquivo As String, Resposta As String, NomePasta As String, pasta As String
     Dim wsPreOS As Worksheet
     Dim wsCADOS As Worksheet
-    Dim estProt As Boolean
-    Dim Senha As String
-    Dim ultimaLinha As Long
+    Dim estProtPreOS As Boolean
+    Dim senhaPreOS As String
+    Dim estProtCADOS As Boolean
+    Dim senhaCADOS As String
+    Dim ultimaLinhaPreOS As Long
+    Dim ultimaLinhaCADOS As Long
+    Dim preOSPreparada As Boolean
+    Dim cadOSPreparada As Boolean
 
     NomeArquivo = ThisWorkbook.Name
     MsgBox "Efetuando c" & ChrW(243) & "pia de seguran" & ChrW(231) & "a, limpando a base de Pr" & ChrW(233) & "-SS e SS e mantendo os demais cadastros.", _
@@ -157,21 +162,40 @@ On Error GoTo erro_carregamento:
         Set wsPreOS = ThisWorkbook.Sheets("PRE_OS")
         Set wsCADOS = ThisWorkbook.Sheets("CAD_OS")
 
-        ultimaLinha = wsPreOS.Range("A65536").End(xlUp).row
-        If ultimaLinha > 1 Then
-            Call Util_PrepararAbaParaEscrita(wsPreOS, estProt, Senha)
-            wsPreOS.Range("A2:I" & ultimaLinha).ClearContents
-            wsPreOS.Cells(1, 44).Value = 0  ' coluna AR = contador de IDs
-            Call Util_RestaurarProtecaoAba(wsPreOS, estProt, Senha)
+        ultimaLinhaPreOS = wsPreOS.Range("A65536").End(xlUp).row
+        ultimaLinhaCADOS = wsCADOS.Range("A65536").End(xlUp).row
+
+        If ultimaLinhaPreOS > 1 Then
+            If Not Util_PrepararAbaParaEscrita(wsPreOS, estProtPreOS, senhaPreOS) Then
+                MsgBox "Não foi possível iniciar o novo período: aba PRE_OS protegida para escrita.", _
+                       vbCritical, "Configurações iniciais"
+                Exit Sub
+            End If
+            preOSPreparada = True
         End If
 
-        ultimaLinha = wsCADOS.Range("A65536").End(xlUp).row
-        If ultimaLinha > 1 Then
-            Call Util_PrepararAbaParaEscrita(wsCADOS, estProt, Senha)
-            wsCADOS.Range("A2:Y" & ultimaLinha).ClearContents
-            wsCADOS.Cells(1, 44).Value = 0  ' coluna AR = contador de IDs
-            Call Util_RestaurarProtecaoAba(wsCADOS, estProt, Senha)
+        If ultimaLinhaCADOS > 1 Then
+            If Not Util_PrepararAbaParaEscrita(wsCADOS, estProtCADOS, senhaCADOS) Then
+                If preOSPreparada Then Call Util_RestaurarProtecaoAba(wsPreOS, estProtPreOS, senhaPreOS)
+                MsgBox "Não foi possível iniciar o novo período: aba CAD_OS protegida para escrita.", _
+                       vbCritical, "Configurações iniciais"
+                Exit Sub
+            End If
+            cadOSPreparada = True
         End If
+
+        If ultimaLinhaPreOS > 1 Then
+            wsPreOS.Range("A2:I" & ultimaLinhaPreOS).ClearContents
+            wsPreOS.Cells(1, 44).Value = 0  ' coluna AR = contador de IDs
+        End If
+
+        If ultimaLinhaCADOS > 1 Then
+            wsCADOS.Range("A2:Y" & ultimaLinhaCADOS).ClearContents
+            wsCADOS.Cells(1, 44).Value = 0  ' coluna AR = contador de IDs
+        End If
+
+        If cadOSPreparada Then Call Util_RestaurarProtecaoAba(wsCADOS, estProtCADOS, senhaCADOS)
+        If preOSPreparada Then Call Util_RestaurarProtecaoAba(wsPreOS, estProtPreOS, senhaPreOS)
 
         Call PreenchimentoServico
         Call AtualizarListaEntidadeMenuAtual
@@ -188,6 +212,10 @@ On Error GoTo erro_carregamento:
 
 Exit Sub
 erro_carregamento:
+    On Error Resume Next
+    If cadOSPreparada Then Call Util_RestaurarProtecaoAba(wsCADOS, estProtCADOS, senhaCADOS)
+    If preOSPreparada Then Call Util_RestaurarProtecaoAba(wsPreOS, estProtPreOS, senhaPreOS)
+    On Error GoTo 0
     MsgBox "Erro no processo de backup: " & Err.Description, vbCritical, "Configurações iniciais"
 End Sub
 
@@ -279,6 +307,5 @@ Private Function ValorControleTexto(ByVal frm As Object, ByVal nomeControle As S
 usar_padrao:
     ValorControleTexto = Trim$(valorPadrao)
 End Function
-
 
 
