@@ -18,7 +18,7 @@ Attribute VB_Exposed = False
 
 
 Private Sub UserForm_Initialize()
-    Me.Caption = "Relatorio de Empresas Credenciadas por Servico"
+    Me.Caption = Rel_TituloExibicao("RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO")
 End Sub
 
 Private Sub SV_CR_Lista_Click()
@@ -49,7 +49,7 @@ Private Sub SV_CR_Lista_Click()
     wsRel.Range("A:D").ClearContents
     wsRel.Cells(1, 1).Value = "COD.EMP"
     wsRel.Cells(1, 2).Value = "N CNPJ"
-    wsRel.Cells(1, 3).Value = "RAZAO SOCIAL"
+    wsRel.Cells(1, 3).Value = "RAZ" & ChrW(195) & "O SOCIAL"
     wsRel.Cells(1, 4).Value = "STATUS CRED"
     linhaOut = LINHA_DADOS
 
@@ -77,38 +77,11 @@ Private Sub SV_CR_Lista_Click()
     wsRel.Columns("A:D").AutoFit
     Err.Clear
     On Error GoTo erro_carregamento
-    With wsRel.PageSetup
-        .LeftHeader = ""
-        .CenterHeader = "RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO"
-        .RightHeader = ""
-        .LeftFooter = ""
-        .CenterFooter = "Pagina &P"
-        .RightFooter = ""
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .Orientation = xlPortrait
-        .LeftMargin = Application.CentimetersToPoints(0.5)
-        .RightMargin = Application.CentimetersToPoints(0.5)
-        .TopMargin = Application.CentimetersToPoints(1.5)
-        .BottomMargin = Application.CentimetersToPoints(1)
-        .HeaderMargin = Application.CentimetersToPoints(0.5)
-        .FooterMargin = Application.CentimetersToPoints(0.5)
-        .PrintHeadings = False
-        .PrintGridlines = False
-        .PrintComments = xlPrintNoComments
-        .CenterHorizontally = False
-        .CenterVertically = False
-        .Draft = False
-        .PaperSize = xlPaperA4
-        .FirstPageNumber = xlAutomatic
-        .Order = xlDownThenOver
-        .BlackAndWhite = False
-        .Zoom = False
-        .PrintErrors = xlPrintErrorsDisplayed
-    End With
+    Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO", "D", False, xlPortrait)
 
     If MsgBox("Relatório gerado com " & CStr(totalRegistros) & " registro(s)." & vbCrLf & _
-              "Deseja imprimir agora? (Nao = visualizar na tela)", vbQuestion + vbYesNo, "Relatorio") = vbYes Then
+              "Identificação sugerida: " & Rel_NomeArquivoSugerido("RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO") & vbCrLf & _
+              "Deseja imprimir agora? (Nao = visualizar na tela)", vbQuestion + vbYesNo, "Relatório") = vbYes Then
         If Application.Dialogs(xlDialogPrinterSetup).Show Then
             wsRel.PrintOut
             MsgBox "Relatório impresso com sucesso.", vbInformation, "Relatório"

@@ -87,9 +87,75 @@ End Function
 ' HELPERS PARA RELATORIOS DE NEGOCIO (V12.0.0149)
 ' ============================================================
 
+Public Function Rel_TituloExibicao(ByVal titulo As String) As String
+    Dim chave As String
+
+    chave = UCase$(Trim$(titulo))
+
+    Select Case chave
+        Case "RELATORIO DE ENTIDADES CADASTRADAS NO CREDENCIAMENTO"
+            Rel_TituloExibicao = "Relat" & ChrW(243) & "rio de Entidades Cadastradas no Credenciamento"
+        Case "RELATORIO DE EMPRESAS CADASTRADAS NO CREDENCIAMENTO"
+            Rel_TituloExibicao = "Relat" & ChrW(243) & "rio de Empresas Cadastradas no Credenciamento"
+        Case "RELATORIO DE EMPRESAS CREDENCIADAS"
+            Rel_TituloExibicao = "Relat" & ChrW(243) & "rio de Empresas Credenciadas"
+        Case "RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO"
+            Rel_TituloExibicao = "Relat" & ChrW(243) & "rio de Empresas Credenciadas por Servi" & ChrW(231) & "o"
+        Case "RELATORIO DE ORDENS DE SERVICO ABERTAS"
+            Rel_TituloExibicao = "Relat" & ChrW(243) & "rio de Ordens de Servi" & ChrW(231) & "o Abertas"
+        Case "RELATORIO DE ORDENS DE SERVICO POR EMPRESA"
+            Rel_TituloExibicao = "Relat" & ChrW(243) & "rio de Ordens de Servi" & ChrW(231) & "o por Empresa"
+        Case "RELATORIO DE PRE-OS VENCIDAS"
+            Rel_TituloExibicao = "Relat" & ChrW(243) & "rio de Pr" & ChrW(233) & "-OS Vencidas"
+        Case Else
+            Rel_TituloExibicao = titulo
+            Rel_TituloExibicao = Replace(Rel_TituloExibicao, "RELATORIO", "Relat" & ChrW(243) & "rio")
+            Rel_TituloExibicao = Replace(Rel_TituloExibicao, "SERVICOS", "Servi" & ChrW(231) & "os")
+            Rel_TituloExibicao = Replace(Rel_TituloExibicao, "SERVICO", "Servi" & ChrW(231) & "o")
+            Rel_TituloExibicao = Replace(Rel_TituloExibicao, "PRE-OS", "Pr" & ChrW(233) & "-OS")
+    End Select
+End Function
+
+Private Function Rel_CodigoCurto(ByVal titulo As String) As String
+    Dim chave As String
+
+    chave = UCase$(Trim$(titulo))
+
+    Select Case chave
+        Case "RELATORIO DE ENTIDADES CADASTRADAS NO CREDENCIAMENTO"
+            Rel_CodigoCurto = "ENTIDADES_CADASTRADAS"
+        Case "RELATORIO DE EMPRESAS CADASTRADAS NO CREDENCIAMENTO"
+            Rel_CodigoCurto = "EMPRESAS_CADASTRADAS"
+        Case "RELATORIO DE EMPRESAS CREDENCIADAS"
+            Rel_CodigoCurto = "EMPRESAS_CREDENCIADAS"
+        Case "RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO"
+            Rel_CodigoCurto = "EMPRESAS_CREDENCIADAS_SERVICO"
+        Case "RELATORIO DE ORDENS DE SERVICO ABERTAS"
+            Rel_CodigoCurto = "OS_ABERTAS"
+        Case "RELATORIO DE ORDENS DE SERVICO POR EMPRESA"
+            Rel_CodigoCurto = "OS_POR_EMPRESA"
+        Case "RELATORIO DE PRE-OS VENCIDAS"
+            Rel_CodigoCurto = "PREOS_VENCIDAS"
+        Case Else
+            Rel_CodigoCurto = "RELATORIO"
+    End Select
+End Function
+
+Public Function Rel_NomeArquivoSugerido(ByVal titulo As String, Optional ByVal extensao As String = "pdf") As String
+    Dim baseNome As String
+
+    baseNome = Rel_CodigoCurto(titulo) & "_" & Format$(Now, "yyyymmdd_hhnnss")
+    If Trim$(extensao) <> "" Then
+        Rel_NomeArquivoSugerido = baseNome & "." & LCase$(Trim$(extensao))
+    Else
+        Rel_NomeArquivoSugerido = baseNome
+    End If
+End Function
+
 Public Sub Rel_ConfigurarPagina(ByVal ws As Worksheet, ByVal titulo As String, _
                                  Optional ByVal ultimaColLetra As String = "J", _
-                                 Optional ByVal centralizarHorizontalmente As Boolean = False)
+                                 Optional ByVal centralizarHorizontalmente As Boolean = False, _
+                                 Optional ByVal orientacaoPagina As XlPageOrientation = xlLandscape)
     ' Configura PageSetup padrao para relatorios de negocio:
     '   - Titulo com acentos no cabecalho central
     '   - Municipio na esquerda
@@ -97,6 +163,11 @@ Public Sub Rel_ConfigurarPagina(ByVal ws As Worksheet, ByVal titulo As String, _
     '   - Rodape com "Pagina X" acentuado
     '   - Paisagem, A4, margens estreitas, FitToPage
     Dim mun As String
+    Dim tituloExibicao As String
+    Dim referenciaRel As String
+
+    tituloExibicao = Rel_TituloExibicao(titulo)
+    referenciaRel = Rel_NomeArquivoSugerido(titulo, "")
     mun = GetMunicipio()
     If mun = "" Then
         mun = "Munic" & ChrW(237) & "pio n" & ChrW(227) & "o informado"
@@ -108,12 +179,12 @@ Public Sub Rel_ConfigurarPagina(ByVal ws As Worksheet, ByVal titulo As String, _
 
     With ws.PageSetup
         .LeftHeader = "&""Calibri,Regular""&08" & mun
-        .CenterHeader = "&""Calibri,Bold""&12" & titulo
+        .CenterHeader = "&""Calibri,Bold""&12" & tituloExibicao
         .RightHeader = "&""Calibri,Regular""&08Impresso em &D " & ChrW(224) & "s &T"
-        .LeftFooter = ""
+        .LeftFooter = "&""Calibri,Regular""&07" & tituloExibicao
         .CenterFooter = "&""Calibri,Regular""&08P" & ChrW(225) & "gina &P de &N"
-        .RightFooter = "&""Calibri,Regular""&07" & APP_RELEASE_ATUAL
-        .Orientation = xlLandscape
+        .RightFooter = "&""Calibri,Regular""&07Ref " & referenciaRel & " | " & APP_RELEASE_ATUAL
+        .Orientation = orientacaoPagina
         .PaperSize = xlPaperA4
         .LeftMargin = Application.CentimetersToPoints(0.5)
         .RightMargin = Application.CentimetersToPoints(0.5)

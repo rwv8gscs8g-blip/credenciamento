@@ -1015,7 +1015,7 @@ On Error GoTo falha_rel_entidades
 
 wsRel.Cells.ClearContents
 wsRel.Cells(1, 1).Value = "CNPJ"
-wsRel.Cells(1, 2).Value = "RAZAO SOCIAL"
+wsRel.Cells(1, 2).Value = "RAZ" & ChrW(195) & "O SOCIAL"
 wsRel.Cells(1, 3).Value = "TEL.FIXO"
 wsRel.Cells(1, 4).Value = "CELULAR"
 wsRel.Cells(1, 5).Value = "CONTATO 1"
@@ -2633,7 +2633,7 @@ For i = LINHA_DADOS To ultimaCred
             End If
         Next j
         If descAtiv = "" Then descAtiv = "ATIVIDADE " & ativId
-        If descServ = "" Then descServ = "SERVICO " & servId
+        If descServ = "" Then descServ = "SERVI" & ChrW(199) & "O " & servId
 
         wsRel.Cells(linhaRel, 1).Value = descAtiv & " / " & descServ
         linhaRel = linhaRel + 1
@@ -2707,7 +2707,7 @@ On Error GoTo falha_rel_os_emit
 wsRel.Cells.ClearContents
 wsRel.Cells(1, 1).Value = "N.O.S."
 wsRel.Cells(1, 2).Value = "DEMANDANTE"
-wsRel.Cells(1, 3).Value = "SERVICO"
+wsRel.Cells(1, 3).Value = "SERVI" & ChrW(199) & "O"
 wsRel.Cells(1, 4).Value = "CREDENCIADO"
 wsRel.Cells(1, 5).Value = "N. EMPENHO"
 wsRel.Cells(1, 6).Value = "DATA O.S."
@@ -3149,7 +3149,7 @@ On Error GoTo falha_rel_pre_venc
 wsRel.Cells.ClearContents
 wsRel.Cells(1, 1).Value = "N. PRE O.S."
 wsRel.Cells(1, 2).Value = "DEMANDANTE"
-wsRel.Cells(1, 3).Value = "SERVICO"
+wsRel.Cells(1, 3).Value = "SERVI" & ChrW(199) & "O"
 wsRel.Cells(1, 4).Value = "CREDENCIADO"
 wsRel.Cells(1, 5).Value = "DATA PRE O.S."
 wsRel.Cells(1, 6).Value = "DATA LIMITE"

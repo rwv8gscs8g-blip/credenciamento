@@ -37,6 +37,7 @@ tratam apenas da linha pública oficial.
 - documentação pública da esteira de release e evidência em `docs/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`
 - plano executável da Sprint 2 para fortalecimento incremental dos testes e redução de dependência da interface
 - primeira fatia de `C3` incorporada: relatórios simples do `Menu_Principal` agora reutilizam helper comum de configuração de página
+- padronização inicial dos relatórios com título acentuado, nome do relatório no rodapé e referência auditável automática para impressão
 
 ### Alterado
 

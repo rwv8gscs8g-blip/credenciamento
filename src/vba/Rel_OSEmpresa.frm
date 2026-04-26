@@ -14,8 +14,9 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 
-
-
+Private Sub UserForm_Initialize()
+    Me.Caption = Rel_TituloExibicao("RELATORIO DE ORDENS DE SERVICO POR EMPRESA")
+End Sub
 
 Private Sub B_RelEmpresaOS_Click()
 On Error GoTo erro_carregamento:
@@ -28,60 +29,14 @@ On Error GoTo erro_carregamento:
     ultimaLinhaRel = wsRel.Range("A65536").End(xlUp).row
     wsRel.Columns("A:H").AutoFit
 
-    With wsRel.PageSetup
-        .LeftHeader = ""
-        .CenterHeader = "RELATORIO DE ORDENS DE SERVI" & ChrW(199) & "O POR EMPRESA"
-        .RightHeader = ""
-        .LeftFooter = ""
-        .CenterFooter = "P" & ChrW(225) & "gina &P"
-        .RightFooter = ""
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .Orientation = xlLandscape
-        .LeftMargin = Application.CentimetersToPoints(0.5)
-        .RightMargin = Application.CentimetersToPoints(0.5)
-        .TopMargin = Application.CentimetersToPoints(1.5)
-        .BottomMargin = Application.CentimetersToPoints(1)
-        .HeaderMargin = Application.CentimetersToPoints(0.5)
-        .FooterMargin = Application.CentimetersToPoints(0.5)
-        .PrintHeadings = False
-        .PrintGridlines = False
-        .PrintComments = xlPrintNoComments
-        .PrintQuality = 600
-        .CenterHorizontally = False
-        .CenterVertically = False
-        .Orientation = xlLandscape
-        .Draft = False
-        .PaperSize = xlPaperA4
-        .FirstPageNumber = xlAutomatic
-        .Order = xlDownThenOver
-        .BlackAndWhite = False
-        .Zoom = False
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .PrintErrors = xlPrintErrorsDisplayed
-        .OddAndEvenPagesHeaderFooter = False
-        .DifferentFirstPageHeaderFooter = False
-        .ScaleWithDocHeaderFooter = True
-        .AlignMarginsHeaderFooter = True
-        .EvenPage.LeftHeader.Text = ""
-        .EvenPage.CenterHeader.Text = ""
-        .EvenPage.RightHeader.Text = ""
-        .EvenPage.LeftFooter.Text = ""
-        .EvenPage.CenterFooter.Text = ""
-        .EvenPage.RightFooter.Text = ""
-        .FirstPage.LeftHeader.Text = ""
-        .FirstPage.CenterHeader.Text = ""
-        .FirstPage.RightHeader.Text = ""
-        .FirstPage.LeftFooter.Text = ""
-        .FirstPage.CenterFooter.Text = ""
-        .FirstPage.RightFooter.Text = ""
-    End With
+    Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE ORDENS DE SERVICO POR EMPRESA", "H", False, xlLandscape)
 
     Application.Dialogs(xlDialogPrinterSetup).Show
     wsRel.PrintOut
 
-    MsgBox "Relat" & ChrW(243) & "rio impresso com Sucesso!", vbExclamation, "Impress" & ChrW(227) & "o"
+    MsgBox "Relat" & ChrW(243) & "rio impresso com sucesso!" & vbCrLf & _
+           "Identifica" & ChrW(231) & "ão sugerida: " & Rel_NomeArquivoSugerido("RELATORIO DE ORDENS DE SERVICO POR EMPRESA"), _
+           vbInformation, "Impress" & ChrW(227) & "o"
     wsRel.Range("A1:H" & ultimaLinhaRel).ClearContents
     wsRel.Range("A1:H" & ultimaLinhaRel).ClearFormats
     Unload Me
