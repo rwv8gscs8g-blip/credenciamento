@@ -27,7 +27,8 @@ Public Sub CT2_AbrirCentral()
         "[9] Abrir HISTORICO_QA_V2" & vbCrLf & _
         "[10] Abrir TESTE_TRILHA" & vbCrLf & _
         "[11] Abrir AUDIT_TESTES" & vbCrLf & _
-        "[12] Validacao release: V1 + Smoke + Canonico (~10 min)" & vbCrLf & vbCrLf & _
+        "[12] Validacao release: V1 + Smoke + Canonico (~10 min)" & vbCrLf & _
+        "[13] Filtros deterministicos (~1 min)" & vbCrLf & vbCrLf & _
         "Digite o numero:", _
         "Central de Testes V2", "1"))
 
@@ -58,6 +59,8 @@ Public Sub CT2_AbrirCentral()
             TV2_AbrirAuditTestes
         Case "12"
             CT_ValidarRelease_TrioMinimo
+        Case "13"
+            CT2_ExecutarFiltrosDeterministicos
         Case Else
             MsgBox "Opcao invalida.", vbInformation, "Central V2"
     End Select
@@ -90,4 +93,9 @@ End Sub
 Public Sub CT2_ExecutarCanonicoFundacao()
     TV2_PrepararNavegacaoHumana
     TV2_RunCanonicoFundacao False
+End Sub
+
+Public Sub CT2_ExecutarFiltrosDeterministicos()
+    TV2_PrepararNavegacaoHumana
+    TV2_RunFiltros False
 End Sub

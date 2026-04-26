@@ -326,6 +326,79 @@ falha:
     TV2_FinalizarExecucao "SMOKE", silencioso
 End Sub
 
+Public Sub TV2_RunFiltros(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Dim matriz(1 To 4, 1 To 4) As Variant
+    Dim colsNomeServico(1 To 2) As Long
+    Dim colsCnpj(1 To 1) As Long
+    Dim filtrado As Variant
+    Dim norm As String
+    Dim obtido As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao "FILTROS", visual
+
+    norm = UtilFiltro_Normalizar("  Servi" & ChrW$(231) & "o  " & ChrW$(193) & ChrW$(199) & ChrW$(195) & "o  ")
+    TV2_LogAssert "FILTROS", "FLT_001", "AUTO", _
+                  "Normalizar busca textual sem depender de acento, caixa ou espaco duplo", _
+                  "SERVICO ACAO", _
+                  norm, _
+                  "Define o contrato comum dos filtros antes de plugar nos formularios", _
+                  (norm = "SERVICO ACAO")
+
+    TV2_MontarMatrizFiltroFixture matriz
+    colsNomeServico(1) = 2
+    colsNomeServico(2) = 4
+    colsCnpj(1) = 3
+
+    filtrado = UtilFiltro_AplicarSobreMatriz(matriz, colsNomeServico, "")
+    obtido = "QTD=" & CStr(TV2_ArrayLinhaCount(filtrado))
+    TV2_LogAssert "FILTROS", "FLT_002", "AUTO", _
+                  "Filtro vazio preserva todas as linhas da matriz", _
+                  "4 linhas preservadas", _
+                  obtido, _
+                  "Evita que campo de busca vazio esconda registros validos na interface", _
+                  (TV2_ArrayLinhaCount(filtrado) = 4)
+
+    filtrado = UtilFiltro_AplicarSobreMatriz(matriz, colsNomeServico, "joao")
+    obtido = "QTD=" & CStr(TV2_ArrayLinhaCount(filtrado)) & "; ID=" & TV2_ArrayValorTexto(filtrado, 0, 1)
+    TV2_LogAssert "FILTROS", "FLT_003", "AUTO", _
+                  "Encontrar texto com acento usando busca sem acento", _
+                  "Apenas ID 001", _
+                  obtido, _
+                  "Garante busca deterministica para nomes digitados sem acentuacao", _
+                  (TV2_ArrayLinhaCount(filtrado) = 1 And TV2_ArrayValorTexto(filtrado, 0, 1) = "001")
+
+    filtrado = UtilFiltro_AplicarSobreMatriz(matriz, colsNomeServico, "98.765")
+    obtido = "QTD_COLS_NOME_SERVICO=" & CStr(TV2_ArrayLinhaCount(filtrado))
+    TV2_LogAssert "FILTROS", "FLT_004", "AUTO", _
+                  "Respeitar as colunas configuradas para a busca", _
+                  "Busca por CNPJ nao aparece quando CNPJ nao esta nas colunas-alvo", _
+                  obtido, _
+                  "Evita falsos positivos quando cada tela define seus campos de filtro", _
+                  (TV2_ArrayLinhaCount(filtrado) = 0)
+
+    filtrado = UtilFiltro_AplicarSobreMatriz(matriz, colsCnpj, "98.765")
+    obtido = "QTD_COL_CNPJ=" & CStr(TV2_ArrayLinhaCount(filtrado)) & "; ID=" & TV2_ArrayValorTexto(filtrado, 0, 1)
+    TV2_LogAssert "FILTROS", "FLT_005", "AUTO", _
+                  "Encontrar o mesmo termo quando a coluna CNPJ e selecionada", _
+                  "Apenas ID 002", _
+                  obtido, _
+                  "Prova que o helper e configuravel por tela sem alterar o algoritmo", _
+                  (TV2_ArrayLinhaCount(filtrado) = 1 And TV2_ArrayValorTexto(filtrado, 0, 1) = "002")
+
+    TV2_FinalizarExecucao "FILTROS", silencioso
+    Exit Sub
+
+falha:
+    TV2_LogAssert "FILTROS", "FATAL", "AUTO", _
+                  "Executar suite de filtros sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(Err.Number) & ": " & Err.Description, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao "FILTROS", silencioso
+End Sub
+
 Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
     Dim fila As String
     Dim qtdServAntes As Long
@@ -1130,6 +1203,44 @@ Private Sub TV2_PreencherNotas(ByRef notas() As Integer, ByVal valor As Integer)
         notas(i) = valor
     Next i
 End Sub
+
+Private Sub TV2_MontarMatrizFiltroFixture(ByRef matriz() As Variant)
+    matriz(1, 1) = "001"
+    matriz(1, 2) = "Jo" & ChrW$(227) & "o da Silva"
+    matriz(1, 3) = "12.345.678/0001-90"
+    matriz(1, 4) = "Servi" & ChrW$(231) & "o A"
+
+    matriz(2, 1) = "002"
+    matriz(2, 2) = "Maria Souza"
+    matriz(2, 3) = "98.765.432/0001-10"
+    matriz(2, 4) = "Servico B"
+
+    matriz(3, 1) = "003"
+    matriz(3, 2) = "Empresa sem acento"
+    matriz(3, 3) = "11.111.111/0001-11"
+    matriz(3, 4) = "Servi" & ChrW$(231) & "o de poda"
+
+    matriz(4, 1) = "004"
+    matriz(4, 2) = "Pulverizacao"
+    matriz(4, 3) = "22.222.222/0001-22"
+    matriz(4, 4) = "SERVICO DE PULVERIZACAO"
+End Sub
+
+Private Function TV2_ArrayLinhaCount(ByVal arr As Variant) As Long
+    On Error GoTo fim
+    If IsArray(arr) Then
+        TV2_ArrayLinhaCount = UBound(arr, 1) - LBound(arr, 1) + 1
+    End If
+fim:
+End Function
+
+Private Function TV2_ArrayValorTexto(ByVal arr As Variant, ByVal rowOffset As Long, ByVal col As Long) As String
+    On Error GoTo fim
+    If IsArray(arr) Then
+        TV2_ArrayValorTexto = SafeListText(arr(LBound(arr, 1) + rowOffset, col))
+    End If
+fim:
+End Function
 
 Private Function TV2_FormatEmpId(ByVal valor As String) As String
     If Trim$(valor) = "" Then
