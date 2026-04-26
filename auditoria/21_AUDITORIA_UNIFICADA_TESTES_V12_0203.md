@@ -1156,6 +1156,12 @@ novo. `Svc_PreOS` e `Svc_OS` passaram a montar/validar parâmetros
 mínimos de emissão, e o `Menu_Principal` ficou restrito à seleção,
 confirmação e impressão.
 
+**C3 — Relatórios menos dependentes da navegação visual.**
+Estado na `V12.0.0203`: primeira fatia incorporada. Os relatórios
+mais simples do `Menu_Principal` passaram a reutilizar helper comum
+de configuração de página (`Rel_ConfigurarPagina`), reduzindo a
+duplicação de `PageSetup` sem alterar a geração de dados.
+
 ### 13.4 Catálogo de benefícios por peça
 
 - **AR-01** fecha lacuna R-57, permite auditoria completa por

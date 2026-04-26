@@ -1041,55 +1041,7 @@ For i = LINHA_DADOS To ultimaEnt
 Next i
 
 wsRel.Columns("A:J").AutoFit
-With wsRel.PageSetup
-        .LeftHeader = ""
-        .CenterHeader = "RELATORIO DE ENTIDADES CADASTRADAS NO CREDENCIAMENTO"
-        .RightHeader = ""
-        .LeftFooter = ""
-        .CenterFooter = "Pagina &P"
-        .RightFooter = ""
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .Orientation = xlLandscape
-        .LeftMargin = Application.CentimetersToPoints(0.5)
-        .RightMargin = Application.CentimetersToPoints(0.5)
-        .TopMargin = Application.CentimetersToPoints(1.5)
-        .BottomMargin = Application.CentimetersToPoints(1)
-        .HeaderMargin = Application.CentimetersToPoints(0.5)
-        .FooterMargin = Application.CentimetersToPoints(0.5)
-        .PrintHeadings = False
-        .PrintGridlines = False
-        .PrintComments = xlPrintNoComments
-        .PrintQuality = 600
-        .CenterHorizontally = False
-        .CenterVertically = False
-        .Orientation = xlLandscape
-        .Draft = False
-        .PaperSize = xlPaperA4
-        .FirstPageNumber = xlAutomatic
-        .Order = xlDownThenOver
-        .BlackAndWhite = False
-        .Zoom = False
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .PrintErrors = xlPrintErrorsDisplayed
-        .OddAndEvenPagesHeaderFooter = False
-        .DifferentFirstPageHeaderFooter = False
-        .ScaleWithDocHeaderFooter = True
-        .AlignMarginsHeaderFooter = True
-        .EvenPage.LeftHeader.Text = ""
-        .EvenPage.CenterHeader.Text = ""
-        .EvenPage.RightHeader.Text = ""
-        .EvenPage.LeftFooter.Text = ""
-        .EvenPage.CenterFooter.Text = ""
-        .EvenPage.RightFooter.Text = ""
-        .FirstPage.LeftHeader.Text = ""
-        .FirstPage.CenterHeader.Text = ""
-        .FirstPage.RightHeader.Text = ""
-        .FirstPage.LeftFooter.Text = ""
-        .FirstPage.CenterFooter.Text = ""
-        .FirstPage.RightFooter.Text = ""
-End With
+Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE ENTIDADES CADASTRADAS NO CREDENCIAMENTO", "J", False)
 
 wsRel.Range("A1:J" & (linhaRel - 1)).PrintOut
 
@@ -2606,58 +2558,8 @@ End If
 On Error GoTo falha_rel_emp_cad
 
 wsEmp.Columns("A:O").AutoFit
-With wsEmp.PageSetup
-        .LeftHeader = ""
-        .CenterHeader = "RELATORIO DE EMPRESAS CADASTRADAS NO CREDENCIAMENTO"
-        .RightHeader = ""
-        .LeftFooter = ""
-        .CenterFooter = "Pagina &P"
-        .RightFooter = ""
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .Orientation = xlLandscape
-        .LeftMargin = Application.CentimetersToPoints(0.5)
-        .RightMargin = Application.CentimetersToPoints(0.5)
-        .TopMargin = Application.CentimetersToPoints(1.5)
-        .BottomMargin = Application.CentimetersToPoints(1)
-        .HeaderMargin = Application.CentimetersToPoints(0.5)
-        .FooterMargin = Application.CentimetersToPoints(0.5)
-        .PrintHeadings = False
-        .PrintGridlines = False
-        .PrintComments = xlPrintNoComments
-        .PrintQuality = 600
-        .CenterHorizontally = False
-        .CenterVertically = False
-        .Orientation = xlLandscape
-        .Draft = False
-        .PaperSize = xlPaperA4
-        .FirstPageNumber = xlAutomatic
-        .Order = xlDownThenOver
-        .BlackAndWhite = False
-        .Zoom = False
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .PrintErrors = xlPrintErrorsDisplayed
-        .OddAndEvenPagesHeaderFooter = False
-        .DifferentFirstPageHeaderFooter = False
-        .ScaleWithDocHeaderFooter = True
-        .AlignMarginsHeaderFooter = True
-        .EvenPage.LeftHeader.Text = ""
-        .EvenPage.CenterHeader.Text = ""
-        .EvenPage.RightHeader.Text = ""
-        .EvenPage.LeftFooter.Text = ""
-        .EvenPage.CenterFooter.Text = ""
-        .EvenPage.RightFooter.Text = ""
-        .FirstPage.LeftHeader.Text = ""
-        .FirstPage.CenterHeader.Text = ""
-        .FirstPage.RightHeader.Text = ""
-        .FirstPage.LeftFooter.Text = ""
-        .FirstPage.CenterFooter.Text = ""
-        .FirstPage.RightFooter.Text = ""
- 
-'        copias = InputBox("Quantas cpias?", "Copias a serem Impressas")
-        wsEmp.Range("A1:O" & ultima).PrintOut
-End With
+Call Rel_ConfigurarPagina(wsEmp, "RELATORIO DE EMPRESAS CADASTRADAS NO CREDENCIAMENTO", "O", False)
+wsEmp.Range("A1:O" & ultima).PrintOut
 Call Util_RestaurarProtecaoAba(wsEmp, estEmp, senEmp)
 Exit Sub
 
@@ -2761,23 +2663,7 @@ If linhaRel <= 1 Then
 End If
 
 wsRel.Columns("A:F").AutoFit
-With wsRel.PageSetup
-        .LeftHeader = ""
-        .CenterHeader = "RELATORIO DE EMPRESAS CREDENCIADAS"
-        .RightHeader = ""
-        .LeftFooter = ""
-        .CenterFooter = "Pagina &P"
-        .RightFooter = ""
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .Orientation = xlLandscape
-        .LeftMargin = Application.CentimetersToPoints(0.5)
-        .RightMargin = Application.CentimetersToPoints(0.5)
-        .TopMargin = Application.CentimetersToPoints(1.5)
-        .BottomMargin = Application.CentimetersToPoints(1)
-        .HeaderMargin = Application.CentimetersToPoints(0.5)
-        .FooterMargin = Application.CentimetersToPoints(0.5)
-End With
+Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE EMPRESAS CREDENCIADAS", "F", False)
 
 wsRel.Range("A1:F" & (linhaRel - 1)).PrintOut
 wsRel.Range("A1:F" & (linhaRel - 1)).ClearContents
@@ -2862,55 +2748,7 @@ If linhaRel = 2 Then
 End If
 
 wsRel.Columns("A:I").AutoFit
-With wsRel.PageSetup
-        .LeftHeader = ""
-        .CenterHeader = "RELATORIO DE ORDENS DE SERVICO ABERTAS"
-        .RightHeader = ""
-        .LeftFooter = ""
-        .CenterFooter = "Pagina &P"
-        .RightFooter = ""
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .Orientation = xlLandscape
-        .LeftMargin = Application.CentimetersToPoints(0.5)
-        .RightMargin = Application.CentimetersToPoints(0.5)
-        .TopMargin = Application.CentimetersToPoints(1.5)
-        .BottomMargin = Application.CentimetersToPoints(1)
-        .HeaderMargin = Application.CentimetersToPoints(0.5)
-        .FooterMargin = Application.CentimetersToPoints(0.5)
-        .PrintHeadings = False
-        .PrintGridlines = False
-        .PrintComments = xlPrintNoComments
-        .PrintQuality = 600
-        .CenterHorizontally = False
-        .CenterVertically = False
-        .Orientation = xlLandscape
-        .Draft = False
-        .PaperSize = xlPaperA4
-        .FirstPageNumber = xlAutomatic
-        .Order = xlDownThenOver
-        .BlackAndWhite = False
-        .Zoom = False
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .PrintErrors = xlPrintErrorsDisplayed
-        .OddAndEvenPagesHeaderFooter = False
-        .DifferentFirstPageHeaderFooter = False
-        .ScaleWithDocHeaderFooter = True
-        .AlignMarginsHeaderFooter = True
-        .EvenPage.LeftHeader.Text = ""
-        .EvenPage.CenterHeader.Text = ""
-        .EvenPage.RightHeader.Text = ""
-        .EvenPage.LeftFooter.Text = ""
-        .EvenPage.CenterFooter.Text = ""
-        .EvenPage.RightFooter.Text = ""
-        .FirstPage.LeftHeader.Text = ""
-        .FirstPage.CenterHeader.Text = ""
-        .FirstPage.RightHeader.Text = ""
-        .FirstPage.LeftFooter.Text = ""
-        .FirstPage.CenterFooter.Text = ""
-        .FirstPage.RightFooter.Text = ""
-End With
+Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE ORDENS DE SERVICO ABERTAS", "I", False)
 
 wsRel.Range("A1:I" & (linhaRel - 1)).PrintOut
 
@@ -3357,55 +3195,7 @@ If linhaRel = 2 Then
 End If
 
 wsRel.Columns("A:F").AutoFit
-With wsRel.PageSetup
-        .LeftHeader = ""
-        .CenterHeader = "RELATORIO DE ORDENS DE SERVICO ABERTAS"
-        .RightHeader = ""
-        .LeftFooter = ""
-        .CenterFooter = "Pagina &P"
-        .RightFooter = ""
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .Orientation = xlLandscape
-        .LeftMargin = Application.CentimetersToPoints(0.5)
-        .RightMargin = Application.CentimetersToPoints(0.5)
-        .TopMargin = Application.CentimetersToPoints(1.5)
-        .BottomMargin = Application.CentimetersToPoints(1)
-        .HeaderMargin = Application.CentimetersToPoints(0.5)
-        .FooterMargin = Application.CentimetersToPoints(0.5)
-        .PrintHeadings = False
-        .PrintGridlines = False
-        .PrintComments = xlPrintNoComments
-        .PrintQuality = 600
-        .CenterHorizontally = False
-        .CenterVertically = False
-        .Orientation = xlLandscape
-        .Draft = False
-        .PaperSize = xlPaperA4
-        .FirstPageNumber = xlAutomatic
-        .Order = xlDownThenOver
-        .BlackAndWhite = False
-        .Zoom = False
-        .FitToPagesWide = 1
-        .FitToPagesTall = False
-        .PrintErrors = xlPrintErrorsDisplayed
-        .OddAndEvenPagesHeaderFooter = False
-        .DifferentFirstPageHeaderFooter = False
-        .ScaleWithDocHeaderFooter = True
-        .AlignMarginsHeaderFooter = True
-        .EvenPage.LeftHeader.Text = ""
-        .EvenPage.CenterHeader.Text = ""
-        .EvenPage.RightHeader.Text = ""
-        .EvenPage.LeftFooter.Text = ""
-        .EvenPage.CenterFooter.Text = ""
-        .EvenPage.RightFooter.Text = ""
-        .FirstPage.LeftHeader.Text = ""
-        .FirstPage.CenterHeader.Text = ""
-        .FirstPage.RightHeader.Text = ""
-        .FirstPage.LeftFooter.Text = ""
-        .FirstPage.CenterFooter.Text = ""
-        .FirstPage.RightFooter.Text = ""
-End With
+Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE PRE-OS VENCIDAS", "F", False)
 
 wsRel.Range("A1:F" & (linhaRel - 1)).PrintOut
 

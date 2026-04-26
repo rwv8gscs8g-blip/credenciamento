@@ -268,6 +268,12 @@ Objetivo:
 
 ### C3. Tornar os relatórios menos dependentes da navegação visual
 
+Status atual:
+
+- primeira fatia incorporada ao `codex/v12-0-0203-governanca-testes`
+- relatórios do `Menu_Principal` passaram a reutilizar helper comum de configuração de página
+- `PageSetup` repetido deixou de viver espalhado nos relatórios mais simples
+
 Objetivo:
 
 - separar melhor geração de dados e renderização visual

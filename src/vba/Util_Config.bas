@@ -88,7 +88,8 @@ End Function
 ' ============================================================
 
 Public Sub Rel_ConfigurarPagina(ByVal ws As Worksheet, ByVal titulo As String, _
-                                 Optional ByVal ultimaColLetra As String = "J")
+                                 Optional ByVal ultimaColLetra As String = "J", _
+                                 Optional ByVal centralizarHorizontalmente As Boolean = False)
     ' Configura PageSetup padrao para relatorios de negocio:
     '   - Titulo com acentos no cabecalho central
     '   - Municipio na esquerda
@@ -127,7 +128,8 @@ Public Sub Rel_ConfigurarPagina(ByVal ws As Worksheet, ByVal titulo As String, _
         .PrintGridlines = False
         .PrintComments = xlPrintNoComments
         .PrintQuality = 600
-        .CenterHorizontally = True
+        .CenterHorizontally = centralizarHorizontalmente
+        .CenterVertically = False
         .Draft = False
         .Order = xlDownThenOver
         .BlackAndWhite = False
@@ -136,6 +138,18 @@ Public Sub Rel_ConfigurarPagina(ByVal ws As Worksheet, ByVal titulo As String, _
         .DifferentFirstPageHeaderFooter = False
         .ScaleWithDocHeaderFooter = True
         .AlignMarginsHeaderFooter = True
+        .EvenPage.LeftHeader.Text = ""
+        .EvenPage.CenterHeader.Text = ""
+        .EvenPage.RightHeader.Text = ""
+        .EvenPage.LeftFooter.Text = ""
+        .EvenPage.CenterFooter.Text = ""
+        .EvenPage.RightFooter.Text = ""
+        .FirstPage.LeftHeader.Text = ""
+        .FirstPage.CenterHeader.Text = ""
+        .FirstPage.RightHeader.Text = ""
+        .FirstPage.LeftFooter.Text = ""
+        .FirstPage.CenterFooter.Text = ""
+        .FirstPage.RightFooter.Text = ""
     End With
 End Sub
 

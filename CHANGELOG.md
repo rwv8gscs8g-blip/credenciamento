@@ -36,6 +36,7 @@ tratam apenas da linha pública oficial.
 - workflow de governança ampliado para verificar coerência entre versão, status oficial, tag, changelog e pacote de evidências
 - documentação pública da esteira de release e evidência em `docs/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`
 - plano executável da Sprint 2 para fortalecimento incremental dos testes e redução de dependência da interface
+- primeira fatia de `C3` incorporada: relatórios simples do `Menu_Principal` agora reutilizam helper comum de configuração de página
 
 ### Alterado
 
