@@ -13,6 +13,7 @@
 - [19_AUDITORIA_PONTOS_FORTES_V12_0202.md](19_AUDITORIA_PONTOS_FORTES_V12_0202.md) — auditoria positiva dos pontos fortes e da maturidade da linha pública
 - [20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md](20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md) — backlog executável da próxima rodada de testes e desacoplamento da interface
 - [21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md](21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md) — auditoria estratégica de cobertura, metodologia, interface e proposta de unificação semântica da V1/V2
+- [22_STATUS_MICROEVOLUCOES_V12_0203.md](22_STATUS_MICROEVOLUCOES_V12_0203.md) — checkpoint de build, feito/pendente/adiado e regra operacional da linha `V12.0.0203`
 
 ## Evidências públicas
 

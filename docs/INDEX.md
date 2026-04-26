@@ -34,6 +34,8 @@ Este é o índice canônico de leitura pública do repositório.
 - [auditoria/18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md](../auditoria/18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md)
 - [auditoria/19_AUDITORIA_PONTOS_FORTES_V12_0202.md](../auditoria/19_AUDITORIA_PONTOS_FORTES_V12_0202.md)
 - [auditoria/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md](../auditoria/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md)
+- [auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md](../auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md)
+- [auditoria/22_STATUS_MICROEVOLUCOES_V12_0203.md](../auditoria/22_STATUS_MICROEVOLUCOES_V12_0203.md)
 - [auditoria/evidencias/V12.0.0202/MANIFEST.md](../auditoria/evidencias/V12.0.0202/MANIFEST.md)
 - [auditoria/INDEX.md](../auditoria/INDEX.md)
 

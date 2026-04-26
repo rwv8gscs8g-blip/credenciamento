@@ -18,6 +18,25 @@ Ou seja:
 - o alvo não é “fazer voltar a funcionar”
 - o alvo é “deixar mais difícil quebrar no futuro”
 
+## Checkpoint operacional — 2026-04-26
+
+Build âncora validado: `88107f1`, gerado na branch
+`codex/v12-0-0203-governanca-testes` e confirmado na tela `Sobre` do
+workbook de homologação.
+
+Validação humana informada:
+
+- compilação limpa
+- build conferido na tela `Sobre`
+- Bateria Oficial V1 rápida: `OK=171`, `FALHA=0`
+- V2 Smoke: `OK=14`, `FALHA=0`
+- V2 Canônica: `OK=20`, `FALHA=0`
+
+Interpretação: a Sprint 2 atingiu um estado verde intermediário forte.
+As próximas ações devem ser apenas microevoluções de estabilização,
+documentação e fechamento de evidência. Novas frentes amplas ficam
+adiadas para depois do fechamento da `V12.0.0203`.
+
 ## Frente A — Novos cenários de teste
 
 ### A0. Família V2 canônica `CS_*`
@@ -321,6 +340,20 @@ A Sprint 2 deve ser considerada concluída quando:
 4. a Bateria Oficial e a V2 continuarem verdes após a ampliação
 5. a família `CS_*` já tiver pelo menos um lote executável e determinístico
 6. a trilha cumulativa `TESTE_TRILHA` / `AUDIT_TESTES` estiver funcionando sem quebrar o reset determinístico
+
+### Situação frente ao critério em 2026-04-26
+
+| Critério | Situação |
+|---|---|
+| 4 novos cenários automatizados | Atendido e superado pela família `CS_*`, `EXP_001` e reforços associados |
+| 3 cenários existentes fortalecidos | Atendido por `SMK_007`, `ATM_001` e `STR_001` |
+| 1 fatia concreta fora do `Menu_Principal.frm` | Atendido parcialmente por avaliação, Pre-OS/OS e relatórios |
+| Bateria Oficial e V2 verdes | Atendido no build `88107f1` |
+| Família `CS_*` executável e determinística | Atendido com V2 Canônica verde (`OK=20`, `FALHA=0`) |
+| Trilha cumulativa funcionando | Atendido por `TESTE_TRILHA` e `AUDIT_TESTES` |
+
+Pendência de fechamento: consolidar a evidência formal da `0203`, rever
+a documentação final e evitar novas frentes técnicas antes da promoção.
 
 ## Resultado esperado
 

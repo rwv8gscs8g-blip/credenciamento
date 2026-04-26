@@ -55,6 +55,21 @@ tratam apenas da linha pública oficial.
 - `Svc_Avaliacao` passa a registrar `Avaliacao Registrada` de forma explícita e sempre auditável
 - backlog explícito para revisão futura da UX dos testes assistidos antes do fechamento da versão
 
+### Validado
+
+- build `88107f1` importado em workbook de homologação, com `Sobre` exibindo commit, branch e data de geração do pacote
+- compilação limpa confirmada por operador humano no build `88107f1`
+- Bateria Oficial V1 rápida validada em 2026-04-26 com `OK=171` e `FALHA=0`
+- V2 Smoke validado em 2026-04-26 com `OK=14`, `FALHA=0` e sem CSV de falhas
+- V2 Canônica validada em 2026-04-26 com `OK=20`, `FALHA=0` e sem CSV de falhas
+
+### Adiado
+
+- promoção de `APP_RELEASE_ATUAL` para `V12.0.0203` até o fechamento formal da release
+- desacoplamento total tela a tela da interface operacional
+- reescrita do importador automático e revisão estrutural de `Mod_Types.bas`
+- redesign visual completo dos testes assistidos e padronização visual profunda dos relatórios
+
 ## [V12.0.0202] - 2026-04-19
 
 ### Corrigido

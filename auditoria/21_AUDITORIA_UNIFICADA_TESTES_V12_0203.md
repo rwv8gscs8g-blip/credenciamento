@@ -8,7 +8,7 @@ data: 2026-04-21
 autoria: Auditoria conduzida por Claude Opus 4.7 a pedido de Luís Maurício Junqueira Zanin
 destino: gestores públicos, auditoria externa, mantenedores técnicos, futuras IAs que ampliem a suíte
 padrao-narrativo: leitura / matriz / decomposição em blocos / catálogo (pré-condição, ação, resultado esperado, razão), conforme `docs/testes/00_MODELO_DOCUMENTAL_DOS_TESTES.md`
-observacao-de-sincronia: documento saneado em 2026-04-21 para refletir os cenários e a trilha cumulativa já validados em workbook na linha `V12.0.0203`
+observacao-de-sincronia: documento saneado em 2026-04-21 e reancorado em 2026-04-26 no build `88107f1`, com V1 rápida, V2 Smoke e V2 Canônica verdes
 ---
 
 # 21. Auditoria Unificada dos Testes — V12.0.0203
@@ -28,6 +28,13 @@ observacao-de-sincronia: documento saneado em 2026-04-21 para refletir os cenár
 A estratégia de testes da linha pública `V12.0.0202` é **madura, honesta
 e suficiente** para sustentar a release oficial estabilizada, mas **não é
 ainda o teto de maturidade desejado** para a sucessora `V12.0.0203`.
+
+Checkpoint de 2026-04-26: a linha `V12.0.0203` atingiu um estado verde
+intermediário no build `88107f1`. O operador humano confirmou compilação
+limpa, Bateria Oficial V1 rápida verde, V2 Smoke verde e V2 Canônica
+verde. Esse checkpoint não promove a release oficial; ele ancora a
+continuidade das microevoluções e reduz a necessidade de abrir novas
+frentes antes do fechamento formal.
 
 Em uma frase: o projeto já prova o que precisa provar, com determinismo
 e rastreabilidade, mas ainda paga um custo de dispersão entre três
@@ -1294,6 +1301,11 @@ ser reproduzido aqui por referência: família `CS_*` verde e
 determinística, `NV-01` e `NV-02` absorvidos, trilha cumulativa
 vigente, V1 e V2 verdes e pelo menos uma fatia concreta de lógica
 saindo do formulário principal.
+
+Estado em 2026-04-26: critério técnico atendido no build `88107f1`.
+Restam fechamento documental, consolidação de evidência e decisão
+formal de promoção da release. O próximo documento operacional é
+`auditoria/22_STATUS_MICROEVOLUCOES_V12_0203.md`.
 
 ### 15.4 Decomposição da Sprint 3 (prospecto)
 

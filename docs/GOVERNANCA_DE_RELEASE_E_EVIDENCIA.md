@@ -62,6 +62,31 @@ O pacote operacional em `local-ai/vba_import/` deve ser gerado a partir de `src/
 
 O operador deve sempre reimportar `App_Release.bas` junto com qualquer microevolução que precise de rastreabilidade visual imediata no Excel.
 
+## Regra de acompanhamento por build
+
+Durante uma linha de desenvolvimento ainda não promovida, o projeto deve
+registrar duas informações diferentes:
+
+- **versão oficial**: permanece estável até a publicação formal;
+- **build importado**: commit curto exato do pacote em execução no workbook.
+
+Na linha `V12.0.0203`, o build importado passou a ser o indicador
+operacional mais preciso para responder "qual código está no ar". O
+histórico de microevoluções deve ser acompanhado por esse commit, não
+por uma promoção prematura da versão oficial.
+
+O checkpoint público de cada sequência relevante deve registrar:
+
+1. build importado;
+2. branch;
+3. data de geração do pacote;
+4. testes humanos executados;
+5. resultado objetivo de cada suíte;
+6. classificação do que ficou feito, pendente e adiado.
+
+O documento vigente dessa linha é
+[auditoria/22_STATUS_MICROEVOLUCOES_V12_0203.md](../auditoria/22_STATUS_MICROEVOLUCOES_V12_0203.md).
+
 O bump da versão oficial só deve acontecer no fechamento do ciclo, quando:
 
 1. a evolução compilar

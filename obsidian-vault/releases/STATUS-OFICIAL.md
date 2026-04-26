@@ -8,6 +8,12 @@ Este arquivo e a fonte canonica para o status de publicacao das versoes. As rele
 |--------|--------|---------|--------|------------|
 | V12.0.0202 | VALIDADA | Sim | Bateria oficial verde + V2 validada | Base técnica estabilizada; evidência pública da bateria oficial publicada; V2 smoke, stress e assistido validados por operador humano |
 
+## Linha em estabilizacao, ainda nao oficial
+
+| Versao alvo | Status | Build ancora | Compila | Testes | Observacao |
+|-------------|--------|--------------|---------|--------|------------|
+| V12.0.0203 | DESENVOLVIMENTO | 88107f1 | Sim | V1 rápida verde + V2 Smoke verde + V2 Canônica verde | Linha em microevolucao; nao promover como oficial antes de manifesto/evidencia final, changelog de release, tag e decisao humana de fechamento |
+
 ## Marcos validados
 
 | Versao | Status | Observacao |
