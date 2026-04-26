@@ -4,7 +4,7 @@ natureza-do-documento: checkpoint tecnico de estabilizacao
 versao-oficial-vigente: V12.0.0202
 linha-alvo: V12.0.0203
 branch: codex/v12-0-0203-governanca-testes
-build-ancora-validado: 88107f1
+build-ancora-validado: 20e400b-dirty
 data: 2026-04-26
 status: em estabilizacao, com V1 rapida, V2 smoke e V2 canonica verdes
 ---
@@ -25,9 +25,9 @@ deliberadamente adiado para nao abrir frentes novas antes da estabilizacao.
 | Proxima release alvo | `V12.0.0203` |
 | Canal ativo | `DESENVOLVIMENTO` |
 | Branch de trabalho | `codex/v12-0-0203-governanca-testes` |
-| Build importado validado | `88107f1` |
-| Pacote exibido no Sobre | gerado em `2026-04-26 01:32` |
-| Validacao humana do build | compilacao limpa, build conferido, V1 rapida verde, V2 smoke verde, V2 canonica verde |
+| Build importado validado | `20e400b-dirty` |
+| Pacote exibido no Sobre | gerado em `2026-04-26 11:50` |
+| Validacao humana do build | compilacao limpa, build conferido, V1 rapida verde, V2 smoke verde, V2 canonica verde e validador consolidado aprovado |
 
 O numero de microevolucao deixou de ser a unica referencia operacional.
 Durante a estabilizacao da `0203`, o indicador objetivo de "qual codigo
@@ -38,9 +38,10 @@ Esse build e o commit curto do pacote efetivamente levado ao Excel.
 
 | Suite | Execucao observada | Resultado |
 |---|---|---|
-| Bateria Oficial V1 rapida | execucao em `2026-04-26 01:50` | `OK=171`, `FALHA=0` |
-| V2 Smoke | `TV2_20260426_015838` | `OK=14`, `FALHA=0`, sem CSV de falhas |
-| V2 Canonica | `TV2_20260426_020124` | `OK=20`, `FALHA=0`, sem CSV de falhas |
+| Bateria Oficial V1 rapida | `BO-20260426-111549` | `OK=171`, `FALHA=0`, `MANUAL=0` |
+| V2 Smoke | `TV2_20260426_112130` | `OK=14`, `FALHA=0`, sem CSV de falhas |
+| V2 Canonica | `TV2_20260426_112250` | `OK=20`, `FALHA=0`, sem CSV de falhas |
+| Validacao release consolidada | `VR_20260426_111549` | `APROVADO`, CSV resumo em `auditoria/evidencias/V12.0.0203/` |
 
 Esses tres resultados formam a combinacao minima de confianca para
 continuar microevoluindo: a V1 protege regressao funcional, o smoke V2
@@ -72,17 +73,23 @@ de negocio profundas do rodizio.
   protegidas sem quebrar a rotina de backup.
 - Fragilidades de compilacao por tipos/instancias implicitas do VBA
   foram contornadas com microcorrecoes locais, sem tocar em `Mod_Types.bas`.
+- Validador consolidado de release criado para encadear V1 rapida,
+  V2 Smoke e V2 Canonica em uma unica evidencia copiavel para IAs.
+- Pacote local passou a gerar lembrete obrigatorio de importacao do
+  `AAX-App_Release.bas`, evitando codigo atualizado com build visual antigo.
 
 ## 03. Pendente para fechar a V12.0.0203
 
 - Consolidar manifesto/evidencia da `0203` quando a release for
   formalmente fechada.
-- Atualizar o pacote de documentacao final com o build de fechamento,
+- Atualizar o pacote de documentacao final com o build limpo de fechamento,
   testes executados e data/hora da validacao humana.
 - Revisar, sem alterar codigo, se a documentacao de testes reflete
   todos os cenarios ja automatizados e a cobertura vigente.
 - Rodar novamente o trio minimo de validacao antes da promocao final:
   V1 rapida, V2 Smoke e V2 Canonica.
+- Gerar pacote final a partir de arvore limpa, sem sufixo `-dirty`, antes
+  da promocao oficial e da tag `v12.0.0203`.
 - Revisar os relatorios gerados em PDF apenas no nivel de identidade
   auditavel ja aprovado: titulo, rodape, referencia, release/build.
 - Manter a correcao de interface em microescopo: so corrigir bug

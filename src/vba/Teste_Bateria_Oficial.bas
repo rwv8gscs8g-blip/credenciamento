@@ -34,6 +34,7 @@ Private gTesteOfPreparado As Boolean
 Private gTesteOfEstavaProtegida As Boolean
 Private gTesteOfSenhaProtecao As String
 Private gRegistrarEmPlanilha As Boolean
+Private gUltimoCsvFalhas As String
 Private gAtivCanonA As String
 Private gAtivCanonB As String
 Private gAtivCanonC As String
@@ -49,7 +50,27 @@ Public Sub BA_SetModoExecucaoVisual(ByVal execucaoLenta As Boolean)
     End If
 End Sub
 
-Public Sub RunBateriaOficial()
+Public Function BA_UltimaExecucaoId() As String
+    BA_UltimaExecucaoId = gExecucaoId
+End Function
+
+Public Function BA_UltimoOk() As Long
+    BA_UltimoOk = gOk
+End Function
+
+Public Function BA_UltimoFail() As Long
+    BA_UltimoFail = gFail
+End Function
+
+Public Function BA_UltimoManual() As Long
+    BA_UltimoManual = gManual
+End Function
+
+Public Function BA_UltimoCsvFalhas() As String
+    BA_UltimoCsvFalhas = gUltimoCsvFalhas
+End Function
+
+Public Sub RunBateriaOficial(Optional ByVal silencioso As Boolean = False)
     Dim displayAlertsAnterior As Boolean
     Dim fatalNumero As Long
     Dim fatalDescricao As String
@@ -61,6 +82,7 @@ Public Sub RunBateriaOficial()
     On Error GoTo Erro
 
     BA_InitExecucao
+    gUltimoCsvFalhas = ""
     displayAlertsAnterior = Application.DisplayAlerts
     Application.DisplayAlerts = False
     ' No modo visual, manter ScreenUpdating ligado para dashboard ao vivo
@@ -74,7 +96,7 @@ Public Sub RunBateriaOficial()
     BA_Bloco2_Expansao
     BA_Bloco3_RegressaoTecnica
     BA_Bloco4_Combinatoria
-    BA_Bloco5_ExportacaoEReset
+    BA_Bloco5_ExportacaoEReset silencioso
 
     BA_AtualizarResumo
     BA_FormatacaoFinal
@@ -86,6 +108,7 @@ Public Sub RunBateriaOficial()
     If gRegistrarEmPlanilha And gFail > 0 Then
         On Error Resume Next
         csvPathFalhas = CTR_ExportarTesteOficialFalhasCSV()
+        gUltimoCsvFalhas = csvPathFalhas
         On Error GoTo Erro
     End If
 
@@ -99,7 +122,9 @@ Public Sub RunBateriaOficial()
     ElseIf Not gRegistrarEmPlanilha Then
         msgFim = msgFim & vbCrLf & vbCrLf & "Obs.: não foi possível registrar em RESULTADO_QA (possível proteção)."
     End If
-    MsgBox msgFim, vbInformation, "Bateria Oficial"
+    If Not silencioso Then
+        MsgBox msgFim, vbInformation, "Bateria Oficial"
+    End If
     BA_FinalizarExecucao
     Exit Sub
 
@@ -127,13 +152,16 @@ Erro:
     BA_AtualizarResumo
     If gRegistrarEmPlanilha Then
         csvPathFalhas = CTR_ExportarTesteOficialFalhasCSV()
+        gUltimoCsvFalhas = csvPathFalhas
     End If
     BA_FinalizarExecucao
-    MsgBox "Erro fatal na bateria oficial:" & vbCrLf & _
-           CStr(fatalNumero) & " - " & fatalDescricao & vbCrLf & _
-           "Origem: " & fatalOrigem & _
-           IIf(Len(csvPathFalhas) > 0, vbCrLf & vbCrLf & "CSV somente falhas:" & vbCrLf & csvPathFalhas, ""), _
-           vbCritical, "Bateria Oficial"
+    If Not silencioso Then
+        MsgBox "Erro fatal na bateria oficial:" & vbCrLf & _
+               CStr(fatalNumero) & " - " & fatalDescricao & vbCrLf & _
+               "Origem: " & fatalOrigem & _
+               IIf(Len(csvPathFalhas) > 0, vbCrLf & vbCrLf & "CSV somente falhas:" & vbCrLf & csvPathFalhas, ""), _
+               vbCritical, "Bateria Oficial"
+    End If
 End Sub
 
 Private Sub BA_FinalizarExecucao()
@@ -696,7 +724,7 @@ Private Sub BA_Bloco4_Combinatoria()
     BA_LogAssert "BO_440_MatrizCapacidade_3Empresas", resRod.encontrou And BA_Pad3(resRod.Empresa.EMP_ID) = "003", "Atividade com 3 empresas respeita primeira da fila", BA_ResumoRodizio(resRod), "Cobrir fronteira de tres empresas aptas", "Selecionar Item C com tres empresas aptas"
 End Sub
 
-Private Sub BA_Bloco5_ExportacaoEReset()
+Private Sub BA_Bloco5_ExportacaoEReset(Optional ByVal silencioso As Boolean = False)
     BA_LogInfo "BO_500_ExportarResumoTecnico", "Resumo tecnico consolidado na aba TESTE_OFICIAL", _
         "Aba TESTE_OFICIAL preenchida com resultado detalhado e resumo executivo", _
         "Execução=" & gExecucaoId
@@ -714,10 +742,14 @@ Private Sub BA_Bloco5_ExportacaoEReset()
 
     ' --- RESET CONDICIONAL: só executa com confirmação do operador ---
     Dim respReset As Long
-    respReset = MsgBox("Bateria concluída. " & BA_ResumoExecucaoTexto() & vbCrLf & vbCrLf & _
-        "Deseja LIMPAR a base operacional agora?" & vbCrLf & _
-        "(Dados de teste serão removidos. A aba RESULTADO_QA será preservada.)", _
-        vbQuestion + vbYesNo, "Reset Pós-Bateria V12")
+    If silencioso Then
+        respReset = vbNo
+    Else
+        respReset = MsgBox("Bateria concluída. " & BA_ResumoExecucaoTexto() & vbCrLf & vbCrLf & _
+            "Deseja LIMPAR a base operacional agora?" & vbCrLf & _
+            "(Dados de teste serão removidos. A aba RESULTADO_QA será preservada.)", _
+            vbQuestion + vbYesNo, "Reset Pós-Bateria V12")
+    End If
 
     If respReset = vbYes Then
         BA_ResetBaseOperacional

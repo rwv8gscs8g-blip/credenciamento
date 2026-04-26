@@ -14,10 +14,13 @@
 - [20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md](20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md) — backlog executável da próxima rodada de testes e desacoplamento da interface
 - [21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md](21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md) — auditoria estratégica de cobertura, metodologia, interface e proposta de unificação semântica da V1/V2
 - [22_STATUS_MICROEVOLUCOES_V12_0203.md](22_STATUS_MICROEVOLUCOES_V12_0203.md) — checkpoint de build, feito/pendente/adiado e regra operacional da linha `V12.0.0203`
+- [23_PARECER_OPUS_FECHAMENTO_E_ORGANIZACAO_V12_0203.md](23_PARECER_OPUS_FECHAMENTO_E_ORGANIZACAO_V12_0203.md) — parecer externo de fechamento, documentação e organização da `V12.0.0203`
+- [24_FECHAMENTO_V12_0203.md](24_FECHAMENTO_V12_0203.md) — fechamento candidato da `V12.0.0203`, com feito/pendente/adiado
 
 ## Evidências públicas
 
 - [evidencias/V12.0.0202/MANIFEST.md](evidencias/V12.0.0202/MANIFEST.md) — manifesto hashado da evidência pública da release `V12.0.0202`
+- [evidencias/V12.0.0203/MANIFEST.md](evidencias/V12.0.0203/MANIFEST.md) — manifesto da evidência candidata da release `V12.0.0203`
 
 ## Regra de leitura
 

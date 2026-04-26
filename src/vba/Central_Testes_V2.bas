@@ -16,17 +16,18 @@ Public Sub CT2_AbrirCentral()
 
     op = Trim$(InputBox( _
         "=== CENTRAL DE TESTES V2 ===" & vbCrLf & vbCrLf & _
-        "[1] Smoke rapido" & vbCrLf & _
-        "[2] Smoke assistido" & vbCrLf & _
-        "[3] Stress deterministico" & vbCrLf & _
-        "[4] Stress assistido" & vbCrLf & _
-        "[5] Suite canonica (fundacao)" & vbCrLf & _
+        "[1] Smoke rapido (~2 min)" & vbCrLf & _
+        "[2] Smoke assistido (~3 min)" & vbCrLf & _
+        "[3] Stress deterministico (~3 min)" & vbCrLf & _
+        "[4] Stress assistido (~5 min)" & vbCrLf & _
+        "[5] Suite canonica (fundacao, ~3 min)" & vbCrLf & _
         "[6] Abrir roteiro assistido V2" & vbCrLf & _
         "[7] Abrir RESULTADO_QA_V2" & vbCrLf & _
         "[8] Abrir CATALOGO_CENARIOS_V2" & vbCrLf & _
         "[9] Abrir HISTORICO_QA_V2" & vbCrLf & _
         "[10] Abrir TESTE_TRILHA" & vbCrLf & _
-        "[11] Abrir AUDIT_TESTES" & vbCrLf & vbCrLf & _
+        "[11] Abrir AUDIT_TESTES" & vbCrLf & _
+        "[12] Validacao release: V1 + Smoke + Canonico (~10 min)" & vbCrLf & vbCrLf & _
         "Digite o numero:", _
         "Central de Testes V2", "1"))
 
@@ -55,6 +56,8 @@ Public Sub CT2_AbrirCentral()
             TV2_AbrirTrilha
         Case "11"
             TV2_AbrirAuditTestes
+        Case "12"
+            CT_ValidarRelease_TrioMinimo
         Case Else
             MsgBox "Opcao invalida.", vbInformation, "Central V2"
     End Select

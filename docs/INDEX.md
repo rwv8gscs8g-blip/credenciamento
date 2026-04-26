@@ -36,7 +36,10 @@ Este é o índice canônico de leitura pública do repositório.
 - [auditoria/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md](../auditoria/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md)
 - [auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md](../auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md)
 - [auditoria/22_STATUS_MICROEVOLUCOES_V12_0203.md](../auditoria/22_STATUS_MICROEVOLUCOES_V12_0203.md)
+- [auditoria/23_PARECER_OPUS_FECHAMENTO_E_ORGANIZACAO_V12_0203.md](../auditoria/23_PARECER_OPUS_FECHAMENTO_E_ORGANIZACAO_V12_0203.md)
+- [auditoria/24_FECHAMENTO_V12_0203.md](../auditoria/24_FECHAMENTO_V12_0203.md)
 - [auditoria/evidencias/V12.0.0202/MANIFEST.md](../auditoria/evidencias/V12.0.0202/MANIFEST.md)
+- [auditoria/evidencias/V12.0.0203/MANIFEST.md](../auditoria/evidencias/V12.0.0203/MANIFEST.md)
 - [auditoria/INDEX.md](../auditoria/INDEX.md)
 
 ## Releases e status

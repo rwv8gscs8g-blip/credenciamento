@@ -12,7 +12,7 @@ Este arquivo e a fonte canonica para o status de publicacao das versoes. As rele
 
 | Versao alvo | Status | Build ancora | Compila | Testes | Observacao |
 |-------------|--------|--------------|---------|--------|------------|
-| V12.0.0203 | DESENVOLVIMENTO | 88107f1 | Sim | V1 rápida verde + V2 Smoke verde + V2 Canônica verde | Linha em microevolucao; nao promover como oficial antes de manifesto/evidencia final, changelog de release, tag e decisao humana de fechamento |
+| V12.0.0203 | DESENVOLVIMENTO | 20e400b-dirty | Sim | V1 rápida verde + V2 Smoke verde + V2 Canônica verde + validador consolidado aprovado | Linha em microevolucao; candidato verde ainda nao final porque o build esta dirty; nao promover como oficial antes de build limpo, manifesto final, changelog de release, tag e decisao humana de fechamento |
 
 ## Marcos validados
 

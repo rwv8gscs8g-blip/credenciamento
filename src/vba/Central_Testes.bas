@@ -39,7 +39,7 @@ Public Sub CT_AbrirCentral()
     Dim op As String
     op = Trim$(InputBox( _
         "=== CENTRAL DE TESTES V12 / TRANSICAO ===" & vbCrLf & vbCrLf & _
-        "[1] Executar Bateria Automatizada Legada" & vbCrLf & _
+        "[1] Executar Bateria Oficial V1 (rapida ~5 min / assistida ~8 min)" & vbCrLf & _
         "[2] Abrir Central de Testes V2" & vbCrLf & vbCrLf & _
         "Digite o numero:", "Central de Testes V12", "1"))
     If op = "" Then Exit Sub
@@ -134,8 +134,8 @@ Private Sub CT_IniciarBateria()
     End If
 
     opModo = MsgBox("Escolha o modo de execução:" & vbCrLf & vbCrLf & _
-                    "SIM  = ASSISTIDA (mesma bateria, mais lenta e mostrando a evolução na tela)" & vbCrLf & _
-                    "NÃO  = RÁPIDA (mesma bateria, sem pausas visuais)" & vbCrLf & _
+                    "SIM  = ASSISTIDA (~8 min; mesma bateria, mais lenta e mostrando a evolução na tela)" & vbCrLf & _
+                    "NÃO  = RÁPIDA (~5 min; mesma bateria, sem pausas visuais)" & vbCrLf & _
                     "CANCELAR = não executar agora", _
                     vbQuestion + vbYesNoCancel, "Modo de Execução")
     If opModo = vbCancel Then Exit Sub

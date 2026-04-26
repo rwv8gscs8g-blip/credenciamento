@@ -65,7 +65,23 @@ Public Sub TV2_InitExecucao(ByVal suite As String, Optional ByVal visual As Bool
     TV2_LogInfo suite, "BOOT", "Inicializar a suite V2", "Suite pronta para execucao"
 End Sub
 
-Public Sub TV2_FinalizarExecucao(ByVal suite As String)
+Public Function TV2_ExecucaoAtualId() As String
+    TV2_ExecucaoAtualId = gTV2ExecucaoId
+End Function
+
+Public Function TV2_UltimoOk() As Long
+    TV2_UltimoOk = gTV2Ok
+End Function
+
+Public Function TV2_UltimoFail() As Long
+    TV2_UltimoFail = gTV2Fail
+End Function
+
+Public Function TV2_UltimoManual() As Long
+    TV2_UltimoManual = gTV2Manual
+End Function
+
+Public Sub TV2_FinalizarExecucao(ByVal suite As String, Optional ByVal silencioso As Boolean = False)
     Dim ws As Worksheet
     Dim nr As Long
     Dim pathCsvFalhas As String
@@ -99,15 +115,19 @@ Public Sub TV2_FinalizarExecucao(ByVal suite As String)
     TV2_FormatarHistoricoSheet
     TV2_FormatarTrilhaSheet
     TV2_FormatarAuditTestesSheet
-    TV2_AbrirResultadoExecucao gTV2ExecucaoId
+    If Not silencioso Then
+        TV2_AbrirResultadoExecucao gTV2ExecucaoId
+    End If
     Application.StatusBar = False
 
-    MsgBox "Suite V2 concluida." & vbCrLf & _
-           "Execucao: " & gTV2ExecucaoId & vbCrLf & _
-           "OK=" & CStr(gTV2Ok) & " | FALHA=" & CStr(gTV2Fail) & " | MANUAL=" & CStr(gTV2Manual) & vbCrLf & vbCrLf & _
-           "CSV de falhas:" & vbCrLf & IIf(Len(pathCsvFalhas) > 0, pathCsvFalhas, "Nao exportado") & vbCrLf & vbCrLf & _
-           obsExportacao, _
-           IIf(gTV2Fail = 0, vbInformation, vbExclamation), "Testes V2"
+    If Not silencioso Then
+        MsgBox "Suite V2 concluida." & vbCrLf & _
+               "Execucao: " & gTV2ExecucaoId & vbCrLf & _
+               "OK=" & CStr(gTV2Ok) & " | FALHA=" & CStr(gTV2Fail) & " | MANUAL=" & CStr(gTV2Manual) & vbCrLf & vbCrLf & _
+               "CSV de falhas:" & vbCrLf & IIf(Len(pathCsvFalhas) > 0, pathCsvFalhas, "Nao exportado") & vbCrLf & vbCrLf & _
+               obsExportacao, _
+               IIf(gTV2Fail = 0, vbInformation, vbExclamation), "Testes V2"
+    End If
 End Sub
 
 Public Sub TV2_LogAssert( _

@@ -60,7 +60,11 @@ O pacote operacional em `local-ai/vba_import/` deve ser gerado a partir de `src/
 - branch atual
 - data e hora da geração do pacote
 
-O operador deve sempre reimportar `App_Release.bas` junto com qualquer microevolução que precise de rastreabilidade visual imediata no Excel.
+O operador deve sempre reimportar `App_Release.bas` junto com qualquer microevolução importável.
+Na pasta publicada, o arquivo obrigatório é `local-ai/vba_import/001-modulo/AAX-App_Release.bas`.
+Sem essa importação, o código pode estar atualizado, mas o Excel continuará exibindo o build anterior no Sobre, na validação consolidada e nas evidências.
+
+Regra para IAs: toda orientação de importação deve listar `AAX-App_Release.bas` antes dos módulos funcionais alterados. Uma proposta de importação sem `AAX-App_Release.bas` é incompleta, mesmo quando a alteração é pequena.
 
 ## Regra de acompanhamento por build
 

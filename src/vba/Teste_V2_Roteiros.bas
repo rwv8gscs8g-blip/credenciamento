@@ -9,7 +9,7 @@ Option Explicit
 ' - stress deterministico
 ' ============================================================
 
-Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
+Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
     Dim fila As String
     Dim filaAntes As String
     Dim filaDepois As String
@@ -311,7 +311,7 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False)
                   "Prova atomicidade ampliada entre CREDENCIADOS e EMPRESAS no fluxo punido", _
                   okAtm
 
-    TV2_FinalizarExecucao "SMOKE"
+    TV2_FinalizarExecucao "SMOKE", silencioso
     Exit Sub
 
 falha:
@@ -323,10 +323,10 @@ falha:
                   "Nenhum erro fatal", _
                   "Erro " & CStr(Err.Number) & ": " & Err.Description, _
                   "Toda falha fatal precisa ficar rastreavel", False
-    TV2_FinalizarExecucao "SMOKE"
+    TV2_FinalizarExecucao "SMOKE", silencioso
 End Sub
 
-Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
+Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
     Dim fila As String
     Dim qtdServAntes As Long
     Dim qtdServDepois As Long
@@ -1033,7 +1033,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False)
                   "Fecha a lacuna de completude mínima das famílias críticas de evento", _
                   ok21
 
-    TV2_FinalizarExecucao "CANONICO"
+    TV2_FinalizarExecucao "CANONICO", silencioso
     Exit Sub
 
 falha:
@@ -1045,7 +1045,7 @@ falha:
                   "Nenhum erro fatal", _
                   "Erro " & CStr(Err.Number) & ": " & Err.Description, _
                   "Toda falha fatal precisa ficar rastreável na família CS_*", False
-    TV2_FinalizarExecucao "CANONICO"
+    TV2_FinalizarExecucao "CANONICO", silencioso
 End Sub
 
 Public Sub TV2_RunStress(Optional ByVal iteracoes As Long = 12, Optional ByVal visual As Boolean = False)

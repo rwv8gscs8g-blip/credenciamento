@@ -38,6 +38,8 @@ tratam apenas da linha pública oficial.
 - plano executável da Sprint 2 para fortalecimento incremental dos testes e redução de dependência da interface
 - primeira fatia de `C3` incorporada: relatórios simples do `Menu_Principal` agora reutilizam helper comum de configuração de página
 - padronização inicial dos relatórios com título acentuado, nome do relatório no rodapé e referência auditável automática para impressão
+- validador consolidado de release encadeando V1 rápida, V2 Smoke e V2 Canônica em uma evidência copiável para IA
+- manifesto candidato de evidências da `V12.0.0203` em `auditoria/evidencias/V12.0.0203/`
 
 ### Alterado
 
@@ -54,14 +56,16 @@ tratam apenas da linha pública oficial.
 - `Audit_Log` passa a diferenciar inativação e reativação de empresa vs entidade na descrição legível do evento
 - `Svc_Avaliacao` passa a registrar `Avaliacao Registrada` de forma explícita e sempre auditável
 - backlog explícito para revisão futura da UX dos testes assistidos antes do fechamento da versão
+- pacote local de importação passa a destacar `AAX-App_Release.bas` como obrigatório em toda microevolução parcial com rastreabilidade visual
 
 ### Validado
 
-- build `88107f1` importado em workbook de homologação, com `Sobre` exibindo commit, branch e data de geração do pacote
-- compilação limpa confirmada por operador humano no build `88107f1`
+- build `20e400b-dirty` importado em workbook de homologação, com `Sobre` exibindo commit, branch e data de geração do pacote
+- compilação limpa confirmada por operador humano no build `20e400b-dirty`
 - Bateria Oficial V1 rápida validada em 2026-04-26 com `OK=171` e `FALHA=0`
 - V2 Smoke validado em 2026-04-26 com `OK=14`, `FALHA=0` e sem CSV de falhas
 - V2 Canônica validada em 2026-04-26 com `OK=20`, `FALHA=0` e sem CSV de falhas
+- validador consolidado `VR_20260426_111549` aprovado com V1 rápida, V2 Smoke e V2 Canônica verdes
 
 ### Adiado
 
