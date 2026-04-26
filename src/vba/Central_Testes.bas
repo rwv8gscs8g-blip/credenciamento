@@ -166,7 +166,9 @@ Private Sub CT_IniciarBateria()
     End If
     If MsgBox("Reabrir o Menu Principal?", vbQuestion + vbYesNo, "Central V12") = vbYes Then
         On Error Resume Next
-        Menu_Principal.Show vbModal
+        Dim frmMenuPrincipal As Object
+        Set frmMenuPrincipal = VBA.UserForms.Add("Menu_Principal")
+        frmMenuPrincipal.Show vbModal
         On Error GoTo falha
     End If
     Exit Sub
@@ -256,7 +258,9 @@ End Sub
 ' ============================================================
 Public Sub CT_AbrirMenuPrincipal()
     On Error Resume Next
-    Menu_Principal.Show
+    Dim frmMenuPrincipal As Object
+    Set frmMenuPrincipal = VBA.UserForms.Add("Menu_Principal")
+    frmMenuPrincipal.Show
 End Sub
 
 ' ============================================================
