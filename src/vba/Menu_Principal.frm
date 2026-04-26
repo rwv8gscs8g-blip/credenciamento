@@ -3105,8 +3105,10 @@ End Function
 Private Sub Btn_Rel_OS_Empresa_Click()
     ' Relatorio "Ordens de Servico por Empresa" — nome separado do TextBox TXT_OS_NomeEmpresa (evita colisao OS_Empresa).
     On Error GoTo falha
+    Dim frmRelOSEmpresa As Object
     Call PreenchimentoRelatorioOSEmpresa
-    Rel_OSEmpresa.Show vbModal
+    Set frmRelOSEmpresa = VBA.UserForms.Add("Rel_OSEmpresa")
+    frmRelOSEmpresa.Show vbModal
     Exit Sub
 falha:
     MsgBox "Erro ao abrir relatorio OS por Empresa: " & Err.Description, vbCritical, "Relatorio"
@@ -3213,9 +3215,11 @@ End Sub
 
 Private Sub Rel_EmpXServ_Click()
 
+Dim frmRelEmpServ As Object
 Call PreenchimentoRel_EmpXServ
 
-Rel_Emp_Serv.Show
+Set frmRelEmpServ = VBA.UserForms.Add("Rel_Emp_Serv")
+frmRelEmpServ.Show
 
 End Sub
 
