@@ -328,13 +328,15 @@ End Sub
 
 Public Sub TV2_PrepararNavegacaoHumana()
     Dim i As Long
+    Dim frmMP As Object
 
     On Error Resume Next
-    Menu_Principal.Menu_RecolherParaBateria
     For i = VBA.UserForms.Count - 1 To 0 Step -1
         If TypeName(VBA.UserForms(i)) = "Menu_Principal" Then
-            VBA.UserForms(i).Hide
-            Unload VBA.UserForms(i)
+            Set frmMP = VBA.UserForms(i)
+            CallByName frmMP, "Menu_RecolherParaBateria", VbMethod
+            frmMP.Hide
+            Unload frmMP
         End If
     Next i
     On Error GoTo 0
