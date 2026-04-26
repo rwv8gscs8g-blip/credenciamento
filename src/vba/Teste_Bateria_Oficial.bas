@@ -1152,12 +1152,12 @@ Private Sub BA_InitExecucao()
 
         ' --- Linha 2: Botoes de navegacao ---
         ws.Rows(2).RowHeight = 30
-        Dim shp As Shape
+        Dim shp As Object
         For Each shp In ws.Shapes
             If Left$(shp.Name, 7) = "QA_BTN_" Then shp.Delete
         Next shp
 
-        Dim b As Shape
+        Dim b As Object
         Set b = ws.Shapes.AddShape(msoShapeRoundedRectangle, 10, 34, 180, 26)
         With b
             .Name = "QA_BTN_MENU"

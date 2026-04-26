@@ -724,13 +724,13 @@ End Sub
 ' ============================================================
 Private Sub InserirBotoes(ByVal ws As Worksheet)
     On Error Resume Next
-    Dim shp As Shape
+    Dim shp As Object
     For Each shp In ws.Shapes
         If Left$(shp.Name, 6) = "CT_BTN" Then shp.Delete
     Next shp
     On Error GoTo 0
 
-    Dim b As Shape
+    Dim b As Object
     Set b = ws.Shapes.AddShape(msoShapeRoundedRectangle, 10, 34, 180, 26)
     With b
         .Name = "CT_BTN_MENU"

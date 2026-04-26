@@ -2269,8 +2269,8 @@ Private Sub TV2_PausarVisual(ByVal segundos As Long)
 End Sub
 
 Private Sub TV2_AdicionarBotoes(ByVal ws As Worksheet)
-    Dim shp As Shape
-    Dim b As Shape
+    Dim shp As Object
+    Dim b As Object
     Dim topPos As Double
     Dim leftMenu As Double
     Dim leftCentral As Double
