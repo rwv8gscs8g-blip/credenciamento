@@ -16,6 +16,7 @@
 - [22_STATUS_MICROEVOLUCOES_V12_0203.md](22_STATUS_MICROEVOLUCOES_V12_0203.md) — checkpoint de build, feito/pendente/adiado e regra operacional da linha `V12.0.0203`
 - [23_PARECER_OPUS_FECHAMENTO_E_ORGANIZACAO_V12_0203.md](23_PARECER_OPUS_FECHAMENTO_E_ORGANIZACAO_V12_0203.md) — parecer externo de fechamento, documentação e organização da `V12.0.0203`
 - [24_FECHAMENTO_V12_0203.md](24_FECHAMENTO_V12_0203.md) — fechamento candidato da `V12.0.0203`, com feito/pendente/adiado
+- [25_PLANO_HARDENING_POS_0203.md](25_PLANO_HARDENING_POS_0203.md) — plano pós-estabilização para desacoplamento tela a tela, CNAE, relatórios, simulador UI, documentação narrada e frentes adiadas
 
 ## Evidências públicas
 
