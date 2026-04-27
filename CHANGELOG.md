@@ -60,8 +60,8 @@ tratam apenas da linha pública oficial.
 
 ### Validado
 
-- build `20e400b-dirty` importado em workbook de homologação, com `Sobre` exibindo commit, branch e data de geração do pacote
-- compilação limpa confirmada por operador humano no build `20e400b-dirty`
+- build `20e400b-em-homologacao` importado em workbook de homologação, com `Sobre` exibindo commit, branch e data de geração do pacote
+- compilação limpa confirmada por operador humano no build `20e400b-em-homologacao`
 - Bateria Oficial V1 rápida validada em 2026-04-26 com `OK=171` e `FALHA=0`
 - V2 Smoke validado em 2026-04-26 com `OK=14`, `FALHA=0` e sem CSV de falhas
 - V2 Canônica validada em 2026-04-26 com `OK=20`, `FALHA=0` e sem CSV de falhas

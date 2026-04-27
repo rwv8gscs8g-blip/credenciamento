@@ -4,7 +4,7 @@ natureza-do-documento: consolidacao operacional de estabilizacao
 versao-oficial-vigente: V12.0.0202
 linha-alvo: V12.0.0203
 branch: codex/v12-0-0203-governanca-testes
-build-candidato: 20e400b-dirty
+build-candidato: 20e400b-em-homologacao
 data: 2026-04-26
 status: candidato verde, aguardando build limpo final
 ---
@@ -20,7 +20,7 @@ que foi deliberadamente adiado para evitar regressao.
 
 | Item | Resultado |
 |---|---|
-| Build importado | `20e400b-dirty` |
+| Build importado | `20e400b-em-homologacao` |
 | Tela Sobre | build, branch e pacote gerado exibidos corretamente |
 | V1 rapida | `OK=171`, `FALHA=0`, `MANUAL=0` |
 | V2 Smoke | `OK=14`, `FALHA=0`, `MANUAL=0` |
@@ -29,8 +29,8 @@ que foi deliberadamente adiado para evitar regressao.
 | Evidencia | `auditoria/evidencias/V12.0.0203/` |
 
 Interpretacao: o candidato esta verde para continuidade de estabilizacao.
-Ainda nao e build final de release porque o sufixo `-dirty` indica que a
-arvore local tinha alteracoes nao commitadas quando o pacote foi gerado.
+Ainda nao e build final de release porque o estado `em homologação` indica
+que a arvore local tinha alteracoes nao commitadas quando o pacote foi gerado.
 
 ## 02. Feito
 
@@ -55,7 +55,7 @@ arvore local tinha alteracoes nao commitadas quando o pacote foi gerado.
 ## 03. Pendente antes da promocao oficial
 
 - Fechar as alteracoes atuais em commit.
-- Regenerar pacote com arvore limpa, sem `-dirty`.
+- Regenerar pacote com arvore limpa, com estado `homologado`.
 - Reimportar `AAX-App_Release.bas` carimbado no workbook de homologacao.
 - Rodar novamente o validador consolidado de release.
 - Atualizar `App_Release.bas` para promocao oficial apenas no fechamento:

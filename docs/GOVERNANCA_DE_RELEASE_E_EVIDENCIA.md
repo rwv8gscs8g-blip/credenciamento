@@ -38,6 +38,7 @@ O projeto distingue explicitamente:
 - **build importado**: commit exato do pacote levado ao Excel
 - **origem do build**: branch de onde o pacote foi gerado
 - **pacote gerado em**: data e hora do carimbo operacional do pacote
+- **estado do build**: `homologado` quando gerado a partir de árvore rastreada limpa; `em homologação` quando gerado com alterações rastreadas ainda não commitadas
 - **assinatura do build**: combinação curta que mantém legibilidade da linha em evolução
 
 Exemplo de microevolução segura:
@@ -46,7 +47,7 @@ Exemplo de microevolução segura:
 - `APP_RELEASE_STATUS = VALIDADO`
 - `APP_RELEASE_CANAL = DESENVOLVIMENTO`
 - `APP_RELEASE_ALVO = V12.0.0203`
-- `APP_BUILD_IMPORTADO = 733782c`
+- `APP_BUILD_IMPORTADO = 733782c-homologado`
 - `APP_BUILD_BRANCH = codex/v12-0-0203-governanca-testes`
 - `APP_BUILD_GERADO_EM = 2026-04-21 06:03`
 
@@ -65,6 +66,8 @@ Na pasta publicada, o arquivo obrigatório é `local-ai/vba_import/001-modulo/AA
 Sem essa importação, o código pode estar atualizado, mas o Excel continuará exibindo o build anterior no Sobre, na validação consolidada e nas evidências.
 
 Regra para IAs: toda orientação de importação deve listar `AAX-App_Release.bas` antes dos módulos funcionais alterados. Uma proposta de importação sem `AAX-App_Release.bas` é incompleta, mesmo quando a alteração é pequena.
+
+Regra pública de nomenclatura: documentação, tela `Sobre`, evidências e mensagens para operador devem usar os rótulos **em homologação** e **homologado**. Termos técnicos de controle interno do Git não devem aparecer na comunicação pública do projeto.
 
 ## Regra de acompanhamento por build
 

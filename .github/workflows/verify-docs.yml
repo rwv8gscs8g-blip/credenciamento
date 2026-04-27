@@ -30,7 +30,13 @@ jobs:
         run: |
           for f in auditoria/*.md; do
             name="$(basename "$f")"
-            grep -q "$name" auditoria/INDEX.md
+            if [ "$name" = "INDEX.md" ]; then
+              continue
+            fi
+            grep -q "$name" auditoria/INDEX.md || {
+              echo "Arquivo de auditoria ausente no índice: $name" >&2
+              exit 1
+            }
           done
 
       - name: Validate release consistency

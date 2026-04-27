@@ -3,7 +3,7 @@ titulo: Plano de Hardening Pos-Estabilizacao da V12.0.0203
 natureza-do-documento: plano executivo de microevolucoes, mapa tela a tela, simulador UI, matriz de cobertura, redesign assistidos, doc narrada e backlog Codex
 versao-oficial-vigente: V12.0.0202
 linha-alvo: V12.0.0203
-build-candidato-atual: 20e400b-dirty
+build-candidato-atual: 20e400b-em-homologacao
 data: 2026-04-26
 autor: Claude Opus 4.7 (sessao Cowork)
 solicitante: Luis Mauricio Junqueira Zanin
@@ -14,7 +14,7 @@ escopo: planejamento, sem edicao de codigo, sem refatoracao ampla, sem alterar M
 # 25. Plano de Hardening Pos-Estabilizacao da V12.0.0203
 
 > Este documento e um plano executivo. Ele assume que a `V12.0.0203` esta em
-> fase de fechamento (auditoria 24, build candidato `20e400b-dirty`, trio
+> fase de fechamento (auditoria 24, build candidato `20e400b-em-homologacao`, trio
 > minimo verde, validador consolidado `APROVADO`) e organiza o trabalho que
 > vem **antes, durante e depois** da promocao oficial. O documento foi escrito
 > para ser executado por Codex em ciclos curtos, com aprovacao humana em cada
@@ -69,7 +69,7 @@ ja vem priorizado para Codex.
 
 | Eixo | Estado em 2026-04-26 |
 |---|---|
-| Compilacao | limpa no build `20e400b-dirty` |
+| Compilacao | limpa no build `20e400b-em-homologacao` |
 | Bateria Oficial V1 rapida | `OK=171`, `FALHA=0`, `MANUAL=0` |
 | V2 Smoke | `OK=14`, `FALHA=0`, `MANUAL=0` |
 | V2 Canonica | `OK=20`, `FALHA=0`, `MANUAL=0` |
@@ -96,7 +96,7 @@ arquivo provavel listado, criterio de aceite mensuravel.
 
 ### PE-01 Fechamento limpo da V12.0.0203 (gate-zero)
 
-- Objetivo: regerar pacote sem `-dirty`, reimportar `App_Release.bas`,
+- Objetivo: regerar pacote com estado `homologado`, reimportar `App_Release.bas`,
   rodar validador consolidado, atualizar STATUS-OFICIAL/CHANGELOG/release
   note, criar tag `v12.0.0203`.
 - Arquivos provaveis: `src/vba/App_Release.bas`,

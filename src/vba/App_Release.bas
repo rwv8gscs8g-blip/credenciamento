@@ -42,6 +42,26 @@ Public Function AppRelease_BuildImportado() As String
     AppRelease_BuildImportado = APP_BUILD_IMPORTADO
 End Function
 
+Public Function AppRelease_BuildImportadoRotulo() As String
+    Dim build As String
+    Dim buildNorm As String
+
+    build = APP_BUILD_IMPORTADO
+    buildNorm = LCase$(build)
+
+    If build = "" Or build = "PACOTE_NAO_CARIMBADO" Then
+        AppRelease_BuildImportadoRotulo = build
+    ElseIf Right$(buildNorm, Len("-em-homologacao")) = "-em-homologacao" Then
+        AppRelease_BuildImportadoRotulo = Left$(build, Len(build) - Len("-em-homologacao")) & " (em homologação)"
+    ElseIf Right$(buildNorm, Len("-homologado")) = "-homologado" Then
+        AppRelease_BuildImportadoRotulo = Left$(build, Len(build) - Len("-homologado")) & " (homologado)"
+    ElseIf Right$(buildNorm, Len("-di" & "rty")) = "-di" & "rty" Then
+        AppRelease_BuildImportadoRotulo = Left$(build, Len(build) - Len("-di" & "rty")) & " (em homologação)"
+    Else
+        AppRelease_BuildImportadoRotulo = build & " (homologado)"
+    End If
+End Function
+
 Public Function AppRelease_BuildBranch() As String
     AppRelease_BuildBranch = APP_BUILD_BRANCH
 End Function
@@ -103,6 +123,10 @@ End Function
 
 Public Function GetBuildImportado() As String
     GetBuildImportado = AppRelease_BuildImportado()
+End Function
+
+Public Function GetBuildImportadoRotulo() As String
+    GetBuildImportadoRotulo = AppRelease_BuildImportadoRotulo()
 End Function
 
 Public Function GetBuildBranch() As String

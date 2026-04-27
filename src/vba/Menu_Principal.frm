@@ -3485,7 +3485,7 @@ Private Sub Menu_TelaInicial_MostrarSobre()
     msg = msg & vbCrLf & "Status oficial: " & AppRelease_Status()
     msg = msg & vbCrLf & "Canal ativo: " & AppRelease_Canal()
     msg = msg & vbCrLf & "Próxima release alvo: " & AppRelease_Alvo()
-    msg = msg & vbCrLf & "Build importado: " & AppRelease_BuildImportado()
+    msg = msg & vbCrLf & "Build importado: " & AppRelease_BuildImportadoRotulo()
     msg = msg & vbCrLf & "Origem do build: " & AppRelease_BuildBranch()
     msg = msg & vbCrLf & "Pacote gerado em: " & AppRelease_BuildGeradoEm()
     msg = msg & vbCrLf & vbCrLf & "Objetivo:"
