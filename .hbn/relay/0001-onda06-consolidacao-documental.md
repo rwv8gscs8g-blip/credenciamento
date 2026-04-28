@@ -2,12 +2,21 @@
 titulo: Onda 6 — consolidacao documental + cleanup + integracao metodologica
 ciclo: 0001
 track: safe_track
-status: em-execucao
+status: ENCERRADO
 agente: Claude Opus 4.7 (Cowork)
 hearback: confirmed (Mauricio, 2026-04-28)
 data-inicio: 2026-04-28
+data-encerramento: 2026-04-28
 escopo: doc-only — sem alteracao de codigo VBA
+erp: ../results/0001-exec-onda06.json
+summary: ../reports/0001-onda06-summary.md
+commits: ["85d7459", "7e64622"]
 ---
+
+> **CICLO ENCERRADO.** Este arquivo continua aqui ate a abertura do
+> proximo ciclo (Onda 7 ou homologacao residual da Onda 5), quando sera
+> movido para `.hbn/relay-archive/0001-onda06-consolidacao-documental.md`
+> conforme contrato HBN.
 
 # Onda 6 — consolidacao documental + cleanup
 

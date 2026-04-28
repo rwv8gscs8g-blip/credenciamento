@@ -1,0 +1,84 @@
+{
+  "execution_id": "exec-onda06-2026-04-28",
+  "agent_id": "claude-opus-4-7-cowork",
+  "readback_id": "readback-onda06-2026-04-28",
+  "track": "safe_track",
+  "action": "Onda 6 — consolidacao documental + integracao HBN/Diataxis/llms.txt/AGENTS.md/Glasswing-style preventive security em Credenciamento + 6 documentos novos no usehbn como case study production-scale.",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "medium",
+  "execution_summary": {
+    "commits_credenciamento": [
+      {
+        "sha_short": "85d7459",
+        "subject": "wip(onda05+06): snapshot da Onda 5 em homologacao + Onda 6 consolidacao documental",
+        "files_changed": 63,
+        "insertions": 9197,
+        "deletions": 585,
+        "scope": "conteudo novo da Onda 6 + materiais nao commitados das Ondas 1-5"
+      },
+      {
+        "sha_short": "7e64622",
+        "subject": "onda(06)/fase-2: reorganizacao estrutural auditoria/ + docs/ + cleanup backups",
+        "files_changed": 50,
+        "deletions_only": 165,
+        "scope": "git mv em larga escala preservando historia + delete auditoria/39"
+      }
+    ],
+    "commits_usehbn": [],
+    "_note_usehbn": "usehbn recebeu 6 docs novos (EVOLUTION-POLICY, INTEGRATION-{DIATAXIS,LLMS-TXT,AGENTS-MD,GLASSWING}, CASE-STUDY-CREDENCIAMENTO) + atualizacoes em CHANGELOG.md e README.md. Commit do usehbn fica para o Mauricio decidir quando e como (repositorio paralelo, nao acoplado).",
+    "tag_salvaguarda": "pre-onda-06-2026-04-28",
+    "tamanho_repo_publico_apos": "~10MB (sem .git que tem 35M de historia) — meta atingida",
+    "backups_movidos_para_externo": "~80MB (backup_bateria_oficial 66M + V12-202-{L..P} 15M + BKP_forms 1.7M + legacy-backups 36K)",
+    "macros_descartaveis_movidas": 5,
+    "auditoria_reorganizada": true,
+    "docs_diataxis_aplicado": true
+  },
+  "glasswing_checks": {
+    "G1_macro_nao_confiavel": "ok",
+    "G2_config_validada": "not_applicable",
+    "G3_formulas_privilegiadas": "not_applicable",
+    "G4_audit_log_append_only": "not_applicable",
+    "G5_claims_proporcionais": "ok"
+  },
+  "_glasswing_notes": {
+    "G1": "5 macros descartaveis removidas de local-ai/vba_import/ raiz; mapa de retorno em Projetos/backups/credenciamento/macros_descartaveis_v0203/MAPA_DE_RETORNO.md.",
+    "G2_G3_G4": "fora de escopo — Onda 6 e doc-only sem alteracao em src/vba/.",
+    "G5": "todos os documentos novos criados na Onda 6 evitam claims absolutos. Truth Barrier do HBN passou."
+  },
+  "invariants_preserved": {
+    "codigo_vba_intocado": true,
+    "mod_types_intocado": true,
+    "build_workbook": "f7aa84f+ONDA05-em-homologacao (mantido)",
+    "onda_5_nao_reaberta": true,
+    "trio_minimo_nao_reexecutado": "esperado — Onda 6 e doc-only",
+    "push_origin": "NAO realizado (decisao do Mauricio)"
+  },
+  "residual_risks_observed": {
+    "arquivo_xlsm_solto_em_backups": {
+      "path": "/Users/macbookpro/Projetos/backups/credenciamento/PlanilhaCredenciamento-Homologacao_BATERIA_OFICIAL_2026_03_25_20260419_225709.xlsm",
+      "size_mb": 2.3,
+      "origin": "primeira tentativa de cp do Claude para diagnosticar restricoes do sandbox fuse",
+      "mitigation": "incluido no script onda06-finalizacao.sh (mv para dentro de backup_bateria_oficial/)"
+    },
+    "util_filtro_lista_hash_diverge": {
+      "path": "src/vba/Util_Filtro_Lista.bas vs local-ai/vba_import/001-modulo/ABI-Util_Filtro_Lista.bas",
+      "scope": "questao da Onda 5, nao da Onda 6. Sera resolvida na homologacao final da Onda 5."
+    },
+    "branch_ahead_origin_by_2": {
+      "scope": "esperado — push e decisao do Mauricio apos audit final",
+      "action": "manter local ate Mauricio aprovar push"
+    }
+  },
+  "next_action": {
+    "owner": "Luis Mauricio Junqueira Zanin",
+    "options": [
+      "(A) homologar Onda 5 manualmente no workbook em homologacao",
+      "(B) abrir Onda 7 (familia IDM_* + RDZ_* + script Glasswing-checks)",
+      "(C) commitar finalizacao HBN (relay-archive + ERP) como onda(06)/finalizacao",
+      "(D) fazer push das 2 ondas + finalizacao para origin (apos audit final)"
+    ],
+    "claude_opus_baton_status": "ainda comigo ate fechamento V12.0.0203 no GitHub"
+  },
+  "created_at": "2026-04-28"
+}

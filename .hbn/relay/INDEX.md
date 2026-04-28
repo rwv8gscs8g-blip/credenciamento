@@ -2,8 +2,8 @@
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.2.0
 proprietario-bastao: Claude Opus 4.7 (sessao Cowork de 2026-04-28)
-ciclo-ativo: ONDA 6 — consolidacao documental + cleanup
-proxima-acao: executar tarefas #2..#11 da TaskList ate fechar Onda 6
+ciclo-ativo: SEM CICLO ATIVO (Onda 6 encerrada em 2026-04-28)
+proxima-acao: aguardando mandato do Mauricio entre 4 opcoes (ver .hbn/results/0001-exec-onda06.json)
 ultima-atualizacao: 2026-04-28
 ---
 
@@ -22,13 +22,22 @@ ultima-atualizacao: 2026-04-28
 
 ## Ciclo ativo
 
+**SEM CICLO ATIVO.** Onda 6 encerrada em 2026-04-28.
+
+## Ciclo encerrado mais recente
+
 | Campo | Valor |
 |---|---|
 | Ciclo | ONDA 6 — consolidacao documental + cleanup |
 | Track HBN | safe_track |
+| Status | ENCERRADO em 2026-04-28 |
 | Readback | [readbacks/0001-onda06.json](../readbacks/0001-onda06.json) |
-| Hearback | confirmed (2026-04-28) |
-| Ciclo origem | [relay/0001-onda06-consolidacao-documental.md](0001-onda06-consolidacao-documental.md) |
+| Hearback | confirmed |
+| ERP | [results/0001-exec-onda06.json](../results/0001-exec-onda06.json) |
+| Resumo humano | [reports/0001-onda06-summary.md](../reports/0001-onda06-summary.md) |
+| Doc tecnico | [auditoria/03_ondas/onda_06_consolidacao_documental/41_TECNICO.md](../../auditoria/03_ondas/onda_06_consolidacao_documental/41_TECNICO.md) |
+| Commits | `85d7459` (conteudo) + `7e64622` (estrutural) |
+| Ciclo origem | [relay/0001-onda06-consolidacao-documental.md](0001-onda06-consolidacao-documental.md) (sera arquivado em proxima abertura de ciclo) |
 
 ## Ondas previstas (a partir desta)
 
@@ -43,19 +52,16 @@ ultima-atualizacao: 2026-04-28
 
 ## Proxima acao explicita
 
-Executar tarefas #2..#11 da TaskList:
+Aguardando mandato do Mauricio entre 4 opcoes:
 
-- apagar auditoria/39 (duplicacao consolidada em .hbn/knowledge/0002 e local-ai/vba_import/000-REGRA-OURO.md)
-- mover backups historicos para Projetos/backups/credenciamento/
-- mover macros descartaveis para Projetos/backups/credenciamento/macros_descartaveis_v0203/
-- reorganizar auditoria/ por tipo preservando numero historico
-- criar AGENTS.md, llms.txt, llms-full.txt, docs/ Diataxis
-- refinar CLAUDE.md (Mod_Types como Onda 9)
-- atualizar CHANGELOG, README, docs/INDEX, vba_import/README, vault dashboard
-- reviver vault Obsidian Opcao A com metodologia D (HBN+Diataxis+llms.txt+AGENTS.md)
-- atualizar usehbn em paralelo com integracoes adotadas
-- escrever auditoria/03_ondas/onda_06_consolidacao_documental/41_TECNICO.md
-- verificacao final (md5, links, grep, git status)
+| # | Opcao | Custo | Recomendacao |
+|---|---|---|---|
+| A | Homologar Onda 5 manualmente no workbook (rodar trio minimo, validar Util_Filtro_Lista divergencia) | ~30 min do Mauricio | depois de C |
+| B | Abrir Onda 7 (familia `IDM_*` + `RDZ_*` + script `glasswing-checks.sh`) | 1 sessao Claude Opus | depois de A |
+| C | Commitar finalizacao HBN (mover relay -> archive + ERP + summary commitados) | 1 commit pequeno | **AGORA** — fecha o ciclo |
+| D | Push das 3 ondas para origin/codex/v12-0-0203-governanca-testes | 30 segundos | depois de B verde |
+
+**Recomendacao minha:** C → A → B → D, nessa ordem.
 
 ## Standard HBN markers
 
