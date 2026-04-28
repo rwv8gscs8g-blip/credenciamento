@@ -65,6 +65,54 @@ falha:
     GetNotaMinimaAvaliacao = 5#
 End Function
 
+' V12.0.0203 ONDA 1 — Numero de strikes (avaliacoes com media < nota minima)
+' acumulados antes de suspender automaticamente a empresa.
+' Default conservador 3. Coluna COL_CFG_MAX_STRIKES (L) na aba CONFIG.
+' MAX_STRIKES = 1 reproduz a regra antiga (suspende na primeira nota baixa).
+Public Function GetMaxStrikes() As Long
+    On Error GoTo falha
+
+    Dim ws As Worksheet
+    Dim v As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
+    v = CLng(Val(ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value))
+
+    If v < 1 Then v = 3
+    If v > 50 Then v = 50
+
+    GetMaxStrikes = v
+    Exit Function
+
+falha:
+    GetMaxStrikes = 3
+End Function
+
+' V12.0.0203 ONDA 1 — Quantidade de dias da suspensao automatica
+' disparada pela regra de strikes na avaliacao. Default 90 dias.
+' Coluna COL_CFG_DIAS_SUSPENSAO_STRIKE (M) na aba CONFIG.
+' Quando o valor for <= 0, o helper Svc_Rodizio.Suspender cai no
+' fallback historico em meses (PERIODO_SUSPENSAO_MESES) — preserva
+' compatibilidade com a regra antiga de suspensao por excesso de recusas.
+Public Function GetDiasSuspensaoStrike() As Long
+    On Error GoTo falha
+
+    Dim ws As Worksheet
+    Dim v As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
+    v = CLng(Val(ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value))
+
+    If v < 0 Then v = 0
+    If v > 3650 Then v = 3650
+
+    GetDiasSuspensaoStrike = v
+    Exit Function
+
+falha:
+    GetDiasSuspensaoStrike = 90
+End Function
+
 Public Function GetGestorNome() As String
     Dim cfg As TConfig
     cfg = GetConfig()

@@ -29,6 +29,8 @@ End Function
 Public Function UtilFiltro_LinhaAtende(ByVal linhaConcatenada As Variant, ByVal termo As Variant) As Boolean
     Dim termoNorm As String
     Dim linhaNorm As String
+    Dim termoDigitos As String
+    Dim linhaDigitos As String
 
     termoNorm = UtilFiltro_Normalizar(termo)
     If termoNorm = "" Then
@@ -37,7 +39,16 @@ Public Function UtilFiltro_LinhaAtende(ByVal linhaConcatenada As Variant, ByVal 
     End If
 
     linhaNorm = UtilFiltro_Normalizar(linhaConcatenada)
-    UtilFiltro_LinhaAtende = (InStr(1, linhaNorm, termoNorm, vbBinaryCompare) > 0)
+    If InStr(1, linhaNorm, termoNorm, vbBinaryCompare) > 0 Then
+        UtilFiltro_LinhaAtende = True
+        Exit Function
+    End If
+
+    termoDigitos = UtilFiltro_SomenteDigitos(termoNorm)
+    If Len(termoDigitos) >= 3 Then
+        linhaDigitos = UtilFiltro_SomenteDigitos(linhaNorm)
+        UtilFiltro_LinhaAtende = (InStr(1, linhaDigitos, termoDigitos, vbBinaryCompare) > 0)
+    End If
 End Function
 
 Public Function UtilFiltro_ConcatenarLinha( _
@@ -178,4 +189,17 @@ Private Function UtilFiltro_CompactarEspacos(ByVal texto As String) As String
         s = Replace(s, "  ", " ")
     Loop
     UtilFiltro_CompactarEspacos = s
+End Function
+
+Private Function UtilFiltro_SomenteDigitos(ByVal texto As String) As String
+    Dim i As Long
+    Dim ch As String
+    Dim saida As String
+
+    For i = 1 To Len(texto)
+        ch = Mid$(texto, i, 1)
+        If ch >= "0" And ch <= "9" Then saida = saida & ch
+    Next i
+
+    UtilFiltro_SomenteDigitos = saida
 End Function

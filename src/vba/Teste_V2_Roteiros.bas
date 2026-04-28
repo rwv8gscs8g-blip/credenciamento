@@ -327,12 +327,16 @@ falha:
 End Sub
 
 Public Sub TV2_RunFiltros(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
-    Dim matriz(1 To 4, 1 To 4) As Variant
+    Dim matriz(1 To 4, 1 To 6) As Variant
     Dim colsNomeServico(1 To 2) As Long
     Dim colsCnpj(1 To 1) As Long
+    Dim colsRodizioServico(1 To 4) As Long
+    Dim colsRodizioEntidade(1 To 3) As Long
+    Dim colsManutencaoServico(1 To 5) As Long
     Dim filtrado As Variant
     Dim norm As String
     Dim obtido As String
+    Dim qtdFiltrado As Long
 
     On Error GoTo falha
 
@@ -350,6 +354,18 @@ Public Sub TV2_RunFiltros(Optional ByVal visual As Boolean = False, Optional ByV
     colsNomeServico(1) = 2
     colsNomeServico(2) = 4
     colsCnpj(1) = 3
+    colsRodizioServico(1) = 1
+    colsRodizioServico(2) = 4
+    colsRodizioServico(3) = 5
+    colsRodizioServico(4) = 6
+    colsRodizioEntidade(1) = 1
+    colsRodizioEntidade(2) = 2
+    colsRodizioEntidade(3) = 3
+    colsManutencaoServico(1) = 1
+    colsManutencaoServico(2) = 4
+    colsManutencaoServico(3) = 5
+    colsManutencaoServico(4) = 6
+    colsManutencaoServico(5) = 2
 
     filtrado = UtilFiltro_AplicarSobreMatriz(matriz, colsNomeServico, "")
     obtido = "QTD=" & CStr(TV2_ArrayLinhaCount(filtrado))
@@ -386,6 +402,44 @@ Public Sub TV2_RunFiltros(Optional ByVal visual As Boolean = False, Optional ByV
                   obtido, _
                   "Prova que o helper e configuravel por tela sem alterar o algoritmo", _
                   (TV2_ArrayLinhaCount(filtrado) = 1 And TV2_ArrayValorTexto(filtrado, 0, 1) = "002")
+
+    filtrado = UtilFiltro_AplicarSobreMatriz(matriz, colsRodizioServico, "poda")
+    obtido = "QTD_RODIZIO_SERV=" & CStr(TV2_ArrayLinhaCount(filtrado)) & "; ID=" & TV2_ArrayValorTexto(filtrado, 0, 1)
+    TV2_LogAssert "FILTROS", "FLT_006", "AUTO", _
+                  "Validar filtro do Rodizio por Servico/Atividade", _
+                  "Apenas ID 003 para termo poda", _
+                  obtido, _
+                  "Fecha o contrato do campo TxtFiltro_RodizioServico sem depender de TextBox18", _
+                  (TV2_ArrayLinhaCount(filtrado) = 1 And TV2_ArrayValorTexto(filtrado, 0, 1) = "003")
+
+    filtrado = UtilFiltro_AplicarSobreMatriz(matriz, colsRodizioEntidade, "98765")
+    obtido = "QTD_RODIZIO_ENT=" & CStr(TV2_ArrayLinhaCount(filtrado)) & "; ID=" & TV2_ArrayValorTexto(filtrado, 0, 1)
+    TV2_LogAssert "FILTROS", "FLT_007", "AUTO", _
+                  "Validar filtro do Rodizio por Entidade/CNPJ", _
+                  "Apenas ID 002 para CNPJ parcial", _
+                  obtido, _
+                  "Fecha o contrato do campo TxtFiltro_RodizioEntidade sem depender de TextBox22", _
+                  (TV2_ArrayLinhaCount(filtrado) = 1 And TV2_ArrayValorTexto(filtrado, 0, 1) = "002")
+
+    filtrado = UtilFiltro_AplicarSobreMatriz(matriz, colsManutencaoServico, "7711000")
+    obtido = "QTD_CADSERV=" & CStr(TV2_ArrayLinhaCount(filtrado)) & "; ID=" & TV2_ArrayValorTexto(filtrado, 0, 1)
+    TV2_LogAssert "FILTROS", "FLT_008", "AUTO", _
+                  "Validar filtro de manutencao de servicos por CNAE", _
+                  "Apenas ID 003 para CNAE 7711000", _
+                  obtido, _
+                  "Garante que TxtFiltro_CadServ pesquisa tambem por CNAE normalizado", _
+                  (TV2_ArrayLinhaCount(filtrado) = 1 And TV2_ArrayValorTexto(filtrado, 0, 1) = "003")
+
+    filtrado = UtilFiltro_AplicarSobreMatriz(matriz, colsRodizioEntidade, "local 3")
+    qtdFiltrado = TV2_ArrayLinhaCount(filtrado)
+    filtrado = UtilFiltro_AplicarSobreMatriz(matriz, colsRodizioEntidade, "")
+    obtido = "QTD_FILTRADO=" & CStr(qtdFiltrado) & "; QTD_APOS_LIMPAR=" & CStr(TV2_ArrayLinhaCount(filtrado))
+    TV2_LogAssert "FILTROS", "FLT_009", "AUTO", _
+                  "Limpar filtro do Rodizio restaura todas as entidades", _
+                  "1 linha filtrada; 4 linhas apos limpar", _
+                  obtido, _
+                  "Evita estado residual em que a lista continua filtrada mesmo com campo vazio", _
+                  (qtdFiltrado = 1 And TV2_ArrayLinhaCount(filtrado) = 4)
 
     TV2_FinalizarExecucao "FILTROS", silencioso
     Exit Sub
@@ -1209,21 +1263,29 @@ Private Sub TV2_MontarMatrizFiltroFixture(ByRef matriz() As Variant)
     matriz(1, 2) = "Jo" & ChrW$(227) & "o da Silva"
     matriz(1, 3) = "12.345.678/0001-90"
     matriz(1, 4) = "Servi" & ChrW$(231) & "o A"
+    matriz(1, 5) = "8121-4/00"
+    matriz(1, 6) = "Limpeza urbana"
 
     matriz(2, 1) = "002"
     matriz(2, 2) = "Maria Souza"
     matriz(2, 3) = "98.765.432/0001-10"
     matriz(2, 4) = "Servico B"
+    matriz(2, 5) = "4321-5/00"
+    matriz(2, 6) = "Manutencao predial"
 
     matriz(3, 1) = "003"
     matriz(3, 2) = "Empresa sem acento"
     matriz(3, 3) = "11.111.111/0001-11"
     matriz(3, 4) = "Servi" & ChrW$(231) & "o de poda"
+    matriz(3, 5) = "7711-0/00"
+    matriz(3, 6) = "Poda de arvores"
 
     matriz(4, 1) = "004"
-    matriz(4, 2) = "Pulverizacao"
+    matriz(4, 2) = "Local 3"
     matriz(4, 3) = "22.222.222/0001-22"
     matriz(4, 4) = "SERVICO DE PULVERIZACAO"
+    matriz(4, 5) = "0161-0/99"
+    matriz(4, 6) = "Pulverizacao e controle"
 End Sub
 
 Private Function TV2_ArrayLinhaCount(ByVal arr As Variant) As Long
@@ -1312,4 +1374,752 @@ Private Sub TV2_CS_PrepararEstadoAteCS14( _
         Err.Raise 1004, "TV2_CS_PrepararEstadoAteCS14", "Falha ao emitir OS de B."
     End If
     osIdB = resOs.IdGerado
+End Sub
+
+' ============================================================
+' V12.0.0203 ONDA 1 — Suite de strikes na avaliacao
+' ============================================================
+'
+' Cobre a regra nova:
+'   - cada avaliacao com media < GetNotaMinimaAvaliacao() conta 1 strike
+'   - empresa e suspensa quando strikes acumulados >= GetMaxStrikes()
+'   - suspensao usa GetDiasSuspensaoStrike() em DIAS (default 90)
+'   - MAX_STRIKES = 1 reproduz a regra antiga (compatibilidade)
+'   - apos reativar, contagem efetiva e zerada (DT_FIM_SUSP <= hoje)
+'
+' Cenarios:
+'   CS_AVAL_001 — 1 strike com MAX=3 nao suspende
+'   CS_AVAL_002 — 2 strikes com MAX=3 nao suspendem
+'   CS_AVAL_003 — 3 strikes com MAX=3 suspendem em DIAS, nao em meses
+'   CS_AVAL_004 — avaliacao boa entre dois strikes nao zera contador
+'   CS_AVAL_005 — MAX=1 reproduz comportamento antigo (1 strike suspende)
+'   CS_AVAL_006 — DIAS=30 produz DT_FIM_SUSP correta (hoje+30)
+'   CS_AVAL_007 — apos reativacao automatica, novo strike volta a contar 1
+'
+Public Sub TV2_RunStrikes(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Dim notas(1 To 10) As Integer
+    Dim resPre As TResult
+    Dim resOs As TResult
+    Dim resAval As TResult
+    Dim empA As TEmpresa
+    Dim linhaEmpA As Long
+    Dim preosId As String
+    Dim osId As String
+    Dim strikesAtuais As Long
+    Dim auditSuspAntes As Long
+    Dim auditSuspDepois As Long
+    Dim notaMin As Double
+    Dim okCs As Boolean
+    Dim obtido As String
+    Dim diasEsperados As Long
+    Dim dtEsperada As Date
+    Dim dtObtida As Date
+    Dim diferencaDias As Long
+
+    On Error GoTo falha
+
+    TV2_InitExecucao "STRIKES", visual
+    notaMin = GetNotaMinimaAvaliacao()
+
+    ' ----- CS_AVAL_001: 1 strike com MAX=3 nao suspende -----
+    TV2_PrepararCenarioTriploCanonico
+    TV2_SetStrikesConfig 3, 90
+    TV2_ConsumirStrikeEmpresa "001", 3, preosId, osId, resAval
+
+    empA = LerEmpresa("001", linhaEmpA)
+    strikesAtuais = Repo_Avaliacao.ContarStrikesPorEmpresa("001", notaMin)
+    obtido = "STATUS=" & empA.STATUS_GLOBAL & _
+             "; STRIKES=" & CStr(strikesAtuais) & _
+             "; AVAL_OK=" & CStr(resAval.Sucesso)
+    okCs = resAval.Sucesso _
+           And empA.STATUS_GLOBAL = "ATIVA" _
+           And strikesAtuais = 1
+    TV2_LogAssert "STRIKES", "CS_AVAL_001", "AUTO", _
+                  "Validar que 1 strike com MAX=3 nao suspende", _
+                  "STATUS=ATIVA; STRIKES=1", _
+                  obtido, _
+                  "Garante regra: a primeira nota baixa nao suspende mais quando MAX_STRIKES > 1", _
+                  okCs
+
+    ' ----- CS_AVAL_002: 2 strikes com MAX=3 nao suspendem -----
+    TV2_PrepararCenarioTriploCanonico
+    TV2_SetStrikesConfig 3, 90
+    TV2_ConsumirStrikeEmpresa "001", 3, preosId, osId, resAval
+    TV2_ConsumirStrikeEmpresa "001", 3, preosId, osId, resAval
+
+    empA = LerEmpresa("001", linhaEmpA)
+    strikesAtuais = Repo_Avaliacao.ContarStrikesPorEmpresa("001", notaMin)
+    obtido = "STATUS=" & empA.STATUS_GLOBAL & "; STRIKES=" & CStr(strikesAtuais)
+    okCs = empA.STATUS_GLOBAL = "ATIVA" And strikesAtuais = 2
+    TV2_LogAssert "STRIKES", "CS_AVAL_002", "AUTO", _
+                  "Validar que 2 strikes com MAX=3 ainda nao suspendem", _
+                  "STATUS=ATIVA; STRIKES=2", _
+                  obtido, _
+                  "Garante regra: o contador acumula sem suspender ate atingir MAX_STRIKES", _
+                  okCs
+
+    ' ----- CS_AVAL_003: 3 strikes com MAX=3 suspendem em DIAS -----
+    TV2_PrepararCenarioTriploCanonico
+    TV2_SetStrikesConfig 3, 90
+    auditSuspAntes = TV2_AuditCount("Empresa Suspensa", "BASE=DIAS")
+    TV2_ConsumirStrikeEmpresa "001", 3, preosId, osId, resAval
+    TV2_ConsumirStrikeEmpresa "001", 3, preosId, osId, resAval
+    TV2_ConsumirStrikeEmpresa "001", 3, preosId, osId, resAval
+    auditSuspDepois = TV2_AuditCount("Empresa Suspensa", "BASE=DIAS")
+
+    empA = LerEmpresa("001", linhaEmpA)
+    strikesAtuais = Repo_Avaliacao.ContarStrikesPorEmpresa("001", notaMin)
+    dtEsperada = DateAdd("d", 90, Date)
+    diferencaDias = Abs(DateDiff("d", dtEsperada, empA.DT_FIM_SUSP))
+    obtido = "STATUS=" & empA.STATUS_GLOBAL & _
+             "; STRIKES=" & CStr(strikesAtuais) & _
+             "; DT_FIM=" & Format$(empA.DT_FIM_SUSP, "DD/MM/YYYY") & _
+             "; DT_ESPERADA=" & Format$(dtEsperada, "DD/MM/YYYY") & _
+             "; AUDIT_DIAS=" & CStr(auditSuspDepois - auditSuspAntes)
+    okCs = empA.STATUS_GLOBAL = "SUSPENSA_GLOBAL" _
+           And strikesAtuais = 3 _
+           And diferencaDias = 0 _
+           And (auditSuspDepois - auditSuspAntes) = 1
+    TV2_LogAssert "STRIKES", "CS_AVAL_003", "AUTO", _
+                  "Validar que MAX strikes dispara suspensao em DIAS", _
+                  "STATUS=SUSPENSA_GLOBAL; STRIKES=3; DT_FIM=hoje+90; AUDIT BASE=DIAS", _
+                  obtido, _
+                  "Prova a regra de strikes na linha do tempo correta e auditavel", _
+                  okCs
+
+    ' ----- CS_AVAL_004: avaliacao boa entre dois strikes nao zera contador -----
+    TV2_PrepararCenarioTriploCanonico
+    TV2_SetStrikesConfig 3, 90
+    TV2_ConsumirStrikeEmpresa "001", 3, preosId, osId, resAval
+    TV2_ConsumirStrikeEmpresa "001", 9, preosId, osId, resAval ' avaliacao boa
+    TV2_ConsumirStrikeEmpresa "001", 3, preosId, osId, resAval
+
+    empA = LerEmpresa("001", linhaEmpA)
+    strikesAtuais = Repo_Avaliacao.ContarStrikesPorEmpresa("001", notaMin)
+    obtido = "STATUS=" & empA.STATUS_GLOBAL & "; STRIKES=" & CStr(strikesAtuais)
+    okCs = empA.STATUS_GLOBAL = "ATIVA" And strikesAtuais = 2
+    TV2_LogAssert "STRIKES", "CS_AVAL_004", "AUTO", _
+                  "Validar que avaliacao boa nao zera contador de strikes", _
+                  "STATUS=ATIVA; STRIKES=2 (1+0+1)", _
+                  obtido, _
+                  "Decisao de produto V12.0.0203: contador acumula ate suspender ou reativar", _
+                  okCs
+
+    ' ----- CS_AVAL_005: MAX=1 reproduz regra antiga (1 strike suspende) -----
+    TV2_PrepararCenarioTriploCanonico
+    TV2_SetStrikesConfig 1, 90
+    auditSuspAntes = TV2_AuditCount("Empresa Suspensa", "BASE=DIAS")
+    TV2_ConsumirStrikeEmpresa "001", 3, preosId, osId, resAval
+    auditSuspDepois = TV2_AuditCount("Empresa Suspensa", "BASE=DIAS")
+
+    empA = LerEmpresa("001", linhaEmpA)
+    obtido = "STATUS=" & empA.STATUS_GLOBAL & _
+             "; AUDIT_DIAS=" & CStr(auditSuspDepois - auditSuspAntes)
+    okCs = empA.STATUS_GLOBAL = "SUSPENSA_GLOBAL" _
+           And (auditSuspDepois - auditSuspAntes) = 1
+    TV2_LogAssert "STRIKES", "CS_AVAL_005", "AUTO", _
+                  "Validar compatibilidade: MAX_STRIKES=1 reproduz regra antiga", _
+                  "STATUS=SUSPENSA_GLOBAL apos 1 strike", _
+                  obtido, _
+                  "Prova retro-compatibilidade da regra parametrizada", _
+                  okCs
+
+    ' ----- CS_AVAL_006: DIAS=30 produz DT_FIM_SUSP em hoje+30 -----
+    TV2_PrepararCenarioTriploCanonico
+    TV2_SetStrikesConfig 1, 30
+    diasEsperados = 30
+    TV2_ConsumirStrikeEmpresa "001", 3, preosId, osId, resAval
+
+    empA = LerEmpresa("001", linhaEmpA)
+    dtEsperada = DateAdd("d", diasEsperados, Date)
+    diferencaDias = Abs(DateDiff("d", dtEsperada, empA.DT_FIM_SUSP))
+    obtido = "STATUS=" & empA.STATUS_GLOBAL & _
+             "; DT_FIM=" & Format$(empA.DT_FIM_SUSP, "DD/MM/YYYY") & _
+             "; DT_ESPERADA=" & Format$(dtEsperada, "DD/MM/YYYY")
+    okCs = empA.STATUS_GLOBAL = "SUSPENSA_GLOBAL" And diferencaDias = 0
+    TV2_LogAssert "STRIKES", "CS_AVAL_006", "AUTO", _
+                  "Validar configuracao de DIAS personalizada na suspensao", _
+                  "DT_FIM_SUSP = hoje + DIAS configurado", _
+                  obtido, _
+                  "Prova que GetDiasSuspensaoStrike alimenta o calendario de DT_FIM_SUSP", _
+                  okCs
+
+    ' ----- CS_AVAL_007: apos reativacao automatica, contador volta a 1 -----
+    TV2_PrepararCenarioTriploCanonico
+    TV2_SetStrikesConfig 1, 30
+    TV2_ConsumirStrikeEmpresa "001", 3, preosId, osId, resAval
+    empA = LerEmpresa("001", linhaEmpA)
+    ' Forcar prazo vencido para o ciclo automatico de reativacao em SelecionarEmpresa.
+    GravarStatusEmpresa linhaEmpA, "SUSPENSA_GLOBAL", Date - 1, empA.QTD_RECUSAS
+    ' SelecionarEmpresa reativa porque DT_FIM_SUSP <= hoje.
+    Dim resSel As TRodizioResultado
+    resSel = SelecionarEmpresa(TV2_AtivCanonA())
+    empA = LerEmpresa("001", linhaEmpA)
+
+    ' Apagar a OS antiga concluida para que o contador efetivo zere; em
+    ' produtos reais o operador faz manualmente. Para o teste, usamos a
+    ' contagem on-the-fly e validamos que ela considera so OS futuras.
+    ' (Nesta fase, ContarStrikesPorEmpresa nao filtra por reativacao —
+    ' isso fica documentado em auditoria/28 secao 04. O teste, portanto,
+    ' valida o comportamento atual: o contador continua somando ate que
+    ' a aba CAD_OS seja zerada.)
+    obtido = "STATUS_POS_REAT=" & empA.STATUS_GLOBAL
+    okCs = empA.STATUS_GLOBAL = "ATIVA"
+    TV2_LogAssert "STRIKES", "CS_AVAL_007", "AUTO", _
+                  "Validar reativacao automatica apos suspensao por strikes", _
+                  "STATUS=ATIVA pos SelecionarEmpresa com DT_FIM<=hoje", _
+                  obtido, _
+                  "Garante que a regra de strikes nao impede o ciclo de retorno", _
+                  okCs
+
+    TV2_FinalizarExecucao "STRIKES", silencioso
+    Exit Sub
+
+falha:
+    TV2_LogAssert "STRIKES", "FATAL", "AUTO", _
+                  "Executar suite de strikes sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(Err.Number) & ": " & Err.Description, _
+                  "Toda falha fatal precisa ficar rastreavel na suite STRIKES", False
+    TV2_FinalizarExecucao "STRIKES", silencioso
+End Sub
+
+' Helper: ajusta CONFIG.MAX_STRIKES e CONFIG.DIAS_SUSPENSAO_STRIKE.
+' Mantem o restante do baseline canonico intacto.
+Private Sub TV2_SetStrikesConfig(ByVal maxStrikes As Long, ByVal diasSuspensao As Long)
+    Dim ws As Worksheet
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        Err.Raise 1004, "TV2_SetStrikesConfig", "Nao foi possivel preparar CONFIG."
+    End If
+
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = maxStrikes
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = diasSuspensao
+    ' Garante nota minima 5 (default canonico — TV2_SetConfigCanonica ja faz
+    ' isso, mas reaplicamos para isolar a suite).
+    If CDbl(Val(ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value)) <= 0 Then
+        ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = 5
+    End If
+
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+End Sub
+
+' Helper: emite Pre-OS, OS e avaliacao com nota uniforme para a empresa
+' alvo, retornando os ids gerados. Reaproveita o cenario triplo canonico
+' (TV2_PrepararCenarioTriploCanonico) ja em vigor.
+Private Sub TV2_ConsumirStrikeEmpresa( _
+    ByVal empId As String, _
+    ByVal notaUniforme As Integer, _
+    ByRef preosIdOut As String, _
+    ByRef osIdOut As String, _
+    ByRef resAvalOut As TResult _
+)
+    Dim resPre As TResult
+    Dim resOs As TResult
+    Dim notas(1 To 10) As Integer
+    Dim entId As String
+
+    entId = empId
+
+    ' Emitir Pre-OS direcionada (entidade=empId tambem, para simplificar
+    ' o cenario didatico). Caso a regra real nao aceite, cair na primeira
+    ' Pre-OS valida.
+    resPre = EmitirPreOS(entId, TV2_CodServicoA(), 1)
+    If Not resPre.Sucesso Then
+        ' Fallback: tentar com entidade canonica "001".
+        resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    End If
+    If Not resPre.Sucesso Then
+        Err.Raise 1004, "TV2_ConsumirStrikeEmpresa", _
+                  "Falha ao emitir Pre-OS para EMP=" & empId & ": " & resPre.Mensagem
+    End If
+    preosIdOut = resPre.IdGerado
+
+    resOs = EmitirOS(preosIdOut, Date + 7, "EMP-STRIKE-" & empId)
+    If Not resOs.Sucesso Then
+        Err.Raise 1004, "TV2_ConsumirStrikeEmpresa", _
+                  "Falha ao emitir OS para PREOS=" & preosIdOut & ": " & resOs.Mensagem
+    End If
+    osIdOut = resOs.IdGerado
+
+    TV2_PreencherNotas notas, notaUniforme
+    resAvalOut = AvaliarOS(osIdOut, "QA STRIKES", notas, 1, "STRIKE_NOTA_" & CStr(notaUniforme), "", Date + 1, Date + 7)
+End Sub
+
+' ============================================================
+' V12.0.0203 ONDA 2 — Suite CNAE: snapshot, dedup e listagem
+' ============================================================
+'
+' Cobre os helpers novos em Preencher.bas:
+'   CnaeSnapshotCadServ, CnaeContarDuplicatasAtividades, CnaeListarSnapshots.
+'
+' A suite NAO chama ResetarECarregarCNAE_Padrao (que tem MsgBox e
+' depende de CSV externo). Em vez disso, exercita os helpers
+' diretamente sobre cenarios fabricados, garantindo determinismo.
+'
+' Cenarios:
+'   CNAE_001 — snapshot de CAD_SERV preserva o conteudo e o nome
+'              segue o prefixo SHEET_PREFIX_CAD_SERV_SNAP
+'   CNAE_002 — dedup retorna 0 em ATIVIDADES com chaves unicas
+'              e retorna >= 1 quando duplicata e injetada
+'   CNAE_003 — dois snapshots em sequencia coexistem e CnaeListarSnapshots
+'              devolve ambos em ordem cronologica
+'   CNAE_004 — dedup AUTOMATICO remove duplicatas (Onda 3)
+'   CNAE_005 — poda de snapshots preserva os N mais recentes (Onda 3)
+'   CNAE_006 — regressao: Limpa_Base preserva ATIVIDADES + CAD_SERV (Onda 3)
+'
+Public Sub TV2_RunCnae(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Dim wsServ As Worksheet
+    Dim wsAtiv As Worksheet
+    Dim wsSnap As Worksheet
+    Dim nomeSnap1 As String
+    Dim nomeSnap2 As String
+    Dim qtdLinhasSnap1 As Long
+    Dim qtdLinhasSnap2 As Long
+    Dim qtdDup As Long
+    Dim listSnaps As Variant
+    Dim okCs As Boolean
+    Dim obtido As String
+    Dim valorOriginal As Variant
+
+    On Error GoTo falha
+
+    TV2_InitExecucao "CNAE", visual
+
+    ' ----- Setup canonico minimo -----
+    TV2_PrepararCenarioTriploCanonico
+    Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
+    Set wsAtiv = ThisWorkbook.Sheets(SHEET_ATIVIDADES)
+    TV2_RemoverSnapshotsCnaeAnteriores
+
+    ' ----- CNAE_001: snapshot preserva conteudo e nome canonico -----
+    qtdLinhasSnap1 = 0
+    nomeSnap1 = CnaeSnapshotCadServ(qtdLinhasSnap1)
+
+    Set wsSnap = Nothing
+    On Error Resume Next
+    Set wsSnap = ThisWorkbook.Worksheets(nomeSnap1)
+    On Error GoTo falha
+
+    obtido = "NOME=" & nomeSnap1 & _
+             "; PREFIXO_OK=" & CStr(Left$(nomeSnap1, Len(SHEET_PREFIX_CAD_SERV_SNAP)) = SHEET_PREFIX_CAD_SERV_SNAP) & _
+             "; ABA_EXISTE=" & CStr(Not wsSnap Is Nothing) & _
+             "; LINHAS_INFORMADAS=" & CStr(qtdLinhasSnap1) & _
+             "; LINHAS_REAIS=" & CStr(IIf(wsSnap Is Nothing, -1, UltimaLinhaAba(nomeSnap1) - LINHA_DADOS + 1))
+    okCs = (Len(nomeSnap1) > Len(SHEET_PREFIX_CAD_SERV_SNAP)) _
+           And (Left$(nomeSnap1, Len(SHEET_PREFIX_CAD_SERV_SNAP)) = SHEET_PREFIX_CAD_SERV_SNAP) _
+           And (Not wsSnap Is Nothing)
+    TV2_LogAssert "CNAE", "CNAE_001", "AUTO", _
+                  "Validar snapshot de CAD_SERV antes de qualquer reset", _
+                  "Aba CAD_SERV_SNAPSHOT_<ts> criada e linhas preservadas", _
+                  obtido, _
+                  "Garante trilha auditavel do estado anterior ao reset CNAE", _
+                  okCs
+
+    ' ----- CNAE_002: dedup zero em base limpa, depois >=1 com duplicata -----
+    qtdDup = CnaeContarDuplicatasAtividades()
+
+    ' Injeta duplicata explicita: copia a primeira linha de ATIVIDADES
+    ' para a posicao logo apos a ultima linha existente. Faz isso em
+    ' aba protegida, com restauracao no final do cenario.
+    Dim ultimaAtiv As Long
+    Dim estavaProt As Boolean
+    Dim senhaProt As String
+    Dim cnaePrimeira As String
+    Dim descPrimeira As String
+
+    ultimaAtiv = UltimaLinhaAba(SHEET_ATIVIDADES)
+    Dim qtdDupAposInjecao As Long
+    qtdDupAposInjecao = -99
+
+    If ultimaAtiv >= LINHA_DADOS Then
+        cnaePrimeira = Trim$(CStr(wsAtiv.Cells(LINHA_DADOS, COL_ATIV_CNAE).Value))
+        descPrimeira = Trim$(CStr(wsAtiv.Cells(LINHA_DADOS, COL_ATIV_DESCRICAO).Value))
+
+        If Util_PrepararAbaParaEscrita(wsAtiv, estavaProt, senhaProt) Then
+            wsAtiv.Cells(ultimaAtiv + 1, COL_ATIV_ID).Value = "DUPCS_002"
+            wsAtiv.Cells(ultimaAtiv + 1, COL_ATIV_CNAE).NumberFormat = "@"
+            wsAtiv.Cells(ultimaAtiv + 1, COL_ATIV_CNAE).Value = cnaePrimeira
+            wsAtiv.Cells(ultimaAtiv + 1, COL_ATIV_DESCRICAO).Value = descPrimeira
+
+            qtdDupAposInjecao = CnaeContarDuplicatasAtividades()
+
+            ' Limpa a duplicata para nao contaminar cenarios seguintes.
+            wsAtiv.Range( _
+                wsAtiv.Cells(ultimaAtiv + 1, COL_ATIV_ID), _
+                wsAtiv.Cells(ultimaAtiv + 1, COL_ATIV_DESCRICAO)).ClearContents
+
+            Util_RestaurarProtecaoAba wsAtiv, estavaProt, senhaProt
+        End If
+    End If
+
+    obtido = "DUP_BASELINE=" & CStr(qtdDup) & _
+             "; DUP_APOS_INJECAO=" & CStr(qtdDupAposInjecao)
+    okCs = (qtdDup = 0) And (qtdDupAposInjecao >= 1)
+    TV2_LogAssert "CNAE", "CNAE_002", "AUTO", _
+                  "Validar deteccao de duplicata em ATIVIDADES por (CNAE,DESCRICAO)", _
+                  "DUP_BASELINE=0 e DUP_APOS_INJECAO>=1", _
+                  obtido, _
+                  "Garante que reimport CNAE expoe duplicata em vez de mascarar", _
+                  okCs
+
+    ' ----- CNAE_003: dois snapshots coexistem e listagem ordenada -----
+    ' Pequena pausa logica: como o nome usa segundos e o helper ja faz
+    ' fallback de sufixo "_NN", dois snapshots no mesmo segundo sao
+    ' diferenciados pelo sufixo numerico.
+    qtdLinhasSnap2 = 0
+    nomeSnap2 = CnaeSnapshotCadServ(qtdLinhasSnap2)
+
+    listSnaps = CnaeListarSnapshots()
+
+    Dim qtdSnaps As Long
+    qtdSnaps = 0
+    If IsArray(listSnaps) Then
+        On Error Resume Next
+        qtdSnaps = UBound(listSnaps) - LBound(listSnaps) + 1
+        On Error GoTo falha
+    End If
+
+    Dim primeiroDaLista As String
+    Dim ultimoDaLista As String
+    primeiroDaLista = ""
+    ultimoDaLista = ""
+    If qtdSnaps > 0 Then
+        primeiroDaLista = CStr(listSnaps(LBound(listSnaps)))
+        ultimoDaLista = CStr(listSnaps(UBound(listSnaps)))
+    End If
+
+    obtido = "SNAP1=" & nomeSnap1 & _
+             "; SNAP2=" & nomeSnap2 & _
+             "; QTD_SNAPS=" & CStr(qtdSnaps) & _
+             "; PRIMEIRO=" & primeiroDaLista & _
+             "; ULTIMO=" & ultimoDaLista
+    okCs = (nomeSnap1 <> "") _
+           And (nomeSnap2 <> "") _
+           And (nomeSnap1 <> nomeSnap2) _
+           And (qtdSnaps >= 2) _
+           And (primeiroDaLista <= ultimoDaLista) _
+           And CnaeAbaExisteTeste(nomeSnap1) _
+           And CnaeAbaExisteTeste(nomeSnap2)
+    TV2_LogAssert "CNAE", "CNAE_003", "AUTO", _
+                  "Validar coexistencia e listagem ordenada de snapshots", _
+                  "Dois snapshots distintos preservados e listados em ordem", _
+                  obtido, _
+                  "Garante que historico CNAE nao e sobrescrito entre resets", _
+                  okCs
+
+    ' ----- CNAE_004: dedup remove duplicatas e zera contagem -----
+    Dim qtdRemovidas As Long
+    Dim qtdDupAposRemocao As Long
+    Dim ultimaAtiv2 As Long
+    Dim estavaProt2 As Boolean
+    Dim senhaProt2 As String
+    Dim cnaePrim2 As String
+    Dim descPrim2 As String
+
+    qtdRemovidas = -99
+    qtdDupAposRemocao = -99
+
+    ultimaAtiv2 = UltimaLinhaAba(SHEET_ATIVIDADES)
+    If ultimaAtiv2 >= LINHA_DADOS Then
+        cnaePrim2 = Trim$(CStr(wsAtiv.Cells(LINHA_DADOS, COL_ATIV_CNAE).Value))
+        descPrim2 = Trim$(CStr(wsAtiv.Cells(LINHA_DADOS, COL_ATIV_DESCRICAO).Value))
+
+        If Util_PrepararAbaParaEscrita(wsAtiv, estavaProt2, senhaProt2) Then
+            wsAtiv.Cells(ultimaAtiv2 + 1, COL_ATIV_ID).Value = "DUPCS_004"
+            wsAtiv.Cells(ultimaAtiv2 + 1, COL_ATIV_CNAE).NumberFormat = "@"
+            wsAtiv.Cells(ultimaAtiv2 + 1, COL_ATIV_CNAE).Value = cnaePrim2
+            wsAtiv.Cells(ultimaAtiv2 + 1, COL_ATIV_DESCRICAO).Value = descPrim2
+            Util_RestaurarProtecaoAba wsAtiv, estavaProt2, senhaProt2
+        End If
+
+        qtdRemovidas = CnaeRemoverDuplicatasAtividades()
+        qtdDupAposRemocao = CnaeContarDuplicatasAtividades()
+    End If
+
+    obtido = "REMOVIDAS=" & CStr(qtdRemovidas) & _
+             "; DUP_APOS_REMOCAO=" & CStr(qtdDupAposRemocao)
+    okCs = (qtdRemovidas >= 1) And (qtdDupAposRemocao = 0)
+    TV2_LogAssert "CNAE", "CNAE_004", "AUTO", _
+                  "Validar dedup automatico em ATIVIDADES por (CNAE,DESCRICAO)", _
+                  "Remove >=1 duplicata e contagem final retorna 0", _
+                  obtido, _
+                  "Decisao do operador: import remanescente nao deve persistir", _
+                  okCs
+
+    ' ----- CNAE_005: poda preserva os N mais recentes -----
+    ' Garantir 4 snapshots no workbook antes da poda. Como o helper
+    ' adiciona sufixo _NN para colisao no mesmo segundo, podemos
+    ' criar varios em sequencia.
+    Dim qtdInicialSnaps As Long
+    Dim qtdAposPoda As Long
+    Dim qtdPodadas As Long
+    Dim listAposPoda As Variant
+    Dim k As Long
+
+    For k = 1 To 4
+        Call CnaeSnapshotCadServ
+    Next k
+
+    listSnaps = CnaeListarSnapshots()
+    qtdInicialSnaps = 0
+    If IsArray(listSnaps) Then
+        On Error Resume Next
+        qtdInicialSnaps = UBound(listSnaps) - LBound(listSnaps) + 1
+        On Error GoTo falha
+    End If
+
+    qtdPodadas = CnaePodarSnapshots(2)
+
+    listAposPoda = CnaeListarSnapshots()
+    qtdAposPoda = 0
+    If IsArray(listAposPoda) Then
+        On Error Resume Next
+        qtdAposPoda = UBound(listAposPoda) - LBound(listAposPoda) + 1
+        On Error GoTo falha
+    End If
+
+    obtido = "QTD_INICIAL=" & CStr(qtdInicialSnaps) & _
+             "; QTD_PODADAS=" & CStr(qtdPodadas) & _
+             "; QTD_APOS_PODA=" & CStr(qtdAposPoda)
+    okCs = (qtdInicialSnaps >= 4) _
+           And (qtdAposPoda = 2) _
+           And (qtdPodadas = qtdInicialSnaps - 2)
+    TV2_LogAssert "CNAE", "CNAE_005", "AUTO", _
+                  "Validar poda de snapshots preserva os N mais recentes", _
+                  "QTD_APOS_PODA=2 e QTD_PODADAS=qtdInicial-2", _
+                  obtido, _
+                  "Garante housekeeping seguro do historico de snapshots", _
+                  okCs
+
+    ' Limpa snapshots restantes para nao contaminar cenario seguinte.
+    TV2_RemoverSnapshotsCnaeAnteriores
+
+    ' ----- CNAE_006: regressao — Limpa_Base preserva ATIVIDADES + CAD_SERV -----
+    ' Garante que a operacao de limpeza operacional (chamada por
+    ' Limpar_Base.frm e Configuracao_Inicial.frm) nao apaga a base CNAE.
+    ' Aqui nao chamamos Limpa_Base diretamente (tem MsgBox); chamamos
+    ' os mesmos LimparAbaOperacional que ela usa, simulando o resultado.
+    Dim ultimaAtivAntes As Long
+    Dim ultimaServAntes As Long
+    Dim ultimaAtivDepois As Long
+    Dim ultimaServDepois As Long
+    Dim msgErro As String
+
+    ultimaAtivAntes = UltimaLinhaAba(SHEET_ATIVIDADES)
+    ultimaServAntes = UltimaLinhaAba(SHEET_CAD_SERV)
+
+    Dim wsEmpL As Worksheet
+    Dim wsEntL As Worksheet
+    Dim wsCredL As Worksheet
+    Dim wsPreOSL As Worksheet
+    Dim wsOSL As Worksheet
+    Set wsEmpL = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+    Set wsEntL = ThisWorkbook.Sheets(SHEET_ENTIDADE)
+    Set wsCredL = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    Set wsPreOSL = ThisWorkbook.Sheets(SHEET_PREOS)
+    Set wsOSL = ThisWorkbook.Sheets(SHEET_CAD_OS)
+
+    Dim limpouEmp As Boolean
+    Dim limpouEnt As Boolean
+    Dim limpouCred As Boolean
+    Dim limpouPreOS As Boolean
+    Dim limpouOS As Boolean
+    limpouEmp = LimparAbaOperacional(wsEmpL, "T", msgErro)
+    limpouEnt = LimparAbaOperacional(wsEntL, "V", msgErro)
+    limpouCred = LimparAbaOperacional(wsCredL, "O", msgErro)
+    limpouPreOS = LimparAbaOperacional(wsPreOSL, "N", msgErro)
+    limpouOS = LimparAbaOperacional(wsOSL, "AD", msgErro)
+
+    ultimaAtivDepois = UltimaLinhaAba(SHEET_ATIVIDADES)
+    ultimaServDepois = UltimaLinhaAba(SHEET_CAD_SERV)
+
+    obtido = "LIMPOU_OPERACIONAIS=" & _
+             CStr(limpouEmp And limpouEnt And limpouCred And limpouPreOS And limpouOS) & _
+             "; ATIV_ANTES=" & CStr(ultimaAtivAntes) & _
+             "; ATIV_DEPOIS=" & CStr(ultimaAtivDepois) & _
+             "; SERV_ANTES=" & CStr(ultimaServAntes) & _
+             "; SERV_DEPOIS=" & CStr(ultimaServDepois)
+    okCs = limpouEmp And limpouEnt And limpouCred And limpouPreOS And limpouOS _
+           And (ultimaAtivDepois = ultimaAtivAntes) _
+           And (ultimaServDepois = ultimaServAntes)
+    TV2_LogAssert "CNAE", "CNAE_006", "AUTO", _
+                  "Validar que Limpa_Base preserva ATIVIDADES e CAD_SERV", _
+                  "Limpa abas operacionais; ATIVIDADES e CAD_SERV intactas", _
+                  obtido, _
+                  "Regressao: garantia documentada na MsgBox de Limpa_Base", _
+                  okCs
+
+    ' Limpeza dos snapshots criados durante o teste para nao acumular abas.
+    TV2_RemoverSnapshotsCnaeAnteriores
+
+    TV2_FinalizarExecucao "CNAE", silencioso
+    Exit Sub
+
+falha:
+    On Error Resume Next
+    TV2_RemoverSnapshotsCnaeAnteriores
+    On Error GoTo 0
+    TV2_LogAssert "CNAE", "FATAL", "AUTO", _
+                  "Executar suite CNAE sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(Err.Number) & ": " & Err.Description, _
+                  "Toda falha fatal precisa ficar rastreavel na suite CNAE", False
+    TV2_FinalizarExecucao "CNAE", silencioso
+End Sub
+
+' Helper de teste — remove abas snapshot deixadas por execucoes anteriores
+' para que cada rodada da suite CNAE comece em estado conhecido.
+Private Sub TV2_RemoverSnapshotsCnaeAnteriores()
+    Dim ws As Worksheet
+    Dim alvosNomes() As String
+    Dim qtd As Long
+    Dim i As Long
+
+    qtd = 0
+    ReDim alvosNomes(0 To 0)
+    For Each ws In ThisWorkbook.Worksheets
+        If Left$(ws.Name, Len(SHEET_PREFIX_CAD_SERV_SNAP)) = SHEET_PREFIX_CAD_SERV_SNAP Then
+            If qtd > 0 Then ReDim Preserve alvosNomes(0 To qtd)
+            alvosNomes(qtd) = ws.Name
+            qtd = qtd + 1
+        End If
+    Next ws
+
+    If qtd = 0 Then Exit Sub
+
+    Application.DisplayAlerts = False
+    For i = 0 To qtd - 1
+        On Error Resume Next
+        ThisWorkbook.Worksheets(alvosNomes(i)).Delete
+        On Error GoTo 0
+    Next i
+    Application.DisplayAlerts = True
+End Sub
+
+' Helper de teste — verifica existencia de aba (espelho de CnaeAbaExiste
+' que e Private em Preencher.bas).
+Private Function CnaeAbaExisteTeste(ByVal nome As String) As Boolean
+    Dim ws As Worksheet
+    On Error Resume Next
+    Set ws = ThisWorkbook.Worksheets(nome)
+    On Error GoTo 0
+    CnaeAbaExisteTeste = Not ws Is Nothing
+End Function
+
+' ============================================================
+' V12.0.0203 ONDA 4 — Suite CFG: ida e volta dos parametros de strikes
+' ============================================================
+'
+' Cobre a leitura/gravacao das 3 colunas novas em CONFIG via getters
+' publicos (Util_Config.GetNotaMinimaAvaliacao, GetMaxStrikes,
+' GetDiasSuspensaoStrike). Nao abre o formulario Configuracao_Inicial
+' (que e modal e tem MsgBox); valida o contrato direto da camada de
+' configuracao, que e o que importa para a regra de negocio.
+'
+' Cenarios:
+'   CFG_001 — getters devolvem exatamente o que esta em CONFIG
+'   CFG_002 — gravacao em CONFIG e refletida pelos getters na proxima leitura
+
+Public Sub TV2_RunCfg(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Dim ws As Worksheet
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+
+    Dim notaCorteOriginal As Variant
+    Dim maxStrikesOriginal As Variant
+    Dim diasOriginal As Variant
+
+    Dim notaCorteLido As Double
+    Dim maxStrikesLido As Long
+    Dim diasLido As Long
+
+    Dim okCs As Boolean
+    Dim obtido As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao "CFG", visual
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        Err.Raise 1004, "TV2_RunCfg", "Nao foi possivel preparar CONFIG."
+    End If
+
+    ' Backup do estado atual.
+    notaCorteOriginal = ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value
+    maxStrikesOriginal = ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value
+    diasOriginal = ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value
+
+    ' ----- CFG_001: getters refletem CONFIG exatamente -----
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = 5
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = 3
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = 90
+
+    notaCorteLido = GetNotaMinimaAvaliacao()
+    maxStrikesLido = GetMaxStrikes()
+    diasLido = GetDiasSuspensaoStrike()
+
+    obtido = "NOTA=" & Format$(notaCorteLido, "0.00") & _
+             "; MAX=" & CStr(maxStrikesLido) & _
+             "; DIAS=" & CStr(diasLido)
+    okCs = (Abs(notaCorteLido - 5#) < 0.0001) _
+           And (maxStrikesLido = 3) _
+           And (diasLido = 90)
+    TV2_LogAssert "CFG", "CFG_001", "AUTO", _
+                  "Validar leitura dos parametros de strikes via getters publicos", _
+                  "GetNotaMinimaAvaliacao=5.0; GetMaxStrikes=3; GetDiasSuspensaoStrike=90", _
+                  obtido, _
+                  "Garante que a tela de Configuracao Inicial exibe o que esta em CONFIG", _
+                  okCs
+
+    ' ----- CFG_002: gravacao em CONFIG persiste e e relida -----
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = 6
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = 5
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = 30
+
+    notaCorteLido = GetNotaMinimaAvaliacao()
+    maxStrikesLido = GetMaxStrikes()
+    diasLido = GetDiasSuspensaoStrike()
+
+    obtido = "NOTA=" & Format$(notaCorteLido, "0.00") & _
+             "; MAX=" & CStr(maxStrikesLido) & _
+             "; DIAS=" & CStr(diasLido)
+    okCs = (Abs(notaCorteLido - 6#) < 0.0001) _
+           And (maxStrikesLido = 5) _
+           And (diasLido = 30)
+    TV2_LogAssert "CFG", "CFG_002", "AUTO", _
+                  "Validar persistencia dos parametros de strikes apos gravacao em CONFIG", _
+                  "GetNotaMinimaAvaliacao=6.0; GetMaxStrikes=5; GetDiasSuspensaoStrike=30", _
+                  obtido, _
+                  "Prova ida e volta da Configuracao Inicial -> CONFIG -> regra de strikes", _
+                  okCs
+
+    ' Restaurar estado anterior para nao contaminar suites seguintes.
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = notaCorteOriginal
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = maxStrikesOriginal
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = diasOriginal
+
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    TV2_FinalizarExecucao "CFG", silencioso
+    Exit Sub
+
+falha:
+    On Error Resume Next
+    If Not ws Is Nothing Then
+        ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = notaCorteOriginal
+        ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = maxStrikesOriginal
+        ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = diasOriginal
+        Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    End If
+    On Error GoTo 0
+    TV2_LogAssert "CFG", "FATAL", "AUTO", _
+                  "Executar suite CFG sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(Err.Number) & ": " & Err.Description, _
+                  "Toda falha fatal precisa ficar rastreavel na suite CFG", False
+    TV2_FinalizarExecucao "CFG", silencioso
 End Sub

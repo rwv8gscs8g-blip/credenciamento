@@ -99,11 +99,7 @@ Private Function TextoEmpresaParaFiltro(ByVal wsEmp As Worksheet, ByVal linha As
 End Function
 
 Private Function EmpresaLinhaPassaFiltro(ByVal wsEmp As Worksheet, ByVal linha As Long, ByVal filtroU As String) As Boolean
-    If filtroU = "" Then
-        EmpresaLinhaPassaFiltro = True
-    Else
-        EmpresaLinhaPassaFiltro = (InStr(1, TextoEmpresaParaFiltro(wsEmp, linha), filtroU, vbBinaryCompare) > 0)
-    End If
+    EmpresaLinhaPassaFiltro = UtilFiltro_LinhaAtende(TextoEmpresaParaFiltro(wsEmp, linha), filtroU)
 End Function
 
 Private Function TextoEntidadeParaFiltro(ByVal wsEnt As Worksheet, ByVal linha As Long) As String
@@ -117,25 +113,18 @@ Private Function TextoEntidadeParaFiltro(ByVal wsEnt As Worksheet, ByVal linha A
 End Function
 
 Private Function EntidadeLinhaPassaFiltro(ByVal wsEnt As Worksheet, ByVal linha As Long, ByVal filtroU As String) As Boolean
-    If filtroU = "" Then
-        EntidadeLinhaPassaFiltro = True
-    Else
-        EntidadeLinhaPassaFiltro = (InStr(1, TextoEntidadeParaFiltro(wsEnt, linha), filtroU, vbBinaryCompare) > 0)
-    End If
+    EntidadeLinhaPassaFiltro = UtilFiltro_LinhaAtende(TextoEntidadeParaFiltro(wsEnt, linha), filtroU)
 End Function
 
 Private Function LinhaServicoPassaFiltroCred(ByVal wsServ As Worksheet, ByVal linha As Long, ByVal filtroU As String) As Boolean
     Dim textoBusca As String
 
-    If filtroU = "" Then
-        LinhaServicoPassaFiltroCred = True
-    Else
-        textoBusca = UCase$( _
-            SafeListVal(BuscarCnaeAtividade(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value)) & " " & _
-            SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_DESC).Value) & " " & _
-            SafeListVal(wsServ.Cells(linha, COL_SERV_DESCRICAO).Value))
-        LinhaServicoPassaFiltroCred = (InStr(1, textoBusca, filtroU, vbBinaryCompare) > 0)
-    End If
+    textoBusca = SafeListVal(wsServ.Cells(linha, COL_SERV_ID).Value) & " " & _
+                SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value) & " " & _
+                SafeListVal(BuscarCnaeAtividade(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value)) & " " & _
+                SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_DESC).Value) & " " & _
+                SafeListVal(wsServ.Cells(linha, COL_SERV_DESCRICAO).Value)
+    LinhaServicoPassaFiltroCred = UtilFiltro_LinhaAtende(textoBusca, filtroU)
 End Function
 
 Private Sub CarregarCacheCnaeAtividade()
@@ -444,7 +433,7 @@ For linha = LINHA_DADOS To ultima
     idEnt = Trim$(SafeListVal(wsEnt.Cells(linha, COL_ENT_ID).Value))
     nomeEnt = Trim$(SafeListVal(wsEnt.Cells(linha, COL_ENT_NOME).Value))
     If idEnt <> "" Or nomeEnt <> "" Then
-        If filtroU = "" Or InStr(1, UCase$(nomeEnt), filtroU) > 0 Then
+        If EntidadeLinhaPassaFiltro(wsEnt, linha, filtroU) Then
             total = total + 1
         End If
     End If
@@ -459,7 +448,7 @@ For linha = LINHA_DADOS To ultima
     idEnt = Trim$(SafeListVal(wsEnt.Cells(linha, COL_ENT_ID).Value))
     nomeEnt = Trim$(SafeListVal(wsEnt.Cells(linha, COL_ENT_NOME).Value))
     If idEnt <> "" Or nomeEnt <> "" Then
-        If filtroU = "" Or InStr(1, UCase$(nomeEnt), filtroU) > 0 Then
+        If EntidadeLinhaPassaFiltro(wsEnt, linha, filtroU) Then
             For col = 1 To 22
                 dados(idx, col) = SafeListVal(wsEnt.Cells(linha, col).Value)
             Next col
@@ -619,10 +608,12 @@ If NLinhas < LINHA_DADOS Then Exit Sub
 For linha = LINHA_DADOS To NLinhas
     If LinhaServicoValida(wsServ, linha) Then
         cnaeAtual = SafeListVal(BuscarCnaeAtividade(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value))
-        textoBusca = UCase$(cnaeAtual & " " & _
-                            SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_DESC).Value) & " " & _
-                            SafeListVal(wsServ.Cells(linha, COL_SERV_DESCRICAO).Value))
-        If filtroU = "" Or InStr(1, textoBusca, filtroU, vbBinaryCompare) > 0 Then
+        textoBusca = SafeListVal(wsServ.Cells(linha, COL_SERV_ID).Value) & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value) & " " & _
+                    cnaeAtual & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_DESC).Value) & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_DESCRICAO).Value)
+        If UtilFiltro_LinhaAtende(textoBusca, filtroU) Then
             total = total + 1
         End If
     End If
@@ -635,10 +626,12 @@ idx = 1
 For linha = LINHA_DADOS To NLinhas
     If LinhaServicoValida(wsServ, linha) Then
         cnaeAtual = SafeListVal(BuscarCnaeAtividade(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value))
-        textoBusca = UCase$(cnaeAtual & " " & _
-                            SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_DESC).Value) & " " & _
-                            SafeListVal(wsServ.Cells(linha, COL_SERV_DESCRICAO).Value))
-        If filtroU = "" Or InStr(1, textoBusca, filtroU, vbBinaryCompare) > 0 Then
+        textoBusca = SafeListVal(wsServ.Cells(linha, COL_SERV_ID).Value) & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value) & " " & _
+                    cnaeAtual & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_DESC).Value) & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_DESCRICAO).Value)
+        If UtilFiltro_LinhaAtende(textoBusca, filtroU) Then
             For col = 1 To 9
                 itens(idx, col) = SafeListVal(wsServ.Cells(linha, col).Value)
             Next col
@@ -1806,11 +1799,11 @@ Private Function LinhaAtividadeCombina(ByVal wsAtiv As Worksheet, ByVal linhaAtu
         Exit Function
     End If
 
-    textoBusca = UCase$(Trim$(CStr(wsAtiv.Cells(linhaAtual, COL_ATIV_ID).Value))) & " " & _
-                 UCase$(Trim$(CStr(wsAtiv.Cells(linhaAtual, COL_ATIV_CNAE).Value))) & " " & _
-                 UCase$(Trim$(CStr(wsAtiv.Cells(linhaAtual, COL_ATIV_DESCRICAO).Value)))
+    textoBusca = SafeListVal(wsAtiv.Cells(linhaAtual, COL_ATIV_ID).Value) & " " & _
+                 SafeListVal(wsAtiv.Cells(linhaAtual, COL_ATIV_CNAE).Value) & " " & _
+                 SafeListVal(wsAtiv.Cells(linhaAtual, COL_ATIV_DESCRICAO).Value)
 
-    LinhaAtividadeCombina = (InStr(1, textoBusca, filtro, vbTextCompare) > 0)
+    LinhaAtividadeCombina = UtilFiltro_LinhaAtende(textoBusca, filtro)
 End Function
 
 Public Sub ImportarCNAE_Arquivo()
@@ -1883,6 +1876,353 @@ Exit Sub
 
 erro_carregamento:
 MsgBox "Falha ao carregar/salvar CNAE: " & Err.Description, vbCritical, "CNAE"
+End Sub
+
+Public Sub ResetarECarregarCNAE_Padrao_DryRun()
+' ---------------------------------------------------------------
+' V12.0.0203 - Dry-run do reset CNAE.
+' Gera RPT_CNAE_DIFF e nao altera ATIVIDADES nem CAD_SERV.
+' ---------------------------------------------------------------
+Dim wsAtiv As Worksheet
+Dim wsServ As Worksheet
+Dim wsRpt As Worksheet
+Dim caminho As String
+Dim textoCsv As String
+Dim linhas() As String
+Dim linhaTxt As String
+Dim partesCabec() As String
+Dim partes() As String
+Dim delim As String
+Dim colCnae As Long
+Dim colDesc As Long
+Dim temCabecalho As Boolean
+Dim idxLinha As Long
+Dim inicioLoop As Long
+Dim totalLinhas As Long
+Dim i As Long
+Dim j As Long
+Dim cnaeVal As String
+Dim descVal As String
+Dim chave As String
+Dim qtdImportaveis As Long
+Dim qtdDuplicadasCsv As Long
+Dim qtdAtividadesAtuais As Long
+Dim qtdCadServ As Long
+Dim qtdCadServVinculado As Long
+Dim ultimaAtiv As Long
+Dim ultimaServ As Long
+Dim mapaCsv As Object
+Dim mapaAtual As Object
+Dim linhaRpt As Long
+Dim estavaProtegidaRpt As Boolean
+Dim senhaProtecaoRpt As String
+Dim erroNumero As Long
+Dim erroMensagem As String
+
+On Error GoTo erro_carregamento
+
+Application.StatusBar = "Dry-run CNAE: localizando CSV..."
+caminho = LocalizarArquivoCnaePadrao()
+If caminho = "" Then
+    MsgBox "Arquivo CNAE padrao nao encontrado. Nenhuma alteracao foi feita.", _
+           vbExclamation, "Dry-run CNAE"
+    Application.StatusBar = False
+    Exit Sub
+End If
+
+Application.StatusBar = "Dry-run CNAE: lendo CSV..."
+textoCsv = LerTextoArquivo(caminho)
+If textoCsv = "" Then
+    MsgBox "CSV encontrado, mas vazio ou ilegivel:" & vbCrLf & caminho, _
+           vbCritical, "Dry-run CNAE"
+    Application.StatusBar = False
+    Exit Sub
+End If
+
+textoCsv = Replace(textoCsv, vbCrLf, vbLf)
+textoCsv = Replace(textoCsv, vbCr, vbLf)
+linhas = Split(textoCsv, vbLf)
+If UBound(linhas) < 1 Then
+    MsgBox "CSV tem menos de 2 linhas. Nenhuma alteracao foi feita." & vbCrLf & caminho, _
+           vbCritical, "Dry-run CNAE"
+    Application.StatusBar = False
+    Exit Sub
+End If
+
+linhaTxt = linhas(0)
+If InStr(1, linhaTxt, ";") > 0 Then
+    delim = ";"
+Else
+    delim = ","
+End If
+
+partesCabec = Split(linhaTxt, delim)
+colCnae = IdentificarColunaCabecalho(partesCabec, "CNAE", "SUBCLASSE", "SUBCLASSE_ID", "CODIGO")
+colDesc = IdentificarColunaCabecalho(partesCabec, "DESCRICAO", "DENOMINACAO", "DENOMINACAO_SUBCLASSE")
+temCabecalho = (colCnae >= 0 And colDesc >= 0)
+
+If Not temCabecalho Then
+    If UBound(partesCabec) >= 2 Then
+        colCnae = 1
+        colDesc = 2
+    Else
+        MsgBox "Cabecalho do CSV nao reconhecido e formato posicional invalido." & vbCrLf & _
+               "Primeira linha: " & Left$(linhaTxt, 200), vbCritical, "Dry-run CNAE"
+        Application.StatusBar = False
+        Exit Sub
+    End If
+End If
+
+Set mapaCsv = CreateObject("Scripting.Dictionary")
+Set mapaAtual = CreateObject("Scripting.Dictionary")
+mapaCsv.CompareMode = vbTextCompare
+mapaAtual.CompareMode = vbTextCompare
+
+If temCabecalho Then
+    inicioLoop = 1
+Else
+    inicioLoop = 0
+End If
+totalLinhas = UBound(linhas)
+
+Application.StatusBar = "Dry-run CNAE: analisando CSV..."
+For idxLinha = inicioLoop To totalLinhas
+    linhaTxt = linhas(idxLinha)
+    If Trim$(linhaTxt) <> "" Then
+        partes = Split(linhaTxt, delim)
+        If colCnae <= UBound(partes) And colDesc <= UBound(partes) Then
+            cnaeVal = Trim$(Replace(partes(colCnae), """", ""))
+            descVal = Trim$(Replace(partes(colDesc), """", ""))
+
+            If UBound(partes) > colDesc Then
+                For j = colDesc + 1 To UBound(partes)
+                    descVal = descVal & "," & Trim$(Replace(partes(j), """", ""))
+                Next j
+            End If
+
+            cnaeVal = FormatarCodigoCNAE(cnaeVal)
+            descVal = LimparTextoImportado(descVal)
+            chave = CnaeDryRun_Chave(cnaeVal, descVal)
+
+            If chave <> "" Then
+                qtdImportaveis = qtdImportaveis + 1
+                If mapaCsv.Exists(chave) Then
+                    qtdDuplicadasCsv = qtdDuplicadasCsv + 1
+                Else
+                    mapaCsv.Add chave, cnaeVal & "||" & descVal
+                End If
+            End If
+        End If
+    End If
+Next idxLinha
+
+Application.StatusBar = "Dry-run CNAE: analisando abas atuais..."
+Set wsAtiv = ThisWorkbook.Sheets(SHEET_ATIVIDADES)
+ultimaAtiv = UltimaLinhaAba(SHEET_ATIVIDADES)
+If ultimaAtiv >= LINHA_DADOS Then
+    For i = LINHA_DADOS To ultimaAtiv
+        cnaeVal = FormatarCodigoCNAE(SafeListVal(wsAtiv.Cells(i, COL_ATIV_CNAE).Value))
+        descVal = LimparTextoImportado(SafeListVal(wsAtiv.Cells(i, COL_ATIV_DESCRICAO).Value))
+        chave = CnaeDryRun_Chave(cnaeVal, descVal)
+        If chave <> "" Then
+            qtdAtividadesAtuais = qtdAtividadesAtuais + 1
+            If Not mapaAtual.Exists(chave) Then mapaAtual.Add chave, cnaeVal & "||" & descVal
+        End If
+    Next i
+End If
+
+Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
+ultimaServ = UltimaLinhaAba(SHEET_CAD_SERV)
+If ultimaServ >= LINHA_DADOS Then
+    For i = LINHA_DADOS To ultimaServ
+        If LinhaServicoValida(wsServ, i) Then
+            qtdCadServ = qtdCadServ + 1
+            If Trim$(SafeListVal(wsServ.Cells(i, COL_SERV_ATIV_ID).Value)) <> "" Or _
+               Trim$(SafeListVal(wsServ.Cells(i, COL_SERV_ATIV_DESC).Value)) <> "" Then
+                qtdCadServVinculado = qtdCadServVinculado + 1
+            End If
+        End If
+    Next i
+End If
+
+Set wsRpt = CnaeDryRun_EnsureSheet()
+If Not Util_PrepararAbaParaEscrita(wsRpt, estavaProtegidaRpt, senhaProtecaoRpt) Then
+    MsgBox "Nao foi possivel preparar RPT_CNAE_DIFF para escrita." & vbCrLf & _
+           "Nenhuma aba operacional foi alterada.", vbCritical, "Dry-run CNAE"
+    Application.StatusBar = False
+    Exit Sub
+End If
+
+Application.StatusBar = "Dry-run CNAE: gerando RPT_CNAE_DIFF..."
+wsRpt.Cells.Clear
+linhaRpt = 1
+wsRpt.Cells(linhaRpt, 1).Value = "RPT_CNAE_DIFF - DRY-RUN"
+wsRpt.Cells(linhaRpt, 2).Value = Format$(Now, "dd/mm/yyyy hh:nn:ss")
+linhaRpt = linhaRpt + 2
+
+wsRpt.Cells(linhaRpt, 1).Value = "FONTE_CSV"
+wsRpt.Cells(linhaRpt, 2).Value = caminho
+linhaRpt = linhaRpt + 1
+wsRpt.Cells(linhaRpt, 1).Value = "LINHAS_CSV"
+wsRpt.Cells(linhaRpt, 2).Value = UBound(linhas) + 1
+linhaRpt = linhaRpt + 1
+wsRpt.Cells(linhaRpt, 1).Value = "REGISTROS_IMPORTAVEIS"
+wsRpt.Cells(linhaRpt, 2).Value = qtdImportaveis
+linhaRpt = linhaRpt + 1
+wsRpt.Cells(linhaRpt, 1).Value = "REGISTROS_DISTINTOS_CSV"
+wsRpt.Cells(linhaRpt, 2).Value = mapaCsv.count
+linhaRpt = linhaRpt + 1
+wsRpt.Cells(linhaRpt, 1).Value = "DUPLICIDADES_CSV_IGNORADAS"
+wsRpt.Cells(linhaRpt, 2).Value = qtdDuplicadasCsv
+linhaRpt = linhaRpt + 1
+wsRpt.Cells(linhaRpt, 1).Value = "ATIVIDADES_ATUAIS"
+wsRpt.Cells(linhaRpt, 2).Value = qtdAtividadesAtuais
+linhaRpt = linhaRpt + 1
+wsRpt.Cells(linhaRpt, 1).Value = "CAD_SERV_LINHAS_VALIDAS"
+wsRpt.Cells(linhaRpt, 2).Value = qtdCadServ
+linhaRpt = linhaRpt + 1
+wsRpt.Cells(linhaRpt, 1).Value = "CAD_SERV_VINCULOS_QUE_SERIAM_LIMPOS"
+wsRpt.Cells(linhaRpt, 2).Value = qtdCadServVinculado
+linhaRpt = linhaRpt + 1
+wsRpt.Cells(linhaRpt, 1).Value = "STATUS"
+wsRpt.Cells(linhaRpt, 2).Value = "DRY-RUN: nenhuma escrita operacional realizada"
+linhaRpt = linhaRpt + 2
+
+Call CnaeDryRun_EscreverSecao(wsRpt, linhaRpt, "AMOSTRA_ADICIONADAS_CSV_NAO_ATUAL", mapaCsv, mapaAtual, 25)
+linhaRpt = linhaRpt + 1
+Call CnaeDryRun_EscreverSecao(wsRpt, linhaRpt, "AMOSTRA_REMOVIDAS_ATUAL_NAO_CSV", mapaAtual, mapaCsv, 25)
+
+Call CnaeDryRun_FormatarRelatorio(wsRpt, linhaRpt)
+Call Util_RestaurarProtecaoAba(wsRpt, estavaProtegidaRpt, senhaProtecaoRpt)
+
+Application.StatusBar = False
+wsRpt.Activate
+MsgBox "Dry-run CNAE concluido sem alterar dados operacionais." & vbCrLf & vbCrLf & _
+       "CSV importavel: " & qtdImportaveis & vbCrLf & _
+       "Atividades atuais: " & qtdAtividadesAtuais & vbCrLf & _
+       "Vinculos em CAD_SERV que seriam limpos: " & qtdCadServVinculado & vbCrLf & _
+       "Relatorio: RPT_CNAE_DIFF", vbInformation, "Dry-run CNAE"
+Exit Sub
+
+erro_carregamento:
+erroNumero = Err.Number
+erroMensagem = Err.Description
+On Error Resume Next
+Application.StatusBar = False
+If Not wsRpt Is Nothing Then Call Util_RestaurarProtecaoAba(wsRpt, estavaProtegidaRpt, senhaProtecaoRpt)
+On Error GoTo 0
+If erroMensagem = "" Then erroMensagem = "Erro " & CStr(erroNumero)
+MsgBox "Falha no dry-run CNAE: " & erroMensagem & vbCrLf & _
+       "Nenhuma aba operacional foi alterada.", vbCritical, "Dry-run CNAE"
+End Sub
+
+Private Function CnaeDryRun_Chave(ByVal cnaeVal As String, ByVal descVal As String) As String
+    cnaeVal = Trim$(cnaeVal)
+    descVal = Trim$(descVal)
+    If cnaeVal = "" Or descVal = "" Then Exit Function
+    CnaeDryRun_Chave = UCase$(cnaeVal & "|" & descVal)
+End Function
+
+Private Function CnaeDryRun_EnsureSheet() As Worksheet
+    Dim ws As Worksheet
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Worksheets("RPT_CNAE_DIFF")
+    On Error GoTo 0
+
+    If ws Is Nothing Then
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.count))
+        ws.Name = "RPT_CNAE_DIFF"
+    End If
+
+    Set CnaeDryRun_EnsureSheet = ws
+End Function
+
+Private Sub CnaeDryRun_SepararValor(ByVal valor As String, ByRef cnaeVal As String, ByRef descVal As String)
+    Dim pos As Long
+
+    cnaeVal = ""
+    descVal = ""
+    pos = InStr(1, valor, "||", vbBinaryCompare)
+    If pos > 0 Then
+        cnaeVal = Left$(valor, pos - 1)
+        descVal = Mid$(valor, pos + 2)
+    Else
+        descVal = valor
+    End If
+End Sub
+
+Private Sub CnaeDryRun_EscreverSecao( _
+    ByVal wsRpt As Worksheet, _
+    ByRef linhaRpt As Long, _
+    ByVal titulo As String, _
+    ByVal mapaOrigem As Object, _
+    ByVal mapaComparacao As Object, _
+    ByVal limite As Long _
+)
+    Dim chaves As Variant
+    Dim i As Long
+    Dim qtd As Long
+    Dim chave As String
+    Dim cnaeVal As String
+    Dim descVal As String
+    Dim exibir As Boolean
+
+    wsRpt.Cells(linhaRpt, 1).Value = titulo
+    wsRpt.Cells(linhaRpt, 1).Font.Bold = True
+    linhaRpt = linhaRpt + 1
+    wsRpt.Cells(linhaRpt, 1).Value = "SEQ"
+    wsRpt.Cells(linhaRpt, 2).Value = "CNAE"
+    wsRpt.Cells(linhaRpt, 3).Value = "DESCRICAO"
+    wsRpt.Cells(linhaRpt, 4).Value = "CHAVE"
+    linhaRpt = linhaRpt + 1
+
+    If Not mapaOrigem Is Nothing Then
+        If mapaOrigem.count > 0 Then
+            chaves = mapaOrigem.Keys
+            For i = LBound(chaves) To UBound(chaves)
+                chave = CStr(chaves(i))
+                exibir = True
+                If Not mapaComparacao Is Nothing Then
+                    If mapaComparacao.Exists(chave) Then exibir = False
+                End If
+
+                If exibir Then
+                    qtd = qtd + 1
+                    Call CnaeDryRun_SepararValor(CStr(mapaOrigem(chave)), cnaeVal, descVal)
+                    wsRpt.Cells(linhaRpt, 1).Value = qtd
+                    wsRpt.Cells(linhaRpt, 2).Value = cnaeVal
+                    wsRpt.Cells(linhaRpt, 3).Value = descVal
+                    wsRpt.Cells(linhaRpt, 4).Value = chave
+                    linhaRpt = linhaRpt + 1
+                    If qtd >= limite Then Exit For
+                End If
+            Next i
+        End If
+    End If
+
+    If qtd = 0 Then
+        wsRpt.Cells(linhaRpt, 1).Value = "SEM_DIFERENCA_NA_AMOSTRA"
+        linhaRpt = linhaRpt + 1
+    End If
+End Sub
+
+Private Sub CnaeDryRun_FormatarRelatorio(ByVal wsRpt As Worksheet, ByVal ultimaLinha As Long)
+    If ultimaLinha < 1 Then Exit Sub
+
+    With wsRpt
+        .Columns("A:D").EntireColumn.AutoFit
+        .Rows(1).Font.Bold = True
+        .Rows(1).Font.Color = RGB(255, 255, 255)
+        .Rows(1).Interior.Color = RGB(0, 51, 102)
+        .Range(.Cells(1, 1), .Cells(ultimaLinha, 4)).Borders.LineStyle = xlContinuous
+        .Range(.Cells(1, 1), .Cells(ultimaLinha, 4)).Borders.Weight = xlThin
+        .Columns("A:A").ColumnWidth = 18
+        .Columns("B:B").ColumnWidth = 18
+        .Columns("C:C").ColumnWidth = 70
+        .Columns("D:D").ColumnWidth = 85
+        .Rows("1:" & ultimaLinha).VerticalAlignment = xlTop
+    End With
 End Sub
 
 Public Sub ResetarECarregarCNAE_Padrao()
@@ -2007,6 +2347,11 @@ If MsgBox("Reset vai APAGAR dados atuais da aba ATIVIDADES e reimportar do CSV."
     Exit Sub
 End If
 
+' V12.0.0203 ONDA 3 — pergunta se quer podar snapshots antigos antes
+' de criar mais um. Mantem os 5 mais recentes por default.
+Dim qtdPodadas As Long
+qtdPodadas = CnaeConfirmarPodaSnapshots(5)
+
 ' --- ETAPA 5: Preparar aba — desproteger UMA VEZ para todo o ciclo ---
 etapa = "Preparando aba ATIVIDADES"
 Application.StatusBar = "Reset CNAE: " & etapa & "..."
@@ -2112,7 +2457,44 @@ End If
 etapa = "Pos-processamento"
 Application.StatusBar = "Reset CNAE: " & etapa & "..."
 Call InvalidarCacheCnaeAtividade
+
+' V12.0.0203 ONDA 2 — snapshot de CAD_SERV antes da limpeza,
+' validacao de duplicidade e auditoria via EVT_TRANSACAO.
+' V12.0.0203 ONDA 3 — dedup AUTOMATICO de duplicatas remanescentes
+' em ATIVIDADES (decisao do operador: import remanescente nao deve
+' persistir no estado final).
+Dim nomeSnapshot As String
+Dim qtdLinhasSnapshot As Long
+Dim qtdDuplicatas As Long
+Dim qtdDupRemovidas As Long
+
+nomeSnapshot = CnaeSnapshotCadServ(qtdLinhasSnapshot)
 qtdCadServ = LimparCadServParaAssociacaoManual()
+qtdDuplicatas = CnaeContarDuplicatasAtividades()
+qtdDupRemovidas = 0
+If qtdDuplicatas > 0 Then
+    qtdDupRemovidas = CnaeRemoverDuplicatasAtividades()
+End If
+
+' Auditoria do reset (evento existente EVT_TRANSACAO, sem mexer em
+' Audit_Log.bas nem criar novo enum). Antes/Depois carregam o
+' contexto operacional do que aconteceu.
+On Error Resume Next
+RegistrarEvento _
+    EVT_TRANSACAO, ENT_ATIV, "RESET_CNAE", _
+    "ATIVIDADES_ANTES=" & CStr(ultima) & _
+    "; CADSERV_ANTES=" & CStr(qtdCadServ), _
+    "RESET_CNAE_CONCLUIDO" & _
+    "; ATIVIDADES_IMPORTADAS=" & CStr(qtd) & _
+    "; CADSERV_LIMPADO=" & CStr(qtdCadServ) & _
+    "; SNAPSHOT=" & nomeSnapshot & _
+    "; SNAPSHOT_LINHAS=" & CStr(qtdLinhasSnapshot) & _
+    "; SNAPSHOTS_PODADOS=" & CStr(qtdPodadas) & _
+    "; ATIVIDADES_DUPLICATAS=" & CStr(qtdDuplicatas) & _
+    "; DUPLICATAS_REMOVIDAS=" & CStr(qtdDupRemovidas), _
+    "Preencher"
+On Error GoTo erro_carregamento
+
 Call PreenchimentoListaAtividade
 Call PreencherManutencaoValor
 
@@ -2127,6 +2509,10 @@ Application.StatusBar = False
 MsgBox "Reset e carga concluída com sucesso!" & vbCrLf & vbCrLf & _
        "Registros CNAE carregados: " & qtd & vbCrLf & _
        "Associações removidas em CAD_SERV: " & qtdCadServ & vbCrLf & _
+       "Snapshot preservado: " & nomeSnapshot & " (" & qtdLinhasSnapshot & " linhas)" & vbCrLf & _
+       "Snapshots antigos podados: " & qtdPodadas & vbCrLf & _
+       "Duplicatas detectadas em ATIVIDADES: " & qtdDuplicatas & vbCrLf & _
+       "Duplicatas removidas automaticamente: " & qtdDupRemovidas & vbCrLf & _
        "Vinculação de serviços permanece manual." & vbCrLf & _
        "Fonte: " & caminho, vbInformation, "Reset CNAE"
 Exit Sub
@@ -3023,10 +3409,12 @@ If NLinhas < LINHA_DADOS Then Exit Sub
 For linha = LINHA_DADOS To NLinhas
     If LinhaServicoValida(wsServ, linha) Then
         cnaeAtual = SafeListVal(BuscarCnaeAtividade(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value))
-        textoBusca = UCase$(cnaeAtual & " " & _
-                            SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_DESC).Value) & " " & _
-                            SafeListVal(wsServ.Cells(linha, COL_SERV_DESCRICAO).Value))
-        If filtroU = "" Or InStr(1, textoBusca, filtroU, vbBinaryCompare) > 0 Then
+        textoBusca = SafeListVal(wsServ.Cells(linha, COL_SERV_ID).Value) & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value) & " " & _
+                    cnaeAtual & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_DESC).Value) & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_DESCRICAO).Value)
+        If UtilFiltro_LinhaAtende(textoBusca, filtroU) Then
             total = total + 1
         End If
     End If
@@ -3039,10 +3427,12 @@ idx = 1
 For linha = LINHA_DADOS To NLinhas
     If LinhaServicoValida(wsServ, linha) Then
         cnaeAtual = SafeListVal(BuscarCnaeAtividade(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value))
-        textoBusca = UCase$(cnaeAtual & " " & _
-                            SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_DESC).Value) & " " & _
-                            SafeListVal(wsServ.Cells(linha, COL_SERV_DESCRICAO).Value))
-        If filtroU = "" Or InStr(1, textoBusca, filtroU, vbBinaryCompare) > 0 Then
+        textoBusca = SafeListVal(wsServ.Cells(linha, COL_SERV_ID).Value) & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value) & " " & _
+                    cnaeAtual & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_DESC).Value) & " " & _
+                    SafeListVal(wsServ.Cells(linha, COL_SERV_DESCRICAO).Value)
+        If UtilFiltro_LinhaAtende(textoBusca, filtroU) Then
             arrayitems(idx, 1) = SafeListVal(wsServ.Cells(linha, COL_SERV_ID).Value)
             arrayitems(idx, 2) = SafeListVal(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value)
             arrayitems(idx, 3) = cnaeAtual
@@ -3066,68 +3456,53 @@ erro_carregamento:
 End Sub
 
 
+' V12.0.0203 ONDA 5 — agora delega para Mod_Limpeza_Base.LimpaBaseTotalReset,
+' que detecta cabecalho corrompido, usa MAX(End(xlUp)) em 50 colunas e
+' tambem zera AUDIT_LOG / RELATORIO. Mantem a mesma assinatura para nao
+' quebrar quem chama (Limpar_Base.frm > CommandButton1_Click; tambem o
+' fallback Configuracao_Inicial.AbrirLimparBaseSeguro). PRESERVA: ATIVIDADES,
+' CAD_SERV, CONFIG.
 Sub Limpa_Base()
-    Dim wsEmp As Worksheet
-    Dim wsEnt As Worksheet
-    Dim wsServ As Worksheet
-    Dim wsCred As Worksheet
-    Dim wsPreOS As Worksheet
-    Dim wsOS As Worksheet
-    Dim msgErro As String
+    Dim relatorio As String
     Dim msgSave As String
 
     If MsgBox("Tem certeza que deseja ZERAR a Base Operacional?" & vbCrLf & _
-              "(EMPRESAS, ENTIDADE, CREDENCIADOS, PRE_OS e CAD_OS)" & vbCrLf & _
-              "As abas ATIVIDADES (CNAE) e CAD_SERV serao PRESERVADAS.", _
-              vbQuestion + vbYesNo, "Limpar a Base de Dados") = vbYes Then
-        Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
-        If Not LimparAbaOperacional(wsEmp, "T", msgErro) Then
-            MsgBox msgErro, vbCritical, "Limpar Base"
-            Exit Sub
-        End If
-
-        Set wsEnt = ThisWorkbook.Sheets(SHEET_ENTIDADE)
-        If Not LimparAbaOperacional(wsEnt, "V", msgErro) Then
-            MsgBox msgErro, vbCritical, "Limpar Base"
-            Exit Sub
-        End If
-
-        Set wsCred = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
-        If Not LimparAbaOperacional(wsCred, "O", msgErro) Then
-            MsgBox msgErro, vbCritical, "Limpar Base"
-            Exit Sub
-        End If
-
-        Set wsPreOS = ThisWorkbook.Sheets(SHEET_PREOS)
-        If Not LimparAbaOperacional(wsPreOS, "N", msgErro) Then
-            MsgBox msgErro, vbCritical, "Limpar Base"
-            Exit Sub
-        End If
-
-        Set wsOS = ThisWorkbook.Sheets(SHEET_CAD_OS)
-        If Not LimparAbaOperacional(wsOS, "AD", msgErro) Then
-            MsgBox msgErro, vbCritical, "Limpar Base"
-            Exit Sub
-        End If
-
-        Call PreenchimentoServico
-        Call AtualizarListaEntidadeMenuAtual
-        Call AtualizarListaEmpresaMenuAtual
-        Call PreenchimentoEntidadeRodizio
-        Call PreencherAvaliarOS
-        Call PreencherManutencaoValor
-        If Not Util_SalvarWorkbookSeguro(msgSave) Then
-            MsgBox "Base limpa, mas não foi possível salvar automaticamente." & vbCrLf & _
-                   "Detalhe: " & msgSave & vbCrLf & _
-                   "Use Ctrl+S para salvar manualmente antes de continuar.", vbExclamation, "Limpar Base"
-        End If
-        MsgBox "Base de Dados Limpa com Sucesso!", vbInformation, "Limpar Base"
-    Else
+              "(EMPRESAS, EMPRESAS_INATIVAS, ENTIDADE, ENTIDADE_INATIVOS," & vbCrLf & _
+              " CREDENCIADOS, PRE_OS, CAD_OS, AUDIT_LOG, RELATORIO)" & vbCrLf & _
+              "As abas ATIVIDADES (CNAE), CAD_SERV e CONFIG serao PRESERVADAS." & vbCrLf & vbCrLf & _
+              "Quando o cabecalho de uma aba estiver corrompido," & vbCrLf & _
+              "a rotina detecta e reescreve o cabecalho canonico.", _
+              vbQuestion + vbYesNo, "Limpar a Base de Dados") <> vbYes Then
         MsgBox "Base de dados não foi alterada.", vbInformation, "Base preservada"
+        Exit Sub
     End If
+
+    If Not Mod_Limpeza_Base.LimpaBaseTotalReset(relatorio) Then
+        MsgBox "Falha durante a limpeza:" & vbCrLf & vbCrLf & relatorio, _
+               vbCritical, "Limpar Base"
+        Exit Sub
+    End If
+
+    Call PreenchimentoServico
+    Call AtualizarListaEntidadeMenuAtual
+    Call AtualizarListaEmpresaMenuAtual
+    Call PreenchimentoEntidadeRodizio
+    Call PreencherAvaliarOS
+    Call PreencherManutencaoValor
+    If Not Util_SalvarWorkbookSeguro(msgSave) Then
+        MsgBox "Base limpa, mas não foi possível salvar automaticamente." & vbCrLf & _
+               "Detalhe: " & msgSave & vbCrLf & _
+               "Use Ctrl+S para salvar manualmente antes de continuar.", vbExclamation, "Limpar Base"
+    End If
+    MsgBox "Base de Dados Limpa com Sucesso!" & vbCrLf & vbCrLf & _
+           "Relatorio detalhado tambem foi gravado em RPT_LIMPEZA_TOTAL." & vbCrLf & vbCrLf & _
+           relatorio, vbInformation, "Limpar Base"
 End Sub
 
-Private Function LimparAbaOperacional(ByVal ws As Worksheet, ByVal ultimaColuna As String, ByRef msgErro As String) As Boolean
+' V12.0.0203 ONDA 3 — exposta como Public para permitir cobertura de
+' regressao (CS CNAE_006) provando que ATIVIDADES e CAD_SERV nunca sao
+' tocados por essa rotina. Nao altera comportamento; apenas escopo.
+Public Function LimparAbaOperacional(ByVal ws As Worksheet, ByVal ultimaColuna As String, ByRef msgErro As String) As Boolean
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
     Dim ultimaLinha As Long
@@ -3295,3 +3670,369 @@ proxLinha:
            "Formato CNAE: DDDD-D/DD (normalizado)" & vbCrLf & _
            "Fonte: " & caminhoCsv, vbInformation, "CNAE emergência"
 End Sub
+
+' ============================================================
+' V12.0.0203 ONDA 2 — Snapshot + dedup do reset CNAE
+' ============================================================
+'
+' Propósito: dar trilha auditavel ao reset CNAE sem mexer no nucleo
+' do importador nem em Mod_Types.bas. Tres helpers publicos:
+'
+'   - CnaeSnapshotCadServ()       : copia CAD_SERV para uma aba
+'                                   nova "CAD_SERV_SNAPSHOT_<ts>"
+'                                   antes de qualquer limpeza.
+'   - CnaeContarDuplicatasAtividades() : conta duplicatas exatas em
+'                                   ATIVIDADES no par (CNAE, DESCRICAO).
+'   - CnaeListarSnapshots()       : devolve as abas snapshot existentes
+'                                   ordenadas por nome (timestamp).
+'
+' Sao chamados pelo ResetarECarregarCNAE_Padrao na ETAPA 9 e tambem
+' pelos cenarios CNAE_001..003 da suite TV2_RunCnae.
+
+Public Function CnaeSnapshotCadServ(Optional ByRef qtdLinhasOut As Long) As String
+    Dim wsServ As Worksheet
+    Dim wsSnap As Worksheet
+    Dim ultima As Long
+    Dim nomeSnap As String
+    Dim sufixo As Long
+
+    On Error GoTo falha
+    qtdLinhasOut = 0
+
+    Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
+    ultima = UltimaLinhaAba(SHEET_CAD_SERV)
+
+    nomeSnap = SHEET_PREFIX_CAD_SERV_SNAP & Format$(Now, "yyyymmdd_hhnnss")
+    ' Garante unicidade caso o reset rode duas vezes no mesmo segundo.
+    sufixo = 0
+    Do While CnaeAbaExiste(nomeSnap)
+        sufixo = sufixo + 1
+        nomeSnap = SHEET_PREFIX_CAD_SERV_SNAP & Format$(Now, "yyyymmdd_hhnnss") & "_" & Format$(sufixo, "00")
+    Loop
+
+    Set wsSnap = ThisWorkbook.Worksheets.Add( _
+        After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+    wsSnap.Name = nomeSnap
+
+    ' Copia integral (cabecalho + dados, com formatos), preservando
+    ' a aba original. CopyDestination usa o range completo da fonte.
+    If ultima >= 1 Then
+        wsServ.Range(wsServ.Cells(1, COL_SERV_ID), _
+                     wsServ.Cells(ultima, COL_SERV_DT_CAD)) _
+              .Copy Destination:=wsSnap.Cells(1, COL_SERV_ID)
+        Application.CutCopyMode = False
+    End If
+
+    If ultima >= LINHA_DADOS Then
+        qtdLinhasOut = ultima - LINHA_DADOS + 1
+    Else
+        qtdLinhasOut = 0
+    End If
+
+    ' Snapshot sai protegido com a senha padrao para nao virar fonte
+    ' de edicao acidental. Operador pode desproteger manualmente se
+    ' precisar reaproveitar dados.
+    On Error Resume Next
+    wsSnap.Protect Password:=Util_SenhaProtecaoPadrao(), UserInterfaceOnly:=True
+    On Error GoTo falha
+
+    CnaeSnapshotCadServ = nomeSnap
+    Exit Function
+
+falha:
+    On Error Resume Next
+    Application.CutCopyMode = False
+    On Error GoTo 0
+    CnaeSnapshotCadServ = ""
+    qtdLinhasOut = 0
+End Function
+
+Public Function CnaeContarDuplicatasAtividades() As Long
+    Dim wsAtiv As Worksheet
+    Dim ultima As Long
+    Dim i As Long
+    Dim cnaeVal As String
+    Dim descVal As String
+    Dim chave As String
+    Dim mapa As Object
+    Dim duplicatas As Long
+
+    On Error GoTo falha
+
+    Set wsAtiv = ThisWorkbook.Sheets(SHEET_ATIVIDADES)
+    ultima = UltimaLinhaAba(SHEET_ATIVIDADES)
+    If ultima < LINHA_DADOS Then
+        CnaeContarDuplicatasAtividades = 0
+        Exit Function
+    End If
+
+    Set mapa = CreateObject("Scripting.Dictionary")
+    duplicatas = 0
+
+    For i = LINHA_DADOS To ultima
+        cnaeVal = Trim$(CStr(wsAtiv.Cells(i, COL_ATIV_CNAE).Value))
+        descVal = Trim$(CStr(wsAtiv.Cells(i, COL_ATIV_DESCRICAO).Value))
+        If cnaeVal = "" And descVal = "" Then GoTo proximaLinha
+
+        chave = UCase$(cnaeVal) & "|" & UCase$(descVal)
+        If mapa.Exists(chave) Then
+            duplicatas = duplicatas + 1
+        Else
+            mapa.Add chave, True
+        End If
+
+proximaLinha:
+    Next i
+
+    CnaeContarDuplicatasAtividades = duplicatas
+    Exit Function
+
+falha:
+    CnaeContarDuplicatasAtividades = -1
+End Function
+
+Public Function CnaeListarSnapshots() As Variant
+    Dim ws As Worksheet
+    Dim nomes() As String
+    Dim qtd As Long
+    Dim i As Long
+    Dim j As Long
+    Dim tmp As String
+
+    On Error GoTo falha
+
+    qtd = 0
+    ReDim nomes(0 To 0)
+    For Each ws In ThisWorkbook.Worksheets
+        If Left$(ws.Name, Len(SHEET_PREFIX_CAD_SERV_SNAP)) = SHEET_PREFIX_CAD_SERV_SNAP Then
+            If qtd > 0 Then ReDim Preserve nomes(0 To qtd)
+            nomes(qtd) = ws.Name
+            qtd = qtd + 1
+        End If
+    Next ws
+
+    If qtd = 0 Then
+        CnaeListarSnapshots = Empty
+        Exit Function
+    End If
+
+    ' Ordena por nome (timestamp) — bubble simples; n geralmente pequeno.
+    For i = 0 To qtd - 2
+        For j = i + 1 To qtd - 1
+            If nomes(i) > nomes(j) Then
+                tmp = nomes(i)
+                nomes(i) = nomes(j)
+                nomes(j) = tmp
+            End If
+        Next j
+    Next i
+
+    CnaeListarSnapshots = nomes
+    Exit Function
+
+falha:
+    CnaeListarSnapshots = Empty
+End Function
+
+Private Function CnaeAbaExiste(ByVal nome As String) As Boolean
+    Dim ws As Worksheet
+    On Error Resume Next
+    Set ws = ThisWorkbook.Worksheets(nome)
+    On Error GoTo 0
+    CnaeAbaExiste = Not ws Is Nothing
+End Function
+
+' ============================================================
+' V12.0.0203 ONDA 3 — Dedup automatico + housekeeping de snapshots
+' ============================================================
+'
+' Decisoes de produto (registradas em CHANGELOG e auditoria/32):
+'  - duplicatas detectadas em ATIVIDADES por (CNAE,DESCRICAO) sao
+'    REMOVIDAS automaticamente (decisao do operador: foi um erro de
+'    importacao remanescente, nao deve persistir);
+'  - snapshots antigos sao podados quando o reset CNAE roda, com
+'    confirmacao humana e mantendo os N mais recentes (default 5).
+'
+' Tres helpers publicos novos:
+'  - CnaeRemoverDuplicatasAtividades() : remove fisicamente as
+'    linhas duplicadas em ATIVIDADES por (CNAE, DESCRICAO),
+'    preservando a primeira ocorrencia. Retorna quantidade removida.
+'  - CnaePodarSnapshots(manterUltimos)  : apaga abas-snapshot mais
+'    antigas, preservando as N mais recentes. Retorna quantidade
+'    apagada.
+'  - CnaeConfirmarPodaSnapshots(manterUltimos): wrapper interativo
+'    com MsgBox; pergunta ao operador antes de podar. Usado pelo
+'    reset CNAE no inicio da ETAPA 1.
+
+Public Function CnaeRemoverDuplicatasAtividades() As Long
+    Dim wsAtiv As Worksheet
+    Dim ultima As Long
+    Dim i As Long
+    Dim cnaeVal As String
+    Dim descVal As String
+    Dim chave As String
+    Dim mapa As Object
+    Dim removidas As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim linhasParaRemover() As Long
+    Dim qtdAlvo As Long
+
+    On Error GoTo falha
+
+    Set wsAtiv = ThisWorkbook.Sheets(SHEET_ATIVIDADES)
+    ultima = UltimaLinhaAba(SHEET_ATIVIDADES)
+    If ultima < LINHA_DADOS Then
+        CnaeRemoverDuplicatasAtividades = 0
+        Exit Function
+    End If
+
+    Set mapa = CreateObject("Scripting.Dictionary")
+    qtdAlvo = 0
+    ReDim linhasParaRemover(0 To 0)
+
+    ' Pass 1: identificar linhas duplicadas (preservando a primeira ocorrencia).
+    For i = LINHA_DADOS To ultima
+        cnaeVal = Trim$(CStr(wsAtiv.Cells(i, COL_ATIV_CNAE).Value))
+        descVal = Trim$(CStr(wsAtiv.Cells(i, COL_ATIV_DESCRICAO).Value))
+        If cnaeVal = "" And descVal = "" Then GoTo proxLinhaPass1
+
+        chave = UCase$(cnaeVal) & "|" & UCase$(descVal)
+        If mapa.Exists(chave) Then
+            If qtdAlvo > 0 Then ReDim Preserve linhasParaRemover(0 To qtdAlvo)
+            linhasParaRemover(qtdAlvo) = i
+            qtdAlvo = qtdAlvo + 1
+        Else
+            mapa.Add chave, True
+        End If
+proxLinhaPass1:
+    Next i
+
+    If qtdAlvo = 0 Then
+        CnaeRemoverDuplicatasAtividades = 0
+        Exit Function
+    End If
+
+    ' Pass 2: remover linhas em ordem reversa para nao corromper indices.
+    If Not Util_PrepararAbaParaEscrita(wsAtiv, estavaProtegida, senhaProtecao) Then
+        CnaeRemoverDuplicatasAtividades = -1
+        Exit Function
+    End If
+
+    removidas = 0
+    For i = qtdAlvo - 1 To 0 Step -1
+        wsAtiv.Rows(linhasParaRemover(i)).Delete
+        removidas = removidas + 1
+    Next i
+
+    ' Atualiza contador da aba (linha 1, COL_CONTADOR_AR) considerando
+    ' as linhas remanescentes apos a remocao. Se o contador anterior
+    ' nao bater com o numero real, ajusta para o real.
+    Dim ultimaPos As Long
+    ultimaPos = UltimaLinhaAba(SHEET_ATIVIDADES)
+    If ultimaPos >= LINHA_DADOS Then
+        wsAtiv.Cells(1, COL_CONTADOR_AR).Value = ultimaPos - LINHA_DADOS + 1
+    Else
+        wsAtiv.Cells(1, COL_CONTADOR_AR).Value = 0
+    End If
+
+    Util_RestaurarProtecaoAba wsAtiv, estavaProtegida, senhaProtecao
+    Call InvalidarCacheCnaeAtividade
+
+    CnaeRemoverDuplicatasAtividades = removidas
+    Exit Function
+
+falha:
+    On Error Resume Next
+    If Not wsAtiv Is Nothing Then Util_RestaurarProtecaoAba wsAtiv, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    CnaeRemoverDuplicatasAtividades = -1
+End Function
+
+Public Function CnaePodarSnapshots(Optional ByVal manterUltimos As Long = 5) As Long
+    Dim listSnaps As Variant
+    Dim qtdSnaps As Long
+    Dim qtdPodar As Long
+    Dim i As Long
+    Dim podadas As Long
+    Dim nomeAlvo As String
+
+    On Error GoTo falha
+
+    If manterUltimos < 0 Then manterUltimos = 0
+
+    listSnaps = CnaeListarSnapshots()
+    If Not IsArray(listSnaps) Then
+        CnaePodarSnapshots = 0
+        Exit Function
+    End If
+
+    qtdSnaps = UBound(listSnaps) - LBound(listSnaps) + 1
+    If qtdSnaps <= manterUltimos Then
+        CnaePodarSnapshots = 0
+        Exit Function
+    End If
+
+    qtdPodar = qtdSnaps - manterUltimos
+    podadas = 0
+
+    Application.DisplayAlerts = False
+    For i = LBound(listSnaps) To LBound(listSnaps) + qtdPodar - 1
+        nomeAlvo = CStr(listSnaps(i))
+        On Error Resume Next
+        ThisWorkbook.Worksheets(nomeAlvo).Delete
+        If Err.Number = 0 Then podadas = podadas + 1
+        Err.Clear
+        On Error GoTo falha
+    Next i
+    Application.DisplayAlerts = True
+
+    CnaePodarSnapshots = podadas
+    Exit Function
+
+falha:
+    On Error Resume Next
+    Application.DisplayAlerts = True
+    On Error GoTo 0
+    CnaePodarSnapshots = -1
+End Function
+
+Public Function CnaeConfirmarPodaSnapshots(Optional ByVal manterUltimos As Long = 5) As Long
+    Dim listSnaps As Variant
+    Dim qtdSnaps As Long
+    Dim qtdExcedente As Long
+    Dim resposta As VbMsgBoxResult
+
+    On Error GoTo falha
+
+    listSnaps = CnaeListarSnapshots()
+    If Not IsArray(listSnaps) Then
+        CnaeConfirmarPodaSnapshots = 0
+        Exit Function
+    End If
+
+    qtdSnaps = UBound(listSnaps) - LBound(listSnaps) + 1
+    If qtdSnaps <= manterUltimos Then
+        CnaeConfirmarPodaSnapshots = 0
+        Exit Function
+    End If
+
+    qtdExcedente = qtdSnaps - manterUltimos
+    resposta = MsgBox( _
+        "Existem " & qtdSnaps & " snapshots de CAD_SERV salvos no workbook." & vbCrLf & _
+        "Deseja apagar os " & qtdExcedente & " mais antigos, mantendo apenas os " & _
+        manterUltimos & " mais recentes?" & vbCrLf & vbCrLf & _
+        "Resposta Nao preserva todos os snapshots existentes.", _
+        vbQuestion + vbYesNo + vbDefaultButton1, _
+        "Reset CNAE: limpeza de snapshots")
+
+    If resposta = vbYes Then
+        CnaeConfirmarPodaSnapshots = CnaePodarSnapshots(manterUltimos)
+    Else
+        CnaeConfirmarPodaSnapshots = 0
+    End If
+    Exit Function
+
+falha:
+    CnaeConfirmarPodaSnapshots = -1
+End Function

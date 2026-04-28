@@ -110,4 +110,57 @@ End Function
 
 ' IdsIguais removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
 
+' V12.0.0203 ONDA 1 — Conta avaliacoes registradas para uma empresa
+' cuja media de notas seja estritamente menor que `notaCorte`.
+' A varredura usa SHEET_CAD_OS, COL_OS_EMP_ID e COL_OS_MEDIA.
+' Apenas linhas com OS no STATUS_OS_CONCLUIDA sao consideradas
+' (avaliar() so persiste media quando finaliza a OS).
+' A funcao e idempotente e nao altera nenhuma aba.
+Public Function ContarStrikesPorEmpresa( _
+    ByVal EMP_ID As String, _
+    ByVal notaCorte As Double _
+) As Long
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim i As Long
+    Dim mediaCelula As Variant
+    Dim mediaVal As Double
+    Dim statusVal As String
+    Dim qtd As Long
+
+    On Error GoTo falha
+
+    If Trim$(EMP_ID) = "" Then
+        ContarStrikesPorEmpresa = 0
+        Exit Function
+    End If
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
+    ultima = UltimaLinhaAba(SHEET_CAD_OS)
+    If ultima < LINHA_DADOS Then
+        ContarStrikesPorEmpresa = 0
+        Exit Function
+    End If
+
+    For i = LINHA_DADOS To ultima
+        If IdsIguais(ws.Cells(i, COL_OS_EMP_ID).Value, EMP_ID) Then
+            statusVal = Trim$(CStr(ws.Cells(i, COL_OS_STATUS).Value))
+            If statusVal = STATUS_OS_CONCLUIDA Then
+                mediaCelula = ws.Cells(i, COL_OS_MEDIA).Value
+                If IsNumeric(mediaCelula) Then
+                    mediaVal = CDbl(mediaCelula)
+                    If mediaVal > 0# And mediaVal < notaCorte Then
+                        qtd = qtd + 1
+                    End If
+                End If
+            End If
+        End If
+    Next i
+
+    ContarStrikesPorEmpresa = qtd
+    Exit Function
+
+falha:
+    ContarStrikesPorEmpresa = 0
+End Function
 

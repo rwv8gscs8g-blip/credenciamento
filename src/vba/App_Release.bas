@@ -9,9 +9,13 @@ Public Const APP_RELEASE_STATUS As String = "VALIDADO"
 Public Const APP_RELEASE_CANAL As String = "DESENVOLVIMENTO"
 Public Const APP_RELEASE_ALVO As String = "V12.0.0203"
 Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0202|DESENVOLVIMENTO|V12.0.0203"
-Public Const APP_BUILD_IMPORTADO As String = "PACOTE_NAO_CARIMBADO"
-Public Const APP_BUILD_BRANCH As String = "PACOTE_NAO_CARIMBADO"
-Public Const APP_BUILD_GERADO_EM As String = "PACOTE_NAO_CARIMBADO"
+' V12.0.0203 ONDA 5 — carimbo manual do build (sem rodar publicar_vba_import.sh).
+' Identificador semantico: <commit-base>+ONDA<NN>-em-homologacao quando a arvore
+' tem mudancas nao commitadas; trocar para <commit-base>+ONDA<NN>-homologado
+' apos commitar a onda. AppRelease_BuildImportadoRotulo trata os dois sufixos.
+Public Const APP_BUILD_IMPORTADO As String = "f7aa84f+ONDA05-em-homologacao"
+Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0203-governanca-testes"
+Public Const APP_BUILD_GERADO_EM As String = "2026-04-28 08:45"
 Public Const APP_RELEASE_TAG As String = "v12.0.0202"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0202"
 Public Const APP_RELEASE_TEST_KEY As String = "bo-2026-04-20+v2-2026-04-20"

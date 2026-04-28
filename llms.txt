@@ -1,0 +1,75 @@
+# Sistema de Credenciamento e Rodizio de Pequenos Reparos
+
+> Repositorio publico source-available para gestao municipal de
+> credenciamento, rodizio, Pre-OS, OS e avaliacao de prestadores em
+> Excel/VBA, governado pelo protocolo HBN. Linha oficial V12.0.0202;
+> linha em estabilizacao V12.0.0203.
+
+## Entrada para IAs
+
+- [AGENTS.md](AGENTS.md): entrada canonica para qualquer IA que va trabalhar no repositorio
+- [.hbn/relay/INDEX.md](.hbn/relay/INDEX.md): quem tem o bastao agora e qual e a proxima acao
+- [.hbn/knowledge/0001-regras-v203-inegociaveis.md](.hbn/knowledge/0001-regras-v203-inegociaveis.md): as 10 regras V203 inegociaveis
+- [.hbn/knowledge/0002-regra-ouro-vba-import.md](.hbn/knowledge/0002-regra-ouro-vba-import.md): como espelhar codigo no pacote vba_import/
+- [.hbn/knowledge/0003-glasswing-style-preventive-security.md](.hbn/knowledge/0003-glasswing-style-preventive-security.md): camada de seguranca preventiva (5 vetores cobertos)
+- [CLAUDE.md](CLAUDE.md): instrucoes especificas para Claude (aponta para AGENTS.md)
+
+## Status do projeto
+
+- [auditoria/00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md](auditoria/00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md): checkpoint da V12.0.0203
+- [auditoria/00_status/24_FECHAMENTO_V12_0203.md](auditoria/00_status/24_FECHAMENTO_V12_0203.md): fechamento candidato
+- [auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md](auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md): auditoria honesta + plano de retomada
+- [obsidian-vault/00-DASHBOARD.md](obsidian-vault/00-DASHBOARD.md): dashboard executivo
+
+## Regras e governanca
+
+- [auditoria/01_regras_e_governanca/00_REGRAS_V203_INEGOCIAVEIS.md](auditoria/01_regras_e_governanca/00_REGRAS_V203_INEGOCIAVEIS.md): constituicao operacional
+- [auditoria/01_regras_e_governanca/03_AUDITORIA_REGRAS_DE_NEGOCIO.md](auditoria/01_regras_e_governanca/03_AUDITORIA_REGRAS_DE_NEGOCIO.md): regras de negocio consolidadas
+- [auditoria/01_regras_e_governanca/17_PARECER_LICENCIAMENTO_TPGL_v1_1.md](auditoria/01_regras_e_governanca/17_PARECER_LICENCIAMENTO_TPGL_v1_1.md): parecer juridico TPGL v1.1
+- [docs/reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md](docs/reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md): governanca de release
+- [LICENSE](LICENSE): TPGL v1.1
+- [SECURITY.md](SECURITY.md): politica publica de seguranca
+- [CLA.md](CLA.md): Contributor License Agreement
+
+## Documentacao tecnica (Diataxis)
+
+- [docs/tutorials/](docs/tutorials/): aprender — passo a passo para novos integradores
+- [docs/how-to/](docs/how-to/): cookbook — problemas concretos (importar pacote, rodar testes, gerar evidencia)
+- [docs/reference/](docs/reference/): consulta — regras de codigo, API VBA, governanca
+- [docs/explanation/](docs/explanation/): entender — arquitetura, decisoes, racional
+
+## Ondas de estabilizacao V12.0.0203
+
+- [auditoria/03_ondas/onda_01_strikes/](auditoria/03_ondas/onda_01_strikes/): regra de strikes na avaliacao
+- [auditoria/03_ondas/onda_02_cnae_snapshot/](auditoria/03_ondas/onda_02_cnae_snapshot/): snapshot CAD_SERV + dedup
+- [auditoria/03_ondas/onda_03_cnae_dedup/](auditoria/03_ondas/onda_03_cnae_dedup/): dedup automatico + housekeeping
+- [auditoria/03_ondas/onda_04_config_strikes/](auditoria/03_ondas/onda_04_config_strikes/): config de strikes na interface
+- [auditoria/03_ondas/onda_05_form_deterministico/](auditoria/03_ondas/onda_05_form_deterministico/): form deterministico + Limpa_Base robusta
+- [auditoria/03_ondas/onda_06_consolidacao_documental/](auditoria/03_ondas/onda_06_consolidacao_documental/): consolidacao documental + integracao HBN/Diataxis/llms.txt/AGENTS.md/Glasswing
+
+## Codigo fonte
+
+- [src/vba/](src/vba/): fonte de verdade VBA
+- [local-ai/vba_import/](local-ai/vba_import/): pacote oficial de import com prefixos
+- [local-ai/vba_import/000-REGRA-OURO.md](local-ai/vba_import/000-REGRA-OURO.md): regra absoluta do pacote
+- [local-ai/vba_import/000-MANIFESTO-IMPORTACAO.txt](local-ai/vba_import/000-MANIFESTO-IMPORTACAO.txt): manifesto canonico
+- [local-ai/vba_import/000-MAPA-PREFIXOS.txt](local-ai/vba_import/000-MAPA-PREFIXOS.txt): mapa de prefixos
+
+## Evidencias publicas
+
+- [auditoria/04_evidencias/V12.0.0202/MANIFEST.md](auditoria/04_evidencias/V12.0.0202/MANIFEST.md): evidencia hashada da V12.0.0202
+- [auditoria/04_evidencias/V12.0.0203/MANIFEST.md](auditoria/04_evidencias/V12.0.0203/MANIFEST.md): evidencia candidata da V12.0.0203
+
+## Metodologia (vitrine usehbn)
+
+- [obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md](obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md): mapa documental do projeto
+- [obsidian-vault/metodologia/01-COMO-A-IA-LE-ESTE-REPO.md](obsidian-vault/metodologia/01-COMO-A-IA-LE-ESTE-REPO.md): guia para o RAG
+- [obsidian-vault/metodologia/02-INTEGRACAO-USEHBN.md](obsidian-vault/metodologia/02-INTEGRACAO-USEHBN.md): integracao com o usehbn
+- [obsidian-vault/metodologia/03-PROTOCOLO-GLASSWING.md](obsidian-vault/metodologia/03-PROTOCOLO-GLASSWING.md): camada Glasswing aplicada
+
+## Optional
+
+- [README.md](README.md): visao publica humana
+- [CHANGELOG.md](CHANGELOG.md): historico de mudancas
+- [CONTRIBUTING.md](CONTRIBUTING.md): como contribuir
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md): codigo de conduta

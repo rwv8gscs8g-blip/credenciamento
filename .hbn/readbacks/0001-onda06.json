@@ -1,0 +1,71 @@
+{
+  "readback_id": "readback-onda06-2026-04-28",
+  "execution_id": "exec-onda06-2026-04-28",
+  "agent_id": "claude-opus-4-7-cowork",
+  "track": "safe_track",
+  "hearback_status": "confirmed",
+  "hearback_confirmed_by": "Luis Mauricio Junqueira Zanin",
+  "hearback_confirmed_at": "2026-04-28",
+  "hearback_method": "explicit chat approval (item-by-item, 7 operational questions answered)",
+  "understanding": "Onda 6 e doc-only. Aplica metodologia hibrida HBN-core + Diataxis + llms.txt + AGENTS.md ao Credenciamento, atualiza usehbn em paralelo para incorporar os mesmos protocolos como integracoes abertas, e estabelece o Credenciamento como case study real do usehbn. Glasswing/Mythos da Anthropic aparece como camada de seguranca preventiva no documento INTEGRATION-GLASSWING.md.",
+  "invariants_preserved": [
+    "Codigo VBA em src/vba/ NAO e tocado nesta onda",
+    "Mod_Types.bas NAO e tocado nesta onda (intervencao planejada Onda 9)",
+    "Build do workbook permanece f7aa84f+ONDA05-em-homologacao",
+    "Onda 5 nao e re-aberta nesta onda (segue em homologacao manual do Mauricio)",
+    "Trio minimo de testes nao e re-executado (responsabilidade do operador no workbook)",
+    "Push para origin NAO ocorre nesta onda — apenas commit local"
+  ],
+  "action_plan": [
+    "Setup .hbn/ + readback + relay (este documento)",
+    "Apagar auditoria/39 (duplicacao consolidada)",
+    "Criar pasta backups externa e mover backups + macros descartaveis",
+    "Reorganizar auditoria/ por tipo preservando numero historico",
+    "Criar AGENTS.md, llms.txt, llms-full.txt, docs/ Diataxis",
+    "Refinar CLAUDE.md (Mod_Types como Onda 9)",
+    "Atualizar CHANGELOG, README, docs/INDEX, local-ai/vba_import/README",
+    "Reviver vault Obsidian (Opcao A) com metodologia D",
+    "Atualizar usehbn em paralelo (5 docs novos + README + CHANGELOG)",
+    "Escrever auditoria/03_ondas/onda_06_consolidacao_documental/41_TECNICO.md (UM doc)",
+    "Verificacao final (md5, links, grep, git status)"
+  ],
+  "out_of_scope": [
+    "Codigo VBA novo",
+    "Cenarios de teste novos (IDM_*, RDZ_* entram na Onda 7)",
+    "Heuristica zero em forms (Onda 8)",
+    "Reescrita do Importador_VBA (Onda 9)",
+    "Mod_Types audit (Onda 9)",
+    "Push para origin (decisao do Mauricio)",
+    "Promocao da V12.0.0203 para oficial (decisao do Mauricio apos trio minimo verde)"
+  ],
+  "residual_risks": [
+    "git mv em larga escala pode quebrar links cruzados nao detectados — mitigado por grep amplo antes + verificacao final",
+    "Mudancas em docs/ podem afetar docs/testes/ — mitigado por leitura previa de docs/testes/INDEX.md",
+    "Conflito com trabalho paralelo no usehbn — mitigado por commits separados marcados como 'credenciamento case study'",
+    "Frontmatter YAML nao parseavel se sintaxe quebrar em algum arquivo — mitigado por validacao manual em SAMPLE de 3 arquivos antes de aplicar em massa"
+  ],
+  "classification_basis": "safe_track porque envolve git rm, git mv em larga escala, e mudancas em arquivos que sao entradas obrigatorias para futuras IAs (CLAUDE.md, AGENTS.md). hearback explicito do Mauricio na resposta de 2026-04-28.",
+  "created_at": "2026-04-28",
+  "guardian_warnings": [
+    {
+      "code": "guardian-large-restructure",
+      "severity": "info",
+      "message": "Reorganizacao de >40 arquivos em auditoria/ + criacao de 6 arquivos novos em usehbn. Prefira git mv em vez de mv+add para preservar historia.",
+      "evidence": "auditoria/ tem 30 documentos versionados; reorganizar todos preservando historia exige git mv."
+    },
+    {
+      "code": "guardian-cross-repo",
+      "severity": "info",
+      "message": "Trabalho paralelo em DOIS repositorios (Credenciamento + usehbn). Cada repo recebe seu proprio commit, sem cross-references nao versionadas.",
+      "evidence": "usehbn esta em /Users/macbookpro/Projetos/usehbn, separado do Credenciamento."
+    }
+  ],
+  "truth_barrier_warnings": [
+    {
+      "code": "truth-barrier-no-claim",
+      "severity": "info",
+      "message": "Nenhum claim de '100% testado', 'sem risco', 'totalmente seguro' deve ser introduzido na documentacao desta onda.",
+      "evidence": "Regra HBN: claims devem ser proporcionais a evidencia."
+    }
+  ]
+}

@@ -1995,8 +1995,7 @@ Private Sub RefreshPosPreOS()
     On Error Resume Next
     Call PreenchimentoEscolhaAtividade
     If Err.Number <> 0 Then Err.Clear
-    Call PreenchimentoEntidadeRodizio
-    If Err.Number <> 0 Then Err.Clear
+    Call Rodizio_RecarregarAtribuicao(True, True)
     Call PreencherPreencheOS
     If Err.Number <> 0 Then Err.Clear
     On Error GoTo 0
@@ -3379,9 +3378,54 @@ Private Sub UserForm_Initialize()
 End Sub
 
 Private Sub AplicarFiltrosAtribuicao()
+    Call Rodizio_RecarregarAtribuicao(False, False)
+End Sub
+
+Private Function UI_TextoFiltro(ByVal tb As MSForms.TextBox) As String
+    On Error GoTo usarText
+    UI_TextoFiltro = Trim$(SafeListVal(tb.Value))
+    Exit Function
+usarText:
     On Error Resume Next
-    If Not mTxtFiltroServico Is Nothing Then Call PreenchimentoServico(mTxtFiltroServico.Text)
-    If Not mTxtFiltroRodizio Is Nothing Then Call PreenchimentoEntidadeRodizio(mTxtFiltroRodizio.Text)
+    UI_TextoFiltro = Trim$(tb.Text)
+    On Error GoTo 0
+End Function
+
+Private Sub Rodizio_LimparSelecaoEntidade()
+    On Error Resume Next
+    C_ListaRodizio.ListIndex = -1
+    Entidade = ""
+    Desc_entidade = ""
+    cont_entidade = ""
+    telcont_entidade = ""
+    END_ENTIDADE = ""
+    On Error GoTo 0
+End Sub
+
+Private Sub Rodizio_RecarregarAtribuicao(Optional ByVal limparFiltros As Boolean = False, Optional ByVal limparSelecaoEntidade As Boolean = False)
+    Dim filtroServico As String
+    Dim filtroRodizio As String
+    Dim estavaInicializando As Boolean
+
+    On Error Resume Next
+    estavaInicializando = mInicializando
+    If limparFiltros Then mInicializando = True
+
+    If limparFiltros Then
+        If Not mTxtFiltroServico Is Nothing Then mTxtFiltroServico.Value = vbNullString
+        If Not mTxtFiltroRodizio Is Nothing Then mTxtFiltroRodizio.Value = vbNullString
+    End If
+
+    If Not mTxtFiltroServico Is Nothing Then filtroServico = UI_TextoFiltro(mTxtFiltroServico)
+    If Not mTxtFiltroRodizio Is Nothing Then filtroRodizio = UI_TextoFiltro(mTxtFiltroRodizio)
+
+    If limparFiltros Then mInicializando = estavaInicializando
+    If limparSelecaoEntidade Or filtroRodizio = "" Then Call Rodizio_LimparSelecaoEntidade
+
+    Call PreenchimentoServico(filtroServico)
+    If Err.Number <> 0 Then Err.Clear
+    Call PreenchimentoEntidadeRodizio(filtroRodizio)
+    If Err.Number <> 0 Then Err.Clear
     On Error GoTo 0
 End Sub
 
@@ -3654,8 +3698,9 @@ Private Sub Filtros_CriarDinamico()
     Dim lblServ As Object
     Dim tbFiltroEnt As MSForms.TextBox
 
-    ' Busca na lista de Empresas (EMP_Lista)
-    Set mTxtFiltroEmpresa = UI_TextBoxSeExisteRecursivo(EMP_Lista.Parent, "TextBox17")
+    ' Busca na lista de Empresas (EMP_Lista): canonico primeiro, legado depois.
+    Set mTxtFiltroEmpresa = UI_TextBoxSeExisteRecursivo(EMP_Lista.Parent, "TxtFiltro_Empresa")
+    If mTxtFiltroEmpresa Is Nothing Then Set mTxtFiltroEmpresa = UI_TextBoxSeExisteRecursivo(EMP_Lista.Parent, "TextBox17")
     If mTxtFiltroEmpresa Is Nothing Then Set mTxtFiltroEmpresa = UI_PegarTextBoxBuscaDaLista(EMP_Lista)
     If mTxtFiltroEmpresa Is Nothing Then Set mTxtFiltroEmpresa = UI_TextBoxSeExistePagina(EMP_Lista.Parent, "TxtFiltroEmpresaDin")
     If mTxtFiltroEmpresa Is Nothing Then
@@ -3693,12 +3738,18 @@ Private Sub Filtros_CriarDinamico()
     End If
     Set mTxtFiltroEntidade = tbFiltroEnt
 
-    ' Filtros do Rodizio/Atribuicao (pagina PAGINAS=3): deterministico, sem TextBox18/TextBox22.
-    Set mTxtFiltroServico = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_Servico")
-    Set mTxtFiltroRodizio = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_EntidadeRodizio")
+    ' Filtros do Rodizio/Atribuicao (pagina PAGINAS=3): canonico primeiro, legado ate reexportar o .frx.
+    Set mTxtFiltroServico = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_RodizioServico")
+    If mTxtFiltroServico Is Nothing Then Set mTxtFiltroServico = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_Servico")
+    If mTxtFiltroServico Is Nothing Then Set mTxtFiltroServico = UI_TextBoxSeExisteRecursivo(Me, "TextBox18")
+
+    Set mTxtFiltroRodizio = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_RodizioEntidade")
+    If mTxtFiltroRodizio Is Nothing Then Set mTxtFiltroRodizio = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_EntidadeRodizio")
+    If mTxtFiltroRodizio Is Nothing Then Set mTxtFiltroRodizio = UI_TextBoxSeExisteRecursivo(Me, "TextBox22")
 
     ' Busca na lista de manutencao de servicos (H_Lista)
-    Set mTxtFiltroCadServ = UI_PegarTextBoxBuscaDaLista(H_Lista)
+    Set mTxtFiltroCadServ = UI_TextBoxSeExisteRecursivo(H_Lista.Parent, "TxtFiltro_CadServ")
+    If mTxtFiltroCadServ Is Nothing Then Set mTxtFiltroCadServ = UI_PegarTextBoxBuscaDaLista(H_Lista)
     If mTxtFiltroCadServ Is Nothing Then Set mTxtFiltroCadServ = UI_TextBoxSeExisteRecursivo(H_Lista.Parent, "TxtFiltroCadServDin")
     If mTxtFiltroCadServ Is Nothing Then
         Set mTxtFiltroCadServ = H_Lista.Parent.Controls.Add("Forms.TextBox.1", "TxtFiltroCadServDin", True)
@@ -3743,13 +3794,14 @@ End Sub
 Private Sub mTxtFiltroServico_Change()
     If mInicializando Then Exit Sub
     If mTxtFiltroServico Is Nothing Then Exit Sub
-    Call PreenchimentoServico(mTxtFiltroServico.Text)
+    Call PreenchimentoServico(UI_TextoFiltro(mTxtFiltroServico))
 End Sub
 
 Private Sub mTxtFiltroRodizio_Change()
     If mInicializando Then Exit Sub
     If mTxtFiltroRodizio Is Nothing Then Exit Sub
-    Call PreenchimentoEntidadeRodizio(mTxtFiltroRodizio.Text)
+    Call PreenchimentoEntidadeRodizio(UI_TextoFiltro(mTxtFiltroRodizio))
+    If UI_TextoFiltro(mTxtFiltroRodizio) = "" Then Call Rodizio_LimparSelecaoEntidade
 End Sub
 Private Sub mTxtFiltroCadServ_Change()
     If mInicializando Then Exit Sub

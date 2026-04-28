@@ -15,6 +15,12 @@ Public Const SHEET_ENTIDADE As String = "ENTIDADE"
 Public Const SHEET_ENTIDADE_INATIVOS As String = "ENTIDADE_INATIVOS"
 Public Const SHEET_ATIVIDADES As String = "ATIVIDADES"
 Public Const SHEET_CAD_SERV As String = "CAD_SERV"
+' V12.0.0203 ONDA 2 — prefixo das abas-snapshot de CAD_SERV criadas
+' antes de cada reset CNAE. O nome final fica
+' "CAD_SERV_SNAPSHOT_yyyymmdd_hhnnss" para preservar historico
+' reaproveitavel manualmente caso a re-vinculacao posterior precise
+' de fonte de verdade do estado anterior.
+Public Const SHEET_PREFIX_CAD_SERV_SNAP As String = "CAD_SERV_SNAPSHOT_"
 Public Const SHEET_CREDENCIADOS As String = "CREDENCIADOS"
 Public Const SHEET_PREOS As String = "PRE_OS"
 Public Const SHEET_CAD_OS As String = "CAD_OS"
@@ -37,6 +43,13 @@ Public Const COL_CFG_PASTA_DOCS As Long = 8       ' H
 Public Const COL_CFG_UF As Long = 9               ' I
 Public Const COL_CFG_SECRETARIA As Long = 10      ' J
 Public Const COL_CFG_NOTA_MINIMA As Long = 11     ' K
+' --- V12.0.0203 ONDA 1: regra de strikes na avaliacao ---
+' Numero de avaliacoes com media abaixo de COL_CFG_NOTA_MINIMA antes de suspender.
+' Default em Util_Config.GetMaxStrikes(): 3.
+Public Const COL_CFG_MAX_STRIKES As Long = 12          ' L
+' Quantidade de dias da suspensao automatica disparada por strikes.
+' Default em Util_Config.GetDiasSuspensaoStrike(): 90.
+Public Const COL_CFG_DIAS_SUSPENSAO_STRIKE As Long = 13 ' M
 Public Const LINHA_CFG_VALORES As Long = 2        ' Linha dos valores na CONFIG
 
 ' --- Aba EMPRESAS (e EMPRESAS_INATIVAS) ---

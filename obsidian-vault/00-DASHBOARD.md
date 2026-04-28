@@ -1,79 +1,117 @@
 ---
 titulo: Dashboard - Credenciamento
-ultima-atualizacao: 2026-04-26
-autor-ultima-alteracao: Maurício Zanin
-tags: [vivo]
+ultima-atualizacao: 2026-04-28
+autor-ultima-alteracao: Claude Opus 4.7 (Cowork) na Onda 6
+tags: [vivo, dashboard, hbn-active]
 versao-sistema: V12.0.0202
 linha-alvo: V12.0.0203
-build-ancora-validado: 88107f1
+build-importado-no-workbook: f7aa84f+ONDA05-em-homologacao
+hbn-track: fast_track
+diataxis: status
+audiencia: ambos
 ---
 
-# Dashboard - Credenciamento
+# Dashboard — Credenciamento
 
-## Status Atual
+> Atualizado a cada onda fechada. Cadencia obrigatoria conforme Onda 6.
+> Fonte unica de status. Discrepancias entre este arquivo e
+> `auditoria/00_status/22_*` sao resolvidas a favor do mais recente
+> (campo `ultima-atualizacao`).
 
-**Versão**: V12.0.0202
-**Data**: 2026-04-26
-**Status**: VALIDADO
-**Linha em estabilização**: V12.0.0203
-**Build âncora validado**: 88107f1
-**Ambiente**: Windows 10+, Excel 2019/2021/365
-**Planilha**: PlanilhaCredenciamento-Homologacao.xlsm
+## Status atual
 
-## Documentos Canonicos
+| Campo | Valor |
+|---|---|
+| Versao oficial vigente | **V12.0.0202** (validada) |
+| Linha em estabilizacao | V12.0.0203 |
+| Build importado no workbook | `f7aa84f+ONDA05-em-homologacao` |
+| Tag git de salvaguarda | `pre-onda-06-2026-04-28` |
+| Branch ativa | `codex/v12-0-0203-governanca-testes` |
+| Bastao de implementacao | Claude Opus 4.7 (Cowork) — ate V12.0.0203 estavel no GitHub |
+| Ambiente | Windows 10+, Excel 2019/2021/365 |
+| Planilha homologacao | `PlanilhaCredenciamento-Homologacao.xlsm` |
 
-1. **[[releases/STATUS-OFICIAL]]** — status oficial das versoes para publicacao
-2. **[[releases/V12.0.0202]]** — release validada atual
-3. `auditoria/22_STATUS_MICROEVOLUCOES_V12_0203.md` — checkpoint da linha `0203`
-4. `README.md` — visao geral publica do projeto
-5. `docs/INDEX.md` — indice publico de documentacao
-6. `LICENSE` — TPGL v1.1
-7. `SECURITY.md` — politica publica de seguranca
-8. `auditoria/14_FECHAMENTO_BACKLOG_OPUS_V12_0202.md` — fechamento do backlog tecnico
+## Onda em curso
 
-## Checkpoint da Versão Atual
+**Onda 6 — Consolidacao documental + cleanup + integracao HBN/Diataxis/llms.txt/AGENTS.md/Glasswing**
 
-### Nucleo do Sistema
-- [x] Autenticacao e Contexto (AppContext)
-- [x] Auditoria centralizada (Audit_Log)
-- [x] Tratamento de erros (ErrorBoundary)
-- [x] Carregamento automatico (Auto_Open)
-- [x] Release metadata centralizada (App_Release)
+- Status: EM EXECUCAO (em fechamento)
+- Track HBN: safe_track
+- Hearback: confirmed
+- Doc tecnica: `auditoria/03_ondas/onda_06_consolidacao_documental/41_TECNICO.md`
+- Readback: `.hbn/readbacks/0001-onda06.json`
+- Sem alteracao de codigo VBA (doc-only)
 
-### Gestao de Credenciamento
-- [x] Cadastro de empresas (Credencia_Empresa)
-- [x] Alteracao de dados (Altera_Empresa)
-- [x] Reativacao de empresas (Reativa_Empresa)
-- [x] Gestao de entidades (Altera_Entidade, Reativa_Entidade)
-- [x] Filtros de busca (empresas, entidades)
-- [x] Importacao de CNAEs (612 atividades via ImportarCNAE_Emergencia)
-- [x] Cadastro de servicos com edicao (CAD_SERV, Alterar Dados)
+## Roadmap apos Onda 6
 
-### Rodizio e Ordens de Servico
-- [x] Rodizio de empresas (Svc_Rodizio)
-- [x] Criacao de pre-ordens (Svc_PreOS)
-- [x] Processamento de ordens (Svc_OS)
-- [x] Avaliacao de servicos (Svc_Avaliacao)
-- [x] Fluxo oficial validado pela bateria automatizada
+| Onda | Tema | Status |
+|---|---|---|
+| 5 (residual) | homologacao do form deterministico + Limpa_Base robusta | EM HOMOLOGACAO |
+| 7 | familia IDM_* + RDZ_* (idempotencia + rodizio em loop) | proxima apos 6 |
+| 8 | heuristica zero em todos os 13 forms | depois da 7 |
+| 9 | reescrita Importador_VBA + auditoria Mod_Types | depois da 8 |
+| FECHAMENTO | tag v12.0.0203, push GitHub, release publica | depois da 9 |
 
-### Testes e Evidencias
-- [x] Compilação limpa validada por operador humano
-- [x] Bateria oficial V1 rápida validada em 2026-04-26 no build `88107f1`
-- [x] V2 Smoke validado em 2026-04-26 no build `88107f1`
-- [x] V2 Canônica validada em 2026-04-26 no build `88107f1`
-- [ ] Evidência pública final da `V12.0.0203` ainda será consolidada no fechamento formal
+## Documentos canonicos (pos-Onda 6)
 
-### Governanca publica
-- [x] Licença pública formalizada em TPGL v1.1
-- [x] CLA exigido para contribuicoes publicas
-- [x] Politica publica de seguranca
-- [x] Linha publica source-available e auditavel
+### Para IAs
+1. [`AGENTS.md`](../AGENTS.md) — entrada canonica
+2. [`.hbn/relay/INDEX.md`](../.hbn/relay/INDEX.md) — bastao + ciclo ativo
+3. [`.hbn/knowledge/0001-regras-v203-inegociaveis.md`](../.hbn/knowledge/0001-regras-v203-inegociaveis.md) — 10 regras
+4. [`.hbn/knowledge/0002-regra-ouro-vba-import.md`](../.hbn/knowledge/0002-regra-ouro-vba-import.md) — Regra de Ouro
+5. [`.hbn/knowledge/0003-glasswing-style-preventive-security.md`](../.hbn/knowledge/0003-glasswing-style-preventive-security.md) — 5 vetores Glasswing
 
-### Relatorios
-- [x] Relatorio de empresas por servico (Rel_Emp_Serv)
-- [x] Relatorio de ordens por empresa (Rel_OSEmpresa)
-- [x] Central de testes com cobertura (Central_Testes_Relatorio)
+### Para humanos (Diataxis)
+1. `docs/tutorials/` — aprender (passo-a-passo)
+2. `docs/how-to/` — cookbook (importar pacote, rodar testes, gerar evidencia)
+3. `docs/reference/` — consulta (regras, API VBA, governanca)
+4. `docs/explanation/` — entender (arquitetura, decisoes, racional)
 
----
-**Ultima Verificacao**: 2026-04-26
-**Mantido por**: Maurício Zanin
+### Para LLMs (RAG)
+1. [`llms.txt`](../llms.txt) — mapa curado
+2. [`llms-full.txt`](../llms-full.txt) — indice exaustivo
+
+### Vitrine institucional
+1. [`releases/STATUS-OFICIAL.md`](releases/STATUS-OFICIAL.md) — status oficial das versoes
+2. [`releases/V12.0.0202.md`](releases/V12.0.0202.md) — release validada atual
+3. [`metodologia/00-MAPA-DOCUMENTAL.md`](metodologia/00-MAPA-DOCUMENTAL.md) — mapa documental do projeto
+4. [`metodologia/01-COMO-A-IA-LE-ESTE-REPO.md`](metodologia/01-COMO-A-IA-LE-ESTE-REPO.md) — guia para o RAG
+5. [`metodologia/02-INTEGRACAO-USEHBN.md`](metodologia/02-INTEGRACAO-USEHBN.md) — integracao com o usehbn
+6. [`metodologia/03-PROTOCOLO-GLASSWING.md`](metodologia/03-PROTOCOLO-GLASSWING.md) — camada Glasswing aplicada
+
+## Checkpoint de testes
+
+Ultima execucao do trio minimo: `VR_20260426_111549` (em
+`auditoria/04_evidencias/V12.0.0203/`).
+
+| Suite | Resultado | Build |
+|---|---|---|
+| V1 rapida | OK=171, FALHA=0 | 88107f1 (anterior a Ondas 1-5) |
+| V2 Smoke | OK=14, FALHA=0 | 88107f1 |
+| V2 Canonica | OK=20, FALHA=0 | 88107f1 |
+
+> **Nota:** o trio minimo precisa ser re-executado contra
+> `f7aa84f+ONDA05-em-homologacao` para ratificar Ondas 1-5. Esse e o
+> primeiro gate da Onda 7.
+
+## Governanca publica
+
+- Licenca: TPGL v1.1 (auto-conversao para Apache 2.0 em 4 anos)
+- CLA: obrigatorio para contribuidores externos
+- Politica de seguranca: `SECURITY.md`
+- Camada preventiva: Glasswing G1-G5 documentada em
+  `.hbn/knowledge/0003-glasswing-style-preventive-security.md`
+- Protocolo de governanca AI: HBN
+  ([usehbn.org](https://usehbn.org)) — Credenciamento e o primeiro
+  case study production-scale do HBN.
+
+## Cadencia de update deste dashboard
+
+Update obrigatorio a cada onda fechada. Quem fecha a onda atualiza:
+
+1. Campo `ultima-atualizacao` (frontmatter)
+2. Secao "Status atual" (build novo se houver)
+3. Secao "Onda em curso" (proxima onda)
+4. Tabela "Roadmap apos Onda N"
+
+Ausencia de update bloqueia a abertura da proxima onda.

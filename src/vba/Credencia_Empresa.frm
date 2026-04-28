@@ -37,10 +37,11 @@ Private Sub CR_EnsureFiltroListaDinamico()
     On Error GoTo fim
     If Not mTxtFiltroCredLista Is Nothing Then Exit Sub
     On Error Resume Next
-    Set mTxtFiltroCredLista = Me.Controls("CR_TxtFiltroListaDin")
+    Set mTxtFiltroCredLista = Me.Controls("TxtFiltro_CredenciamentoServico")
+    If mTxtFiltroCredLista Is Nothing Then Set mTxtFiltroCredLista = Me.Controls("CR_TxtFiltroListaDin")
     On Error GoTo fim
     If mTxtFiltroCredLista Is Nothing Then
-        Set mTxtFiltroCredLista = Me.Controls.Add("Forms.TextBox.1", "CR_TxtFiltroListaDin", True)
+        Set mTxtFiltroCredLista = Me.Controls.Add("Forms.TextBox.1", "TxtFiltro_CredenciamentoServico", True)
         With mTxtFiltroCredLista
             .Top = CR_Lista.Top - 32
             .Left = CR_Lista.Left
@@ -50,7 +51,7 @@ Private Sub CR_EnsureFiltroListaDinamico()
             .Text = ""
             .Font.Size = 9
         End With
-        Set lblCr = Me.Controls.Add("Forms.Label.1", "CR_LblFiltroListaDin", True)
+        Set lblCr = Me.Controls.Add("Forms.Label.1", "LblFiltro_CredenciamentoServico", True)
         With lblCr
             .Caption = "Buscar atividade / servi" & ChrW(231) & "o:"
             .Top = mTxtFiltroCredLista.Top - 16
@@ -391,5 +392,4 @@ Private Function Pad3(ByVal v As Variant) As String
         Pad3 = s
     End If
 End Function
-
 

@@ -28,7 +28,11 @@ Public Sub CT2_AbrirCentral()
         "[10] Abrir TESTE_TRILHA" & vbCrLf & _
         "[11] Abrir AUDIT_TESTES" & vbCrLf & _
         "[12] Validacao release: V1 + Smoke + Canonico (~10 min)" & vbCrLf & _
-        "[13] Filtros deterministicos (~1 min)" & vbCrLf & vbCrLf & _
+        "[13] Filtros deterministicos (~1 min)" & vbCrLf & _
+        "[14] Strikes na avaliacao (~2 min)" & vbCrLf & _
+        "[15] CNAE: snapshot, dedup e housekeeping (~1 min)" & vbCrLf & _
+        "[16] Diag rodizio (relatorio do estado atual da fila)" & vbCrLf & _
+        "[17] Configuracao de strikes: ida e volta (~30s)" & vbCrLf & vbCrLf & _
         "Digite o numero:", _
         "Central de Testes V2", "1"))
 
@@ -61,6 +65,14 @@ Public Sub CT2_AbrirCentral()
             CT_ValidarRelease_TrioMinimo
         Case "13"
             CT2_ExecutarFiltrosDeterministicos
+        Case "14"
+            CT2_ExecutarStrikes
+        Case "15"
+            CT2_ExecutarCnae
+        Case "16"
+            Diag_RodizioStatusInteractive
+        Case "17"
+            CT2_ExecutarCfg
         Case Else
             MsgBox "Opcao invalida.", vbInformation, "Central V2"
     End Select
@@ -98,4 +110,19 @@ End Sub
 Public Sub CT2_ExecutarFiltrosDeterministicos()
     TV2_PrepararNavegacaoHumana
     TV2_RunFiltros False
+End Sub
+
+Public Sub CT2_ExecutarStrikes()
+    TV2_PrepararNavegacaoHumana
+    TV2_RunStrikes False
+End Sub
+
+Public Sub CT2_ExecutarCnae()
+    TV2_PrepararNavegacaoHumana
+    TV2_RunCnae False
+End Sub
+
+Public Sub CT2_ExecutarCfg()
+    TV2_PrepararNavegacaoHumana
+    TV2_RunCfg False
 End Sub

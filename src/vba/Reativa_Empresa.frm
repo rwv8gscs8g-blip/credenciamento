@@ -206,8 +206,9 @@ On Error GoTo fim
     ' V12.0.0006: formulario popula a propria lista ao inicializar.
     ' PreenchimentoEmpresa_Inativo usa ControleFormulario("Reativa_Empresa", "RM_Lista");
     ' o form ja esta em VBA.UserForms neste ponto, entao a busca encontra RM_Lista corretamente.
-    ' V12.0.0108: TextBox de busca precisa existir no designer; o codigo apenas conecta ao controle.
-    Set mTxtBusca = UI_PegarTextBoxBuscaTopoDireita()
+    ' TextBox de busca: canonico primeiro, heuristica/legado enquanto o .frx nao for reexportado.
+    Set mTxtBusca = UI_TextBoxSeExiste("TxtFiltro_ReativaEmpresa")
+    If mTxtBusca Is Nothing Then Set mTxtBusca = UI_PegarTextBoxBuscaTopoDireita()
     If mTxtBusca Is Nothing Then Set mTxtBusca = UI_TextBoxSeExiste("TextBox16")
     Call UI_PreencherListaEmpresasInativas(IIf(mTxtBusca Is Nothing, "", CStr(mTxtBusca.Text)))
 fim:

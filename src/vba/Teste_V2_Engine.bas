@@ -555,6 +555,10 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "FLT_003", "FILTROS", "RAPIDO", "AUTO", "Interface", "Busca textual sem acento", "Nome Joao gravado com acento e busca digitada sem acento", "Validar matching textual normalizado", "Apenas ID 001", "Garante busca previsivel para nomes e servicos", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
     TV2_AddCatalogo ws, nr, "FLT_004", "FILTROS", "RAPIDO", "AUTO", "Interface", "Filtro respeita colunas alvo", "Busca por CNPJ usando apenas colunas de nome e servico", "Validar ausencia de falso positivo fora das colunas configuradas", "0 linhas", "Permite cada tela definir sua fronteira de busca", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
     TV2_AddCatalogo ws, nr, "FLT_005", "FILTROS", "RAPIDO", "AUTO", "Interface", "Filtro por coluna CNPJ", "Busca pelo mesmo CNPJ com coluna CNPJ habilitada", "Validar reuso do algoritmo com outra configuracao de colunas", "Apenas ID 002", "Prova que o helper e configuravel sem mudar a regra", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
+    TV2_AddCatalogo ws, nr, "FLT_006", "FILTROS", "RAPIDO", "AUTO", "Rodizio", "Filtro de atividade/servico do rodizio", "Matriz com CNAE, atividade e servico", "Validar busca deterministica por descricao do servico na tela de atribuicao", "Apenas ID 003", "Fecha o filtro superior da tela Rodizio sem depender de TextBox generico", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
+    TV2_AddCatalogo ws, nr, "FLT_007", "FILTROS", "RAPIDO", "AUTO", "Rodizio", "Filtro de entidade do rodizio", "Matriz com CNPJ, nome, contato e telefone", "Validar busca deterministica por CNPJ na lista de entidades do rodizio", "Apenas ID 002", "Fecha o filtro lateral da tela Rodizio com fronteira explicita de colunas", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
+    TV2_AddCatalogo ws, nr, "FLT_008", "FILTROS", "RAPIDO", "AUTO", "Servico", "Filtro de manutencao de servicos", "Matriz com SERV_ID, ATIV_ID, CNAE, atividade e servico", "Validar busca por CNAE na manutencao de servicos", "Apenas ID 003", "Garante que cadastro/alteracao de servicos use o mesmo contrato de filtro", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
+    TV2_AddCatalogo ws, nr, "FLT_009", "FILTROS", "RAPIDO", "AUTO", "Rodizio", "Limpeza do filtro de entidade do rodizio", "Filtrar Local 3 e depois limpar o termo", "Validar que campo vazio restaura todas as entidades", "1 linha filtrada; 4 linhas apos limpar", "Impede estado residual em que a tela continua ocultando entidades sem filtro ativo", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
 
     TV2_FormatarCatalogoSheet
     TV2_GerarRoteiroAssistido
@@ -639,6 +643,15 @@ Private Sub TV2_SetConfigCanonica()
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_UF).Value = "PE"
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_SECRETARIA).Value = "Secretaria Testes V2"
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = 5
+    ' V12.0.0203 ONDA 1 — defaults canonicos para a regra de strikes.
+    ' MAX_STRIKES=1 mantem o comportamento legado da suite canonica
+    ' existente (CS_14 ainda suspende na primeira nota baixa).
+    ' DIAS_SUSPENSAO_STRIKE=0 faz o helper Suspender cair no fallback
+    ' historico em meses (PERIODO_SUSPENSAO_MESES), preservando os
+    ' asserts de CS_14/CS_16. A suite TV2_RunStrikes ajusta esses dois
+    ' valores localmente via TV2_SetStrikesConfig antes de cada cenario.
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = 1
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = 0
 
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
 End Sub
@@ -2207,6 +2220,10 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "FLT_003", "AUTO", "Validar busca sem acento em texto acentuado", "Executar a opcao 13 da Central V2 e conferir a linha FLT_003", "Apenas ID 001", "Linha do cenario FLT_003", "Garante busca previsivel por nome ou servico", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "FLT_004", "AUTO", "Validar fronteira de colunas do filtro", "Executar a opcao 13 da Central V2 e conferir a linha FLT_004", "0 linhas quando CNPJ nao esta nas colunas-alvo", "Linha do cenario FLT_004", "Evita falso positivo fora da configuracao da tela", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "FLT_005", "AUTO", "Validar filtro por CNPJ quando coluna habilitada", "Executar a opcao 13 da Central V2 e conferir a linha FLT_005", "Apenas ID 002", "Linha do cenario FLT_005", "Prova reuso do algoritmo com configuracao diferente", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FLT_006", "AUTO", "Validar filtro do rodizio por atividade/servico", "Executar a opcao 13 da Central V2 e conferir a linha FLT_006", "Apenas ID 003", "Linha do cenario FLT_006", "Prova busca deterministica no filtro superior do rodizio", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FLT_007", "AUTO", "Validar filtro do rodizio por entidade/CNPJ", "Executar a opcao 13 da Central V2 e conferir a linha FLT_007", "Apenas ID 002", "Linha do cenario FLT_007", "Prova busca deterministica no filtro lateral do rodizio", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FLT_008", "AUTO", "Validar filtro de manutencao de servicos por CNAE", "Executar a opcao 13 da Central V2 e conferir a linha FLT_008", "Apenas ID 003", "Linha do cenario FLT_008", "Prova reuso do contrato em cadastro e manutencao de servicos", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FLT_009", "AUTO", "Validar limpeza do filtro de entidade do rodizio", "Executar a opcao 13 da Central V2 e conferir a linha FLT_009", "1 linha filtrada; 4 linhas apos limpar", "Linha do cenario FLT_009", "Prova que campo vazio desfaz filtro residual na tela de atribuicao", "AUTOMATIZADO"
 
     TV2_FormatarRoteiroSheet
 End Sub

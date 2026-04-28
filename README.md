@@ -84,14 +84,40 @@ operacional controlada da documentação institucional auditável.
 
 ## Leitura recomendada
 
-- [docs/INDEX.md](docs/INDEX.md)
-- [docs/ARQUITETURA.md](docs/ARQUITETURA.md)
-- [docs/COMPLIANCE_CMMI_ISO.md](docs/COMPLIANCE_CMMI_ISO.md)
-- [docs/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](docs/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
+### Para humanos
+
+- [docs/INDEX.md](docs/INDEX.md) — indice publico Diataxis-aware
+- [docs/explanation/ARQUITETURA.md](docs/explanation/ARQUITETURA.md)
+- [docs/reference/COMPLIANCE_CMMI_ISO.md](docs/reference/COMPLIANCE_CMMI_ISO.md)
+- [docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
+- [obsidian-vault/00-DASHBOARD.md](obsidian-vault/00-DASHBOARD.md) — dashboard executivo
 - [SECURITY.md](SECURITY.md)
 - [CONTRIBUTING.md](CONTRIBUTING.md)
 - [CLA.md](CLA.md)
 - [LICENSE](LICENSE)
+
+### Para IAs
+
+- [AGENTS.md](AGENTS.md) — entrada canonica (padrao [agents.md](https://agents.md/))
+- [llms.txt](llms.txt) — mapa curado para LLMs (padrao [llmstxt.org](https://llmstxt.org/))
+- [llms-full.txt](llms-full.txt) — indice exaustivo
+- [.hbn/relay/INDEX.md](.hbn/relay/INDEX.md) — bastao + ciclo ativo (HBN)
+- [.hbn/knowledge/0001-regras-v203-inegociaveis.md](.hbn/knowledge/0001-regras-v203-inegociaveis.md) — 10 regras V203
+
+## Metodologia
+
+Este projeto adotou em 28/04/2026 a metodologia hibrida composta por:
+
+| Protocolo | Papel |
+|---|---|
+| [HBN](https://usehbn.org) | core de coordenacao inter-IA (relay, readback, hearback, truth barrier) |
+| [Diataxis](https://diataxis.fr/) | docs/ para humanos (4 quadrantes) |
+| [llms.txt](https://llmstxt.org/) | docs/ para LLMs (mapa curado) |
+| [agents.md](https://agents.md/) | contrato unificado de agentes |
+| Glasswing-style preventive | seguranca preventiva (5 vetores domain-specific) |
+
+Detalhes em [obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md](obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md).
+Este projeto e o primeiro [case study](https://github.com/...) production-scale do `usehbn`.
 
 ## Créditos
 

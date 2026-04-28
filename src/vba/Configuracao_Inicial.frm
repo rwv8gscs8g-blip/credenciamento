@@ -70,6 +70,13 @@ On Error GoTo erro_carregamento:
     Dim prazoTxt As String
     Dim logoTxt As String
     Dim msgSave As String
+    ' V12.0.0203 ONDA 4 — campos da regra de strikes na avaliacao.
+    Dim notaCorteTxt As String
+    Dim maxStrikesTxt As String
+    Dim diasSuspensaoTxt As String
+    Dim notaCorteVal As Double
+    Dim maxStrikesVal As Long
+    Dim diasSuspensaoVal As Long
 
     Set wsCfg = ThisWorkbook.Sheets(SHEET_CONFIG)
     If Not Util_PrepararAbaParaEscrita(wsCfg, estavaProtegida, senhaProtecao) Then
@@ -82,6 +89,19 @@ On Error GoTo erro_carregamento:
     prazoTxt = Trim$(ValorControleTexto(Me, "PR_Val_OS", CStr(PR_Val_OS)))
     logoTxt = Trim$(ValorControleTexto(Me, "Caminho_Logo", CStr(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_LOGO).Value)))
 
+    ' V12.0.0203 ONDA 5 — leitura DETERMINISTICA dos 3 campos novos pelos
+    ' nomes canonicos definidos no designer pelo gestor:
+    '   TxtNotaCorte, TxtMaxStrikes, TxtDiasSuspensao.
+    ' On Error Resume Next protege contra workbooks antigos que ainda nao
+    ' tenham os controles renomeados — nesse caso o campo e ignorado e o
+    ' valor anterior em CONFIG e preservado pela validacao defensiva
+    ' mais abaixo (notaCorteTxt = "" mantem cell intacta).
+    On Error Resume Next
+    notaCorteTxt = Trim$(CStr(Me.Controls("TxtNotaCorte").Value))
+    maxStrikesTxt = Trim$(CStr(Me.Controls("TxtMaxStrikes").Value))
+    diasSuspensaoTxt = Trim$(CStr(Me.Controls("TxtDiasSuspensao").Value))
+    On Error GoTo erro_carregamento
+
     If prazoTxt = "" Then prazoTxt = "5"
 
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_GESTOR).Value = gestorTxt
@@ -89,6 +109,28 @@ On Error GoTo erro_carregamento:
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MUNICIPIO).Value = municipioTxt
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value = prazoTxt
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value = "1"
+
+    ' V12.0.0203 ONDA 4 — Persistencia da regra de strikes.
+    ' Validacao defensiva: se o usuario apagar os campos, mantem o
+    ' valor atual em CONFIG (sem zerar nem suspender o sistema).
+    If notaCorteTxt <> "" Then
+        notaCorteVal = CDbl(Val(notaCorteTxt))
+        If notaCorteVal > 0 And notaCorteVal <= 10 Then
+            wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = notaCorteVal
+        End If
+    End If
+    If maxStrikesTxt <> "" Then
+        maxStrikesVal = CLng(Val(maxStrikesTxt))
+        If maxStrikesVal >= 1 And maxStrikesVal <= 50 Then
+            wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = maxStrikesVal
+        End If
+    End If
+    If diasSuspensaoTxt <> "" Then
+        diasSuspensaoVal = CLng(Val(diasSuspensaoTxt))
+        If diasSuspensaoVal >= 0 And diasSuspensaoVal <= 3650 Then
+            wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = diasSuspensaoVal
+        End If
+    End If
 
     Call Util_RestaurarProtecaoAba(wsCfg, estavaProtegida, senhaProtecao)
     If Not Util_SalvarWorkbookSeguro(msgSave) Then
@@ -104,6 +146,12 @@ erro_carregamento:
     On Error GoTo 0
     MsgBox "Falha ao salvar parâmetros: (" & CStr(Err.Number) & ") " & Err.Description, vbCritical, "Configurações iniciais"
 End Sub
+
+' V12.0.0203 ONDA 5 — As funcoes heuristicas CI_BuscarTextBoxPorLabel,
+' CI_TextoTextBoxPorLabel e CI_DefinirTextoTextBoxPorLabel foram REMOVIDAS.
+' A V203 e deterministica: os textboxes da regra de strikes sao acessados
+' por nome canonico (TxtNotaCorte, TxtMaxStrikes, TxtDiasSuspensao)
+' diretamente em UserForm_Initialize e B_Parametros_Click.
 
 Private Sub BR_Backup_Click()
 On Error GoTo erro_carregamento:
@@ -266,6 +314,18 @@ On Error GoTo erro_carregamento:
     ' Garantir que o prazo da Pre-OS esteja sempre preenchido (valor padrao 5 se nunca configurado)
     If PR_Val_OS = "" Or PR_Val_OS = "0" Or IsEmpty(PR_Val_OS) Then PR_Val_OS = "5"
     TP_Valor = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value
+
+    ' V12.0.0203 ONDA 5 — popular campos novos da regra de strikes
+    ' diretamente pelos nomes canonicos definidos no designer:
+    '   TxtNotaCorte, TxtMaxStrikes, TxtDiasSuspensao.
+    ' Os defaults vem dos getters em Util_Config (5, 3, 90).
+    ' On Error Resume Next protege contra workbooks antigos que ainda
+    ' nao tenham os controles renomeados — sem heuristica.
+    On Error Resume Next
+    Me.Controls("TxtNotaCorte").Value = Format$(GetNotaMinimaAvaliacao(), "0.0")
+    Me.Controls("TxtMaxStrikes").Value = CStr(GetMaxStrikes())
+    Me.Controls("TxtDiasSuspensao").Value = CStr(GetDiasSuspensaoStrike())
+    On Error GoTo erro_carregamento
 
     ' Ajustes de interface: acentuacao e rotulos
     On Error Resume Next

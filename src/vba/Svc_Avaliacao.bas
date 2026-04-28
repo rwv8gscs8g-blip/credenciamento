@@ -361,11 +361,50 @@ Public Function AvaliarOS( _
         Exit Function
     End If
 
-    ' 7b. Regra: media abaixo da nota minima => suspende empresa (Iteracao 2)
+    ' 7b. V12.0.0203 ONDA 1 — Regra de strikes na avaliacao.
+    '
+    ' Cada avaliacao com media estritamente menor que a nota de corte
+    ' (GetNotaMinimaAvaliacao, default 5.0) conta 1 strike para a empresa.
+    ' Quando os strikes acumulados (incluindo a avaliacao recem-inserida)
+    ' atingem MAX_STRIKES (GetMaxStrikes, default 3), a empresa e
+    ' suspensa por DIAS_SUSPENSAO_STRIKE dias (GetDiasSuspensaoStrike,
+    ' default 90). MAX_STRIKES = 1 reproduz a regra antiga (suspende na
+    ' primeira nota baixa). Strikes sao recontados on-the-fly em
+    ' Repo_Avaliacao.ContarStrikesPorEmpresa, que varre SHEET_CAD_OS
+    ' filtrando OS CONCLUIDA com COL_OS_MEDIA < notaCorte. Ao reativar
+    ' (auto por DT_FIM_SUSP <= hoje, ou manual via Reativar()), a
+    ' empresa volta a contar do zero porque GravarStatusEmpresa zera
+    ' QTD_RECUSAS e o filtro de strikes nao olha para o passado anterior
+    ' a esse ponto na proxima evolucao (ver auditoria/27 secao 03 e
+    ' auditoria/28 secao 04 para o roadmap da janela temporal).
     notaMin = GetNotaMinimaAvaliacao()
     If media < notaMin Then
-        resSusp = Suspender(os.EMP_ID)
-        ' Suspensão registra sua própria auditoria; aqui só garantimos a regra de negócio.
+        Dim maxStrikes As Long
+        Dim strikesAtuais As Long
+        Dim diasSusp As Long
+
+        maxStrikes = GetMaxStrikes()
+        strikesAtuais = Repo_Avaliacao.ContarStrikesPorEmpresa(os.EMP_ID, notaMin)
+
+        ' Auditoria do strike (mesmo quando ainda nao suspende).
+        RegistrarEvento _
+            EVT_AVALIACAO, ENT_EMP, os.EMP_ID, _
+            "STRIKES=" & CStr(strikesAtuais - 1) & "/" & CStr(maxStrikes), _
+            "STRIKES=" & CStr(strikesAtuais) & "/" & CStr(maxStrikes) & _
+            "; NOTA_MIN=" & Format$(notaMin, "0.00") & _
+            "; MEDIA=" & FormatarMediaAvaliacao(media), _
+            "Svc_Avaliacao"
+
+        If strikesAtuais >= maxStrikes Then
+            diasSusp = GetDiasSuspensaoStrike()
+            If diasSusp > 0 Then
+                resSusp = Suspender(os.EMP_ID, diasSusp, "STRIKES=" & CStr(strikesAtuais))
+            Else
+                ' Fallback: usa a regra antiga em meses.
+                resSusp = Suspender(os.EMP_ID, 0, "STRIKES=" & CStr(strikesAtuais) & "; FALLBACK_MESES")
+            End If
+            ' Suspender registra sua propria auditoria.
+        End If
     End If
 
     ' 8. Avancar fila do rodizio: mover empresa para fim da fila SEM punicao.

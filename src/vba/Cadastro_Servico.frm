@@ -21,6 +21,12 @@ Private mIgnorarFiltro As Boolean
 Private WithEvents mTxtBuscaTopo As MSForms.TextBox
 Attribute mTxtBuscaTopo.VB_VarHelpID = -1
 
+Private Function UI_TextBoxSeExiste(ByVal nome As String) As MSForms.TextBox
+    On Error Resume Next
+    Set UI_TextBoxSeExiste = Me.Controls(nome)
+    On Error GoTo 0
+End Function
+
 Private Function UI_PegarTextBoxBuscaTopoDireita() As MSForms.TextBox
     Dim ctl As Object
     Dim melhor As MSForms.TextBox
@@ -232,8 +238,9 @@ Call GarantirAtividadesBase
 Call PreenchimentoListaAtividade("", SV_Lista)
 mIgnorarFiltro = False
 
-' Busca incremental da lista (TextBox topo-direita).
-Set mTxtBuscaTopo = UI_PegarTextBoxBuscaTopoDireita()
+' Busca incremental da lista: canonico primeiro, heuristica enquanto o .frx nao for reexportado.
+Set mTxtBuscaTopo = UI_TextBoxSeExiste("TxtFiltro_CadastroServicoAtividade")
+If mTxtBuscaTopo Is Nothing Then Set mTxtBuscaTopo = UI_PegarTextBoxBuscaTopoDireita()
 mIgnorarFiltro = True
 If Not mTxtBuscaTopo Is Nothing Then mTxtBuscaTopo.Text = ""
 mIgnorarFiltro = False

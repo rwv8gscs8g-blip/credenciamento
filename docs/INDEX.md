@@ -1,54 +1,91 @@
-# Índice Público
+---
+titulo: Indice publico de documentacao
+ultima-atualizacao: 2026-04-28
+diataxis: reference
+hbn-track: fast_track
+audiencia: ambos
+versao-sistema: V12.0.0203
+---
 
-Este é o índice canônico de leitura pública do repositório.
+# Indice Publico (Diataxis-aware)
+
+Este indice usa o framework [Diataxis](https://diataxis.fr/). Cada
+documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 
 ## Comece por aqui
 
-- [README.md](../README.md)
-- [LICENSE](../LICENSE)
-- [CLA.md](../CLA.md)
-- [SECURITY.md](../SECURITY.md)
-- [CONTRIBUTING.md](../CONTRIBUTING.md)
-- [CHANGELOG.md](../CHANGELOG.md)
+- [`README.md`](../README.md) — posicionamento publico humano
+- [`AGENTS.md`](../AGENTS.md) — entrada canonica para IAs
+- [`llms.txt`](../llms.txt) — mapa curado para LLMs
+- [`obsidian-vault/00-DASHBOARD.md`](../obsidian-vault/00-DASHBOARD.md) — dashboard executivo
 
-## Documentação técnica
+## docs/tutorials/ — aprender (passo-a-passo)
 
-- [docs/ARQUITETURA.md](ARQUITETURA.md)
-- [docs/COMPLIANCE_CMMI_ISO.md](COMPLIANCE_CMMI_ISO.md)
-- [docs/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md](GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md)
-- [docs/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md](PROPOSTA_TESTES_V2_CENARIO_CANONICO.md)
-- [docs/testes/INDEX.md](testes/INDEX.md)
-- [docs/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
-- [docs/licenca/README.md](licenca/README.md)
-- [docs/legal/CLA_INSTITUCIONAL_TEMPLATE.md](legal/CLA_INSTITUCIONAL_TEMPLATE.md)
+> Conteudo em construcao na Onda 6+. Sera populado com tutoriais para:
+>
+> - Operador municipal: primeira vez usando o sistema
+> - Contribuidor publico: primeiro pull request
+> - Auditor externo: primeiro audit completo
 
-## Auditoria e testes
+## docs/how-to/ — cookbook (problema concreto)
 
-- [auditoria/00_SUMARIO_EXECUTIVO.md](../auditoria/00_SUMARIO_EXECUTIVO.md)
-- [auditoria/03_AUDITORIA_REGRAS_DE_NEGOCIO.md](../auditoria/03_AUDITORIA_REGRAS_DE_NEGOCIO.md)
-- [auditoria/04_MATRIZ_MESTRE_DE_TESTES.md](../auditoria/04_MATRIZ_MESTRE_DE_TESTES.md)
-- [auditoria/14_FECHAMENTO_BACKLOG_OPUS_V12_0202.md](../auditoria/14_FECHAMENTO_BACKLOG_OPUS_V12_0202.md)
-- [auditoria/15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md](../auditoria/15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md)
-- [auditoria/16_AUDITORIA_OPUS_PUBLICACAO_V12_0202.md](../auditoria/16_AUDITORIA_OPUS_PUBLICACAO_V12_0202.md)
-- [auditoria/17_PARECER_LICENCIAMENTO_TPGL_v1_1.md](../auditoria/17_PARECER_LICENCIAMENTO_TPGL_v1_1.md)
-- [auditoria/18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md](../auditoria/18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md)
-- [auditoria/19_AUDITORIA_PONTOS_FORTES_V12_0202.md](../auditoria/19_AUDITORIA_PONTOS_FORTES_V12_0202.md)
-- [auditoria/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md](../auditoria/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md)
-- [auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md](../auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md)
-- [auditoria/22_STATUS_MICROEVOLUCOES_V12_0203.md](../auditoria/22_STATUS_MICROEVOLUCOES_V12_0203.md)
-- [auditoria/23_PARECER_OPUS_FECHAMENTO_E_ORGANIZACAO_V12_0203.md](../auditoria/23_PARECER_OPUS_FECHAMENTO_E_ORGANIZACAO_V12_0203.md)
-- [auditoria/24_FECHAMENTO_V12_0203.md](../auditoria/24_FECHAMENTO_V12_0203.md)
-- [auditoria/evidencias/V12.0.0202/MANIFEST.md](../auditoria/evidencias/V12.0.0202/MANIFEST.md)
-- [auditoria/evidencias/V12.0.0203/MANIFEST.md](../auditoria/evidencias/V12.0.0203/MANIFEST.md)
-- [auditoria/INDEX.md](../auditoria/INDEX.md)
+- [`how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md`](how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md) — acesso a materiais operacionais controlados
 
-## Releases e status
+## docs/reference/ — consulta (regras, API, governanca)
 
-- [obsidian-vault/releases/STATUS-OFICIAL.md](../obsidian-vault/releases/STATUS-OFICIAL.md)
-- [obsidian-vault/releases/V12.0.0202.md](../obsidian-vault/releases/V12.0.0202.md)
-- [obsidian-vault/00-DASHBOARD.md](../obsidian-vault/00-DASHBOARD.md)
+- [`reference/COMPLIANCE_CMMI_ISO.md`](reference/COMPLIANCE_CMMI_ISO.md) — mapeamento CMMI/ISO
+- [`reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`](reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md) — governanca de release
+- [`reference/testes/INDEX.md`](reference/testes/INDEX.md) — indice de testes
+- [`reference/licenca/README.md`](reference/licenca/README.md) — modelo de licenca
+- [`reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md`](reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md) — template CLA institucional
 
-## Código
+## docs/explanation/ — entender (arquitetura, decisoes)
 
-- [src/vba](../src/vba)
-- [doc](../doc)
+- [`explanation/ARQUITETURA.md`](explanation/ARQUITETURA.md) — arquitetura do sistema
+- [`explanation/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md`](explanation/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md) — racional dos cenarios V2
+
+## auditoria/ — historia + evidencias publicas
+
+- [`auditoria/00_status/`](../auditoria/00_status/) — snapshots de estado (00, 22, 24, 26)
+- [`auditoria/01_regras_e_governanca/`](../auditoria/01_regras_e_governanca/) — regras canonicas (00 inegociaveis, 03, 04, 14, 16, 17, 18, 19, 21, 23)
+- [`auditoria/02_planos/`](../auditoria/02_planos/) — planos (15, 20, 25, 27)
+- [`auditoria/03_ondas/`](../auditoria/03_ondas/) — documentacao tecnica de cada onda (28-41)
+- [`auditoria/04_evidencias/`](../auditoria/04_evidencias/) — CSVs e manifestos hashados
+- [`auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md`](../auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md) — auditoria honesta + plano (raiz)
+
+## .hbn/ — coordenacao inter-IA (HBN-native)
+
+- [`.hbn/relay/INDEX.md`](../.hbn/relay/INDEX.md) — bastao + ciclo ativo
+- [`.hbn/knowledge/INDEX.md`](../.hbn/knowledge/INDEX.md) — decisoes reutilizaveis
+- [`.hbn/readbacks/`](../.hbn/readbacks/) — snapshots safe_track
+- [`.hbn/results/`](../.hbn/results/) — ERPs
+
+## Releases e status (vitrine institucional)
+
+- [`obsidian-vault/00-DASHBOARD.md`](../obsidian-vault/00-DASHBOARD.md)
+- [`obsidian-vault/releases/STATUS-OFICIAL.md`](../obsidian-vault/releases/STATUS-OFICIAL.md)
+- [`obsidian-vault/releases/V12.0.0202.md`](../obsidian-vault/releases/V12.0.0202.md)
+- [`obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md`](../obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md)
+- [`obsidian-vault/metodologia/01-COMO-A-IA-LE-ESTE-REPO.md`](../obsidian-vault/metodologia/01-COMO-A-IA-LE-ESTE-REPO.md)
+- [`obsidian-vault/metodologia/02-INTEGRACAO-USEHBN.md`](../obsidian-vault/metodologia/02-INTEGRACAO-USEHBN.md)
+- [`obsidian-vault/metodologia/03-PROTOCOLO-GLASSWING.md`](../obsidian-vault/metodologia/03-PROTOCOLO-GLASSWING.md)
+
+## Arquivos canonicos da raiz
+
+- [`README.md`](../README.md)
+- [`LICENSE`](../LICENSE)
+- [`CLA.md`](../CLA.md)
+- [`SECURITY.md`](../SECURITY.md)
+- [`CONTRIBUTING.md`](../CONTRIBUTING.md)
+- [`CHANGELOG.md`](../CHANGELOG.md)
+- [`AGENTS.md`](../AGENTS.md)
+- [`CLAUDE.md`](../CLAUDE.md)
+- [`llms.txt`](../llms.txt)
+- [`llms-full.txt`](../llms-full.txt)
+
+## Codigo
+
+- [`src/vba/`](../src/vba/) — fonte de verdade VBA
+- [`local-ai/vba_import/`](../local-ai/vba_import/) — pacote oficial de import
+- [`local-ai/vba_import/000-REGRA-OURO.md`](../local-ai/vba_import/000-REGRA-OURO.md)
+- [`doc/`](../doc/) — dados estruturais de referencia
