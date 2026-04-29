@@ -9,7 +9,7 @@ Public Const APP_RELEASE_STATUS As String = "VALIDADO"
 Public Const APP_RELEASE_CANAL As String = "DESENVOLVIMENTO"
 Public Const APP_RELEASE_ALVO As String = "V12.0.0203"
 Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0202|DESENVOLVIMENTO|V12.0.0203"
-' V12.0.0203 ONDA 5 — carimbo manual do build (sem rodar publicar_vba_import.sh).
+' V12.0.0203 ONDA 5 - carimbo manual do build (sem rodar publicar_vba_import.sh).
 ' Identificador semantico: <commit-base>+ONDA<NN>-em-homologacao quando a arvore
 ' tem mudancas nao commitadas; trocar para <commit-base>+ONDA<NN>-homologado
 ' apos commitar a onda. AppRelease_BuildImportadoRotulo trata os dois sufixos.
@@ -164,3 +164,5 @@ End Function
 Public Function GetReleaseTestKey() As String
     GetReleaseTestKey = AppRelease_TestKey()
 End Function
+
+

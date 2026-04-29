@@ -35,6 +35,42 @@ fonte-canonica: este arquivo (publico) + .hbn/knowledge/0001-regras-v203-inegoci
 9. **`Mod_Types.bas` pode ser tocado APENAS na Onda 9** — com plano
    documentado e aprovado.
 10. **Nenhum arquivo importavel fora de `vba_import/`** — sem excecao.
+11. **Codigo de produto na resposta da IA e violacao.** Toda entrega de
+    codigo VBA, formula Excel privilegiada, ou conteudo de form sai
+    como **arquivo no repositorio** (`local-ai/vba_import/...`) +
+    **procedimento atualizado** em `auditoria/03_ondas/onda_NN_*/<NN+1>_PROCEDIMENTO_IMPORT.md`.
+    A IA pode incluir na resposta: comandos de shell para o operador
+    rodar, tabelas operacionais [arquivo | acao no Excel], saida de
+    diagnostico, e referencias por path. **Adicionado no hotfix v2 da
+    Onda 6 (2026-04-28)** apos violacao real (ver
+    `.hbn/knowledge/0003-glasswing-style-preventive-security.md`
+    secao G6).
+12. **Toda entrega de arquivo apresentada em tabela canonica de 4
+    colunas** (`#`, `Arquivo no repositorio`, `Acao no Excel/sistema`,
+    `Tipo de operacao`). Sem prosa solta, sem ausencia de prefixo
+    alfabetico. Pre-condicoes obrigatorias: arquivos existem no
+    working tree, hash bate entre `src/vba/` e `local-ai/vba_import/`,
+    `.code-only.txt` puro com primeira linha `Private/Public Sub` ou
+    `Public Function`. Pos-condicoes: a resposta termina com path do
+    procedimento + comando de commit + linha de retorno esperado.
+    Especificacao completa em `.hbn/knowledge/0004-padrao-resposta-tabela-de-entrega.md`.
+    **Adicionado no hotfix v3 da Onda 6 (2026-04-28)** apos aprovacao
+    explicita do Mauricio.
+13. **Encoding e EOF de `.bas`/`.frm` sao parte da Regra de Ouro.**
+    Todo `.bas` e `.frm` versionado deve ter (a) line endings CRLF
+    (Windows), (b) ASCII puro em comentarios — proibido em-dash
+    (`—` U+2014), ellipsis (`…`), smart quotes — substituir por
+    equivalentes ASCII, (c) **EOF terminando com 3 CRLFs**
+    (`\r\n\r\n\r\n` apos `End Sub`/`End Function`) — equivalente a 2
+    linhas em branco extras obrigatorias. Verificar com
+    `tail -c 6 <arquivo> | xxd` (deve retornar `0d0a0d0a0d0a`).
+    Violacao causa o bug "Invalido fora de um procedimento" ou
+    "Metodo ou membro de dados nao encontrado" quando reimportado no
+    VBE. Especificacao completa em
+    `.hbn/knowledge/0006-padronizacao-encoding-line-endings-frm.md`.
+    **Adicionado no hotfix v5 da Onda 6 (2026-04-28)** apos
+    Mod_Limpeza_Base.bas + Preencher.bas terem causado regressao real
+    no workbook em homologacao do Mauricio.
 
 ## Auditoria de cumprimento
 

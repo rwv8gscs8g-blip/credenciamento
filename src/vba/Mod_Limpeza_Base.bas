@@ -2,7 +2,7 @@ Attribute VB_Name = "Mod_Limpeza_Base"
 Option Explicit
 
 ' ============================================================
-' V12.0.0203 ONDA 5 — Limpeza TOTAL e idempotente da base
+' V12.0.0203 ONDA 5 - Limpeza TOTAL e idempotente da base
 ' (versao oficial do projeto, substitui o uso da macro
 '  descartavel local-ai/vba_import/Limpa_Base_Total.bas)
 ' ============================================================
@@ -11,7 +11,7 @@ Option Explicit
 '   A rotina antiga Preencher.Limpa_Base assumia que a linha 1
 '   de cada aba sempre era cabecalho. Em homologacao 28/04/2026
 '   detectamos workbooks com cabecalho corrompido (linha 1
-'   contendo dados — ex.: "Empresa 1 22.222.222/2222-22"),
+'   contendo dados - ex.: "Empresa 1 22.222.222/2222-22"),
 '   e a rotina antiga deixava esses zumbis sobreviverem ao
 '   reset. Esse modulo:
 '
@@ -22,7 +22,7 @@ Option Explicit
 '       cabecalho canonico a partir das listas LBT_Cabecalho*().
 '     - Usa MAX(End(xlUp)) das colunas A..AT (50 colunas) para
 '       evitar UsedRange "vazado" para 1.048.576 linhas.
-'     - Trata AUDIT_LOG, RELATORIO e as abas _INATIVAS — nao
+'     - Trata AUDIT_LOG, RELATORIO e as abas _INATIVAS - nao
 '       so as 5 abas operacionais.
 '
 ' Quem chama:
@@ -123,7 +123,7 @@ Private Function MLB_LimparAba(ByVal nomeAba As String, ByVal cabecalhoCanonico 
         acao = "cabecalho preservado"
     Else
         linhaInicio = 1
-        acao = "cabecalho NAO encontrado — apagado e reescrito"
+        acao = "cabecalho NAO encontrado - apagado e reescrito"
     End If
 
     qtdLinhas = 0
@@ -139,7 +139,7 @@ Private Function MLB_LimparAba(ByVal nomeAba As String, ByVal cabecalhoCanonico 
         Next i
     End If
 
-    ' Resetar contador (Cells(1, 44) — convencao COL_CONTADOR_AR)
+    ' Resetar contador (Cells(1, 44) - convencao COL_CONTADOR_AR)
     On Error Resume Next
     ws.Cells(1, 44).Value = 0
     On Error GoTo falhaAba
@@ -196,7 +196,7 @@ Private Function MLB_LinhaEhCabecalho(ByVal ws As Worksheet) As Boolean
         End If
     End If
 
-    ' CNPJ formatado em A1 — e dado, nao cabecalho.
+    ' CNPJ formatado em A1 - e dado, nao cabecalho.
     If Len(a1) >= 14 And InStr(a1, ".") > 0 And InStr(a1, "/") > 0 Then
         MLB_LinhaEhCabecalho = False
         Exit Function
@@ -294,3 +294,5 @@ Private Sub MLB_GravarRelatorio(ByVal texto As String)
 
 falha:
 End Sub
+
+

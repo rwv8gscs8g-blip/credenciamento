@@ -2227,7 +2227,7 @@ End Sub
 
 Public Sub ResetarECarregarCNAE_Padrao()
 ' ---------------------------------------------------------------
-' V12.0.0143 — Reescrita completa com import direto inline.
+' V12.0.0143 - Reescrita completa com import direto inline.
 ' Elimina dependencias de ProximoId por-linha e AtividadeJaExiste.
 ' Valida CSV ANTES de apagar dados. Diagnostico em cada passo.
 ' ---------------------------------------------------------------
@@ -2301,7 +2301,7 @@ textoCsv = Replace(textoCsv, vbCr, vbLf)
 linhas = Split(textoCsv, vbLf)
 
 If UBound(linhas) < 1 Then
-    MsgBox "CSV tem menos de 2 linhas — sem dados para importar." & vbCrLf & _
+    MsgBox "CSV tem menos de 2 linhas - sem dados para importar." & vbCrLf & _
            "Arquivo: " & caminho, vbCritical, "Reset CNAE"
     Application.StatusBar = False
     Exit Sub
@@ -2320,7 +2320,7 @@ colDesc = IdentificarColunaCabecalho(partesCabec, "DESCRICAO", "DENOMINACAO", "D
 temCabecalho = (colCnae >= 0 And colDesc >= 0)
 
 If Not temCabecalho Then
-    ' Fallback: CSV sem cabecalho reconhecido — tentar colunas posicionais.
+    ' Fallback: CSV sem cabecalho reconhecido - tentar colunas posicionais.
     ' Formato esperado: ID, CNAE, DESCRICAO (3 colunas).
     If UBound(partesCabec) >= 2 Then
         colCnae = 1
@@ -2347,12 +2347,12 @@ If MsgBox("Reset vai APAGAR dados atuais da aba ATIVIDADES e reimportar do CSV."
     Exit Sub
 End If
 
-' V12.0.0203 ONDA 3 — pergunta se quer podar snapshots antigos antes
+' V12.0.0203 ONDA 3 - pergunta se quer podar snapshots antigos antes
 ' de criar mais um. Mantem os 5 mais recentes por default.
 Dim qtdPodadas As Long
 qtdPodadas = CnaeConfirmarPodaSnapshots(5)
 
-' --- ETAPA 5: Preparar aba — desproteger UMA VEZ para todo o ciclo ---
+' --- ETAPA 5: Preparar aba - desproteger UMA VEZ para todo o ciclo ---
 etapa = "Preparando aba ATIVIDADES"
 Application.StatusBar = "Reset CNAE: " & etapa & "..."
 Set wsAtiv = ThisWorkbook.Sheets(SHEET_ATIVIDADES)
@@ -2374,7 +2374,7 @@ If ultima >= LINHA_DADOS Then
 End If
 wsAtiv.Cells(1, COL_CONTADOR_AR).Value = 0
 
-' --- ETAPA 7: Import DIRETO — escrita inline sem ProximoId/AtividadeJaExiste ---
+' --- ETAPA 7: Import DIRETO - escrita inline sem ProximoId/AtividadeJaExiste ---
 etapa = "Importando registros"
 contadorId = 0
 linhaEscrita = LINHA_DADOS
@@ -2415,7 +2415,7 @@ For idxLinha = inicioLoop To totalLinhas
     cnaeVal = FormatarCodigoCNAE(cnaeVal)
     descVal = LimparTextoImportado(descVal)
 
-    ' Escrever diretamente — sem ProximoId (contador inline), sem AtividadeJaExiste (aba limpa).
+    ' Escrever diretamente - sem ProximoId (contador inline), sem AtividadeJaExiste (aba limpa).
     contadorId = contadorId + 1
     wsAtiv.Cells(linhaEscrita, COL_ATIV_ID).Value = Format$(contadorId, "000")
     wsAtiv.Cells(linhaEscrita, COL_ATIV_CNAE).NumberFormat = "@"
@@ -2458,9 +2458,9 @@ etapa = "Pos-processamento"
 Application.StatusBar = "Reset CNAE: " & etapa & "..."
 Call InvalidarCacheCnaeAtividade
 
-' V12.0.0203 ONDA 2 — snapshot de CAD_SERV antes da limpeza,
+' V12.0.0203 ONDA 2 - snapshot de CAD_SERV antes da limpeza,
 ' validacao de duplicidade e auditoria via EVT_TRANSACAO.
-' V12.0.0203 ONDA 3 — dedup AUTOMATICO de duplicatas remanescentes
+' V12.0.0203 ONDA 3 - dedup AUTOMATICO de duplicatas remanescentes
 ' em ATIVIDADES (decisao do operador: import remanescente nao deve
 ' persistir no estado final).
 Dim nomeSnapshot As String
@@ -3230,7 +3230,7 @@ End Sub
 Sub PreencherAvaliacaoOS()
 ' V12: eliminado Sheets.Select + Range.Select + ActiveCell (proibidos; chamado de formulario modal).
 ' Usa referencia direta via ws.Range("X").Value.
-' V12.0.0093: IMP_AVALIA costuma estar protegida — desproteger antes de gravar.
+' V12.0.0093: IMP_AVALIA costuma estar protegida - desproteger antes de gravar.
 Dim ws As Worksheet
 Set ws = ThisWorkbook.Sheets("IMP_AVALIA")
 If Not mImpAvaliaEmUso Then
@@ -3456,7 +3456,7 @@ erro_carregamento:
 End Sub
 
 
-' V12.0.0203 ONDA 5 — agora delega para Mod_Limpeza_Base.LimpaBaseTotalReset,
+' V12.0.0203 ONDA 5 - agora delega para Mod_Limpeza_Base.LimpaBaseTotalReset,
 ' que detecta cabecalho corrompido, usa MAX(End(xlUp)) em 50 colunas e
 ' tambem zera AUDIT_LOG / RELATORIO. Mantem a mesma assinatura para nao
 ' quebrar quem chama (Limpar_Base.frm > CommandButton1_Click; tambem o
@@ -3499,7 +3499,7 @@ Sub Limpa_Base()
            relatorio, vbInformation, "Limpar Base"
 End Sub
 
-' V12.0.0203 ONDA 3 — exposta como Public para permitir cobertura de
+' V12.0.0203 ONDA 3 - exposta como Public para permitir cobertura de
 ' regressao (CS CNAE_006) provando que ATIVIDADES e CAD_SERV nunca sao
 ' tocados por essa rotina. Nao altera comportamento; apenas escopo.
 Public Function LimparAbaOperacional(ByVal ws As Worksheet, ByVal ultimaColuna As String, ByRef msgErro As String) As Boolean
@@ -3541,7 +3541,7 @@ finalizar:
 End Function
 
 ' =====================================================================
-' V12.0.0143 — IMPORTACAO EMERGENCIAL CNAE
+' V12.0.0143 - IMPORTACAO EMERGENCIAL CNAE
 ' Zero dependencias internas. Aparece no Alt+F8.
 ' Le CSV, normaliza formato CNAE, escreve diretamente nas celulas.
 ' =====================================================================
@@ -3614,7 +3614,7 @@ Public Sub ImportarCNAE_Emergencia()
         partes = Split(linha, ",")
         If UBound(partes) < 2 Then GoTo proxLinha
 
-        ' CNAE (coluna 1 do CSV) — normalizar para formato DDDD-D/DD.
+        ' CNAE (coluna 1 do CSV) - normalizar para formato DDDD-D/DD.
         cnaeVal = Trim$(Replace(partes(1), """", ""))
         d = ""
         For i = 1 To Len(cnaeVal)
@@ -3672,7 +3672,7 @@ proxLinha:
 End Sub
 
 ' ============================================================
-' V12.0.0203 ONDA 2 — Snapshot + dedup do reset CNAE
+' V12.0.0203 ONDA 2 - Snapshot + dedup do reset CNAE
 ' ============================================================
 '
 ' Propósito: dar trilha auditavel ao reset CNAE sem mexer no nucleo
@@ -3816,7 +3816,7 @@ Public Function CnaeListarSnapshots() As Variant
         Exit Function
     End If
 
-    ' Ordena por nome (timestamp) — bubble simples; n geralmente pequeno.
+    ' Ordena por nome (timestamp) - bubble simples; n geralmente pequeno.
     For i = 0 To qtd - 2
         For j = i + 1 To qtd - 1
             If nomes(i) > nomes(j) Then
@@ -3843,7 +3843,7 @@ Private Function CnaeAbaExiste(ByVal nome As String) As Boolean
 End Function
 
 ' ============================================================
-' V12.0.0203 ONDA 3 — Dedup automatico + housekeeping de snapshots
+' V12.0.0203 ONDA 3 - Dedup automatico + housekeeping de snapshots
 ' ============================================================
 '
 ' Decisoes de produto (registradas em CHANGELOG e auditoria/32):
@@ -4036,3 +4036,5 @@ Public Function CnaeConfirmarPodaSnapshots(Optional ByVal manterUltimos As Long 
 falha:
     CnaeConfirmarPodaSnapshots = -1
 End Function
+
+

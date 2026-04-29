@@ -81,46 +81,96 @@ APENAS a `Sub Limpa_Base()` para minimizar risco.
 
 ### 02.4 `Configuracao_Inicial.frm` — substituir somente o codigo (NAO o design)
 
-> Estrategia: como o `.frx` (binario com a posicao/tamanho dos
-> controles) ja foi customizado pelo gestor com os textboxes renomeados,
-> NAO reimportar o form. Substituir apenas o codigo atras do form.
+> **Regra inegociavel:** como o `.frx` (binario com posicao/tamanho/nome
+> dos controles) ja foi customizado pelo gestor, NAO usar `File > Import`
+> para o `.frm`. Substituir apenas o codigo atras do form, usando o
+> arquivo `.code-only.txt` que ja vem **puro** (so codigo VBA, sem
+> cabecalho FRM nem comentarios de instrucao).
+
+#### Passo 0 — saneamento obrigatorio (adicionado no hotfix v3 da Onda 6, 2026-04-28)
+
+> **Bug conhecido:** `File > Import` apontando para `.frm` em workbook
+> estabilizado pode (a) criar form com sufixo numerico
+> (`Configuracao_Inicial1`), (b) criar **modulo padrao** com cabecalho FRM
+> como codigo solto, ou (c) sobrescrever `.frx`. Documentado integralmente
+> em [`.hbn/knowledge/0005-bug-form-importado-como-modulo.md`](../../../.hbn/knowledge/0005-bug-form-importado-como-modulo.md).
+> Toda IA executora deve referenciar esse doc e toda IA assistente deve
+> avisar o operador antes do passo 02.4.
 >
-> **ATENCAO:** o arquivo `.frm` em si tem 15 linhas iniciais de
-> cabecalho que NAO sao codigo VBA (sao metadados do designer:
-> `VERSION 5.00`, `Begin {GUID} ... End`, blocos `Attribute VB_*`).
-> Se essas linhas forem coladas no editor de codigo do VBE, voce
-> recebe "Erro de compilacao: Invalido fora de um procedimento".
+> **Root cause comprovada na hotfix v4 (2026-04-28):** o
+> `Configuracao_Inicial.frm` foi salvo com line endings LF (Unix) +
+> 3 LFs trailing + 7 em-dashes UTF-8 — combinacao toxica para o parser
+> do VBE. Apos hotfix v4, o `.frm` foi normalizado para CRLF (Windows) +
+> EOF correto (3 CRLFs) + em-dashes substituidos por hyphen-minus.
+> Padrao permanente em
+> [`.hbn/knowledge/0006-padronizacao-encoding-line-endings-frm.md`](../../../.hbn/knowledge/0006-padronizacao-encoding-line-endings-frm.md).
+
+Antes dos 8 passos abaixo, voce **DEVE** verificar se o Project Explorer
+do VBE esta limpo. Se algum dos sintomas abaixo aparecer, sanear antes
+de prosseguir, senao a compilacao falhara com "Invalido fora de um procedimento".
+
+| Sintoma | Onde aparece | Causa | Acao corretiva |
+|---|---|---|---|
+| `Configuracao_Inicial` duplicado em pasta `Modulos` (alem do form em `Formulários`) | Project Explorer (esquerda do VBE) | `File > Import` foi feito apontando para `.frm` ou para `.code-only.txt` renomeado, em conflito com o form ja existente | Clique direito no item duplicado em `Modulos` > `Remove Configuracao_Inicial...` > **No** (nao exportar) |
+| `Configuracao_Inicial1`, `Configuracao_Inicial2` etc. em `Formulários` | Project Explorer (pasta `Formulários`) | re-import sucessivo do `.frm` criou copias com sufixo numerico | Clique direito em CADA copia com sufixo > `Remove...` > **No** (manter apenas o `Configuracao_Inicial` original sem sufixo) |
+| Codigo da janela do form comeca com `VERSION 5.00`, `Begin {GUID}`, `Caption =`, `End`, ou `Attribute VB_*` | Janela de codigo do VBE quando voce abre `Configuracao_Inicial` (form, nao modulo) | colado o `.frm` cru por engano em vez do `.code-only.txt` | apos saneamento acima, seguir os 8 passos. Se ainda assim aparecer apos colar, verificar passo 5 (deve comecar em `Private Sub Carrega_CAD_SERV_Click()`) |
+
+Apos saneamento:
+
+1. Salvar workbook (Ctrl+S).
+2. Compilar VBE (Debug > Compile VBAProject) — deve passar sem erro
+   ANTES de qualquer alteracao nesta secao 02.4. Se ainda houver erro
+   apos saneamento, parar e reportar. Nao prosseguir com copy-paste.
 >
-> Para evitar esse erro, use o arquivo CODE-ONLY:
+> Arquivo a usar:
 > **`local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt`**
-
-1. VBE > duplo-clique em `Configuracao_Inicial` (aparece o designer).
-2. Clicar em "Visualizar Codigo" (F7) — abre a janela com o VBA do form.
-3. Selecionar TODO o codigo da janela (Ctrl+A) e Delete.
-4. Abrir o arquivo `local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt`
-   em um editor de texto (Notepad, VS Code, etc.).
-5. **Pular o cabecalho de comentarios** desse arquivo (de
-   `' ============================================================` ate
-   a linha em branco logo apos `' ============================================================`
-   — sao as primeiras ~40 linhas, todas comecando com aspa simples).
-6. Selecionar a partir da primeira `Private Sub` ate o final do arquivo.
-7. Copiar (Ctrl+C) e colar (Ctrl+V) na janela de codigo do VBE.
-8. Salvar projeto (Ctrl+B).
-9. Debug > Compile VBAProject.
-
-> **Recuperacao se voce ja colou errado** (erro "Invalido fora de
-> um procedimento"):
 >
-> - O codigo no editor comeca com `VERSION 5.00` ou `Begin {GUID}`.
-> - Apague essas linhas iniciais ate a primeira `Private Sub` (apague
->   tambem as linhas `Attribute VB_*` se aparecerem — o VBE gerencia
->   esses atributos automaticamente).
-> - Compilar de novo (Debug > Compile VBAProject).
-> - Salvar (Ctrl+B).
+> Atualizado em V12.0.0203 ONDA 6 (hotfix): a partir de agora o
+> `.code-only.txt` contem APENAS codigo VBA. A primeira linha do arquivo
+> e `Private Sub Carrega_CAD_SERV_Click()` e a ultima linha do codigo
+> e `End Function`. Voce pode fazer Ctrl+A do arquivo inteiro sem
+> precisar localizar onde comeca a primeira `Private Sub`.
+
+Procedimento copy-paste (8 passos, em ordem rigorosa):
+
+1. No VBE, Project Explorer (esquerda), em `Formulários`, **duplo-clique**
+   em `Configuracao_Inicial` — abre o designer (ver os textboxes).
+2. Tecle `F7` (ou clique direito > "Visualizar Codigo") — abre a
+   janela com o VBA atras do form.
+3. Na janela de codigo, `Ctrl+A` (selecionar tudo) seguido de `Delete`.
+   A janela fica vazia.
+4. Em outra janela do sistema (Finder/TextEdit/VS Code/Notepad++),
+   abrir o arquivo:
+   `local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt`.
+5. Confirmar visualmente que a primeira linha do arquivo e
+   `Private Sub Carrega_CAD_SERV_Click()`. Se NAO for, parar e abrir
+   issue — o pacote esta corrompido.
+6. `Ctrl+A` (selecionar tudo do arquivo) e `Ctrl+C` (copiar).
+7. Voltar no VBE, na janela de codigo (que esta vazia), `Ctrl+V`
+   (colar). Conferir que a primeira linha colada e
+   `Private Sub Carrega_CAD_SERV_Click()` — sem nada antes (sem
+   `VERSION 5.00`, sem `Begin {GUID}`, sem `Attribute VB_*`).
+8. `Ctrl+S` para salvar projeto, depois `Debug > Compile VBAProject`.
+
+Esperado: compilacao limpa, sem erro.
+
+> **Erro "Invalido fora de um procedimento"** apos colar significa
+> uma de duas coisas:
 >
-> Se aparecer outro erro de compilacao "controle nao encontrado",
-> confirmar que os 3 textboxes foram renomeados no designer
-> (passo 01.4).
+> 1. Voce abriu e colou de `src/vba/Configuracao_Inicial.frm` (cabecalho
+>    FRM) por engano em vez do `.code-only.txt`. Solucao: refazer do
+>    passo 1 usando o arquivo certo (caminho exato no passo 4).
+> 2. Voce fez `File > Import` em algum momento. Solucao: rollback ao
+>    backup `.xlsm` (secao 04) e refazer.
+>
+> Em qualquer caso, a primeira linha visivel no editor de codigo do
+> VBE deve ser `Private Sub Carrega_CAD_SERV_Click()`. Se nao for,
+> NAO compilar — apagar e refazer.
+
+> **Erro "controle nao encontrado"** apos compilar significa que os
+> 3 textboxes do designer nao foram renomeados (passo 01.4):
+> `TxtNotaCorte`, `TxtMaxStrikes`, `TxtDiasSuspensao`. Renomear em
+> "Propriedades" do VBE com o form em modo design e recompilar.
 
 ## 03. Validacao pos-import
 

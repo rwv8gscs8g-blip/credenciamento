@@ -18,11 +18,35 @@ ultima-atualizacao: 2026-04-28
 | Data de concessao | 2026-04-28 |
 | Validade | ate fechamento estavel da V12.0.0203 no GitHub |
 | Reverte para | Codex (apoio) + Claude Opus em modo auditoria |
+| Modo de operacao atual | **CONSULTIVO CONTROLADO** (alterado 2026-04-28 apos violacao G6 — saiu do modo "execucao maxima") |
 | Justificativa | retrabalho da Onda 5 nao estabilizada; concentracao em uma IA reduz risco de perda de contexto durante a estabilizacao |
+
+## Modo de operacao
+
+**Consultivo controlado** (vigente desde hotfix v2 da Onda 6):
+
+- Leitura ampla permitida (Read, Glob, Grep em todo o repo).
+- Escrita pequena: cada arquivo modificado e escrita atomica, com
+  hearback explicito para mudancas em arquivos canonicos
+  (`.hbn/knowledge/`, `auditoria/01_regras_e_governanca/`,
+  `usehbn/agents/`, `CLAUDE.md`).
+- **Verificacao G6 obrigatoria** antes de enviar resposta ao Mauricio:
+  scan da resposta por padroes VBA (`Private Sub`, `Public Sub`,
+  `Public Function`, `Dim ... As`, `Range(...)`, `Sheets(...)`,
+  `Cells(...)`, `Application.X`). Se houver match, pausar, mover para
+  arquivo, atualizar procedimento, reenviar.
+- Comandos shell para o operador continuam permitidos (sao operacionais,
+  nao deliverable).
+- Modo "execucao maxima" anterior (Onda 6 fase 1-2) provou produzir
+  violacao — descontinuado.
 
 ## Ciclo ativo
 
-**SEM CICLO ATIVO.** Onda 6 encerrada em 2026-04-28.
+**ONDA 6 HOTFIX v4** — reaberta em 2026-04-28 ~20h apos Mauricio reportar
+que `Configuracao_Inicial` continua sendo classificado como modulo no VBE,
+com pista nova: "comentarios do codigo e forma de escrita do .frm" sao a
+causa. Investigacao isola anomalia no cabecalho FRM. Tokens autorizados
+para ciclo profundo.
 
 ## Ciclo encerrado mais recente
 

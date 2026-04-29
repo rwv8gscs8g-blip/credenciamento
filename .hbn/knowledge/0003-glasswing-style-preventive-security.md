@@ -25,11 +25,13 @@ manipulam dados pessoais e operacao real — isso muda o calculo de risco.
 Nao e mais "uma IA bem intencionada nao vai introduzir vulnerabilidade".
 E "se uma IA hostil clonar o repo, com qual rapidez ela acha falha?"
 
-## Os 5 vetores que esta camada cobre
+## Os 6 vetores que esta camada cobre
 
-A camada Glasswing-style do Credenciamento adiciona 5 verificacoes
-preventivas em cima do HBN existente. Toda IA executora deve responder
-"sim" a todas as 5 antes de declarar onda fechada.
+A camada Glasswing-style do Credenciamento adiciona 6 verificacoes
+preventivas em cima do HBN existente (G1-G5 introduzidos na Onda 6;
+**G6 adicionado no hotfix v2 da Onda 6** apos violacao real). Toda IA
+executora deve responder "sim" a todas as 6 antes de declarar onda
+fechada **e antes de enviar resposta ao operador**.
 
 ### G1 — Macro nao confiavel
 
@@ -83,6 +85,68 @@ grep -nE "(AUDIT_LOG|AUDIT_TESTES)\b" src/vba/*.bas | grep -E "(Delete|Clear|Ent
 # Deve retornar apenas referencias dentro de Limpa_Base/LimpaBaseTotalReset.
 ```
 
+### G6 — Codigo de produto na resposta da IA bloqueia entrega
+
+**Adicionado em V12.0.0203 ONDA 6 hotfix v2 (2026-04-28).**
+
+A IA executora **nao** envia ao operador, dentro do chat, qualquer
+artefato que va eventualmente parar dentro do workbook `.xlsm`. Em
+particular: nenhum bloco de codigo VBA (`Private Sub`, `Public Sub`,
+`Public Function`, `Dim ... As`, `Range(...)`, `Sheets(...)`, `Cells(...)`,
+`Application.X`), nenhuma formula Excel privilegiada, nenhuma macro
+descartavel direto na resposta.
+
+**Por que existe:** durante a Onda 6, identifiquei (Claude Opus 4.7
+Cowork) que o Truth Barrier do HBN cobre claims de texto em documentos
+do projeto, mas **nao cobre codigo solto na resposta da IA ao operador**.
+O resultado pratico foi: respondi um diagnostico de erro de compilacao
+colando codigo no chat com instrucoes Ctrl+A/C/V, em vez de atualizar o
+procedimento canonico em `auditoria/03_ondas/onda_NN_*/<NN+1>_PROCEDIMENTO_IMPORT.md`
+e o arquivo em `local-ai/vba_import/`. Mauricio pegou a violacao e
+exigiu correcao explicita.
+
+**O que e permitido na resposta:**
+
+- Comandos shell que o operador roda no terminal local (git, bash, ls,
+  cd, mv, mkdir, etc.) — esses sao **operacionais**, nao deliverables.
+- Caminhos de arquivo no repositorio (`local-ai/vba_import/...`,
+  `auditoria/03_ondas/...`).
+- Tabelas operacionais que mapeiam [arquivo no repo | acao no Excel].
+- Saida de diagnostico (output esperado, erros conhecidos, hashes).
+
+**O que e proibido na resposta:**
+
+- Trecho de Sub/Function VBA, mesmo em bloco markdown.
+- Conteudo do `.code-only.txt`, `.bas`, ou `.frm` reproduzido na resposta.
+- Formulas Excel com argumento dinamico (`HYPERLINK`, `WEBSERVICE`,
+  `INDIRECT`).
+- Macro descartavel "rapida" direto no chat ("rode esta macro de
+  diagnostico").
+
+**Verificacao manual:**
+
+```bash
+# Pre-flight check antes de mandar resposta — se algum match, parar e
+# mover o conteudo para arquivo no repo:
+grep -E "^(Private |Public |Sub |Function |Dim .* As |Sheets\(|Range\(|Cells\(|Application\.)" <(echo "$RESPOSTA")
+```
+
+**Verificacao automatica (a implementar na Onda 7 junto com glasswing-checks.sh):**
+
+`local-ai/scripts/glasswing-checks.sh` recebe extensao para validar a
+ultima resposta da IA salva (se aplicavel) e flag tokens VBA. Por
+enquanto, a verificacao e manual e responsabilidade da propria IA antes
+de enviar.
+
+**Recuperacao se G6 violado:**
+
+1. Reconhecer a violacao explicitamente para o operador.
+2. Mover o codigo da resposta para o arquivo correto em
+   `local-ai/vba_import/`.
+3. Atualizar (ou criar) o procedimento em
+   `auditoria/03_ondas/onda_NN_*/`.
+4. Reenviar a resposta apenas com tabela de paths + acao.
+
 ### G5 — Claim sem evidencia bloqueia entrega
 
 A IA nao pode escrever em onda fechada frases como:
@@ -123,7 +187,8 @@ Em readbacks, a IA executora declara explicitamente:
     "G2_config_validada": "ok | violado | nao_aplicavel",
     "G3_formulas_privilegiadas": "ok | violado | nao_aplicavel",
     "G4_audit_log_append_only": "ok | violado | nao_aplicavel",
-    "G5_claims_proporcionais": "ok | violado | nao_aplicavel"
+    "G5_claims_proporcionais": "ok | violado | nao_aplicavel",
+    "G6_codigo_no_chat": "ok | violado | nao_aplicavel"
   }
 }
 ```

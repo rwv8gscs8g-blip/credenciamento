@@ -24,6 +24,9 @@ ultima-atualizacao: 2026-04-28
 | Regras V203 inegociaveis | [0001-regras-v203-inegociaveis.md](0001-regras-v203-inegociaveis.md) | Toda IA que entrar no projeto le primeiro |
 | Regra de Ouro do `vba_import/` | [0002-regra-ouro-vba-import.md](0002-regra-ouro-vba-import.md) | Antes de modificar `.bas` ou `.frm` |
 | Camada Glasswing de seguranca preventiva | [0003-glasswing-style-preventive-security.md](0003-glasswing-style-preventive-security.md) | Antes de declarar onda fechada |
+| Padrao resposta: tabela de entrega de arquivos | [0004-padrao-resposta-tabela-de-entrega.md](0004-padrao-resposta-tabela-de-entrega.md) | Toda entrega operacional para o operador |
+| Bug conhecido: formulario importado como modulo no VBE | [0005-bug-form-importado-como-modulo.md](0005-bug-form-importado-como-modulo.md) | Antes de qualquer `File > Import` de `.frm`, e como diagnosticar/recuperar quando o bug se manifesta |
+| Padronizacao obrigatoria de encoding, line endings e EOF | [0006-padronizacao-encoding-line-endings-frm.md](0006-padronizacao-encoding-line-endings-frm.md) | Antes de salvar/comitar qualquer `.frm` ou `.bas`. Root cause comprovada do bug 0005. |
 
 ## Por decisao (decisoes que afetam comportamento)
 
