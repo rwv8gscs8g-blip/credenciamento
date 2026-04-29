@@ -1,7 +1,7 @@
 Attribute VB_Name = "Audit_Log"
 Option Explicit
 
-' Auditoria V10 — grava eventos na aba AUDIT_LOG usando Const_Colunas.
+' Auditoria V10 - grava eventos na aba AUDIT_LOG usando Const_Colunas.
 
 Public Enum eTipoEvento
     EVT_CAD_EMP = 1

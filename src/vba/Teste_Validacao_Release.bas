@@ -478,3 +478,5 @@ Private Sub VR_FormatarSheet(ByVal ws As Worksheet, ByVal statusGeral As String)
     ws.Cells.WrapText = True
     On Error GoTo 0
 End Sub
+
+

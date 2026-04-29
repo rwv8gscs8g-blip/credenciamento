@@ -643,7 +643,7 @@ Private Sub TV2_SetConfigCanonica()
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_UF).Value = "PE"
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_SECRETARIA).Value = "Secretaria Testes V2"
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = 5
-    ' V12.0.0203 ONDA 1 — defaults canonicos para a regra de strikes.
+    ' V12.0.0203 ONDA 1 - defaults canonicos para a regra de strikes.
     ' MAX_STRIKES=1 mantem o comportamento legado da suite canonica
     ' existente (CS_14 ainda suspende na primeira nota baixa).
     ' DIAS_SUSPENSAO_STRIKE=0 faz o helper Suspender cair no fallback
@@ -2589,3 +2589,5 @@ Private Sub TV2_LerCatalogoCenario(ByVal cenarioId As String, ByRef dominioOut A
         End If
     Next r
 End Sub
+
+

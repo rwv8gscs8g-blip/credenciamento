@@ -29,7 +29,7 @@ Public Sub RunTesteUI()
     ' Titulo
     ws.Range("A1:G1").Merge
     With ws.Range("A1")
-        .Value = "ROTEIRO DE TESTES VISO-MANUAIS DE UI — V12"
+        .Value = "ROTEIRO DE TESTES VISO-MANUAIS DE UI - V12"
         .Font.Bold = True
         .Font.Size = 14
         .HorizontalAlignment = xlCenter

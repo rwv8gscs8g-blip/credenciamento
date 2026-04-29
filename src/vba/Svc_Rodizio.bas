@@ -1,7 +1,7 @@
 Attribute VB_Name = "Svc_Rodizio"
 Option Explicit
 
-' Serviço de Rodízio Centralizado — V10
+' Serviço de Rodízio Centralizado - V10
 ' Implementa: SelecionarEmpresa, AvancarFila, Suspender, Reativar.
 ' Sem Select/ActiveCell/On Error Resume Next silencioso.
 ' Referência: doc/Time_AI/001-Sprint0-Maquina-de-Estados.md (seção 4 - Algoritmo)
@@ -20,7 +20,7 @@ Private Const MOTIVO_OS_ABERTA As String = "OS_ABERTA_NA_ATIVIDADE"
 ' SEÇÃO 1: SELEÇÃO (Algoritmo Central de Rodízio)
 ' ============================================================
 
-' SelecionarEmpresa — executa o algoritmo de rodízio para uma atividade.
+' SelecionarEmpresa - executa o algoritmo de rodízio para uma atividade.
 '
 ' Algoritmo (conforme Máquina de Estados v1.0):
 '   1. Buscar fila da atividade (CREDENCIADOS ordenados por POSICAO_FILA)
@@ -86,7 +86,7 @@ Public Function SelecionarEmpresa(ByVal ATIV_ID As String) As TRodizioResultado
         If emp.STATUS_GLOBAL = STATUS_EMP_SUSPENSA Then
             ' Verificar reativação automática
             If emp.DT_FIM_SUSP > CDate(0) And emp.DT_FIM_SUSP <= Date Then
-                ' Reativar automaticamente — empresa volta a participar
+                ' Reativar automaticamente - empresa volta a participar
                 resOp = Reativar(cred.EMP_ID)
                 If Not resOp.Sucesso Then
                     cntFiltroB = cntFiltroB + 1
@@ -110,7 +110,7 @@ Public Function SelecionarEmpresa(ByVal ATIV_ID As String) As TRodizioResultado
         ' FILTRO D: Empresa tem OS aberta nesta atividade → pular SEM punição, mover para fim
         If TemOSAbertaNaAtividade(cred.EMP_ID, ATIV_ID) Then
             resOp = MoverFinal(cred.EMP_ID, ATIV_ID)
-            ' Sem auditoria aqui — não é punição, é skip técnico
+            ' Sem auditoria aqui - não é punição, é skip técnico
             cntFiltroD = cntFiltroD + 1
             GoTo ProximaEmpresa
         End If
@@ -128,7 +128,7 @@ Public Function SelecionarEmpresa(ByVal ATIV_ID As String) As TRodizioResultado
         resultado.Credenciamento = cred
 
         ' Registrar indicação: atualizar DT_ULTIMA_IND sem mover na fila
-        ' (a empresa permanece no topo até aceitar/recusar — Svc_PreOS avança depois)
+        ' (a empresa permanece no topo até aceitar/recusar - Svc_PreOS avança depois)
         RegistrarIndicacao cred.EMP_ID, ATIV_ID, Now
 
         ' Nota: NÃO gravar auditoria aqui. A auditoria de emissão de Pré-OS
@@ -157,7 +157,7 @@ End Function
 ' SEÇÃO 2: AVANÇO DE FILA (chamado por Svc_PreOS no Sprint 3)
 ' ============================================================
 
-' AvancarFila — move empresa para o fim da fila após aceite, recusa ou expiração.
+' AvancarFila - move empresa para o fim da fila após aceite, recusa ou expiração.
 '
 ' Parâmetros:
 '   EMP_ID   : empresa a mover
@@ -271,7 +271,7 @@ End Function
 ' SEÇÃO 3: SUSPENSÃO E REATIVAÇÃO
 ' ============================================================
 
-' Suspender — coloca empresa em SUSPENSA_GLOBAL.
+' Suspender - coloca empresa em SUSPENSA_GLOBAL.
 ' Chamada automaticamente por AvancarFila quando MAX_RECUSAS é atingido.
 ' Pode também ser chamada manualmente pelo gestor (futuro Sprint 4).
 '
@@ -307,7 +307,7 @@ Public Function Suspender( _
         Exit Function
     End If
 
-    ' V12.0.0203 ONDA 1 — Suspensao em dias quando informado;
+    ' V12.0.0203 ONDA 1 - Suspensao em dias quando informado;
     ' fallback historico em meses (PERIODO_SUSPENSAO_MESES) quando nao.
     ' Compatibilidade: chamadores antigos sem parametros continuam usando meses.
     If diasSuspensao > 0 Then
@@ -347,7 +347,7 @@ Erro:
     Suspender = res
 End Function
 
-' Reativar — reverte suspensão global de uma empresa.
+' Reativar - reverte suspensão global de uma empresa.
 ' Chamada automaticamente por SelecionarEmpresa quando DT_FIM_SUSPENSAO <= Hoje.
 ' Pode também ser chamada pelo gestor antes do prazo (futuro Sprint 4).
 '
@@ -433,7 +433,7 @@ fim:
     On Error GoTo 0
 End Sub
 
-' IdsIguais removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
+' IdsIguais removida - usar Util_Planilha.IdsIguais (V12-CLEAN).
 
 Private Function MontarMotivoSemAptos( _
     ByVal cntA As Long, _
@@ -464,7 +464,7 @@ Private Function MontarMotivoSemAptos( _
 End Function
 
 ' ============================================================
-' V12.0.0203 ONDA 4 — Diagnostico de rodizio
+' V12.0.0203 ONDA 4 - Diagnostico de rodizio
 ' ============================================================
 '
 ' Diag_RodizioStatus(ATIV_ID) percorre BuscarFila(ATIV_ID) e produz,
@@ -641,6 +641,5 @@ Public Sub Diag_RodizioStatusInteractive()
     If ATIV_ID = "" Then Exit Sub
     Diag_RodizioStatus ATIV_ID
 End Sub
-
 
 

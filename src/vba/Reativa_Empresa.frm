@@ -358,3 +358,5 @@ nao_achou_emp:
 erro_carregamento:
     MsgBox "Erro ao reativar empresa: " & Err.Description, vbCritical, "Erro"
 End Sub
+
+

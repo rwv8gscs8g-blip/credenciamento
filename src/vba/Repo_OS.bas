@@ -1,7 +1,7 @@
 Attribute VB_Name = "Repo_OS"
 Option Explicit
 
-' Repositório da aba CAD_OS — V10
+' Repositório da aba CAD_OS - V10
 ' Usa Const_Colunas para mapeamento. Sem Select/ActiveCell.
 
 Private Const STATUS_OS_EM_EXECUCAO As String = "EM_EXECUCAO"
@@ -199,6 +199,6 @@ Public Function TemOSAbertaNaAtividade( _
 fim:
 End Function
 
-' IdsIguais removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
+' IdsIguais removida - usar Util_Planilha.IdsIguais (V12-CLEAN).
 
 

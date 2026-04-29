@@ -651,7 +651,7 @@ End Function
 
 Private Sub Credencia_Empresa_Click()
 On Error GoTo erro_carregamento:
-    ' V12: Bug corrigido — ordem de criacao de instancia do formulario estava invertida.
+    ' V12: Bug corrigido - ordem de criacao de instancia do formulario estava invertida.
     ' PreenchimentoCRServico criava Instancia A e populava CR_Lista nela.
     ' UserForms.Add criava Instancia B (CR_Lista vazia) e essa era exibida.
     ' Solucao: criar a instancia ANTES, definir empresa, entao chamar PreenchimentoCRServico
@@ -882,7 +882,7 @@ Private Sub EncerraOS_Click()
 
     precisaJustificativa = (Abs(vlOS - vlOrcado) > 0.0001 Or Abs(qtExec - qtOrcada) > 0.0001 Or houveEdicaoDefaults)
 
-    ' V12.0.0010: validacao reforçada — justificativa obrigatoria quando diverge
+    ' V12.0.0010: validacao reforçada - justificativa obrigatoria quando diverge
     If precisaJustificativa Then
         justfInput = ""
         If houveEdicaoDefaults Then
@@ -1059,7 +1059,7 @@ End Sub
 Private Sub H_Lista_Click()
 On Error GoTo erro_carregamento:
     ' V12: eliminado Sheets("CAD_SERV").Select (proibido; formulario modal).
-    ' Leitura direta das colunas do ListBox — sem acesso a planilha necessario aqui.
+    ' Leitura direta das colunas do ListBox - sem acesso a planilha necessario aqui.
     H_Atividade = H_Lista.Column(3)
     H_Servico = H_Lista.Column(4)
     H_Vl_Hora.SetFocus
@@ -1539,7 +1539,7 @@ On Error GoTo erro_carregamento:
 
     ' V12: eliminado .Select + Application.GoTo + ActiveCell (proibidos; causavam saida
     ' prematura via erro_carregamento dentro de formulario modal, zerando as variaveis).
-    ' Leitura direta do ListBox — sem efeitos colaterais no workbook.
+    ' Leitura direta do ListBox - sem efeitos colaterais no workbook.
     A_Cad = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 2))     ' Razao Social (legado)
     C_Cad = CInt(Val(empIdSel))                                  ' ID numerico (legado)
     M_ID_Empresa = empIdSel
@@ -1581,7 +1581,7 @@ On Error GoTo erro_carregamento:
     Dim frmAltera As Object
 
     Set frmAltera = VBA.UserForms.Add("Altera_Empresa")
-    ' V12.0.0010: corrigido — col 0 (ID) removido da CallByName.
+    ' V12.0.0010: corrigido - col 0 (ID) removido da CallByName.
     ' O ID e lido da global M_ID_Empresa.
     ' Garantia explicitamente definida aqui antes de chamar:
     M_ID_Empresa = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 0))
@@ -3102,7 +3102,7 @@ Private Function BuscarDescricaoServicoPorCod(ByVal codServRaw As Variant, ByVal
 End Function
 
 Private Sub Btn_Rel_OS_Empresa_Click()
-    ' Relatorio "Ordens de Servico por Empresa" — nome separado do TextBox TXT_OS_NomeEmpresa (evita colisao OS_Empresa).
+    ' Relatorio "Ordens de Servico por Empresa" - nome separado do TextBox TXT_OS_NomeEmpresa (evita colisao OS_Empresa).
     On Error GoTo falha
     Dim frmRelOSEmpresa As Object
     Call PreenchimentoRelatorioOSEmpresa
@@ -3566,7 +3566,7 @@ Private Sub BT_GITHUB_Click()
 End Sub
 
 ' ============================================================
-' HANDLERS LEGADOS (designer) — manter enquanto existirem CommandButton13/14/15
+' HANDLERS LEGADOS (designer) - manter enquanto existirem CommandButton13/14/15
 ' ============================================================
 Private Sub CommandButton15_Click()
     Call Menu_TelaInicial_AbrirCentralTestes
@@ -3813,3 +3813,5 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
+
+

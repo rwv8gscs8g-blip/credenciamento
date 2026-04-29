@@ -31,7 +31,7 @@ On Error GoTo erro_carregamento
 
     Application.Cursor = xlWait
     ProgressBar.MousePointer = fmMousePointerHourGlass
-    Application.CutCopyMode = False 'Limpa a área de transferência
+    Application.CutCopyMode = False 'Limpa a Ã¡rea de transferÃªncia
     
     Call CalculateData
     Application.Cursor = xlDefault
@@ -75,7 +75,7 @@ Dim Cont, i, a, b           As Long
                 Application.ThisWorkbook.Save
             End If
         End If
-        'Fração de Segundo
+        'FraÃ§Ã£o de Segundo
         For Cont = 1 To 1
             timedelay (0.01)
         Next Cont

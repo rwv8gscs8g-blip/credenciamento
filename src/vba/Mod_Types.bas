@@ -3,7 +3,7 @@ Option Explicit
 
 ' Tipos publicos do sistema de credenciamento.
 ' ATENCAO: o nome "Mod_Types" deve ser mantido. O erro "Nome repetido: TConfig"
-' NAO e causado pelo nome do modulo — e causado por corrupcao no binario do
+' NAO e causado pelo nome do modulo - e causado por corrupcao no binario do
 ' projeto VBA dentro do .xlsm. A solucao e usar uma planilha com projeto limpo
 ' (nunca reimportar TODOS os modulos do zero num .xlsm existente).
 '
@@ -179,3 +179,5 @@ Public Type TAppContext
     IsEmpresaValida       As Boolean
     IsEntidadeValida      As Boolean
 End Type
+
+

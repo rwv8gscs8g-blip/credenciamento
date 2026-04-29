@@ -128,3 +128,5 @@ End Function
 Private Function Transacao_QtdWrites() As Long
     Transacao_QtdWrites = gTransacaoWriteCount
 End Function
+
+

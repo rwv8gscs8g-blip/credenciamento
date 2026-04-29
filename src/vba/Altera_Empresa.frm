@@ -416,7 +416,7 @@ On Error GoTo erro_carregamento:
     Set wsInativas = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
     Set wsCred = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
 
-    ' V12.0.0009: loop normalizado — elimina Range.Find fragil (ID string vs numerico)
+    ' V12.0.0009: loop normalizado - elimina Range.Find fragil (ID string vs numerico)
     primeiraLinhaEmp = PrimeiraLinhaDadosEmpresas()
     linhaFinalEmp = UltimaLinhaAba(SHEET_EMPRESAS)
     Set EncontrarID = Nothing

@@ -1,7 +1,7 @@
 Attribute VB_Name = "Repo_Empresa"
 Option Explicit
 
-' Repositorio da aba EMPRESAS — V12-CLEAN
+' Repositorio da aba EMPRESAS - V12-CLEAN
 ' Extraido de Repo_Credenciamento.bas (SECAO 2: HELPERS DE EMPRESAS).
 ' Usa Const_Colunas e Util_Planilha. Sem Select/ActiveCell.
 

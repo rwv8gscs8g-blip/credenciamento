@@ -2,7 +2,7 @@ Attribute VB_Name = "Emergencia_CNAE"
 Option Explicit
 
 ' =====================================================================
-' MACRO EMERGENCIAL V2 — Importa CNAE do CSV para ATIVIDADES.
+' MACRO EMERGENCIAL V2 - Importa CNAE do CSV para ATIVIDADES.
 ' Zero dependencias do sistema. Normaliza formato CNAE.
 ' =====================================================================
 
@@ -135,3 +135,5 @@ Private Function NormalizarCNAE(ByVal codigo As String) As String
         NormalizarCNAE = Trim$(codigo)
     End If
 End Function
+
+

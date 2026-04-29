@@ -65,7 +65,7 @@ falha:
     GetNotaMinimaAvaliacao = 5#
 End Function
 
-' V12.0.0203 ONDA 1 — Numero de strikes (avaliacoes com media < nota minima)
+' V12.0.0203 ONDA 1 - Numero de strikes (avaliacoes com media < nota minima)
 ' acumulados antes de suspender automaticamente a empresa.
 ' Default conservador 3. Coluna COL_CFG_MAX_STRIKES (L) na aba CONFIG.
 ' MAX_STRIKES = 1 reproduz a regra antiga (suspende na primeira nota baixa).
@@ -88,11 +88,11 @@ falha:
     GetMaxStrikes = 3
 End Function
 
-' V12.0.0203 ONDA 1 — Quantidade de dias da suspensao automatica
+' V12.0.0203 ONDA 1 - Quantidade de dias da suspensao automatica
 ' disparada pela regra de strikes na avaliacao. Default 90 dias.
 ' Coluna COL_CFG_DIAS_SUSPENSAO_STRIKE (M) na aba CONFIG.
 ' Quando o valor for <= 0, o helper Svc_Rodizio.Suspender cai no
-' fallback historico em meses (PERIODO_SUSPENSAO_MESES) — preserva
+' fallback historico em meses (PERIODO_SUSPENSAO_MESES) - preserva
 ' compatibilidade com a regra antiga de suspensao por excesso de recusas.
 Public Function GetDiasSuspensaoStrike() As Long
     On Error GoTo falha
@@ -314,4 +314,5 @@ Public Sub Rel_FormatarDados(ByVal ws As Worksheet, ByVal linhaInicio As Long, _
         End If
     Next r
 End Sub
+
 

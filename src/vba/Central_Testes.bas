@@ -2,7 +2,7 @@ Attribute VB_Name = "Central_Testes"
 Option Explicit
 
 ' ============================================================
-' Central_Testes — Orquestrador da Central de Testes e Treinamento V12
+' Central_Testes - Orquestrador da Central de Testes e Treinamento V12
 ' Proposito: Ponto unico de entrada para testes e treinamento.
 ' Abas que cria: ROTEIRO_RAPIDO, CHECKLIST_136, HISTORICO_TESTES
 '
@@ -54,7 +54,7 @@ falha:
 End Sub
 
 ' ============================================================
-' ROTEIRO RAPIDO — 16 PASSOS
+' ROTEIRO RAPIDO - 16 PASSOS
 ' ============================================================
 Public Sub CT_AbrirRoteiroRapido()
     On Error GoTo falha
@@ -72,7 +72,7 @@ falha:
 End Sub
 
 ' ============================================================
-' RESULTADO_QA — Funil QA Unificado (substitui CHECKLIST_136)
+' RESULTADO_QA - Funil QA Unificado (substitui CHECKLIST_136)
 ' ============================================================
 Public Sub CT_AbrirResultadoQA()
     On Error GoTo falha
@@ -93,7 +93,7 @@ falha:
 End Sub
 
 ' ============================================================
-' CHECKLIST 136 (legado — mantido para compatibilidade)
+' CHECKLIST 136 (legado - mantido para compatibilidade)
 ' ============================================================
 Public Sub CT_AbrirChecklist136()
     On Error GoTo falha
@@ -320,7 +320,7 @@ Private Sub MontarRoteiro(ByVal ws As Worksheet)
     ' Titulo + instrucao
     ws.Range("A1:H1").Merge
     With ws.Range("A1")
-        .Value = "ROTEIRO RÁPIDO DE VALIDAÇÃO — RODÍZIO V12"
+        .Value = "ROTEIRO RÁPIDO DE VALIDAÇÃO - RODÍZIO V12"
         .Font.Bold = True: .Font.Size = 14: .HorizontalAlignment = xlCenter
         .Interior.Color = RGB(255, 192, 0): .RowHeight = 30
     End With
@@ -443,7 +443,7 @@ Private Sub MontarChecklist136(ByVal ws As Worksheet)
 
     ws.Range("A1:K1").Merge
     With ws.Range("A1")
-        .Value = "BATERIA MANUAL DE APOIO — " & CStr(CT_CK_MAX_LINHAS) & " linhas (uso opcional) — V12"
+        .Value = "BATERIA MANUAL DE APOIO - " & CStr(CT_CK_MAX_LINHAS) & " linhas (uso opcional) - V12"
         .Font.Bold = True: .Font.Size = 13: .HorizontalAlignment = xlCenter
         .Interior.Color = RGB(255, 192, 0): .RowHeight = 30
     End With
@@ -574,7 +574,7 @@ Private Sub CT_AtualizarTituloChecklist136(ByVal ws As Worksheet)
         End If
     Next r
 
-    ws.Range("A1").Value = "BATERIA MANUAL DE APOIO — " & CStr(total) & " linhas preenchidas — V12"
+    ws.Range("A1").Value = "BATERIA MANUAL DE APOIO - " & CStr(total) & " linhas preenchidas - V12"
 
 sair:
 End Sub
@@ -635,7 +635,7 @@ sair:
 End Sub
 
 ' ============================================================
-' BATERIA AO VIVO — atualiza CHECKLIST_136 a cada log
+' BATERIA AO VIVO - atualiza CHECKLIST_136 a cada log
 ' ============================================================
 Public Sub CT_PrepararChecklistParaBateriaAoVivo()
     On Error Resume Next
@@ -701,7 +701,7 @@ Public Sub CT_BateriaLive_Registrar( _
 
     Call CT_AtualizarTituloChecklist136(wd)
 
-    Application.StatusBar = "Bateria [" & CStr(gBateriaLiveSeq) & "/" & CStr(CT_CK_MAX_LINHAS) & "] " & nomeTeste & " — " & statusFinal
+    Application.StatusBar = "Bateria [" & CStr(gBateriaLiveSeq) & "/" & CStr(CT_CK_MAX_LINHAS) & "] " & nomeTeste & " - " & statusFinal
 
     Application.ScreenUpdating = True
     DoEvents
@@ -724,7 +724,7 @@ fimChk:
 End Sub
 
 ' ============================================================
-' BOTOES DE NAVEGACAO (Shapes — Mac compativel)
+' BOTOES DE NAVEGACAO (Shapes - Mac compativel)
 ' ============================================================
 Private Sub InserirBotoes(ByVal ws As Worksheet)
     On Error Resume Next
@@ -793,3 +793,5 @@ Private Function ObterUsr() As String
     On Error GoTo 0
     If ObterUsr = "" Then ObterUsr = "OPERADOR"
 End Function
+
+

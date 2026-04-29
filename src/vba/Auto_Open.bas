@@ -2,7 +2,7 @@ Attribute VB_Name = "Auto_Open"
 Option Explicit
 
 ' =============================================================================
-' Auto_Open.bas — Inicialização do sistema ao abrir o workbook
+' Auto_Open.bas - Inicialização do sistema ao abrir o workbook
 ' Este módulo é chamado automaticamente pelo Excel ao abrir o arquivo.
 ' =============================================================================
 
@@ -40,6 +40,5 @@ Public Sub AbrirMenu()
     ' Atalho manual para abrir o menu (pode ser atribuído a um botão)
     InicializarSistema
 End Sub
-
 
 

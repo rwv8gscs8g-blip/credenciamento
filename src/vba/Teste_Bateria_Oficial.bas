@@ -1513,7 +1513,7 @@ Private Sub BA_Log(ByVal statusTeste As String, ByVal bloco As String, ByVal nom
                     ' Apenas a celula de STATUS (coluna G = 7) fica verde
                     ws.Cells(gLinhaResultado, 7).Interior.Color = RGB(198, 239, 206)
                 Case STATUS_FAIL
-                    corFundo = RGB(255, 199, 206)    ' vermelho claro — linha inteira
+                    corFundo = RGB(255, 199, 206)    ' vermelho claro - linha inteira
                     ws.Range(ws.Cells(gLinhaResultado, 1), ws.Cells(gLinhaResultado, 10)).Interior.Color = corFundo
                 Case Else
                     ' INFO: sem cor (fundo branco padrao)
@@ -2439,3 +2439,5 @@ End Function
 Private Function BA_Pad3(ByVal valor As Variant) As String
     BA_Pad3 = Format$(CLng(Val(valor)), "000")
 End Function
+
+

@@ -1,7 +1,7 @@
 Attribute VB_Name = "Svc_Avaliacao"
 Option Explicit
 
-' Serviço de Avaliação de OS — V10
+' Serviço de Avaliação de OS - V10
 ' Implementa: AvaliarOS.
 ' Registra 10 notas (0-10), calcula média e fecha OS como CONCLUIDA.
 ' Sem Select/ActiveCell/On Error Resume Next silencioso.
@@ -361,7 +361,7 @@ Public Function AvaliarOS( _
         Exit Function
     End If
 
-    ' 7b. V12.0.0203 ONDA 1 — Regra de strikes na avaliacao.
+    ' 7b. V12.0.0203 ONDA 1 - Regra de strikes na avaliacao.
     '
     ' Cada avaliacao com media estritamente menor que a nota de corte
     ' (GetNotaMinimaAvaliacao, default 5.0) conta 1 strike para a empresa.
@@ -412,7 +412,7 @@ Public Function AvaliarOS( _
     '    para a proxima empresa nas solicitacoes seguintes.
     Dim resAvancar As TResult
     resAvancar = AvancarFila(os.EMP_ID, os.ATIV_ID, False, "AVALIACAO_CONCLUIDA")
-    ' Se falhar, nao bloqueia a avaliacao — apenas loga.
+    ' Se falhar, nao bloqueia a avaliacao - apenas loga.
     If Not resAvancar.Sucesso Then
         RegistrarEvento _
             EVT_AVALIACAO, ENT_OS, OS_ID, _
@@ -450,6 +450,5 @@ Erro:
     res.CodigoErro = Err.Number
     AvaliarOS = res
 End Function
-
 
 

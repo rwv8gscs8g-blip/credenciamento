@@ -3,7 +3,7 @@ Option Explicit
 
 ' ============================================================
 ' Constantes de mapeamento V10
-' Gerado por Claude Opus 4.6 — NÃO editar manualmente.
+' Gerado por Claude Opus 4.6 - NÃO editar manualmente.
 ' Referência: doc/Time_AI/001-Sprint0-Contrato-de-Dados-V10.md
 ' ============================================================
 
@@ -15,7 +15,7 @@ Public Const SHEET_ENTIDADE As String = "ENTIDADE"
 Public Const SHEET_ENTIDADE_INATIVOS As String = "ENTIDADE_INATIVOS"
 Public Const SHEET_ATIVIDADES As String = "ATIVIDADES"
 Public Const SHEET_CAD_SERV As String = "CAD_SERV"
-' V12.0.0203 ONDA 2 — prefixo das abas-snapshot de CAD_SERV criadas
+' V12.0.0203 ONDA 2 - prefixo das abas-snapshot de CAD_SERV criadas
 ' antes de cada reset CNAE. O nome final fica
 ' "CAD_SERV_SNAPSHOT_yyyymmdd_hhnnss" para preservar historico
 ' reaproveitavel manualmente caso a re-vinculacao posterior precise
@@ -194,6 +194,5 @@ Public Const COL_AUDIT_DEPOIS As Long = 9         ' I
 ' Funcoes UltimaLinhaAba, ProximoId e PrimeiraLinhaDadosEmpresas
 ' foram movidas para Util_Planilha.bas (modulo de constantes nao deve conter logica).
 ' IdsIguais centralizada em Util_Planilha.bas.
-
 
 

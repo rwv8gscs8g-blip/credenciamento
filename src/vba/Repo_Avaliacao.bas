@@ -1,7 +1,7 @@
 Attribute VB_Name = "Repo_Avaliacao"
 Option Explicit
 
-' Repositório de Avaliação — V10
+' Repositório de Avaliação - V10
 ' Persiste avaliação na linha correspondente da aba CAD_OS.
 ' Sem Select/ActiveCell/On Error Resume Next silencioso.
 
@@ -108,9 +108,9 @@ Public Function RepoAvaliacaoInserir( _
     RepoAvaliacaoInserir = Inserir(a, QtExecutada, valorExecutado, justifDiv, dtFechamento, DtPagto, numEmpenho)
 End Function
 
-' IdsIguais removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
+' IdsIguais removida - usar Util_Planilha.IdsIguais (V12-CLEAN).
 
-' V12.0.0203 ONDA 1 — Conta avaliacoes registradas para uma empresa
+' V12.0.0203 ONDA 1 - Conta avaliacoes registradas para uma empresa
 ' cuja media de notas seja estritamente menor que `notaCorte`.
 ' A varredura usa SHEET_CAD_OS, COL_OS_EMP_ID e COL_OS_MEDIA.
 ' Apenas linhas com OS no STATUS_OS_CONCLUIDA sao consideradas
@@ -163,4 +163,5 @@ Public Function ContarStrikesPorEmpresa( _
 falha:
     ContarStrikesPorEmpresa = 0
 End Function
+
 

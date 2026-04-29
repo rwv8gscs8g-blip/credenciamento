@@ -1,7 +1,7 @@
 Attribute VB_Name = "Svc_PreOS"
 Option Explicit
 
-' Serviço de Pré-OS — V10
+' Serviço de Pré-OS - V10
 ' Implementa: EmitirPreOS, RecusarPreOS, ExpirarPreOS.
 ' Integrado com Svc_Rodizio (SelecionarEmpresa, AvancarFila).
 ' Sem Select/ActiveCell/On Error Resume Next silencioso.
@@ -85,7 +85,7 @@ End Function
 ' SEÇÃO 1: EMISSÃO
 ' ============================================================
 
-' EmitirPreOS — emite Pré-OS via rodízio para uma atividade.
+' EmitirPreOS - emite Pré-OS via rodízio para uma atividade.
 '
 ' Parâmetros:
 '   ENT_ID      : ID da entidade demandante (FK → ENTIDADE)
@@ -93,16 +93,16 @@ End Function
 '   QT_ESTIMADA : quantidade estimada do serviço
 '
 ' Fluxo:
-'   1. Validar/PARSE COD_SERVICO — critério 1
+'   1. Validar/PARSE COD_SERVICO - critério 1
 '   2. Extrair ATIV_ID e SERV_ID
-'   3. Buscar VALOR_UNIT em CAD_SERV (filtro ATIV_ID + SERV_ID) — critério 2
-'   4. Chamar SelecionarEmpresa(ATIV_ID) — critério 3
+'   3. Buscar VALOR_UNIT em CAD_SERV (filtro ATIV_ID + SERV_ID) - critério 2
+'   4. Chamar SelecionarEmpresa(ATIV_ID) - critério 3
 '   5. Ler DIAS_DECISAO de GetConfig()
-'   6. Gerar PREOS_ID via ProximoId(SHEET_PREOS) — critério 8
-'   7. Gravar linha na aba PRE_OS — critérios 4-7
-'   8. Auditoria EVT_PREOS_EMITIDA — critério 9
+'   6. Gerar PREOS_ID via ProximoId(SHEET_PREOS) - critério 8
+'   7. Gravar linha na aba PRE_OS - critérios 4-7
+'   8. Auditoria EVT_PREOS_EMITIDA - critério 9
 '
-' Nota: NÃO chama AvancarFila — o avanço ocorre somente em
+' Nota: NÃO chama AvancarFila - o avanço ocorre somente em
 '       RecusarPreOS, ExpirarPreOS (punidos) e EmitirOS (aceite).
 '
 Public Function EmitirPreOS( _
@@ -237,7 +237,7 @@ End Function
 ' SEÇÃO 2: RECUSA E EXPIRAÇÃO
 ' ============================================================
 
-' RecusarPreOS — registra recusa explícita da empresa/gestor.
+' RecusarPreOS - registra recusa explícita da empresa/gestor.
 '
 ' POLÍTICA AvancarFila: chamado ANTES de gravar PRE_OS.
 '   Se AvancarFila falhar → Sucesso=False, PRE_OS inalterada (critério 46).
@@ -322,7 +322,7 @@ Erro:
     RecusarPreOS = res
 End Function
 
-' ExpirarPreOS — marca Pré-OS como EXPIRADA por prazo vencido.
+' ExpirarPreOS - marca Pré-OS como EXPIRADA por prazo vencido.
 '
 ' POLÍTICA AvancarFila: chamado ANTES de gravar PRE_OS (critério 47).
 '
@@ -511,7 +511,6 @@ Private Function ExtrairIdsCodServico( _
     End If
 End Function
 
-' IdsEquivalentes removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
-
+' IdsEquivalentes removida - usar Util_Planilha.IdsIguais (V12-CLEAN).
 
 

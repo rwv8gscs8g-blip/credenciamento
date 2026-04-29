@@ -1,7 +1,7 @@
 Attribute VB_Name = "Repo_Credenciamento"
 Option Explicit
 
-' Repositório da aba CREDENCIADOS — V10
+' Repositório da aba CREDENCIADOS - V10
 ' Gerencia fila de rodízio por atividade.
 ' Usa Const_Colunas. Sem Select/ActiveCell/On Error Resume Next silencioso.
 ' Nota: helpers de EMPRESAS aqui são temporários até Repo_Empresa existir (Sprint 4).
@@ -54,7 +54,7 @@ Public Function BuscarFila(ByVal ATIV_ID As String) As TCredenciamento()
         End If
     Next i
 
-    ' Ordenação por POSICAO_FILA (bubble sort — fila tipicamente pequena)
+    ' Ordenação por POSICAO_FILA (bubble sort - fila tipicamente pequena)
     Dim trocou As Boolean
     Do
         trocou = False
@@ -384,7 +384,7 @@ fim:
     MaxPosicaoFila = maxPos
 End Function
 
-' IdsIguais removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
+' IdsIguais removida - usar Util_Planilha.IdsIguais (V12-CLEAN).
 
 ' Preenche um TCredenciamento a partir de uma linha da aba CREDENCIADOS.
 Private Function LerCredenciamento(ByVal ws As Worksheet, ByVal linha As Long) As TCredenciamento

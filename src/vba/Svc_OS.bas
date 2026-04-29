@@ -1,7 +1,7 @@
 Attribute VB_Name = "Svc_OS"
 Option Explicit
 
-' Serviço de OS — V10
+' Serviço de OS - V10
 ' Implementa: EmitirOS, CancelarOS.
 ' EmitirOS converte PRE_OS aceita em OS formal (STATUS=EM_EXECUCAO).
 ' CancelarOS encerra OS com STATUS=CANCELADA.
@@ -127,7 +127,7 @@ Public Function EmitirOS( _
     os.STATUS_OS = STATUS_OS_EXEC
     os.JUSTIF_DIVERGENCIA = ""
 
-    ' 3. Inserir OS via Repo_OS (os.OS_ID preenchido ByRef — critérios 23-24)
+    ' 3. Inserir OS via Repo_OS (os.OS_ID preenchido ByRef - critérios 23-24)
     resInsert = Repo_OS.Inserir(os)
     If Not resInsert.Sucesso Then
         res.Sucesso = False
@@ -159,7 +159,7 @@ Public Function EmitirOS( _
         "; DT_PREV=" & Format$(DT_PREV_TERMINO, "DD/MM/YYYY"), _
         "Svc_OS"
 
-    ' 6. AvancarFila SEM punição (critério 26) — falha = AVISO (critério 48)
+    ' 6. AvancarFila SEM punição (critério 26) - falha = AVISO (critério 48)
     resAv = AvancarFila(preos.EMP_ID, preos.ATIV_ID, False, "ACEITE_OS_EMITIDA")
 
     res.Sucesso = True
@@ -418,6 +418,6 @@ Private Function ExtrairServId(ByVal codServ As String, ByVal ativId As String) 
     End If
 End Function
 
-' IdsEquivalentesOS removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
+' IdsEquivalentesOS removida - usar Util_Planilha.IdsIguais (V12-CLEAN).
 
 

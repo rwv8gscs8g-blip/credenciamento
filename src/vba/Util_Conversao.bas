@@ -15,7 +15,7 @@ Public Function SafeListText(ByVal v As Variant) As String
 End Function
 
 ' Converte texto monetário ("R$ 1.234,56", "1234.56") em Currency.
-' Nunca retorna erro — retorna 0 se inválido.
+' Nunca retorna erro - retorna 0 se inválido.
 Public Function ToCurrency(ByVal v As Variant) As Currency
     Dim n As Double
     

@@ -1,7 +1,7 @@
 Attribute VB_Name = "Repo_PreOS"
 Option Explicit
 
-' Repositório da aba PRE_OS — V10
+' Repositório da aba PRE_OS - V10
 ' Usa Const_Colunas para mapeamento. Sem Select/ActiveCell.
 
 Private Const STATUS_PREOS_AGUARDANDO_ACEITE As String = "AGUARDANDO_ACEITE"
@@ -152,7 +152,7 @@ Public Function TemPreOSPendenteNaAtividade( _
 fim:
 End Function
 
-' IdsIguais removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
+' IdsIguais removida - usar Util_Planilha.IdsIguais (V12-CLEAN).
 
 ' Atualiza status e motivo de uma Pré-OS.
 Public Function AtualizarStatus( _

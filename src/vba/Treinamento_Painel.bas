@@ -2,15 +2,15 @@ Attribute VB_Name = "Treinamento_Painel"
 Option Explicit
 
 ' ============================================================
-' Treinamento_Painel — Checklist de Testes V12
+' Treinamento_Painel - Checklist de Testes V12
 ' Abordagem: aba dedicada TREINAMENTO_RESULTADOS
 ' SEM controles dinamicos, SEM UserForm auxiliar
 ' Tudo via planilha nativa (Data Validation + formatacao condicional)
 '
 ' Funcoes publicas:
-'   Treinamento_AbrirChecklist  — cria/atualiza aba e a ativa
-'   Treinamento_SalvarResultado — grava snapshot dos resultados
-'   Treinamento_Resumo          — exibe resumo SIM/NAO/PENDENTE
+'   Treinamento_AbrirChecklist  - cria/atualiza aba e a ativa
+'   Treinamento_SalvarResultado - grava snapshot dos resultados
+'   Treinamento_Resumo          - exibe resumo SIM/NAO/PENDENTE
 ' ============================================================
 
 Private Const SHEET_CHECKLIST As String = "TREINAMENTO_RESULTADOS"
@@ -39,7 +39,7 @@ Public Sub Treinamento_AbrirChecklist()
     Set ws = ObterOuCriarAba(jaCriada)
 
     If Not jaCriada Then
-        ' Aba nova — montar do zero
+        ' Aba nova - montar do zero
         Call MontarCabecalho(ws)
         Call MontarInstrucoes(ws)
         Call MontarPerguntas(ws)
@@ -48,7 +48,7 @@ Public Sub Treinamento_AbrirChecklist()
         Call MontarResumo(ws)
         Call AplicarProtecaoLeve(ws)
     Else
-        ' Aba existente — apenas garantir que resumo esta atualizado
+        ' Aba existente - apenas garantir que resumo esta atualizado
         Call AtualizarResumo(ws)
     End If
 
@@ -180,7 +180,7 @@ Private Sub MontarCabecalho(ByVal ws As Worksheet)
 
     ' Titulo
     ws.Range("A1:G1").Merge
-    ws.Range("A1").Value = "CHECKLIST DE TESTES V12 — Rodízio de Empresas"
+    ws.Range("A1").Value = "CHECKLIST DE TESTES V12 - Rodízio de Empresas"
     With ws.Range("A1")
         .Font.Bold = True
         .Font.Size = 14
@@ -422,7 +422,7 @@ Private Sub MontarResumo(ByVal ws As Worksheet)
 End Sub
 
 Private Sub AtualizarResumo(ByVal ws As Worksheet)
-    ' Resumo usa formulas COUNTIF — atualiza automaticamente
+    ' Resumo usa formulas COUNTIF - atualiza automaticamente
     ' Nada a fazer aqui
 End Sub
 
@@ -478,6 +478,5 @@ Private Function ObterUsuario() As String
     On Error GoTo 0
     If ObterUsuario = "" Then ObterUsuario = "OPERADOR"
 End Function
-
 
 

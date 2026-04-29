@@ -1377,7 +1377,7 @@ Private Sub TV2_CS_PrepararEstadoAteCS14( _
 End Sub
 
 ' ============================================================
-' V12.0.0203 ONDA 1 — Suite de strikes na avaliacao
+' V12.0.0203 ONDA 1 - Suite de strikes na avaliacao
 ' ============================================================
 '
 ' Cobre a regra nova:
@@ -1388,13 +1388,13 @@ End Sub
 '   - apos reativar, contagem efetiva e zerada (DT_FIM_SUSP <= hoje)
 '
 ' Cenarios:
-'   CS_AVAL_001 — 1 strike com MAX=3 nao suspende
-'   CS_AVAL_002 — 2 strikes com MAX=3 nao suspendem
-'   CS_AVAL_003 — 3 strikes com MAX=3 suspendem em DIAS, nao em meses
-'   CS_AVAL_004 — avaliacao boa entre dois strikes nao zera contador
-'   CS_AVAL_005 — MAX=1 reproduz comportamento antigo (1 strike suspende)
-'   CS_AVAL_006 — DIAS=30 produz DT_FIM_SUSP correta (hoje+30)
-'   CS_AVAL_007 — apos reativacao automatica, novo strike volta a contar 1
+'   CS_AVAL_001 - 1 strike com MAX=3 nao suspende
+'   CS_AVAL_002 - 2 strikes com MAX=3 nao suspendem
+'   CS_AVAL_003 - 3 strikes com MAX=3 suspendem em DIAS, nao em meses
+'   CS_AVAL_004 - avaliacao boa entre dois strikes nao zera contador
+'   CS_AVAL_005 - MAX=1 reproduz comportamento antigo (1 strike suspende)
+'   CS_AVAL_006 - DIAS=30 produz DT_FIM_SUSP correta (hoje+30)
+'   CS_AVAL_007 - apos reativacao automatica, novo strike volta a contar 1
 '
 Public Sub TV2_RunStrikes(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
     Dim notas(1 To 10) As Integer
@@ -1559,7 +1559,7 @@ Public Sub TV2_RunStrikes(Optional ByVal visual As Boolean = False, Optional ByV
     ' Apagar a OS antiga concluida para que o contador efetivo zere; em
     ' produtos reais o operador faz manualmente. Para o teste, usamos a
     ' contagem on-the-fly e validamos que ela considera so OS futuras.
-    ' (Nesta fase, ContarStrikesPorEmpresa nao filtra por reativacao —
+    ' (Nesta fase, ContarStrikesPorEmpresa nao filtra por reativacao -
     ' isso fica documentado em auditoria/28 secao 04. O teste, portanto,
     ' valida o comportamento atual: o contador continua somando ate que
     ' a aba CAD_OS seja zerada.)
@@ -1598,7 +1598,7 @@ Private Sub TV2_SetStrikesConfig(ByVal maxStrikes As Long, ByVal diasSuspensao A
 
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = maxStrikes
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = diasSuspensao
-    ' Garante nota minima 5 (default canonico — TV2_SetConfigCanonica ja faz
+    ' Garante nota minima 5 (default canonico - TV2_SetConfigCanonica ja faz
     ' isso, mas reaplicamos para isolar a suite).
     If CDbl(Val(ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value)) <= 0 Then
         ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = 5
@@ -1650,7 +1650,7 @@ Private Sub TV2_ConsumirStrikeEmpresa( _
 End Sub
 
 ' ============================================================
-' V12.0.0203 ONDA 2 — Suite CNAE: snapshot, dedup e listagem
+' V12.0.0203 ONDA 2 - Suite CNAE: snapshot, dedup e listagem
 ' ============================================================
 '
 ' Cobre os helpers novos em Preencher.bas:
@@ -1661,15 +1661,15 @@ End Sub
 ' diretamente sobre cenarios fabricados, garantindo determinismo.
 '
 ' Cenarios:
-'   CNAE_001 — snapshot de CAD_SERV preserva o conteudo e o nome
+'   CNAE_001 - snapshot de CAD_SERV preserva o conteudo e o nome
 '              segue o prefixo SHEET_PREFIX_CAD_SERV_SNAP
-'   CNAE_002 — dedup retorna 0 em ATIVIDADES com chaves unicas
+'   CNAE_002 - dedup retorna 0 em ATIVIDADES com chaves unicas
 '              e retorna >= 1 quando duplicata e injetada
-'   CNAE_003 — dois snapshots em sequencia coexistem e CnaeListarSnapshots
+'   CNAE_003 - dois snapshots em sequencia coexistem e CnaeListarSnapshots
 '              devolve ambos em ordem cronologica
-'   CNAE_004 — dedup AUTOMATICO remove duplicatas (Onda 3)
-'   CNAE_005 — poda de snapshots preserva os N mais recentes (Onda 3)
-'   CNAE_006 — regressao: Limpa_Base preserva ATIVIDADES + CAD_SERV (Onda 3)
+'   CNAE_004 - dedup AUTOMATICO remove duplicatas (Onda 3)
+'   CNAE_005 - poda de snapshots preserva os N mais recentes (Onda 3)
+'   CNAE_006 - regressao: Limpa_Base preserva ATIVIDADES + CAD_SERV (Onda 3)
 '
 Public Sub TV2_RunCnae(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
     Dim wsServ As Worksheet
@@ -1898,7 +1898,7 @@ Public Sub TV2_RunCnae(Optional ByVal visual As Boolean = False, Optional ByVal 
     ' Limpa snapshots restantes para nao contaminar cenario seguinte.
     TV2_RemoverSnapshotsCnaeAnteriores
 
-    ' ----- CNAE_006: regressao — Limpa_Base preserva ATIVIDADES + CAD_SERV -----
+    ' ----- CNAE_006: regressao - Limpa_Base preserva ATIVIDADES + CAD_SERV -----
     ' Garante que a operacao de limpeza operacional (chamada por
     ' Limpar_Base.frm e Configuracao_Inicial.frm) nao apaga a base CNAE.
     ' Aqui nao chamamos Limpa_Base diretamente (tem MsgBox); chamamos
@@ -1971,7 +1971,7 @@ falha:
     TV2_FinalizarExecucao "CNAE", silencioso
 End Sub
 
-' Helper de teste — remove abas snapshot deixadas por execucoes anteriores
+' Helper de teste - remove abas snapshot deixadas por execucoes anteriores
 ' para que cada rodada da suite CNAE comece em estado conhecido.
 Private Sub TV2_RemoverSnapshotsCnaeAnteriores()
     Dim ws As Worksheet
@@ -2000,7 +2000,7 @@ Private Sub TV2_RemoverSnapshotsCnaeAnteriores()
     Application.DisplayAlerts = True
 End Sub
 
-' Helper de teste — verifica existencia de aba (espelho de CnaeAbaExiste
+' Helper de teste - verifica existencia de aba (espelho de CnaeAbaExiste
 ' que e Private em Preencher.bas).
 Private Function CnaeAbaExisteTeste(ByVal nome As String) As Boolean
     Dim ws As Worksheet
@@ -2011,7 +2011,7 @@ Private Function CnaeAbaExisteTeste(ByVal nome As String) As Boolean
 End Function
 
 ' ============================================================
-' V12.0.0203 ONDA 4 — Suite CFG: ida e volta dos parametros de strikes
+' V12.0.0203 ONDA 4 - Suite CFG: ida e volta dos parametros de strikes
 ' ============================================================
 '
 ' Cobre a leitura/gravacao das 3 colunas novas em CONFIG via getters
@@ -2021,8 +2021,8 @@ End Function
 ' configuracao, que e o que importa para a regra de negocio.
 '
 ' Cenarios:
-'   CFG_001 — getters devolvem exatamente o que esta em CONFIG
-'   CFG_002 — gravacao em CONFIG e refletida pelos getters na proxima leitura
+'   CFG_001 - getters devolvem exatamente o que esta em CONFIG
+'   CFG_002 - gravacao em CONFIG e refletida pelos getters na proxima leitura
 
 Public Sub TV2_RunCfg(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
     Dim ws As Worksheet
@@ -2123,3 +2123,5 @@ falha:
                   "Toda falha fatal precisa ficar rastreavel na suite CFG", False
     TV2_FinalizarExecucao "CFG", silencioso
 End Sub
+
+
