@@ -80,13 +80,66 @@ Public Sub ImportarPacoteV2_Grupo(ByVal nomeGrupo As String)
     Call IV2_RodarMain(False, nomeGrupo)
 End Sub
 
-Public Function ImportarPacoteV2_Status() As String
-    If mIV2_LastStatus = "" Then
-        ImportarPacoteV2_Status = "(nenhum import V2 executado nesta sessao)"
+' ImportarPacoteV2_Status agora e Sub e imprime direto na janela imediata.
+' (Antes era Function. Quando chamada com "Call ..._Status" o VBA descartava
+' o retorno e nada aparecia. Bug corrigido em 2026-04-29.)
+'
+' Quando ainda nao houve nenhum import nesta sessao, mostra um RESUMO DO
+' MANIFESTO (grupos + contagem) para que o operador veja imediatamente
+' que a ferramenta esta viva e qual seria o universo de import.
+Public Sub ImportarPacoteV2_Status()
+    Debug.Print "=== ImportarPacoteV2_Status (" & IV2_VERSION & ") ==="
+    If mIV2_LastStatus <> "" Then
+        Debug.Print "ULTIMO RUN NESTA SESSAO:"
+        Debug.Print mIV2_LastStatus
+        Debug.Print ""
     Else
-        ImportarPacoteV2_Status = mIV2_LastStatus
+        Debug.Print "(nenhum import V2 executado nesta sessao)"
+        Debug.Print ""
     End If
-End Function
+
+    ' Sempre mostra resumo do manifesto (mesmo sem run anterior)
+    Dim manifesto As String
+    manifesto = ThisWorkbook.Path & Application.PathSeparator & _
+                Replace(IV2_MANIFESTO_REL, "\", Application.PathSeparator)
+    Debug.Print "MANIFESTO ESPERADO:"
+    Debug.Print "  " & manifesto
+    If Not IV2_ArquivoExiste(manifesto) Then
+        Debug.Print "  STATUS: AUSENTE"
+        Debug.Print ""
+        Debug.Print "Pacote local-ai/vba_import/ nao foi descompactado " & _
+                    "ou path errado. Ver docs/how-to/COMO_OBTER_FERRAMENTAS_VBA.md."
+        Exit Sub
+    End If
+    Debug.Print "  STATUS: presente"
+    Debug.Print ""
+
+    Dim grupos() As String
+    Call IV2_LerManifesto(manifesto, grupos)
+
+    Debug.Print "GRUPOS DECLARADOS NO MANIFESTO:"
+    Dim i As Long
+    Dim totalItens As Long
+    Dim cabecalho As String
+    Dim conteudoItens As String
+    Dim qtdGrupo As Long
+    For i = LBound(grupos) To UBound(grupos)
+        cabecalho = IV2_PartesGrupo_Header(grupos(i))
+        conteudoItens = IV2_PartesGrupo_Itens(grupos(i))
+        If conteudoItens = "" Then
+            qtdGrupo = 0
+        Else
+            qtdGrupo = UBound(Split(conteudoItens, vbCrLf)) + 1
+        End If
+        totalItens = totalItens + qtdGrupo
+        Debug.Print "  [" & Format$(i, "00") & "] " & _
+                    Left$(cabecalho & String$(60, " "), 60) & _
+                    " itens=" & qtdGrupo
+    Next i
+    Debug.Print ""
+    Debug.Print "TOTAL DE ITENS NO MANIFESTO: " & totalItens
+    Debug.Print "=== fim ImportarPacoteV2_Status ==="
+End Sub
 
 
 ' ============================================================
@@ -101,6 +154,12 @@ Private Sub IV2_RodarMain(ByVal dryRun As Boolean, ByVal grupoSpec As String)
     Dim totalSkipped As Long
     Dim totalErros As Long
     Dim modoTxt As String
+    ' Variaveis snapshot para o handler `falha:` (preserva info mesmo se Err
+    ' for limpo por sub aninhada com OERN antes do handler ler).
+    Dim faseAtual As String
+    Dim ultErrNum As Long
+    Dim ultErrDesc As String
+    Dim ultErrSource As String
 
     ts = Format$(Now, "yyyymmdd_hhnnss")
     If dryRun Then
@@ -109,10 +168,12 @@ Private Sub IV2_RodarMain(ByVal dryRun As Boolean, ByVal grupoSpec As String)
         modoTxt = "REAL"
     End If
     mIV2_LastStatus = "(executando " & modoTxt & " em " & ts & ")"
+    faseAtual = "INICIO"
 
     On Error GoTo falha
 
     ' 1. Validar VBOM habilitado
+    faseAtual = "1_VBOM_CHECK"
     If Not IV2_VBOMHabilitado() Then
         Call IV2_AbortarComDiagnostico("VBOM nao habilitado. " & _
             "Excel > Opcoes > Centro de Confiabilidade > Configuracoes de Macro > " & _
@@ -121,6 +182,7 @@ Private Sub IV2_RodarMain(ByVal dryRun As Boolean, ByVal grupoSpec As String)
     End If
 
     ' 2. Localizar manifesto
+    faseAtual = "2_LOCALIZAR_MANIFESTO"
     manifesto = ThisWorkbook.Path & Application.PathSeparator & _
                 Replace(IV2_MANIFESTO_REL, "\", Application.PathSeparator)
     If Not IV2_ArquivoExiste(manifesto) Then
@@ -131,7 +193,9 @@ Private Sub IV2_RodarMain(ByVal dryRun As Boolean, ByVal grupoSpec As String)
     End If
 
     ' 3. Garantir planilha de log
+    faseAtual = "3_GARANTIR_PLANILHA_LOG"
     Call IV2_GarantirPlanilhaLog
+    faseAtual = "3_LOG_INICIO"
     Call IV2_LogarEvento(ts, "INICIO", "", "", _
                        "Importador V2 " & IV2_VERSION & " - " & modoTxt & _
                        IIf(grupoSpec <> "", " (grupo: " & grupoSpec & ")", " (todos)"), _
@@ -139,6 +203,7 @@ Private Sub IV2_RodarMain(ByVal dryRun As Boolean, ByVal grupoSpec As String)
 
     ' 4. Backup do projeto VBA inteiro (so em modo real)
     If Not dryRun Then
+        faseAtual = "4_BACKUP"
         Call IV2_BackupAntesDeImportar(ts)
         Call IV2_LogarEvento(ts, "BACKUP", "(projeto)", "backups/vba/" & ts & "-V2-FULL/", _
                            "backup do projeto VBA antes de import", "ok")
@@ -146,10 +211,12 @@ Private Sub IV2_RodarMain(ByVal dryRun As Boolean, ByVal grupoSpec As String)
 
     ' 5. Purge fantasmas (so em modo real)
     If Not dryRun Then
+        faseAtual = "5_PURGE_FANTASMAS"
         Call IV2_PurgeFantasmas(ts)
     End If
 
     ' 6. Ler manifesto e processar por grupo
+    faseAtual = "6_LER_MANIFESTO"
     Call IV2_LerManifesto(manifesto, grupos)
 
     Dim i As Long
@@ -158,8 +225,10 @@ Private Sub IV2_RodarMain(ByVal dryRun As Boolean, ByVal grupoSpec As String)
     Dim grupoMatch As Boolean
 
     For i = LBound(grupos) To UBound(grupos)
+        faseAtual = "6_GRUPO_" & i & "_PARSE"
         cabecalho = IV2_PartesGrupo_Header(grupos(i))
         conteudo = IV2_PartesGrupo_Itens(grupos(i))
+        faseAtual = "6_GRUPO_" & i & "_" & Left$(cabecalho, 40)
 
         ' Filtrar por grupo se especificado
         grupoMatch = True
@@ -172,11 +241,15 @@ Private Sub IV2_RodarMain(ByVal dryRun As Boolean, ByVal grupoSpec As String)
         End If
 
         If grupoMatch And Len(conteudo) > 0 Then
+            faseAtual = "6_GRUPO_" & i & "_PROCESSAR"
+            ' Snapshot Err antes da chamada (caso sub aninhada limpe Err)
+            ultErrNum = 0: ultErrDesc = "": ultErrSource = ""
             Call IV2_ProcessarGrupo(ts, cabecalho, conteudo, dryRun, _
                                   totalImportados, totalSkipped, totalErros)
 
             ' Validar compilacao apos grupo (so em modo real)
             If Not dryRun Then
+                faseAtual = "6_GRUPO_" & i & "_COMPILE"
                 If Not IV2_CompilarVBProject() Then
                     Call IV2_LogarEvento(ts, cabecalho, "(compile)", "", _
                                        "Compilacao FALHOU apos grupo", "fatal")
@@ -193,6 +266,7 @@ Private Sub IV2_RodarMain(ByVal dryRun As Boolean, ByVal grupoSpec As String)
     Next i
 
     ' 7. Salvar log final
+    faseAtual = "7_LOG_FIM"
     Call IV2_LogarEvento(ts, "FIM", "", "", _
                        "imp=" & totalImportados & " skip=" & totalSkipped & " err=" & totalErros, _
                        IIf(totalErros > 0, "warn", "ok"))
@@ -207,6 +281,7 @@ Private Sub IV2_RodarMain(ByVal dryRun As Boolean, ByVal grupoSpec As String)
         icone = vbExclamation
     End If
 
+    faseAtual = "8_MSGBOX_FIM"
     MsgBox "Importador V2 - " & modoTxt & " concluido." & vbCrLf & vbCrLf & _
            "Importados: " & totalImportados & vbCrLf & _
            "Skipped:    " & totalSkipped & vbCrLf & _
@@ -216,13 +291,20 @@ Private Sub IV2_RodarMain(ByVal dryRun As Boolean, ByVal grupoSpec As String)
     Exit Sub
 
 falha:
-    mIV2_LastStatus = "ERRO " & Err.Number & " - " & Err.Description
+    ' Snapshot Err IMEDIATAMENTE (antes de qualquer call que possa limpar)
+    ultErrNum = Err.Number
+    ultErrDesc = Err.Description
+    ultErrSource = Err.Source
+    mIV2_LastStatus = "ERRO " & ultErrNum & " - " & ultErrDesc & " [fase=" & faseAtual & "]"
     On Error Resume Next
-    Call IV2_LogarEvento(ts, "FALHA_FATAL", "", "", _
-                       "Err " & Err.Number & ": " & Err.Description, "fatal")
+    Call IV2_LogarEvento(ts, "FALHA_FATAL", faseAtual, ultErrSource, _
+                       "Err " & ultErrNum & ": " & ultErrDesc, "fatal")
     On Error GoTo 0
     MsgBox "Importador V2 ABORTADO:" & vbCrLf & vbCrLf & _
-           "Err " & Err.Number & ": " & Err.Description, _
+           "Fase:   " & faseAtual & vbCrLf & _
+           "Source: " & ultErrSource & vbCrLf & _
+           "Err " & ultErrNum & ": " & ultErrDesc & vbCrLf & vbCrLf & _
+           "(Se Err 0: erro engolido por sub interna; ver fase para localizar.)", _
            vbCritical, "Importador V2"
 End Sub
 
@@ -267,19 +349,39 @@ Private Sub IV2_ProcessarGrupo(ByVal ts As String, ByVal cabecalho As String, _
         ' Determinar VB_Name (remove pasta, prefixo AAX-, e extensao)
         vbName = IV2_NomeArquivoSemPrefixo(caminhoRel)
 
-        ' TABU: Mod_Types nao e modificado em import incremental
+        ' TABU: Mod_Types nao e modificado em import incremental.
+        '
+        ' Regra simplificada (2026-04-29):
+        '   - Se Mod_Types ja existe no workbook: SKIP incondicional.
+        '   - Se Mod_Types nao existe (workbook limpo / fresh): importa.
+        '
+        ' A protecao real contra divergencia esta a montante:
+        '   - Glasswing G7 garante src/vba <-> local-ai/vba_import sincronizados.
+        '   - publicar_vba_import_v2 detecta qualquer mudanca em src/vba/Mod_Types.bas.
+        '   - git pre-commit hook (9.4) bloqueia commit que mude Mod_Types sem aprovacao.
+        '
+        ' Hash heuristico foi removido do gate porque o arquivo .bas no disco
+        ' inclui o boilerplate `Attribute VB_Name = ...` que o CodeModule.Lines
+        ' do componente VBA NAO retorna - causando divergencia sistemica.
         If vbName = IV2_MOD_TYPES_NAME Then
-            If IV2_HashHeuristicoArquivo(caminho) <> IV2_HashHeuristicoComponente(vbName) Then
+            If IV2_VBComponentExiste(vbName) Then
                 Call IV2_LogarEvento(ts, cabecalho, vbName, caminho, _
-                                   "TABU: Mod_Types diverge - abortando", "fatal")
-                Err.Raise vbObjectError + 1, "Importador_V2", _
-                          "Mod_Types.bas no workbook diverge do pacote." & vbCrLf & _
-                          "Mod_Types e tabu fora da Onda 9 plena." & vbCrLf & _
-                          "Pedir aprovacao explicita do mantenedor antes de modificar."
-            Else
-                Call IV2_LogarEvento(ts, cabecalho, vbName, caminho, _
-                                   "TABU: Mod_Types ja sincronizado, pulado", "skip")
+                                   "TABU: Mod_Types ja existe no workbook, pulado", "skip")
                 totalSkipped = totalSkipped + 1
+            Else
+                ' Workbook sem Mod_Types: importar (provavelmente build novo)
+                If dryRun Then
+                    Call IV2_LogarEvento(ts, cabecalho, vbName, caminho, _
+                                       "would_import (Mod_Types ausente - workbook limpo)", "dryrun")
+                    totalImportados = totalImportados + 1
+                Else
+                    sucesso = IV2_ImportarModulo(vbName, caminho, ts, cabecalho)
+                    If sucesso Then
+                        totalImportados = totalImportados + 1
+                    Else
+                        totalErros = totalErros + 1
+                    End If
+                End If
             End If
             GoTo proximoItem
         End If
@@ -318,20 +420,25 @@ End Sub
 ' ============================================================
 
 Private Sub IV2_LerManifesto(ByVal caminho As String, ByRef grupos() As String)
-    Dim f As Integer
     Dim linha As String
     Dim grupoCorrente As String
     Dim resultado() As String
     Dim n As Long
+    Dim i As Long
+    Dim conteudo As String
+    Dim linhas() As String
 
     n = -1
     ReDim resultado(200)
     grupoCorrente = ""
 
-    f = FreeFile
-    Open caminho For Input As #f
-    Do While Not EOF(f)
-        Line Input #f, linha
+    ' Le binario + normaliza EOL (cross-platform). Antes usava Line Input,
+    ' que no Excel Mac lia o manifesto inteiro como uma linha (bug 2026-04-29).
+    conteudo = IV2_LerArquivoBinarioComoTexto(caminho)
+    linhas = Split(conteudo, vbCrLf)
+
+    For i = LBound(linhas) To UBound(linhas)
+        linha = linhas(i)
         ' Linha vazia = separador de grupo
         If Trim$(linha) = "" Then
             If grupoCorrente <> "" Then
@@ -346,8 +453,7 @@ Private Sub IV2_LerManifesto(ByVal caminho As String, ByRef grupos() As String)
                 grupoCorrente = grupoCorrente & vbCrLf & linha
             End If
         End If
-    Loop
-    Close #f
+    Next i
 
     ' Adiciona ultimo grupo
     If grupoCorrente <> "" Then
@@ -722,36 +828,51 @@ Private Function IV2_ArquivoExiste(ByVal caminho As String) As Boolean
     Err.Clear
 End Function
 
-Private Function IV2_LerArquivoTexto(ByVal caminho As String) As String
+' Le um arquivo como bloco binario (cross-platform) e normaliza todos os EOL
+' (CR isolado, LF isolado, CRLF) para CRLF unificado. Resolve bug onde
+' Excel para Mac le manifesto inteiro como uma linha so quando o arquivo
+' nao usa o EOL nativo do SO (bug 2026-04-29).
+Private Function IV2_LerArquivoBinarioComoTexto(ByVal caminho As String) As String
     Dim f As Integer
-    Dim total As String
-    Dim linha As String
-
+    Dim conteudo As String
+    Dim tamArq As Long
     f = FreeFile
-    Open caminho For Input As #f
-    Do While Not EOF(f)
-        Line Input #f, linha
-        total = total & linha & vbCrLf
-    Loop
+    Open caminho For Binary Access Read As #f
+    tamArq = LOF(f)
+    If tamArq > 0 Then
+        conteudo = Space$(tamArq)
+        Get #f, , conteudo
+    End If
     Close #f
-    IV2_LerArquivoTexto = total
+    ' Normaliza qualquer EOL para LF, depois LF para CRLF unificado.
+    conteudo = Replace(conteudo, vbCrLf, vbLf)
+    conteudo = Replace(conteudo, vbCr, vbLf)
+    conteudo = Replace(conteudo, vbLf, vbCrLf)
+    IV2_LerArquivoBinarioComoTexto = conteudo
+End Function
+
+Private Function IV2_LerArquivoTexto(ByVal caminho As String) As String
+    IV2_LerArquivoTexto = IV2_LerArquivoBinarioComoTexto(caminho)
 End Function
 
 Private Function IV2_HashHeuristicoArquivo(ByVal caminho As String) As String
     ' VBA nao tem MD5 nativo. Hash heuristico por tamanho + checksum simples.
     On Error Resume Next
-    Dim f As Integer
+    Dim conteudo As String
+    Dim linhas() As String
     Dim total As String
-    Dim linha As String
     Dim n As Long
-    f = FreeFile
-    Open caminho For Input As #f
-    Do While Not EOF(f) And n < 200
-        Line Input #f, linha
-        total = total & linha
+    Dim i As Long
+
+    conteudo = IV2_LerArquivoBinarioComoTexto(caminho)
+    linhas = Split(conteudo, vbCrLf)
+
+    For i = LBound(linhas) To UBound(linhas)
+        If n >= 200 Then Exit For
+        total = total & linhas(i)
         n = n + 1
-    Loop
-    Close #f
+    Next i
+
     IV2_HashHeuristicoArquivo = CStr(Len(total)) & "_" & CStr(n) & "_" & _
                                 IIf(Len(total) > 0, CStr(Asc(Left$(total, 1))) & "_" & CStr(Asc(Right$(total, 1))), "0_0")
 End Function

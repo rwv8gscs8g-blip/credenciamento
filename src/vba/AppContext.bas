@@ -1,7 +1,7 @@
 Attribute VB_Name = "AppContext"
 Option Explicit
 
-' TAppContext esta definido em AAA_Types.bas (antigo Mod_Types.bas, renomeado para compilar primeiro).
+' TAppContext esta definido em Mod_Types.bas (Glasswing G8: Public Type isolado em Mod_Types).
 Private ctx As TAppContext
 
 Public Function GetContext() As TAppContext
