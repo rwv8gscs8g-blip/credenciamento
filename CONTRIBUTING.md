@@ -15,9 +15,30 @@ Toda contribuição pública exige aceite do
 
 Sem CLA rastreável, a contribuição pode ser recusada.
 
-Materiais operacionais complementares, incluindo guia detalhado de importação
-do código-fonte e vídeo tutorial de incorporação ao workbook, são fornecidos
-em canal controlado somente após aceite rastreável do CLA.
+## Como obter ferramentas avançadas (CLA-controlado)
+
+O projeto adota o modelo **público-auditável + ferramentas
+CLA-controladas** (decidido na Onda 9 antecipada da V12.0.0203).
+
+**Tudo que é público** (auditoria, documentação, código VBA do produto,
+governança, evidências de teste, vitrine) está disponível neste
+repositório sem necessidade de CLA. Você pode auditar, ler, e propor
+PRs documentais sem nenhum acesso adicional.
+
+**Ferramentas avançadas** — incluindo o pacote de import oficial
+(`local-ai/vba_import/`), scripts Bash/Python de sincronização e
+auditoria, Importador V2 (módulo VBA) e instalador do git pre-commit
+hook — são distribuídas via **release zip cifrado** após aceite
+rastreável do CLA e validação do enquadramento do solicitante.
+
+Procedimento detalhado em
+[`docs/how-to/COMO_OBTER_FERRAMENTAS_VBA.md`](docs/how-to/COMO_OBTER_FERRAMENTAS_VBA.md).
+
+Por que esse modelo existe e como ele convive com a TPGL v1.1:
+[`docs/explanation/MODELO_DE_ACESSO_CONTROLADO.md`](docs/explanation/MODELO_DE_ACESSO_CONTROLADO.md).
+
+Matriz definitiva do que é público vs CLA-controlado:
+[`docs/reference/MATRIZ_PUBLICO_VS_CLA.md`](docs/reference/MATRIZ_PUBLICO_VS_CLA.md).
 
 ## Fluxo recomendado
 
