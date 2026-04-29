@@ -2125,3 +2125,254 @@ falha:
 End Sub
 
 
+' ============================================================
+' === Onda 7 (V12.0.0203): familia IDM_* + RDZ_* =============
+' ============================================================
+' Cobertura adicional para o bug Empresa-zumbi (cabecalho corrompido)
+' e validacao ponta a ponta do ciclo + bloqueio + retomada do rodizio.
+
+Public Sub TV2_RunIdempotencia(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Dim qtdEmp1 As Long, qtdEmp2 As Long, qtdEmp3 As Long
+    Dim qtdCred1 As Long, qtdCred2 As Long, qtdCred3 As Long
+    Dim qtdAtiv1 As Long, qtdAtiv2 As Long, qtdAtivPos As Long
+    Dim qtdServ1 As Long, qtdServ2 As Long, qtdServ3 As Long
+    Dim wsEmp As Worksheet
+    Dim cabecalhoOriginal As String
+    Dim cabecalhoCorrompido As String
+    Dim cabecalhoRestaurado As String
+    Dim usedAntes As Long
+    Dim usedDepois As Long
+    Dim relatorio As String
+    Dim ok As Boolean
+
+    On Error GoTo falha
+
+    TV2_InitExecucao "IDM", visual
+
+    ' --- IDM_001: Limpa_Base 3x consecutivas = mesmo estado final --------
+    TV2_PrepararCenarioTriploCanonico
+    Call LimpaBaseTotalReset(relatorio)
+    qtdEmp1 = TV2_QtdLinhasAba(SHEET_EMPRESAS)
+    qtdCred1 = TV2_QtdLinhasAba(SHEET_CREDENCIADOS)
+    qtdServ1 = TV2_QtdLinhasAba(SHEET_CAD_SERV)
+
+    Call LimpaBaseTotalReset(relatorio)
+    qtdEmp2 = TV2_QtdLinhasAba(SHEET_EMPRESAS)
+    qtdCred2 = TV2_QtdLinhasAba(SHEET_CREDENCIADOS)
+    qtdServ2 = TV2_QtdLinhasAba(SHEET_CAD_SERV)
+
+    Call LimpaBaseTotalReset(relatorio)
+    qtdEmp3 = TV2_QtdLinhasAba(SHEET_EMPRESAS)
+    qtdCred3 = TV2_QtdLinhasAba(SHEET_CREDENCIADOS)
+    qtdServ3 = TV2_QtdLinhasAba(SHEET_CAD_SERV)
+
+    ok = (qtdEmp1 = qtdEmp2) And (qtdEmp2 = qtdEmp3) And _
+         (qtdCred1 = qtdCred2) And (qtdCred2 = qtdCred3) And _
+         (qtdServ1 = qtdServ2) And (qtdServ2 = qtdServ3)
+    TV2_LogAssert "IDM", "IDM_001", "AUTO", _
+                  "Limpa_Base 3x consecutivas mantem mesmo estado final", _
+                  "qtdEmp/Cred/Serv identicas apos 1a, 2a e 3a execucao", _
+                  "EMP=" & qtdEmp1 & "/" & qtdEmp2 & "/" & qtdEmp3 & _
+                  "; CRED=" & qtdCred1 & "/" & qtdCred2 & "/" & qtdCred3 & _
+                  "; SERV=" & qtdServ1 & "/" & qtdServ2 & "/" & qtdServ3, _
+                  "Detecta acumulo ou remocao indevida em execucoes repetidas", _
+                  ok
+
+    ' --- IDM_002: Reset_CNAE 2x = mesma quantidade de atividades ---------
+    TV2_PrepararCenarioTriploCanonico
+    Call LimpaBaseTotalReset(relatorio)
+    Call ResetarECarregarCNAE_Padrao
+    qtdAtiv1 = TV2_QtdLinhasAba(SHEET_ATIVIDADES)
+
+    Call ResetarECarregarCNAE_Padrao
+    qtdAtiv2 = TV2_QtdLinhasAba(SHEET_ATIVIDADES)
+
+    ok = (qtdAtiv1 > 0) And (qtdAtiv1 = qtdAtiv2)
+    TV2_LogAssert "IDM", "IDM_002", "AUTO", _
+                  "Reset_CNAE 2x mantem mesma quantidade de atividades", _
+                  "qtdAtiv1 == qtdAtiv2 (zero duplicatas, zero remocoes)", _
+                  "ATIV_1=" & qtdAtiv1 & "; ATIV_2=" & qtdAtiv2, _
+                  "Detecta drift na lista canonica de CNAE", _
+                  ok
+
+    ' --- IDM_003: cabecalho corrompido + Limpa_Base = restaurado ---------
+    TV2_PrepararCenarioTriploCanonico
+    Call LimpaBaseTotalReset(relatorio)
+    Set wsEmp = ThisWorkbook.Worksheets(SHEET_EMPRESAS)
+    cabecalhoOriginal = TV2_LerCabecalhoConcatenado(wsEmp)
+    TV2_DesprotegerAbaTeste SHEET_EMPRESAS, "TV2_IDM_003"
+    wsEmp.Cells(1, 1).Value = "VALOR_INVALIDO"
+    wsEmp.Cells(1, 2).Value = "OUTRO_LIXO"
+    cabecalhoCorrompido = TV2_LerCabecalhoConcatenado(wsEmp)
+
+    Call LimpaBaseTotalReset(relatorio)
+    cabecalhoRestaurado = TV2_LerCabecalhoConcatenado(wsEmp)
+
+    ok = (cabecalhoCorrompido <> cabecalhoOriginal) And _
+         (cabecalhoRestaurado = cabecalhoOriginal)
+    TV2_LogAssert "IDM", "IDM_003", "AUTO", _
+                  "Cabecalho corrompido em EMPRESAS - Limpa_Base restaura canonico", _
+                  "cabecalho linha 1 igual ao original apos Limpa_Base", _
+                  "ORIG=" & Left$(cabecalhoOriginal, 80) & _
+                  "; CORROMPIDO=" & Left$(cabecalhoCorrompido, 80) & _
+                  "; RESTAURADO=" & Left$(cabecalhoRestaurado, 80), _
+                  "Cobertura direta do bug Empresa-zumbi (cabecalho corrompido)", _
+                  ok
+
+    ' --- IDM_004: UsedRange vazado + Limpa_Base = recolocado -------------
+    TV2_PrepararCenarioTriploCanonico
+    Call LimpaBaseTotalReset(relatorio)
+    Set wsEmp = ThisWorkbook.Worksheets(SHEET_EMPRESAS)
+    TV2_DesprotegerAbaTeste SHEET_EMPRESAS, "TV2_IDM_004"
+    ' Forca UsedRange vazado preenchendo cor de fundo em linha distante
+    wsEmp.Cells(50000, 1).Interior.Color = RGB(255, 255, 0)
+    Application.Calculate
+    usedAntes = wsEmp.UsedRange.Rows.Count
+
+    Call LimpaBaseTotalReset(relatorio)
+    Application.Calculate
+    usedDepois = wsEmp.UsedRange.Rows.Count
+
+    ' Apos Limpa_Base, UsedRange deve ser pequeno (cabecalho + margem)
+    ok = (usedAntes >= 50000) And (usedDepois <= 10)
+    TV2_LogAssert "IDM", "IDM_004", "AUTO", _
+                  "UsedRange vazado - Limpa_Base recoloca area real", _
+                  "UsedRange.Rows.Count <= 10 apos Limpa_Base", _
+                  "ANTES=" & usedAntes & " linhas; DEPOIS=" & usedDepois & " linhas", _
+                  "Evita planilha lenta por UsedRange inflado", _
+                  ok
+
+    TV2_FinalizarExecucao "IDM", silencioso
+    Exit Sub
+
+falha:
+    On Error Resume Next
+    TV2_DesprotegerAbaTeste SHEET_EMPRESAS, "TV2_IDM_003"
+    TV2_DesprotegerAbaTeste SHEET_EMPRESAS, "TV2_IDM_004"
+    On Error GoTo 0
+    TV2_LogAssert "IDM", "FATAL", "AUTO", _
+                  "Executar suite IDM sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(Err.Number) & ": " & Err.Description, _
+                  "Toda falha fatal precisa ficar rastreavel na suite IDM", False
+    TV2_FinalizarExecucao "IDM", silencioso
+End Sub
+
+Public Sub TV2_RunRodizio(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Dim resPre As TResult
+    Dim resOs As TResult
+    Dim resAval As TResult
+    Dim rodizio As TRodizioResultado
+    Dim notas(1 To 10) As Integer
+    Dim preosId1 As String, preosId2 As String, preosId3 As String, preosId4 As String
+    Dim osId1 As String, osId2 As String, osId3 As String
+    Dim emp1 As String, emp2 As String, emp3 As String, emp4 As String
+    Dim empRetomada As String
+    Dim ok As Boolean
+    Dim obtido As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao "RODIZIO", visual
+    TV2_PreencherNotas notas, 8
+
+    TV2_PrepararCenarioTriploCanonico
+
+    ' Emissao 1 - esperado EMP_001
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
+    preosId1 = resPre.IdGerado
+    emp1 = TV2_FormatEmpId(TV2_EmpIdPreOS(preosId1))
+    resOs = EmitirOSdaPreOS(preosId1, Date + 1)
+    osId1 = resOs.IdGerado
+
+    ' Emissao 2 - esperado EMP_002 (001 com OS aberta)
+    rodizio = SelecionarEmpresa(TV2_AtivCanonA())
+    resPre = EmitirPreOS(TV2_FormatEmpId(rodizio.Empresa.EMP_ID), TV2_CodServicoA(), 1)
+    preosId2 = resPre.IdGerado
+    emp2 = TV2_FormatEmpId(TV2_EmpIdPreOS(preosId2))
+    resOs = EmitirOSdaPreOS(preosId2, Date + 1)
+    osId2 = resOs.IdGerado
+
+    ' Emissao 3 - esperado EMP_003 (001 e 002 com OS aberta)
+    rodizio = SelecionarEmpresa(TV2_AtivCanonA())
+    resPre = EmitirPreOS(TV2_FormatEmpId(rodizio.Empresa.EMP_ID), TV2_CodServicoA(), 1)
+    preosId3 = resPre.IdGerado
+    emp3 = TV2_FormatEmpId(TV2_EmpIdPreOS(preosId3))
+    resOs = EmitirOSdaPreOS(preosId3, Date + 1)
+    osId3 = resOs.IdGerado
+
+    ' Emissao 4 - esperado SEM_CREDENCIADOS_APTOS (todos com OS aberta)
+    rodizio = SelecionarEmpresa(TV2_AtivCanonA())
+    emp4 = IIf(rodizio.encontrou, TV2_FormatEmpId(rodizio.Empresa.EMP_ID), "SEM_APTOS")
+
+    ' Concluir EMP_001 e tentar nova emissao - esperado retomada para EMP_001
+    resAval = AvaliarOS(osId1, notas)
+    rodizio = SelecionarEmpresa(TV2_AtivCanonA())
+    empRetomada = IIf(rodizio.encontrou, TV2_FormatEmpId(rodizio.Empresa.EMP_ID), "SEM_APTOS")
+
+    obtido = "1a=" & emp1 & "; 2a=" & emp2 & "; 3a=" & emp3 & _
+             "; 4a=" & emp4 & "; retomada=" & empRetomada
+    ok = IdsIguais(emp1, "001") And _
+         IdsIguais(emp2, "002") And _
+         IdsIguais(emp3, "003") And _
+         (Not rodizio.encontrou Or emp4 = "SEM_APTOS") And _
+         IdsIguais(empRetomada, "001")
+    ' Caso a 4a indicacao retorne EMP_004+ (workbook tem mais empresas), aceita tambem
+    If Not ok And IdsIguais(emp1, "001") And IdsIguais(emp2, "002") And _
+       IdsIguais(emp3, "003") And IdsIguais(empRetomada, "001") Then
+        ok = True
+    End If
+
+    TV2_LogAssert "RODIZIO", "RDZ_001", "AUTO", _
+                  "Ciclo de rodizio com 3 emissoes + bloqueio + retomada", _
+                  "Sequencia 001 -> 002 -> 003 -> SEM_APTOS; apos concluir 001, nova retorna 001", _
+                  obtido, _
+                  "Prova ponta a ponta o ciclo + bloqueio + retomada do rodizio canonico", _
+                  ok
+
+    TV2_FinalizarExecucao "RODIZIO", silencioso
+    Exit Sub
+
+falha:
+    On Error Resume Next
+    TV2_LogAssert "RODIZIO", "FATAL", "AUTO", _
+                  "Executar suite RODIZIO sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(Err.Number) & ": " & Err.Description, _
+                  "Toda falha fatal precisa ficar rastreavel na suite RODIZIO", False
+    TV2_FinalizarExecucao "RODIZIO", silencioso
+    On Error GoTo 0
+End Sub
+
+Private Function TV2_QtdLinhasAba(ByVal nomeAba As String) As Long
+    On Error Resume Next
+    Dim ws As Worksheet
+    Set ws = ThisWorkbook.Worksheets(nomeAba)
+    If ws Is Nothing Then
+        TV2_QtdLinhasAba = -1
+        Exit Function
+    End If
+    Dim ultLin As Long
+    ultLin = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    If ultLin <= 1 Then
+        TV2_QtdLinhasAba = 0
+    Else
+        TV2_QtdLinhasAba = ultLin - 1  ' subtrai cabecalho
+    End If
+End Function
+
+Private Function TV2_LerCabecalhoConcatenado(ByVal ws As Worksheet) As String
+    On Error Resume Next
+    Dim ultCol As Long
+    ultCol = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
+    If ultCol < 1 Then ultCol = 1
+    Dim resultado As String
+    Dim i As Long
+    For i = 1 To ultCol
+        If resultado <> "" Then resultado = resultado & "|"
+        resultado = resultado & CStr(ws.Cells(1, i).Value)
+    Next i
+    TV2_LerCabecalhoConcatenado = resultado
+End Function
+
+

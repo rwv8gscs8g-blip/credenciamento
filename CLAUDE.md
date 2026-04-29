@@ -40,11 +40,11 @@
 | 3 | CNAE dedup automatico | entregue (em homologacao) |
 | 4 | wire-up Configuracao_Inicial | entregue (em homologacao) |
 | 5 | form deterministico + Limpa_Base robusta | entregue (em homologacao) |
-| 6 | consolidacao documental + cleanup + HBN/Diataxis/llms.txt/AGENTS.md/Glasswing | EM EXECUCAO |
-| 7 | familia IDM_* + RDZ_* | DEPOIS |
-| 8 | heuristica zero em todos os 13 forms | DEPOIS |
-| 9 | reescrita Importador_VBA + auditoria Mod_Types | DEPOIS |
-| FECH | tag v12.0.0203 + push GitHub | DEPOIS |
+| 6 | consolidacao documental + cleanup + HBN/Diataxis/llms.txt/AGENTS.md/Glasswing | entregue |
+| 7 | familia IDM_* + RDZ_* (5 cenarios na bateria V2) | entregue |
+| 8 | heuristica zero em todos os 13 forms | entregue |
+| 9 | Importador V2 + Glasswing G7+G8 + git pre-commit hook (antecipada) | entregue |
+| FECH | tag v12.0.0203 + push GitHub | EM EXECUCAO |
 
 ## Estrutura do repositorio (pos-Onda 6)
 

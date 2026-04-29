@@ -32,7 +32,9 @@ Public Sub CT2_AbrirCentral()
         "[14] Strikes na avaliacao (~2 min)" & vbCrLf & _
         "[15] CNAE: snapshot, dedup e housekeeping (~1 min)" & vbCrLf & _
         "[16] Diag rodizio (relatorio do estado atual da fila)" & vbCrLf & _
-        "[17] Configuracao de strikes: ida e volta (~30s)" & vbCrLf & vbCrLf & _
+        "[17] Configuracao de strikes: ida e volta (~30s)" & vbCrLf & _
+        "[18] Idempotencia administrativa IDM_* (~1 min)" & vbCrLf & _
+        "[19] Rodizio canonico RDZ_* (~2 min)" & vbCrLf & vbCrLf & _
         "Digite o numero:", _
         "Central de Testes V2", "1"))
 
@@ -73,6 +75,10 @@ Public Sub CT2_AbrirCentral()
             Diag_RodizioStatusInteractive
         Case "17"
             CT2_ExecutarCfg
+        Case "18"
+            CT2_ExecutarIdempotencia
+        Case "19"
+            CT2_ExecutarRodizio
         Case Else
             MsgBox "Opcao invalida.", vbInformation, "Central V2"
     End Select
@@ -125,6 +131,17 @@ End Sub
 Public Sub CT2_ExecutarCfg()
     TV2_PrepararNavegacaoHumana
     TV2_RunCfg False
+End Sub
+
+' === Onda 7 (V12.0.0203): IDM_* + RDZ_* ====================
+Public Sub CT2_ExecutarIdempotencia()
+    TV2_PrepararNavegacaoHumana
+    TV2_RunIdempotencia False
+End Sub
+
+Public Sub CT2_ExecutarRodizio()
+    TV2_PrepararNavegacaoHumana
+    TV2_RunRodizio False
 End Sub
 
 

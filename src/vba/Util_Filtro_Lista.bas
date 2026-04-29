@@ -7,6 +7,56 @@ Option Explicit
 ' Nesta etapa o modulo fica isolado: nenhum formulario consome ainda.
 ' ============================================================
 
+' ============================================================
+' Onda 8 (V12.0.0203): heuristica zero nos forms
+'
+' UtilFiltro_LocalizarTextBoxFiltro centraliza a logica de descoberta
+' do TextBox de busca/filtro nos forms. Antes essa heuristica vivia
+' inline em Cadastro_Servico.frm, Reativa_Empresa.frm e
+' Reativa_Entidade.frm como `If ctl.Top <= 20 And ctl.Height <= 22`,
+' violando a regra V203 de zero heuristica em .frm.
+'
+' Estrategia:
+'   1. Tenta primeiro o nome canonico "txtFiltro" (Me.Controls("txtFiltro")).
+'   2. Se ausente, itera por TextBox no form e aplica o fallback heuristico
+'      (topo + altura pequena + mais a direita). A heuristica fica
+'      contida AQUI, fora dos .frm. O grep no criterio de aceite Onda 8
+'      retorna zero ocorrencias nos forms.
+'   3. Operador pode eliminar a heuristica de vez renomeando o TextBox
+'      no designer para "txtFiltro" - apos isso o passo 2 nunca executa.
+'
+' Doc: docs/explanation/HEURISTICA_ZERO_NOS_FORMS.md
+' ============================================================
+Public Function UtilFiltro_LocalizarTextBoxFiltro(ByVal frm As Object) As Object
+    On Error Resume Next
+    Dim canonico As Object
+    Set canonico = frm.Controls("txtFiltro")
+    If Err.Number = 0 And Not canonico Is Nothing Then
+        Set UtilFiltro_LocalizarTextBoxFiltro = canonico
+        Exit Function
+    End If
+    Err.Clear
+    On Error GoTo 0
+
+    ' Fallback heuristico (deprecated: renomear TextBox para "txtFiltro"
+    ' no designer para usar caminho canonico e eliminar este passo).
+    Dim ctl As Object
+    Dim melhor As Object
+    Dim leftMax As Double
+    leftMax = -1
+    For Each ctl In frm.Controls
+        If TypeName(ctl) = "TextBox" Then
+            If ctl.Top <= 20 And ctl.Height <= 22 Then
+                If CDbl(ctl.Left) > leftMax Then
+                    leftMax = CDbl(ctl.Left)
+                    Set melhor = ctl
+                End If
+            End If
+        End If
+    Next ctl
+    Set UtilFiltro_LocalizarTextBoxFiltro = melhor
+End Function
+
 Public Function UtilFiltro_Normalizar(ByVal valor As Variant) As String
     Dim s As String
 

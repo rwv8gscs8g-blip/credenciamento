@@ -28,28 +28,11 @@ Private Function UI_TextBoxSeExiste(ByVal nome As String) As MSForms.TextBox
 End Function
 
 Private Function UI_PegarTextBoxBuscaTopoDireita() As MSForms.TextBox
-    Dim ctl As Object
-    Dim melhor As MSForms.TextBox
-    Dim leftMax As Double
-
-    On Error GoTo fim
-
-    leftMax = -1
-    For Each ctl In Me.Controls
-        If TypeName(ctl) = "TextBox" Then
-            ' Campo pequeno no topo (busca incremental da lista).
-            If ctl.Top <= 20 And ctl.Height <= 22 Then
-                If CDbl(ctl.Left) > leftMax Then
-                    leftMax = CDbl(ctl.Left)
-                    Set melhor = ctl
-                End If
-            End If
-        End If
-    Next ctl
-
-    Set UI_PegarTextBoxBuscaTopoDireita = melhor
-    Exit Function
-fim:
+    ' Onda 8 (V12.0.0203): heuristica delegada para Util_Filtro_Lista
+    ' (criterio de aceite: zero heuristica posicional em .frm).
+    On Error Resume Next
+    Set UI_PegarTextBoxBuscaTopoDireita = UtilFiltro_LocalizarTextBoxFiltro(Me)
+    On Error GoTo 0
 End Function
 
 Private Sub S_Cadastrar_SV_Click()
