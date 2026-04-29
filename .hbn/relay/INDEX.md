@@ -42,11 +42,19 @@ ultima-atualizacao: 2026-04-28
 
 ## Ciclo ativo
 
-**ONDA 6 HOTFIX v4** — reaberta em 2026-04-28 ~20h apos Mauricio reportar
-que `Configuracao_Inicial` continua sendo classificado como modulo no VBE,
-com pista nova: "comentarios do codigo e forma de escrita do .frm" sao a
-causa. Investigacao isola anomalia no cabecalho FRM. Tokens autorizados
-para ciclo profundo.
+**ONDA 9 ANTECIPADA — Importador V2** (aberta 2026-04-28 ~23h30 apos
+Onda 5 homologada com trio minimo APROVADO em VR_20260428_231958).
+Mauricio autorizou ciclo profundo modo execucao.
+
+## Onda 5 — HOMOLOGADA
+
+| Campo | Valor |
+|---|---|
+| Status | HOMOLOGADA em 2026-04-28 |
+| Validacao | `VR_20260428_231958` em `auditoria/04_evidencias/V12.0.0203/` |
+| Build | `f7aa84f+ONDA05-em-homologacao` |
+| Trio minimo | V1=171/0, V2 Smoke=14/0, V2 Canonica=20/0 — **APROVADO** |
+| Backup ancora | `V12-202-Q/` no diretorio raiz do projeto |
 
 ## Ciclo encerrado mais recente
 
