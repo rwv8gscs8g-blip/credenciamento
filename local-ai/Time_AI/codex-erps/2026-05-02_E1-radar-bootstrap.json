@@ -1,0 +1,285 @@
+{
+  "esteira_id": "E1",
+  "esteira_nome": "radar-bootstrap",
+  "spec_origem": "local-ai/Time_AI/2026-05-02-V203-fechamento/300-SPRINT-0-HBN-PHAGO-CODEX.md",
+  "data_inicio": "2026-05-02 BRT",
+  "data_fim": "2026-05-02 BRT",
+  "executor": "Codex CLI",
+  "commits_credenciamento": [
+    {
+      "sha": "d9949638337ca320e2e7312a8f7947b0fccf7345",
+      "mensagem": "[hbn-radar] cria estrutura usehbn/radar",
+      "arquivos": [
+        "usehbn/radar/README.md",
+        "usehbn/radar/_per-technology/.gitkeep"
+      ]
+    },
+    {
+      "sha": "c0e9afc489a5040933a7e7262dbd8d4ae3005031",
+      "mensagem": "[hbn-radar] adiciona fichas de agentes e observabilidade",
+      "arquivos": [
+        "usehbn/radar/_per-technology/arize-phoenix.md",
+        "usehbn/radar/_per-technology/autogen.md",
+        "usehbn/radar/_per-technology/crewai.md",
+        "usehbn/radar/_per-technology/google-agent-development-kit-adk.md",
+        "usehbn/radar/_per-technology/langfuse.md",
+        "usehbn/radar/_per-technology/langgraph.md",
+        "usehbn/radar/_per-technology/langsmith.md",
+        "usehbn/radar/_per-technology/mlflow.md",
+        "usehbn/radar/_per-technology/openai-agents-sdk.md",
+        "usehbn/radar/_per-technology/opentelemetry.md",
+        "usehbn/radar/_per-technology/pydantic-ai.md"
+      ]
+    },
+    {
+      "sha": "bd680cecf43587337e0143503bb74fd0c9e38e28",
+      "mensagem": "[hbn-radar] adiciona fichas de tecnologias legado",
+      "arquivos": [
+        "usehbn/radar/_per-technology/clipper.md",
+        "usehbn/radar/_per-technology/cobol.md",
+        "usehbn/radar/_per-technology/delphi.md",
+        "usehbn/radar/_per-technology/fortran.md",
+        "usehbn/radar/_per-technology/foxpro-dbase.md",
+        "usehbn/radar/_per-technology/google-apps-script.md",
+        "usehbn/radar/_per-technology/microsoft-access.md",
+        "usehbn/radar/_per-technology/microsoft-excel.md",
+        "usehbn/radar/_per-technology/office-scripts.md",
+        "usehbn/radar/_per-technology/pascal.md",
+        "usehbn/radar/_per-technology/procedural-sql.md",
+        "usehbn/radar/_per-technology/shell-scripts.md",
+        "usehbn/radar/_per-technology/vba.md",
+        "usehbn/radar/_per-technology/vbscript.md",
+        "usehbn/radar/_per-technology/visual-basic-6.md"
+      ]
+    },
+    {
+      "sha": "e2cc3c755e6e33877eba91f2521e614b32823a5a",
+      "mensagem": "[hbn-radar] adiciona fichas de conhecimento distribuicao e governanca",
+      "arquivos": [
+        "usehbn/radar/_per-technology/abstract-syntax-trees-ast.md",
+        "usehbn/radar/_per-technology/agents-md.md",
+        "usehbn/radar/_per-technology/boinc.md",
+        "usehbn/radar/_per-technology/characterization-tests.md",
+        "usehbn/radar/_per-technology/consent-capsules.md",
+        "usehbn/radar/_per-technology/contribution-reputation.md",
+        "usehbn/radar/_per-technology/diataxis.md",
+        "usehbn/radar/_per-technology/distributed-workers.md",
+        "usehbn/radar/_per-technology/github-actions.md",
+        "usehbn/radar/_per-technology/glasswing.md",
+        "usehbn/radar/_per-technology/hbn.md",
+        "usehbn/radar/_per-technology/json-ld.md",
+        "usehbn/radar/_per-technology/jsonl-event-ledger.md",
+        "usehbn/radar/_per-technology/knowledge-graphs.md",
+        "usehbn/radar/_per-technology/language-server-protocol-lsp.md",
+        "usehbn/radar/_per-technology/llms-txt.md",
+        "usehbn/radar/_per-technology/markdown-plus-yaml-frontmatter.md",
+        "usehbn/radar/_per-technology/model-context-protocol-mcp.md",
+        "usehbn/radar/_per-technology/multi-agent-consensus.md",
+        "usehbn/radar/_per-technology/obsidian.md",
+        "usehbn/radar/_per-technology/ontologies.md",
+        "usehbn/radar/_per-technology/redundant-validation.md",
+        "usehbn/radar/_per-technology/signed-commits-and-sigstore.md",
+        "usehbn/radar/_per-technology/sqlite.md",
+        "usehbn/radar/_per-technology/task-queues.md",
+        "usehbn/radar/_per-technology/tree-sitter.md",
+        "usehbn/radar/_per-technology/typer.md",
+        "usehbn/radar/_per-technology/uv.md",
+        "usehbn/radar/_per-technology/versioned-documentation.md"
+      ]
+    },
+    {
+      "sha": "9809d5073bf1dc0b57b8190e3a6c5267e9c163f8",
+      "mensagem": "[hbn-radar] consolida registry matriz e relatorio E1",
+      "arquivos": [
+        "auditoria/00_status/39_USEHBN_RADAR_BOOTSTRAP_CODEX.md",
+        "usehbn/radar/CONVERGENCE-MATRIX.md",
+        "usehbn/radar/REGISTRY.md"
+      ]
+    }
+  ],
+  "commits_usehbn_phago": [
+    {
+      "sha": "28767f058b537020ce61362ce8bd22dd9d6f4d3c",
+      "mensagem": "[hbn-phago] bootstrap inicial — LICENSE AGPLv3 + scaffolding metodológico",
+      "arquivos": [
+        ".gitignore",
+        "LICENSE",
+        "METHODOLOGY.md",
+        "PRINCIPLES.md",
+        "PROTOCOL.md",
+        "RADAR.md",
+        "README.md",
+        "docs/.gitkeep",
+        "pyproject.toml"
+      ]
+    }
+  ],
+  "observacao_commit_erp": "Este ERP e a mensagem de handoff serão commitados em um sexto commit [hbn-radar] de devolução; o hash desse commit não pode ser listado dentro do próprio JSON sem auto-referência instável.",
+  "tarefas_executadas": [
+    {
+      "id": "T1",
+      "status": "concluida",
+      "evidencia": "Inventário de 55 tecnologias/estruturas no relatório 39 e fichas."
+    },
+    {
+      "id": "T2",
+      "status": "concluida",
+      "evidencia": "Deduplicações listadas no relatório 39."
+    },
+    {
+      "id": "T3",
+      "status": "concluida",
+      "evidencia": "usehbn/radar/README.md, REGISTRY.md, CONVERGENCE-MATRIX.md, _per-technology/.gitkeep."
+    },
+    {
+      "id": "T4",
+      "status": "concluida",
+      "evidencia": "55 fichas em usehbn/radar/_per-technology/."
+    },
+    {
+      "id": "T5",
+      "status": "concluida",
+      "evidencia": "usehbn/radar/REGISTRY.md com 55 linhas."
+    },
+    {
+      "id": "T6",
+      "status": "concluida",
+      "evidencia": "usehbn/radar/CONVERGENCE-MATRIX.md com 10 princípios."
+    },
+    {
+      "id": "T7",
+      "status": "concluida",
+      "evidencia": "auditoria/00_status/39_USEHBN_RADAR_BOOTSTRAP_CODEX.md."
+    },
+    {
+      "id": "T8",
+      "status": "concluida",
+      "evidencia": "/Users/macbookpro/Projetos/usehbn-phago commit 28767f0."
+    },
+    {
+      "id": "T9",
+      "status": "concluida",
+      "evidencia": "5 commits [hbn-radar] criados para T3-T7."
+    },
+    {
+      "id": "T10",
+      "status": "concluida",
+      "evidencia": "local-ai/Time_AI/codex-erps/2026-05-02_E1-radar-bootstrap.json"
+    },
+    {
+      "id": "T11",
+      "status": "concluida",
+      "evidencia": ".hbn/messages/2026-05-02_02_de-codex_para-opus.md"
+    }
+  ],
+  "auto_check": [
+    {
+      "id": "V1",
+      "resultado": "verde",
+      "detalhe": "ERP parseado com jq após escrita: OK."
+    },
+    {
+      "id": "V2",
+      "resultado": "verde",
+      "detalhe": "Tese 38 §8 coberta; faltantes=[]."
+    },
+    {
+      "id": "V3",
+      "resultado": "verde",
+      "detalhe": "Parser local encontrou frontmatter obrigatório e 10 linhas de princípios em 55/55 fichas."
+    },
+    {
+      "id": "V4",
+      "resultado": "verde",
+      "detalhe": "Estados usados: in-radar, under-analysis, phagocytosed; todos no enum."
+    },
+    {
+      "id": "V5",
+      "resultado": "verde",
+      "detalhe": "55 slugs únicos; sem duplicidade."
+    },
+    {
+      "id": "V6",
+      "resultado": "verde",
+      "detalhe": "REGISTRY possui 55 links únicos para 55 fichas."
+    },
+    {
+      "id": "V7",
+      "resultado": "verde",
+      "detalhe": "5 commits de implementação no Credenciamento seguem prefixo [hbn-radar] e mencionam E1 no corpo."
+    },
+    {
+      "id": "V8",
+      "resultado": "verde",
+      "detalhe": "Repo /Users/macbookpro/Projetos/usehbn-phago existe, git status limpo, LICENSE inicia com GNU AFFERO GENERAL PUBLIC LICENSE."
+    },
+    {
+      "id": "V9",
+      "resultado": "verde",
+      "detalhe": "Cross-refs principais usam links relativos/absolutos para REGISTRY, metodologia, tese 38 e protocolo markers."
+    },
+    {
+      "id": "V10",
+      "resultado": "verde",
+      "detalhe": "Delta card e marcadores V2 incluídos neste ERP."
+    },
+    {
+      "id": "V11",
+      "resultado": "verde",
+      "detalhe": "Arquivos proibidos tocados por commits E1: []."
+    },
+    {
+      "id": "V12",
+      "resultado": "verde",
+      "detalhe": "Commits E1 em Credenciamento alteraram somente usehbn/radar/ e auditoria/00_status/39; total 60 paths."
+    }
+  ],
+  "bloqueios_encontrados": [
+    {
+      "descricao": "Worktree do Credenciamento já estava sujo antes da E1, inclusive com paths proibidos modificados por outra frente.",
+      "decisao_tomada": "Não reverter nem tocar; commits E1 limitaram-se aos paths permitidos."
+    },
+    {
+      "descricao": ".hbn/locks/ não existia no preflight.",
+      "decisao_tomada": "Tratado como ausência de locks ativos e registrado no relatório."
+    }
+  ],
+  "marcadores_hbn_v2": [
+    "🔵 HBN HANDOFF READY",
+    "🟢 HBN CHECKPOINT CLEAN",
+    "🟤 HBN LICENSE SPLIT REQUIRED"
+  ],
+  "delta_card": {
+    "hbn_mode": "executor",
+    "baton": "Codex (devolvendo para Opus)",
+    "scope": "E1 — radar bootstrap",
+    "touched_paths": [
+      "usehbn/radar/",
+      "auditoria/00_status/39_USEHBN_RADAR_BOOTSTRAP_CODEX.md",
+      "local-ai/Time_AI/codex-erps/2026-05-02_E1-radar-bootstrap.json",
+      ".hbn/messages/2026-05-02_02_de-codex_para-opus.md",
+      "/Users/macbookpro/Projetos/usehbn-phago/"
+    ],
+    "gate_run": "auto-check V1-V12 local; jq . executado com sucesso",
+    "evidence": "este ERP + relatório 39 + git logs",
+    "decision_needed": "no"
+  },
+  "resumo_quantitativo": {
+    "tecnologias_total": 55,
+    "fichas_total": 55,
+    "estados": {
+      "in-radar": 35,
+      "under-analysis": 10,
+      "phagocytosed": 10
+    },
+    "categorias": {
+      "agentes": 6,
+      "observabilidade": 5,
+      "legado": 15,
+      "conhecimento-estruturado": 13,
+      "computacao-distribuida": 6,
+      "outros": 10
+    }
+  },
+  "proxima_esteira_sugerida": "E2 — ingestão do seed PHAGOCYTOSIS-VBA-PATTERNS no usehbn-phago com CLI read-only inicial."
+}
