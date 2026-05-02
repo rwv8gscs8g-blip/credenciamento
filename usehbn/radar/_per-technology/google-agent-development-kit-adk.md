@@ -2,16 +2,20 @@
 titulo: Google Agent Development Kit (ADK)
 slug: google-agent-development-kit-adk
 categoria: agentes
-estado: in-radar
+estado: archived
 data-entrada: 2026-05-02
-ultima-revisao: 2026-05-02
-proxima-revisao: 2026-08-02
+ultima-revisao: 2026-05-02 (arquivada por decisão Maurício + Opus)
+proxima-revisao: 2027-05-02
 fonte-radar: "auditoria/00_status/38_USEHBN_TESE_FAGOCITOSE_INTEGRADA.md:191-198"
 licenca-target: usehbn (AGPLv3)
+licenca-tecnologia: Apache-2.0
+motivo-arquivamento: foco-estrategico-temporario
+pode-reentrar-se: Ecossistema imaturo; aguardar 6 meses
 hbn-track: knowledge
 hbn-status: active
 audiencia: ambos
 versao-sistema: V12.0.0203
+revisao-humana-pendente: false
 ---
 
 # Google Agent Development Kit (ADK)
@@ -60,9 +64,13 @@ No radar, a tecnologia é tratada de forma neutra: o registro não equivale a ad
 
 | Data | De | Para | Motivo | Decisor |
 |---|---|---|---|---|
+| 2026-05-02 | in-radar | archived | Arquivamento por foco estratégico temporário: Ecossistema imaturo; aguardar 6 meses | Maurício + Opus |
 | 2026-05-02 | n/a | in-radar | Entrada inicial no bootstrap E1 do Radar. | Codex CLI, sob spec Opus |
 
 ## Referências
 
 - https://google.github.io/adk-docs/
 - ../../../auditoria/00_status/38_USEHBN_TESE_FAGOCITOSE_INTEGRADA.md:191-198
+## Nota de arquivamento E1.1
+
+Conteúdo da E1 mantido como referência histórica; ficha arquivada em 2026-05-02 antes de receber análise individual. Motivo: foco estratégico temporário. Reentrada permitida se o contexto mudar: Ecossistema imaturo; aguardar 6 meses.
