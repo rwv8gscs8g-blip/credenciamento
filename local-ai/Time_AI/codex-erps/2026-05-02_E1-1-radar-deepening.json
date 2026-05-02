@@ -1,0 +1,231 @@
+{
+  "esteira_id": "E1.1",
+  "esteira_nome": "radar-content-deepening",
+  "spec_origem": "local-ai/Time_AI/2026-05-02-V203-fechamento/302-ESTEIRA-E1-1-RADAR-CONTENT-DEEPENING.md",
+  "data_inicio": "2026-05-02 BRT",
+  "data_fim": "2026-05-02 BRT",
+  "executor": "Codex CLI",
+  "commits_credenciamento": [
+    {
+      "sha": "b54f1ad75ea3d0c4f98ff5a5f600caa323a689a0",
+      "mensagem": "[hbn-radar] arquiva tecnologias fora do foco E1.1",
+      "arquivos": [
+        "usehbn/radar/_per-technology/autogen.md",
+        "usehbn/radar/_per-technology/contribution-reputation.md",
+        "usehbn/radar/_per-technology/distributed-workers.md",
+        "usehbn/radar/_per-technology/google-agent-development-kit-adk.md",
+        "usehbn/radar/_per-technology/json-ld.md",
+        "usehbn/radar/_per-technology/knowledge-graphs.md",
+        "usehbn/radar/_per-technology/obsidian.md",
+        "usehbn/radar/_per-technology/ontologies.md",
+        "usehbn/radar/_per-technology/redundant-validation.md",
+        "usehbn/radar/_per-technology/task-queues.md"
+      ]
+    },
+    {
+      "sha": "1659666085a770318c1970fee93327512b0fcc19",
+      "mensagem": "[hbn-radar] aprofunda analise individual de fichas E1.1",
+      "arquivos": [
+        "usehbn/radar/_per-technology/abstract-syntax-trees-ast.md",
+        "usehbn/radar/_per-technology/agents-md.md",
+        "usehbn/radar/_per-technology/arize-phoenix.md",
+        "usehbn/radar/_per-technology/boinc.md",
+        "usehbn/radar/_per-technology/characterization-tests.md",
+        "usehbn/radar/_per-technology/clipper.md",
+        "usehbn/radar/_per-technology/cobol.md",
+        "usehbn/radar/_per-technology/consent-capsules.md",
+        "usehbn/radar/_per-technology/crewai.md",
+        "usehbn/radar/_per-technology/delphi.md",
+        "usehbn/radar/_per-technology/diataxis.md",
+        "usehbn/radar/_per-technology/fortran.md",
+        "usehbn/radar/_per-technology/foxpro-dbase.md",
+        "usehbn/radar/_per-technology/github-actions.md",
+        "usehbn/radar/_per-technology/glasswing.md",
+        "usehbn/radar/_per-technology/google-apps-script.md",
+        "usehbn/radar/_per-technology/hbn.md",
+        "usehbn/radar/_per-technology/jsonl-event-ledger.md",
+        "usehbn/radar/_per-technology/langfuse.md",
+        "usehbn/radar/_per-technology/langsmith.md",
+        "usehbn/radar/_per-technology/language-server-protocol-lsp.md",
+        "usehbn/radar/_per-technology/llms-txt.md",
+        "usehbn/radar/_per-technology/markdown-plus-yaml-frontmatter.md",
+        "usehbn/radar/_per-technology/microsoft-access.md",
+        "usehbn/radar/_per-technology/microsoft-excel.md",
+        "usehbn/radar/_per-technology/mlflow.md",
+        "usehbn/radar/_per-technology/multi-agent-consensus.md",
+        "usehbn/radar/_per-technology/office-scripts.md",
+        "usehbn/radar/_per-technology/openai-agents-sdk.md",
+        "usehbn/radar/_per-technology/opentelemetry.md",
+        "usehbn/radar/_per-technology/pascal.md",
+        "usehbn/radar/_per-technology/procedural-sql.md",
+        "usehbn/radar/_per-technology/pydantic-ai.md",
+        "usehbn/radar/_per-technology/shell-scripts.md",
+        "usehbn/radar/_per-technology/signed-commits-and-sigstore.md",
+        "usehbn/radar/_per-technology/sqlite.md",
+        "usehbn/radar/_per-technology/tree-sitter.md",
+        "usehbn/radar/_per-technology/typer.md",
+        "usehbn/radar/_per-technology/uv.md",
+        "usehbn/radar/_per-technology/vba.md",
+        "usehbn/radar/_per-technology/vbscript.md",
+        "usehbn/radar/_per-technology/versioned-documentation.md",
+        "usehbn/radar/_per-technology/visual-basic-6.md"
+      ]
+    },
+    {
+      "sha": "a449579c98e50daab977bf10c48c77cad79d0435",
+      "mensagem": "[hbn-radar] regenera registry matriz e relatorio E1.1",
+      "arquivos": [
+        "auditoria/00_status/40_USEHBN_RADAR_DEEPENING_CODEX.md",
+        "usehbn/radar/CONVERGENCE-MATRIX.md",
+        "usehbn/radar/REGISTRY.md"
+      ]
+    }
+  ],
+  "observacao_commit_erp": "Este ERP e a mensagem de handoff serão commitados em commit separado de devolução; o SHA desse commit não é listado para evitar auto-referência instável.",
+  "tarefas_executadas": [
+    {
+      "id": "arquivamentos",
+      "status": "concluida",
+      "evidencia": "10 fichas archived com motivo foco-estrategico-temporario."
+    },
+    {
+      "id": "reescritas",
+      "status": "concluida",
+      "evidencia": "43 fichas reescritas com análise individual."
+    },
+    {
+      "id": "modelos",
+      "status": "concluida",
+      "evidencia": "langgraph e MCP preservados por hash."
+    },
+    {
+      "id": "consolidação",
+      "status": "concluida",
+      "evidencia": "REGISTRY, CONVERGENCE-MATRIX e relatório 40 regenerados."
+    },
+    {
+      "id": "handoff",
+      "status": "concluida",
+      "evidencia": ".hbn/messages/2026-05-02_05_de-codex_para-opus.md"
+    }
+  ],
+  "auto_check": [
+    {
+      "id": "V1",
+      "resultado": "verde",
+      "detalhe": "ERP parseado com jq após escrita: OK."
+    },
+    {
+      "id": "V2",
+      "resultado": "verde",
+      "detalhe": "43 fichas com marker de reescrita; 10 archived; modelos preservados."
+    },
+    {
+      "id": "V3",
+      "resultado": "verde",
+      "detalhe": "Fichas sem licenca-tecnologia: []"
+    },
+    {
+      "id": "V4",
+      "resultado": "verde",
+      "detalhe": "Duplicidade interna em fichas ativas: []"
+    },
+    {
+      "id": "V5",
+      "resultado": "verde",
+      "detalhe": "Duplicatas literais exatas entre fichas ativas: 0. Heurística Levenshtein não automatizada."
+    },
+    {
+      "id": "V6",
+      "resultado": "verde",
+      "detalhe": "Fichas ativas com referências inválidas: []. Archived isentas por decisão E1.1."
+    },
+    {
+      "id": "V7",
+      "resultado": "verde",
+      "detalhe": "REGISTRY regenerado; mostra 10 archived e subtotais por estado/categoria."
+    },
+    {
+      "id": "V8",
+      "resultado": "verde",
+      "detalhe": "CONVERGENCE-MATRIX regenerada a partir das 55 fichas atuais."
+    },
+    {
+      "id": "V9",
+      "resultado": "verde",
+      "detalhe": "auditoria/00_status/40_USEHBN_RADAR_DEEPENING_CODEX.md criado."
+    },
+    {
+      "id": "V10",
+      "resultado": "verde",
+      "detalhe": "43 fichas reescritas têm linha de histórico E1.1; arquivadas têm linha de arquivamento."
+    },
+    {
+      "id": "V11",
+      "resultado": "verde",
+      "detalhe": "Hashes modelos: {'langgraph': '7b2d726ac551ae6b7e6fd80ad19a32b216550bd2', 'model-context-protocol-mcp': '9239c603e76900b0002155de3f2ee7adacc26175'}"
+    },
+    {
+      "id": "V12",
+      "resultado": "verde",
+      "detalhe": "Paths proibidos nos commits E1.1: []"
+    },
+    {
+      "id": "V13",
+      "resultado": "verde",
+      "detalhe": "Archived=10; sem nota=[]"
+    },
+    {
+      "id": "V14",
+      "resultado": "verde",
+      "detalhe": "REGISTRY contém subtotal archived=10."
+    },
+    {
+      "id": "V15",
+      "resultado": "verde",
+      "detalhe": "Arquivadas mantidas como arquivos íntegros; reversibilidade preservada por git log e nota E1.1."
+    }
+  ],
+  "bloqueios_encontrados": [
+    {
+      "descricao": "Fichas-modelo Opus estavam modificadas no worktree antes da E1.1.",
+      "decisao_tomada": "Tratadas como baseline externo; verificadas por SHA e não stageadas por Codex."
+    },
+    {
+      "descricao": "Frente 1 avisou MD-5/L16-L18+M7 durante execução.",
+      "decisao_tomada": "Ignorado conforme escopo E1.1; incorporação fica para E2."
+    }
+  ],
+  "marcadores_hbn_v2": [
+    "🔵 HBN HANDOFF READY",
+    "🟢 HBN CHECKPOINT CLEAN",
+    "🟤 HBN LICENSE SPLIT REQUIRED"
+  ],
+  "delta_card": {
+    "hbn_mode": "executor",
+    "baton": "Codex (devolvendo para Opus)",
+    "scope": "E1.1 — Radar Content Deepening",
+    "touched_paths": [
+      "usehbn/radar/_per-technology/*.md (exceto modelos Opus)",
+      "usehbn/radar/REGISTRY.md",
+      "usehbn/radar/CONVERGENCE-MATRIX.md",
+      "auditoria/00_status/40_USEHBN_RADAR_DEEPENING_CODEX.md",
+      "local-ai/Time_AI/codex-erps/2026-05-02_E1-1-radar-deepening.json",
+      ".hbn/messages/2026-05-02_05_de-codex_para-opus.md"
+    ],
+    "gate_run": "auto-check V1-V15; jq . executado com sucesso",
+    "evidence": "ERP + relatório 40 + git log",
+    "decision_needed": "no"
+  },
+  "resumo_quantitativo": {
+    "fichas_total": 55,
+    "reescritas": 43,
+    "arquivadas": 10,
+    "modelos_preservados": 2,
+    "revisao_humana_pendente": [
+      "clipper",
+      "foxpro-dbase"
+    ]
+  },
+  "proxima_esteira_sugerida": "E2 — Ingestão PHAGOCYTOSIS-VBA-PATTERNS no usehbn-phago."
+}
