@@ -4,65 +4,81 @@ slug: microsoft-access
 categoria: legado
 estado: in-radar
 data-entrada: 2026-05-02
-ultima-revisao: 2026-05-02
+ultima-revisao: 2026-05-02 (E1.1 — Codex análise individual)
 proxima-revisao: 2026-08-02
 fonte-radar: "auditoria/00_status/38_USEHBN_TESE_FAGOCITOSE_INTEGRADA.md:208-219"
 licenca-target: usehbn (AGPLv3)
+licenca-tecnologia: proprietária Microsoft
 hbn-track: knowledge
 hbn-status: active
 audiencia: ambos
 versao-sistema: V12.0.0203
+revisao-humana-pendente: false
 ---
 
 # Microsoft Access
 
 ## Por que está no radar
 
-Microsoft Access foi identificado no inventário E1 como tecnologia, estrutura ou dependência conceitual citada no ecossistema useHBN/Credenciamento. Fonte inicial: `auditoria/00_status/38_USEHBN_TESE_FAGOCITOSE_INTEGRADA.md:208-219`.
+A entrada aparece nas fontes do radar como banco+UI desktop Office. Interesse específico do useHBN: avaliar se Microsoft Access ajuda a preservar, explicar e validar tecnologias sem substituir o protocolo por uma ferramenta.
 
-Está marcado como `in-radar` porque foi citado como referência, alvo ou dependência conceitual, mas ainda não há ciclo operacional dedicado. O próximo passo é decidir se merece análise comparativa mais profunda.
+Fonte inicial: `auditoria/00_status/38_USEHBN_TESE_FAGOCITOSE_INTEGRADA.md:208-219`. Estado atual: `in-radar`.
 
 ## Resumo da tecnologia
 
-Tecnologia ou ambiente legado com presença operacional em organizações reais. Entra no radar como alvo possível de fagocitose: preservar comportamento, extrair regras, documentar decisões e construir validação antes de refatorar. O foco inicial é conhecer a identidade da tecnologia, não convertê-la automaticamente para uma stack moderna.
+Microsoft Access é banco+UI desktop Office. Tecnicamente, ACCDB/MDB, ACE/Jet, queries, forms, relatórios, macros e VBA. Recursos centrais:
+- ACCDB/MDB
+- queries
+- forms
+- relatórios
+- VBA
 
-No radar, a tecnologia é tratada de forma neutra: o registro não equivale a adoção. A função desta ficha é preservar contexto, explicitar riscos e manter uma trilha de decisão para Opus/Maurício antes de qualquer avanço de estado.
+Diferencial para o radar: permite estudar banco+UI desktop Office com evidência concreta, mantendo a decisão de adoção fora da ferramenta. O posicionamento é útil quando reduz ambiguidade operacional; é inadequado quando cria dependência que o HBN não consegue reverter.
+
+Licença: proprietária Microsoft. Mantenedor: Microsoft. Maturidade: maduro em aplicações departamentais.
 
 ## Convergência com os 10 princípios useHBN
 
-| # | Princípio | Convergência | Justificativa (1-2 linhas) |
+| # | Princípio | Convergência | Justificativa |
 |---|---|---|---|
-| 1 | Preservar antes de transformar | sim | Microsoft Access pode reforçar este princípio quando usado como suporte explícito ao protocolo, com evidência e rastreabilidade. |
-| 2 | Documentar antes de executar | parcial | Microsoft Access ajuda em parte, mas depende de disciplina de uso, limites claros e validação humana antes de virar regra. |
-| 3 | Testar antes de refatorar | parcial | Microsoft Access ajuda em parte, mas depende de disciplina de uso, limites claros e validação humana antes de virar regra. |
-| 4 | Explicar antes de automatizar | sim | Microsoft Access pode reforçar este princípio quando usado como suporte explícito ao protocolo, com evidência e rastreabilidade. |
-| 5 | Humano no controle por padrão | parcial | Microsoft Access ajuda em parte, mas depende de disciplina de uso, limites claros e validação humana antes de virar regra. |
-| 6 | Toda evolução deve ser reversível | parcial | Microsoft Access ajuda em parte, mas depende de disciplina de uso, limites claros e validação humana antes de virar regra. |
-| 7 | Nenhuma tecnologia fagocitada perde sua identidade | sim | Microsoft Access pode reforçar este princípio quando usado como suporte explícito ao protocolo, com evidência e rastreabilidade. |
-| 8 | O protocolo importa mais que a ferramenta | sim | Microsoft Access pode reforçar este princípio quando usado como suporte explícito ao protocolo, com evidência e rastreabilidade. |
-| 9 | Frameworks são descartáveis; princípios são permanentes | sim | Microsoft Access pode reforçar este princípio quando usado como suporte explícito ao protocolo, com evidência e rastreabilidade. |
-| 10 | Segurança e não-regressão > velocidade | parcial | Microsoft Access ajuda em parte, mas depende de disciplina de uso, limites claros e validação humana antes de virar regra. |
+| 1 | Preservar antes de transformar | sim | Preserva o comportamento original ao manter ACCDB/MDB como fonte de verdade antes de qualquer tradução. Sinal E1.1: ACCDB/MDB. |
+| 2 | Documentar antes de executar | parcial | Precisa documentar runtime, arquivos e convenções; em Microsoft Access, queries costuma esconder regra de negócio. Sinal E1.1: queries. |
+| 3 | Testar antes de refatorar | parcial | Testes de caracterização devem cobrir forms antes de refactor. Sinal E1.1: forms. |
+| 4 | Explicar antes de automatizar | sim | Explicação vem do mapa de eventos, dados e efeitos colaterais de microsoft access. Sinal E1.1: relatórios. |
+| 5 | Humano no controle por padrão | parcial | Controle humano é parcial porque execução legacy costuma tocar dados reais; backups e hearback ficam fora do runtime. Sinal E1.1: VBA. |
+| 6 | Toda evolução deve ser reversível | parcial | Reversibilidade exige exportar ambiente e artefatos; sem isso, rollback vira restauração manual. Sinal E1.1: microsoft access. |
+| 7 | Nenhuma tecnologia fagocitada perde sua identidade | sim | A identidade é forte: Microsoft Access continua sendo Microsoft Access, mesmo com ponte para outra linguagem. Sinal E1.1: microsoft access. |
+| 8 | O protocolo importa mais que a ferramenta | sim | O protocolo HBN envolve microsoft access; a tecnologia estudada não dita o método. Sinal E1.1: microsoft access. |
+| 9 | Frameworks são descartáveis; princípios são permanentes | sim | Os princípios sobrevivem a qualquer migração; a ficha deve extrair padrões, não vender reescrita. Sinal E1.1: microsoft access. |
+| 10 | Segurança e não-regressão > velocidade | parcial | Segurança exige leitura estática e dados sintéticos antes de executar microsoft access. Sinal E1.1: microsoft access. |
+
+**Convergência média: 5/10 sim, 5/10 parcial, 0/10 não.**
 
 ## Divergências e riscos
 
-- Risco de captura por ferramenta se Microsoft Access for promovido sem prova empírica.
-- Risco de documentação alucinatória se a ficha virar premissa sem validação por fonte oficial, código real ou caso de uso local.
-- Risco de licença, privacidade ou reversibilidade quando a tecnologia cruza dados do Credenciamento e artefatos AGPLv3 do useHBN.
+- **Vendor risk**: Microsoft. Exit exige manter artefatos e decisões fora da ferramenta.
+- **Velocidade de evolução**: maduro em aplicações departamentais; pinagem ou revisão periódica é obrigatória antes de uso operacional.
+- **Custo operacional**: envolve treinamento, manutenção e possível infraestrutura/serviço além do repositório.
+- **Lock-in técnico**: médio se banco+UI desktop Office virar fonte de verdade; baixo se ficar como camada auxiliar documentada.
+- **Compatibilidade AGPLv3**: proprietária Microsoft; confirmar licença de código e termos de serviço antes de incorporar implementação.
 
 ## O que precisa para avançar de estado
 
-- Confirmar fontes oficiais e casos de uso mínimos.
-- Definir um experimento pequeno, reversível e auditável.
-- Registrar evidência objetiva no ERP da esteira correspondente.
-- Obter decisão humana explícita quando a transição for `convergence-mapped` → `candidate`.
+- Definir POC pequeno, reversível e com dados sintéticos.
+- Registrar entrada, saída, custo e rollback no ERP da esteira.
+- Comparar contra alternativa mais simples baseada em arquivos/protocolo HBN puro.
+- Só avançar de `in-radar` se o ganho for evidenciado por teste, log ou redução de risco.
+- Se houver conteúdo TPGL envolvido, exigir consentimento e redaction-map antes de qualquer promoção pública.
 
 ## Histórico de transições
 
 | Data | De | Para | Motivo | Decisor |
 |---|---|---|---|---|
-| 2026-05-02 | n/a | in-radar | Entrada inicial no bootstrap E1 do Radar. | Codex CLI, sob spec Opus |
+| 2026-05-02 | n/a | in-radar | Entrada inicial no bootstrap E1 do Radar | Codex CLI, sob spec Opus |
+| 2026-05-02 | in-radar | in-radar | Reescrita de conteúdo (E1.1 — Codex análise individual) | Codex CLI |
 
 ## Referências
 
-- https://support.microsoft.com/access
-- ../../../auditoria/00_status/38_USEHBN_TESE_FAGOCITOSE_INTEGRADA.md:208-219
+- [Referência oficial/base](https://support.microsoft.com/access)
+- Documentação técnica: `usehbn/docs/INTEGRATION-VBA-IMPORTER.md`
+- Referência complementar: `auditoria/00_status/38_USEHBN_TESE_FAGOCITOSE_INTEGRADA.md:208-219`
