@@ -1,0 +1,142 @@
+# Credenciamento — indice exaustivo para LLMs (llms-full.txt)
+
+> Indice exaustivo de todos os `.md` versionados no repositorio publico.
+> Padrao [llmstxt.org](https://llmstxt.org/), formato secao + links.
+> Para o mapa curado (recomendado para queries one-shot), use
+> [`llms.txt`](llms.txt).
+
+## Raiz
+
+- [README.md](README.md)
+- [AGENTS.md](AGENTS.md): entrada canonica para IAs (padrao agents.md)
+- [CLAUDE.md](CLAUDE.md): instrucoes especificas para Claude (aponta para AGENTS.md)
+- [CHANGELOG.md](CHANGELOG.md)
+- [CLA.md](CLA.md): contributor license agreement
+- [SECURITY.md](SECURITY.md): politica publica de seguranca
+- [CONTRIBUTING.md](CONTRIBUTING.md)
+- [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)
+
+## Coordenacao inter-IA (.hbn/)
+
+- [.hbn/relay/INDEX.md](.hbn/relay/INDEX.md): bastao + ciclo ativo
+- [.hbn/relay/0001-onda06-consolidacao-documental.md](.hbn/relay/0001-onda06-consolidacao-documental.md): ciclo Onda 6
+- [.hbn/knowledge/INDEX.md](.hbn/knowledge/INDEX.md): indice de conhecimento
+- [.hbn/knowledge/0001-regras-v203-inegociaveis.md](.hbn/knowledge/0001-regras-v203-inegociaveis.md): 10 regras V203 inegociaveis
+- [.hbn/knowledge/0002-regra-ouro-vba-import.md](.hbn/knowledge/0002-regra-ouro-vba-import.md): Regra de Ouro
+- [.hbn/knowledge/0003-glasswing-style-preventive-security.md](.hbn/knowledge/0003-glasswing-style-preventive-security.md): camada Glasswing G1-G5
+- [.hbn/reports/INDEX.md](.hbn/reports/INDEX.md): saidas humanas concisas
+- [.hbn/results/INDEX.md](.hbn/results/INDEX.md): ERPs vinculados a readbacks
+
+## Auditoria publica (auditoria/) — pos-Onda 6
+
+### Sumarios cronologicos (raiz de auditoria/)
+
+- [auditoria/INDEX.md](auditoria/INDEX.md)
+- [auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md](auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md)
+
+### Status (auditoria/00_status/)
+
+- [auditoria/00_status/00_SUMARIO_EXECUTIVO.md](auditoria/00_status/00_SUMARIO_EXECUTIVO.md)
+- [auditoria/00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md](auditoria/00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md)
+- [auditoria/00_status/24_FECHAMENTO_V12_0203.md](auditoria/00_status/24_FECHAMENTO_V12_0203.md)
+- [auditoria/00_status/26_DIAGNOSTICO_LOOPING_CODEX_E_PROMPT_RETOMADA.md](auditoria/00_status/26_DIAGNOSTICO_LOOPING_CODEX_E_PROMPT_RETOMADA.md)
+
+### Regras e governanca (auditoria/01_regras_e_governanca/)
+
+- [auditoria/01_regras_e_governanca/00_REGRAS_V203_INEGOCIAVEIS.md](auditoria/01_regras_e_governanca/00_REGRAS_V203_INEGOCIAVEIS.md): 10 regras inegociaveis
+- [auditoria/01_regras_e_governanca/03_AUDITORIA_REGRAS_DE_NEGOCIO.md](auditoria/01_regras_e_governanca/03_AUDITORIA_REGRAS_DE_NEGOCIO.md): regras de negocio
+- [auditoria/01_regras_e_governanca/04_MATRIZ_MESTRE_DE_TESTES.md](auditoria/01_regras_e_governanca/04_MATRIZ_MESTRE_DE_TESTES.md): matriz mestre de testes
+- [auditoria/01_regras_e_governanca/14_FECHAMENTO_BACKLOG_OPUS_V12_0202.md](auditoria/01_regras_e_governanca/14_FECHAMENTO_BACKLOG_OPUS_V12_0202.md)
+- [auditoria/01_regras_e_governanca/16_AUDITORIA_OPUS_PUBLICACAO_V12_0202.md](auditoria/01_regras_e_governanca/16_AUDITORIA_OPUS_PUBLICACAO_V12_0202.md)
+- [auditoria/01_regras_e_governanca/17_PARECER_LICENCIAMENTO_TPGL_v1_1.md](auditoria/01_regras_e_governanca/17_PARECER_LICENCIAMENTO_TPGL_v1_1.md): parecer juridico TPGL v1.1
+- [auditoria/01_regras_e_governanca/18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md](auditoria/01_regras_e_governanca/18_AUDITORIA_PUBLICACAO_OFICIAL_V12_0202.md)
+- [auditoria/01_regras_e_governanca/19_AUDITORIA_PONTOS_FORTES_V12_0202.md](auditoria/01_regras_e_governanca/19_AUDITORIA_PONTOS_FORTES_V12_0202.md)
+- [auditoria/01_regras_e_governanca/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md](auditoria/01_regras_e_governanca/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md)
+- [auditoria/01_regras_e_governanca/23_PARECER_OPUS_FECHAMENTO_E_ORGANIZACAO_V12_0203.md](auditoria/01_regras_e_governanca/23_PARECER_OPUS_FECHAMENTO_E_ORGANIZACAO_V12_0203.md)
+
+### Planos (auditoria/02_planos/)
+
+- [auditoria/02_planos/15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md](auditoria/02_planos/15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md)
+- [auditoria/02_planos/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md](auditoria/02_planos/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md)
+- [auditoria/02_planos/25_PLANO_HARDENING_POS_0203.md](auditoria/02_planos/25_PLANO_HARDENING_POS_0203.md)
+- [auditoria/02_planos/27_PLANO_ESTEIRA_OPUS_RELEASE_V203.md](auditoria/02_planos/27_PLANO_ESTEIRA_OPUS_RELEASE_V203.md)
+
+### Ondas (auditoria/03_ondas/)
+
+- [auditoria/03_ondas/onda_01_strikes/28_TECNICO.md](auditoria/03_ondas/onda_01_strikes/28_TECNICO.md): Onda 1 — strikes
+- [auditoria/03_ondas/onda_01_strikes/29_PROCEDIMENTO_IMPORT.md](auditoria/03_ondas/onda_01_strikes/29_PROCEDIMENTO_IMPORT.md)
+- [auditoria/03_ondas/onda_02_cnae_snapshot/30_TECNICO.md](auditoria/03_ondas/onda_02_cnae_snapshot/30_TECNICO.md): Onda 2 — snapshot + dedup
+- [auditoria/03_ondas/onda_02_cnae_snapshot/31_PROCEDIMENTO_IMPORT.md](auditoria/03_ondas/onda_02_cnae_snapshot/31_PROCEDIMENTO_IMPORT.md)
+- [auditoria/03_ondas/onda_03_cnae_dedup/32_TECNICO.md](auditoria/03_ondas/onda_03_cnae_dedup/32_TECNICO.md): Onda 3 — dedup automatico + housekeeping
+- [auditoria/03_ondas/onda_03_cnae_dedup/33_PROCEDIMENTO_IMPORT.md](auditoria/03_ondas/onda_03_cnae_dedup/33_PROCEDIMENTO_IMPORT.md)
+- [auditoria/03_ondas/onda_04_config_strikes/34_TECNICO.md](auditoria/03_ondas/onda_04_config_strikes/34_TECNICO.md): Onda 4 — config strikes na interface
+- [auditoria/03_ondas/onda_04_config_strikes/35_PROCEDIMENTO_IMPORT.md](auditoria/03_ondas/onda_04_config_strikes/35_PROCEDIMENTO_IMPORT.md)
+- [auditoria/03_ondas/onda_04_config_strikes/36_DIAG_IMEDIATO_RODIZIO_BUG.md](auditoria/03_ondas/onda_04_config_strikes/36_DIAG_IMEDIATO_RODIZIO_BUG.md)
+- [auditoria/03_ondas/onda_05_form_deterministico/37_TECNICO.md](auditoria/03_ondas/onda_05_form_deterministico/37_TECNICO.md): Onda 5 — form deterministico
+- [auditoria/03_ondas/onda_05_form_deterministico/38_PROCEDIMENTO_IMPORT.md](auditoria/03_ondas/onda_05_form_deterministico/38_PROCEDIMENTO_IMPORT.md)
+- [auditoria/03_ondas/onda_06_consolidacao_documental/41_TECNICO.md](auditoria/03_ondas/onda_06_consolidacao_documental/41_TECNICO.md): Onda 6 — consolidacao documental + integracao metodologica
+
+### Evidencias (auditoria/04_evidencias/)
+
+- [auditoria/04_evidencias/V12.0.0202/MANIFEST.md](auditoria/04_evidencias/V12.0.0202/MANIFEST.md)
+- [auditoria/04_evidencias/V12.0.0202/V2_VALIDACAO_HUMANA_2026-04-20.md](auditoria/04_evidencias/V12.0.0202/V2_VALIDACAO_HUMANA_2026-04-20.md)
+- [auditoria/04_evidencias/V12.0.0203/MANIFEST.md](auditoria/04_evidencias/V12.0.0203/MANIFEST.md)
+
+## Documentacao Diataxis (docs/)
+
+### Reference
+
+- [docs/INDEX.md](docs/INDEX.md): indice publico Diataxis-aware
+- [docs/reference/COMPLIANCE_CMMI_ISO.md](docs/reference/COMPLIANCE_CMMI_ISO.md)
+- [docs/reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md](docs/reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md)
+- [docs/reference/testes/INDEX.md](docs/reference/testes/INDEX.md)
+- [docs/reference/testes/00_MODELO_DOCUMENTAL_DOS_TESTES.md](docs/reference/testes/00_MODELO_DOCUMENTAL_DOS_TESTES.md)
+- [docs/reference/testes/01_EVIDENCIAS_E_RELATORIOS_DE_TESTE.md](docs/reference/testes/01_EVIDENCIAS_E_RELATORIOS_DE_TESTE.md)
+- [docs/reference/licenca/README.md](docs/reference/licenca/README.md)
+- [docs/reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md](docs/reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md)
+
+### How-to
+
+- [docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
+
+### Explanation
+
+- [docs/explanation/ARQUITETURA.md](docs/explanation/ARQUITETURA.md)
+- [docs/explanation/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md](docs/explanation/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md)
+
+### Tutorials
+
+(em construcao — Ondas 7-9)
+
+## Vault Obsidian (obsidian-vault/)
+
+- [obsidian-vault/00-DASHBOARD.md](obsidian-vault/00-DASHBOARD.md): dashboard executivo
+- [obsidian-vault/MANIFEST.md](obsidian-vault/MANIFEST.md)
+- [obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md](obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md)
+- [obsidian-vault/metodologia/01-COMO-A-IA-LE-ESTE-REPO.md](obsidian-vault/metodologia/01-COMO-A-IA-LE-ESTE-REPO.md)
+- [obsidian-vault/metodologia/02-INTEGRACAO-USEHBN.md](obsidian-vault/metodologia/02-INTEGRACAO-USEHBN.md)
+- [obsidian-vault/metodologia/03-PROTOCOLO-GLASSWING.md](obsidian-vault/metodologia/03-PROTOCOLO-GLASSWING.md)
+- [obsidian-vault/releases/STATUS-OFICIAL.md](obsidian-vault/releases/STATUS-OFICIAL.md): status oficial das versoes
+- [obsidian-vault/releases/V12.0.0202.md](obsidian-vault/releases/V12.0.0202.md): release validada atual
+- [obsidian-vault/releases/historico/README.md](obsidian-vault/releases/historico/README.md): histórico de releases (V12.0.0010+ — não navegue exaustivamente)
+
+## Codigo
+
+- [local-ai/vba_import/000-REGRA-OURO.md](local-ai/vba_import/000-REGRA-OURO.md): regra absoluta do pacote
+- [local-ai/vba_import/README.md](local-ai/vba_import/README.md): convencao operacional do pacote
+- [src/vba/](src/vba/): fonte de verdade VBA (37 .bas + 13 .frm — nao .md)
+- [doc/cnae-fonte-bruta/DOWNLOAD-INFO.md](doc/cnae-fonte-bruta/DOWNLOAD-INFO.md)
+- [doc/cnae-normalizado/RELATORIO-CNAE-V12.md](doc/cnae-normalizado/RELATORIO-CNAE-V12.md)
+
+## .github
+
+- [.github/PULL_REQUEST_TEMPLATE.md](.github/PULL_REQUEST_TEMPLATE.md)
+
+## Anti-recall (deprior em pipelines RAG)
+
+Arquivos historicos pesados que nao refletem estado atual:
+
+- `local-ai/historico/**/*.md` — backups V11 (nao indexar)
+- `local-ai/obsidian-vault/historico/**/*.md` — releases V12.0.0010+ legacy
+- `local-ai/auditoria/V12.0.0189_SUBSTITUTIVA/**/*.md` — auditoria substitutiva descontinuada
+- `local-ai/incoming/` — exports do workbook real, nao fonte oficial

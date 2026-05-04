@@ -1,7 +1,7 @@
 Attribute VB_Name = "Repo_Empresa"
 Option Explicit
 
-' Repositorio da aba EMPRESAS — V12-CLEAN
+' Repositorio da aba EMPRESAS - V12-CLEAN
 ' Extraido de Repo_Credenciamento.bas (SECAO 2: HELPERS DE EMPRESAS).
 ' Usa Const_Colunas e Util_Planilha. Sem Select/ActiveCell.
 
@@ -44,6 +44,14 @@ Public Function LerEmpresa( _
                 emp.DT_FIM_SUSP = CDate(0)
             End If
 
+            Dim rawDtReativ As Variant
+            rawDtReativ = ws.Cells(iRow, COL_EMP_DT_ULT_REATIV).Value
+            If IsDate(rawDtReativ) Then
+                emp.DT_ULT_REATIV = CDate(rawDtReativ)
+            Else
+                emp.DT_ULT_REATIV = CDate(0)
+            End If
+
             Exit For
         End If
     Next iRow
@@ -57,7 +65,8 @@ Public Sub GravarStatusEmpresa( _
     ByVal linhaEmp As Long, _
     ByVal NovoStatus As String, _
     ByVal dtFimSusp As Date, _
-    ByVal qtdRecusas As Long _
+    ByVal qtdRecusas As Long, _
+    Optional ByVal dtUltReativ As Variant _
 )
     Dim ws As Worksheet
     Dim estavaProtegida As Boolean
@@ -78,6 +87,10 @@ Public Sub GravarStatusEmpresa( _
 
     If qtdRecusas >= 0 Then
         ws.Cells(linhaEmp, COL_EMP_QTD_RECUSAS).Value = qtdRecusas
+    End If
+
+    If IsDate(dtUltReativ) Then
+        ws.Cells(linhaEmp, COL_EMP_DT_ULT_REATIV).Value = CDate(dtUltReativ)
     End If
 
     ws.Cells(linhaEmp, COL_EMP_DT_ULT_ALT).Value = Now
@@ -144,8 +157,8 @@ Public Function Inserir( _
 
     Set ws = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar EMPRESAS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar EMPRESAS para escrita."
         Inserir = res
         Exit Function
     End If
@@ -171,9 +184,10 @@ Public Function Inserir( _
     ws.Cells(novaLinha, COL_EMP_STATUS_GLOBAL).Value = "ATIVA"
     ws.Cells(novaLinha, COL_EMP_DT_CAD).Value = Now
     ws.Cells(novaLinha, COL_EMP_DT_ULT_ALT).Value = Now
+    ws.Cells(novaLinha, COL_EMP_DT_ULT_REATIV).Value = ""
 
-    res.Sucesso = True
-    res.Mensagem = "Empresa inserida com sucesso."
+    res.sucesso = True
+    res.mensagem = "Empresa inserida com sucesso."
     res.IdGerado = novoID
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     Inserir = res
@@ -183,8 +197,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro ao inserir empresa: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro ao inserir empresa: " & Err.Description
     res.CodigoErro = Err.Number
     Inserir = res
 End Function
@@ -214,16 +228,16 @@ Public Function Atualizar( _
     On Error GoTo Erro
 
     If linhaEmp < LINHA_DADOS Then
-        res.Sucesso = False
-        res.Mensagem = "Linha invalida para atualizacao: " & linhaEmp
+        res.sucesso = False
+        res.mensagem = "Linha invalida para atualizacao: " & linhaEmp
         Atualizar = res
         Exit Function
     End If
 
     Set ws = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar EMPRESAS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar EMPRESAS para escrita."
         Atualizar = res
         Exit Function
     End If
@@ -243,8 +257,8 @@ Public Function Atualizar( _
     ws.Cells(linhaEmp, COL_EMP_EXPERIENCIA).Value = Funcoes.NormalizarTextoPTBR(experienciaVal)
     ws.Cells(linhaEmp, COL_EMP_DT_ULT_ALT).Value = Now
 
-    res.Sucesso = True
-    res.Mensagem = "Empresa atualizada com sucesso."
+    res.sucesso = True
+    res.mensagem = "Empresa atualizada com sucesso."
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     Atualizar = res
     Exit Function
@@ -253,8 +267,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro ao atualizar empresa: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro ao atualizar empresa: " & Err.Description
     res.CodigoErro = Err.Number
     Atualizar = res
 End Function

@@ -1,7 +1,7 @@
 Attribute VB_Name = "Svc_OS"
 Option Explicit
 
-' Serviço de OS — V10
+' Serviço de OS - V10
 ' Implementa: EmitirOS, CancelarOS.
 ' EmitirOS converte PRE_OS aceita em OS formal (STATUS=EM_EXECUCAO).
 ' CancelarOS encerra OS com STATUS=CANCELADA.
@@ -33,8 +33,8 @@ Public Function MontarParametrosEmissaoOS( _
     Dim numTexto As String
 
     If Trim$(PREOS_ID) = "" Then
-        res.Sucesso = False
-        res.Mensagem = "Selecione uma Pre-OS para emitir a OS."
+        res.sucesso = False
+        res.mensagem = "Selecione uma Pre-OS para emitir a OS."
         MontarParametrosEmissaoOS = res
         Exit Function
     End If
@@ -43,13 +43,13 @@ Public Function MontarParametrosEmissaoOS( _
     If dtTexto = "" Then
         DT_PREV_TERMINO = DateAdd("d", PrazoPadraoOSDiasOS(), Date)
     ElseIf Not TryParseDataBROS(dtTexto, DT_PREV_TERMINO) Then
-        res.Sucesso = False
-        res.Mensagem = "Data prevista de termino invalida. Use o formato DD/MM/AAAA."
+        res.sucesso = False
+        res.mensagem = "Data prevista de termino invalida. Use o formato DD/MM/AAAA."
         MontarParametrosEmissaoOS = res
         Exit Function
     ElseIf DT_PREV_TERMINO < Date Then
-        res.Sucesso = False
-        res.Mensagem = "Data prevista de termino nao pode ser anterior a hoje."
+        res.sucesso = False
+        res.mensagem = "Data prevista de termino nao pode ser anterior a hoje."
         MontarParametrosEmissaoOS = res
         Exit Function
     End If
@@ -61,8 +61,8 @@ Public Function MontarParametrosEmissaoOS( _
         NUM_EMPENHO = numTexto
     End If
 
-    res.Sucesso = True
-    res.Mensagem = "Parametros da OS montados com sucesso."
+    res.sucesso = True
+    res.mensagem = "Parametros da OS montados com sucesso."
     MontarParametrosEmissaoOS = res
 End Function
 
@@ -91,22 +91,22 @@ Public Function EmitirOS( _
     LerPreOSCompleto PREOS_ID, linhaPreOS, preos
 
     If linhaPreOS = 0 Then
-        res.Sucesso = False
-        res.Mensagem = "Pre-OS nao encontrada: PREOS_ID=" & PREOS_ID
+        res.sucesso = False
+        res.mensagem = "Pre-OS nao encontrada: PREOS_ID=" & PREOS_ID
         EmitirOS = res
         Exit Function
     End If
 
     If preos.STATUS_PREOS <> STATUS_PREOS_AGU Then
-        res.Sucesso = False
-        res.Mensagem = "Pre-OS nao pode ser convertida. STATUS=" & preos.STATUS_PREOS
+        res.sucesso = False
+        res.mensagem = "Pre-OS nao pode ser convertida. STATUS=" & preos.STATUS_PREOS
         EmitirOS = res
         Exit Function
     End If
 
     If DT_PREV_TERMINO < Date Then
-        res.Sucesso = False
-        res.Mensagem = "Data prevista de termino nao pode ser anterior a hoje."
+        res.sucesso = False
+        res.mensagem = "Data prevista de termino nao pode ser anterior a hoje."
         EmitirOS = res
         Exit Function
     End If
@@ -127,11 +127,11 @@ Public Function EmitirOS( _
     os.STATUS_OS = STATUS_OS_EXEC
     os.JUSTIF_DIVERGENCIA = ""
 
-    ' 3. Inserir OS via Repo_OS (os.OS_ID preenchido ByRef — critérios 23-24)
+    ' 3. Inserir OS via Repo_OS (os.OS_ID preenchido ByRef - critérios 23-24)
     resInsert = Repo_OS.Inserir(os)
-    If Not resInsert.Sucesso Then
-        res.Sucesso = False
-        res.Mensagem = "Falha ao inserir OS: " & resInsert.Mensagem
+    If Not resInsert.sucesso Then
+        res.sucesso = False
+        res.mensagem = "Falha ao inserir OS: " & resInsert.mensagem
         EmitirOS = res
         Exit Function
     End If
@@ -139,8 +139,8 @@ Public Function EmitirOS( _
     ' 4. Atualizar PRE_OS (critério 25)
     Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar PRE_OS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar PRE_OS para escrita."
         EmitirOS = res
         Exit Function
     End If
@@ -159,16 +159,16 @@ Public Function EmitirOS( _
         "; DT_PREV=" & Format$(DT_PREV_TERMINO, "DD/MM/YYYY"), _
         "Svc_OS"
 
-    ' 6. AvancarFila SEM punição (critério 26) — falha = AVISO (critério 48)
+    ' 6. AvancarFila SEM punição (critério 26) - falha = AVISO (critério 48)
     resAv = AvancarFila(preos.EMP_ID, preos.ATIV_ID, False, "ACEITE_OS_EMITIDA")
 
-    res.Sucesso = True
+    res.sucesso = True
     res.IdGerado = os.OS_ID
-    If resAv.Sucesso Then
-        res.Mensagem = "OS emitida. OS_ID=" & os.OS_ID & "; PREOS_ID=" & PREOS_ID
+    If resAv.sucesso Then
+        res.mensagem = "OS emitida. OS_ID=" & os.OS_ID & "; PREOS_ID=" & PREOS_ID
     Else
-        res.Mensagem = "OS emitida. OS_ID=" & os.OS_ID & "; PREOS_ID=" & PREOS_ID & _
-                       " | AVISO: falha ao avançar fila: " & resAv.Mensagem
+        res.mensagem = "OS emitida. OS_ID=" & os.OS_ID & "; PREOS_ID=" & PREOS_ID & _
+                       " | AVISO: falha ao avançar fila: " & resAv.mensagem
     End If
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     EmitirOS = res
@@ -178,8 +178,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro em EmitirOS: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em EmitirOS: " & Err.Description
     res.CodigoErro = Err.Number
     EmitirOS = res
 End Function
@@ -292,8 +292,8 @@ Public Function CancelarOS( _
     Next i
 
     If linhaOS = 0 Then
-        res.Sucesso = False
-        res.Mensagem = "OS nao encontrada: OS_ID=" & OS_ID
+        res.sucesso = False
+        res.mensagem = "OS nao encontrada: OS_ID=" & OS_ID
         CancelarOS = res
         Exit Function
     End If
@@ -304,15 +304,15 @@ Public Function CancelarOS( _
             "OPERACAO=CANCELAR; STATUS=" & statusAtual, _
             "REJEITADA; MOTIVO=STATUS_INVALIDO", _
             "Svc_OS"
-        res.Sucesso = False
-        res.Mensagem = "OS nao pode ser cancelada. STATUS=" & statusAtual
+        res.sucesso = False
+        res.mensagem = "OS nao pode ser cancelada. STATUS=" & statusAtual
         CancelarOS = res
         Exit Function
     End If
 
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar CAD_OS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar CAD_OS para escrita."
         CancelarOS = res
         Exit Function
     End If
@@ -328,8 +328,8 @@ Public Function CancelarOS( _
         "; EMP_ID=" & empId & "; ATIV_ID=" & ativId, _
         "Svc_OS"
 
-    res.Sucesso = True
-    res.Mensagem = "OS " & OS_ID & " cancelada."
+    res.sucesso = True
+    res.mensagem = "OS " & OS_ID & " cancelada."
     res.IdGerado = OS_ID
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     CancelarOS = res
@@ -339,8 +339,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro em CancelarOS: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em CancelarOS: " & Err.Description
     res.CodigoErro = Err.Number
     CancelarOS = res
 End Function
@@ -418,6 +418,6 @@ Private Function ExtrairServId(ByVal codServ As String, ByVal ativId As String) 
     End If
 End Function
 
-' IdsEquivalentesOS removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
+' IdsEquivalentesOS removida - usar Util_Planilha.IdsIguais (V12-CLEAN).
 
 

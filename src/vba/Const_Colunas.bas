@@ -3,7 +3,7 @@ Option Explicit
 
 ' ============================================================
 ' Constantes de mapeamento V10
-' Gerado por Claude Opus 4.6 — NÃO editar manualmente.
+' Gerado por Claude Opus 4.6 - NÃO editar manualmente.
 ' Referência: doc/Time_AI/001-Sprint0-Contrato-de-Dados-V10.md
 ' ============================================================
 
@@ -15,6 +15,12 @@ Public Const SHEET_ENTIDADE As String = "ENTIDADE"
 Public Const SHEET_ENTIDADE_INATIVOS As String = "ENTIDADE_INATIVOS"
 Public Const SHEET_ATIVIDADES As String = "ATIVIDADES"
 Public Const SHEET_CAD_SERV As String = "CAD_SERV"
+' V12.0.0203 ONDA 2 - prefixo das abas-snapshot de CAD_SERV criadas
+' antes de cada reset CNAE. O nome final fica
+' "CAD_SERV_SNAPSHOT_yyyymmdd_hhnnss" para preservar historico
+' reaproveitavel manualmente caso a re-vinculacao posterior precise
+' de fonte de verdade do estado anterior.
+Public Const SHEET_PREFIX_CAD_SERV_SNAP As String = "CAD_SERV_SNAPSHOT_"
 Public Const SHEET_CREDENCIADOS As String = "CREDENCIADOS"
 Public Const SHEET_PREOS As String = "PRE_OS"
 Public Const SHEET_CAD_OS As String = "CAD_OS"
@@ -37,6 +43,18 @@ Public Const COL_CFG_PASTA_DOCS As Long = 8       ' H
 Public Const COL_CFG_UF As Long = 9               ' I
 Public Const COL_CFG_SECRETARIA As Long = 10      ' J
 Public Const COL_CFG_NOTA_MINIMA As Long = 11     ' K
+' --- V12.0.0203 ONDA 1: regra de strikes na avaliacao ---
+' Numero de avaliacoes com media abaixo de COL_CFG_NOTA_MINIMA antes de suspender.
+' Default em Util_Config.GetMaxStrikes(): 3.
+Public Const COL_CFG_MAX_STRIKES As Long = 12          ' L
+' Quantidade de dias da suspensao automatica disparada por strikes.
+' Default em Util_Config.GetDiasSuspensaoStrike(): 90.
+Public Const COL_CFG_DIAS_SUSPENSAO_STRIKE As Long = 13 ' M
+' --- V12.0.0203 ONDA 16 MD-16.2: threshold de teste lento ---
+' Suites V2 que excederem este valor em milissegundos sao marcadas como
+' "lento" em RESULTADO_QA_V2.DURACAO_MS (cor condicional vermelha).
+' Default em Util_Config.GetThresholdTesteLentoMS(): 500 ms.
+Public Const COL_CFG_THRESHOLD_TESTE_LENTO_MS As Long = 14 ' N
 Public Const LINHA_CFG_VALORES As Long = 2        ' Linha dos valores na CONFIG
 
 ' --- Aba EMPRESAS (e EMPRESAS_INATIVAS) ---
@@ -60,6 +78,7 @@ Public Const COL_EMP_DT_FIM_SUSP As Long = 17     ' Q
 Public Const COL_EMP_QTD_RECUSAS As Long = 18     ' R
 Public Const COL_EMP_DT_CAD As Long = 19          ' S
 Public Const COL_EMP_DT_ULT_ALT As Long = 20      ' T
+Public Const COL_EMP_DT_ULT_REATIV As Long = 21   ' U
 
 ' --- Aba ENTIDADE (e ENTIDADE_INATIVOS) ---
 Public Const COL_ENT_ID As Long = 1               ' A
@@ -181,6 +200,5 @@ Public Const COL_AUDIT_DEPOIS As Long = 9         ' I
 ' Funcoes UltimaLinhaAba, ProximoId e PrimeiraLinhaDadosEmpresas
 ' foram movidas para Util_Planilha.bas (modulo de constantes nao deve conter logica).
 ' IdsIguais centralizada em Util_Planilha.bas.
-
 
 

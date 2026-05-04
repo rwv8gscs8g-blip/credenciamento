@@ -24,6 +24,11 @@ Public Const TV2_STATUS_FAIL As String = "FALHA"
 Public Const TV2_STATUS_INFO As String = "INFO"
 Public Const TV2_STATUS_MANUAL As String = "MANUAL_ASSISTIDO"
 
+' V12.0.0203 ONDA 16 MD-16.2 - coluna nova em HISTORICO_QA_V2 com
+' duracao da execucao em milissegundos. Populada automaticamente em
+' TV2_FinalizarExecucao via (Timer - gTV2TimerInicio) * 1000.
+Public Const TV2_COL_HIST_DURACAO_MS As Long = 10
+
 Private Const TV2_COLUNA_BOTOES_INICIO As Long = 13
 Private Const TV2_EMP_STATUS_ATIVA As String = "ATIVA"
 Private Const TV2_CRED_STATUS_ATIVO As String = "ATIVO"
@@ -39,6 +44,34 @@ Private gTV2Fail As Long
 Private gTV2Manual As Long
 Private gTV2SnapshotExecutado As Boolean
 Private gTV2TrailSeq As Long
+' V12.0.0203 ONDA 16 MD-16.2 - timer marcador para calcular DURACAO_MS
+' por execucao (granularidade: suite). Gravado em TV2_InitExecucao;
+' lido em TV2_FinalizarExecucao para gravar coluna J de HISTORICO_QA_V2.
+Private gTV2TimerInicio As Double
+
+' V12.0.0203 ONDA 17 MD-17.1.d.I - Perf gamma conservador.
+' Salvar Application.{Calculation, ScreenUpdating, EnableEvents} originais
+' em TV2_InitExecucao via TV2_PerfModeOn; restaurar em TV2_FinalizarExecucao
+' via TV2_PerfModeRestore (com handler garantindo restore mesmo em erro
+' fatal). Idempotencia preservada por design - analise documentada em
+' .hbn/readbacks/0015-onda17-md17-1-d-I.json secao analise_idempotencia:
+'   - Calculation manual safe: zero formulas em Repo_*/Svc_* lidas pelos
+'     testes (grep .Formula = 0)
+'   - EnableEvents=False safe: zero Worksheet_Change handlers em src/vba
+'     (apenas Auto_Open na abertura)
+'   - ScreenUpdating=False safe: padrao ja usado em outros modulos
+Private gTV2OldCalc As XlCalculation
+Private gTV2OldScreen As Boolean
+Private gTV2OldEvents As Boolean
+
+' V12.0.0203 ONDA 17 MD-17.1.d.II - Visibility alfa (status bar rica).
+' gTV2VerbosityCached: cache de GetStatusBarVerbosity por execucao
+'   (evita reler CONFIG a cada cenario). Lido em TV2_InitExecucao.
+'   -1 = nao cached ainda; 0..3 = nivel cached.
+' gTV2TotalCenarios: total estimado por suite (passado opcional em
+'   TV2_InitExecucao). 0 = nao passado (StatusBar mostra so X, nao X/N).
+Private gTV2VerbosityCached As Long
+Private gTV2TotalCenarios As Long
 
 Private gTV2AtivCanonA As String
 Private gTV2AtivCanonB As String
@@ -47,7 +80,7 @@ Private gTV2AtivDescA As String
 Private gTV2AtivDescB As String
 Private gTV2AtivDescC As String
 
-Public Sub TV2_InitExecucao(ByVal suite As String, Optional ByVal visual As Boolean = False)
+Public Sub TV2_InitExecucao(ByVal suite As String, Optional ByVal visual As Boolean = False, Optional ByVal totalCenarios As Long = 0)
     gTV2ExecucaoId = "TV2_" & Format$(Now, "yyyymmdd_hhnnss")
     gTV2Visual = visual
     gTV2Ok = 0
@@ -55,6 +88,22 @@ Public Sub TV2_InitExecucao(ByVal suite As String, Optional ByVal visual As Bool
     gTV2Manual = 0
     gTV2SnapshotExecutado = False
     gTV2TrailSeq = 0
+    ' V12.0.0203 ONDA 16 MD-16.2 - marcar inicio para calculo de DURACAO_MS
+    ' (Timer retorna segundos desde meia-noite com fracao decimal).
+    gTV2TimerInicio = Timer
+
+    ' V12.0.0203 ONDA 17 MD-17.1.d.I - Perf mode ON apos timer (timer mede
+    ' execucao real do teste; perf mode ative durante o trabalho util).
+    Call TV2_PerfModeOn
+
+    ' V12.0.0203 ONDA 17 MD-17.1.d.II - Visibility alfa: cache verbosity
+    ' (1 leitura por execucao) + total cenarios opcional. Run*s atuais nao
+    ' passam totalCenarios (default 0 = StatusBar mostra so X, nao X/N).
+    gTV2VerbosityCached = GetStatusBarVerbosity()
+    gTV2TotalCenarios = totalCenarios
+
+    ' Status bar inicial (verbosity >= 1)
+    TV2_StatusBar suite, 0, gTV2TotalCenarios, "iniciando", ""
 
     TV2_PrepararNavegacaoHumana
     Util_LimparFiltrosAba TV2_EnsureResultadoSheet()
@@ -86,6 +135,13 @@ Public Sub TV2_FinalizarExecucao(ByVal suite As String, Optional ByVal silencios
     Dim nr As Long
     Dim pathCsvFalhas As String
     Dim obsExportacao As String
+    Dim erroFatal As String
+
+    ' V12.0.0203 ONDA 17 MD-17.1.d.I - handler garante restore de Application.*
+    ' mesmo em erro fatal. SEM esse handler, Excel ficaria com Calculation
+    ' manual + ScreenUpdating off + EnableEvents off, travando uso do
+    ' workbook pelo operador.
+    On Error GoTo erro_fatal_handler
 
     If gTV2Fail > 0 Then
         pathCsvFalhas = TV2_ExportarFalhasCSV(gTV2ExecucaoId)
@@ -110,6 +166,16 @@ Public Sub TV2_FinalizarExecucao(ByVal suite As String, Optional ByVal silencios
     ws.Cells(nr, 7).Value = gTV2Ok + gTV2Fail + gTV2Manual
     ws.Cells(nr, 8).Value = pathCsvFalhas
     ws.Cells(nr, 9).Value = obsExportacao
+    ' V12.0.0203 ONDA 16 MD-16.2 - DURACAO_MS calculada do delta de Timer
+    ' desde TV2_InitExecucao. Coluna J. Cor condicional aplicada em
+    ' TV2_FormatarHistoricoSheet a partir do threshold de CONFIG.
+    Dim duracaoMs As Long
+    duracaoMs = CLng((Timer - gTV2TimerInicio) * 1000)
+    ws.Cells(nr, TV2_COL_HIST_DURACAO_MS).Value = duracaoMs
+
+    ' V12.0.0203 ONDA 16 MD-16.3 - registrar evolucao temporal por suite.
+    ' Hook silencioso: falha em Util_Evolucao nao quebra a suite chamadora.
+    Util_Evolucao_RegistrarExecucao gTV2ExecucaoId, suite, duracaoMs, gTV2Ok, gTV2Fail
 
     TV2_FormatarResultadoSheet
     TV2_FormatarHistoricoSheet
@@ -120,6 +186,15 @@ Public Sub TV2_FinalizarExecucao(ByVal suite As String, Optional ByVal silencios
     End If
     Application.StatusBar = False
 
+    ' V12.0.0203 ONDA 17 MD-17.1.d.I - Perf mode RESTORE ANTES da MsgBox
+    ' (operador interage com workbook ao clicar OK; precisa Excel responsivo).
+    Call TV2_PerfModeRestore
+
+    ' V12.0.0203 ONDA 17 MD-17.1.d.II - Status bar de fim (verbosity >= 1)
+    ' substitui o "Application.StatusBar = False" silencioso anterior por
+    ' mensagem informativa ate o operador interagir.
+    TV2_StatusBar suite, gTV2Ok + gTV2Fail + gTV2Manual, gTV2TotalCenarios, "concluido", ""
+
     If Not silencioso Then
         MsgBox "Suite V2 concluida." & vbCrLf & _
                "Execucao: " & gTV2ExecucaoId & vbCrLf & _
@@ -127,6 +202,18 @@ Public Sub TV2_FinalizarExecucao(ByVal suite As String, Optional ByVal silencios
                "CSV de falhas:" & vbCrLf & IIf(Len(pathCsvFalhas) > 0, pathCsvFalhas, "Nao exportado") & vbCrLf & vbCrLf & _
                obsExportacao, _
                IIf(gTV2Fail = 0, vbInformation, vbExclamation), "Testes V2"
+    End If
+    Exit Sub
+
+erro_fatal_handler:
+    erroFatal = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    ' V12.0.0203 ONDA 17 MD-17.1.d.I - restore garantido em erro fatal.
+    ' Excel volta a estado utilizavel mesmo se TV2_FinalizarExecucao crashar.
+    Call TV2_PerfModeRestore
+    If Not silencioso Then
+        MsgBox "Erro fatal em TV2_FinalizarExecucao: " & vbCrLf & erroFatal & vbCrLf & vbCrLf & _
+               "Application.{Calculation, ScreenUpdating, EnableEvents} restaurados.", _
+               vbCritical, "Testes V2"
     End If
 End Sub
 
@@ -205,10 +292,13 @@ Private Sub TV2_LogLinha( _
     TV2_ApplyStatusColor ws.Cells(nr, 8), statusTeste
     TV2_AppendTrilha suite, cenarioId, automacao, objetivo, esperado, obtido, statusTeste, significado, observacao
 
+    ' V12.0.0203 ONDA 17 MD-17.1.d.II - StatusBar update SEMPRE (nao apenas
+    ' em modo visual). Operador deixa de ter sensacao de Quarteto travado.
+    ' .Activate/.Select continuam apenas em modo visual (efeito visual real).
+    TV2_StatusBar suite, gTV2Ok + gTV2Fail + gTV2Manual, gTV2TotalCenarios, cenarioId, statusTeste
     If gTV2Visual Then
         ws.Activate
         ws.Cells(nr, 1).Select
-        Application.StatusBar = "Testes V2: " & suite & " -> " & cenarioId & " = " & statusTeste
         TV2_PausarVisual 1
     End If
 End Sub
@@ -351,8 +441,8 @@ Public Sub TV2_PrepararNavegacaoHumana()
     Dim frmMP As Object
 
     On Error Resume Next
-    For i = VBA.UserForms.Count - 1 To 0 Step -1
-        If TypeName(VBA.UserForms(i)) = "Menu_Principal" Then
+    For i = VBA.UserForms.count - 1 To 0 Step -1
+        If typeName(VBA.UserForms(i)) = "Menu_Principal" Then
             Set frmMP = VBA.UserForms(i)
             CallByName frmMP, "Menu_RecolherParaBateria", VbMethod
             frmMP.Hide
@@ -416,7 +506,7 @@ Public Sub TV2_GerarRelatorioUltimaExecucao()
     wsRpt.Range("A3").Value = "EXECUÇÃO_ID"
     wsRpt.Range("B3").Value = execucaoId
 
-    ultHist = wsHist.Cells(wsHist.Rows.Count, 1).End(xlUp).Row
+    ultHist = wsHist.Cells(wsHist.Rows.count, 1).End(xlUp).row
     For r = 2 To ultHist
         If Trim$(CStr(wsHist.Cells(r, 1).Value)) = execucaoId Then
             linhaHist = r
@@ -457,7 +547,7 @@ Public Sub TV2_GerarRelatorioUltimaExecucao()
     wsRpt.Range("K13").Value = "DATA_HORA"
 
     nr = 14
-    ultTrail = wsTrail.Cells(wsTrail.Rows.Count, 1).End(xlUp).Row
+    ultTrail = wsTrail.Cells(wsTrail.Rows.count, 1).End(xlUp).row
     For r = 2 To ultTrail
         If Trim$(CStr(wsTrail.Cells(r, 1).Value)) = execucaoId Then
             wsRpt.Cells(nr, 1).Value = wsTrail.Cells(r, 1).Value
@@ -555,6 +645,10 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "FLT_003", "FILTROS", "RAPIDO", "AUTO", "Interface", "Busca textual sem acento", "Nome Joao gravado com acento e busca digitada sem acento", "Validar matching textual normalizado", "Apenas ID 001", "Garante busca previsivel para nomes e servicos", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
     TV2_AddCatalogo ws, nr, "FLT_004", "FILTROS", "RAPIDO", "AUTO", "Interface", "Filtro respeita colunas alvo", "Busca por CNPJ usando apenas colunas de nome e servico", "Validar ausencia de falso positivo fora das colunas configuradas", "0 linhas", "Permite cada tela definir sua fronteira de busca", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
     TV2_AddCatalogo ws, nr, "FLT_005", "FILTROS", "RAPIDO", "AUTO", "Interface", "Filtro por coluna CNPJ", "Busca pelo mesmo CNPJ com coluna CNPJ habilitada", "Validar reuso do algoritmo com outra configuracao de colunas", "Apenas ID 002", "Prova que o helper e configuravel sem mudar a regra", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
+    TV2_AddCatalogo ws, nr, "FLT_006", "FILTROS", "RAPIDO", "AUTO", "Rodizio", "Filtro de atividade/servico do rodizio", "Matriz com CNAE, atividade e servico", "Validar busca deterministica por descricao do servico na tela de atribuicao", "Apenas ID 003", "Fecha o filtro superior da tela Rodizio sem depender de TextBox generico", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
+    TV2_AddCatalogo ws, nr, "FLT_007", "FILTROS", "RAPIDO", "AUTO", "Rodizio", "Filtro de entidade do rodizio", "Matriz com CNPJ, nome, contato e telefone", "Validar busca deterministica por CNPJ na lista de entidades do rodizio", "Apenas ID 002", "Fecha o filtro lateral da tela Rodizio com fronteira explicita de colunas", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
+    TV2_AddCatalogo ws, nr, "FLT_008", "FILTROS", "RAPIDO", "AUTO", "Servico", "Filtro de manutencao de servicos", "Matriz com SERV_ID, ATIV_ID, CNAE, atividade e servico", "Validar busca por CNAE na manutencao de servicos", "Apenas ID 003", "Garante que cadastro/alteracao de servicos use o mesmo contrato de filtro", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
+    TV2_AddCatalogo ws, nr, "FLT_009", "FILTROS", "RAPIDO", "AUTO", "Rodizio", "Limpeza do filtro de entidade do rodizio", "Filtrar Local 3 e depois limpar o termo", "Validar que campo vazio restaura todas as entidades", "1 linha filtrada; 4 linhas apos limpar", "Impede estado residual em que a tela continua ocultando entidades sem filtro ativo", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
 
     TV2_FormatarCatalogoSheet
     TV2_GerarRoteiroAssistido
@@ -639,6 +733,15 @@ Private Sub TV2_SetConfigCanonica()
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_UF).Value = "PE"
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_SECRETARIA).Value = "Secretaria Testes V2"
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = 5
+    ' V12.0.0203 ONDA 1 - defaults canonicos para a regra de strikes.
+    ' MAX_STRIKES=1 mantem o comportamento legado da suite canonica
+    ' existente (CS_14 ainda suspende na primeira nota baixa).
+    ' DIAS_SUSPENSAO_STRIKE=0 faz o helper Suspender cair no fallback
+    ' historico em meses (PERIODO_SUSPENSAO_MESES), preservando os
+    ' asserts de CS_14/CS_16. A suite TV2_RunStrikes ajusta esses dois
+    ' valores localmente via TV2_SetStrikesConfig antes de cada cenario.
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = 1
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = 0
 
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
 End Sub
@@ -729,7 +832,7 @@ Private Sub TV2_CopiarSnapshotAba(ByVal nomeOrigem As String, ByVal sufixo As St
     Application.DisplayAlerts = True
     On Error GoTo 0
 
-    Set wsDestino = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+    Set wsDestino = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.count))
     wsDestino.Name = nomeDestino
     wsOrigem.UsedRange.Copy Destination:=wsDestino.Cells(1, 1)
     wsDestino.Tab.Color = RGB(191, 191, 191)
@@ -778,7 +881,7 @@ Private Sub TV2_ClearSheet(ByVal nomeAba As String)
 
     On Error Resume Next
     For Each lo In ws.ListObjects
-        Do While lo.ListRows.Count > 0
+        Do While lo.ListRows.count > 0
             lo.ListRows(1).Delete
         Loop
     Next lo
@@ -787,11 +890,11 @@ Private Sub TV2_ClearSheet(ByVal nomeAba As String)
     primeiraLinha = TV2_PrimeiraLinhaDados(nomeAba)
     colunaChave = TV2_ColunaChave(nomeAba)
 
-    ultimaLinhaColunaA = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
-    ultimaLinhaColunaChave = ws.Cells(ws.Rows.Count, colunaChave).End(xlUp).Row
-    ultimaLinhaUsedRange = ws.UsedRange.Row + ws.UsedRange.Rows.Count - 1
-    ultimaColunaCabecalho = ws.Cells(1, ws.Columns.Count).End(xlToLeft).Column
-    ultimaColunaUsedRange = ws.UsedRange.Column + ws.UsedRange.Columns.Count - 1
+    ultimaLinhaColunaA = ws.Cells(ws.Rows.count, 1).End(xlUp).row
+    ultimaLinhaColunaChave = ws.Cells(ws.Rows.count, colunaChave).End(xlUp).row
+    ultimaLinhaUsedRange = ws.UsedRange.row + ws.UsedRange.Rows.count - 1
+    ultimaColunaCabecalho = ws.Cells(1, ws.Columns.count).End(xlToLeft).Column
+    ultimaColunaUsedRange = ws.UsedRange.Column + ws.UsedRange.Columns.count - 1
 
     ultimaLinha = Application.WorksheetFunction.Max(ultimaLinhaColunaA, ultimaLinhaColunaChave, ultimaLinhaUsedRange)
     ultimaColuna = Application.WorksheetFunction.Max(ultimaColunaCabecalho, ultimaColunaUsedRange)
@@ -813,7 +916,13 @@ Private Function TV2_PrimeiraLinhaDados(ByVal nomeAba As String) As Long
     End If
 End Function
 
-Private Function TV2_NextDataRow(ByVal nomeAba As String) As Long
+' V12.0.0203 ONDA 17 MD-17.1.a - promovido de Private para Public para
+' permitir reuso direto em Roteiros (substitui TV2_E2E_NextDataRow que
+' duplicava logica). Operador autorizou Q-MD17.1.a.1 alternativa (a):
+' unificar a logica do Engine (mais robusta - usa TV2_ColunaChave +
+' TV2_PrimeiraLinhaDados) e remover a versao Private duplicada do
+' Roteiros. Ver readback 0013-onda17-test-first.json.
+Public Function TV2_NextDataRow(ByVal nomeAba As String) As Long
     Dim ws As Worksheet
     Dim colunaChave As Long
     Dim ultima As Long
@@ -822,7 +931,7 @@ Private Function TV2_NextDataRow(ByVal nomeAba As String) As Long
     Set ws = ThisWorkbook.Sheets(nomeAba)
     primeira = TV2_PrimeiraLinhaDados(nomeAba)
     colunaChave = TV2_ColunaChave(nomeAba)
-    ultima = ws.Cells(ws.Rows.Count, colunaChave).End(xlUp).Row
+    ultima = ws.Cells(ws.Rows.count, colunaChave).End(xlUp).row
 
     If ultima < primeira Then
         TV2_NextDataRow = primeira
@@ -1004,6 +1113,7 @@ Public Sub TV2_CadastrarEmpresaCanonica(ByVal empId As String, ByVal razao As St
     ws.Cells(linha, COL_EMP_QTD_RECUSAS).Value = 0
     ws.Cells(linha, COL_EMP_DT_CAD).Value = Now
     ws.Cells(linha, COL_EMP_DT_ULT_ALT).Value = Now
+    ws.Cells(linha, COL_EMP_DT_ULT_REATIV).Value = ""
 
     TV2_SetCounter SHEET_EMPRESAS, CLng(Val(empId))
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
@@ -1358,7 +1468,7 @@ Public Function TV2_CountRows(ByVal nomeAba As String) As Long
     Set ws = ThisWorkbook.Sheets(nomeAba)
     colunaChave = TV2_ColunaChave(nomeAba)
     primeira = TV2_PrimeiraLinhaDados(nomeAba)
-    Set intervalo = ws.Range(ws.Cells(primeira, colunaChave), ws.Cells(ws.Rows.Count, colunaChave))
+    Set intervalo = ws.Range(ws.Cells(primeira, colunaChave), ws.Cells(ws.Rows.count, colunaChave))
 
     TV2_CountRows = Application.WorksheetFunction.CountA(intervalo)
 End Function
@@ -1400,20 +1510,20 @@ Public Function TV2_AuditCount(Optional ByVal tipoDesc As String = "", Optional 
     Next linha
 End Function
 
-Public Sub TV2_ProtegerAbaTeste(ByVal nomeAba As String, ByVal senha As String)
+Public Sub TV2_ProtegerAbaTeste(ByVal nomeAba As String, ByVal Senha As String)
     Dim ws As Worksheet
 
     Set ws = ThisWorkbook.Sheets(nomeAba)
     Util_DesprotegerAbaComTentativas ws
-    ws.Protect Password:=senha, UserInterfaceOnly:=False
+    ws.Protect Password:=Senha, UserInterfaceOnly:=False
 End Sub
 
-Public Sub TV2_DesprotegerAbaTeste(ByVal nomeAba As String, ByVal senha As String)
+Public Sub TV2_DesprotegerAbaTeste(ByVal nomeAba As String, ByVal Senha As String)
     Dim ws As Worksheet
 
     Set ws = ThisWorkbook.Sheets(nomeAba)
     On Error Resume Next
-    ws.Unprotect Password:=senha
+    ws.Unprotect Password:=Senha
     On Error GoTo 0
 End Sub
 
@@ -1548,7 +1658,7 @@ Public Function TV2_InativarEmpresaCadastro(ByVal empId As String) As TResult
     Set wsDestino = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
     linhaOrigem = TV2_LinhaPorIdAba(SHEET_EMPRESAS, PrimeiraLinhaDadosEmpresas(), COL_EMP_ID, empId)
     If linhaOrigem = 0 Then
-        res.Mensagem = "Empresa não encontrada em EMPRESAS: " & empId
+        res.mensagem = "Empresa não encontrada em EMPRESAS: " & empId
         TV2_InativarEmpresaCadastro = res
         Exit Function
     End If
@@ -1557,17 +1667,17 @@ Public Function TV2_InativarEmpresaCadastro(ByVal empId As String) As TResult
     razao = CStr(wsOrigem.Cells(linhaOrigem, COL_EMP_RAZAO).Value)
     linhaDuplicada = Util_LinhaDuplicadaIdOuDocumento(wsDestino, LINHA_DADOS, COL_EMP_ID, empId, COL_EMP_CNPJ, cnpj)
     If linhaDuplicada > 0 Then
-        res.Mensagem = "Empresa já existe em EMPRESAS_INATIVAS: " & empId
+        res.mensagem = "Empresa já existe em EMPRESAS_INATIVAS: " & empId
         TV2_InativarEmpresaCadastro = res
         Exit Function
     End If
 
-    On Error GoTo erro
+    On Error GoTo Erro
     If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
     If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
 
     linhaDestino = TV2_NextDataRow(SHEET_EMPRESAS_INATIVAS)
-    TV2_CopiarLinhaValores wsOrigem, linhaOrigem, wsDestino, linhaDestino, COL_EMP_DT_ULT_ALT
+    TV2_CopiarLinhaValores wsOrigem, linhaOrigem, wsDestino, linhaDestino, COL_EMP_DT_ULT_REATIV
     wsDestino.Cells(linhaDestino, COL_EMP_STATUS_GLOBAL).Value = "INATIVA"
     wsDestino.Cells(linhaDestino, COL_EMP_DT_FIM_SUSP).Value = ""
     wsDestino.Cells(linhaDestino, COL_EMP_DT_ULT_ALT).Value = Now
@@ -1587,22 +1697,22 @@ Public Function TV2_InativarEmpresaCadastro(ByVal empId As String) As TResult
                     "STATUS=INATIVA; ORIGEM=Teste_V2_Engine", _
                     "Teste_V2_Engine"
 
-    res.Sucesso = True
-    res.Mensagem = "Empresa inativada com sucesso: " & razao
+    res.sucesso = True
+    res.mensagem = "Empresa inativada com sucesso: " & razao
     TV2_InativarEmpresaCadastro = res
     Exit Function
 
 erroPreparacao:
     Err.Raise 1004, "TV2_InativarEmpresaCadastro", "Não foi possível preparar as abas de empresa."
 
-erro:
+Erro:
     On Error Resume Next
     If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
     Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
     Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro ao inativar empresa: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro ao inativar empresa: " & Err.Description
     res.CodigoErro = Err.Number
     TV2_InativarEmpresaCadastro = res
 End Function
@@ -1625,7 +1735,7 @@ Public Function TV2_ReativarEmpresaCadastro(ByVal empId As String) As TResult
     Set wsDestino = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     linhaOrigem = TV2_LinhaPorIdAba(SHEET_EMPRESAS_INATIVAS, LINHA_DADOS, COL_EMP_ID, empId)
     If linhaOrigem = 0 Then
-        res.Mensagem = "Empresa não encontrada em EMPRESAS_INATIVAS: " & empId
+        res.mensagem = "Empresa não encontrada em EMPRESAS_INATIVAS: " & empId
         TV2_ReativarEmpresaCadastro = res
         Exit Function
     End If
@@ -1633,21 +1743,23 @@ Public Function TV2_ReativarEmpresaCadastro(ByVal empId As String) As TResult
     cnpj = CStr(wsOrigem.Cells(linhaOrigem, COL_EMP_CNPJ).Value)
     linhaDuplicada = Util_LinhaDuplicadaIdOuDocumento(wsDestino, PrimeiraLinhaDadosEmpresas(), COL_EMP_ID, empId, COL_EMP_CNPJ, cnpj)
     If linhaDuplicada > 0 Then
-        res.Mensagem = "Empresa já existe em EMPRESAS: " & empId
+        res.mensagem = "Empresa já existe em EMPRESAS: " & empId
         TV2_ReativarEmpresaCadastro = res
         Exit Function
     End If
 
-    On Error GoTo erro
+    On Error GoTo Erro
     If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
     If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
 
     linhaDestino = TV2_NextDataRow(SHEET_EMPRESAS)
-    TV2_CopiarLinhaValores wsOrigem, linhaOrigem, wsDestino, linhaDestino, COL_EMP_DT_ULT_ALT
-    wsDestino.Cells(linhaDestino, COL_EMP_STATUS_GLOBAL).Value = TV2_EMP_STATUS_ATIVA
-    wsDestino.Cells(linhaDestino, COL_EMP_DT_FIM_SUSP).Value = ""
-    wsDestino.Cells(linhaDestino, COL_EMP_DT_ULT_ALT).Value = Now
+    TV2_CopiarLinhaValores wsOrigem, linhaOrigem, wsDestino, linhaDestino, COL_EMP_DT_ULT_REATIV
     copiou = True
+
+    res = ReativarLinhaEmpresa(linhaDestino, "Teste_V2_Engine")
+    If Not res.sucesso Then
+        Err.Raise 1004, "TV2_ReativarEmpresaCadastro", res.mensagem
+    End If
 
     If Not Util_ExcluirLinhaSegura(wsOrigem, linhaOrigem) Then
         Err.Raise 1004, "TV2_ReativarEmpresaCadastro", "Falha ao remover empresa da aba inativa."
@@ -1658,27 +1770,23 @@ Public Function TV2_ReativarEmpresaCadastro(ByVal empId As String) As TResult
     copiou = False
 
     ClassificaEmpresa
-    RegistrarEvento EVT_REATIVACAO, ENT_EMP, empId, _
-                    "STATUS=INATIVA", _
-                    "STATUS=ATIVA; ORIGEM=Teste_V2_Engine", _
-                    "Teste_V2_Engine"
 
-    res.Sucesso = True
-    res.Mensagem = "Empresa reativada com sucesso: " & empId
+    res.sucesso = True
+    res.mensagem = "Empresa reativada com sucesso: " & empId
     TV2_ReativarEmpresaCadastro = res
     Exit Function
 
 erroPreparacao:
     Err.Raise 1004, "TV2_ReativarEmpresaCadastro", "Não foi possível preparar as abas de empresa."
 
-erro:
+Erro:
     On Error Resume Next
     If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
     Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
     Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro ao reativar empresa: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro ao reativar empresa: " & Err.Description
     res.CodigoErro = Err.Number
     TV2_ReativarEmpresaCadastro = res
 End Function
@@ -1702,7 +1810,7 @@ Public Function TV2_InativarEntidadeCadastro(ByVal entId As String) As TResult
     Set wsDestino = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
     linhaOrigem = TV2_LinhaPorIdAba(SHEET_ENTIDADE, LINHA_DADOS, COL_ENT_ID, entId)
     If linhaOrigem = 0 Then
-        res.Mensagem = "Entidade não encontrada em ENTIDADE: " & entId
+        res.mensagem = "Entidade não encontrada em ENTIDADE: " & entId
         TV2_InativarEntidadeCadastro = res
         Exit Function
     End If
@@ -1711,12 +1819,12 @@ Public Function TV2_InativarEntidadeCadastro(ByVal entId As String) As TResult
     nomeEnt = CStr(wsOrigem.Cells(linhaOrigem, COL_ENT_NOME).Value)
     linhaDuplicada = Util_LinhaDuplicadaIdOuDocumento(wsDestino, LINHA_DADOS, COL_ENT_ID, entId, COL_ENT_CNPJ, cnpj)
     If linhaDuplicada > 0 Then
-        res.Mensagem = "Entidade já existe em ENTIDADE_INATIVOS: " & entId
+        res.mensagem = "Entidade já existe em ENTIDADE_INATIVOS: " & entId
         TV2_InativarEntidadeCadastro = res
         Exit Function
     End If
 
-    On Error GoTo erro
+    On Error GoTo Erro
     If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
     If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
 
@@ -1738,22 +1846,22 @@ Public Function TV2_InativarEntidadeCadastro(ByVal entId As String) As TResult
                     "ABA=ENTIDADE_INATIVOS; ORIGEM=Teste_V2_Engine", _
                     "Teste_V2_Engine"
 
-    res.Sucesso = True
-    res.Mensagem = "Entidade inativada com sucesso: " & nomeEnt
+    res.sucesso = True
+    res.mensagem = "Entidade inativada com sucesso: " & nomeEnt
     TV2_InativarEntidadeCadastro = res
     Exit Function
 
 erroPreparacao:
     Err.Raise 1004, "TV2_InativarEntidadeCadastro", "Não foi possível preparar as abas de entidade."
 
-erro:
+Erro:
     On Error Resume Next
     If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
     Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
     Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro ao inativar entidade: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro ao inativar entidade: " & Err.Description
     res.CodigoErro = Err.Number
     TV2_InativarEntidadeCadastro = res
 End Function
@@ -1776,7 +1884,7 @@ Public Function TV2_ReativarEntidadeCadastro(ByVal entId As String) As TResult
     Set wsDestino = ThisWorkbook.Sheets(SHEET_ENTIDADE)
     linhaOrigem = TV2_LinhaPorIdAba(SHEET_ENTIDADE_INATIVOS, LINHA_DADOS, COL_ENT_ID, entId)
     If linhaOrigem = 0 Then
-        res.Mensagem = "Entidade não encontrada em ENTIDADE_INATIVOS: " & entId
+        res.mensagem = "Entidade não encontrada em ENTIDADE_INATIVOS: " & entId
         TV2_ReativarEntidadeCadastro = res
         Exit Function
     End If
@@ -1784,12 +1892,12 @@ Public Function TV2_ReativarEntidadeCadastro(ByVal entId As String) As TResult
     cnpj = CStr(wsOrigem.Cells(linhaOrigem, COL_ENT_CNPJ).Value)
     linhaDuplicada = Util_LinhaDuplicadaIdOuDocumento(wsDestino, LINHA_DADOS, COL_ENT_ID, entId, COL_ENT_CNPJ, cnpj)
     If linhaDuplicada > 0 Then
-        res.Mensagem = "Entidade já existe em ENTIDADE: " & entId
+        res.mensagem = "Entidade já existe em ENTIDADE: " & entId
         TV2_ReativarEntidadeCadastro = res
         Exit Function
     End If
 
-    On Error GoTo erro
+    On Error GoTo Erro
     If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
     If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
 
@@ -1811,22 +1919,22 @@ Public Function TV2_ReativarEntidadeCadastro(ByVal entId As String) As TResult
                     "ABA=ENTIDADE; ORIGEM=Teste_V2_Engine", _
                     "Teste_V2_Engine"
 
-    res.Sucesso = True
-    res.Mensagem = "Entidade reativada com sucesso: " & entId
+    res.sucesso = True
+    res.mensagem = "Entidade reativada com sucesso: " & entId
     TV2_ReativarEntidadeCadastro = res
     Exit Function
 
 erroPreparacao:
     Err.Raise 1004, "TV2_ReativarEntidadeCadastro", "Não foi possível preparar as abas de entidade."
 
-erro:
+Erro:
     On Error Resume Next
     If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
     Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
     Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro ao reativar entidade: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro ao reativar entidade: " & Err.Description
     res.CodigoErro = Err.Number
     TV2_ReativarEntidadeCadastro = res
 End Function
@@ -1843,7 +1951,7 @@ Private Function TV2_EnsureResultadoSheet() As Worksheet
     On Error GoTo 0
 
     If ws Is Nothing Then
-        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.count))
         ws.Name = TV2_SHEET_RESULTADO
     End If
 
@@ -1872,7 +1980,7 @@ Private Function TV2_EnsureCatalogoSheet() As Worksheet
     On Error GoTo 0
 
     If ws Is Nothing Then
-        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.count))
         ws.Name = TV2_SHEET_CATALOGO
     End If
 
@@ -1887,7 +1995,7 @@ Private Function TV2_EnsureRoteiroSheet() As Worksheet
     On Error GoTo 0
 
     If ws Is Nothing Then
-        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.count))
         ws.Name = TV2_SHEET_ROTEIRO
     End If
 
@@ -1902,7 +2010,7 @@ Private Function TV2_EnsureRelatorioSheet() As Worksheet
     On Error GoTo 0
 
     If ws Is Nothing Then
-        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.count))
         ws.Name = TV2_SHEET_RPT
     End If
 
@@ -1917,7 +2025,7 @@ Private Function TV2_EnsureTrilhaSheet() As Worksheet
     On Error GoTo 0
 
     If ws Is Nothing Then
-        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.count))
         ws.Name = TV2_SHEET_TRILHA
     End If
 
@@ -1948,7 +2056,7 @@ Private Function TV2_EnsureAuditTestesSheet() As Worksheet
     On Error GoTo 0
 
     If ws Is Nothing Then
-        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.count))
         ws.Name = TV2_SHEET_AUDIT_TESTES
     End If
 
@@ -1982,7 +2090,7 @@ Private Function TV2_EnsureHistoricoSheet() As Worksheet
     On Error GoTo 0
 
     If ws Is Nothing Then
-        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.count))
         ws.Name = TV2_SHEET_HIST
     End If
 
@@ -1996,9 +2104,12 @@ Private Function TV2_EnsureHistoricoSheet() As Worksheet
         ws.Cells(1, 7).Value = "TOTAL"
         ws.Cells(1, 8).Value = "CSV_FALHAS"
         ws.Cells(1, 9).Value = "OBS_EXPORTACAO"
+        ws.Cells(1, TV2_COL_HIST_DURACAO_MS).Value = "DURACAO_MS"
     Else
         ws.Cells(1, 8).Value = "CSV_FALHAS"
         ws.Cells(1, 9).Value = "OBS_EXPORTACAO"
+        ' V12.0.0203 ONDA 16 MD-16.2 - garantir header DURACAO_MS em sheets pre-existentes.
+        ws.Cells(1, TV2_COL_HIST_DURACAO_MS).Value = "DURACAO_MS"
     End If
 
     Set TV2_EnsureHistoricoSheet = ws
@@ -2007,7 +2118,7 @@ End Function
 Private Function TV2_NextRow(ByVal ws As Worksheet, ByVal colBase As Long, ByVal minRow As Long) As Long
     Dim ultima As Long
 
-    ultima = ws.Cells(ws.Rows.Count, colBase).End(xlUp).Row
+    ultima = ws.Cells(ws.Rows.count, colBase).End(xlUp).row
     If ultima < minRow Then
         TV2_NextRow = minRow
     Else
@@ -2024,7 +2135,7 @@ Private Sub TV2_FormatarResultadoSheet()
     ws.Rows(1).Interior.Color = RGB(0, 51, 102)
     ws.Rows(1).Font.Color = RGB(255, 255, 255)
     ws.Columns("A:K").EntireColumn.AutoFit
-    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ultima = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     If ultima >= 1 Then
         On Error Resume Next
         If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
@@ -2054,7 +2165,7 @@ Private Sub TV2_FormatarRoteiroSheet()
     ws.Rows(1).Interior.Color = RGB(0, 51, 102)
     ws.Rows(1).Font.Color = RGB(255, 255, 255)
     ws.Columns("A:H").EntireColumn.AutoFit
-    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ultima = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     If ultima >= 1 Then
         On Error Resume Next
         If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
@@ -2067,19 +2178,42 @@ End Sub
 Private Sub TV2_FormatarHistoricoSheet()
     Dim ws As Worksheet
     Dim ultima As Long
+    Dim r As Long
+    Dim duracao As Long
+    Dim threshold As Long
 
     Set ws = TV2_EnsureHistoricoSheet()
     ws.Rows(1).Font.Bold = True
     ws.Rows(1).Interior.Color = RGB(0, 51, 102)
     ws.Rows(1).Font.Color = RGB(255, 255, 255)
-    ws.Columns("A:I").EntireColumn.AutoFit
-    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ws.Columns("A:J").EntireColumn.AutoFit
+    ultima = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     If ultima >= 1 Then
         On Error Resume Next
         If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
         On Error GoTo 0
-        ws.Range(ws.Cells(1, 1), ws.Cells(ultima, 9)).AutoFilter
+        ws.Range(ws.Cells(1, 1), ws.Cells(ultima, TV2_COL_HIST_DURACAO_MS)).AutoFilter
     End If
+    ' V12.0.0203 ONDA 16 MD-16.2 - cor condicional na coluna DURACAO_MS:
+    '   verde   < threshold/2
+    '   amarelo entre threshold/2 e threshold
+    '   vermelho >= threshold
+    On Error Resume Next
+    threshold = GetThresholdTesteLentoMS()
+    If threshold < 1 Then threshold = 500
+    For r = 2 To ultima
+        duracao = CLng(Val(ws.Cells(r, TV2_COL_HIST_DURACAO_MS).Value))
+        If duracao = 0 Then
+            ws.Cells(r, TV2_COL_HIST_DURACAO_MS).Interior.ColorIndex = xlNone
+        ElseIf duracao < threshold \ 2 Then
+            ws.Cells(r, TV2_COL_HIST_DURACAO_MS).Interior.Color = RGB(198, 239, 206)
+        ElseIf duracao < threshold Then
+            ws.Cells(r, TV2_COL_HIST_DURACAO_MS).Interior.Color = RGB(255, 235, 156)
+        Else
+            ws.Cells(r, TV2_COL_HIST_DURACAO_MS).Interior.Color = RGB(255, 199, 206)
+        End If
+    Next r
+    On Error GoTo 0
     TV2_AdicionarBotoes ws
 End Sub
 
@@ -2099,7 +2233,7 @@ Private Sub TV2_FormatarRelatorioSheet()
     ws.Range("A11:B11").Interior.Color = RGB(255, 242, 204)
     ws.Range("A1:K1").Merge
     ws.Range("A1:K1").HorizontalAlignment = xlCenter
-    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ultima = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     If ultima >= 13 Then
         On Error Resume Next
         If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
@@ -2118,7 +2252,7 @@ Private Sub TV2_FormatarTrilhaSheet()
     ws.Rows(1).Interior.Color = RGB(0, 51, 102)
     ws.Rows(1).Font.Color = RGB(255, 255, 255)
     ws.Columns("A:M").EntireColumn.AutoFit
-    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ultima = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     If ultima >= 1 Then
         On Error Resume Next
         If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
@@ -2138,7 +2272,7 @@ Private Sub TV2_FormatarAuditTestesSheet()
     ws.Rows(1).Font.Color = RGB(255, 255, 255)
     ws.Columns("A:P").EntireColumn.AutoFit
     ws.Columns("N:O").ColumnWidth = 42
-    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ultima = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     If ultima >= 1 Then
         On Error Resume Next
         If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
@@ -2207,6 +2341,10 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "FLT_003", "AUTO", "Validar busca sem acento em texto acentuado", "Executar a opcao 13 da Central V2 e conferir a linha FLT_003", "Apenas ID 001", "Linha do cenario FLT_003", "Garante busca previsivel por nome ou servico", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "FLT_004", "AUTO", "Validar fronteira de colunas do filtro", "Executar a opcao 13 da Central V2 e conferir a linha FLT_004", "0 linhas quando CNPJ nao esta nas colunas-alvo", "Linha do cenario FLT_004", "Evita falso positivo fora da configuracao da tela", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "FLT_005", "AUTO", "Validar filtro por CNPJ quando coluna habilitada", "Executar a opcao 13 da Central V2 e conferir a linha FLT_005", "Apenas ID 002", "Linha do cenario FLT_005", "Prova reuso do algoritmo com configuracao diferente", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FLT_006", "AUTO", "Validar filtro do rodizio por atividade/servico", "Executar a opcao 13 da Central V2 e conferir a linha FLT_006", "Apenas ID 003", "Linha do cenario FLT_006", "Prova busca deterministica no filtro superior do rodizio", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FLT_007", "AUTO", "Validar filtro do rodizio por entidade/CNPJ", "Executar a opcao 13 da Central V2 e conferir a linha FLT_007", "Apenas ID 002", "Linha do cenario FLT_007", "Prova busca deterministica no filtro lateral do rodizio", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FLT_008", "AUTO", "Validar filtro de manutencao de servicos por CNAE", "Executar a opcao 13 da Central V2 e conferir a linha FLT_008", "Apenas ID 003", "Linha do cenario FLT_008", "Prova reuso do contrato em cadastro e manutencao de servicos", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FLT_009", "AUTO", "Validar limpeza do filtro de entidade do rodizio", "Executar a opcao 13 da Central V2 e conferir a linha FLT_009", "1 linha filtrada; 4 linhas apos limpar", "Linha do cenario FLT_009", "Prova que campo vazio desfaz filtro residual na tela de atribuicao", "AUTOMATIZADO"
 
     TV2_FormatarRoteiroSheet
 End Sub
@@ -2296,8 +2434,102 @@ Private Sub TV2_ApplyStatusColor(ByVal alvo As Range, ByVal statusTeste As Strin
 End Sub
 
 Private Sub TV2_PausarVisual(ByVal segundos As Long)
+    ' V12.0.0203 ONDA 17 MD-17.1.d.I - NO-OP em modo perf gamma.
+    ' Era apenas feedback visual entre cenarios (Application.Wait segundos).
+    ' Removido para perf gamma - testes nao dependem de pause real.
+    ' Idempotencia preservada: zero efeito em assertions.
+    ' Assinatura preservada para nao quebrar callers.
     If segundos <= 0 Then Exit Sub
-    Application.Wait Now + TimeSerial(0, 0, segundos)
+    ' (Application.Wait removido)
+End Sub
+
+' V12.0.0203 ONDA 17 MD-17.1.d.I - Helpers Private de perf gamma.
+' Centralizam set/restore de Application.* para uso em
+' TV2_InitExecucao/TV2_FinalizarExecucao. Idempotencia by design - ver
+' .hbn/readbacks/0015-onda17-md17-1-d-I.json secao analise_idempotencia.
+
+Private Sub TV2_PerfModeOn()
+    ' Salvar valores originais ANTES de mudar (para restore correto).
+    gTV2OldCalc = Application.Calculation
+    gTV2OldScreen = Application.ScreenUpdating
+    gTV2OldEvents = Application.EnableEvents
+    ' Ativar modo perf.
+    Application.Calculation = xlCalculationManual
+    Application.ScreenUpdating = False
+    Application.EnableEvents = False
+End Sub
+
+Private Sub TV2_PerfModeRestore()
+    ' Restore com handler defensivo para nao mascarar erros downstream.
+    On Error Resume Next
+    Application.EnableEvents = gTV2OldEvents
+    Application.ScreenUpdating = gTV2OldScreen
+    Application.Calculation = gTV2OldCalc
+    Application.StatusBar = False
+    On Error GoTo 0
+End Sub
+
+' V12.0.0203 ONDA 17 MD-17.1.d.II - Helper de visibility alfa.
+' Atualiza Application.StatusBar conforme verbosity cacheada em
+' gTV2VerbosityCached. Public porque pode ser chamado de fora do Engine
+' (CT_ValidarRelease_QuartetoMinimo, Run*s, etc).
+'
+' Args:
+'   suite        - nome da suite (SMOKE, CANONICO, etc.)
+'   cenAtual     - contador atual (0 = inicio; gTV2Ok+gTV2Fail+gTV2Manual)
+'   totN         - total estimado (0 = nao passado; mostra so X)
+'   nomeCenario  - id ou rotulo do cenario (vazio em init/fim de suite)
+'   etapa        - etapa intra-cenario (vazio quando nao aplicavel)
+'
+' Verbosity (cacheada):
+'   0 = silent (no-op)
+'   1 = transicao de suite ('iniciando', 'concluido')
+'   2 (default) = 'V2 [<suite>] X/N: <nomeCenario> = <etapa>'
+'   3 = inclui [etapa] no fim
+'
+' Idempotencia: zero efeito em business logic - apenas Application.StatusBar.
+Public Sub TV2_StatusBar( _
+    ByVal suite As String, _
+    ByVal cenAtual As Long, _
+    ByVal totN As Long, _
+    ByVal nomeCenario As String, _
+    ByVal etapa As String _
+)
+    Dim verbosity As Long
+    Dim msg As String
+    Dim contador As String
+    Dim ehTransicao As Boolean
+
+    verbosity = gTV2VerbosityCached
+    If verbosity <= 0 Then Exit Sub
+
+    ' Detecta transicao (init ou fim explicito) - nomeCenario eh "iniciando" ou "concluido"
+    ehTransicao = (nomeCenario = "iniciando" Or nomeCenario = "concluido")
+
+    If verbosity = 1 And Not ehTransicao Then Exit Sub
+
+    ' Montar contador "X" ou "X/N"
+    If totN > 0 Then
+        contador = CStr(cenAtual) & "/" & CStr(totN)
+    Else
+        contador = CStr(cenAtual)
+    End If
+
+    If ehTransicao Then
+        msg = "V2 [" & suite & "] " & nomeCenario
+        If nomeCenario = "concluido" Then
+            msg = msg & " OK=" & CStr(gTV2Ok) & " FALHA=" & CStr(gTV2Fail) & " MANUAL=" & CStr(gTV2Manual)
+        End If
+    Else
+        msg = "V2 [" & suite & "] " & contador & ": " & nomeCenario & " = " & etapa
+        If verbosity >= 3 And Len(etapa) > 0 Then
+            ' Verbosity 3 ja inclui etapa naturalmente; nada extra.
+        End If
+    End If
+
+    On Error Resume Next
+    Application.StatusBar = msg
+    On Error GoTo 0
 End Sub
 
 Private Sub TV2_AdicionarBotoes(ByVal ws As Worksheet)
@@ -2375,7 +2607,7 @@ Private Sub TV2_AbrirResultadoExecucao(ByVal execucaoId As String)
     Dim ultima As Long
 
     Set ws = TV2_EnsureResultadoSheet()
-    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ultima = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     On Error Resume Next
     If ws.AutoFilterMode Then ws.AutoFilter.ShowAllData
     On Error GoTo 0
@@ -2391,7 +2623,7 @@ Private Function TV2_UltimaExecucaoId() As String
     Dim ultima As Long
 
     Set ws = TV2_EnsureHistoricoSheet()
-    ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ultima = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     If ultima >= 2 Then
         TV2_UltimaExecucaoId = Trim$(CStr(ws.Cells(ultima, 1).Value))
     End If
@@ -2414,13 +2646,13 @@ Private Function TV2_ExecucaoEmFoco() As String
 
     Select Case UCase$(ws.Name)
         Case UCase$(TV2_SHEET_RESULTADO), UCase$(TV2_SHEET_HIST), UCase$(TV2_SHEET_TRILHA), UCase$(TV2_SHEET_AUDIT_TESTES)
-            linhaAtual = ActiveCell.Row
+            linhaAtual = ActiveCell.row
             If linhaAtual >= 2 Then
                 TV2_ExecucaoEmFoco = Trim$(CStr(ws.Cells(linhaAtual, 1).Value))
                 If TV2_ExecucaoEmFoco <> "" Then Exit Function
             End If
 
-            ultima = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+            ultima = ws.Cells(ws.Rows.count, 1).End(xlUp).row
             For r = 2 To ultima
                 If Not ws.Rows(r).Hidden Then
                     TV2_ExecucaoEmFoco = Trim$(CStr(ws.Cells(r, 1).Value))
@@ -2458,7 +2690,7 @@ Public Function TV2_ExportarFalhasCSV(ByVal execucaoId As String) As String
     stamp = Replace$(Replace$(Replace$(execucaoId, ":", ""), "-", ""), " ", "_")
     caminho = pastaBase & Application.PathSeparator & "TesteV2_" & suite & "_Falhas_" & stamp & ".csv"
 
-    ultLinha = wsSrc.Cells(wsSrc.Rows.Count, 1).End(xlUp).Row
+    ultLinha = wsSrc.Cells(wsSrc.Rows.count, 1).End(xlUp).row
     If ultLinha < 2 Then Exit Function
 
     For r = 2 To ultLinha
@@ -2502,7 +2734,7 @@ Private Function TV2_SuiteDaExecucao(ByVal execucaoId As String) As String
     Dim r As Long
 
     Set ws = TV2_EnsureResultadoSheet()
-    ultLinha = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ultLinha = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     For r = 2 To ultLinha
         If Trim$(CStr(ws.Cells(r, 1).Value)) = execucaoId Then
             TV2_SuiteDaExecucao = Trim$(CStr(ws.Cells(r, 2).Value))
@@ -2561,7 +2793,7 @@ Private Sub TV2_LerCatalogoCenario(ByVal cenarioId As String, ByRef dominioOut A
     If Trim$(cenarioId) = "" Then Exit Sub
 
     Set ws = TV2_EnsureCatalogoSheet()
-    ultLinha = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ultLinha = ws.Cells(ws.Rows.count, 1).End(xlUp).row
 
     For r = 2 To ultLinha
         If Trim$(CStr(ws.Cells(r, 1).Value)) = cenarioId Then
@@ -2572,3 +2804,428 @@ Private Sub TV2_LerCatalogoCenario(ByVal cenarioId As String, ByRef dominioOut A
         End If
     Next r
 End Sub
+
+'======================================================================
+' V12.0.0203 ONDA 17 MD-17.1.a - Mecanica de fixture isolada por escopo
+'======================================================================
+' Ver readback .hbn/readbacks/0013-onda17-test-first.json e handoff
+' auditoria/00_status/43_HANDOFF_NOVA_SESSAO_2026_05_03_TEST_FIRST.md.
+'
+' Princípios:
+'   - Cada cenario/suite usa namespace proprio (string curta, ex: "SE2E",
+'     "SINT", "SRDZ"). IDs gerados levam o prefixo do escopo.
+'   - Idempotencia cruzada: TV2_LimparNamespace(escopo) limpa apenas as
+'     linhas com prefixo do escopo nas 7 abas de cadastro estatico.
+'   - Sem multi-thread real (VBA single-threaded); a paralelizacao
+'     logica vem de eliminar Limpa_Base entre suites compativeis,
+'     reusar fixtures e reduzir overhead de IO. Ver Licao M12 candidata.
+'======================================================================
+
+
+'======================================================================
+' TV2_RestaurarConfigBaseline (Onda 17 MD-17.1.a)
+'   Generalizacao do antigo TV2_E2E_RestaurarConfigBaseline (Roteiros
+'   1891), promovido para Engine como Public parametrizado. Defaults
+'   reproduzem comportamento legado V1 + CS_14 + CS_16 (MAX_STRIKES=1,
+'   DIAS_SUSPENSAO_STRIKE=0). Suites que precisam de outros valores
+'   (E2E com MAX_STRIKES=3, DIAS=90) sobrescrevem antes da execucao
+'   e chamam este helper no final para nao vazar entre suites (L16).
+'   OERN local justificado: cleanup helper nunca pode quebrar suite
+'   chamadora.
+'======================================================================
+Public Sub TV2_RestaurarConfigBaseline( _
+    Optional ByVal maxStrikes As Long = 1, _
+    Optional ByVal diasSusp As Long = 0 _
+)
+    Dim ws As Worksheet
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
+    If Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = maxStrikes
+        ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = diasSusp
+        Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    End If
+    On Error GoTo 0
+End Sub
+
+
+'======================================================================
+' TV2_LimparNamespace (Onda 17 MD-17.1.a)
+'   Remove (ClearContents) apenas as linhas cujo ID em coluna chave
+'   inicia com o prefixo "<escopo>_", em 7 abas de cadastro estatico:
+'     EMPRESAS, EMPRESAS_INATIVAS, ENTIDADE, ENTIDADE_INATIVOS,
+'     ATIVIDADES, CAD_SERV (filtrando por SERV_ATIV_ID), CREDENCIADOS
+'     (filtrando por CRED_EMP_ID).
+'   NAO chama Limpa_Base global. Idempotente: rodar Nx produz mesmo
+'   estado final. Para limpar abas transacionais (PRE_OS, CAD_OS), use
+'   TV2_PrepararBaselineCanonica (custo maior).
+'   Q-MD17.1.a.3 alternativa (a): lista mínima fechada de 7 abas.
+'   OERN local justificado: cleanup nao pode quebrar suite chamadora.
+'======================================================================
+Public Sub TV2_LimparNamespace(ByVal escopo As String)
+    Dim escopoNorm As String
+    Dim prefixo As String
+
+    On Error Resume Next
+    escopoNorm = Trim$(CStr(escopo))
+    If Len(escopoNorm) = 0 Then Exit Sub
+
+    prefixo = escopoNorm & "_"
+
+    TV2_LimparLinhasComPrefixo SHEET_EMPRESAS, COL_EMP_ID, prefixo
+    TV2_LimparLinhasComPrefixo SHEET_EMPRESAS_INATIVAS, COL_EMP_ID, prefixo
+    TV2_LimparLinhasComPrefixo SHEET_ENTIDADE, COL_ENT_ID, prefixo
+    TV2_LimparLinhasComPrefixo SHEET_ENTIDADE_INATIVOS, COL_ENT_ID, prefixo
+    ' V12.0.0203 ONDA 17 MD-17.1.b-fix1: ATIV_ID em fixture eh numerico
+    ' (hash do escopo, faixa 900-979 + 0..8). Limpeza via helper dedicado
+    ' por range numerico em vez de prefixo alfanumerico (a versao anterior
+    ' era no-op apos TV2_Pad3 em TV2_CredenciarAtividade ter convertido
+    ' "F_<escopo>_<seq>" para "000"). Causa raiz documentada em
+    ' VR_20260503_020405 (Quarteto reprovado pre-fix1).
+    TV2_FF_LimparAtividadesEscopo escopoNorm
+    TV2_LimparLinhasComPrefixo SHEET_CREDENCIADOS, COL_CRED_EMP_ID, prefixo
+    On Error GoTo 0
+End Sub
+
+' Helper interno: limpa linhas em ws onde Cells(linha, colunaId).Value
+' comeca com prefixo. Respeita protecao de aba via Util_PrepararAbaParaEscrita.
+Private Sub TV2_LimparLinhasComPrefixo( _
+    ByVal nomeAba As String, _
+    ByVal colunaId As Long, _
+    ByVal prefixo As String _
+)
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim linha As Long
+    Dim valor As String
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Sheets(nomeAba)
+    If ws Is Nothing Then Exit Sub
+
+    ultima = ws.Cells(ws.Rows.count, colunaId).End(xlUp).row
+    If ultima < LINHA_DADOS Then Exit Sub
+    If Len(prefixo) = 0 Then Exit Sub
+
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then Exit Sub
+
+    For linha = ultima To LINHA_DADOS Step -1
+        valor = Trim$(CStr(ws.Cells(linha, colunaId).Value))
+        If Len(valor) >= Len(prefixo) Then
+            If StrComp(Left$(valor, Len(prefixo)), prefixo, vbTextCompare) = 0 Then
+                ws.Rows(linha).ClearContents
+            End If
+        End If
+    Next linha
+
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+End Sub
+
+
+'======================================================================
+' TV2_FixtureFactory (Onda 17 MD-17.1.a)
+'   Cria fixtures de teste isoladas em namespace prefixado.
+'
+'   Convencoes de naming (caber em colunas existentes):
+'     - ENT_ID  : <escopo>_<seq3>            ex: SE2E_001 (escopo "SE2E")
+'     - EMP_ID  : <escopo>_<seq3>            ex: SE2E_001
+'     - ATIV_ID : F_<escopo>_<seq2>          ex: F_SE2E_01 (alfanumerico
+'                 deliberado - TV2_MapearAtividadesCanonicas filtra por
+'                 IsNumeric e ignora, evitando interferencia com
+'                 canonicas A/B/C dos cenarios CS_*)
+'     - SERV_ID : 001 (canonico, 1 servico por atividade de fixture)
+'
+'   Cada empresa eh credenciada em cada atividade (cobertura cartesiana).
+'   Idempotente: se IDs ja existem, nao duplica.
+'
+'   ATENCAO sobre CNPJ: TV2_CadastrarEmpresaCanonica usa Right$(empId, 1)
+'   para gerar CNPJ sintetico. Se 2+ escopos rodam na mesma execucao
+'   sem TV2_LimparNamespace antes, podera haver colisao de CNPJ entre
+'   escopos quando o ultimo digito de seqN coincidir. Mitigacao:
+'   suite chama TV2_LimparNamespace(escopo) ANTES de TV2_FixtureFactory.
+'
+'   Q-MD17.1.a.2 alternativa (a): retorno via ByRef arrays.
+'
+'   Uso típico:
+'     Dim entIds() As String, empIds() As String, ativIds() As String
+'     TV2_LimparNamespace "SE2E"
+'     TV2_FixtureFactory "SE2E", 3, 5, 1, entIds, empIds, ativIds
+'     ' fixtures criadas; suite consome arrays ByRef
+'======================================================================
+Public Sub TV2_FixtureFactory( _
+    ByVal escopo As String, _
+    ByVal qtdEntidades As Long, _
+    ByVal qtdEmpresas As Long, _
+    ByVal qtdAtividades As Long, _
+    ByRef idsEntsOut() As String, _
+    ByRef idsEmpsOut() As String, _
+    ByRef idsAtivsOut() As String _
+)
+    Dim escopoNorm As String
+    Dim i As Long, j As Long
+    Dim entId As String, empId As String, ativId As String
+    Dim resCred As String
+
+    escopoNorm = Trim$(CStr(escopo))
+    If Len(escopoNorm) = 0 Then
+        Err.Raise 1004, "TV2_FixtureFactory", "Escopo vazio nao permitido."
+    End If
+    If qtdEntidades < 0 Or qtdEmpresas < 0 Or qtdAtividades < 0 Then
+        Err.Raise 1004, "TV2_FixtureFactory", "Quantidades nao podem ser negativas."
+    End If
+
+    ' ReDim com tamanho minimo 1 para evitar erro com qtd=0;
+    ' caller verifica UBound antes de iterar se qtd era 0.
+    ReDim idsEntsOut(1 To IIf(qtdEntidades = 0, 1, qtdEntidades))
+    ReDim idsEmpsOut(1 To IIf(qtdEmpresas = 0, 1, qtdEmpresas))
+    ReDim idsAtivsOut(1 To IIf(qtdAtividades = 0, 1, qtdAtividades))
+
+    ' 1. Entidades
+    For i = 1 To qtdEntidades
+        entId = escopoNorm & "_" & Format$(i, "000")
+        If Not TV2_FF_EntidadeJaExiste(entId) Then
+            TV2_CadastrarEntidadeCanonica entId, "Entidade " & escopoNorm & " " & CStr(i)
+        End If
+        idsEntsOut(i) = entId
+    Next i
+
+    ' 2. Empresas
+    For i = 1 To qtdEmpresas
+        empId = escopoNorm & "_" & Format$(i, "000")
+        If Not TV2_FF_EmpresaJaExiste(empId) Then
+            TV2_CadastrarEmpresaCanonica empId, "Empresa " & escopoNorm & " " & CStr(i)
+        End If
+        idsEmpsOut(i) = empId
+    Next i
+
+    ' 3. Atividades + servicos (1 servico canonico "001" por atividade).
+    ' V12.0.0203 ONDA 17 MD-17.1.b-fix1: ATIV_ID gerado como numero de 3
+    ' digitos via hash do escopo (faixa 900-979 + sequencia 0..8). Substitui
+    ' o naming alfanumerico anterior (F_<escopo>_<seq>) que era convertido
+    ' para "000" por TV2_Pad3 dentro de TV2_CredenciarAtividade, fazendo
+    ' SelecionarEmpresa nao encontrar empresas aptas para a fixture (causa
+    ' raiz do Quarteto reprovado em VR_20260503_020405). Cap implicito
+    ' qtdAtividades = 9 (suficiente para todos os cenarios atuais).
+    Dim hashBase As Long
+    hashBase = TV2_FF_HashEscopoParaAtivId(escopoNorm)
+    If qtdAtividades > 9 Then
+        Err.Raise 1004, "TV2_FixtureFactory", _
+                  "qtdAtividades=" & CStr(qtdAtividades) & " excede cap 9 da faixa hash. Use escopos diferentes para mais atividades."
+    End If
+    For i = 1 To qtdAtividades
+        ativId = Format$(hashBase + (i - 1), "000")
+        If Not TV2_FF_AtividadeJaExiste(ativId) Then
+            TV2_FF_GarantirAtividade ativId, "Atividade Fixture " & escopoNorm & " " & CStr(i)
+        End If
+        TV2_FF_GarantirServico ativId, "001", "Atividade Fixture " & escopoNorm & " " & CStr(i), 100@
+        idsAtivsOut(i) = ativId
+    Next i
+
+    ' 4. Credenciamento cartesiano: cada empresa em cada atividade.
+    ' resCred="DUPLICADO" eh aceitavel (idempotencia).
+    For i = 1 To qtdEmpresas
+        For j = 1 To qtdAtividades
+            resCred = TV2_CredenciarAtividade(idsEmpsOut(i), idsAtivsOut(j), "001")
+        Next j
+    Next i
+End Sub
+
+Private Function TV2_FF_EntidadeJaExiste(ByVal entId As String) As Boolean
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim linha As Long
+    Set ws = ThisWorkbook.Sheets(SHEET_ENTIDADE)
+    ultima = UltimaLinhaAba(SHEET_ENTIDADE)
+    For linha = LINHA_DADOS To ultima
+        If IdsIguais(ws.Cells(linha, COL_ENT_ID).Value, entId) Then
+            TV2_FF_EntidadeJaExiste = True
+            Exit Function
+        End If
+    Next linha
+End Function
+
+Private Function TV2_FF_EmpresaJaExiste(ByVal empId As String) As Boolean
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim linha As Long
+    Set ws = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+    ultima = UltimaLinhaAba(SHEET_EMPRESAS)
+    For linha = LINHA_DADOS To ultima
+        If IdsIguais(ws.Cells(linha, COL_EMP_ID).Value, empId) Then
+            TV2_FF_EmpresaJaExiste = True
+            Exit Function
+        End If
+    Next linha
+End Function
+
+Private Function TV2_FF_AtividadeJaExiste(ByVal ativId As String) As Boolean
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim linha As Long
+    Set ws = ThisWorkbook.Sheets(SHEET_ATIVIDADES)
+    ultima = UltimaLinhaAba(SHEET_ATIVIDADES)
+    For linha = LINHA_DADOS To ultima
+        If IdsIguais(ws.Cells(linha, COL_ATIV_ID).Value, ativId) Then
+            TV2_FF_AtividadeJaExiste = True
+            Exit Function
+        End If
+    Next linha
+End Function
+
+Private Sub TV2_FF_GarantirAtividade(ByVal ativId As String, ByVal descricao As String)
+    Dim ws As Worksheet
+    Dim linha As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+
+    Set ws = ThisWorkbook.Sheets(SHEET_ATIVIDADES)
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        Err.Raise 1004, "TV2_FF_GarantirAtividade", "Nao foi possivel preparar ATIVIDADES."
+    End If
+    linha = TV2_NextDataRow(SHEET_ATIVIDADES)
+    ws.Cells(linha, COL_ATIV_ID).Value = ativId
+    ws.Cells(linha, COL_ATIV_DESCRICAO).Value = descricao
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+End Sub
+
+Private Sub TV2_FF_GarantirServico( _
+    ByVal ativId As String, _
+    ByVal servId As String, _
+    ByVal descricao As String, _
+    ByVal valorPadrao As Currency _
+)
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim linha As Long
+    Dim linhaEncontrada As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_SERV)
+    ultima = UltimaLinhaAba(SHEET_CAD_SERV)
+
+    For linha = LINHA_DADOS To ultima
+        If IdsIguais(ws.Cells(linha, COL_SERV_ATIV_ID).Value, ativId) And _
+           IdsIguais(ws.Cells(linha, COL_SERV_ID).Value, servId) Then
+            linhaEncontrada = linha
+            Exit For
+        End If
+    Next linha
+
+    If linhaEncontrada > 0 Then Exit Sub
+
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        Err.Raise 1004, "TV2_FF_GarantirServico", "Nao foi possivel preparar CAD_SERV."
+    End If
+    linhaEncontrada = TV2_NextDataRow(SHEET_CAD_SERV)
+    ws.Cells(linhaEncontrada, COL_SERV_ID).Value = servId
+    ws.Cells(linhaEncontrada, COL_SERV_ATIV_ID).Value = ativId
+    ws.Cells(linhaEncontrada, COL_SERV_ATIV_DESC).Value = descricao
+    ws.Cells(linhaEncontrada, COL_SERV_DESCRICAO).Value = descricao
+    ws.Cells(linhaEncontrada, COL_SERV_VALOR_UNIT).Value = valorPadrao
+    ws.Cells(linhaEncontrada, COL_SERV_DT_CAD).Value = Now
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+End Sub
+
+'======================================================================
+' V12.0.0203 ONDA 17 MD-17.1.b-fix1 - Hash determinístico p/ ATIV_ID numerico
+'======================================================================
+' Causa raiz do Quarteto reprovado em VR_20260503_020405:
+' TV2_FixtureFactory (MD-17.1.a) gerava ATIV_ID alfanumerico
+' "F_<escopo>_<seq>". TV2_CredenciarAtividade interno chama TV2_Pad3
+' (Engine 1875) que faz Format$(CLng(Val(valor)), "000"). Val("F_SBM2_01")
+' retorna 0 -> COL_CRED_ATIV_ID gravado como "000". SelecionarEmpresa
+' busca por ATIV_ID original "F_SBM2_01" e nao encontra.
+' Resultado: nenhuma empresa apta -> nenhum ciclo -> strikes=0 em todos
+' os 4 cenarios FF (CS_BORDA_MAX2/MAX5/NOTA_ZERO + CS_E2E_5EMPS) +
+' CS_E2E_REATIV2STRIKES tambem nao testou de fato (ainda AMARELO mas
+' sem ciclo executado).
+'
+' Fix1: ATIV_ID gerado como numero de 3 digitos via hash determinístico
+' do escopo. Faixa reservada:
+'   - 001-099 : canonicos (Bateria_Oficial, V2_Canonica)
+'   - 100-899 : livres (uso operacional / outros testes)
+'   - 900-979 : FixtureFactory (este modulo) - 80 escopos x 9 atividades
+'   - 980-989 : reservado (cap qtdAtividades=9 garante max 987)
+'   - 990-998 : reservado para casos especiais futuros
+'   - 999     : E2E classic (TV2_RunRodizioStrikesEndToEnd antigo)
+'======================================================================
+Private Function TV2_FF_HashEscopoParaAtivId(ByVal escopo As String) As Long
+    ' Hash polynomial com fator 31, modulo 80. Determinismo: mesmo escopo
+    ' sempre gera o mesmo hashBase. Risco de colisao entre escopos: aceitavel
+    ' (mitigado por TV2_LimparNamespace antes de TV2_FixtureFactory por
+    ' convencao). Uso de Long evita overflow para escopos curtos (ate ~10 chars).
+    Dim i As Long
+    Dim h As Long
+
+    h = 0
+    If Len(escopo) = 0 Then
+        TV2_FF_HashEscopoParaAtivId = 900
+        Exit Function
+    End If
+
+    For i = 1 To Len(escopo)
+        h = (h * 31 + AscW(Mid$(escopo, i, 1))) Mod 80
+    Next i
+
+    TV2_FF_HashEscopoParaAtivId = 900 + h
+End Function
+
+Private Sub TV2_FF_LimparAtividadesEscopo(ByVal escopo As String)
+    ' Limpa linhas em SHEET_ATIVIDADES e SHEET_CAD_SERV cujo ID estah no
+    ' range gerado por TV2_FF_HashEscopoParaAtivId(escopo) + 0..8 (cap
+    ' qtdAtividades=9). Substitui o filtro alfanumerico "F_<escopo>_"
+    ' anterior (que era no-op por causa da coercao TV2_Pad3 -> "000").
+    Dim hashBase As Long
+    Dim k As Long
+    Dim ativIdAlvo As String
+
+    hashBase = TV2_FF_HashEscopoParaAtivId(escopo)
+    For k = 0 To 8
+        ativIdAlvo = Format$(hashBase + k, "000")
+        TV2_FF_LimparLinhaPorIdExato SHEET_ATIVIDADES, COL_ATIV_ID, ativIdAlvo
+        TV2_FF_LimparLinhaPorIdExato SHEET_CAD_SERV, COL_SERV_ATIV_ID, ativIdAlvo
+    Next k
+End Sub
+
+Private Sub TV2_FF_LimparLinhaPorIdExato( _
+    ByVal nomeAba As String, _
+    ByVal colunaId As Long, _
+    ByVal valorExato As String _
+)
+    ' Helper interno: limpa linhas em ws onde Cells(linha, colunaId).Value
+    ' eh igual a valorExato (via IdsIguais para tolerar formatos numericos
+    ' vs string). Idempotente. OERN local justificado: cleanup nao pode
+    ' quebrar suite chamadora.
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim linha As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+
+    On Error Resume Next
+    Set ws = ThisWorkbook.Sheets(nomeAba)
+    If ws Is Nothing Then Exit Sub
+
+    ultima = ws.Cells(ws.Rows.count, colunaId).End(xlUp).row
+    If ultima < LINHA_DADOS Then Exit Sub
+
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then Exit Sub
+
+    For linha = ultima To LINHA_DADOS Step -1
+        If IdsIguais(ws.Cells(linha, colunaId).Value, valorExato) Then
+            ws.Rows(linha).ClearContents
+        End If
+    Next linha
+
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+End Sub
+
+

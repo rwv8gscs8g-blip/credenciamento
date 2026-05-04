@@ -13,9 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
 Private WithEvents mTxtBusca As MSForms.TextBox
 Attribute mTxtBusca.VB_VarHelpID = -1
 
@@ -37,7 +34,7 @@ Private Function UI_PegarTextBoxBuscaTopoDireita() As MSForms.TextBox
 
     leftMax = -1
     For Each ctl In Me.Controls
-        If TypeName(ctl) = "TextBox" Then
+        If typeName(ctl) = "TextBox" Then
             If ctl.Top <= 20 And ctl.Height <= 22 Then
                 If CDbl(ctl.Left) > leftMax Then
                     leftMax = CDbl(ctl.Left)
@@ -99,7 +96,7 @@ Private Function UI_ChaveNormalizadaId(ByVal valor As Variant) As String
 End Function
 
 Private Function UI_EntidadeInativasTemConflito(ByVal wsEntInativas As Worksheet, ByRef linhas As Variant) As Boolean
-    Dim ids As Object
+    Dim idS As Object
     Dim docs As Object
     Dim nomes As Object
     Dim i As Long
@@ -108,7 +105,7 @@ Private Function UI_EntidadeInativasTemConflito(ByVal wsEntInativas As Worksheet
     Dim docAtual As String
     Dim nomeAtual As String
 
-    Set ids = CreateObject("Scripting.Dictionary")
+    Set idS = CreateObject("Scripting.Dictionary")
     Set docs = CreateObject("Scripting.Dictionary")
     Set nomes = CreateObject("Scripting.Dictionary")
 
@@ -122,7 +119,7 @@ Private Function UI_EntidadeInativasTemConflito(ByVal wsEntInativas As Worksheet
         nomeAtual = UCase$(Trim$(CStr(wsEntInativas.Cells(linhaAtual, COL_ENT_NOME).Value)))
 
         If idAtual <> "" Then
-            If Not ids.Exists(idAtual) Then ids.Add idAtual, True
+            If Not idS.Exists(idAtual) Then idS.Add idAtual, True
         End If
         If docAtual <> "" Then
             If Not docs.Exists(docAtual) Then docs.Add docAtual, True
@@ -132,7 +129,7 @@ Private Function UI_EntidadeInativasTemConflito(ByVal wsEntInativas As Worksheet
         End If
     Next i
 
-    UI_EntidadeInativasTemConflito = (ids.Count > 1) Or (docs.Count > 1) Or (nomes.Count > 1)
+    UI_EntidadeInativasTemConflito = (idS.count > 1) Or (docs.count > 1) Or (nomes.count > 1)
 End Function
 
 Private Sub UI_AjustarAlturaListaEntInativ(ByVal lst As Object, ByVal qtdLinhas As Long)
@@ -167,10 +164,10 @@ Dim linhaUsada As Long
 
 mListaEntInativCarregando = True
 filtroU = UCase$(Trim$(filtro))
-Cont = 1
+cont = 1
 NItem = 0
 Set wsEntInativas = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
-NLinhas = UltimaLinhaAba(SHEET_ENTIDADE_INATIVOS)
+nLinhas = UltimaLinhaAba(SHEET_ENTIDADE_INATIVOS)
 Set lst = Me.Controls("R_Lista")
 If lst Is Nothing Then GoTo fim_silencioso
 
@@ -180,10 +177,10 @@ With lst
     .ColumnWidths = EntidadeLista_MontarColumnWidths(CDbl(.Width))
 End With
 
-If NLinhas < LINHA_DADOS Then GoTo fim_silencioso
+If nLinhas < LINHA_DADOS Then GoTo fim_silencioso
 
 Set vistos = CreateObject("Scripting.Dictionary")
-For linhaAtual = LINHA_DADOS To NLinhas
+For linhaAtual = LINHA_DADOS To nLinhas
     If UI_LinhaEntidadeValida(wsEntInativas, linhaAtual) Then
         If UI_LinhaEntidadePassaFiltro(wsEntInativas, linhaAtual, filtroU) Then
             chave = EntidadeInativos_ChaveDedupeLinha(wsEntInativas, linhaAtual)
@@ -356,3 +353,5 @@ nao_achou:
 erro_carregamento:
     MsgBox "Erro ao reativar entidade: " & Err.Description, vbCritical, "Erro"
 End Sub
+
+

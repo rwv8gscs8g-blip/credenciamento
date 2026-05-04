@@ -13,14 +13,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
 Private Sub CommandButton1_Click()
 
-  If Cod_Senha <> Util_SenhaProtecaoPadrao() Then
-    MsgBox "A senha est" & ChrW(225) & " incorreta!"
+  If Cod_Senha <> "sebrae2024" Then
+    MsgBox "A senha est" & ChrW$(225) & " incorreta!"
     Cod_Senha = ""
     Cod_Senha.SetFocus
     Me.Hide

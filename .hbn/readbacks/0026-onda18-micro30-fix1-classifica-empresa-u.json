@@ -1,0 +1,55 @@
+{
+  "hbn_protocol": "HBN-0.3.1",
+  "readback_id": "0026-onda18-micro30-fix1-classifica-empresa-u",
+  "data": "2026-05-04",
+  "agente": "Codex CLI",
+  "frente": "Frente 1 Credenciamento",
+  "track": "safe_track",
+  "status": "confirmed",
+  "hearback_operador": {
+    "data": "2026-05-04",
+    "resumo": "Operador informou que MICRO30 importou e compilou, mas Quinteto reprovou em CS_23. Autorizacao vigente: corrigir R1 final antes de liberar V12.0.0203 para testes manuais."
+  },
+  "falha_detectada": {
+    "validacao_id": "VR_20260504_163656",
+    "suite": "V2_CANONICO",
+    "cenario": "CS_23",
+    "csv_falhas": "auditoria/evidencias/V12.0.0203/TesteV2_CANONICO_Falhas_TV2_20260504_164403.csv",
+    "resultado_obtido": "SUCESSO_REAT=Verdadeiro; STATUS_A=ATIVA; DT_ULT_REATIV_A=(vazia); AUDIT_REAT=1",
+    "causa_raiz": "ClassificaEmpresa ordenava EMPRESAS apenas de A:T; DT_ULT_REATIV fica em U e era deixado fora da linha apos a ordenacao."
+  },
+  "escopo": {
+    "microdelta": "MICRO30-fix1",
+    "build": "f7aa84f+v12.0.0203-rc4-r1-forms-reativ-fix1-classifica-u",
+    "release_tag": "v12.0.0203-rc4",
+    "objetivo": "Fazer ClassificaEmpresa preservar DT_ULT_REATIV ao ordenar a aba EMPRESAS."
+  },
+  "arquivos_planejados": [
+    "src/vba/Classificar.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAT-Classificar.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO30-fix1.txt",
+    "auditoria/03_ondas/onda_18_reativ_strikes/21_PROCEDIMENTO_IMPORT_MICRO30_FIX1_CLASSIFICA_EMPRESA_U.md",
+    "CHANGELOG.md",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_18_reativ_strikes/70_FECHAMENTO_ONDA_18.md"
+  ],
+  "gates_planejados": [
+    "shasum src/vba/Classificar.bas == local-ai/vba_import/001-modulo/AAT-Classificar.bas",
+    "shasum src/vba/App_Release.bas == local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "CRLF preservado",
+    "Importador V3 M=2 F=0 err=0 skip=0",
+    "Compile manual limpo",
+    "CT_ValidarRelease_QuintetoMinimo APROVADO com V2_Canonica=23/0"
+  ],
+  "fora_de_escopo": [
+    "Promocao para producao",
+    "Escopo e esteira V12.0.0204",
+    "DT-FRENTE1-GRAVARSTATUSEMPRESA-SILENT",
+    "DT-FRENTE1-REATIV-NOOP-ATIVA",
+    "DT-FRENTE1-BACKFILL-AUDIT",
+    "DT-FRENTE1-CONTARSTRIKES-ERRO-MUDO",
+    "INT-CAD-OS-REF-ORFA"
+  ]
+}

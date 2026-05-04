@@ -13,12 +13,8 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
 Private Sub UserForm_Initialize()
-    Me.Caption = Rel_TituloExibicao("RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO")
+    Me.caption = Rel_TituloExibicao("RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO")
 End Sub
 
 Private Sub SV_CR_Lista_Click()

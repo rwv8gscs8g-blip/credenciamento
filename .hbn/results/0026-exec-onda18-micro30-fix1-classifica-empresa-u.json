@@ -1,0 +1,50 @@
+{
+  "execution_id": "0026-exec-onda18-micro30-fix1-classifica-empresa-u",
+  "agent_id": "codex-cli",
+  "readback_id": "0026-onda18-micro30-fix1-classifica-empresa-u",
+  "action": "Corrigir ClassificaEmpresa para ordenar EMPRESAS ate COL_EMP_DT_ULT_REATIV e preservar DT_ULT_REATIV apos reativacao manual.",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "source_of_truth": "src/vba",
+    "mirror": "local-ai/vba_import",
+    "release_target": "V12.0.0203",
+    "build": "f7aa84f+v12.0.0203-rc4-r1-forms-reativ-fix1-classifica-u",
+    "release_tag": "v12.0.0203-rc4"
+  },
+  "validation": {
+    "import": "confirmado pelo operador",
+    "compile": "confirmado pelo operador",
+    "quinteto": "VR_20260504_171048",
+    "status": "APROVADO",
+    "syntax": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+    "evidence_csv": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuinteto_V12_0_0203_VR_20260504_171048.csv"
+  },
+  "files_changed": [
+    "src/vba/Classificar.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAT-Classificar.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO30-fix1.txt",
+    "auditoria/03_ondas/onda_18_reativ_strikes/21_PROCEDIMENTO_IMPORT_MICRO30_FIX1_CLASSIFICA_EMPRESA_U.md",
+    "auditoria/03_ondas/onda_18_reativ_strikes/70_FECHAMENTO_ONDA_18.md",
+    "CHANGELOG.md",
+    ".hbn/relay/INDEX.md",
+    ".hbn/readbacks/0026-onda18-micro30-fix1-classifica-empresa-u.json",
+    ".hbn/results/INDEX.md"
+  ],
+  "residual_debts_for_v204": [
+    "INT-CAD-OS-REF-ORFA",
+    "DT-FRENTE1-GRAVARSTATUSEMPRESA-SILENT",
+    "DT-FRENTE1-REATIV-NOOP-ATIVA",
+    "DT-FRENTE1-BACKFILL-AUDIT",
+    "DT-FRENTE1-CONTARSTRIKES-ERRO-MUDO"
+  ],
+  "release_decision": {
+    "v203": "liberada para testes manuais formais, nao producao",
+    "v204": "abrir apos testes formais para revisao completa dos debitos tecnicos e estabilizacao publica"
+  },
+  "created_at": "2026-05-04T17:34:00-0300"
+}

@@ -179,3 +179,5 @@ Private Function UtilFiltro_CompactarEspacos(ByVal texto As String) As String
     Loop
     UtilFiltro_CompactarEspacos = s
 End Function
+
+

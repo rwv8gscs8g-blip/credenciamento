@@ -12,8 +12,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
 Option Explicit
 
 Private Const STATUS_CRED_ATIVO As String = "ATIVO"
@@ -37,10 +35,11 @@ Private Sub CR_EnsureFiltroListaDinamico()
     On Error GoTo fim
     If Not mTxtFiltroCredLista Is Nothing Then Exit Sub
     On Error Resume Next
-    Set mTxtFiltroCredLista = Me.Controls("CR_TxtFiltroListaDin")
+    Set mTxtFiltroCredLista = Me.Controls("TxtFiltro_CredenciamentoServico")
+    If mTxtFiltroCredLista Is Nothing Then Set mTxtFiltroCredLista = Me.Controls("CR_TxtFiltroListaDin")
     On Error GoTo fim
     If mTxtFiltroCredLista Is Nothing Then
-        Set mTxtFiltroCredLista = Me.Controls.Add("Forms.TextBox.1", "CR_TxtFiltroListaDin", True)
+        Set mTxtFiltroCredLista = Me.Controls.Add("Forms.TextBox.1", "TxtFiltro_CredenciamentoServico", True)
         With mTxtFiltroCredLista
             .Top = CR_Lista.Top - 32
             .Left = CR_Lista.Left
@@ -50,9 +49,9 @@ Private Sub CR_EnsureFiltroListaDinamico()
             .Text = ""
             .Font.Size = 9
         End With
-        Set lblCr = Me.Controls.Add("Forms.Label.1", "CR_LblFiltroListaDin", True)
+        Set lblCr = Me.Controls.Add("Forms.Label.1", "LblFiltro_CredenciamentoServico", True)
         With lblCr
-            .Caption = "Buscar atividade / servi" & ChrW(231) & "o:"
+            .caption = "Buscar atividade / servi" & ChrW(231) & "o:"
             .Top = mTxtFiltroCredLista.Top - 16
             .Left = CR_Lista.Left
             .Width = CR_Lista.Width

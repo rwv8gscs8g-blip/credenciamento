@@ -1,0 +1,41 @@
+{
+  "execution_id": "0027-exec-onda19-publicacao-v203-treinamento-auditoria-v204",
+  "agent_id": "codex-cli",
+  "readback_id": "0027-onda19-publicacao-v203-treinamento-auditoria-v204",
+  "action": "Preparar documentacao publica de treinamento, prompts de auditoria cruzada e plano inicial da V204 a partir da V203 rc4.",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "release_base": "V12.0.0203-rc4",
+    "build": "f7aa84f+v12.0.0203-rc4-r1-forms-reativ-fix1-classifica-u",
+    "validation_id": "VR_20260504_171048"
+  },
+  "validation": {
+    "docs_created": true,
+    "audit_prompts_created": true,
+    "v204_plan_created": true,
+    "vba_changed": false,
+    "release_decision": "V203 rc4 para testes manuais formais; V204 para estabilizacao final de producao"
+  },
+  "files_changed": [
+    "docs/tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md",
+    "docs/how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md",
+    "docs/reference/testes/02_MAPA_TESTES_V203_QUINTETO.md",
+    "docs/reference/testes/03_CATALOGO_CENARIOS_V2_V203.md",
+    "docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md",
+    "docs/reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md",
+    "auditoria/00_status/62_PROMPT_AUDITORIA_OPUS_V203_RC4_E_V204_2026_05_04.md",
+    "auditoria/00_status/63_PROMPT_AUDITORIA_ANTIGRAVITY_V203_RC4_E_V204_2026_05_04.md",
+    "auditoria/02_planos/28_PLANO_V204_ESTABILIZACAO_FINAL_DEBITOS_TESTES.md",
+    "auditoria/03_ondas/onda_19_publicacao_v203_v204/01_TECNICO_PUBLICACAO_TREINAMENTO_AUDITORIA.md",
+    "docs/INDEX.md",
+    "docs/reference/testes/INDEX.md",
+    "llms.txt",
+    ".hbn/readbacks/0027-onda19-publicacao-v203-treinamento-auditoria-v204.json",
+    ".hbn/results/0027-exec-onda19-publicacao-v203-treinamento-auditoria-v204.json",
+    ".hbn/results/INDEX.md"
+  ],
+  "created_at": "2026-05-04T18:06:13-0300"
+}

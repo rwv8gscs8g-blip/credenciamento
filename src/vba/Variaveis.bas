@@ -7,10 +7,10 @@ Option Explicit
 
 Public ContCodigo           As Long
 Public ultimaLinha          As Long
-Public NLinhas              As Long
+Public nLinhas              As Long
 Public linha                As Long
 Public Coluna               As Integer
-Public Cont                 As Long
+Public cont                 As Long
 Public N_OS                 As String
 Public NItem                As Long
 Public EncontrarID          As Range

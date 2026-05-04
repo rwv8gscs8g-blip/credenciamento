@@ -1,7 +1,7 @@
 Attribute VB_Name = "Svc_Avaliacao"
 Option Explicit
 
-' Serviço de Avaliação de OS — V10
+' Serviço de Avaliação de OS - V10
 ' Implementa: AvaliarOS.
 ' Registra 10 notas (0-10), calcula média e fecha OS como CONCLUIDA.
 ' Sem Select/ActiveCell/On Error Resume Next silencioso.
@@ -26,14 +26,14 @@ Public Function MontarDefaultsAvaliacao( _
     ByRef numEmpenho As String, _
     ByRef dtFechamento As String, _
     ByRef dtPagamento As String, _
-    ByRef qtExecutada As Double, _
+    ByRef QtExecutada As Double, _
     ByRef valorExecutado As Currency _
 ) As TResult
     Dim res As TResult
 
     If Trim$(os.OS_ID) = "" Then
-        res.Sucesso = False
-        res.Mensagem = "OS obrigatoria para montar defaults da avaliacao."
+        res.sucesso = False
+        res.mensagem = "OS obrigatoria para montar defaults da avaliacao."
         MontarDefaultsAvaliacao = res
         Exit Function
     End If
@@ -47,14 +47,14 @@ Public Function MontarDefaultsAvaliacao( _
     End If
     dtPagamento = ""
     If os.QT_CONFIRMADA > 0 Then
-        qtExecutada = os.QT_CONFIRMADA
+        QtExecutada = os.QT_CONFIRMADA
     Else
-        qtExecutada = os.QT_ESTIMADA
+        QtExecutada = os.QT_ESTIMADA
     End If
     valorExecutado = os.VALOR_TOTAL_OS
 
-    res.Sucesso = True
-    res.Mensagem = "Defaults da avaliacao montados."
+    res.sucesso = True
+    res.mensagem = "Defaults da avaliacao montados."
     MontarDefaultsAvaliacao = res
 End Function
 
@@ -107,8 +107,8 @@ Public Function DescreverMudancasAvaliacao( _
         resumoMudancas = Left$(resumoMudancas, Len(resumoMudancas) - 2)
     End If
 
-    res.Sucesso = True
-    res.Mensagem = "Mudancas da avaliacao comparadas."
+    res.sucesso = True
+    res.mensagem = "Mudancas da avaliacao comparadas."
     DescreverMudancasAvaliacao = res
 End Function
 
@@ -132,8 +132,8 @@ Public Function MontarNotasAvaliacao( _
     Dim soma As Long
 
     If LBound(notas) <> 1 Or UBound(notas) <> 10 Then
-        res.Sucesso = False
-        res.Mensagem = "Array Notas deve ter indices 1 a 10."
+        res.sucesso = False
+        res.mensagem = "Array Notas deve ter indices 1 a 10."
         MontarNotasAvaliacao = res
         Exit Function
     End If
@@ -155,8 +155,8 @@ Public Function MontarNotasAvaliacao( _
     Next i
 
     mediaNotas = MediaAvaliacaoDeterministica(soma)
-    res.Sucesso = True
-    res.Mensagem = "Notas normalizadas com sucesso."
+    res.sucesso = True
+    res.mensagem = "Notas normalizadas com sucesso."
     MontarNotasAvaliacao = res
 End Function
 
@@ -179,8 +179,8 @@ Public Function MontarPayloadAvaliacao( _
     Dim soma As Long
 
     If LBound(notas) <> 1 Or UBound(notas) <> 10 Then
-        res.Sucesso = False
-        res.Mensagem = "Array Notas deve ter indices 1 a 10."
+        res.sucesso = False
+        res.mensagem = "Array Notas deve ter indices 1 a 10."
         MontarPayloadAvaliacao = res
         Exit Function
     End If
@@ -198,28 +198,28 @@ Public Function MontarPayloadAvaliacao( _
     payloadMediaNotas = MediaAvaliacaoDeterministica(soma)
 
     If payloadOSID = "" Then
-        res.Sucesso = False
-        res.Mensagem = "OS_ID obrigatorio para montar payload de avaliacao."
+        res.sucesso = False
+        res.mensagem = "OS_ID obrigatorio para montar payload de avaliacao."
         MontarPayloadAvaliacao = res
         Exit Function
     End If
 
     If payloadAvaliador = "" Then
-        res.Sucesso = False
-        res.Mensagem = "Avaliador obrigatorio para montar payload de avaliacao."
+        res.sucesso = False
+        res.mensagem = "Avaliador obrigatorio para montar payload de avaliacao."
         MontarPayloadAvaliacao = res
         Exit Function
     End If
 
     If payloadQtExecutada <= 0 Then
-        res.Sucesso = False
-        res.Mensagem = "QtExecutada deve ser maior que zero."
+        res.sucesso = False
+        res.mensagem = "QtExecutada deve ser maior que zero."
         MontarPayloadAvaliacao = res
         Exit Function
     End If
 
-    res.Sucesso = True
-    res.Mensagem = "Payload de avaliacao montado com sucesso."
+    res.sucesso = True
+    res.mensagem = "Payload de avaliacao montado com sucesso."
     MontarPayloadAvaliacao = res
 End Function
 
@@ -252,7 +252,7 @@ Public Function AvaliarOS( _
     ByVal avaliador As String, _
     ByRef notas() As Integer, _
     ByVal QtExecutada As Double, _
-    ByVal Observacao As String, _
+    ByVal observacao As String, _
     ByVal justifDiv As String, _
     Optional ByVal dtFechamento As Variant, _
     Optional ByVal DtPagto As Variant, _
@@ -277,8 +277,8 @@ Public Function AvaliarOS( _
     ' 1. Buscar OS (critério 32)
     os = Repo_OS.BuscarPorId(OS_ID)
     If os.OS_ID = "" Then
-        res.Sucesso = False
-        res.Mensagem = "OS nao encontrada: OS_ID=" & OS_ID
+        res.sucesso = False
+        res.mensagem = "OS nao encontrada: OS_ID=" & OS_ID
         AvaliarOS = res
         Exit Function
     End If
@@ -290,16 +290,16 @@ Public Function AvaliarOS( _
             "OPERACAO=AVALIAR; STATUS=" & os.STATUS_OS, _
             "REJEITADA; MOTIVO=STATUS_INVALIDO", _
             "Svc_Avaliacao"
-        res.Sucesso = False
-        res.Mensagem = "OS nao pode ser avaliada. STATUS=" & os.STATUS_OS
+        res.sucesso = False
+        res.mensagem = "OS nao pode ser avaliada. STATUS=" & os.STATUS_OS
         AvaliarOS = res
         Exit Function
     End If
 
     ' 3. Validar índices do array (critério 34)
     If LBound(notas) <> 1 Or UBound(notas) <> 10 Then
-        res.Sucesso = False
-        res.Mensagem = "Array Notas deve ter indices 1 a 10."
+        res.sucesso = False
+        res.mensagem = "Array Notas deve ter indices 1 a 10."
         AvaliarOS = res
         Exit Function
     End If
@@ -308,8 +308,8 @@ Public Function AvaliarOS( _
     soma = 0
     For i = 1 To 10
         If notas(i) < 0 Or notas(i) > 10 Then
-            res.Sucesso = False
-            res.Mensagem = "Nota " & i & " invalida: " & CStr(notas(i)) & ". Deve ser 0-10."
+            res.sucesso = False
+            res.mensagem = "Nota " & i & " invalida: " & CStr(notas(i)) & ". Deve ser 0-10."
             AvaliarOS = res
             Exit Function
         End If
@@ -317,14 +317,14 @@ Public Function AvaliarOS( _
     Next i
 
     If QtExecutada <= 0 Then
-        res.Sucesso = False
-        res.Mensagem = "QtExecutada deve ser maior que zero."
+        res.sucesso = False
+        res.mensagem = "QtExecutada deve ser maior que zero."
         AvaliarOS = res
         Exit Function
     End If
 
     justifEfetiva = Trim$(justifDiv)
-    If justifEfetiva = "" Then justifEfetiva = Trim$(Observacao)
+    If justifEfetiva = "" Then justifEfetiva = Trim$(observacao)
 
     valorExecutado = Util_Conversao.ToCurrency(valorExecutadoInformado)
     If valorExecutado <= 0 Then valorExecutado = CCur(QtExecutada * os.VALOR_UNIT)
@@ -332,8 +332,8 @@ Public Function AvaliarOS( _
                     (Abs(CDbl(valorExecutado) - CDbl(os.VALOR_TOTAL_OS)) > 0.0001)
 
     If haDivergencia And justifEfetiva = "" Then
-        res.Sucesso = False
-        res.Mensagem = "Justificativa obrigatoria quando ha divergencia entre o executado e o orcado."
+        res.sucesso = False
+        res.mensagem = "Justificativa obrigatoria quando ha divergencia entre o executado e o orcado."
         AvaliarOS = res
         Exit Function
     End If
@@ -349,23 +349,58 @@ Public Function AvaliarOS( _
     Next i
     aval.SOMA_NOTAS = soma
     aval.MEDIA_NOTAS = media
-    aval.Observacao = Observacao
+    aval.observacao = observacao
     aval.DT_AVAL = Now
 
     ' 7. Persistir via Repo_Avaliacao
     resInsert = RepoAvaliacaoInserir(aval, QtExecutada, valorExecutado, justifEfetiva, dtFechamento, DtPagto, numEmpenho)
-    If Not resInsert.Sucesso Then
-        res.Sucesso = False
-        res.Mensagem = "Falha ao salvar avaliacao: " & resInsert.Mensagem
+    If Not resInsert.sucesso Then
+        res.sucesso = False
+        res.mensagem = "Falha ao salvar avaliacao: " & resInsert.mensagem
         AvaliarOS = res
         Exit Function
     End If
 
-    ' 7b. Regra: media abaixo da nota minima => suspende empresa (Iteracao 2)
+    ' 7b. V12.0.0203 ONDA 1 - Regra de strikes na avaliacao.
+    '
+    ' Cada avaliacao com media estritamente menor que a nota de corte
+    ' (GetNotaMinimaAvaliacao, default 5.0) conta 1 strike para a empresa.
+    ' Quando os strikes acumulados (incluindo a avaliacao recem-inserida)
+    ' atingem MAX_STRIKES (GetMaxStrikes, default 3), a empresa e
+    ' suspensa por DIAS_SUSPENSAO_STRIKE dias (GetDiasSuspensaoStrike,
+    ' default 90). MAX_STRIKES = 1 reproduz a regra antiga (suspende na
+    ' primeira nota baixa). Para punicao, strikes sao recontados on-the-fly
+    ' em ContarStrikesParaPunicao, que preserva modo legado quando
+    ' DT_ULT_REATIV esta vazio e, apos reativacao, filtra CAD_OS por
+    ' COL_OS_DT_FECHAMENTO > EMPRESAS.DT_ULT_REATIV.
     notaMin = GetNotaMinimaAvaliacao()
     If media < notaMin Then
-        resSusp = Suspender(os.EMP_ID)
-        ' Suspensão registra sua própria auditoria; aqui só garantimos a regra de negócio.
+        Dim maxStrikes As Long
+        Dim strikesAtuais As Long
+        Dim diasSusp As Long
+
+        maxStrikes = GetMaxStrikes()
+        strikesAtuais = ContarStrikesParaPunicao(os.EMP_ID, notaMin)
+
+        ' Auditoria do strike (mesmo quando ainda nao suspende).
+        RegistrarEvento _
+            EVT_AVALIACAO, ENT_EMP, os.EMP_ID, _
+            "STRIKES=" & CStr(strikesAtuais - 1) & "/" & CStr(maxStrikes), _
+            "STRIKES=" & CStr(strikesAtuais) & "/" & CStr(maxStrikes) & _
+            "; NOTA_MIN=" & Format$(notaMin, "0.00") & _
+            "; MEDIA=" & FormatarMediaAvaliacao(media), _
+            "Svc_Avaliacao"
+
+        If strikesAtuais >= maxStrikes Then
+            diasSusp = GetDiasSuspensaoStrike()
+            If diasSusp > 0 Then
+                resSusp = Suspender(os.EMP_ID, diasSusp, "STRIKES=" & CStr(strikesAtuais))
+            Else
+                ' Fallback: usa a regra antiga em meses.
+                resSusp = Suspender(os.EMP_ID, 0, "STRIKES=" & CStr(strikesAtuais) & "; FALLBACK_MESES")
+            End If
+            ' Suspender registra sua propria auditoria.
+        End If
     End If
 
     ' 8. Avancar fila do rodizio: mover empresa para fim da fila SEM punicao.
@@ -373,12 +408,12 @@ Public Function AvaliarOS( _
     '    para a proxima empresa nas solicitacoes seguintes.
     Dim resAvancar As TResult
     resAvancar = AvancarFila(os.EMP_ID, os.ATIV_ID, False, "AVALIACAO_CONCLUIDA")
-    ' Se falhar, nao bloqueia a avaliacao — apenas loga.
-    If Not resAvancar.Sucesso Then
+    ' Se falhar, nao bloqueia a avaliacao - apenas loga.
+    If Not resAvancar.sucesso Then
         RegistrarEvento _
             EVT_AVALIACAO, ENT_OS, OS_ID, _
             "", _
-            "AVISO: Falha ao avancar fila apos avaliacao: " & resAvancar.Mensagem, _
+            "AVISO: Falha ao avancar fila apos avaliacao: " & resAvancar.mensagem, _
             "Svc_Avaliacao"
     End If
 
@@ -399,18 +434,17 @@ Public Function AvaliarOS( _
         "; AVALIADOR=" & avaliador & "; QT_EXEC=" & CStr(QtExecutada), _
         "Svc_Avaliacao"
 
-    res.Sucesso = True
-    res.Mensagem = "OS " & OS_ID & " avaliada. MEDIA=" & FormatarMediaAvaliacao(media)
+    res.sucesso = True
+    res.mensagem = "OS " & OS_ID & " avaliada. MEDIA=" & FormatarMediaAvaliacao(media)
     res.IdGerado = OS_ID
     AvaliarOS = res
     Exit Function
 
 Erro:
-    res.Sucesso = False
-    res.Mensagem = "Erro em AvaliarOS: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em AvaliarOS: " & Err.Description
     res.CodigoErro = Err.Number
     AvaliarOS = res
 End Function
-
 
 

@@ -12,16 +12,12 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
 Private Sub UserForm_Activate()
     Dim frmMenu As Object
     ' Ao ativar o fundo, exibe o Menu_Principal uma vez e encerra este formulário,
     ' evitando que o usuário fique preso em uma cadeia de telas.
     For Each frmMenu In VBA.UserForms
-        If TypeName(frmMenu) = "Menu_Principal" Then
+        If typeName(frmMenu) = "Menu_Principal" Then
             If Not frmMenu.Visible Then frmMenu.Show
             Unload Me
             Exit Sub
