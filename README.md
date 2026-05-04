@@ -66,8 +66,8 @@ dependência pública de um instalador ou compilador específico deste repositó
 Integradores podem:
 
 1. baixar o código em [src/vba](src/vba)
-2. revisar as regras em [auditoria/03_AUDITORIA_REGRAS_DE_NEGOCIO.md](auditoria/03_AUDITORIA_REGRAS_DE_NEGOCIO.md)
-3. revisar a matriz de testes em [auditoria/04_MATRIZ_MESTRE_DE_TESTES.md](auditoria/04_MATRIZ_MESTRE_DE_TESTES.md)
+2. revisar as regras em [auditoria/01_regras_e_governanca/03_AUDITORIA_REGRAS_DE_NEGOCIO.md](auditoria/01_regras_e_governanca/03_AUDITORIA_REGRAS_DE_NEGOCIO.md)
+3. revisar a matriz de testes em [auditoria/01_regras_e_governanca/04_MATRIZ_MESTRE_DE_TESTES.md](auditoria/01_regras_e_governanca/04_MATRIZ_MESTRE_DE_TESTES.md)
 4. compilar/incorporar o VBA no processo que julgarem adequado
 
 ## Materiais operacionais complementares

@@ -88,6 +88,7 @@ documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 ## Codigo
 
 - [`src/vba/`](../src/vba/) — fonte de verdade VBA
-- [`local-ai/vba_import/`](../local-ai/vba_import/) — pacote oficial de import
-- [`local-ai/vba_import/000-REGRA-OURO.md`](../local-ai/vba_import/000-REGRA-OURO.md)
+- O pacote operacional de importacao VBA fica fora da superficie publica
+  principal e deve ser obtido por canal controlado, conforme
+  [`how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md`](how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md).
 - [`doc/`](../doc/) — dados estruturais de referencia

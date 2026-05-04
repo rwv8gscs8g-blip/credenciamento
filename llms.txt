@@ -57,10 +57,8 @@
 ## Codigo fonte
 
 - [src/vba/](src/vba/): fonte de verdade VBA
-- [local-ai/vba_import/](local-ai/vba_import/): pacote oficial de import com prefixos
-- [local-ai/vba_import/000-REGRA-OURO.md](local-ai/vba_import/000-REGRA-OURO.md): regra absoluta do pacote
-- [local-ai/vba_import/000-MANIFESTO-IMPORTACAO.txt](local-ai/vba_import/000-MANIFESTO-IMPORTACAO.txt): manifesto canonico
-- [local-ai/vba_import/000-MAPA-PREFIXOS.txt](local-ai/vba_import/000-MAPA-PREFIXOS.txt): mapa de prefixos
+- [docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md): como obter materiais operacionais controlados
+- [docs/explanation/MODELO_DE_ACESSO_CONTROLADO.md](docs/explanation/MODELO_DE_ACESSO_CONTROLADO.md): separacao entre vitrine publica e pacote operacional
 
 ## Evidencias publicas
 
