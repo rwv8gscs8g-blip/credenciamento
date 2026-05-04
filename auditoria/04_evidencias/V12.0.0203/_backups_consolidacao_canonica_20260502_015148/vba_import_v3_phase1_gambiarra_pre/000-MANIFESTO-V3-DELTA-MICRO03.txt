@@ -1,0 +1,30 @@
+# Manifesto V3 DELTA MICRO03 - Onda 10 Microdelta 1.3
+# Tema: Svc_Avaliacao.AvaliarOS - bloco "7b" Onda 1 (regra de strikes ATIVA EM PRODUCAO)
+#
+# Este e o microdelta CRITICO da Onda 10. Ate agora foram preparados:
+#   1.1 = ContarStrikesPorEmpresa em Repo_Avaliacao (funcao pura)
+#   1.2 = Suspender com params opcionais em Svc_Rodizio (retrocompat)
+#   1.4 = TV2_SetConfigCanonica grava MAX_STRIKES=1 + DIAS_SUSPENSAO_STRIKE=0
+#
+# Microdelta 1.3 ATIVA tudo isso: AvaliarOS, depois de RepoAvaliacaoInserir,
+# consulta strikes acumulados; se atingir MAX_STRIKES, suspende a empresa
+# por DIAS_SUSPENSAO_STRIKE dias (com fallback meses se DIAS=0).
+#
+# Estrategia A - espelho minimalista. AAS-Svc_Avaliacao.bas e o baseline
+# V12-202-S com APENAS o bloco 7b expandido (45 linhas substituem 6
+# linhas originais). Resto do baseline intocado.
+#
+# Compatibilidade comportamental garantida por 1.4: como CONFIG canonica
+# tem MAX_STRIKES=1 + DIAS_SUSPENSAO_STRIKE=0, o primeiro strike ja
+# suspende e o fallback cai em meses (PERIODO_SUSPENSAO_MESES=1).
+# Resultado funcional: identico ao baseline para CS_14, mas agora com
+# auditoria detalhada (STRIKES=N/MAX, BASE=MESES no audit_log).
+#
+# Validacao via TV2_RunSmoke (~30s). Trio mínimo so apos 1.5 verde.
+#
+# Uso esperado:
+#   ImportarPacoteV3_Delta "MICRO03", "f7aa84f+ONDA10.MICRO03-Svc_Avaliacao-incremental"
+
+# GRUPO_DELTA_MICRO03_SVC_AVALIACAO
+M|001-modulo/AAS-Svc_Avaliacao.bas
+M|001-modulo/AAX-App_Release.bas

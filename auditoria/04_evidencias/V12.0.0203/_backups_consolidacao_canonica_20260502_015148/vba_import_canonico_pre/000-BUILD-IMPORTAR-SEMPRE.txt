@@ -1,0 +1,4 @@
+# Build atual sincronizado em vba_import/
+# Atualizado automaticamente por publicar_vba_import_v2.sh
+BUILD_SHA=8a2ed5c
+BUILD_DATA=2026-04-29 07:58:05

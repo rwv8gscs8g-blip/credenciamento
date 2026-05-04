@@ -1,0 +1,198 @@
+{
+  "readback_id": "readback-onda10-reincorporacao-onda01-2026-05-01",
+  "agent_id": "claude-opus-4-7-cowork",
+  "track": "safe_track",
+  "tema": "Onda 10 - Reincorporacao progressiva da Onda 1 (strikes na avaliacao) sobre baseline V12-202-S",
+  "criado_em": "2026-05-01",
+  "operator": "Luis Mauricio Junqueira Zanin",
+  "modo_operacao": "consultivo controlado",
+
+  "contexto": {
+    "baseline_atual": "V12-202-S (compila limpo, trio 171/0+14/0+20/0)",
+    "fase_anterior": "Phase A - auditoria Ondas 1-5 concluida em 2026-05-01",
+    "achado_phase_a": "Ondas 1, 2, 3, 4 estao PARCIALMENTE no baseline (so infraestrutura e producao parcial; suites de teste e helpers de diagnostico ausentes). Onda 5 CONFIRMADA. Ver tabela canonica reportada em chat.",
+    "decisao_operador": "Caminho 2 aprovado: reincorporacao progressiva via microdeltas. Cada onda nova de reincorporacao = 1 readback + N microdeltas com bump de build a cada um + 1 ERP."
+  },
+
+  "decisoes_aprovadas_em_chat": [
+    "Caminho 2 (reincorporacao progressiva) confirmado",
+    "Emergencia_CNAE.bas fica fora do release",
+    "26 divergentes residuais: analise caso-a-caso em fase A.6 dedicada apos A.5 estavel",
+    "Build label final v12.0.0203-rc1; build incremental por iteracao automatizado pelo V3",
+    "V3 aceita manifesto delta",
+    "Inicio em microatualizacoes para preservar compile",
+    "Ordem revisada A -> A.5 -> A.6 -> B -> C -> D -> E -> F",
+    "Estrutura 1 onda nova por bloco de reincorporacao (Ondas 10, 11, 12, 13)",
+    "Troca de ordem dentro de Onda 10: 1.0 -> 1.1 -> 1.2 -> 1.4 -> 1.3 -> 1.5",
+    "Padrao de build label: f7aa84f+ONDA{NN}.MICRO{MM}-{descricao}-incremental e final f7aa84f+ONDA{NN}-aprovada",
+    "Comecar pela extensao do V3 (Microdelta 1.0) como pre-requisito"
+  ],
+
+  "objetivo_onda10": "Reincorporar Onda 1 (strikes na avaliacao) ao baseline V12-202-S progressivamente, via 6 microdeltas (1.0 a 1.5), cada um seguido de compile manual + trio minimo verde, sem desestabilizar o sistema.",
+
+  "ordem_microdeltas": [
+    {
+      "id": "1.0",
+      "tema": "Extensao V3 com capacidade delta + bump auto de build label",
+      "arquivos_tocados": [
+        "src/vba/Importador_V3.bas",
+        "src/vba/App_Release.bas (bump constantes APP_BUILD_IMPORTADO + APP_BUILD_GERADO_EM)",
+        "local-ai/vba_import_v3_phase1/001-modulo/ABK-Importador_V3.bas (espelho)",
+        "local-ai/vba_import_v3_phase1/001-modulo/AAX-App_Release.bas (espelho)"
+      ],
+      "novas_rotinas_publicas": [
+        "ImportarPacoteV3_Delta(nomeDelta, buildLabel) - importa pacote delta usando manifesto 000-MANIFESTO-V3-DELTA-<nome>.txt + bump auto",
+        "IV3_BumpBuildLabel(buildLabel) - standalone: atualiza espelho App_Release + re-importa no workbook (usado neste microdelta)"
+      ],
+      "novas_rotinas_privadas": [
+        "IV3_AtualizarConstantesAppRelease - reescreve constantes no espelho .bas",
+        "IV3_SubstituirConstanteString - parse linha-a-linha de Public Const string",
+        "IV3_ReimportarAppRelease - reusa IV3_ImportarModulo padrao"
+      ],
+      "modificacoes_em_rotinas_existentes": [
+        "IV3_RodarMain - usa mIV3_OverrideManifesto se setado; chama bump apos backup quando mIV3_OverrideBuildLabel setado"
+      ],
+      "build_label_pos": "f7aa84f+ONDA10.MICRO00-V3-Delta-Capability-incremental",
+      "validacao_operador": [
+        "1. Re-importar V3 manualmente (clique direito > Remove > Import do espelho) - L2 anti-auto-import",
+        "2. Imediato: IV3_BumpBuildLabel \"f7aa84f+ONDA10.MICRO00-V3-Delta-Capability-incremental\"",
+        "3. Verificar que ?GetBuildImportado retorna o novo label",
+        "4. Compile manual VBE",
+        "5. CT_ValidarRelease_TrioMinimo - esperado 171/0+14/0+20/0"
+      ],
+      "risco": "medio - V3 e estavel; mudanca preserva os 7 fixes acumulados (L1-L9 + M1-M5)",
+      "rollback": "restore do backup automatico V3 em backups/vba/<ts>-V3-FULL/"
+    },
+    {
+      "id": "1.1",
+      "tema": "Repo_Avaliacao - adiciona ContarStrikesPorEmpresa (funcao pura)",
+      "arquivos_tocados": [
+        "src/vba/Repo_Avaliacao.bas (apenas adicao no fim do modulo)",
+        "local-ai/vba_import_v3_phase1/001-modulo/AAN-Repo_Avaliacao.bas (espelho)",
+        "local-ai/vba_import_v3_phase1/000-MANIFESTO-V3-DELTA-MICRO01.txt (novo)"
+      ],
+      "build_label_pos": "f7aa84f+ONDA10.MICRO01-Repo_Avaliacao-incremental",
+      "validacao_operador": [
+        "1. ImportarPacoteV3_Delta \"MICRO01\", \"f7aa84f+ONDA10.MICRO01-Repo_Avaliacao-incremental\"",
+        "2. Compile manual VBE",
+        "3. CT_ValidarRelease_TrioMinimo - esperado 171/0+14/0+20/0",
+        "4. Imediato: ?Repo_Avaliacao.ContarStrikesPorEmpresa(\"EMP_001\", 5) - esperado retornar valor numerico (0 se base limpa)"
+      ],
+      "risco": "muito baixo - so adicao de funcao publica; nenhum caminho existente alterado"
+    },
+    {
+      "id": "1.2",
+      "tema": "Svc_Rodizio - parametros opcionais em Suspender (diasSuspensao, motivo)",
+      "arquivos_tocados": [
+        "src/vba/Svc_Rodizio.bas",
+        "local-ai/vba_import_v3_phase1/001-modulo/AAP-Svc_Rodizio.bas (espelho)",
+        "local-ai/vba_import_v3_phase1/000-MANIFESTO-V3-DELTA-MICRO02.txt (novo)"
+      ],
+      "mudanca_assinatura": "Suspender(EMP_ID) -> Suspender(EMP_ID, Optional diasSuspensao=0, Optional motivo=\"\")",
+      "retrocompatibilidade": "chamadas antigas sem parametros funcionam identicas (defaults reproduzem comportamento velho - fallback meses)",
+      "build_label_pos": "f7aa84f+ONDA10.MICRO02-Svc_Rodizio-incremental",
+      "validacao_operador": [
+        "1. ImportarPacoteV3_Delta \"MICRO02\", \"f7aa84f+ONDA10.MICRO02-Svc_Rodizio-incremental\"",
+        "2. Compile manual VBE - especial atencao: V2 Canonica chama Suspender(EMP_ID) na assinatura velha. Compile deve continuar limpo.",
+        "3. CT_ValidarRelease_TrioMinimo - esperado 171/0+14/0+20/0 (CS_14 sensivel - chama Suspender)"
+      ],
+      "risco": "baixo - opcionalidade preserva contrato. Restore se trio quebrar."
+    },
+    {
+      "id": "1.4",
+      "tema": "Teste_V2_Engine - TV2_SetConfigCanonica grava MAX_STRIKES=1 + DIAS_SUSPENSAO_STRIKE=0",
+      "arquivos_tocados": [
+        "src/vba/Teste_V2_Engine.bas",
+        "local-ai/vba_import_v3_phase1/001-modulo/ABF-Teste_V2_Engine.bas (espelho)",
+        "local-ai/vba_import_v3_phase1/000-MANIFESTO-V3-DELTA-MICRO04.txt (novo)"
+      ],
+      "obs_ordenacao": "Vem ANTES de 1.3 para garantir que CONFIG canonica tenha MAX_STRIKES=1 quando o bloco 7b for ativado em Svc_Avaliacao. Caso contrario CS_14 quebraria por mudanca de defaults.",
+      "build_label_pos": "f7aa84f+ONDA10.MICRO04-Teste_V2_Engine-incremental",
+      "validacao_operador": [
+        "1. ImportarPacoteV3_Delta \"MICRO04\", \"f7aa84f+ONDA10.MICRO04-Teste_V2_Engine-incremental\"",
+        "2. Compile manual VBE",
+        "3. CT_ValidarRelease_TrioMinimo - esperado 171/0+14/0+20/0",
+        "4. Imediato: TV2_SetConfigCanonica - apos rodar, CONFIG L1 deve mostrar MAX_STRIKES=1 e M1=DIAS_SUSPENSAO_STRIKE=0"
+      ],
+      "risco": "muito baixo - apenas adicao em rotina de setup de teste"
+    },
+    {
+      "id": "1.3",
+      "tema": "Svc_Avaliacao - bloco 7b strikes (consulta + suspensao por dias)",
+      "arquivos_tocados": [
+        "src/vba/Svc_Avaliacao.bas",
+        "local-ai/vba_import_v3_phase1/001-modulo/AAS-Svc_Avaliacao.bas (espelho)",
+        "local-ai/vba_import_v3_phase1/000-MANIFESTO-V3-DELTA-MICRO03.txt (novo)"
+      ],
+      "depende_de": ["1.1 (Repo_Avaliacao.ContarStrikesPorEmpresa)", "1.2 (Svc_Rodizio.Suspender com params opcionais)", "1.4 (config canonica MAX_STRIKES=1)"],
+      "build_label_pos": "f7aa84f+ONDA10.MICRO03-Svc_Avaliacao-incremental",
+      "validacao_operador": [
+        "1. ImportarPacoteV3_Delta \"MICRO03\", \"f7aa84f+ONDA10.MICRO03-Svc_Avaliacao-incremental\"",
+        "2. Compile manual VBE",
+        "3. CT_ValidarRelease_TrioMinimo - esperado 171/0+14/0+20/0. CS_14 sensivel: com MAX_STRIKES=1 o primeiro strike ja suspende, equivalente ao caminho legado."
+      ],
+      "risco": "medio - toca caminho critico de avaliacao. Defesa: opcionalidade + config canonica controlada."
+    },
+    {
+      "id": "1.5",
+      "tema": "Teste_V2_Roteiros + Central_Testes_V2 - suite TV2_RunStrikes + opcao [14]",
+      "arquivos_tocados": [
+        "src/vba/Teste_V2_Roteiros.bas (apenas adicao - novo Public Sub TV2_RunStrikes + 2 helpers privados)",
+        "src/vba/Central_Testes_V2.bas (apenas adicao - opcao [14] + CT2_ExecutarStrikes)",
+        "local-ai/vba_import_v3_phase1/001-modulo/ABG-Teste_V2_Roteiros.bas (espelho)",
+        "local-ai/vba_import_v3_phase1/001-modulo/ABE-Central_Testes_V2.bas (espelho)",
+        "local-ai/vba_import_v3_phase1/000-MANIFESTO-V3-DELTA-MICRO05.txt (novo)"
+      ],
+      "build_label_pos": "f7aa84f+ONDA10.MICRO05-Strikes-Suite-incremental",
+      "validacao_operador": [
+        "1. ImportarPacoteV3_Delta \"MICRO05\", \"f7aa84f+ONDA10.MICRO05-Strikes-Suite-incremental\"",
+        "2. Compile manual VBE",
+        "3. CT_ValidarRelease_TrioMinimo - esperado 171/0+14/0+20/0 (suite isolada nao altera Canonica)",
+        "4. Rodada manual: TV2_RunStrikes - esperado 7/0 nos cenarios CS_AVAL_001..007"
+      ],
+      "risco": "baixo - adicoes isoladas"
+    }
+  ],
+
+  "promocao_apos_micro_1_5_verde": {
+    "ancora_workbook": "V12-202-T-onda10",
+    "build_label_final": "f7aa84f+ONDA10-aprovada",
+    "salvar_como": "Cowork instrui operador a salvar como V12-202-T-onda10/PlanilhaCredenciamento-Homologacao.xlsm",
+    "erp_a_emitir": ".hbn/results/0010-exec-onda10.json",
+    "doc_tecnico": "auditoria/03_ondas/onda_10_reincorporacao_onda01/60_TECNICO.md",
+    "procedimento": "auditoria/03_ondas/onda_10_reincorporacao_onda01/61_PROCEDIMENTO_MICRO_1_0.md (e arquivos similares por microdelta)"
+  },
+
+  "gates_inviolaveis": [
+    "G6 enforced - nenhum codigo VBA solto em chat",
+    "L1 mitigada - V3 usa Remove+Import (nao DeleteLines+AddFromString in-place) para .bas",
+    "L2 enforced - V3 nunca importa a si mesmo (re-import V3 e sempre manual)",
+    "L9 enforced - IV3_GarantirPasta usado em qualquer escrita de pasta",
+    "Backup automatico V3 antes de cada microdelta com import",
+    "Compile manual + trio minimo verde sao gates entre microdeltas",
+    "Hearback obrigatorio caso algum microdelta falhe gate"
+  ],
+
+  "rollback_strategy": {
+    "por_microdelta": "restaurar do backup gerado em backups/vba/<ts>-V3-FULL/ correspondente. Workbook volta ao estado pre-microdelta.",
+    "macro_para_emergencia": "operador abre o backup em workbook fresh, copia .xlsm de volta",
+    "zero_perdas_documentais": "src/vba mantem o que foi escrito; rollback so afeta o workbook ativo"
+  },
+
+  "fora_do_escopo_onda10": [
+    "Onda 11 (suite TV2_RunCnae + menu [15] - Onda 2 reincorporacao)",
+    "Onda 12 (cenarios CNAE_004..006 - Onda 3 reincorporacao)",
+    "Onda 13 (Diag_RodizioStatus + TV2_RunCfg + menu [16]/[17] - Onda 4 reincorporacao)",
+    "Auditoria caso-a-caso dos 26 divergentes residuais (fase A.6)",
+    "Onda 7 (IDM_/RDZ_) e Onda 8 (heuristica zero forms) - depois de A.5"
+  ],
+
+  "questoes_pendentes_resolvidas": {
+    "Q1_emergencia_cnae": "OPERADOR DECIDIU - fica fora do release",
+    "Q2_outros_divergentes": "OPERADOR DECIDIU - analise caso-a-caso em fase A.6",
+    "Q3_build_label_final": "OPERADOR DECIDIU - v12.0.0203-rc1",
+    "Q4_v3_aceita_manifesto_delta": "OPERADOR DECIDIU - sim"
+  },
+
+  "aguardando": "hearback explicito do Mauricio sobre este readback. Apos confirmed: implementacao Microdelta 1.0 conforme detalhado."
+}

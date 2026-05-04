@@ -1,0 +1,6 @@
+VALIDACAO_ID;BUILD;DATA_HORA;ETAPA;EXECUCAO_ID;OK;FALHA;MANUAL;STATUS;CSV_FALHAS;PRIMEIRA_FALHA;ACAO_IA
+VR_20260503_152143;f7aa84f+ONDA17.MD1C-fix1-cancontroles-reporoot;03/05/2026 15:27:29;V1_RAPIDA;BO-20260503-152143;171;0;0;OK;NAO_EXPORTADO;;Sem acao corretiva.
+VR_20260503_152143;f7aa84f+ONDA17.MD1C-fix1-cancontroles-reporoot;03/05/2026 15:28:55;V2_SMOKE;TV2_20260503_152729;22;5;4;FALHA;\\Mac\Home\Projetos\Credenciamento\TesteV2_SMOKE_Falhas_TV2_20260503_152729.csv;"CENARIO=CS_UISMOKE_Reativa_Entidade_V4; OBJETIVO=Comparacao .frm <-> .code-only.txt (gamma) Reativa_Entidade; ESPERADO=Normalizacao gamma identica; OBTIDO=DIVERGE: len_frm=12086 len_co=11914; SIGNIFICADO=Drift estrutural alem do cosmetico — investigar manualmente";Corrigir o cenario V2 indicado em PRIMEIRA_FALHA e reexecutar o trio minimo.
+VR_20260503_152143;f7aa84f+ONDA17.MD1C-fix1-cancontroles-reporoot;03/05/2026 15:32:46;V2_CANONICO;TV2_20260503_152855;23;0;0;OK;NAO_EXPORTADO;;Sem acao corretiva.
+VR_20260503_152143;f7aa84f+ONDA17.MD1C-fix1-cancontroles-reporoot;03/05/2026 15:36:33;V2_E2E_STRIKES;TV2_20260503_153246;65;0;1;OK;NAO_EXPORTADO;;Sem acao corretiva.
+VR_20260503_152143;f7aa84f+ONDA17.MD1C-fix1-cancontroles-reporoot;03/05/2026 15:36:33;GERAL;;;;;REPROVADO;;;"Quarteto V1+V2_Smoke+V2_Canonica+E2E_Strikes; usar como evidencia textual."

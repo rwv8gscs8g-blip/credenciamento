@@ -1,0 +1,134 @@
+{
+  "readback_id": "readback-onda16-testes-refatoracao-2026-05-02",
+  "agent_id": "claude-opus-4-7-cowork",
+  "operator": "Luís Maurício Junqueira Zanin",
+  "track": "safe_track",
+  "started_at": "2026-05-02",
+  "deadline_hard": null,
+  "status": "em_execucao",
+  "ciclo_anterior_fechado": "Onda 11 (V12.0.0203-rc1 publicada em GitHub 2026-05-02 06:50 BRT, tag v12.0.0203-rc1)",
+  "ciclos_intermediarios": "Ondas 12-13 (CNAE) PRORROGADAS por decisão do operador 2026-05-02 — registrado em auditoria/03_ondas/onda_12_cnae_prorrogada/00_PRORROGACAO.md",
+
+  "objetivo": "Refatoração estrutural do subsistema de testes do Credenciamento para entregar V12.0.0203-rc2: (1) mensagens da Central V12 e Central V2 reorganizadas com Quarteto destacado como gate oficial; (2) coluna DURACAO_MS em RESULTADO_QA_V2 + threshold em CONFIG; (3) sheet EVOLUCAO_TESTES com sparklines + indicador de regressão; (4) Util_PDF.bas com nomeação humano-legível incluindo CNPJ + emissão automática + suite TV2_RunPdfDeterminismo + sheet RPT_PDFS_GERADOS; (5) padronização cirúrgica de filtros estendendo padrão Altera_Entidade.frm + limpeza heurística residual em Altera_Empresa.frm (colaborativo tela-a-tela com prints do operador); (6) suites de cobertura UI: TV2_RunUiCentralV2 (dispatcher) + TV2_RunUiCobertura (handlers críticos *_Click); (7) bump rc2 + CHANGELOG + L19+L20+L21 em PHAGOCYTOSIS + ERP + 70_FECHAMENTO + tag git v12.0.0203-rc2.",
+
+  "premissa_central": "A resposta Antigravity v4 (peer review arquitetural) foi absorvida e refinada pela Frente 1 em plano executivo. Iteração v1->v2->v3->v4 com Antigravity reduziu escopo da v1 (refatoração ampla 13 forms) para escopo cirúrgico final: filtros + heurística residual em 1 form + UI textual + métricas + PDFs auditáveis + cobertura UI focada em handlers críticos. Forms operacionais NÃO sofrem refatoração estrutural ampla. CNPJ no nome do PDF foi refinamento final do operador.",
+
+  "hearback_dos_5_pontos": {
+    "Q1_pdf_ciclo": "confirmed (c) — gerar AMBOS: 1 PDF resumo geral (CICLO_RESUMO_<EXEC_ID>_<DATA>.pdf) + 1 PDF por empresa (CICLO_<CNPJ>_<EXEC_ID>_<DATA>.pdf)",
+    "Q2_convencao_filtros": "confirmed sim — convivência aceita entre nomes existentes (B_/C_/M_ em Entidade, mBtn*/M_ em Empresa moderno); novos controles de filtro adotam prefixos cmb_filtro_*, txt_busca_*, lst_*, B_filtrar_*, C_filtrar_*",
+    "Q3_cobertura_ui": "confirmed sim — apenas handlers críticos de regra de negócio nesta onda (Salvar, Inativar, Reativar, Avaliar). Critério: handler que muda estado em sheet operacional ou AUDIT_LOG. Cobertura ampla fica para onda futura",
+    "Q4_hooks_pdf_producao": "confirmed (c) — opcional via flag CONFIG.PDFS_AUTOMATICOS; default FALSE; operador habilita quando quiser auditoria forense em produção",
+    "Q5_aprovacao_geral": "confirmed APROVADO — pode implementar"
+  },
+
+  "escopo_em": [
+    "MD-16.1: Texto Central V12 (atalho [3] Quarteto Direto) + Central V2 reorganizada hierárquicamente com [20] em destaque",
+    "MD-16.2: Coluna DURACAO_MS em RESULTADO_QA_V2 + threshold em CONFIG (THRESHOLD_TESTE_LENTO_MS=500) + getter Util_Config_GetThresholdTesteLentoMS",
+    "MD-16.3: Aba EVOLUCAO_TESTES + sparkline + indicador de regressão (>1.5x média) + opção [21] na Central + módulo Util_Evolucao",
+    "MD-16.4: Util_PDF.bas com nomeação humano-legível incluindo CNPJ + emissão automática (flag opcional) + suite TV2_RunPdfDeterminismo (5 cenários) + opção [22] + sheet RPT_PDFS_GERADOS + módulo Util_Empresa (helper CNPJ)",
+    "MD-16.5: Filtros Fase 1 - inventário forms + padrão consolidado (validação tabela com operador)",
+    "MD-16.6: Filtros Fase 2 - revisão tela-a-tela colaborativa com prints (1 microdelta interno por tela; ordem prevista: Limpar_Base, Reativa_Empresa, Reativa_Entidade, Cadastro_Servico, Credencia_Empresa, Rel_Emp_Serv, Rel_OSEmpresa, Altera_Empresa)",
+    "MD-16.7: Suite TV2_RunUiCentralV2 + opção [23] (cobertura completa do dispatcher da Central V2 - 16+ cenários)",
+    "MD-16.8: Suite TV2_RunUiCobertura + opção [24] (handlers críticos *_Click de forms operacionais; cobertura: handlers que mudam estado em sheet ou AUDIT_LOG) + módulo Teste_UI_Engine (TUI_AcionarBotao, TUI_PreencherCampo, TUI_FormularioAberto, TUI_FecharFormulario)",
+    "MD-16.9: Bump v12.0.0203-rc2 (APP_RELEASE_TAG, BUILD, GERADO_EM, TEST_KEY mantém quarteto-2026-05-02) + CHANGELOG + L19+L20+L21 em PHAGOCYTOSIS append-only + ERP 0012-exec-onda16.json + 70_FECHAMENTO_ONDA_16.md + tag git v12.0.0203-rc2"
+  ],
+
+  "escopo_fora": [
+    "Refatoração estrutural ampla de 13 forms (heurística zero global) - prorrogada para onda futura",
+    "Form dedicado CentralTestes_Painel.frm - operador rejeitou; manter InputBox",
+    "OCR para validação de PDF - decisão (a) bytes + metadata hash",
+    "Mexer em Mod_Types.bas - TABU C4",
+    "Invalidar tag rc1 publicada (rc1 fica; rc2 é avanço)",
+    "Mexer em opções [15]-[19] do drift D1 (CNAE/Diag/CFG/IDM/RDZ no src/vba) - prorrogadas para Ondas 12-16 caso-a-caso",
+    "Cobertura UI ampla (todos handlers *_Click) - apenas críticos nesta onda",
+    "Hooks Util_PDF em produção sempre - opcional via flag PDFS_AUTOMATICOS"
+  ],
+
+  "premissas_e_dependencias": [
+    "Workbook ancora atual: V12-202-AB-onda11-rc1 (build f7aa84f+v12.0.0203-rc1, Quarteto VR_20260502_063028 APROVADO)",
+    "Importador V3 V3.2-Canonica-Onda10-Fechada operando em local-ai/vba_import/",
+    "Padrão Altera_Entidade.frm (handlers diretos sem heurística) é modelo canônico a estender",
+    "Altera_Empresa.frm tem dívida heurística residual a limpar cirurgicamente em MD-16.6",
+    "Altera_Empresa.frm e Altera_Entidade.frm mantém nomes existentes (B_/C_/M_/mBtn*) - convivência permitida",
+    "Drift G7 D1 dos 23 arquivos preservado intencionalmente",
+    "EMPRESAS!B = COL_EMP_CNPJ=2 (confirmado via grep)",
+    "Util_NormalizarDocumentoChave (em AAE-Util_Planilha.bas) reusado para CNPJ",
+    "ExportAsFixedFormat Type:=xlTypePDF disponível em Excel for Mac",
+    "Cada microdelta tem build label próprio (ONDA16.MD<NN>) e bump em AAX-App_Release.bas + espelho src/vba"
+  ],
+
+  "convencoes_canonicas": {
+    "filtros": {
+      "modelo_canonico": "Altera_Entidade.frm (handlers diretos <NomeControle>_Click sem heurística)",
+      "convivencia_aceita": "B_<Acao> (Entidade), C_<Acao> (Entidade), M_<Campo> (Empresa), mBtn<Func> (Empresa moderno)",
+      "novos_prefixos": {
+        "combobox_filtro": "cmb_filtro_<entidade>",
+        "textbox_busca": "txt_busca_<entidade>",
+        "listbox_resultados": "lst_<entidade>",
+        "botao_aplicar_filtro": "B_filtrar_<entidade>",
+        "botao_limpar_filtro": "C_filtrar_<entidade>"
+      },
+      "anti_padroes_remover": ["For Each ctl In container.Controls", "InStr(.Caption, ...)", "Controls(varname)", ".Top/.Left para tomada de decisão"]
+    },
+    "pdfs": {
+      "padrao_nome": "<TIPO>_<ENTIDADE_ID>_<CNPJ>_<DATA>[_NN].pdf",
+      "tipos": ["PREOS", "OS", "AVAL", "CICLO", "CICLO_RESUMO"],
+      "cnpj_formato": "limpo (só dígitos, via Util_NormalizarDocumentoChave)",
+      "data_formato": "YYYY-MM-DD",
+      "sufixo_colisao": "_NN (apenas se colisão no mesmo dia)",
+      "diretorio": "auditoria/04_evidencias/V12.0.0203/pdfs/<EXECUCAO_ID>/",
+      "hash": "metadata interno do PDF (rodapé) + sheet RPT_PDFS_GERADOS"
+    },
+    "nomenclatura_microdeltas": "ONDA16.MD<NN>-<descricao>-incremental",
+    "manifestos": "MICRO13 a MICRO22 (rc2 final)"
+  },
+
+  "schemas_sheets_novas": {
+    "RPT_PDFS_GERADOS": "EXECUCAO_ID | TIPO | ENTIDADE_ID | EMP_CNPJ | CAMINHO | NOME_ARQUIVO | HASH_PAYLOAD | TAMANHO_BYTES | DATA_GERACAO | OBS",
+    "EVOLUCAO_TESTES": "EXECUCAO_ID | SUITE | DT_EXEC | DURACAO_MS | OK | FALHA | MEDIA_5_MS | DELTA_PCT | REGRESSAO? | SPARKLINE"
+  },
+
+  "gates_por_microdelta": {
+    "MD-16.1": "manual compile + Quarteto verde + visual OK (Central V12 e V2 com texto reorganizado, [3] no V12 chama CT_ValidarRelease_QuartetoMinimo)",
+    "MD-16.2": "manual compile + Quarteto verde + coluna DURACAO_MS visível em RESULTADO_QA_V2 com valor populado",
+    "MD-16.3": "manual compile + Quarteto verde + sparkline visível em EVOLUCAO_TESTES + indicador de regressão funciona em cenário de teste",
+    "MD-16.4": "manual compile + Quarteto verde + suite TV2_RunPdfDeterminismo passa 5/0 + PDFs gerados em auditoria/04_evidencias/V12.0.0203/pdfs/<EXEC_ID>/ com nome canônico contendo CNPJ + RPT_PDFS_GERADOS populada",
+    "MD-16.5": "tabela canônica entregue + operador valida convenção e ordem",
+    "MD-16.6": "Quarteto verde + filtro idempotente após cada tela (rodar 3x produz mesmo recordset) + Altera_Empresa sem heurística residual",
+    "MD-16.7": "manual compile + Quarteto verde + suite TV2_RunUiCentralV2 passa 16+/0",
+    "MD-16.8": "manual compile + Quarteto verde + suite TV2_RunUiCobertura passa cobertura mínima crítica",
+    "MD-16.9": "manual compile + Quarteto verde + tag git v12.0.0203-rc2 publicada"
+  },
+
+  "rollback_plan": "Cada microdelta tem rollback individual via git checkout dos arquivos afetados. Workbook ancora estável V12-202-AB-onda11-rc1 (rc1 publicada). Onda 16 inteira pode ser revertida deixando V12.0.0203-rc1 como ancora; tag rc2 não publicada se algum microdelta crítico falhar.",
+
+  "marcadores_canon_v2_aplicaveis": [
+    "✅ HBN ACTIVE",
+    "🔵 HBN HANDOFF READY (transições MD entre microdeltas)",
+    "🟢 HBN CHECKPOINT CLEAN (gate de fim de cada microdelta)",
+    "🟡 HBN NEEDS HUMAN DECISION (entre microdeltas e em MD-16.5/6 colaborativo)",
+    "🟣 HBN PEER REVIEW REQUESTED (resposta Antigravity v4 absorvida nesta onda)",
+    "⚪ HBN AUDIT-ONLY (Frente 2 paralela, sem mudança nesta onda)",
+    "🟤 HBN LICENSE SPLIT REQUIRED (Credenciamento TPGL; helpers TUI/Util_PDF candidatos a promoção AGPLv3)",
+    "🟠 HBN SOURCE DRIFT DETECTED (drift D1 preservado intencionalmente; G7 esperado em Central_Testes_V2)"
+  ],
+
+  "licenca_target_artefatos": "Credenciamento: TPGL v1.1. Helpers genéricos (Teste_UI_Engine.TUI_*, Util_PDF.Util_PDF_*) candidatos a promoção AGPLv3 para usehbn em fase posterior, com consentimento explícito.",
+
+  "anchor_pos_onda": "V12-202-AC-onda16-rc2 (após MD-16.9 verde + tag rc2)",
+
+  "build_labels_planejados": [
+    "f7aa84f+ONDA16.MD1-central-textos-incremental (após MD-16.1)",
+    "f7aa84f+ONDA16.MD2-duracao-ms-incremental (após MD-16.2)",
+    "f7aa84f+ONDA16.MD3-evolucao-testes-incremental (após MD-16.3)",
+    "f7aa84f+ONDA16.MD4-util-pdf-cnpj-incremental (após MD-16.4)",
+    "f7aa84f+ONDA16.MD6-<NN>-<form>-incremental (1 por tela em MD-16.6)",
+    "f7aa84f+ONDA16.MD7-ui-central-v2-incremental (após MD-16.7)",
+    "f7aa84f+ONDA16.MD8-ui-cobertura-incremental (após MD-16.8)",
+    "f7aa84f+v12.0.0203-rc2 (após MD-16.9 + Quarteto + tag)"
+  ],
+
+  "frente_2_coordenacao": "Frente 2 (usehbn) opera em paralelo. L19+L20+L21 desta onda serão append-only em PHAGOCYTOSIS-VBA-PATTERNS.md no MD-16.9 e Frente 2 incorpora ao seed do hbn-phago. Sem bloqueio mútuo.",
+
+  "hearback_status": "confirmed (operador aprovou Q1=c, Q2=sim, Q3=sim apenas críticos, Q4=c flag, Q5=APROVADO em 2026-05-02)"
+}

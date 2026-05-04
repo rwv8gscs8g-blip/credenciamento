@@ -215,7 +215,8 @@ Private Function MLB_CabecalhoEmpresas() As Variant
         "EMP_ID", "CNPJ", "RAZAO_SOCIAL", "INSCR_MUN", "RESPONSAVEL", _
         "CPF_RESP", "ENDERECO", "BAIRRO", "MUNICIPIO", "CEP", _
         "UF", "TEL_FIXO", "TEL_CEL", "EMAIL", "EXPERIENCIA", _
-        "STATUS_GLOBAL", "DT_FIM_SUSP", "QTD_RECUSAS", "DT_CAD", "DT_ULT_ALT")
+        "STATUS_GLOBAL", "DT_FIM_SUSP", "QTD_RECUSAS", "DT_CAD", _
+        "DT_ULT_ALT", "DT_ULT_REATIV")
 End Function
 
 Private Function MLB_CabecalhoEntidade() As Variant

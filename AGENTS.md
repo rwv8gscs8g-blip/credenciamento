@@ -15,7 +15,7 @@
 | Linguagem principal | VBA (Excel `.xlsm`) |
 | Versao oficial vigente | V12.0.0202 |
 | Linha em estabilizacao | V12.0.0203 |
-| Build importado no workbook (homologacao) | `f7aa84f+ONDA05-em-homologacao` |
+| Build importado no workbook (homologacao apos Onda 10 fechada) | `f7aa84f+ONDA10-canonica-fechada-com-debito-strikes` |
 | Branch ativa | `codex/v12-0-0203-governanca-testes` |
 | Licenca | TPGL v1.1 (auto-conversao para Apache 2.0 em 4 anos) |
 | Protocolo de governanca | [HBN — Human Brain Net](https://usehbn.org) |
@@ -26,10 +26,13 @@ Leia, em ordem:
 
 1. [`.hbn/relay/INDEX.md`](.hbn/relay/INDEX.md) — quem tem o bastao agora
 2. [`.hbn/knowledge/0001-regras-v203-inegociaveis.md`](.hbn/knowledge/0001-regras-v203-inegociaveis.md) — as 10 regras
-3. [`.hbn/knowledge/0002-regra-ouro-vba-import.md`](.hbn/knowledge/0002-regra-ouro-vba-import.md) — como espelhar codigo
+3. [`.hbn/knowledge/0002-regra-ouro-vba-import.md`](.hbn/knowledge/0002-regra-ouro-vba-import.md) — como espelhar codigo (REVALIDADA em Onda 10)
 4. [`.hbn/knowledge/0003-glasswing-style-preventive-security.md`](.hbn/knowledge/0003-glasswing-style-preventive-security.md) — camada de seguranca preventiva
-5. [`auditoria/00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md`](auditoria/00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md) — checkpoint atual
-6. [`auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md`](auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md) — auditoria honesta
+5. [`auditoria/00_status/27_ROADMAP_REINCORPORACAO_INCREMENTAL_V203.md`](auditoria/00_status/27_ROADMAP_REINCORPORACAO_INCREMENTAL_V203.md) — roadmap V203
+6. [`auditoria/00_status/32_ERRO_E_CORRECAO_PASTA_CANONICA.md`](auditoria/00_status/32_ERRO_E_CORRECAO_PASTA_CANONICA.md) — vitrine de transparencia (2026-05-02)
+7. [`auditoria/00_status/33_HANDOFF_NOVA_SESSAO_OPUS.md`](auditoria/00_status/33_HANDOFF_NOVA_SESSAO_OPUS.md) — prompt de retomada para nova sessao
+8. [`auditoria/03_ondas/onda_10_reincorporacao_onda01/70_FECHAMENTO_ONDA_10.md`](auditoria/03_ondas/onda_10_reincorporacao_onda01/70_FECHAMENTO_ONDA_10.md) — resumo executivo Onda 10
+9. [`usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`](usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md) — licoes L1-L15 + M1-M6 (base de conhecimento "fagocitose" sobre VBA)
 
 ## Working pattern
 

@@ -1,0 +1,101 @@
+{
+  "readback_id": "readback-onda17-bloco-a-2026-05-04",
+  "agent_id": "claude-opus-4-7-cowork-chat-4-bloco-a",
+  "operator": "Luís Maurício Junqueira Zanin",
+  "track": "safe_track",
+  "started_at": "2026-05-03 chat 4 (alternativa C — scoping em chat 3)",
+  "completed_at": "2026-05-04 ~00:13 BRT (operador rodou Quinteto + Quarteto)",
+  "status": "APROVADO_OPERADOR",
+  "schema_version": "hbn-readback/0.3.1",
+  "parent_readback": "readback-onda17-md17-2-2026-05-03 (0018) — scoping firme MD-17.2",
+
+  "objetivo_alcancado": "Caminho C — Bloco A: fechamento Onda 17 em pacote unificado MICRO24 (4 arquivos VBA) + 2 docs. MD-17.2 (TV2_RunIntegridadeBase + RPT_BUGS_CONHECIDOS) + MD-17.3 (CT_ValidarRelease_QuintetoMinimo + renumeracao Central V2 17 opcoes) + MD-17.4 (validacao Quinteto + Quarteto verde simultaneo). MD-18.2 (statusbar hint, toca form) explicitamente movida para Bloco B / Onda 18 para preservar C11 Cap M10=0.",
+
+  "estado_canonico_pos_bloco_a": {
+    "workbook_ancora": "V12-202-Z011-onda17-fechada",
+    "build_label": "f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17",
+    "app_build_gerado_em": "2026-05-03 23:55",
+    "app_release_tag": "v12.0.0203-rc1 (mantida; rc2 sera bumpada em MD-17.5 Bloco B)",
+    "app_release_test_key": "quinteto-2026-05-04",
+    "validacao_quinteto": {
+      "vr_id": "VR_20260503_234443",
+      "resultado": "APROVADO",
+      "sintaxe": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0",
+      "manual_total": 6,
+      "tempo_estimado": "~14 min"
+    },
+    "validacao_quarteto": {
+      "vr_id": "VR_20260504_000004",
+      "resultado": "APROVADO",
+      "sintaxe": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0",
+      "manual_total": 5,
+      "regressao_zero": "CONFIRMADA — sintaxe IDENTICA ao baseline MD-17.1.e VR_20260503_202623",
+      "idempotencia_onda17": "preservada"
+    },
+    "integridade_base_detectou_bug": "1 cenario AMARELO de CS_INT_01..04 (registrado automaticamente em RPT_BUGS_CONHECIDOS via RegistrarBugConhecido com upsert por BUG_ID) — operador identificara qual ao abrir aba"
+  },
+
+  "shasum_m11_final": {
+    "ABG-Teste_V2_Roteiros.bas": "6f88310fbcd1cd0339638e81ec3326deaf15065e",
+    "AAX-App_Release.bas": "6a5d19c50dd729a470911a5dc0cd14f0fcd362dd",
+    "ABH-Teste_Validacao_Release.bas": "c9f2dc7e5496f969751c370a4e670baf95ae89e8",
+    "ABE-Central_Testes_V2.bas": "33baaee06bfe796a6cf49dc9991f3bebf12fc3e5"
+  },
+
+  "balance_sub_function": {
+    "Teste_V2_Roteiros.bas": "37/37",
+    "Teste_Validacao_Release.bas": "36/36",
+    "Central_Testes_V2.bas": "10/10",
+    "App_Release.bas": "30/30"
+  },
+
+  "crlf_preservado": true,
+
+  "deliverables": [
+    "src/vba/Teste_V2_Roteiros.bas (+~380 linhas) — TV2_RunIntegridadeBase Public + 3 helpers + 4 detectores Private",
+    "src/vba/Teste_Validacao_Release.bas (+~220 linhas) — CT_ValidarRelease_QuintetoMinimo Public + wrapper + 5 helpers Private Quinteto",
+    "src/vba/Central_Testes_V2.bas — prompt + Select Case renumerados para 17 opcoes ([1] Quinteto OFICIAL)",
+    "src/vba/App_Release.bas — bump build label + TEST_KEY + comentario MD-17.2/MD-17.3/MD-17.4",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas (espelho M11)",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas (espelho M11)",
+    "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas (espelho M11)",
+    "local-ai/vba_import/001-modulo/ABE-Central_Testes_V2.bas (espelho M11)",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO24.txt (com bloco GRUPO_+M| — licao M20)",
+    "auditoria/03_ondas/onda_17_test_first/14_PROCEDIMENTO_IMPORT_BLOCO_A.md (9 etapas operador + diagnostico regressao)",
+    "auditoria/00_status/54_TRANSICAO_CHAT_4_PARA_5_2026_05_04.md (handoff + 3 prompts)",
+    "memoria: project_caminho_c_blocos_onda17_18.md",
+    "memoria: project_bloco_a_concluido_2026_05_04.md"
+  ],
+
+  "licoes_destiladas_candidatas_phagocytosis": [
+    "M22 (candidata) — Caminho C hibrido estruturado (scoping chat N + implementacao chat N+1 + agrupamento PURE READ + bumps + UI textual em 1 pacote MICRO) e mais barato que Caminho A (microdeltas estritos) quando bloco e homogeneo em risco. Validado empiricamente em Bloco A 2026-05-04: 8 etapas IA + 1 Quinteto operador entregaram fechamento Onda 17 sem fix encadeados.",
+    "M23 (candidata) — IntegridadeBase como pattern reutilizavel para 'auditorias passivas' do sistema (PURE READ + UPSERT em aba RPT_*). Permite registrar bugs descobertos sem alterar logica de producao. Outras auditorias futuras (RPT_USUARIOS_FANTASMA, RPT_DUPLICATAS_AVALIACAO) podem seguir este molde.",
+    "M20 (candidata, ja levantada em chat 3) — Manifesto V3 com bloco GRUPO_+M| confirmada empiricamente: MICRO24 importou primeira tentativa sem 'Manifesto vazio ou malformado'. Comparacao byte-a-byte com MICRO22/MICRO23 na secao critica funcionou."
+  ],
+
+  "debitos_abertos_pos_bloco_a": [
+    {
+      "id": "DT-17-REATIV-STRIKES",
+      "estado": "ABERTO em RPT_BUGS_CONHECIDOS",
+      "resolucao_prevista": "Onda 18 MD-18.1 (TABU C4 com plano dedicado pre-aprovado pelo operador em chat 3)",
+      "auditoria_cruzada_pre_bloco_b": "Antigravity (Gemini) + Codex CLI conforme prompts em doc 54 §A e §B"
+    },
+    {
+      "id": "DT-MD17.1.e-STATUSBAR-HINT",
+      "estado": "ADIADO",
+      "resolucao_prevista": "Bloco B / Onda 18 MD-18.2 (toca Menu_Principal.frm; cap M10=0 da Onda 17 ja relaxado)"
+    },
+    {
+      "id": "INT-* descoberto via TV2_RunIntegridadeBase",
+      "estado": "ABERTO em RPT_BUGS_CONHECIDOS — 1 cenario AMARELO no Quinteto",
+      "resolucao_prevista": "depende de qual cenario (CS_INT_01..04) — operador identifica ao abrir aba; investigacao em onda futura"
+    },
+    {
+      "id": "MD-17.1.d.I.b",
+      "estado": "ABERTO",
+      "resolucao_prevista": "apos Onda 18 (gamma profundo Quarteto < 10min)"
+    }
+  ],
+
+  "next_action": "Operador abre chat 5 limpo com prompt §C do doc 54. Antes disso, opcionalmente, dispara prompts §A (Antigravity) e §B (Codex) para auditorias paralelas que serao consumidas pelo chat 5. Bloco B (Onda 18 + DT-STATUSBAR + fechamento ondas + tag rc2/final) inicia em chat 5 com base nas auditorias cruzadas."
+}

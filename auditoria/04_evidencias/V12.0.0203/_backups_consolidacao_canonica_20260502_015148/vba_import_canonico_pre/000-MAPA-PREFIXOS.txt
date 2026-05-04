@@ -1,0 +1,72 @@
+MAPA DE PREFIXOS DO PACOTE VBA (gerado automaticamente)
+
+Use este arquivo para localizar rapidamente o nome prefixado de cada modulo ou formulario.
+Quando houver duvida na importacao manual, consulte primeiro este mapa.
+
+MODULOS (.bas):
+- AAA-Mod_Types.bas => Mod_Types.bas
+- AAB-Const_Colunas.bas => Const_Colunas.bas
+- AAC-Util_Conversao.bas => Util_Conversao.bas
+- AAD-Util_Config.bas => Util_Config.bas
+- AAE-Util_Planilha.bas => Util_Planilha.bas
+- AAF-Funcoes.bas => Funcoes.bas
+- AAG-Audit_Log.bas => Audit_Log.bas
+- AAH-AppContext.bas => AppContext.bas
+- AAI-ErrorBoundary.bas => ErrorBoundary.bas
+- AAJ-Svc_Transacao.bas => Svc_Transacao.bas
+- AAK-Repo_Credenciamento.bas => Repo_Credenciamento.bas
+- AAL-Repo_PreOS.bas => Repo_PreOS.bas
+- AAM-Repo_OS.bas => Repo_OS.bas
+- AAN-Repo_Avaliacao.bas => Repo_Avaliacao.bas
+- AAO-Repo_Empresa.bas => Repo_Empresa.bas
+- AAP-Svc_Rodizio.bas => Svc_Rodizio.bas
+- AAQ-Svc_PreOS.bas => Svc_PreOS.bas
+- AAR-Svc_OS.bas => Svc_OS.bas
+- AAS-Svc_Avaliacao.bas => Svc_Avaliacao.bas
+- AAT-Classificar.bas => Classificar.bas
+- AAU-Preencher.bas => Preencher.bas
+- AAV-Variaveis.bas => Variaveis.bas
+- AAW-Emergencia_CNAE.bas => Emergencia_CNAE.bas
+- AAX-App_Release.bas => App_Release.bas
+- AAY-Auto_Open.bas => Auto_Open.bas
+- AAZ-Central_Testes.bas => Central_Testes.bas
+- ABA-Teste_Bateria_Oficial.bas => Teste_Bateria_Oficial.bas
+- ABB-Central_Testes_Relatorio.bas => Central_Testes_Relatorio.bas
+- ABC-Treinamento_Painel.bas => Treinamento_Painel.bas
+- ABD-Teste_UI_Guiado.bas => Teste_UI_Guiado.bas
+- ABE-Central_Testes_V2.bas => Central_Testes_V2.bas
+- ABF-Teste_V2_Engine.bas => Teste_V2_Engine.bas
+- ABG-Teste_V2_Roteiros.bas => Teste_V2_Roteiros.bas
+- ABH-Teste_Validacao_Release.bas => Teste_Validacao_Release.bas
+- ABI-Util_Filtro_Lista.bas => Util_Filtro_Lista.bas
+- ABJ-Mod_Limpeza_Base.bas => Mod_Limpeza_Base.bas
+- ABK-Importador_V2.bas => Importador_V2.bas
+
+FORMULARIOS (.frm / .frx):
+- AAA-Fundo_Branco.frm => Fundo_Branco.frm
+  .frx correspondente: Fundo_Branco.frx (sem prefixo)
+- AAB-ProgressBar.frm => ProgressBar.frm
+  .frx correspondente: ProgressBar.frx (sem prefixo)
+- AAC-Configuracao_Inicial.frm => Configuracao_Inicial.frm
+  .frx correspondente: Configuracao_Inicial.frx (sem prefixo)
+- AAD-Cadastro_Servico.frm => Cadastro_Servico.frm
+  .frx correspondente: Cadastro_Servico.frx (sem prefixo)
+- AAE-Altera_Entidade.frm => Altera_Entidade.frm
+  .frx correspondente: Altera_Entidade.frx (sem prefixo)
+- AAF-Reativa_Entidade.frm => Reativa_Entidade.frm
+  .frx correspondente: Reativa_Entidade.frx (sem prefixo)
+- AAG-Altera_Empresa.frm => Altera_Empresa.frm
+  .frx correspondente: Altera_Empresa.frx (sem prefixo)
+- AAH-Reativa_Empresa.frm => Reativa_Empresa.frm
+  .frx correspondente: Reativa_Empresa.frx (sem prefixo)
+- AAI-Credencia_Empresa.frm => Credencia_Empresa.frm
+  .frx correspondente: Credencia_Empresa.frx (sem prefixo)
+- AAJ-Limpar_Base.frm => Limpar_Base.frm
+  .frx correspondente: Limpar_Base.frx (sem prefixo)
+- AAK-Rel_Emp_Serv.frm => Rel_Emp_Serv.frm
+  .frx correspondente: Rel_Emp_Serv.frx (sem prefixo)
+- AAL-Rel_OSEmpresa.frm => Rel_OSEmpresa.frm
+  .frx correspondente: Rel_OSEmpresa.frx (sem prefixo)
+- AAM-Menu_Principal.frm => Menu_Principal.frm
+  .frx correspondente: Menu_Principal.frx (sem prefixo)
+

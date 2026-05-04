@@ -1,0 +1,14 @@
+{
+  "estado": "BASTAO_RECEBIDO",
+  "frente": "F1 - Credenciamento",
+  "agent_id": "codex-cli",
+  "sessao": "codex-cli-bloco-b-onda18-2026-05-04",
+  "operador": "Luis Mauricio Junqueira Zanin",
+  "timestamp_recepcao": "2026-05-04T01:34:31-0300",
+  "doc_de_transicao": "auditoria/00_status/57_PASSAGEM_BASTAO_F1_OPUS_PARA_CODEX_BLOCO_B_2026_05_04.md",
+  "bastao_recebido_de": "claude-opus-4-7-cowork-chat-5",
+  "escopo": "Bloco B / Onda 18 critica - MD-18.1a, MD-18.1b, MD-18.2, MD-18.3, MD-17.5",
+  "devolucao_prevista": "auditoria/00_status/60_DEVOLUCAO_BASTAO_CODEX_PARA_OPUS_2026_05_XX.md",
+  "schema_version": "hbn-bastao-lock/0.1.0",
+  "anti_double_bastao": "Codex CLI e o unico proprietario do bastao de implementacao da Frente 1 ate devolucao formal via doc 60."
+}

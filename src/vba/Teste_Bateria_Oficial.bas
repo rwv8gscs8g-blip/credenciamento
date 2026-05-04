@@ -410,12 +410,12 @@ Private Sub BA_Bloco1_CenarioLiteral()
 
     BA_MontarNotas 8, notas
     res = AvaliarOS(osId, "Gestor Auditoria V12", notas, 2, "Fluxo completo OK", "")
-    BA_LogAssert "BO_120_FluxoCompleto_Avaliacao", res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "OS concluida e avaliada", res.Mensagem & " | STATUS=" & BA_StatusOS(osId), "Validar fechamento completo do servico", "Avaliar fornecedor e encerrar fluxo"
+    BA_LogAssert "BO_120_FluxoCompleto_Avaliacao", res.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "OS concluida e avaliada", res.mensagem & " | STATUS=" & BA_StatusOS(osId), "Validar fechamento completo do servico", "Avaliar fornecedor e encerrar fluxo"
 
     preId = BA_EmitirPreOS("002", "002", "001", 1)
     osId = BA_EmitirOS(preId, DateAdd("d", 15, Date), "EMP-BO121")
     res = CancelarOS(osId, "Teste oficial de cancelamento")
-    BA_LogAssert "BO_121_CancelamentoOS", res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CANCELADA, "OS cancelada com sucesso", res.Mensagem & " | STATUS=" & BA_StatusOS(osId), "Validar caminho de cancelamento no fluxo real", "Cancelar OS apos emissao"
+    BA_LogAssert "BO_121_CancelamentoOS", res.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CANCELADA, "OS cancelada com sucesso", res.mensagem & " | STATUS=" & BA_StatusOS(osId), "Validar caminho de cancelamento no fluxo real", "Cancelar OS apos emissao"
 
     BA_LogAssert "BO_116_AposDoisFluxos_ContagemPreOS", BA_CountLinhas(SHEET_PREOS) = 2, "Duas Pre-OS persistidas no cenario", CStr(BA_CountLinhas(SHEET_PREOS)), "Fluxo completo + fluxo de cancelamento geram duas linhas", "Contar PRE_OS apos BO_120 e BO_121"
     BA_LogAssert "BO_117_AposDoisFluxos_ContagemOS", BA_CountLinhas(SHEET_CAD_OS) = 2, "Duas OS persistidas no cenario", CStr(BA_CountLinhas(SHEET_CAD_OS)), "Uma OS concluida e uma cancelada", "Contar CAD_OS apos BO_120 e BO_121"
@@ -527,7 +527,7 @@ Private Sub BA_Bloco3_RegressaoTecnica()
 
     BA_PrepararCenarioBase
     resOp = EmitirPreOS("001", BA_CodServicoLegado("001", "001"), 5)
-    BA_LogAssert "BO_304_EmissaoCurta_ServicoValido", resOp.Sucesso, "Emissao curta com COD_ATIV_SERV legado continua funcionando", resOp.Mensagem & " | PREOS=" & resOp.IdGerado, "Garantir compatibilidade com servico concatenado usando a atividade canonica mapeada", "Emitir Pre-OS usando codigo legado dinamico"
+    BA_LogAssert "BO_304_EmissaoCurta_ServicoValido", resOp.sucesso, "Emissao curta com COD_ATIV_SERV legado continua funcionando", resOp.mensagem & " | PREOS=" & resOp.IdGerado, "Garantir compatibilidade com servico concatenado usando a atividade canonica mapeada", "Emitir Pre-OS usando codigo legado dinamico"
 
     BA_PrepararCenarioBase
     BA_SetEmpresaStatus "001", BA_STATUS_EMP_ATIVA, CDate(0), 3
@@ -552,7 +552,7 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     notas(1) = 8: notas(2) = 8: notas(3) = 8: notas(4) = 8: notas(5) = 8
     notas(6) = 8: notas(7) = 8: notas(8) = 8: notas(9) = 8: notas(10) = 8
     r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media oito", "")
-    BA_LogAssert "BO_330_AvaliacaoValida", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "Avaliacao valida conclui OS", BA_StatusOS(osId) & " | MSG=" & r.Mensagem, "Validar servico de avaliacao com media calculada", "Avaliar OS com notas 8"
+    BA_LogAssert "BO_330_AvaliacaoValida", r.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "Avaliacao valida conclui OS", BA_StatusOS(osId) & " | MSG=" & r.mensagem, "Validar servico de avaliacao com media calculada", "Avaliar OS com notas 8"
 
     BA_PrepararCenarioBase
     BA_LogInfo "BO_330b_NotaMin_Limite", "Nota minima: media=5 nao suspende", _
@@ -563,9 +563,9 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     notas(1) = 5: notas(2) = 5: notas(3) = 5: notas(4) = 5: notas(5) = 5
     notas(6) = 5: notas(7) = 5: notas(8) = 5: notas(9) = 5: notas(10) = 5
     r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media cinco", "")
-    BA_LogAssert "BO_330b_NotaMin_5_NaoSuspende", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_ATIVA, _
+    BA_LogAssert "BO_330b_NotaMin_5_NaoSuspende", r.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_ATIVA, _
         "Media 5 conclui OS e NAO suspende (limite inclusivo)", _
-        BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.Mensagem, _
+        BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.mensagem, _
         "Validar fronteira: media igual a nota minima nao suspende", _
         "Avaliar com notas 5"
 
@@ -575,9 +575,9 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     notas(1) = 4: notas(2) = 4: notas(3) = 4: notas(4) = 4: notas(5) = 4
     notas(6) = 4: notas(7) = 4: notas(8) = 4: notas(9) = 4: notas(10) = 4
     r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media quatro", "")
-    BA_LogAssert "BO_330c_NotaMin_4_Suspende", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA, _
+    BA_LogAssert "BO_330c_NotaMin_4_Suspende", r.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA, _
         "Media 4 conclui OS e SUSPENDE (4 < 5)", _
-        BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.Mensagem, _
+        BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.mensagem, _
         "Validar regra: media abaixo da nota minima suspende empresa", _
         "Avaliar com notas 4"
 
@@ -587,9 +587,9 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     notas(1) = 0: notas(2) = 0: notas(3) = 0: notas(4) = 0: notas(5) = 0
     notas(6) = 0: notas(7) = 0: notas(8) = 0: notas(9) = 0: notas(10) = 0
     r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media zero", "")
-    BA_LogAssert "BO_330d_NotaMin_0_Suspende", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA, _
+    BA_LogAssert "BO_330d_NotaMin_0_Suspende", r.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA, _
         "Media 0 conclui OS e SUSPENDE (0 < 5)", _
-        BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.Mensagem, _
+        BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.mensagem, _
         "Cobrir fronteira inferior (nota zero)", _
         "Avaliar com notas 0"
 
@@ -599,9 +599,9 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     notas(1) = 10: notas(2) = 10: notas(3) = 10: notas(4) = 10: notas(5) = 10
     notas(6) = 10: notas(7) = 10: notas(8) = 10: notas(9) = 10: notas(10) = 10
     r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media dez", "")
-    BA_LogAssert "BO_330e_NotaMin_10_NaoSuspende", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_ATIVA, _
+    BA_LogAssert "BO_330e_NotaMin_10_NaoSuspende", r.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_ATIVA, _
         "Media 10 conclui OS e NAO suspende", _
-        BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.Mensagem, _
+        BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.mensagem, _
         "Cobrir fronteira superior (nota 10)", _
         "Avaliar com notas 10"
 
@@ -611,9 +611,9 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     notas(1) = 5: notas(2) = 5: notas(3) = 5: notas(4) = 5: notas(5) = 5
     notas(6) = 5: notas(7) = 5: notas(8) = 5: notas(9) = 4: notas(10) = 5
     r = AvaliarOS(osId, "Gestor QA", notas, 10, "Media quatro ponto nove", "")
-    BA_LogAssert "BO_330f_NotaMin_4_9_Suspende", r.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA, _
+    BA_LogAssert "BO_330f_NotaMin_4_9_Suspende", r.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA, _
         "Media 4,9 conclui OS e SUSPENDE (4,9 < 5)", _
-        BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.Mensagem, _
+        BA_StatusOS(osId) & " | EMP03=" & BA_StatusEmpresa("003") & " | MSG=" & r.mensagem, _
         "Cobrir fronteira decimal (4,9)", _
         "Avaliar com 9 notas 5 e uma nota 4"
 
@@ -626,7 +626,7 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     Dim linhaEmpAfter As Long
     r = AvaliarOS(osId, "Gestor QA", notas, 10, "DT_FIM_SUSP esperado", "")
     empAfter = LerEmpresa("003", linhaEmpAfter)
-    BA_LogAssert "BO_330g_DtFimSusp", r.Sucesso And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA And linhaEmpAfter > 0 And empAfter.DT_FIM_SUSP > Date, _
+    BA_LogAssert "BO_330g_DtFimSusp", r.sucesso And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA And linhaEmpAfter > 0 And empAfter.DT_FIM_SUSP > Date, _
         "Ao suspender por nota, DT_FIM_SUSP deve ser hoje + meses de suspensao", _
         "STATUS=" & BA_StatusEmpresa("003") & " | DT_FIM_SUSP=" & Format$(empAfter.DT_FIM_SUSP, "yyyy-mm-dd"), _
         "Validar que a suspensao por nota grava DT_FIM_SUSP", _
@@ -673,43 +673,43 @@ Private Sub BA_Bloco4_Combinatoria()
     preId = BA_EmitirPreOS("001", "182", "001", 1)
     BA_LogAssert "BO_420_MatrizTransicaoPreOS_Recusa", preId <> "", "Pre-OS emitida para transicao de recusa", BA_StatusPreOS(preId), "Cobrir transicao AGUARDANDO_ACEITE -> RECUSADA", "Emitir Pre-OS para recusa"
     res = RecusarPreOS(preId, "Recusa de matriz")
-    BA_LogAssert "BO_420_MatrizTransicaoPreOS_Recusada", res.Sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_RECUSADA, "Transicao AGUARDANDO_ACEITE -> RECUSADA", BA_StatusPreOS(preId), "Validar transicao de estado da Pre-OS", "Recusar Pre-OS"
+    BA_LogAssert "BO_420_MatrizTransicaoPreOS_Recusada", res.sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_RECUSADA, "Transicao AGUARDANDO_ACEITE -> RECUSADA", BA_StatusPreOS(preId), "Validar transicao de estado da Pre-OS", "Recusar Pre-OS"
     res = RecusarPreOS(preId, "Recusa novamente (invalida)")
-    BA_LogAssert "BO_420_RecusaJaRecusada", Not res.Sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_RECUSADA, "Recusar PreOS ja recusada deve falhar", res.Mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar transicao invalida (RECUSADA -> RECUSADA)", "Recusar a mesma Pre-OS novamente"
+    BA_LogAssert "BO_420_RecusaJaRecusada", Not res.sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_RECUSADA, "Recusar PreOS ja recusada deve falhar", res.mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar transicao invalida (RECUSADA -> RECUSADA)", "Recusar a mesma Pre-OS novamente"
 
     BA_PrepararCenarioBase
     preId = BA_EmitirPreOS("001", "182", "001", 1)
     res = ExpirarPreOS(preId)
-    BA_LogAssert "BO_420_MatrizTransicaoPreOS_Expirada", res.Sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_EXPIRADA, "Transicao AGUARDANDO_ACEITE -> EXPIRADA", BA_StatusPreOS(preId), "Validar transicao por prazo expirado", "Expirar Pre-OS"
+    BA_LogAssert "BO_420_MatrizTransicaoPreOS_Expirada", res.sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_EXPIRADA, "Transicao AGUARDANDO_ACEITE -> EXPIRADA", BA_StatusPreOS(preId), "Validar transicao por prazo expirado", "Expirar Pre-OS"
     res = ExpirarPreOS(preId)
-    BA_LogAssert "BO_420_ExpirarJaExpirada", Not res.Sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_EXPIRADA, "Expirar PreOS ja expirada deve falhar", res.Mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar transicao invalida (EXPIRADA -> EXPIRADA)", "Expirar a mesma Pre-OS novamente"
+    BA_LogAssert "BO_420_ExpirarJaExpirada", Not res.sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_EXPIRADA, "Expirar PreOS ja expirada deve falhar", res.mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar transicao invalida (EXPIRADA -> EXPIRADA)", "Expirar a mesma Pre-OS novamente"
 
     BA_PrepararCenarioBase
     preId = BA_EmitirPreOS("001", "182", "001", 1)
     osId = BA_EmitirOS(preId, DateAdd("d", 5, Date), "EMP-BO420")
     BA_LogAssert "BO_420_MatrizTransicaoPreOS_Convertida", osId <> "" And BA_StatusPreOS(preId) = BA_STATUS_PREOS_CONVERTIDA, "Transicao AGUARDANDO_ACEITE -> CONVERTIDA_OS", BA_StatusPreOS(preId) & " | OS_ID=" & osId, "Validar transicao de Pre-OS para OS", "Converter Pre-OS em OS"
     res = RecusarPreOS(preId, "Recusar convertida (invalida)")
-    BA_LogAssert "BO_420_RecusarConvertida", Not res.Sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_CONVERTIDA, "Recusar PreOS CONVERTIDA_OS deve falhar", res.Mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar transicao invalida (CONVERTIDA_OS -> RECUSADA)", "Tentar recusar Pre-OS ja convertida"
+    BA_LogAssert "BO_420_RecusarConvertida", Not res.sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_CONVERTIDA, "Recusar PreOS CONVERTIDA_OS deve falhar", res.mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar transicao invalida (CONVERTIDA_OS -> RECUSADA)", "Tentar recusar Pre-OS ja convertida"
     res = EmitirOS(preId, DateAdd("d", 5, Date), "EMP-BO420-INV")
-    BA_LogAssert "BO_420_EmitirOSJaConvertida", Not res.Sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_CONVERTIDA, "Emitir OS a partir de PreOS ja convertida deve falhar", res.Mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar emissao invalida (PreOS CONVERTIDA_OS)", "Tentar emitir OS novamente para a mesma Pre-OS"
+    BA_LogAssert "BO_420_EmitirOSJaConvertida", Not res.sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_CONVERTIDA, "Emitir OS a partir de PreOS ja convertida deve falhar", res.mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar emissao invalida (PreOS CONVERTIDA_OS)", "Tentar emitir OS novamente para a mesma Pre-OS"
 
     BA_PrepararCenarioBase
     preId = BA_EmitirPreOS("001", "182", "001", 1)
     osId = BA_EmitirOS(preId, DateAdd("d", 5, Date), "EMP-BO430A")
     BA_MontarNotas 10, notas
     res = AvaliarOS(osId, "Gestor Auditoria V12", notas, 1, "Matriz concluida", "")
-    BA_LogAssert "BO_430_MatrizTransicaoOS_Concluida", res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "Transicao EM_EXECUCAO -> CONCLUIDA", BA_StatusOS(osId), "Validar transicao final da OS por avaliacao", "Concluir OS"
+    BA_LogAssert "BO_430_MatrizTransicaoOS_Concluida", res.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "Transicao EM_EXECUCAO -> CONCLUIDA", BA_StatusOS(osId), "Validar transicao final da OS por avaliacao", "Concluir OS"
     res = CancelarOS(osId, "Cancelar OS concluida (invalida)")
-    BA_LogAssert "BO_430_CancelConcluida", Not res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "Cancelar OS CONCLUIDA deve falhar", res.Mensagem & " | STATUS=" & BA_StatusOS(osId), "Validar transicao invalida (CONCLUIDA -> CANCELADA)", "Tentar cancelar OS ja concluida"
+    BA_LogAssert "BO_430_CancelConcluida", Not res.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CONCLUIDA, "Cancelar OS CONCLUIDA deve falhar", res.mensagem & " | STATUS=" & BA_StatusOS(osId), "Validar transicao invalida (CONCLUIDA -> CANCELADA)", "Tentar cancelar OS ja concluida"
 
     BA_PrepararCenarioBase
     preId = BA_EmitirPreOS("001", "002", "001", 1)
     osId = BA_EmitirOS(preId, DateAdd("d", 5, Date), "EMP-BO430B")
     res = CancelarOS(osId, "Matriz cancelada")
-    BA_LogAssert "BO_430_MatrizTransicaoOS_Cancelada", res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CANCELADA, "Transicao EM_EXECUCAO -> CANCELADA", BA_StatusOS(osId), "Validar transicao de cancelamento da OS", "Cancelar OS em execucao"
+    BA_LogAssert "BO_430_MatrizTransicaoOS_Cancelada", res.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CANCELADA, "Transicao EM_EXECUCAO -> CANCELADA", BA_StatusOS(osId), "Validar transicao de cancelamento da OS", "Cancelar OS em execucao"
     BA_MontarNotas 10, notas
     res = AvaliarOS(osId, "Gestor QA", notas, 1, "Avaliar OS cancelada (invalida)", "")
-    BA_LogAssert "BO_430_ConcluirCancelada", Not res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CANCELADA, "Avaliar OS CANCELADA deve falhar", res.Mensagem & " | STATUS=" & BA_StatusOS(osId), "Validar transicao invalida (CANCELADA -> CONCLUIDA)", "Tentar avaliar OS cancelada"
+    BA_LogAssert "BO_430_ConcluirCancelada", Not res.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_CANCELADA, "Avaliar OS CANCELADA deve falhar", res.mensagem & " | STATUS=" & BA_StatusOS(osId), "Validar transicao invalida (CANCELADA -> CONCLUIDA)", "Tentar avaliar OS cancelada"
 
     BA_PrepararCenarioBase
     BA_LogAssert "BO_440_MatrizCapacidade_0Empresas", Not BA_SelecionarEmpresa("999").encontrou, "Atividade sem empresas retorna vazio", BA_ResumoRodizio(BA_SelecionarEmpresa("999")), "Cobrir fronteira de atividade sem elegiveis", "Selecionar atividade inexistente"
@@ -1019,11 +1019,11 @@ Private Sub BA_TesteRecusaOuExpiracao( _
     preId = BA_EmitirPreOS(entId, ativId, servId, 1)
     If expira Then
         r = ExpirarPreOS(preId)
-        BA_LogAssert caso, r.Sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_EXPIRADA, "Pre-OS expirada e fila punida", r.Mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar expiracao com punicao no rodizio", "Expirar Pre-OS e observar proxima selecao"
+        BA_LogAssert caso, r.sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_EXPIRADA, "Pre-OS expirada e fila punida", r.mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar expiracao com punicao no rodizio", "Expirar Pre-OS e observar proxima selecao"
     Else
         If Len(Trim$(motivo)) = 0 Then motivo = "Recusa do caso " & caso
         r = RecusarPreOS(preId, motivo)
-        BA_LogAssert caso, r.Sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_RECUSADA, "Pre-OS recusada e fila punida", r.Mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar recusa com punicao no rodizio", "Recusar Pre-OS e observar proxima selecao"
+        BA_LogAssert caso, r.sucesso And BA_StatusPreOS(preId) = BA_STATUS_PREOS_RECUSADA, "Pre-OS recusada e fila punida", r.mensagem & " | STATUS=" & BA_StatusPreOS(preId), "Validar recusa com punicao no rodizio", "Recusar Pre-OS e observar proxima selecao"
     End If
 
     If Len(Trim$(empIdEsperadoSeguinte)) > 0 Then
@@ -1088,7 +1088,7 @@ Private Sub BA_TesteCancelamentoNaoAvancaFila()
     filaDepois = BA_FilaCsv("002")
     r = CancelarOS(osId, "Cancelar sem avancar novamente")
 
-    BA_LogAssert "BO_260_CancelamentoNaoAvancaFila", r.Sucesso And BA_FilaCsv("002") = filaDepois And filaDepois <> filaAntes, "Cancelamento nao gera novo avancar de fila", "ANTES=" & filaAntes & " | DEPOIS_EMITIR=" & filaDepois & " | DEPOIS_CANCELAR=" & BA_FilaCsv("002"), "Validar que o cancelamento nao avancou a fila duas vezes", "Emitir OS e depois cancelar"
+    BA_LogAssert "BO_260_CancelamentoNaoAvancaFila", r.sucesso And BA_FilaCsv("002") = filaDepois And filaDepois <> filaAntes, "Cancelamento nao gera novo avancar de fila", "ANTES=" & filaAntes & " | DEPOIS_EMITIR=" & filaDepois & " | DEPOIS_CANCELAR=" & BA_FilaCsv("002"), "Validar que o cancelamento nao avancou a fila duas vezes", "Emitir OS e depois cancelar"
 End Sub
 
 Private Sub BA_ValidarCancelamentoSemAvanco( _
@@ -1298,7 +1298,7 @@ Private Sub BA_InitExecucao()
         ActiveWindow.FreezePanes = True
 
         If gDelayVisualMs > 0 Then Application.ScreenUpdating = True
-        Application.Goto ws.Cells(1, 1), False
+        Application.GoTo ws.Cells(1, 1), False
         DoEvents
         On Error GoTo 0
     End If
@@ -1498,12 +1498,19 @@ Private Sub BA_Log(ByVal statusTeste As String, ByVal bloco As String, ByVal nom
         On Error GoTo 0
     End If
 
-    ' Modo visual: colorir linha, atualizar StatusBar e scroll
+    ' V12.0.0203 ONDA 17 MD-17.1.d.III - StatusBar update SEMPRE (nao apenas
+    ' em modo visual). Resolve V1_RAPIDA estatica durante CT_ValidarRelease_*
+    ' (BA_SetModoExecucaoVisual False zera gDelayVisualMs; antes desse fix,
+    ' StatusBar nao atualizava). Coloracao + scroll continuam apenas em modo
+    ' visual real (preservacao do comportamento original).
+    On Error Resume Next
+    Application.StatusBar = "Bateria [" & CStr(gOk + gFail + gManual) & "] " & _
+        nomeTeste & " " & ChrW(8212) & " " & statusTeste
+    On Error GoTo 0
+
+    ' Modo visual: colorir linha e scroll
     If gDelayVisualMs > 0 Then
         On Error Resume Next
-        Application.StatusBar = "Bateria [" & CStr(gOk + gFail + gManual) & "] " & _
-            nomeTeste & " " & ChrW(8212) & " " & statusTeste
-
         ' Colorir linha conforme resultado
         ' OK: apenas celula STATUS (col G) fica verde; FALHA: linha inteira colorida
         If gRegistrarEmPlanilha And Not ws Is Nothing Then
@@ -1546,14 +1553,14 @@ Private Sub BA_PosicionarLinhaVisual(ByVal ws As Worksheet, ByVal linhaAtual As 
 
     On Error Resume Next
     ws.Activate
-    linhasVisiveis = ActiveWindow.VisibleRange.Rows.Count
+    linhasVisiveis = ActiveWindow.VisibleRange.Rows.count
     If linhasVisiveis <= 0 Then linhasVisiveis = 20
 
     scrollRow = linhaAtual - (linhasVisiveis - 6)
     If scrollRow < 1 Then scrollRow = 1
 
     ActiveWindow.ScrollColumn = 1
-    ActiveWindow.ScrollRow = scrollRow
+    ActiveWindow.scrollRow = scrollRow
     ws.Cells(linhaAtual, 1).Select
     On Error GoTo 0
 End Sub
@@ -1771,6 +1778,7 @@ Private Sub BA_CadastrarEmpresaCanonica(ByVal empId As String, ByVal cnpj As Str
     ws.Cells(linha, COL_EMP_QTD_RECUSAS).Value = 0
     ws.Cells(linha, COL_EMP_DT_CAD).Value = Now
     ws.Cells(linha, COL_EMP_DT_ULT_ALT).Value = Now
+    ws.Cells(linha, COL_EMP_DT_ULT_REATIV).Value = ""
 
     gUltimaLinhaEmpresaCanonica = linha
     BA_SetCounter SHEET_EMPRESAS, CLng(Val(empId))
@@ -2084,20 +2092,20 @@ Private Sub BA_RodizioPasso(ByVal nomeTeste As String, ByVal ativId As String, B
 
     If avancaFila And res.encontrou Then
         resAv = BA_AvancarFila(res.Empresa.EMP_ID, ativId, False, "ACEITE_OS_EMITIDA")
-        BA_LogAssert nomeTeste & "_Avanco", resAv.Sucesso, "Fila avancada apos o atendimento da empresa selecionada", resAv.Mensagem & " | FILA=" & BA_FilaCsv(ativId), "Confirmar o giro ciclico da fila", "Avancar fila apos selecao bem-sucedida"
+        BA_LogAssert nomeTeste & "_Avanco", resAv.sucesso, "Fila avancada apos o atendimento da empresa selecionada", resAv.mensagem & " | FILA=" & BA_FilaCsv(ativId), "Confirmar o giro ciclico da fila", "Avancar fila apos selecao bem-sucedida"
     End If
 End Sub
 
 Private Function BA_EmitirPreOS(ByVal entId As String, ByVal ativId As String, ByVal servId As String, ByVal qt As Double) As String
     Dim r As TResult
     r = EmitirPreOS(entId, BA_CodServicoLegado(ativId, servId), qt)
-    If r.Sucesso Then BA_EmitirPreOS = r.IdGerado
+    If r.sucesso Then BA_EmitirPreOS = r.IdGerado
 End Function
 
 Private Function BA_EmitirOS(ByVal preosId As String, ByVal dtPrev As Date, ByVal empenho As String) As String
     Dim r As TResult
     r = EmitirOS(preosId, dtPrev, empenho)
-    If r.Sucesso Then BA_EmitirOS = r.IdGerado
+    If r.sucesso Then BA_EmitirOS = r.IdGerado
 End Function
 
 Private Sub BA_MontarNotas(ByVal valor As Integer, ByRef notas() As Integer)
@@ -2150,7 +2158,7 @@ Private Sub BA_ValidarAvaliacaoInvalida(ByVal casoId As String, ByVal notaInvali
     Next i
     notas(3) = notaInvalida
     res = AvaliarOS(osId, "Gestor QA", notas, 10, "Teste invalido", "")
-    BA_LogAssert casoId, Not res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_EXEC, "Avaliacao invalida nao conclui OS", BA_StatusOS(osId) & " | MSG=" & res.Mensagem, "Blindar validacao de notas fora do intervalo", "Aplicar nota invalida=" & CStr(notaInvalida)
+    BA_LogAssert casoId, Not res.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_EXEC, "Avaliacao invalida nao conclui OS", BA_StatusOS(osId) & " | MSG=" & res.mensagem, "Blindar validacao de notas fora do intervalo", "Aplicar nota invalida=" & CStr(notaInvalida)
 End Sub
 
 Private Sub BA_ValidarAvaliacaoArrayInvalido(ByVal casoId As String)
@@ -2166,7 +2174,7 @@ Private Sub BA_ValidarAvaliacaoArrayInvalido(ByVal casoId As String)
         notas(i) = 8
     Next i
     res = AvaliarOS(osId, "Gestor QA", notas, 10, "Array curto", "")
-    BA_LogAssert casoId, Not res.Sucesso And BA_StatusOS(osId) = BA_STATUS_OS_EXEC, "Array de notas invalido nao conclui OS", BA_StatusOS(osId) & " | MSG=" & res.Mensagem, "Blindar contrato do vetor de notas", "Executar AvaliarOS com vetor 1..9"
+    BA_LogAssert casoId, Not res.sucesso And BA_StatusOS(osId) = BA_STATUS_OS_EXEC, "Array de notas invalido nao conclui OS", BA_StatusOS(osId) & " | MSG=" & res.mensagem, "Blindar contrato do vetor de notas", "Executar AvaliarOS com vetor 1..9"
 End Sub
 
 Private Sub BA_ValidarFiltroDExaustivo(ByVal casoId As String, ByVal ativId As String)

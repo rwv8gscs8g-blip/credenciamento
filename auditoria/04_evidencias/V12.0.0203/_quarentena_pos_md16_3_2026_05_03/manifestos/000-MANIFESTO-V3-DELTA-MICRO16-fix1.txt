@@ -1,0 +1,66 @@
+# Manifesto V3 DELTA MICRO16-fix1 - Onda 16 MD-16.4 fix1 (Util_PDF_HashPayload overflow)
+# Tema: Correcao do erro Overflow em Util_PDF_HashPayload (causa raiz da
+#       falha CT_PDF_999 na suite TV2_RunPdfDeterminismo).
+#
+# Origem: tentativa de rodar TV2_RunPdfDeterminismo apos MICRO16 importou
+# OK e compilou OK, mas a suite quebrou em runtime com CT_PDF_999
+# (Err.Number=0 porque On Error Resume Next no handler resetou). Causa
+# raiz: VBA Long e signed 32-bit (max 2^31-1 = 2147483647). A operacao
+# h * 33 estoura apos poucas iteracoes do loop DJB2, ainda que o
+# AND &H7FFFFFFF estivesse aplicado no fim - o overflow acontece ANTES
+# da reducao.
+#
+# Solucao: refatorar Util_PDF_HashPayload para Double durante o loop,
+# aplicar modulo 2^32 manualmente a cada passo, depois truncar para
+# 31-bit signed (cabe em Long para Hex$). Adicionar On Error GoTo falha
+# interno como guard para fallback "00000000" caso ainda haja edge case.
+#
+# Mudancas (2 arquivos):
+#   ABM-Util_PDF.bas:
+#     - Util_PDF_HashPayload: tipo de h muda de Long para Double.
+#     - Loop com modulo manual h = h - (Int(h/MOD32) * MOD32) a cada passo.
+#     - Truncamento final para 31-bit signed positivo.
+#     - On Error GoTo falha interno -> fallback "00000000".
+#     - Constantes locais MOD32 e MOD31 para legibilidade.
+#     - Sub/Function balanceados: 6/6 + 18/18 (sem mudanca estrutural).
+#
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = f7aa84f+ONDA16.MD4-fix1-util-pdf-cnpj-incremental
+#     - APP_BUILD_GERADO_EM atualizado.
+#
+# Pre-flight L14 cumprido:
+#   - Util_PDF_HashPayload mantem assinatura Public Function (s As String) As String.
+#   - Sem novo Public Type (G8 OK).
+#   - Demais APIs do Util_PDF inalteradas.
+#   - Hashes batendo (canonico <-> src/vba) em ambos arquivos.
+#
+# Sincronizacao espelho src/vba: hashes batendo.
+#
+# Pos-import esperado:
+#   - Compile manual passa limpo.
+#   - ?GetBuildImportado = "f7aa84f+ONDA16.MD4-fix1-util-pdf-cnpj-incremental".
+#   - TV2_RunPdfDeterminismo agora roda 5/0 (sem CT_PDF_999).
+#   - Hash determinístico funciona para payloads de qualquer tamanho.
+#   - Quarteto continua APROVADO (Util_PDF nao e usado pelo Quarteto).
+#
+# Licao L20 candidata para PHAGOCYTOSIS (a destilar no MD-16.9):
+#   "Algoritmos numericos com multiplicacao acumulada (DJB2, FNV, etc.)
+#    em VBA devem usar Double com modulo manual em vez de Long. Long
+#    overflow gera Err 6 que pode ser propagado para handlers genericos
+#    e mascarar a causa raiz. Padrao: Dim h As Double + h = h - Int(h/MOD)*MOD
+#    a cada iteracao."
+#
+# Validacao operacional sugerida:
+#   1. ImportarPacoteV3_Delta "MICRO16-fix1", "f7aa84f+ONDA16.MD4-fix1-util-pdf-cnpj-incremental"
+#   2. Compile manual.
+#   3. ?GetBuildImportado = "f7aa84f+ONDA16.MD4-fix1-util-pdf-cnpj-incremental".
+#   4. TV2_RunPdfDeterminismo - esperado APROVADO 5/0/0.
+#   5. CT_ValidarRelease_QuartetoMinimo - APROVADO esperado.
+#   6. Operador salva como V12-202-AC-onda16-md4 (ou convencao local).
+#
+# Uso esperado:
+#   ImportarPacoteV3_Delta "MICRO16-fix1", "f7aa84f+ONDA16.MD4-fix1-util-pdf-cnpj-incremental"
+
+# GRUPO_DELTA_MICRO16_FIX1_HASH_OVERFLOW
+M|001-modulo/ABM-Util_PDF.bas
+M|001-modulo/AAX-App_Release.bas

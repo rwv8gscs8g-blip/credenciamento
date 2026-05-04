@@ -1,0 +1,38 @@
+{
+  "readback_id": "readback-onda18-md18-2-statusbar-hint-2026-05-04",
+  "agent_id": "codex-cli-bloco-b-onda18",
+  "operator": "Luis Mauricio Junqueira Zanin",
+  "track": "safe_track",
+  "schema_version": "hbn-readback/0.3.1",
+  "created_at": "2026-05-04T06:58:00-0300",
+  "status": "confirmed_by_operator",
+  "hearback_source": "user: MICRO27 importou, compilou e Quinteto VR_20260504_064117 aprovado; diretiva inicial autorizou prosseguir iterativamente no Bloco B",
+  "scope": "Onda 18 MD-18.2 - dica de statusbar no primeiro aviso do Modo Treinamento",
+  "precondition": {
+    "micro27": "Quinteto VR_20260504_064117 APROVADO",
+    "debit_doc": "auditoria/00_status/50_DEBITO_DT_MD17_1E_STATUSBAR_HINT.md",
+    "approved_text": "Acompanhe o progresso no canto inferior esquerdo da tela (barra de status com cenario atual / total)."
+  },
+  "files_planned_src_truth": [
+    "src/vba/Menu_Principal.frm",
+    "src/vba/App_Release.bas"
+  ],
+  "files_planned_import_mirror": [
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas"
+  ],
+  "expected_gate": {
+    "importador_v3": "M=1/F=1/err=0/skip=0",
+    "compile_manual": "operator",
+    "quinteto": "APROVADO",
+    "visual_check": "Ao abrir Modo Treinamento, primeiro MsgBox mostra a dica da barra de status"
+  },
+  "hard_constraints": [
+    "src/vba/Menu_Principal.frm e fonte de verdade",
+    "AAM-Menu_Principal.frm e AAM-Menu_Principal.code-only.txt devem permanecer sincronizados (M9)",
+    "Manifesto usa F|...frm; em modo Estabilizado V3 aplica code-only preservando .frx",
+    "CRLF preservado",
+    "M11 shasum fonte/mirror antes de entregar comando"
+  ]
+}

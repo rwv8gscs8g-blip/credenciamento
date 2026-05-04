@@ -3,6 +3,215 @@
 Este projeto adota o espírito do Keep a Changelog. As mudanças aqui registradas
 tratam apenas da linha pública oficial.
 
+## [v12.0.0203-rc4] — 2026-05-04
+
+> **Release Candidate para testes manuais formais.** Esta versão corrige
+> a ressalva R1 das auditorias cruzadas 58/59 antes de liberar a V203 para
+> homologação manual. Continua não sendo produção.
+
+### Corrigido
+
+- **DT-FRENTE1-FORMS-BYPASS-REATIV / R1** — `Reativa_Empresa.frm` deixa
+  de reativar empresa apenas por cópia direta. Após mover a linha de
+  `EMPRESAS_INATIVAS` para `EMPRESAS`, o form chama
+  `ReativarLinhaEmpresa`, que grava `STATUS=ATIVA`, zera recusas, limpa
+  `DT_FIM_SUSP`, preenche `DT_ULT_REATIV` e registra `EVT_REATIVACAO`.
+- `Svc_Rodizio.Reativar` passa a reutilizar a mesma rotina central
+  `ReativarLinhaEmpresa`, reduzindo divergência entre reativação
+  automática e reativação via UI.
+- `CS_23` agora valida que a ida/volta empresa ativa ↔ inativa retorna
+  com `DT_ULT_REATIV` preenchida.
+- **MICRO30-fix1** — `ClassificaEmpresa` agora ordena `EMPRESAS` até a
+  coluna `U` (`COL_EMP_DT_ULT_REATIV`). Isso preserva a data de reativação
+  após a classificação da aba.
+
+### Alterado
+
+- **`APP_RELEASE_TAG`**: `v12.0.0203-rc3` → `v12.0.0203-rc4`.
+- **`APP_BUILD_IMPORTADO`**:
+  `f7aa84f+v12.0.0203-rc4-r1-forms-reativ-fix1-classifica-u`.
+- **`APP_RELEASE_TEST_KEY`**:
+  `quinteto-v203-rc4-2026-05-04`.
+
+### Débitos Ainda Não Resolvidos Nesta Candidata
+
+- **INT-CAD-OS-REF-ORFA** — permanece aberto em `RPT_BUGS_CONHECIDOS`
+  quando a base contém referências órfãs em `CAD_OS`.
+- **DT-FRENTE1-GRAVARSTATUSEMPRESA-SILENT** — deferido para V12.0.0204.
+- **DT-FRENTE1-REATIV-NOOP-ATIVA** — deferido para V12.0.0204.
+- **DT-FRENTE1-BACKFILL-AUDIT** — deferido para V12.0.0204.
+- **DT-FRENTE1-CONTARSTRIKES-ERRO-MUDO** — deferido para V12.0.0204.
+
+### Validação
+
+- `MICRO30` importou e compilou, mas o Quinteto `VR_20260504_163656`
+  reprovou em `CS_23`: `DT_ULT_REATIV_A=(vazia)`.
+- `MICRO30-fix1` entregue para importação, corrigindo a ordenação
+  `EMPRESAS` de `A:T` para `A:U`.
+- `MICRO30-fix1` importou, compilou e passou no Quinteto
+  `VR_20260504_171048`.
+- Gate aprovado:
+  `V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
+
+## [v12.0.0203-rc3] — 2026-05-04
+
+> **Release Candidate** após fechamento conjunto Onda 17 + Onda 18.
+> Status: `RELEASE_CANDIDATE`. Gate oficial: **Quinteto Mínimo**
+> (`CT_ValidarRelease_QuintetoMinimo` = V1 + V2 Smoke + V2 Canônica +
+> E2E Strikes + IntegridadeBase). `APP_RELEASE_TEST_KEY =
+> "quinteto-onda18-2026-05-04"`. Promoção para `v12.0.0203` final fica
+> condicionada à auditoria cruzada Opus + Antigravity.
+
+### Adicionado
+
+- **Onda 17 (Bloco A)** — gate Quinteto oficial:
+  - `TV2_RunIntegridadeBase` como suite de auditoria passiva.
+  - `RPT_BUGS_CONHECIDOS` com upsert por `BUG_ID`.
+  - `CT_ValidarRelease_QuintetoMinimo` e renumeração da Central V2.
+  - Status bar sempre atualizada nas suites de teste.
+- **Onda 18 (Bloco B)** — resolução crítica DT-17:
+  - `EMPRESAS.DT_ULT_REATIV` na coluna U.
+  - `TEmpresa.DT_ULT_REATIV`.
+  - `Svc_Rodizio.Reativar` grava `DT_ULT_REATIV`.
+  - `Repo_Avaliacao.ContarStrikesParaPunicao` filtra punição por
+    `COL_OS_DT_FECHAMENTO > DT_ULT_REATIV`, preservando contador
+    histórico total.
+  - `RPT_BUGS_RESOLVIDOS` e migração do `DT-17-REATIV-STRIKES` para
+    `RESOLVIDO`.
+  - Dica visual no primeiro aviso do Modo Treinamento para acompanhar
+    progresso na barra de status.
+
+### Alterado
+
+- **`APP_RELEASE_TAG`**: `v12.0.0203-rc1` → `v12.0.0203-rc3`.
+- **`APP_BUILD_IMPORTADO`**: `f7aa84f+v12.0.0203-rc3`.
+- **`APP_RELEASE_TEST_KEY`**:
+  `quinteto-2026-05-04` → `quinteto-onda18-2026-05-04`.
+- **E2E_Strikes**: 65 asserts verdes → 71 asserts verdes, com seis
+  asserções novas cobrindo reativação, janela de punição e modo legado.
+
+### Resolvido
+
+- **DT-17-REATIV-STRIKES** — reativação de empresa não zera histórico,
+  mas zera a janela de punição. `CS_E2E_REATIV2STRIKES` deixou de ser
+  manual/amarelo e passou a assert verde.
+- **DT-MD17.1.e-STATUSBAR-HINT** — aviso do Modo Treinamento agora
+  orienta o operador a acompanhar a barra de status.
+
+### Débitos deferidos
+
+- **INT-CAD-OS-REF-ORFA** — permanece aberto em `RPT_BUGS_CONHECIDOS`
+  quando a base contém referências órfãs em `CAD_OS`.
+- **DT-FRENTE1-FORMS-BYPASS-REATIV** — deferido para onda futura.
+- **DT-FRENTE1-GRAVARSTATUSEMPRESA-SILENT** — deferido.
+- **DT-FRENTE1-REATIV-NOOP-ATIVA** — deferido.
+- **DT-FRENTE1-BACKFILL-AUDIT** — deferido.
+- **DT-FRENTE1-CONTARSTRIKES-ERRO-MUDO** — deferido.
+
+### Validação final
+
+- **Bloco A**:
+  - Quinteto `VR_20260503_234443` = **APROVADO**:
+    `V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0`.
+  - Quarteto `VR_20260504_000004` = **APROVADO** com sintaxe idêntica
+    ao baseline MD-17.1.e.
+- **Bloco B**:
+  - `MICRO25-fix2` Quinteto `VR_20260504_054106` = **APROVADO**.
+  - `MICRO26` Quinteto `VR_20260504_060256` = **APROVADO**:
+    `E2E_Strikes=71/0`.
+  - `MICRO27` Quinteto `VR_20260504_064117` = **APROVADO**.
+  - `MICRO28` Quinteto `VR_20260504_070441` = **APROVADO**:
+    `V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
+  - `MICRO29` Quinteto `VR_20260504_075624` = **APROVADO**:
+    `V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
+
+## [v12.0.0203-rc1] — 2026-05-02
+
+> **Release Candidate** da linha V12.0.0203. Status:
+> `RELEASE_CANDIDATE`. Gate oficial de release: **Quarteto Mínimo**
+> (`CT_ValidarRelease_QuartetoMinimo` = V1 + V2 Smoke + V2 Canonica +
+> V2 E2E Strikes). `APP_RELEASE_TEST_KEY = "quarteto-2026-05-02"`.
+> Promoção para `v12.0.0203` final ocorrerá após Ondas 12-15
+> reincorporadas + push GitHub público.
+
+### Adicionado
+
+- **Onda 11 (V12.0.0203-rc1 closure, 2026-05-02)** — fechamento
+  corretivo + release candidate.
+  - **MD-0** — drift G7 sync: 6 arquivos canônicos copiados de volta
+    para `src/vba` (Svc_Avaliacao, Repo_Avaliacao, Teste_V2_Roteiros,
+    Util_Config, Svc_PreOS, Svc_Rodizio).
+  - **MD-1** — instrumentação E2E DT-3: 5 marcadores `DIAG_*` por
+    rodada em `TV2_E2E_AtenderProximaEmpresa`.
+  - **MD-2** — fix DT-3 part A: Select Case tolerante a padding
+    `"1"↔"001"` + CONFIG `MAX_STRIKES=3`, `DIAS_SUSPENSAO_STRIKE=90`
+    no contexto E2E.
+  - **MD-2.2** — asserts da verdade matemática: Etapa E sem loop,
+    valores reais (1, 3, 3) com comentário-vacina.
+  - **MD-2.3** — anti-vazamento de CONFIG: helper
+    `TV2_E2E_RestaurarConfigBaseline` em sucesso + falha (try/finally
+    simulado).
+  - **MD-3** — DT-1 release gate honesty:
+    `CT_ValidarRelease_QuartetoMinimo` (V1 + V2_Smoke + V2_Canonica +
+    E2E_Strikes). Sintaxe canônica do bloco IA:
+    `V1=A/F+V2_Smoke=A/F+V2_Canonica=A/F+E2E_Strikes=A/F`.
+  - **MD-3.1** — visibilidade do Quarteto no menu da Central V2
+    (opção `[20]`, preserva `[15]-[19]` reservadas para Ondas 12-16).
+  - **MD-4** — CSVs de evidência da raiz movidos para
+    `auditoria/04_evidencias/V12.0.0203/`.
+  - **MD-5** — bump rc1 + CHANGELOG + ERP + fechamento Onda 11 +
+    relatório de drift G7 residual.
+- **Lições destiladas** em `usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`
+  (append-only, preservando L1-L15 + M1-M6):
+  - **L16** — Anti-vazamento de CONFIG entre suites.
+  - **L17** — Instrumentação cirúrgica antes de fixar.
+  - **L18** — Determinismo > narrativa pedagógica.
+  - **M7** — Auditor de espelho deve hashar src vs canonical antes de RCA.
+- **Marcadores HBN V2** (`.hbn/knowledge/0005-protocolo-markers-v2.md`):
+  10 marcadores (3 V1 + 7 V2 novos: 🟠 source drift, 🔴 release blocker,
+  🔵 handoff ready, ⚪ audit-only, 🟢 checkpoint clean, 🟤 license split,
+  🟣 peer review).
+- **Delta card 7 linhas** como retorno operacional canônico de IA em
+  `safe_track`.
+- **Specs deslocadas para V12.0.0204**:
+  - DT-5 (PDFs por ciclo de rodízio) — spec em
+    `auditoria/00_status/35_SPEC_DT5_PDFs_V12_0204.md`.
+  - DT-6 (Validação UI Configuracao_Inicial parametrizada) — spec em
+    `auditoria/00_status/36_SPEC_DT6_Validacao_UI_Configuracao_V12_0204.md`.
+
+### Alterado
+
+- **`APP_RELEASE_STATUS`**: `VALIDADO` → `RELEASE_CANDIDATE`.
+- **`APP_RELEASE_TAG`**: `v12.0.0202` → `v12.0.0203-rc1`.
+- **`APP_RELEASE_EVIDENCE_DIR`**: `auditoria/evidencias/V12.0.0202`
+  → `auditoria/evidencias/V12.0.0203`.
+- **`APP_RELEASE_TEST_KEY`**: `bo-2026-04-20+v2-2026-04-20` →
+  `quarteto-2026-05-02` (Quarteto vira gate canônico).
+- **`APP_BUILD_IMPORTADO`**: `f7aa84f+v12.0.0203-rc1`.
+- **Central V2**: opção `[12]` renomeada para "Validacao release Trio";
+  opção `[20]` adicionada para "Validacao release Quarteto".
+
+### Resolvido (débitos técnicos)
+
+- **DT-1** (release gate honesty) — Quarteto entrega cobertura
+  E2E Strikes no gate oficial.
+- **DT-3** (12 falhas em `TV2_RunRodizioStrikesEndToEnd`) — fluxo
+  natural com 3 EMPs valida regra de strikes end-to-end (64 asserts
+  verdes).
+
+### Drift G7 residual reconhecido (não bloqueante)
+
+- 30+ módulos divergem entre `src/vba` e `local-ai/vba_import` por
+  hotfixes V2 históricos (D1 do roadmap 27). Documentado em
+  `auditoria/03_ondas/onda_11_v203_rc1_closure/DRIFT_G7_RESIDUAL_PRE_ONDA12.md`.
+  Resolução: caso-a-caso pelas Ondas 12-16.
+
+### Validação final
+
+- **Gate Quarteto Mínimo** `VR_20260502_054314` = **APROVADO**:
+  `V1=171/0 + V2_Smoke=14/0 + V2_Canonica=20/0 + E2E_Strikes=64/0`.
+- Compile manual limpo no workbook ancora `V12-202-Z`.
+
 ## [Unreleased]
 
 ### Adicionado (Onda 6 — consolidacao documental + integracao metodologica)

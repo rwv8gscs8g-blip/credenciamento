@@ -1,0 +1,207 @@
+{
+  "readback_id": "readback-onda17-md17-1-d-I-2026-05-03",
+  "agent_id": "claude-opus-4-7-cowork",
+  "operator": "Luís Maurício Junqueira Zanin",
+  "track": "safe_track",
+  "started_at": "2026-05-03",
+  "deadline_hard": null,
+  "status": "aguardando_hearback_confirmed",
+  "schema_version": "hbn-readback/0.3.1",
+  "parent_readback": "readback-onda17-test-first-2026-05-03 (0013) + readback-onda17-md17-1-c-real-2026-05-03 (0014)",
+
+  "ciclo_imediatamente_anterior": "MD-17.1.c real fechada com fix3 em VR_20260503_<hora>; workbook ancora V12-202-Z003-onda17-md1c-fix3; build f7aa84f+ONDA17.MD1C-fix3-gamma-skip-empty-lines; Quarteto APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 (MANUAL=5); 6 lições oficializadas em PHAGOCYTOSIS (L22-L24, M15-M17); CLAUDE.md ganhou READ-FIRST checklist por dominio.",
+
+  "objetivo": "Reduzir tempo do Quarteto Mínimo de 14m41s91cs para alvo HF8 <10min (35%+ speed-up necessário) via opts conservadoras de Application.* em TV2_InitExecucao/TV2_FinalizarExecucao + TV2_PausarVisual no-op. Test-first inegociável: NENHUMA mudança em logica de negocio; apenas state global Excel + remocao de Wait. Idempotencia GARANTIDA POR DESIGN (analise documentada).",
+
+  "premissa_central": "Idempotencia inviolavel: rodar Quarteto N vezes consecutivas DEVE produzir mesmo resultado. Garantia por design: (a) zero formulas em Repo_*/Svc_* lidas pelos testes — Calculation manual nao afeta; (b) zero Worksheet_Change handlers fora de Auto_Open — EnableEvents=False nao afeta; (c) ScreenUpdating ja usado em outros modulos (padrao estabelecido); (d) TV2_PausarVisual e apenas feedback visual (sem efeito em assertions).",
+
+  "ancora_estavel": {
+    "workbook": "V12-202-Z003-onda17-md1c-fix3",
+    "build_label": "f7aa84f+ONDA17.MD1C-fix3-gamma-skip-empty-lines",
+    "app_release_tag": "v12.0.0203-rc1",
+    "app_release_status": "RELEASE_CANDIDATE",
+    "validacao": "Quarteto APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 (MANUAL=5)",
+    "tempo_baseline": "14m 41s 91cs (referencia para esta MD; alvo <10min)",
+    "src_vba_local_ai_aligned": "shasum batendo (validado pos-fix3)"
+  },
+
+  "decisoes_q_md17_1_d_I_confirmadas_pelo_operador_2026_05_03": {
+    "R1": "confirmed sim — escopo conservador (Application.Calculation/ScreenUpdating/EnableEvents + TV2_PausarVisual no-op); refatoracao gamma mais profunda fica para MD-17.1.d.I.b se necessario",
+    "R2": "confirmed sim — restore garantido mesmo em erro fatal via try/finally simulado (label fim_restore + bloco que SEMPRE restaura)",
+    "R3": "confirmed sim — ScreenUpdating=False aceita; visibility detalhada (TV2_StatusBar com 6 niveis) vira em MD-17.1.d.II",
+    "ADENDO_IDEMPOTENCIA": "operador exigiu garantia explicita de que perf opts NAO introduzem nao-determinismo. Analise documentada na secao §analise_idempotencia desta readback."
+  },
+
+  "analise_idempotencia": {
+    "principio": "Cada perf opt foi auditada contra risco de quebrar idempotencia. Garantia por design (nao por teste post-hoc), com comentarios-vacina inline no codigo.",
+    "calculation_manual": {
+      "risco_potencial": "Leitura de Cell.Value que depende de formula retorna valor stale",
+      "verificacao": "grep -rn '\\.Formula\\|\\.FormulaR1C1' src/vba/Repo_*.bas src/vba/Svc_*.bas",
+      "resultado": "ZERO ocorrencias",
+      "conclusao": "Sistema escreve VALORES diretos em cells, nao formulas. Calculation manual NAO afeta nenhum teste.",
+      "comentario_vacina": "obrigatorio inline no codigo: 'Idempotencia preservada: zero formulas em Repo/Svc — testes leem valores diretos. Validado MD-17.1.d.I via grep .Formula em src/vba/Repo_*.bas e Svc_*.bas (resultado=0).'"
+    },
+    "enable_events_off": {
+      "risco_potencial": "Worksheet_Change handlers nao disparam — perda de validacoes automaticas, recalcs, eventos de form",
+      "verificacao": "grep -rn 'Worksheet_Change\\|Workbook_Change\\|Worksheet_Calculate' src/vba/",
+      "resultado": "ZERO ocorrencias (apenas Auto_Open que roda 1x na abertura do workbook)",
+      "conclusao": "Sistema NAO depende de Worksheet_Change handlers durante execucao de testes. EnableEvents=False NAO afeta nenhum teste.",
+      "comentario_vacina": "obrigatorio inline: 'Idempotencia preservada: zero Worksheet_Change handlers em src/vba (apenas Auto_Open na abertura). Validado MD-17.1.d.I.'"
+    },
+    "screen_updating_off": {
+      "risco_potencial": "nenhum (apenas afeta render visual)",
+      "verificacao": "grep mostra padrao ja estabelecido em Configuracao_Inicial.frm e Central_Testes.bas",
+      "resultado": "Padrao validado em outros modulos do projeto",
+      "conclusao": "Zero efeito em business logic.",
+      "comentario_vacina": "n/a (universalmente safe)"
+    },
+    "tv2_pausarvisual_no_op": {
+      "risco_potencial": "Wait removido pode quebrar timing-dependent tests",
+      "verificacao": "grep usage TV2_PausarVisual em src/vba/",
+      "resultado": "Apenas para feedback visual entre cenarios (pedagogico). Asserts nao dependem de timing.",
+      "conclusao": "Zero efeito em assertions.",
+      "comentario_vacina": "obrigatorio: 'TV2_PausarVisual era apenas feedback visual (Application.Wait segundos). MD-17.1.d.I tornou no-op para perf gamma. Sem efeito em business logic — testes nao dependiam de pause real.'"
+    },
+    "garantia_runtime_idempotencia": {
+      "estrategia_atual": "Garantia por design + comentarios-vacina inline",
+      "estrategia_futura_opcional": "MD-17.4 ou nova MD pode adicionar CT_ValidarIdempotencia que roda Quarteto 2x consecutivos e compara contagens OK/FALHA/MANUAL. Se diferentes, perf opt quebrou idempotencia. NAO incluso nesta MD para manter escopo enxuto."
+    }
+  },
+
+  "escopo_em": [
+    "Adicionar 3 globals em src/vba/Teste_V2_Engine.bas (Module level, Private): gTV2OldCalc As XlCalculation, gTV2OldScreen As Boolean, gTV2OldEvents As Boolean",
+    "Modificar TV2_InitExecucao (linha 59-78): adicionar bloco PERF MODE ON apos gTV2TimerInicio = Timer (salvar originais via gTV2Old* + setar manual/False/False)",
+    "Modificar TV2_FinalizarExecucao (linha 96-153): adicionar bloco PERF MODE RESTORE no final (apos Application.StatusBar = False) + handler 'fim_restore:' garantindo restore mesmo em erro fatal",
+    "Modificar TV2_PausarVisual (linha 2369-2372): vira no-op com comentario-vacina (preserva assinatura pra nao quebrar callers)",
+    "Adicionar comentarios-vacina inline em cada ponto modificado (cita §analise_idempotencia desta readback)",
+    "Bump src/vba/App_Release.bas: APP_BUILD_IMPORTADO = 'f7aa84f+ONDA17.MD1D1-perf-gamma-conservador'; comentario novo MD-17.1.d.I",
+    "Espelho local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas + AAX-App_Release.bas com shasum batendo"
+  ],
+
+  "escopo_fora": [
+    "Refatoracao gamma profunda (INV-2 whitelist: setup duplicado, batch I/O cell-to-cell, paralelizacao logica) — fica para MD-17.1.d.I.b se baseline nao atingir <10min",
+    "TV2_StatusBar com 6 niveis de visibility — MD-17.1.d.II",
+    "CT_ValidarIdempotencia automatizado (rodar Quarteto 2x e comparar) — escopo MD-17.4 ou nova MD",
+    "Mexida em Roteiros (sem mudanca; Engine apenas)",
+    "Forms (.frm/.frx/.code-only.txt) — cap M11=0 mantido",
+    "Mod_Types.bas (TABU C4)"
+  ],
+
+  "premissas_e_dependencias": [
+    "Workbook ancora V12-202-Z003-onda17-md1c-fix3 carregado",
+    "Trust Center configurado (mantido do MD anterior)",
+    "src/vba/Teste_V2_Engine.bas estado atual: 3069 linhas (estimado pos-MD-17.1.b-fix1)",
+    "src/vba/App_Release.bas estado atual: 255 linhas (pos-MD-17.1.c-fix3)",
+    "Variavel global Application.Calculation pode ser tipo XlCalculation (xlCalculationAutomatic / xlCalculationManual / xlCalculationSemiautomatic). Salvar como XlCalculation.",
+    "Excel for Mac 2024+ suporta Application.Calculation programatica (validado pelo handoff)"
+  ],
+
+  "tier_3_lido_pela_ia_neste_md": {
+    "ABF-Teste_V2_Engine.bas linhas 59-78 (TV2_InitExecucao)": "lida — sem perf opts atuais",
+    "ABF-Teste_V2_Engine.bas linhas 96-153 (TV2_FinalizarExecucao)": "lida — Application.StatusBar=False ja existe; sem error handler",
+    "ABF-Teste_V2_Engine.bas linhas 2369-2372 (TV2_PausarVisual)": "lida — Application.Wait simples",
+    "src/vba/Repo_*.bas + Svc_*.bas formulas": "auditado via grep — ZERO formulas em cells lidas pelos testes (chave para idempotencia Calculation)",
+    "src/vba/ Worksheet_Change handlers": "auditado via grep — ZERO (apenas Auto_Open na abertura, fora de execucao de teste)"
+  },
+
+  "hard_constraints": [
+    "C1 (Regra Ouro 0002): edicao src/vba/ PRIMEIRO; espelho local-ai/vba_import/ depois com shasum batendo (M11)",
+    "C4 Mod_Types.bas TABU",
+    "C7 Quarteto continua APROVADO apos MD-17.1.d.I (nao deve haver regressao de OK/FALHA/MANUAL)",
+    "C9 Markers HBN V2 vigentes",
+    "C11 Cap M10 = 0 imports em forms",
+    "G6 sem codigo VBA solto no chat",
+    "L14 pre-flight grep assinaturas + UDTs feito (Ok)",
+    "M9/M11 forms intocados",
+    "L24 (NEW) gamma textual valida idempotente",
+    "M14 pacote de fix em onda multi-microdelta cobre todas opcoes — esta MD nao tem multi-rollback (trivialmente satisfeito)",
+    "Hearback explicito por microdelta com escrita em codigo",
+    "CRLF preservado",
+    "INVARIANTE NOVA: idempotencia preservada por design (analise documentada §analise_idempotencia)"
+  ],
+
+  "m14_preflight": {
+    "checkpoint_estavel_anterior": "V12-202-Z003-onda17-md1c-fix3",
+    "arquivos_modificados_neste_md": ["src/vba/Teste_V2_Engine.bas + ABF-", "src/vba/App_Release.bas + AAX-"],
+    "opcoes_de_rollback_oferecidas": "Apenas UMA (rollback total para md1c-fix3) — M14 trivialmente satisfeito"
+  },
+
+  "glasswing_checks": {
+    "G1_macro_nao_confiavel": "ok",
+    "G2_config_validada": "nao_aplicavel",
+    "G3_formulas_privilegiadas": "nao_aplicavel",
+    "G4_audit_log_append_only": "ok",
+    "G5_claims_proporcionais": "ok (claim 'idempotencia garantida' tem evidencia documentada §analise_idempotencia)",
+    "G6_codigo_no_chat": "ok (este readback e JSON descritivo)",
+    "G7_vba_import_sincronizado": "validar shasum no Passo 0 antes do manifesto",
+    "G8_public_type_isolado": "ok (Mod_Types nao tocado)"
+  },
+
+  "markers_hbn_v2_ativos": [
+    "✅ HBN ACTIVE",
+    "🟢 HBN CHECKPOINT CLEAN — V12-202-Z003-onda17-md1c-fix3",
+    "🟡 HBN NEEDS HUMAN DECISION — aguardando hearback confirmed deste readback",
+    "🟣 HBN GAMMA OFFLINE VALIDATED (candidato — destilada como M16 na MD anterior)"
+  ],
+
+  "rollback_plan": {
+    "trigger": "Quarteto reprovado pos-import OU compile error OU crash do Excel OU degradacao de tempo",
+    "acao_imediata": "git restore src/vba/Teste_V2_Engine.bas src/vba/App_Release.bas + espelhos; rm manifesto MICRO20; reabrir backup V12-202-Z003-onda17-md1c-fix3",
+    "ancora_segura": "V12-202-Z003-onda17-md1c-fix3",
+    "limite_iteracoes_em_um_microdelta": "3 fix-attempts; rollback obrigatorio apos isso",
+    "evidencia_obrigatoria_para_seguir": "VR_<timestamp> Quarteto APROVADO + tempo total <12min (preferencial <10min) + idempotencia validada empiricamente (operador roda 2x consecutivos e confirma mesmas contagens)"
+  },
+
+  "criterios_de_sucesso": [
+    "Compile manual passa limpo",
+    "GetBuildImportado retorna f7aa84f+ONDA17.MD1D1-perf-gamma-conservador",
+    "CT_ValidarRelease_QuartetoMinimo APROVADO com sintaxe IDENTICA a anterior (V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 + MANUAL=5)",
+    "Tempo total Quarteto reduzido em pelo menos 25% (alvo realista) — 14m41s -> ~11min ou menos. Alvo HF8 <10min se ScreenUpdating sozinho prover ganho suficiente.",
+    "Run 2 do Quarteto consecutivo produz MESMAS contagens (idempotencia empirica)",
+    "Application.Calculation/ScreenUpdating/EnableEvents restauram para valores originais apos Quarteto (nao deixa Excel em estado quebrado)",
+    "shasum src/vba/Teste_V2_Engine.bas == shasum local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "shasum src/vba/App_Release.bas == shasum local-ai/vba_import/001-modulo/AAX-App_Release.bas"
+  ],
+
+  "estimates": {
+    "ia_horas": 1.0,
+    "operador_horas": 0.4,
+    "etapas_ia": [
+      "(0.2h) Edit TV2_InitExecucao + TV2_FinalizarExecucao + 3 globals",
+      "(0.1h) Edit TV2_PausarVisual",
+      "(0.1h) Bump App_Release",
+      "(0.1h) Mirror local-ai/vba_import + shasum",
+      "(0.2h) Manifesto MICRO20 + procedimento 10",
+      "(0.2h) Hearback de escrita-em-codigo",
+      "(0.1h) Validacao final"
+    ],
+    "etapas_operador": [
+      "(0.05h) Reset VBE",
+      "(0.05h) Import",
+      "(0.05h) Compile",
+      "(0.20h) Quarteto run 1 (esperado <11min)",
+      "(0.05h) Validar sintaxe",
+      "(0.20h) Quarteto run 2 (idempotencia)",
+      "(0.05h) Reportar VR x2 + delta de tempo"
+    ],
+    "duracao_calendario_alvo": "1 sessao IA + 1 janela operador (~1h calendario total)",
+    "risco_overrun": "BAIXO — pre-flight L14 mostrou todos os pontos seguros para idempotencia. Risco principal eh speed-up insuficiente (alvo HF8 <10min); se nao atingir, MD-17.1.d.I.b com refatoracao mais profunda."
+  },
+
+  "next_action": "Aguardar hearback 'confirmed' deste readback do operador. Apos confirmed, IA executa edits + manifesto + procedimento + hearback de escrita-em-codigo final.",
+
+  "perguntas_de_hearback_para_o_operador": {
+    "Q-MD17.1.d.I.A": {
+      "pergunta": "Confirma analise de idempotencia (§analise_idempotencia) — Calculation/EnableEvents safe by design por (a) zero formulas em Repo/Svc, (b) zero Worksheet_Change handlers fora de Auto_Open?",
+      "default": "SIM (evidencia grep documentada)"
+    },
+    "Q-MD17.1.d.I.B": {
+      "pergunta": "Validacao operacional inclui rodar Quarteto 2x consecutivos para empirico de idempotencia (run 1 e run 2 devem produzir mesmas contagens OK/FALHA/MANUAL)?",
+      "default": "SIM (defesa em profundidade — tempo extra ~11min do segundo run vale a confirmacao)"
+    },
+    "Q-MD17.1.d.I.C": {
+      "pergunta": "Se speed-up real <25% (alvo nao atingido), abrir MD-17.1.d.I.b com refatoracao gamma mais profunda (INV-2 whitelist) sem fechar MD-17.1.d.I — OU fechar MD-17.1.d.I com tempo intermediario e seguir para outras MDs primeiro?",
+      "default": "Decisao do operador — IA recomenda fechar MD-17.1.d.I e seguir para 17.1.d.II/17.1.e/17.2 antes de gamma profundo (evita lock-in em otimizacao prematura)"
+    }
+  }
+}

@@ -1,0 +1,141 @@
+{
+  "execution_id": "exec-onda09-v3-phase1-2026-05-01",
+  "readback_id": "readback-onda09-v3-phase1-2026-04-30",
+  "agent_id": "claude-opus-4-7-cowork",
+  "track": "safe_track",
+  "status": "APROVADA",
+  "started_at": "2026-04-30",
+  "completed_at": "2026-05-01T12:25:00",
+  "duration_real": "~24 horas (incluindo 7 ciclos iterativos de fix)",
+  "duration_efetiva_codigo": "~6 horas distribuidas",
+  "operator": "Luis Mauricio Junqueira Zanin",
+
+  "objetivo_alcancado": "Importador V3 substituiu o V2 (descontinuado por bug Mac SMB com DeleteLines+AddFromString in-place). V3 importou 34 modulos + 13 forms a partir do baseline V12-202-R, workbook compilou limpo e trio minimo passou verde em VR_20260501_121550 (171/0 + 14/0 + 20/0).",
+
+  "metricas": {
+    "fixes_v3_aplicados": 7,
+    "modulos_importados": 34,
+    "forms_importados": 13,
+    "items_skipped": 1,
+    "items_falhados_no_run_final": 0,
+    "linhas_codigo_v3_engine": 1095,
+    "linhas_codigo_bootstrap": 95,
+    "fluxos_diagnostico_executados": 4,
+    "intervencoes_manuais_decisivas": 1
+  },
+
+  "evidencias": {
+    "trio_minimo_verde": {
+      "validacao_id": "VR_20260501_121550",
+      "build": "f7aa84f+ONDA05-em-homologacao",
+      "v1_rapida": "171/0",
+      "v2_smoke": "14/0",
+      "v2_canonico": "20/0",
+      "resultado_geral": "APROVADO"
+    },
+    "workbook_baseline_pos_v3": "/Users/macbookpro/Projetos/Credenciamento/V12-202-S/ (renomeacao da V12-202-R apos compile limpo)",
+    "csv_validacao": "auditoria/evidencias/V12.0.0203/ValidacaoRelease_V12_0_0203_VR_20260501_121550.csv",
+    "import_log_v3": "Aba IMPORT_LOG_V3 com 47 entradas OK + 1 SKIP (Mod_Types tabu) + 0 falhas",
+    "backup_pre_run_final": "\\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260501_120243-V3-FULL\\"
+  },
+
+  "fixes_aplicados_em_v3": [
+    {
+      "id": "fix1",
+      "tema": "Backup confiavel sem OERN global",
+      "linhas_alteradas": 95,
+      "evidencia_disparo": "Reviewer agent identificou que On Error Resume Next global mascarava falhas",
+      "consequencia": "Backup deixou de retornar destDir falsamente quando export falhava silenciosamente"
+    },
+    {
+      "id": "fix2",
+      "tema": "Forms Estabilizado com loop DeleteLines + abort",
+      "linhas_alteradas": 50,
+      "evidencia_disparo": "Reviewer agent identificou que forms herdavam bug V2 de DeleteLines+AddFromString",
+      "consequencia": "Loop ate CountOfLines=0 com cota 10 tentativas + abort se nao zerou"
+    },
+    {
+      "id": "fix3",
+      "tema": "Guard anti-auto-import + tolerancia 5 linhas",
+      "linhas_alteradas": 25,
+      "evidencia_disparo": "Reviewer agent recomendou defesa explicita",
+      "consequencia": "V3 nunca importa a si mesmo nem o Bootstrap"
+    },
+    {
+      "id": "fix4",
+      "tema": "Backup com mkdir recursivo (IV3_GarantirPasta)",
+      "linhas_alteradas": 80,
+      "evidencia_disparo": "Phase 1 run #1 falhou com 'Backup pre-import falhou' em workbook fresh",
+      "consequencia": "Cria backups/, backups/vba/, backups/vba/<ts>-V3-FULL/ separadamente, tolerando Err 75/58"
+    },
+    {
+      "id": "fix5",
+      "tema": "UNC preserve + compile diag verboso + skip-only groups + baseline check",
+      "linhas_alteradas": 60,
+      "evidencia_disparo": "Phase 1 run #2 mostrou path mangling \\\\Mac->\\Mac e compile-after-group falsos positivos",
+      "consequencia": "UNC preservado, compile error logado com Err.Number+Description+Source"
+    },
+    {
+      "id": "fix6",
+      "tema": "Remover compile-after-each-group (API instavel Windows)",
+      "linhas_alteradas": 80,
+      "evidencia_disparo": "Phase 1 run #2 e #3 falharam com erro 438 'Object doesn't support this property or method' chamando VBProject.Compile",
+      "consequencia": "Compile vira gate manual operador (Depurar > Compilar VBAProject)"
+    },
+    {
+      "id": "fix7",
+      "tema": "Strip Attribute per-symbol em forms code-only.txt",
+      "linhas_alteradas": 50,
+      "evidencia_disparo": "Phase 1 run #4 importou todos forms mas compile falhou em Attribute X.VB_VarHelpID",
+      "consequencia": "IV3_LimparAtributosCodeOnly remove qualquer linha 'Attribute *' antes de AddFromString"
+    }
+  ],
+
+  "intervencao_manual_decisiva": {
+    "etapa": "Apos Phase 1 run #5 todos forms importados sem erro mas compile manual falhou em Funcoes.NormalizarTextoPTBR",
+    "diagnostico": "Importador_V2 legado (com hotfixes v13 via DeleteLines instavel) tinha codigo duplicado/quebrado dentro do workbook. V12-202-R baseline passava trio (demand-compile) mas full Compile aborta em V2.",
+    "acao": "Operador removeu Importador_V2 do workbook via clique direito > Remove sem exportar",
+    "resultado": "Excel fechou inesperadamente, reabriu, full Compile passou limpo, trio minimo verde",
+    "licao": "L1 do knowledge 0009 documentada — V2 v13 e tabu retroativo, jamais reimportar"
+  },
+
+  "componentes_finais_workbook": {
+    "modulos_bas": 35,
+    "forms": 13,
+    "documents": "ThisWorkbook + N planilhas",
+    "lista_relevante": "App_Release, AppContext, Audit_Log, Auto_Open, Central_Testes, Central_Testes_Relatorio, Central_Testes_V2, Classificar, Const_Colunas, ErrorBoundary, Funcoes, Importador_V3, Importador_V3_Bootstrap, Mod_Limpeza_Base, Mod_Types, Preencher, Repo_Avaliacao, Repo_Credenciamento, Repo_Empresa, Repo_OS, Repo_PreOS, Svc_Avaliacao, Svc_OS, Svc_PreOS, Svc_Rodizio, Svc_Transacao, Teste_Bateria_Oficial, Teste_UI_Guiado, Teste_V2_Engine, Teste_V2_Roteiros, Teste_Validacao_Release, Treinamento_Painel, Util_Config, Util_Conversao, Util_Filtro_Lista, Util_Planilha, Variaveis",
+    "removidos_intencionalmente": "Importador_V2 (legacy v13 buggy)",
+    "permanecem_para_remocao_em_proxima_fase": "Importador_V3_Bootstrap (descartavel), AAA_Types se aparecer fantasma"
+  },
+
+  "artefatos_entregues": [
+    "src/vba/Importador_V3.bas (1095 linhas, hash a confirmar)",
+    "local-ai/vba_import/Importador_V3_Bootstrap.bas",
+    "local-ai/vba_import_v3_phase1/ (pasta isolada Phase 1 completa)",
+    "local-ai/vba_import_v3_phase1/000-MANIFESTO-V3-PHASE1.txt",
+    "local-ai/vba_import_v3_phase1/000-LEIA-ME-PRIMEIRO.md",
+    "local-ai/vba_import_v3_phase1/001-modulo/ (35 .bas com prefixos AAA-..ABK-)",
+    "local-ai/vba_import_v3_phase1/002-formularios/ (13 .frm + 13 .frx + 13 .code-only.txt)",
+    "auditoria/03_ondas/onda_09_importador_v3/50_TECNICO.md",
+    "auditoria/03_ondas/onda_09_importador_v3/51_PROCEDIMENTO.md",
+    ".hbn/readbacks/0009-onda09-v3-phase1.json",
+    ".hbn/results/0009-exec-onda09-v3-phase1.json (este arquivo)",
+    ".hbn/knowledge/0009-licoes-importador-v3-phase1.md (L1-L9 + M1-M5)"
+  ],
+
+  "lecoes_documentadas": ".hbn/knowledge/0009-licoes-importador-v3-phase1.md",
+
+  "out_of_scope_proxima_fase": [
+    "Phase 2 modo Fresh (workbook .xlsx em branco)",
+    "Re-aplicar Ondas 7 e 8 se algum delta for detectado",
+    "Atualizar carimbo de build em App_Release.bas",
+    "Promocao de V12-202-S para PlanilhaCredenciamento-Homologacao.xlsm oficial",
+    "Tag v12.0.0203 + push GitHub"
+  ],
+
+  "promovido_como_ancora": {
+    "nome": "V12-202-S",
+    "definicao": "Primeira versao do projeto Credenciamento V12.0.0203 que (a) usa V3 como importador oficial, (b) passa Debug > Compile VBAProject limpo, (c) passa trio minimo verde em VR_20260501_121550",
+    "supersede": "V12-202-R (que so passava demand-compile via trio, nao full Compile)"
+  }
+}

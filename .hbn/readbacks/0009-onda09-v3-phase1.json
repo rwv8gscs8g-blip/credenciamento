@@ -1,0 +1,84 @@
+{
+  "readback_id": "readback-onda09-v3-phase1-2026-04-30",
+  "execution_id": "exec-onda09-v3-phase1-2026-04-30",
+  "agent_id": "claude-opus-4-7-cowork",
+  "track": "safe_track",
+  "hearback_status": "confirmed",
+  "hearback_confirmed_by": "Luis Mauricio Junqueira Zanin",
+  "hearback_confirmed_at": "2026-04-30",
+  "hearback_method": "explicit chat approval after parecer tecnico (3 perguntas Q1/Q2/Q3 respondidas: L1, Claude implementa, sem Emergencia_CNAE)",
+  "understanding": "Onda 9 antecipada V3 - Phase 1. Substituir Importador_V2.bas (v13, in-place DeleteLines+AddFromString = unreliable Mac SMB) por Importador_V3.bas (do zero, Remove+Import deterministico, modos Fresh/Estabilizado, validacao por CountOfLines, compile-after-each-group, backup pre-real, anti-auto-import via Bootstrap). Phase 1 reproduz o conjunto que JA compila no V12-202-R (35 modulos + 13 forms, EXCLUI Emergencia_CNAE e Importador_V2/V3). Renomeacao de modulos (instrucao 8 do operador): adiada — prefixo permanece so no nome do arquivo, VB_Name interno fica flat.",
+  "invariants_preserved": [
+    "src/vba/Importador_V2.bas NAO e modificado (arquivado mentalmente; permanece intocado em disco para rollback)",
+    "src/vba/Mod_Types.bas NAO e modificado",
+    "Demais .bas e .frm em src/vba/ NAO sao tocados nesta entrega",
+    "local-ai/vba_import/000-MANIFESTO-IMPORTACAO.txt (V2) NAO e tocado — V3 usa manifesto proprio 000-MANIFESTO-V3-PHASE1.txt",
+    "Build atual do workbook permanece como esta (operador vai trocar para baseline V12-202-R em Phase 0 antes de rodar V3)",
+    "V12-202-R/ folder NAO e tocada — e baseline read-only",
+    "Regra de Ouro respeitada: V3 importa exclusivamente de local-ai/vba_import/{001-modulo,002-formularios}/",
+    "Nomes internos VB_Name dos componentes nao mudam (L1 escolhida)"
+  ],
+  "action_plan": [
+    "Criar este readback (.hbn/readbacks/0009-onda09-v3-phase1.json)",
+    "Criar src/vba/Importador_V3.bas (engine ~500 linhas)",
+    "Criar local-ai/vba_import/Importador_V3_Bootstrap.bas (raiz, sem prefixo, ~80 linhas)",
+    "Espelhar em local-ai/vba_import/001-modulo/ABK-Importador_V3.bas (copia bit-a-bit do src/vba/Importador_V3.bas)",
+    "Criar local-ai/vba_import/000-MANIFESTO-V3-PHASE1.txt (35M + 13F, sem Emergencia_CNAE, sem V2/V3)",
+    "Criar auditoria/03_ondas/onda_09_importador_v2/50_PROCEDIMENTO_V3_PHASE1.md (operador roda)",
+    "Spawn subagente para revisao independente do Importador_V3.bas",
+    "Atualizar .hbn/relay/INDEX.md com novo ciclo aberto",
+    "Atualizar .hbn/results/0009-exec-onda09-v3-phase1.json apos entrega (ERP)"
+  ],
+  "out_of_scope": [
+    "Phase 2 (modo Fresh do zero) — entregue em proxima iteracao apos Phase 1 verde",
+    "Phase 3 (renomeacao L2) — operador escolheu L1 (sem renomeacao agora)",
+    "Phase 4 (re-aplicar Ondas 6/7/8 sobre V3) — depois de Phase 1+2 verdes",
+    "Re-importar Emergencia_CNAE.bas — instrucao explicita do operador (Q3)",
+    "Tocar Importador_V2.bas — fica preservado para rollback se necessario",
+    "Rodar trio minimo — responsabilidade do operador",
+    "Push para origin — decisao do operador"
+  ],
+  "residual_risks": [
+    "Bootstrap V3 pode falhar em primeira execucao se VBOM nao estiver habilitado — mitigado por mensagem explicita no Bootstrap pedindo Trust Center > VBA project access",
+    "Modo Estabilizado em Phase 1 vai REMOVER e RE-IMPORTAR cada um dos 35 modulos no workbook V12-202-R — risco de perder algum side effect nao documentado se algum modulo tiver mais codigo no workbook do que no .bas espelhado. Mitigado por (a) backup pre-real automatico, (b) validacao CountOfLines apos cada modulo, (c) compile-after-each-group. Se divergir, abort + restore.",
+    "Importador_V2 ainda existe no workbook V12-202-R — V3 vai trabalhar em paralelo. Operador deve entender que durante a transicao ambos coexistem.",
+    "Manifesto V3 Phase 1 EXCLUI Emergencia_CNAE — se algum modulo do baseline depender estaticamente de Emergencia_CNAE, compile vai falhar apos import. Mitigado por compile-after-each-group (detecta logo).",
+    "Subagente de verificacao pode propor mudancas que precisam de novo readback — aceitavel, e parte do processo HBN."
+  ],
+  "classification_basis": "safe_track porque (a) cria 6 arquivos novos no repositorio, (b) cria modulo VBA novo que sera operacional no workbook V12-202-R, (c) define manifesto novo que sera entrada do importador. Todas as mudancas em arquivos novos (zero edits em arquivos existentes alem do .hbn/relay/INDEX.md). Hearback explicito do operador via 3 OKs.",
+  "created_at": "2026-04-30",
+  "guardian_warnings": [
+    {
+      "code": "guardian-vba-public-surface",
+      "severity": "info",
+      "message": "Importador_V3 introduz novas APIs publicas (ImportarPacoteV3, ImportarPacoteV3_Fresh, ImportarPacoteV3_DryRun, ImportarPacoteV3_Status). Sem colisao com nomes existentes em src/vba/.",
+      "evidence": "grep por ImportarPacote* em V12-202-R retorna apenas ImportarPacoteV2 (do Importador_V2 que sera eventualmente substituido)."
+    },
+    {
+      "code": "guardian-mod-types-tabu",
+      "severity": "info",
+      "message": "Modo Estabilizado pula Mod_Types se hash bate, aborta se diverge. Modo Fresh importa Mod_Types primeiro como AAA. Nenhuma mudanca em Mod_Types.bas.",
+      "evidence": "0008-importador-v2-arquitetura.md contrato 3 + Regra de Ouro secao 'Mod_Types e tabu'."
+    },
+    {
+      "code": "guardian-anti-auto-import",
+      "severity": "info",
+      "message": "Importador_V3 NAO esta no manifesto V3. Bootstrap externo carrega V3 no workbook. V3 nunca importa a si mesmo.",
+      "evidence": "Bug historico V2: import autorreferencial corrompe codigo em execucao. V3 elimina por design."
+    }
+  ],
+  "truth_barrier_warnings": [
+    {
+      "code": "truth-barrier-no-100-claim",
+      "severity": "info",
+      "message": "V3 NAO e '100% testado'. Phase 1 e entrega de codigo + procedimento. Validacao real ocorre quando operador rodar trio minimo apos import. Doc 50_PROCEDIMENTO declara isso explicitamente.",
+      "evidence": "Regra HBN: claims proporcionais a evidencia. Sem evidencia ate trio rodar, sem claim de estabilidade."
+    },
+    {
+      "code": "truth-barrier-mac-smb",
+      "severity": "warn",
+      "message": "V3 substitui DeleteLines+AddFromString por Remove+Import. Nao temos PROVA empirica que Remove+Import e deterministico em Mac SMB; temos apenas evidencia indireta (V2 falhou com in-place; Add+AddFromString puro tambem falhou em v10). Phase 1 ratifica empiricamente.",
+      "evidence": "13 hotfixes v5-v13 documentados em .hbn/relay/IMPORTADOR_V2_DIAGNOSTICO_RETOMADA.md."
+    }
+  ]
+}

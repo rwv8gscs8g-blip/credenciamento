@@ -1,0 +1,93 @@
+# Manifesto V3 DELTA MICRO17 - Onda 16 MD-16.6.1 (Reativa_Entidade.frm sem heurística)
+# Tema: Primeiro form do trabalho colaborativo de filtros (MD-16.6).
+#       Removida funcao UI_PegarTextBoxBuscaTopoDireita (heuristica
+#       posicional For Each ctl + Top/Left/Height) e simplificado wiring
+#       em UserForm_Initialize para acesso direto pelo nome canonico do
+#       controle no designer.
+#
+# Origem: hearback Q1-Q3 confirmado pelo operador 2026-05-02:
+#   Q1 sim - convencao mTxtBusca como nome consolidado
+#   Q2 sim - remover helper orfao em MD-16.6.5 cleanup
+#   Q3 sim - iniciar MD-16.6.1 Reativa_Entidade (mais simples)
+# Plano Executivo Onda 16 secao 4.MD-16.6 (modo colaborativo).
+# Inventario base em auditoria/03_ondas/onda_16_testes_refatoracao/06_INVENTARIO_FILTROS.md.
+#
+# Mudancas (3 arquivos no canonico + 1 no espelho src/vba):
+#   AAF-Reativa_Entidade.frm:
+#     - REMOVIDA Private Function UI_PegarTextBoxBuscaTopoDireita
+#       (heuristica For Each ctl In Me.Controls + filtragem por
+#       ctl.Top <= 20 + ctl.Height <= 22 + ctl.Left maximo).
+#     - UserForm_Initialize: removidas 2 linhas de fallback
+#       heuristico/legado:
+#         "If mTxtBusca Is Nothing Then Set mTxtBusca = UI_PegarTextBoxBuscaTopoDireita()"
+#         "If mTxtBusca Is Nothing Then Set mTxtBusca = UI_TextBoxSeExiste('TextBox16')"
+#       Mantida apenas linha de acesso direto via UI_TextBoxSeExiste
+#       pelo nome canonico do controle no designer:
+#         Set mTxtBusca = UI_TextBoxSeExiste("TxtFiltro_ReativaEntidade")
+#     - Comentario-vacina inline citando MD-16.6.1 e Onda 17 futura
+#       para renomear controle no designer para "mTxtBusca".
+#     - Sub/End Sub balanceado: 5/5.
+#     - Function/End Function balanceado: 7/7.
+#     - .frx intocado (binario do designer preservado).
+#
+#   AAF-Reativa_Entidade.code-only.txt:
+#     - Espelho de codigo aplicado as mesmas mudancas (sincronizado
+#       para reimport seguro sem .frx via "Import code only").
+#
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = f7aa84f+ONDA16.MD6-1-reativa-entidade-filtro-incremental
+#     - APP_BUILD_GERADO_EM atualizado.
+#
+# Espelho src/vba: hashes batendo em todos.
+#   ATENCAO drift G7 historico: src/vba tinha versao "delegada" via
+#   UtilFiltro_LocalizarTextBoxFiltro(Me) (em Util_Filtro_Lista.bas);
+#   canonico tinha versao "inline" com For Each ctl + Top/Left.
+#   MD-16.6.1 alinha ambos lados na nova versao SEM heuristica.
+#   Util_Filtro_Lista.UtilFiltro_LocalizarTextBoxFiltro continua
+#   sendo usada por OUTROS forms (Cadastro_Servico, Reativa_Empresa,
+#   Credencia_Empresa) ate MD-16.6.5 cleanup.
+#
+# Pre-flight L14 cumprido:
+#   - mTxtBusca continua Private WithEvents As MSForms.TextBox.
+#   - UI_TextBoxSeExiste(nome) eh Private Function existente no proprio form
+#     que faz Me.Controls(nome) - acesso por nome direto, NAO eh heuristica.
+#   - mTxtBusca_Change (handler) inalterado.
+#   - UI_PreencherListaEntidadesInativas (sub principal) inalterada.
+#   - Nao toca em estrutura do designer (.frx preservado byte-a-byte).
+#   - Sem novo Public Type (G8 OK).
+#   - C4 OK (nao toca Mod_Types).
+#
+# Pos-import esperado:
+#   - Compile manual passa limpo.
+#   - ?GetBuildImportado = "f7aa84f+ONDA16.MD6-1-reativa-entidade-filtro-incremental".
+#   - Form Reativa_Entidade abre normalmente.
+#   - Filtro mTxtBusca funciona conforme antes (acesso direto pelo
+#     nome do TextBox no designer "TxtFiltro_ReativaEntidade").
+#   - Idempotencia: digitar XYZ -> apagar -> digitar XYZ produz mesmo
+#     recordset.
+#   - Quarteto continua APROVADO (sem regressao).
+#
+# Validacao operacional sugerida:
+#   1. ImportarPacoteV3_Delta "MICRO17", "f7aa84f+ONDA16.MD6-1-reativa-entidade-filtro-incremental"
+#   2. Compile manual.
+#   3. Abrir Reativa_Entidade via Menu Principal (caminho de operador real).
+#   4. Confirmar lista de entidades inativas carrega.
+#   5. Digitar texto no campo de filtro - lista deve refiltrar.
+#   6. Apagar texto - lista volta ao estado completo.
+#   7. CT_ValidarRelease_QuartetoMinimo - APROVADO esperado.
+#   8. Operador salva como V12-202-AC-onda16-md6-1 (ou convencao local).
+#
+# Licao L21 candidata para PHAGOCYTOSIS (a destilar no MD-16.9):
+#   "Forms com filtro de busca: usar acesso direto via Me.Controls(nome)
+#    (helper UI_TextBoxSeExiste e legitimo - acessa por nome). Heuristica
+#    posicional (For Each ctl + ctl.Top + ctl.Left) viola regra V203 #3
+#    e torna o codigo fragil a renomeacao no designer. Refatoracao
+#    cirurgica: remover funcao heuristica + simplificar wiring; nao
+#    precisa tocar .frx se nome do controle ja eh canonico."
+#
+# Uso esperado:
+#   ImportarPacoteV3_Delta "MICRO17", "f7aa84f+ONDA16.MD6-1-reativa-entidade-filtro-incremental"
+
+# GRUPO_DELTA_MICRO17_ONDA16_REATIVA_ENTIDADE_FILTRO
+F|002-formularios/AAF-Reativa_Entidade.frm
+M|001-modulo/AAX-App_Release.bas

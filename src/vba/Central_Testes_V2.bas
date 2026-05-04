@@ -11,74 +11,96 @@ Public Sub CT2_AbrirCentral()
     On Error GoTo falha
 
     Dim op As String
+    Dim buildLabel As String
+    Dim prompt As String
 
     TV2_PrepararNavegacaoHumana
 
-    op = Trim$(InputBox( _
-        "=== CENTRAL DE TESTES V2 ===" & vbCrLf & vbCrLf & _
-        "[1] Smoke rapido (~2 min)" & vbCrLf & _
-        "[2] Smoke assistido (~3 min)" & vbCrLf & _
-        "[3] Stress deterministico (~3 min)" & vbCrLf & _
-        "[4] Stress assistido (~5 min)" & vbCrLf & _
-        "[5] Suite canonica (fundacao, ~3 min)" & vbCrLf & _
-        "[6] Abrir roteiro assistido V2" & vbCrLf & _
-        "[7] Abrir RESULTADO_QA_V2" & vbCrLf & _
-        "[8] Abrir CATALOGO_CENARIOS_V2" & vbCrLf & _
-        "[9] Abrir HISTORICO_QA_V2" & vbCrLf & _
-        "[10] Abrir TESTE_TRILHA" & vbCrLf & _
-        "[11] Abrir AUDIT_TESTES" & vbCrLf & _
-        "[12] Validacao release: V1 + Smoke + Canonico (~10 min)" & vbCrLf & _
-        "[13] Filtros deterministicos (~1 min)" & vbCrLf & _
-        "[14] Strikes na avaliacao (~2 min)" & vbCrLf & _
-        "[15] CNAE: snapshot, dedup e housekeeping (~1 min)" & vbCrLf & _
-        "[16] Diag rodizio (relatorio do estado atual da fila)" & vbCrLf & _
-        "[17] Configuracao de strikes: ida e volta (~30s)" & vbCrLf & _
-        "[18] Idempotencia administrativa IDM_* (~1 min)" & vbCrLf & _
-        "[19] Rodizio canonico RDZ_* (~2 min)" & vbCrLf & vbCrLf & _
-        "Digite o numero:", _
-        "Central de Testes V2", "1"))
+    buildLabel = AppRelease_BuildImportado()
+    If Trim$(buildLabel) = "" Then buildLabel = "BUILD_NAO_INFORMADO"
+
+    ' V12.0.0203 ONDA 16 MD-16.3 fix1 (2026-05-02) - prompt acumulado em
+    ' variavel local em vez de 25+ line continuations consecutivas no
+    ' InputBox. Causa raiz do erro 40192 no Importador V3 era exatamente
+    ' o limite de ~25 line continuations da gramatica VBA. Padrao novo:
+    ' construir prompt aos pedacos via &= para qualquer InputBox/MsgBox
+    ' com mais de ~15 linhas de texto. (Licao L19 oficial.)
+    ' V12.0.0203 ONDA 17 MD-17.1.e (2026-05-03) - menu renumerado para
+    ' fluxo semantico (Gates -> V1 -> V2 -> Visualizacao -> Utilitarios)
+    ' + remocao de [2]/[4]/[6] assistidos da mensagem (status bar L26/L27
+    ' ja entregue resolveu funcao pedagogica). Subs CT2_ExecutarSmokeAssistido
+    ' / CT2_ExecutarStressAssistido / TV2_AbrirRoteiroAssistido continuam
+    ' Public callable do VBE - apenas saem da mensagem visivel.
+    ' V12.0.0203 ONDA 17 MD-17.3 / Bloco A (2026-05-03) - Quinteto Minimo
+    ' entra como [1] OFICIAL (V1+V2_Smoke+V2_Canonica+E2E_Strikes+IntegridadeBase).
+    ' Quarteto vira [2] (gate intermediario rapido), Trio vira [3] legado.
+    ' Renumeracao geral +1 nas opcoes 4-17 (era 3-16). Default InputBox = "1".
+    prompt = "=== CENTRAL DE TESTES V2 ===" & vbCrLf
+    prompt = prompt & "Build: " & buildLabel & vbCrLf
+    prompt = prompt & "Gate oficial vigente: [1] Quinteto Minimo" & vbCrLf & vbCrLf
+    prompt = prompt & ">> GATES DE RELEASE (rodar antes de homologar)" & vbCrLf
+    prompt = prompt & "[1] Quinteto Minimo  (V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes + V2 IntegridadeBase)  *** OFICIAL ***" & vbCrLf
+    prompt = prompt & "[2] Quarteto Minimo  (V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes)  -- gate intermediario rapido" & vbCrLf
+    prompt = prompt & "[3] Trio Minimo      (V1 + V2 Smoke + V2 Canonica)  -- legado" & vbCrLf & vbCrLf
+    prompt = prompt & ">> BATERIA V1 (executavel direto)" & vbCrLf
+    prompt = prompt & "[4] V1 - Bateria Oficial completa (~5 min)" & vbCrLf & vbCrLf
+    prompt = prompt & ">> BATERIA V2 (suites parciais)" & vbCrLf
+    prompt = prompt & "[5] V2 Smoke rapido            (~30 s)" & vbCrLf
+    prompt = prompt & "[6] V2 Suite Canonica           (~3 min)" & vbCrLf
+    prompt = prompt & "[7] V2 Stress deterministico    (~3 min)" & vbCrLf
+    prompt = prompt & "[8] V2 Filtros deterministicos  (~1 min)" & vbCrLf
+    prompt = prompt & "[9] V2 E2E Strikes              (~2 min)" & vbCrLf & vbCrLf
+    prompt = prompt & ">> VISUALIZACAO (abrir aba)" & vbCrLf
+    prompt = prompt & "[10] RESULTADO_QA_V2" & vbCrLf
+    prompt = prompt & "[11] CATALOGO_CENARIOS_V2" & vbCrLf
+    prompt = prompt & "[12] HISTORICO_QA_V2" & vbCrLf
+    prompt = prompt & "[13] TESTE_TRILHA" & vbCrLf
+    prompt = prompt & "[14] AUDIT_TESTES" & vbCrLf
+    prompt = prompt & "[15] EVOLUCAO_TESTES (regressao + media movel)" & vbCrLf & vbCrLf
+    prompt = prompt & ">> UTILITARIOS" & vbCrLf
+    prompt = prompt & "[16] Roteiro Assistido V2 (navegacao guiada)" & vbCrLf
+    prompt = prompt & "[17] Limpar testes antigos" & vbCrLf & vbCrLf
+    prompt = prompt & "Digite o numero:"
+
+    op = Trim$(InputBox(prompt, "Central de Testes V2", "1"))
 
     If op = "" Then Exit Sub
 
     Select Case op
         Case "1"
-            CT2_ExecutarSmokeRapido
+            CT_ValidarRelease_QuintetoMinimo
         Case "2"
-            CT2_ExecutarSmokeAssistido
+            CT_ValidarRelease_QuartetoMinimo
         Case "3"
-            CT2_ExecutarStress
-        Case "4"
-            CT2_ExecutarStressAssistido
-        Case "5"
-            CT2_ExecutarCanonicoFundacao
-        Case "6"
-            TV2_AbrirRoteiroAssistido
-        Case "7"
-            TV2_AbrirResultado
-        Case "8"
-            TV2_AbrirCatalogo
-        Case "9"
-            TV2_AbrirHistorico
-        Case "10"
-            TV2_AbrirTrilha
-        Case "11"
-            TV2_AbrirAuditTestes
-        Case "12"
             CT_ValidarRelease_TrioMinimo
-        Case "13"
+        Case "4"
+            CT2_ExecutarBateriaV1
+        Case "5"
+            CT2_ExecutarSmokeRapido
+        Case "6"
+            CT2_ExecutarCanonicoFundacao
+        Case "7"
+            CT2_ExecutarStress
+        Case "8"
             CT2_ExecutarFiltrosDeterministicos
-        Case "14"
+        Case "9"
             CT2_ExecutarStrikes
+        Case "10"
+            TV2_AbrirResultado
+        Case "11"
+            TV2_AbrirCatalogo
+        Case "12"
+            TV2_AbrirHistorico
+        Case "13"
+            TV2_AbrirTrilha
+        Case "14"
+            TV2_AbrirAuditTestes
         Case "15"
-            CT2_ExecutarCnae
+            Util_Evolucao_AbrirEMostrar
         Case "16"
-            Diag_RodizioStatusInteractive
+            TV2_AbrirRoteiroAssistido
         Case "17"
-            CT2_ExecutarCfg
-        Case "18"
-            CT2_ExecutarIdempotencia
-        Case "19"
-            CT2_ExecutarRodizio
+            CT2_ExecutarLimparTestes
         Case Else
             MsgBox "Opcao invalida.", vbInformation, "Central V2"
     End Select
@@ -118,30 +140,31 @@ Public Sub CT2_ExecutarFiltrosDeterministicos()
     TV2_RunFiltros False
 End Sub
 
+' V12.0.0203 ONDA 10 Microdelta 1.5 fix4 - opcao end-to-end strikes
+' chama TV2_RunRodizioStrikesEndToEnd (cenarios CS_E2E_*), que substitui
+' TV2_RunStrikes (deprecated). A nova suite usa rodizio natural sem
+' manipular fila e e idempotente por design.
+' (Renumerada na MD-17.1.e: era [14] no menu antigo, agora [8].)
 Public Sub CT2_ExecutarStrikes()
     TV2_PrepararNavegacaoHumana
-    TV2_RunStrikes False
+    TV2_RunRodizioStrikesEndToEnd False
 End Sub
 
-Public Sub CT2_ExecutarCnae()
+' V12.0.0203 ONDA 17 MD-17.1.e (2026-05-03) - novas Subs Public para
+' atalhos do menu renumerado: [3] V1 Bateria + [16] Limpar testes antigos.
+' Mantem o padrao "uma porta de entrada" (Central V2) sem precisar abrir
+' Central V1. CT2_ExecutarLimparTestes delega para wrapper Public
+' CT_LimparTestesAntigos em Central_Testes.bas (que adiciona MsgBox de
+' confirmacao antes de chamar a Private CT_LimparArtefatosTesteV1
+' ja existente desde Onda 10).
+
+Public Sub CT2_ExecutarBateriaV1()
     TV2_PrepararNavegacaoHumana
-    TV2_RunCnae False
+    RunBateriaOficial
 End Sub
 
-Public Sub CT2_ExecutarCfg()
-    TV2_PrepararNavegacaoHumana
-    TV2_RunCfg False
-End Sub
-
-' === Onda 7 (V12.0.0203): IDM_* + RDZ_* ====================
-Public Sub CT2_ExecutarIdempotencia()
-    TV2_PrepararNavegacaoHumana
-    TV2_RunIdempotencia False
-End Sub
-
-Public Sub CT2_ExecutarRodizio()
-    TV2_PrepararNavegacaoHumana
-    TV2_RunRodizio False
+Public Sub CT2_ExecutarLimparTestes()
+    CT_LimparTestesAntigos
 End Sub
 
 

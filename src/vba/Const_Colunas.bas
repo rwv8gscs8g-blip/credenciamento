@@ -50,6 +50,11 @@ Public Const COL_CFG_MAX_STRIKES As Long = 12          ' L
 ' Quantidade de dias da suspensao automatica disparada por strikes.
 ' Default em Util_Config.GetDiasSuspensaoStrike(): 90.
 Public Const COL_CFG_DIAS_SUSPENSAO_STRIKE As Long = 13 ' M
+' --- V12.0.0203 ONDA 16 MD-16.2: threshold de teste lento ---
+' Suites V2 que excederem este valor em milissegundos sao marcadas como
+' "lento" em RESULTADO_QA_V2.DURACAO_MS (cor condicional vermelha).
+' Default em Util_Config.GetThresholdTesteLentoMS(): 500 ms.
+Public Const COL_CFG_THRESHOLD_TESTE_LENTO_MS As Long = 14 ' N
 Public Const LINHA_CFG_VALORES As Long = 2        ' Linha dos valores na CONFIG
 
 ' --- Aba EMPRESAS (e EMPRESAS_INATIVAS) ---
@@ -73,6 +78,7 @@ Public Const COL_EMP_DT_FIM_SUSP As Long = 17     ' Q
 Public Const COL_EMP_QTD_RECUSAS As Long = 18     ' R
 Public Const COL_EMP_DT_CAD As Long = 19          ' S
 Public Const COL_EMP_DT_ULT_ALT As Long = 20      ' T
+Public Const COL_EMP_DT_ULT_REATIV As Long = 21   ' U
 
 ' --- Aba ENTIDADE (e ENTIDADE_INATIVOS) ---
 Public Const COL_ENT_ID As Long = 1               ' A

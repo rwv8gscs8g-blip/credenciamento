@@ -67,8 +67,15 @@ End Function
 
 ' V12.0.0203 ONDA 1 - Numero de strikes (avaliacoes com media < nota minima)
 ' acumulados antes de suspender automaticamente a empresa.
-' Default conservador 3. Coluna COL_CFG_MAX_STRIKES (L) na aba CONFIG.
-' MAX_STRIKES = 1 reproduz a regra antiga (suspende na primeira nota baixa).
+' Coluna COL_CFG_MAX_STRIKES (L) na aba CONFIG.
+'
+' V12.0.0203 ONDA 10 Microdelta 1.5 fix2 (2026-05-01) - DEFAULT MUDADO
+' DE 3 PARA 1. Justificativa: quando CONFIG nao tem valor preenchido
+' (workbook em estado natural sem TV2_SetConfigCanonica), o default
+' anterior 3 quebrava o comportamento legado (suspende na primeira
+' nota baixa) e fazia testes V1 BO_330c/d/f falhar com "nota minima
+' nao suspende". MAX_STRIKES=1 reproduz exatamente a regra antiga.
+' Operador pode override para 3 (conservador) via Configuracao_Inicial.frm.
 Public Function GetMaxStrikes() As Long
     On Error GoTo falha
 
@@ -78,22 +85,26 @@ Public Function GetMaxStrikes() As Long
     Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
     v = CLng(Val(ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value))
 
-    If v < 1 Then v = 3
+    If v < 1 Then v = 1
     If v > 50 Then v = 50
 
     GetMaxStrikes = v
     Exit Function
 
 falha:
-    GetMaxStrikes = 3
+    GetMaxStrikes = 1
 End Function
 
 ' V12.0.0203 ONDA 1 - Quantidade de dias da suspensao automatica
-' disparada pela regra de strikes na avaliacao. Default 90 dias.
+' disparada pela regra de strikes na avaliacao.
 ' Coluna COL_CFG_DIAS_SUSPENSAO_STRIKE (M) na aba CONFIG.
 ' Quando o valor for <= 0, o helper Svc_Rodizio.Suspender cai no
-' fallback historico em meses (PERIODO_SUSPENSAO_MESES) - preserva
-' compatibilidade com a regra antiga de suspensao por excesso de recusas.
+' fallback historico em meses (PERIODO_SUSPENSAO_MESES).
+'
+' V12.0.0203 ONDA 10 Microdelta 1.5 fix2 (2026-05-01) - DEFAULT MUDADO
+' DE 90 PARA 0. Justificativa: quando CONFIG nao tem valor (workbook
+' natural), default 0 forca fallback meses, alinhando com regra antiga.
+' Operador pode override para 90 (ou outro valor) via Configuracao_Inicial.frm.
 Public Function GetDiasSuspensaoStrike() As Long
     On Error GoTo falha
 
@@ -110,7 +121,67 @@ Public Function GetDiasSuspensaoStrike() As Long
     Exit Function
 
 falha:
-    GetDiasSuspensaoStrike = 90
+    GetDiasSuspensaoStrike = 0
+End Function
+
+' V12.0.0203 ONDA 16 MD-16.2 (2026-05-02) - threshold de teste lento.
+' Suites V2 com duracao acima desse valor (em ms) sao marcadas como
+' "lento" no historico (cor condicional vermelha). Coluna COL_CFG_
+' THRESHOLD_TESTE_LENTO_MS (N) na aba CONFIG.
+' Default 500 ms. Faixa valida 1..600000 (10 min).
+Public Function GetThresholdTesteLentoMS() As Long
+    On Error GoTo falha
+
+    Dim ws As Worksheet
+    Dim v As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
+    v = CLng(Val(ws.Cells(LINHA_CFG_VALORES, COL_CFG_THRESHOLD_TESTE_LENTO_MS).Value))
+
+    If v < 1 Then v = 500
+    If v > 600000 Then v = 600000
+
+    GetThresholdTesteLentoMS = v
+    Exit Function
+
+falha:
+    GetThresholdTesteLentoMS = 500
+End Function
+
+' V12.0.0203 ONDA 17 MD-17.1.d.II (2026-05-03) - verbosity da StatusBar
+' durante execucao de suites V2.
+'   0 = silent (no-op; Application.StatusBar nao atualiza)
+'   1 = minimum (so transicao de suite: 'V2 [SMOKE] iniciando' / 'concluido')
+'   2 = default ('V2 [SMOKE] X/N: CS_xxx = OK')
+'   3 = verbose ('V2 [SMOKE] X/N: CS_xxx = OK [etapa]')
+' Coluna formal em CONFIG sera adicionada em Const_Colunas em MD futura.
+' Por enquanto le coluna 99 (high enough para nao colidir). Default 2
+' quando coluna ausente/vazia/invalida (compatibilidade backward total).
+Public Function GetStatusBarVerbosity() As Long
+    Const COL_VERBOSITY As Long = 99
+
+    On Error GoTo falha
+
+    Dim ws As Worksheet
+    Dim valor As Variant
+    Dim v As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
+    On Error Resume Next
+    valor = ws.Cells(LINHA_CFG_VALORES, COL_VERBOSITY).Value
+    On Error GoTo falha
+    If IsEmpty(valor) Or CStr(valor) = "" Then
+        GetStatusBarVerbosity = 2
+        Exit Function
+    End If
+    v = CLng(Val(CStr(valor)))
+    If v < 0 Then v = 0
+    If v > 3 Then v = 3
+    GetStatusBarVerbosity = v
+    Exit Function
+
+falha:
+    GetStatusBarVerbosity = 2
 End Function
 
 Public Function GetGestorNome() As String

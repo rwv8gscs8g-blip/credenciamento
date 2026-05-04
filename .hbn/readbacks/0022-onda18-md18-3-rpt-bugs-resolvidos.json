@@ -1,0 +1,39 @@
+{
+  "readback_id": "readback-onda18-md18-3-rpt-bugs-resolvidos-2026-05-04",
+  "agent_id": "codex-cli-bloco-b-onda18",
+  "operator": "Luis Mauricio Junqueira Zanin",
+  "track": "safe_track",
+  "schema_version": "hbn-readback/0.3.1",
+  "created_at": "2026-05-04T06:05:00-0300",
+  "status": "confirmed_by_operator",
+  "hearback_source": "user: MICRO25 Quinteto aprovado; MICRO26 importada, compilada e Quinteto aprovado; podemos seguir",
+  "scope": "Onda 18 MD-18.3 - RPT_BUGS_RESOLVIDOS e fechamento administrativo DT-17",
+  "precondition": {
+    "micro25_fix2": "Quinteto VR_20260504_054106 APROVADO",
+    "micro26": "Quinteto VR_20260504_060256 APROVADO",
+    "dt17": "CS_E2E_REATIV2STRIKES verde; E2E_Strikes=71/0"
+  },
+  "files_planned_src_truth": [
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas"
+  ],
+  "files_planned_import_mirror": [
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas"
+  ],
+  "expected_gate": {
+    "importador_v3": "M=2/F=0/err=0/skip=0",
+    "compile_manual": "operator",
+    "quinteto": "APROVADO",
+    "expected_syntax": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+    "rpt_bugs_conhecidos": "DT-17-REATIV-STRIKES removido; INT-CAD-OS-REF-ORFA permanece aberto se a base ainda contiver orfa",
+    "rpt_bugs_resolvidos": "DT-17-REATIV-STRIKES registrado como RESOLVIDO"
+  },
+  "hard_constraints": [
+    "src/vba e fonte de verdade",
+    "local-ai/vba_import e espelho",
+    "CRLF preservado",
+    "M11 shasum match antes de entregar comando",
+    "sem tocar forms neste microdelta"
+  ]
+}

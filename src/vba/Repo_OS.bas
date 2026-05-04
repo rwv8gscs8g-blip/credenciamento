@@ -18,8 +18,8 @@ Public Function Inserir(ByRef O As TOS) As TResult
 
     Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar CAD_OS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar CAD_OS para escrita."
         Inserir = res
         Exit Function
     End If
@@ -44,8 +44,8 @@ Public Function Inserir(ByRef O As TOS) As TResult
     ws.Cells(linha, COL_OS_VL_UNIT).Value = O.VALOR_UNIT
     ' JUSTIF_DIVERGENCIA vazio
 
-    res.Sucesso = True
-    res.Mensagem = "OS inserida com sucesso."
+    res.sucesso = True
+    res.mensagem = "OS inserida com sucesso."
     res.IdGerado = O.OS_ID
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     Inserir = res
@@ -55,8 +55,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro ao inserir OS: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro ao inserir OS: " & Err.Description
     res.CodigoErro = Err.Number
     Inserir = res
 End Function
@@ -134,8 +134,8 @@ Public Function Atualizar(ByRef O As TOS) As TResult
 
     Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar CAD_OS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar CAD_OS para escrita."
         Atualizar = res
         Exit Function
     End If
@@ -149,8 +149,8 @@ Public Function Atualizar(ByRef O As TOS) As TResult
             ws.Cells(i, COL_OS_JUSTIF_DIV).Value = O.JUSTIF_DIVERGENCIA
             ws.Cells(i, COL_OS_OBSERVACOES).Value = ""
 
-            res.Sucesso = True
-            res.Mensagem = "OS atualizada com sucesso."
+            res.sucesso = True
+            res.mensagem = "OS atualizada com sucesso."
             res.IdGerado = O.OS_ID
             Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
             Atualizar = res
@@ -158,8 +158,8 @@ Public Function Atualizar(ByRef O As TOS) As TResult
         End If
     Next i
 
-    res.Sucesso = False
-    res.Mensagem = "OS ID " & O.OS_ID & " nao encontrada."
+    res.sucesso = False
+    res.mensagem = "OS ID " & O.OS_ID & " nao encontrada."
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     Atualizar = res
     Exit Function
@@ -168,8 +168,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro ao atualizar OS: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro ao atualizar OS: " & Err.Description
     res.CodigoErro = Err.Number
     Atualizar = res
 End Function

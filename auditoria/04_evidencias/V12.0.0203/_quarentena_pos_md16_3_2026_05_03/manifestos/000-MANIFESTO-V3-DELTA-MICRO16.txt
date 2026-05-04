@@ -1,0 +1,111 @@
+# Manifesto V3 DELTA MICRO16 - Onda 16 MD-16.4 (Util_PDF + CNPJ + suite determinismo + [22]/[23])
+# Tema: PDFs auditaveis com nomeacao humano-legivel incluindo CNPJ +
+#       hash payload deterministico + sheet RPT_PDFS_GERADOS +
+#       suite TV2_RunPdfDeterminismo (5 cenarios) +
+#       opcoes [22] (abrir RPT) e [23] (rodar suite) na Central V2.
+#
+# Origem: hearback Q1-Q5 confirmado pelo operador 2026-05-02.
+# Plano Executivo Onda 16 secao 4.MD-16.4. Decisoes:
+#   Q1 (c) ambos PDFs de ciclo: por empresa + resumo geral
+#   Q4 (c) hooks producao opcional via flag CONFIG.PDFS_AUTOMATICOS
+#
+# Mudancas (5 arquivos + MAPA):
+#   AAW-Util_Empresa.bas (NOVO):
+#     - Public Function Util_Empresa_GetCnpjPorId(empId) As String
+#       lookup em SHEET_EMPRESAS depois SHEET_EMPRESAS_INATIVAS;
+#       reusa Util_NormalizarDocumentoChave para limpar CNPJ.
+#     - Sub/Function balanceados 2/2.
+#
+#   ABM-Util_PDF.bas (NOVO):
+#     - APIs publicas:
+#         Util_PDF_GerarPdfPreOS(preosId, execucaoId)
+#         Util_PDF_GerarPdfOS(osId, execucaoId)
+#         Util_PDF_GerarPdfAvaliacao(osId, execucaoId)
+#         Util_PDF_GerarPdfCicloPorEmpresa(execucaoId, empId)
+#         Util_PDF_GerarPdfCicloResumo(execucaoId)
+#         Util_PDF_HashPayload(payload) As String  [DJB2 8 chars hex]
+#         Util_PDF_AbrirPasta  [handler [22]]
+#         Util_PDF_AutomaticoHabilitado  [flag CONFIG.PDFS_AUTOMATICOS]
+#         Util_PDF_RegistrarEmRpt  [append em RPT_PDFS_GERADOS]
+#     - Padrao nome humano-legivel: <TIPO>_<ENTIDADE_ID>_<CNPJ>_<DATA>[_NN].pdf
+#     - CICLO_RESUMO sem CNPJ (vista geral); demais com CNPJ via Util_Empresa.
+#     - Sufixo _NN automatico em colisao no mesmo dia (loop ate 99).
+#     - Sheet TEMP_PDF_GEN (oculta) para renderizar antes do export.
+#     - Sheet RPT_PDFS_GERADOS lazy create com 10 colunas.
+#     - Hash DJB2 deterministico em VBA puro (32-bit, sem dependencia
+#       externa); 8 chars hex; suficiente para fixture (nao cripto-forte).
+#     - Header com build/exec_id/timestamp; rodape com HASH_PAYLOAD + RESUMO.
+#     - 6 Sub + 18 Function (24/24 balanceado).
+#     - Hook em producao opcional via Util_PDF_AutomaticoHabilitado lendo
+#       CONFIG coluna O (livre, operador habilita manualmente quando precisar).
+#
+#   ABG-Teste_V2_Roteiros.bas:
+#     - Suite nova TV2_RunPdfDeterminismo (Public Sub) com 5 cenarios:
+#         CT_PDF_001 - hash de payload conhecido tem 8 chars hex
+#         CT_PDF_002 - mesmo payload em segunda chamada gera mesmo hash (idempotencia)
+#         CT_PDF_003 - payload diferente gera hash diferente
+#         CT_PDF_004 - nome do arquivo segue padrao TIPO_ID_*.pdf
+#         CT_PDF_005 - geracao retorna caminho nao-vazio
+#     - Sub/End Sub balanceado: 15/15.
+#
+#   ABE-Central_Testes_V2.bas:
+#     - Texto do menu: secao ">> VISUALIZACAO" ganha [22] RPT_PDFS_GERADOS;
+#       secao ">> SUITES AUXILIARES" nova com [23] PDF determinismo.
+#     - Case "22" => Util_PDF_AbrirPasta.
+#     - Case "23" => TV2_RunPdfDeterminismo False.
+#     - Padrao prompt acumulado preservado (lic L19 fix1).
+#     - Sub/End Sub balanceado: 8/8.
+#
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = f7aa84f+ONDA16.MD4-util-pdf-cnpj-incremental
+#     - APP_BUILD_GERADO_EM atualizado.
+#
+#   000-MAPA-PREFIXOS.txt:
+#     - Adicionadas entradas AAW-Util_Empresa e ABM-Util_PDF.
+#
+# Pre-flight L14 cumprido:
+#   - SHEET_EMPRESAS, COL_EMP_ID=1, COL_EMP_CNPJ=2, SHEET_CONFIG,
+#     LINHA_CFG_VALORES sao constantes existentes em AAB-Const_Colunas.bas.
+#   - Util_NormalizarDocumentoChave eh Public Function em AAE-Util_Planilha.
+#   - AppRelease_BuildImportado eh Public Function em AAX-App_Release.
+#   - TV2_InitExecucao, TV2_LogAssert, TV2_FinalizarExecucao,
+#     TV2_ExecucaoAtualId sao Public Subs/Functions em ABF-Teste_V2_Engine.
+#   - Sem novo Public Type (G8 OK).
+#   - Sem heuristica (G6 enforced).
+#   - C4 OK (nao toca Mod_Types).
+#   - Hashes batendo (canonico <-> src/vba) em todos os 5 arquivos.
+#   - Sub/End Sub e Function/End Function balanceados em todos.
+#
+# Pos-import esperado:
+#   - Compile manual passa limpo.
+#   - ?GetBuildImportado = "f7aa84f+ONDA16.MD4-util-pdf-cnpj-incremental".
+#   - Modulos Util_Empresa e Util_PDF visiveis no VBE Project Explorer.
+#   - CT2_AbrirCentral exibe novas opcoes [22] e [23].
+#   - [22] abre RPT_PDFS_GERADOS (criada lazy).
+#   - [23] roda TV2_RunPdfDeterminismo - esperado APROVADO 5/0.
+#   - PDFs gerados em auditoria/04_evidencias/V12.0.0203/pdfs/<EXEC_ID>/
+#     com nome OS_OS-PDFTEST-001_<DATA>.pdf (sem CNPJ porque
+#     EMPRESAS!OS-PDFTEST-001 nao existe; fallback "SEM_CNPJ").
+#   - Quarteto continua APROVADO (regressao zero - codigo de teste inalterado).
+#
+# Validacao operacional sugerida:
+#   1. ImportarPacoteV3_Delta "MICRO16", "f7aa84f+ONDA16.MD4-util-pdf-cnpj-incremental"
+#   2. Compile manual.
+#   3. ?GetBuildImportado = "f7aa84f+ONDA16.MD4-util-pdf-cnpj-incremental".
+#   4. CT2_AbrirCentral -> confirmar [22] e [23] no menu.
+#   5. Selecionar [23] -> roda suite PDF_DET, esperado APROVADO 5/0/0.
+#   6. Inspecionar pasta auditoria/04_evidencias/V12.0.0203/pdfs/<exec_id>/
+#      contendo OS_OS-PDFTEST-001_*.pdf
+#   7. Selecionar [22] -> RPT_PDFS_GERADOS abre com 1 linha registrada.
+#   8. CT_ValidarRelease_QuartetoMinimo -> APROVADO esperado.
+#   9. Operador salva como V12-202-AC-onda16-md4 (ou convencao local).
+#
+# Uso esperado:
+#   ImportarPacoteV3_Delta "MICRO16", "f7aa84f+ONDA16.MD4-util-pdf-cnpj-incremental"
+
+# GRUPO_DELTA_MICRO16_ONDA16_UTIL_PDF
+M|001-modulo/AAW-Util_Empresa.bas
+M|001-modulo/ABM-Util_PDF.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/ABE-Central_Testes_V2.bas
+M|001-modulo/AAX-App_Release.bas

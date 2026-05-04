@@ -18,7 +18,7 @@ Private Sub InicializarSistema()
 
     ' Mostrar o menu principal
     For Each frm In VBA.UserForms
-        If TypeName(frm) = "Menu_Principal" Then
+        If typeName(frm) = "Menu_Principal" Then
             If Not frm.Visible Then frm.Show
             Exit Sub
         End If

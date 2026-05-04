@@ -1,0 +1,74 @@
+{
+  "execution_id": "exec-onda17-bloco-a-2026-05-04",
+  "readback_id": "readback-onda17-bloco-a-2026-05-04",
+  "agent_id": "claude-opus-4-7-cowork-chat-4-bloco-a",
+  "operator": "Luís Maurício Junqueira Zanin",
+  "track": "safe_track",
+  "schema_version": "hbn-result/0.3.1",
+  "started_at": "2026-05-03 ~22h BRT",
+  "completed_at": "2026-05-04 ~00:13 BRT",
+  "duration_calendar": "~3h corridas (incluindo edits + import operador + Quinteto + Quarteto + reporte)",
+  "status": "APROVADO_OPERADOR",
+
+  "etapas_executadas": [
+    { "n": 1, "tarefa": "Pre-flight L14 (leitura Tier 1+2+3)", "ia_horas_estimado": 0.5, "status": "concluida" },
+    { "n": 2, "tarefa": "MD-17.2 Edit Teste_V2_Roteiros.bas (TV2_RunIntegridadeBase + helpers + 4 detectores)", "ia_horas_estimado": 0.8, "status": "concluida" },
+    { "n": 3, "tarefa": "MD-17.3 Edit Teste_Validacao_Release.bas (CT_ValidarRelease_QuintetoMinimo + 5 helpers)", "ia_horas_estimado": 0.4, "status": "concluida" },
+    { "n": 4, "tarefa": "MD-17.3 Edit Central_Testes_V2.bas (renumeracao 17 opcoes)", "ia_horas_estimado": 0.2, "status": "concluida" },
+    { "n": 5, "tarefa": "App_Release.bas bump build + TEST_KEY", "ia_horas_estimado": 0.1, "status": "concluida" },
+    { "n": 6, "tarefa": "Mirror 4 arquivos + shasum M11 + balance + CRLF", "ia_horas_estimado": 0.1, "status": "concluida" },
+    { "n": 7, "tarefa": "Manifesto MICRO24 (com bloco GRUPO_+M|) + Procedimento 14", "ia_horas_estimado": 0.4, "status": "concluida" },
+    { "n": 8, "tarefa": "Operador: VBE Reset + Import V3 MICRO24 + Compile manual", "operador_minutos_estimado": 8, "status": "concluida" },
+    { "n": 9, "tarefa": "Operador: Quinteto VR_20260503_234443 APROVADO", "operador_minutos_real": 14, "status": "concluida" },
+    { "n": 10, "tarefa": "Operador: Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e", "operador_minutos_real": 13, "status": "concluida" },
+    { "n": 11, "tarefa": "Handoff chat 4 -> chat 5 (doc 54 + readback 0019 + ERP 0019 + relay update)", "ia_horas_estimado": 0.5, "status": "em_progresso" }
+  ],
+
+  "ia_horas_total": 3.0,
+  "operador_horas_total": 0.6,
+  "duracao_total_calendario": "~3h",
+
+  "metricas": {
+    "arquivos_vba_modificados": 4,
+    "arquivos_espelho_atualizados": 4,
+    "shasum_m11_match": "4/4",
+    "crlf_preservado": "4/4",
+    "balance_sub_function": "37/37, 36/36, 10/10, 30/30 — todos pareados",
+    "linhas_codigo_vba_adicionadas": "~600",
+    "manifestos_v3_gerados": 1,
+    "procedimentos_de_import_gerados": 1,
+    "validacoes_release_aprovadas": 2,
+    "fix_encadeados": 0,
+    "regressao_quarteto": "ZERO — sintaxe IDENTICA ao MD-17.1.e baseline"
+  },
+
+  "validacao_release_quinteto": {
+    "vr_id": "VR_20260503_234443",
+    "resultado": "APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0",
+    "ok_total": 289,
+    "falha_total": 0,
+    "manual_total": 6,
+    "csv_path": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuinteto_V12_0_0203_VR_20260503_234443.csv"
+  },
+
+  "validacao_release_quarteto": {
+    "vr_id": "VR_20260504_000004",
+    "resultado": "APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0",
+    "ok_total": 286,
+    "falha_total": 0,
+    "manual_total": 5,
+    "regressao_zero_vs_md17_1_e": true,
+    "csv_path": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuarteto_V12_0_0203_VR_20260504_000004.csv"
+  },
+
+  "decisoes_arquiteturais_validadas_empiricamente": [
+    "Caminho C (hibrido estruturado) preferivel a Caminho A (microdeltas estritos) e Caminho B (mega-onda absoluta) quando bloco e homogeneo em risco",
+    "MD-18.2 (statusbar hint) movida para Bloco B preservou C11 Cap M10=0 e evitou risco do V3 cm.AddFromString Err=50132 sobre forms (M15 candidata)",
+    "IntegridadeBase como suite PURE READ + UPSERT em RPT_BUGS_CONHECIDOS funciona como pattern reutilizavel",
+    "Manifesto V3 com bloco GRUPO_+M| (licao M20 candidata) confirmada empiricamente — MICRO24 importou primeira tentativa"
+  ],
+
+  "next_action": "Operador abre chat 5 com prompt §C do doc 54. Bloco B (Onda 18 critica) inicia depois das auditorias cruzadas Antigravity (§A) + Codex (§B) chegarem em auditoria/00_status/55 e 56."
+}

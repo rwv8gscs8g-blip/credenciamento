@@ -1,0 +1,82 @@
+# Manifesto V3 DELTA MICRO20 - Onda 16 MD-16.6 fix4 (Sincronizar code-only.txt do Reativa_Empresa)
+# Tema: Causa raiz do erro "Erro de automacao - Objeto desconectado de seus
+#       clientes" ao abrir Reativa_Empresa - rollback do MICRO19 deixou
+#       AAH-Reativa_Empresa.code-only.txt em estado MICRO18 (sem cascata),
+#       enquanto o .frm correspondente ja tinha cascata correta.
+#
+# Origem: regressao reportada pelo operador 2026-05-02 apos rodar V1
+# Bateria Oficial 172/0 (zerou cenario), cadastrar 3 empresas, inativar
+# Empresa 2 - ao abrir Reativa_Empresa o form abre vazio com erro de
+# automacao "O objeto chamado foi desconectado de seus clientes". Erro
+# tipico de bind de WithEvents falhando em runtime quando o TextBox
+# nao foi resolvido em UserForm_Initialize.
+#
+# Diagnostico: o V3 em modo Estabilizado prefere .code-only.txt sobre
+# .frm quando disponivel (preserva binario do designer .frx). Quando
+# rodei o rollback no MICRO19, atualizei o .frm com cascata restaurada
+# mas esqueci de atualizar tambem o .code-only.txt - este permaneceu em
+# estado MICRO18 (sem fallback heuristico). Resultado: V3 importou a
+# versao quebrada do .code-only.txt; nem MICRO19 nem o restart
+# resolveram porque o .code-only.txt ainda nao tinha cascata.
+#
+# Mudancas (2 arquivos):
+#   AAH-Reativa_Empresa.code-only.txt:
+#     - UserForm_Initialize: cascata restaurada (3 fallbacks identicos
+#       aos do .frm: nome canonico -> heuristica -> TextBox16).
+#     - Comentario-vacina inline indicando fix4 + sincronizacao.
+#
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = f7aa84f+ONDA16.MD6-fix4-codeonly-sync-incremental
+#     - APP_BUILD_GERADO_EM atualizado.
+#
+# .frm INTOCADO (ja estava correto desde MICRO19). Operador nao
+# precisa importar o .frm, mas inclusao dele no manifesto eh defensiva
+# (V3 vai notar que .frm == .code-only.txt e nao alterar bind).
+#
+# Pre-flight L14 cumprido:
+#   - Cascata em .frm e .code-only.txt sao IDENTICAS apos esta MD.
+#   - Sub/End Sub balanceado (4/4 em ambos arquivos).
+#   - Function/End Function balanceado (8/8 em ambos).
+#   - .frx intocado (binario do designer preservado).
+#   - Sem novo Public Type. Sem heuristica nova. C4 OK.
+#
+# Pos-import esperado:
+#   - Compile manual passa limpo.
+#   - ?GetBuildImportado = "f7aa84f+ONDA16.MD6-fix4-codeonly-sync-incremental"
+#   - Reativa_Empresa abre SEM erro de automacao.
+#   - Lista de empresas inativas POPULA com itens reais.
+#   - Filtro mTxtBusca funciona.
+#   - Reativa_Entidade continua funcionando como ja estava em MICRO19.
+#   - Quarteto continua APROVADO.
+#
+# Validacao operacional sugerida:
+#   1. ImportarPacoteV3_Delta "MICRO20", "f7aa84f+ONDA16.MD6-fix4-codeonly-sync-incremental"
+#   2. Compile manual.
+#   3. ?GetBuildImportado = "f7aa84f+ONDA16.MD6-fix4-codeonly-sync-incremental"
+#   4. Inativar 1 empresa (cenario zerado da V1 ja oferece 3 empresas).
+#   5. Abrir Reativa_Empresa -> deve abrir SEM erro + lista popula com a empresa inativada.
+#   6. Filtrar -> lista refiltra; apagar -> volta completa.
+#   7. Reativa_Entidade -> continua funcionando.
+#   8. CT_ValidarRelease_QuartetoMinimo -> APROVADO esperado.
+#   9. Salvar como V12-202-AC-onda16-rollback-completo.
+#
+# Apos validacao:
+#   Continuamos para MICRO21 (suite TV2_RunUiFiltros + Quinteto release
+#   gate) - sem cobertura UI nao detectamos esse tipo de regressao
+#   antes de chegar no operador.
+#
+# Licao M9 candidata para PHAGOCYTOSIS (a destilar no MD-16.9):
+#   "Forms VBA tem dois espelhos no pacote canonico: .frm (incluindo
+#    binario .frx) e .code-only.txt (espelho de codigo para reimport
+#    seguro). Importador V3 modo Estabilizado prefere .code-only.txt.
+#    Rollback ou edicao de form DEVE atualizar AMBOS .frm e
+#    .code-only.txt - se um ficar dessincronizado, o V3 importa a
+#    versao errada. Padrao: criar marca de validacao em CI ou
+#    pre-flight L14 que compara conteudo dos dois lados."
+#
+# Uso esperado:
+#   ImportarPacoteV3_Delta "MICRO20", "f7aa84f+ONDA16.MD6-fix4-codeonly-sync-incremental"
+
+# GRUPO_DELTA_MICRO20_ONDA16_CODEONLY_SYNC
+F|002-formularios/AAH-Reativa_Empresa.frm
+M|001-modulo/AAX-App_Release.bas

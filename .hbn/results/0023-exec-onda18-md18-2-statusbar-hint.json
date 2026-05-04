@@ -1,0 +1,42 @@
+{
+  "execution_id": "exec-onda18-md18-2-statusbar-hint-2026-05-04",
+  "readback_id": "readback-onda18-md18-2-statusbar-hint-2026-05-04",
+  "agent_id": "codex-cli-bloco-b-onda18",
+  "operator": "Luis Mauricio Junqueira Zanin",
+  "track": "safe_track",
+  "schema_version": "hbn-result/0.3.1",
+  "started_at": "2026-05-04T06:58:00-0300",
+  "completed_at": "2026-05-04T07:04:41-0300",
+  "status": "APROVADO_OPERADOR",
+  "scope": "Onda 18 MD-18.2 - dica de statusbar no primeiro aviso do Modo Treinamento",
+  "microdelta_final": {
+    "delta": "MICRO28",
+    "build": "f7aa84f+ONDA18.MD18.2-statusbar-hint-treinamento",
+    "importador": "ImportarPacoteV3_Delta",
+    "import_status": "confirmado pelo operador: importou e compilou"
+  },
+  "validacao_release_quinteto": {
+    "vr_id": "VR_20260504_070441",
+    "resultado": "APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+    "ok_total": 295,
+    "falha_total": 0,
+    "csv_path": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuinteto_V12_0_0203_VR_20260504_070441.csv"
+  },
+  "evidencia_operador": [
+    "MICRO28 importou.",
+    "Compilacao manual no VBE passou limpa.",
+    "Mensagem nova apareceu no Modo Treinamento.",
+    "Quinteto aprovado em 2026-05-04 07:04:41 BRT."
+  ],
+  "arquivos_fonte_verdade": [
+    "src/vba/Menu_Principal.frm",
+    "src/vba/App_Release.bas"
+  ],
+  "resultado_tecnico": [
+    "Treinamento_ConfirmarUso mostra dica para acompanhar progresso no canto inferior esquerdo da tela.",
+    "AAM-Menu_Principal.frm e AAM-Menu_Principal.code-only.txt foram mantidos em sincronia M9.",
+    "Designer .frx preservado pelo importador V3 em modo Estabilizado."
+  ],
+  "proximo_passo": "MD-17.5: fechamento conjunto Onda 17 + Onda 18 em rc3."
+}

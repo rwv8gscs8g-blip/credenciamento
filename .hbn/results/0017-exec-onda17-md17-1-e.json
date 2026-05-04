@@ -1,0 +1,123 @@
+{
+  "erp_id": "erp-onda17-md17-1-e-2026-05-03",
+  "agent_id": "claude-opus-4-7-cowork",
+  "operator": "Luís Maurício Junqueira Zanin",
+  "track": "safe_track",
+  "schema_version": "hbn-erp/0.3.1",
+  "readback_referenciado": "0017-onda17-md17-1-e (readback-onda17-md17-1-e-2026-05-03)",
+  "started_at": "2026-05-03 (chat 3 abertura)",
+  "completed_at": "2026-05-03 20:43 BRT",
+  "outcome": "success",
+
+  "objetivo_realizado": "Limpeza C3 do menu Central V2 + renumeracao semantica + V1 dentro V2 (porta unica) + atalho Limpar testes antigos. Mensagem do menu fica auto-explicativa. Idempotencia preservada (Quarteto sintaxe IDENTICA ao md1d3).",
+
+  "ancora_estavel_pos_md1e": {
+    "workbook": "V12-202-Z009-onda17-md1e",
+    "build_label": "f7aa84f+ONDA17.MD1E-menu-renumeracao-limpeza-c3",
+    "validacao": "VR_20260503_202623 Quarteto APROVADO",
+    "sintaxe_quarteto": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0",
+    "manual_total": 5,
+    "manual_decomposto": "V2_Smoke=4 + V2_E2E_Strikes=1",
+    "tempo_quarteto_min": 10,
+    "tempo_md1d3_baseline_min": 13,
+    "speedup_observado": "~23% melhor que md1d3 (variavel — depende de carga maquina)",
+    "csv_resumo_path": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuarteto_V12_0_0203_VR_20260503_202623.csv",
+    "idempotencia": "preservada — sintaxe IDENTICA ao md1d3"
+  },
+
+  "arquivos_tocados": [
+    {
+      "path": "src/vba/Central_Testes_V2.bas",
+      "espelho": "local-ai/vba_import/001-modulo/ABE-Central_Testes_V2.bas",
+      "sha1": "0f50dfcb4762aee36066bb6e746015e2d24daa3e",
+      "linhas_antes": 137,
+      "linhas_depois": 162,
+      "tipo_mudanca": [
+        "string prompt do CT2_AbrirCentral substituida (16 opcoes contiguas)",
+        "Select Case op novo mapeamento [1]-[16]",
+        "default InputBox \"20\" -> \"1\"",
+        "Sub Public CT2_ExecutarBateriaV1 (NOVO atalho [3])",
+        "Sub Public CT2_ExecutarLimparTestes (NOVO atalho [16])",
+        "Subs assistidos PRESERVADOS Public callable VBE",
+        "Comentario MD-17.1.e (12 linhas)"
+      ]
+    },
+    {
+      "path": "src/vba/Central_Testes.bas",
+      "espelho": "local-ai/vba_import/001-modulo/AAZ-Central_Testes.bas",
+      "sha1": "f9221a2c4ae142ca85791f0d6b39e4ed1617c1c1",
+      "linhas_antes": 806,
+      "linhas_depois": 839,
+      "tipo_mudanca": [
+        "Sub Public CT_LimparTestesAntigos (NOVO wrapper) com confirmacao MsgBox vbDefaultButton2",
+        "delega para CT_LimparArtefatosTesteV1 (Private existente desde Onda 10)",
+        "CT_AbrirCentral (V1 menu) intacto"
+      ]
+    },
+    {
+      "path": "src/vba/App_Release.bas",
+      "espelho": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "sha1": "4e7b3d6c5fe6caec56449a22e99b6c4f6e4fc3b5",
+      "linhas_antes": 293,
+      "linhas_depois": 306,
+      "tipo_mudanca": [
+        "APP_BUILD_IMPORTADO bumpado para f7aa84f+ONDA17.MD1E-menu-renumeracao-limpeza-c3",
+        "APP_BUILD_GERADO_EM atualizado para 2026-05-03 23:30",
+        "Comentario MD-17.1.e (16 linhas)"
+      ]
+    }
+  ],
+
+  "manifesto_v3": {
+    "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO23.txt",
+    "grupo": "GRUPO_DELTA_MICRO23_ONDA17_MD17_1E_MENU_RENUMERACAO_LIMPEZA_C3",
+    "itens": "M|001-modulo/ABE-Central_Testes_V2.bas + M|001-modulo/AAZ-Central_Testes.bas + M|001-modulo/AAX-App_Release.bas",
+    "incidente_corrigido": "primeiro draft do manifesto continha apenas comentarios # — bloco de dados M|... ausente. Importador V3 retornou 'Manifesto vazio ou malformado'. Hotfix aplicado adicionando bloco GRUPO_ + 3 linhas M|. Ver licao candidata M20."
+  },
+
+  "procedimento_import": "auditoria/03_ondas/onda_17_test_first/13_PROCEDIMENTO_IMPORT_MD17_1_e.md",
+
+  "validacao_operacional": {
+    "vbe_compile_manual": "0 erros",
+    "build_check": "?GetBuildImportado retornou f7aa84f+ONDA17.MD1E-menu-renumeracao-limpeza-c3",
+    "menu_central_v2_visual": "16 opcoes contiguas confirmadas pelo operador (screenshot)",
+    "tela_limpar_testes_antigos": "MsgBox confirmacao funcionou (default NAO; abas listadas; sem dados operacionais)",
+    "quarteto_aprovado": "VR_20260503_202623 sintaxe IDENTICA ao md1d3",
+    "subs_assistidos_callable": "preservadas (nao testadas explicitamente nesta sessao por agilidade — risco baixo, codigo nao alterado)"
+  },
+
+  "constraints_satisfeitos": {
+    "C1_src_vba_primeiro": "ok — src/vba editado primeiro, depois espelhado",
+    "C4_mod_types_intacto": "ok",
+    "C7_quarteto_aprovado": "ok — sintaxe IDENTICA",
+    "C9_markers_v2": "ok — uso de checkpoint clean + handoff ready",
+    "C11_zero_imports_forms": "ok — zero forms tocados (Modo Treinamento adiado, ver 50_DEBITO_DT_MD17_1E_STATUSBAR_HINT.md)",
+    "G6_codigo_no_chat": "ok — nenhum codigo VBA solto",
+    "L14_preflight": "incompleto — pre-flight aplicado ao codigo VBA mas omitiu o parser de manifesto V3 (causou 1 round de hotfix). Licao candidata M20.",
+    "M9_forms_sincronia": "n/a — nenhum form tocado",
+    "M11_src_vba_fonte_verdade": "ok — shasum batendo 100% nos 3 arquivos",
+    "M14_pacote_cobre_rollback": "ok — apenas 1 opcao de rollback (Z008/Z009), trivialmente satisfeito",
+    "crlf_preservado": "ok — file confirma CRLF nos 3 arquivos pos-edit"
+  },
+
+  "licoes_candidatas_para_md17_5": [
+    {
+      "id": "M20 (candidato)",
+      "tema": "L14 (pre-flight grep) estende-se a TODO artefato consumido pelo sistema, nao so codigo VBA",
+      "anti_padrao": "Aplicar L14 apenas ao codigo gerado, omitindo formato de artefatos auxiliares (manifestos, schemas, configs) que tambem sao parseados pelo sistema",
+      "padrao": "Antes de gerar artefato novo, ler o parser/consumer dele E comparar com versao anterior funcionando byte-a-byte na secao critica. Custo de leitura = segundos; custo de erro = round inteiro de hearback do operador",
+      "evidencia": "MICRO23 primeiro draft so tinha comentarios; faltava bloco GRUPO_ + M|<path>. Operador recebeu 'Manifesto vazio ou malformado' antes de import funcionar"
+    }
+  ],
+
+  "debitos_abertos": [
+    {
+      "id": "DT-MD17.1.e-STATUSBAR-HINT",
+      "doc": "auditoria/00_status/50_DEBITO_DT_MD17_1E_STATUSBAR_HINT.md",
+      "resolucao_prevista": "Onda 18 ou primeira oportunidade pos-Onda 17 com forms liberados (C11 relaxado)",
+      "impacto_atual": "nenhum — status bar ja funciona; falta apenas descoberta dirigida no Modo Treinamento"
+    }
+  ],
+
+  "next_action": "Iniciar MD-17.2 (TV2_RunIntegridadeBase + RPT_BUGS_CONHECIDOS) — MD mais carnudo da Onda 17. Antes do readback formal, levantar surface area do TV2_Run* + schema RPT_BUGS_*."
+}

@@ -1,0 +1,53 @@
+{
+  "hbn_protocol": "HBN-0.3.1",
+  "readback_id": "0025-onda18-micro30-r1-forms-reativ",
+  "data": "2026-05-04",
+  "agente": "Codex CLI",
+  "frente": "Frente 1 Credenciamento",
+  "track": "safe_track",
+  "status": "confirmed",
+  "hearback_operador": {
+    "data": "2026-05-04",
+    "resumo": "Operador aprovou seguir a onda de evolucao, corrigir R1 final, liberar V12.0.0203 para testes manuais sem producao e abrir V12.0.0204 na sequencia para revisao dos debitos tecnicos conhecidos."
+  },
+  "escopo": {
+    "microdelta": "MICRO30",
+    "build": "f7aa84f+v12.0.0203-rc4-r1-forms-reativ",
+    "release_tag": "v12.0.0203-rc4",
+    "objetivo": "Corrigir R1 DT-FRENTE1-FORMS-BYPASS-REATIV no fluxo manual Reativa_Empresa antes dos testes manuais da V12.0.0203."
+  },
+  "arquivos_planejados": [
+    "src/vba/Svc_Rodizio.bas",
+    "src/vba/Reativa_Empresa.frm",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+    "local-ai/vba_import/002-formularios/AAH-Reativa_Empresa.frm",
+    "local-ai/vba_import/002-formularios/AAH-Reativa_Empresa.code-only.txt",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO30.txt",
+    "auditoria/03_ondas/onda_18_reativ_strikes/20_PROCEDIMENTO_IMPORT_MICRO30_R1_FORMS_REATIV.md",
+    "CHANGELOG.md",
+    ".hbn/relay/INDEX.md"
+  ],
+  "gates_planejados": [
+    "shasum src/vba == local-ai/vba_import nos arquivos canônicos tocados",
+    "code-only AAH-Reativa_Empresa regenerado da fonte .frm",
+    "CRLF preservado",
+    "Importador V3 M=4 F=1 err=0 skip=0",
+    "Compile manual limpo",
+    "CT_ValidarRelease_QuintetoMinimo APROVADO"
+  ],
+  "fora_de_escopo": [
+    "Promocao para producao",
+    "DT-FRENTE1-GRAVARSTATUSEMPRESA-SILENT geral",
+    "DT-FRENTE1-REATIV-NOOP-ATIVA",
+    "DT-FRENTE1-BACKFILL-AUDIT",
+    "DT-FRENTE1-CONTARSTRIKES-ERRO-MUDO",
+    "INT-CAD-OS-REF-ORFA",
+    "Escopo e esteira V12.0.0204"
+  ]
+}

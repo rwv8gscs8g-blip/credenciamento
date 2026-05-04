@@ -1,0 +1,40 @@
+{
+  "readback_id": "readback-onda18-md18-1b-reativ-strikes-2026-05-04",
+  "agent_id": "codex-cli-bloco-b-onda18",
+  "operator": "Luis Mauricio Junqueira Zanin",
+  "track": "safe_track",
+  "schema_version": "hbn-readback/0.3.1",
+  "created_at": "2026-05-04T05:40:00-0300",
+  "status": "confirmed_by_operator",
+  "hearback_source": "user: MICRO25-fix2 import OK M=8/F=0/err=0/skip=0; status V3.3-Onda18-C4; 'podemos seguir'",
+  "scope": "Onda 18 MD-18.1b - logica DT_ULT_REATIV para punicao por strikes",
+  "precondition": "MICRO25-fix2 importado no workbook correto; gate compile/quinteto MD-18.1a a confirmar pelo operador antes de salvar checkpoint",
+  "decisions_reused": {
+    "opcao_b": "ContarStrikesPorEmpresa preserva historico total; ContarStrikesParaPunicao filtra por janela",
+    "cutoff_date": "COL_OS_DT_FECHAMENTO > EMPRESAS.DT_ULT_REATIV",
+    "forms_bypass": "deferido como DT-FRENTE1-FORMS-BYPASS-REATIV",
+    "rpt_bugs_resolvidos": "MD-18.3"
+  },
+  "files_planned_src_truth": [
+    "src/vba/Repo_Avaliacao.bas",
+    "src/vba/Svc_Avaliacao.bas",
+    "src/vba/Repo_Empresa.bas",
+    "src/vba/Svc_Rodizio.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas"
+  ],
+  "files_planned_import_mirror": [
+    "local-ai/vba_import/001-modulo/AAN-Repo_Avaliacao.bas",
+    "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+    "local-ai/vba_import/001-modulo/AAO-Repo_Empresa.bas",
+    "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas"
+  ],
+  "expected_gate": {
+    "importador_v3": "M=6/F=0/err=0/skip=0",
+    "compile_manual": "operator",
+    "quinteto": "APROVADO",
+    "scenario": "CS_E2E_REATIV2STRIKES verde"
+  }
+}

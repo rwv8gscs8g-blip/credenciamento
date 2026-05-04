@@ -29,6 +29,8 @@ End Sub
 Sub ClassificaEmpresa()
     ' V10: classificação da aba de empresas (antes era Empresa).
     ' Usa Range.Sort por compatibilidade entre versões de Excel.
+    ' V12.0.0203 MICRO30-fix1: ordenar ate COL_EMP_DT_ULT_REATIV (U).
+    ' Se o sort parar em T, DT_ULT_REATIV fica fora da linha reativada.
     Dim ws As Worksheet
     Dim ultima As Long
     Dim primeiraLinha As Long
@@ -42,8 +44,8 @@ Sub ClassificaEmpresa()
     ' Com 0/1 registro nao precisa ordenar.
     If ultima <= primeiraLinha Then Exit Sub
 
-    ws.Range("A" & primeiraLinha & ":T" & ultima).Sort _
-        Key1:=ws.Range("C" & primeiraLinha), _
+    ws.Range(ws.Cells(primeiraLinha, 1), ws.Cells(ultima, COL_EMP_DT_ULT_REATIV)).Sort _
+        Key1:=ws.Cells(primeiraLinha, COL_EMP_RAZAO), _
         Order1:=xlAscending, _
         Header:=xlNo, _
         Orientation:=xlTopToBottom

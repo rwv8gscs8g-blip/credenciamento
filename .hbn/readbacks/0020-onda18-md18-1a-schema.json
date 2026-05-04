@@ -1,0 +1,57 @@
+{
+  "readback_id": "readback-onda18-md18-1a-schema-2026-05-04",
+  "agent_id": "codex-cli-bloco-b-onda18",
+  "operator": "Luis Mauricio Junqueira Zanin",
+  "track": "safe_track",
+  "schema_version": "hbn-readback/0.3.1",
+  "created_at": "2026-05-04T01:45:00-0300",
+  "status": "confirmed_by_operator",
+  "hearback_source": "user: APROVO Q1=SIM Q2=SIM Q3=SIM Q4=SIM; bug report via RPT_BUGS_CONHECIDOS screenshot",
+  "scope": "Onda 18 MD-18.1a - schema DT_ULT_REATIV",
+  "decisions_confirmed": {
+    "D3_D4_expand_schema": true,
+    "D5_cutoff_date": "COL_OS_DT_FECHAMENTO",
+    "D1_D2_forms_bypass_deferred": "DT-FRENTE1-FORMS-BYPASS-REATIV",
+    "MD_18_1_split": "18.1a schema, 18.1b logic"
+  },
+  "bug_context_from_operator": {
+    "yellow_integridade_bug": "CS_INT_04",
+    "bug_id": "INT-CAD-OS-REF-ORFA",
+    "title": "Referencias orfas em CAD_OS (EMP_ID ou ATIV_ID nao existe em EMPRESAS/ATIVIDADES)",
+    "impact_on_md18_1": "Nao e duplicidade ativa-inativa; manter D1+D2 deferido e prosseguir com schema."
+  },
+  "files_planned_src_truth": [
+    "src/vba/Const_Colunas.bas",
+    "src/vba/Mod_Types.bas",
+    "src/vba/Mod_Limpeza_Base.bas",
+    "src/vba/Repo_Empresa.bas",
+    "src/vba/Teste_Bateria_Oficial.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/App_Release.bas"
+  ],
+  "files_planned_import_mirror": [
+    "local-ai/vba_import/001-modulo/AAB-Const_Colunas.bas",
+    "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+    "local-ai/vba_import/001-modulo/ABJ-Mod_Limpeza_Base.bas",
+    "local-ai/vba_import/001-modulo/AAO-Repo_Empresa.bas",
+    "local-ai/vba_import/001-modulo/ABA-Teste_Bateria_Oficial.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas"
+  ],
+  "hard_constraints": [
+    "src/vba is source of truth; local-ai/vba_import is mirror",
+    "Mod_Types.bas C4 exception is limited to this planned schema field",
+    "No VBA code in chat (G6)",
+    "CRLF preserved",
+    "M11 shasum match required before declaring gate",
+    "Logic of strike punishment remains for MD-18.1b"
+  ],
+  "expected_gate": {
+    "compile_manual": "operator",
+    "quinteto": "APROVADO after import",
+    "regression_expectation": "same functional behavior; new column present and fixtures/cadastros populate blank DT_ULT_REATIV"
+  }
+}

@@ -1,16 +1,10 @@
 Attribute VB_Name = "Mod_Types"
 Option Explicit
 
-' Tipos publicos do sistema de credenciamento.
-' ATENCAO: o nome "Mod_Types" deve ser mantido. O erro "Nome repetido: TConfig"
-' NAO e causado pelo nome do modulo - e causado por corrupcao no binario do
-' projeto VBA dentro do .xlsm. A solucao e usar uma planilha com projeto limpo
-' (nunca reimportar TODOS os modulos do zero num .xlsm existente).
-'
 ' Resultado genérico de serviços (Svc_*)
 Public Type TResult
-    Sucesso     As Boolean
-    Mensagem    As String
+    sucesso     As Boolean
+    mensagem    As String
     CodigoErro  As Long
     IdGerado    As String    ' ID do registro criado (PREOS_ID, OS_ID, etc.)
 End Type
@@ -56,6 +50,7 @@ Public Type TEmpresa
     QTD_RECUSAS     As Long      ' contador global (apoio à auditoria)
     DT_CAD          As Date
     DT_ULT_ALT      As Date
+    DT_ULT_REATIV   As Date      ' 0 = nunca reativada apos suspensao
 End Type
 
 ' Credenciamento de empresa em atividade (fila)
@@ -142,7 +137,7 @@ Public Type TAvaliacao
     notas(1 To 10) As Integer
     SOMA_NOTAS   As Long
     MEDIA_NOTAS  As Double
-    Observacao   As String
+    observacao   As String
     DT_AVAL      As Date
 End Type
 

@@ -1,0 +1,92 @@
+# Manifesto V3 DELTA MICRO19 - Onda 16 MD-16.6 fix1 (Rollback Reativa_Entidade + Reativa_Empresa)
+# Tema: Reverter MICRO17 + MICRO18 que regrediram listas de empresas
+#       e entidades inativas. Restaurar UI_PegarTextBoxBuscaTopoDireita
+#       e cascata de fallback original em ambos forms.
+#
+# Origem: regressao reportada pelo operador 2026-05-02 apos validar
+# MICRO17 e MICRO18: ao abrir Reativa_Empresa e Reativa_Entidade as
+# listas vinham VAZIAS, mesmo apos inativar registros pelo fluxo normal.
+# Causa raiz: o nome do TextBox no designer no workbook real NAO bate
+# com "TxtFiltro_ReativaEntidade"/"TxtFiltro_ReativaEmpresa" como
+# assumido. Sem o fallback heuristico nem o fallback nominal "TextBox16",
+# mTxtBusca virou Nothing e algo na cadeia de eventos resultou em lista
+# vazia.
+#
+# Insight critico do operador: "O teste do Quarteto nao esta sendo
+# suficiente para garantir que todos os filtros estao funcionando, entao
+# precisamos incluir esses itens no teste". O Quarteto cobre V1, V2 Smoke,
+# V2 Canonica e E2E Strikes - NAO exercita UI guiado dos filtros. Por
+# isso a regressao passou pelo gate.
+#
+# Plano corrigido (2 microdeltas):
+#   MICRO19 (este) - rollback puro para estado funcional pre-MICRO17.
+#   MICRO20 (proximo) - criar suite TV2_RunUiFiltros + estender Quarteto
+#     para Quinteto (V1+Smoke+Canonica+E2E+UiFiltros). Apos Quinteto
+#     verde com filtros validados via UI, retomamos MD-16.6 form-a-form
+#     com cobertura automatica de regressao.
+#
+# Mudancas (5 arquivos: 2 .frm + 2 .code-only.txt + 1 release):
+#   AAF-Reativa_Entidade.frm:
+#     - RESTAURADA Private Function UI_PegarTextBoxBuscaTopoDireita
+#       (For Each ctl + filtragem por Top/Left/Height).
+#     - UserForm_Initialize: cascata original restaurada com 3 fallbacks
+#       (canonico -> heuristica posicional -> TextBox16 nominal).
+#     - Comentario-vacina inline citando MICRO17 + plano fix correto.
+#     - Sub/End Sub balanceado: 5/5. Function/End Function: 8/8.
+#
+#   AAH-Reativa_Empresa.frm:
+#     - Mesmas mudancas simetricas (rollback do MICRO18).
+#     - Sub/End Sub: 4/4. Function/End Function: 8/8.
+#
+#   AAF-Reativa_Entidade.code-only.txt + AAH-Reativa_Empresa.code-only.txt:
+#     - Espelho de codigo aplicado com mesma reversao.
+#
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = f7aa84f+ONDA16.MD6-fix1-rollback-reativa-incremental
+#     - APP_BUILD_GERADO_EM atualizado.
+#
+# Espelho src/vba: hashes batendo.
+#
+# Pre-flight L14 cumprido:
+#   - Estado restaurado eh exatamente o estado pre-MICRO17 (validado por
+#     git diff manual; assinaturas dos handlers preservadas).
+#   - .frx intocado (binarios do designer preservados).
+#   - Sem novo Public Type. Sem heuristica nova. C4 OK.
+#
+# Pos-import esperado:
+#   - Compile manual passa limpo.
+#   - ?GetBuildImportado = "f7aa84f+ONDA16.MD6-fix1-rollback-reativa-incremental".
+#   - Reativa_Entidade abre, lista de inativas POPULA com itens reais.
+#   - Reativa_Empresa abre, lista de inativas POPULA com itens reais.
+#   - Filtro funciona em ambos.
+#   - Quarteto continua APROVADO (sem regressao).
+#
+# Validacao operacional sugerida:
+#   1. ImportarPacoteV3_Delta "MICRO19", "f7aa84f+ONDA16.MD6-fix1-rollback-reativa-incremental"
+#   2. Compile manual.
+#   3. Inativar 1 entidade (fluxo normal pelo Menu Principal).
+#   4. Abrir Reativa_Entidade -> confirmar lista popula com a entidade inativada.
+#   5. Inativar 1 empresa (fluxo normal).
+#   6. Abrir Reativa_Empresa -> confirmar lista popula.
+#   7. CT_ValidarRelease_QuartetoMinimo -> APROVADO esperado.
+#   8. Salvar como V12-202-AC-onda16-rollback.
+#
+# Apos validacao MICRO19:
+#   MICRO20 traz suite TV2_RunUiFiltros + Quinteto - daquele ponto em
+#   diante, qualquer regressao em filtros eh detectada antes do
+#   import virar release candidate.
+#
+# Licao M8 candidata para PHAGOCYTOSIS (a destilar no MD-16.9):
+#   "Suite de gate de release deve cobrir TODA superficie que pode
+#    regredir, incluindo UI guiado quando o sistema tem dependencia
+#    de naming runtime. Quarteto V1+V2_Smoke+V2_Canonica+E2E_Strikes
+#    nao detectou regressao em filtro de form porque nao toca UI.
+#    Refatoracoes UI sem cobertura UI sao high-risk."
+#
+# Uso esperado:
+#   ImportarPacoteV3_Delta "MICRO19", "f7aa84f+ONDA16.MD6-fix1-rollback-reativa-incremental"
+
+# GRUPO_DELTA_MICRO19_ONDA16_ROLLBACK_REATIVA
+F|002-formularios/AAF-Reativa_Entidade.frm
+F|002-formularios/AAH-Reativa_Empresa.frm
+M|001-modulo/AAX-App_Release.bas

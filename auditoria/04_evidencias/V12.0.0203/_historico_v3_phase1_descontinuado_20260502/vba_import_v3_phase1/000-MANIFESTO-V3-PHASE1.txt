@@ -1,0 +1,89 @@
+# Manifesto V3 - Phase 1 - replica fiel do baseline V12-202-R
+# Formato: M|caminho relativo .bas  ou  F|caminho relativo .frm
+# Caminhos sao relativos a esta pasta (vba_import_v3_phase1/).
+# Linhas comecando com # sao comentarios.
+# Linhas em branco separam GRUPOS.
+# Importador V3 valida compilacao apos cada grupo.
+#
+# Phase 1 reproduz EXATAMENTE o conjunto que ja compila no
+# baseline V12-202-R (build f7aa84f+ONDA05-em-homologacao,
+# trio minimo VR_20260430_225826 = 171/0 + 14/0 + 20/0 APROVADO).
+#
+# Decisoes do operador (2026-04-30):
+#   Q1: prefixo so no nome do arquivo, VB_Name flat (L1)
+#   Q2: Claude implementa V3 com gates HBN
+#   Q3: NAO importar Emergencia_CNAE nesta fase
+#
+# Universo: 35 modulos + 13 forms = 48 itens.
+# EXCLUI: Emergencia_CNAE.bas (Q3), Importador_V2.bas (legacy),
+#         Importador_V3.bas (auto-import proibido por guard).
+#
+# Carimbo: 2026-05-01
+
+# GRUPO_TYPES - sempre primeiro. Modo Estabilizado pula se ja existe.
+M|001-modulo/AAA-Mod_Types.bas
+
+# GRUPO_BASE - constantes, identidade, utils basicos
+M|001-modulo/AAB-Const_Colunas.bas
+M|001-modulo/AAC-Util_Conversao.bas
+M|001-modulo/AAD-Util_Config.bas
+M|001-modulo/AAE-Util_Planilha.bas
+M|001-modulo/AAF-Funcoes.bas
+M|001-modulo/AAV-Variaveis.bas
+
+# GRUPO_INFRA - logging, contexto, error, transacao
+M|001-modulo/AAG-Audit_Log.bas
+M|001-modulo/AAH-AppContext.bas
+M|001-modulo/AAI-ErrorBoundary.bas
+M|001-modulo/AAJ-Svc_Transacao.bas
+
+# GRUPO_REPOS - repositorios CRUD que tocam abas
+M|001-modulo/AAK-Repo_Credenciamento.bas
+M|001-modulo/AAL-Repo_PreOS.bas
+M|001-modulo/AAM-Repo_OS.bas
+M|001-modulo/AAN-Repo_Avaliacao.bas
+M|001-modulo/AAO-Repo_Empresa.bas
+
+# GRUPO_SERVICES - logica de negocio
+M|001-modulo/AAP-Svc_Rodizio.bas
+M|001-modulo/AAQ-Svc_PreOS.bas
+M|001-modulo/AAR-Svc_OS.bas
+M|001-modulo/AAS-Svc_Avaliacao.bas
+
+# GRUPO_DOMAIN - operacoes que tocam varias abas
+M|001-modulo/AAT-Classificar.bas
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/ABJ-Mod_Limpeza_Base.bas
+M|001-modulo/ABI-Util_Filtro_Lista.bas
+
+# GRUPO_RELEASE - identidade do build
+M|001-modulo/AAX-App_Release.bas
+
+# GRUPO_STARTUP - entry point
+M|001-modulo/AAY-Auto_Open.bas
+
+# GRUPO_TESTS - cenarios automatizados
+M|001-modulo/AAZ-Central_Testes.bas
+M|001-modulo/ABA-Teste_Bateria_Oficial.bas
+M|001-modulo/ABB-Central_Testes_Relatorio.bas
+M|001-modulo/ABC-Treinamento_Painel.bas
+M|001-modulo/ABD-Teste_UI_Guiado.bas
+M|001-modulo/ABE-Central_Testes_V2.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/ABH-Teste_Validacao_Release.bas
+
+# GRUPO_FORMS - apos todos os modulos. Em modo Estabilizado V3 usa .code-only.txt; em Fresh usa .frm + .frx.
+F|002-formularios/AAA-Fundo_Branco.frm
+F|002-formularios/AAB-ProgressBar.frm
+F|002-formularios/AAC-Configuracao_Inicial.frm
+F|002-formularios/AAD-Cadastro_Servico.frm
+F|002-formularios/AAE-Altera_Entidade.frm
+F|002-formularios/AAF-Reativa_Entidade.frm
+F|002-formularios/AAG-Altera_Empresa.frm
+F|002-formularios/AAH-Reativa_Empresa.frm
+F|002-formularios/AAI-Credencia_Empresa.frm
+F|002-formularios/AAJ-Limpar_Base.frm
+F|002-formularios/AAK-Rel_Emp_Serv.frm
+F|002-formularios/AAL-Rel_OSEmpresa.frm
+F|002-formularios/AAM-Menu_Principal.frm

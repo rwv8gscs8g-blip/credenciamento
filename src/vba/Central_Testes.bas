@@ -37,15 +37,25 @@ Private gBateriaLiveSeq As Long
 Public Sub CT_AbrirCentral()
     On Error GoTo falha
     Dim op As String
+    Dim build As String
+    build = AppRelease_BuildImportado()
+    If Trim$(build) = "" Then build = "BUILD_NAO_INFORMADO"
+
     op = Trim$(InputBox( _
-        "=== CENTRAL DE TESTES V12 / TRANSICAO ===" & vbCrLf & vbCrLf & _
-        "[1] Executar Bateria Oficial V1 (rapida ~5 min / assistida ~8 min)" & vbCrLf & _
-        "[2] Abrir Central de Testes V2" & vbCrLf & vbCrLf & _
-        "Digite o numero:", "Central de Testes V12", "1"))
+        "=== CENTRAL DE TESTES V12 / TRANSICAO ===" & vbCrLf & _
+        "Build: " & build & vbCrLf & _
+        "Gate oficial de release: [3] Quarteto Minimo" & vbCrLf & vbCrLf & _
+        ">> GATES DE RELEASE" & vbCrLf & _
+        "[3] Quarteto Direto: V1 + V2_Smoke + V2_Canonica + E2E_Strikes (~12 min)  *** OFICIAL rc1+ ***" & vbCrLf & vbCrLf & _
+        ">> ENTRY POINTS" & vbCrLf & _
+        "[1] Bateria Oficial V1 (legado, rapida ~5 min / assistida ~8 min)" & vbCrLf & _
+        "[2] Central de Testes V2 (suites detalhadas + utilitarios)" & vbCrLf & vbCrLf & _
+        "Digite o numero:", "Central de Testes V12", "3"))
     If op = "" Then Exit Sub
     Select Case op
         Case "1": Call CT_IniciarBateria
         Case "2": Call CT2_AbrirCentral
+        Case "3": Call CT_ValidarRelease_QuartetoMinimo
         Case Else: MsgBox "Opção inválida.", vbInformation, "Central V12"
     End Select
     Exit Sub
@@ -147,7 +157,7 @@ Private Sub CT_IniciarBateria()
     On Error Resume Next
     Dim frmMP As Object
     For Each frmMP In VBA.UserForms
-        If TypeName(frmMP) = "Menu_Principal" Then
+        If typeName(frmMP) = "Menu_Principal" Then
             frmMP.Hide
             Exit For
         End If
@@ -188,7 +198,7 @@ Private Sub CT_LimparArtefatosTesteV1()
     On Error Resume Next
     Application.DisplayAlerts = False
 
-    For idx = ThisWorkbook.Worksheets.Count To 1 Step -1
+    For idx = ThisWorkbook.Worksheets.count To 1 Step -1
         Set ws = ThisWorkbook.Worksheets(idx)
         nomeAba = ws.Name
         If CT_EhArtefatoTeste(nomeAba) Then
@@ -793,5 +803,38 @@ Private Function ObterUsr() As String
     On Error GoTo 0
     If ObterUsr = "" Then ObterUsr = "OPERADOR"
 End Function
+
+' V12.0.0203 ONDA 17 MD-17.1.e (2026-05-03) - wrapper Public para
+' permitir chamada direta a partir do menu Central V2 (opcao [16]).
+' Reusa CT_LimparArtefatosTesteV1 (Private) ja existente desde Onda 10.
+' Operador roda este atalho quando quer limpar artefatos de teste sem
+' precisar abrir CT_AbrirCentral V1 -> "Deseja limpar testes anteriores".
+' Confirmacao explicita (vbDefaultButton2 = NAO default; previne
+' destruicao acidental).
+Public Sub CT_LimparTestesAntigos()
+    On Error GoTo falha
+    Dim resp As VbMsgBoxResult
+    resp = MsgBox( _
+        "Limpar todos os artefatos de teste?" & vbCrLf & vbCrLf & _
+        "Abas afetadas (apagadas ou limpas):" & vbCrLf & _
+        "- RESULTADO_QA / RESULTADO_QA_V2" & vbCrLf & _
+        "- HISTORICO_QA / HISTORICO_QA_V2" & vbCrLf & _
+        "- ROTEIRO_RAPIDO / ROTEIRO_ASSISTIDO_V2" & vbCrLf & _
+        "- CATALOGO_CENARIOS_V2 / TESTE_TRILHA" & vbCrLf & _
+        "- CHECKLIST_136 / RPT_* / SNAPV2_*" & vbCrLf & vbCrLf & _
+        "NAO toca dados operacionais (EMPRESAS, CAD_OS, ATIVIDADES," & vbCrLf & _
+        "CONFIG, AUDIT_LOG)." & vbCrLf & vbCrLf & _
+        "Confirma?", _
+        vbQuestion + vbYesNo + vbDefaultButton2, _
+        "Limpar testes antigos")
+    If resp <> vbYes Then Exit Sub
+
+    CT_LimparArtefatosTesteV1
+
+    MsgBox "Artefatos de teste removidos/limpados.", vbInformation, "Limpar testes antigos"
+    Exit Sub
+falha:
+    MsgBox "Erro ao limpar testes: " & Err.Description, vbExclamation, "Limpar testes antigos"
+End Sub
 
 

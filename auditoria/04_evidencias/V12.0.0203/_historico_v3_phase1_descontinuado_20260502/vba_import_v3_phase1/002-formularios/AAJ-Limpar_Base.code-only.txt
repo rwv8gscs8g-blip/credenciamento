@@ -1,0 +1,16 @@
+Private Sub CommandButton1_Click()
+
+  If Cod_Senha <> "sebrae2024" Then
+    MsgBox "A senha est" & ChrW$(225) & " incorreta!"
+    Cod_Senha = ""
+    Cod_Senha.SetFocus
+    Me.Hide
+    Exit Sub
+  Else
+    Me.Hide
+    Call Limpa_Base
+  End If
+  Cod_Senha = ""
+End Sub
+
+

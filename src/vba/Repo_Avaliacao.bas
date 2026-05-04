@@ -36,15 +36,15 @@ Public Function Inserir( _
     Next i
 
     If linhaOS = 0 Then
-        res.Sucesso = False
-        res.Mensagem = "OS nao encontrada em CAD_OS: OS_ID=" & a.OS_ID
+        res.sucesso = False
+        res.mensagem = "OS nao encontrada em CAD_OS: OS_ID=" & a.OS_ID
         Inserir = res
         Exit Function
     End If
 
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar CAD_OS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar CAD_OS para escrita."
         Inserir = res
         Exit Function
     End If
@@ -61,7 +61,7 @@ Public Function Inserir( _
     ws.Cells(linhaOS, COL_OS_NOTA_10).Value = a.notas(10)
 
     ws.Cells(linhaOS, COL_OS_MEDIA).Value = a.MEDIA_NOTAS
-    ws.Cells(linhaOS, COL_OS_OBSERVACOES).Value = a.Observacao
+    ws.Cells(linhaOS, COL_OS_OBSERVACOES).Value = a.observacao
     ws.Cells(linhaOS, COL_OS_STATUS).Value = STATUS_OS_CONCLUIDA
     If IsDate(dtFechamento) Then
         ws.Cells(linhaOS, COL_OS_DT_FECHAMENTO).Value = CDate(dtFechamento)
@@ -78,8 +78,8 @@ Public Function Inserir( _
     End If
     ws.Cells(linhaOS, COL_OS_JUSTIF_DIV).Value = justifDiv
 
-    res.Sucesso = True
-    res.Mensagem = "Avaliacao gravada. OS_ID=" & a.OS_ID & _
+    res.sucesso = True
+    res.mensagem = "Avaliacao gravada. OS_ID=" & a.OS_ID & _
                    "; MEDIA=" & Format$(a.MEDIA_NOTAS, "0.00")
     res.IdGerado = a.OS_ID
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
@@ -90,8 +90,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro em Repo_Avaliacao.Inserir: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em Repo_Avaliacao.Inserir: " & Err.Description
     res.CodigoErro = Err.Number
     Inserir = res
 End Function
@@ -142,6 +142,13 @@ Public Function ContarStrikesPorEmpresa( _
         Exit Function
     End If
 
+    ' V12.0.0203 ONDA 10 Microdelta 1.5 fix3 (2026-05-01) - removido o
+    ' filtro defensivo `mediaVal > 0` que excluia casos legitimos de
+    ' media exatamente zero (todas as notas zero). BO_330d_NotaMin_0_Suspende
+    ' falhava porque media=0 nao contava como strike. A protecao contra
+    ' linha vazia ja esta garantida pelo filtro statusVal=STATUS_OS_CONCLUIDA
+    ' (linha so chega aqui se foi avaliada) + IsNumeric(mediaCelula).
+    ' Licao L12 documentada em usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md.
     For i = LINHA_DADOS To ultima
         If IdsIguais(ws.Cells(i, COL_OS_EMP_ID).Value, EMP_ID) Then
             statusVal = Trim$(CStr(ws.Cells(i, COL_OS_STATUS).Value))
@@ -149,7 +156,7 @@ Public Function ContarStrikesPorEmpresa( _
                 mediaCelula = ws.Cells(i, COL_OS_MEDIA).Value
                 If IsNumeric(mediaCelula) Then
                     mediaVal = CDbl(mediaCelula)
-                    If mediaVal > 0# And mediaVal < notaCorte Then
+                    If mediaVal < notaCorte Then
                         qtd = qtd + 1
                     End If
                 End If
@@ -162,6 +169,72 @@ Public Function ContarStrikesPorEmpresa( _
 
 falha:
     ContarStrikesPorEmpresa = 0
+End Function
+
+Public Function ContarStrikesParaPunicao( _
+    ByVal EMP_ID As String, _
+    ByVal notaCorte As Double _
+) As Long
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim i As Long
+    Dim mediaCelula As Variant
+    Dim mediaVal As Double
+    Dim statusVal As String
+    Dim qtd As Long
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+    Dim dtCorte As Date
+    Dim usarJanela As Boolean
+    Dim dtFech As Variant
+
+    On Error GoTo falha
+
+    If Trim$(EMP_ID) = "" Then
+        ContarStrikesParaPunicao = 0
+        Exit Function
+    End If
+
+    emp = LerEmpresa(EMP_ID, linhaEmp)
+    If linhaEmp > 0 Then
+        dtCorte = emp.DT_ULT_REATIV
+        usarJanela = (dtCorte > CDate(0))
+    End If
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
+    ultima = UltimaLinhaAba(SHEET_CAD_OS)
+    If ultima < LINHA_DADOS Then
+        ContarStrikesParaPunicao = 0
+        Exit Function
+    End If
+
+    For i = LINHA_DADOS To ultima
+        If IdsIguais(ws.Cells(i, COL_OS_EMP_ID).Value, EMP_ID) Then
+            statusVal = Trim$(CStr(ws.Cells(i, COL_OS_STATUS).Value))
+            If statusVal = STATUS_OS_CONCLUIDA Then
+                If usarJanela Then
+                    dtFech = ws.Cells(i, COL_OS_DT_FECHAMENTO).Value
+                    If Not IsDate(dtFech) Then GoTo proximaLinha
+                    If CDate(dtFech) <= dtCorte Then GoTo proximaLinha
+                End If
+
+                mediaCelula = ws.Cells(i, COL_OS_MEDIA).Value
+                If IsNumeric(mediaCelula) Then
+                    mediaVal = CDbl(mediaCelula)
+                    If mediaVal < notaCorte Then
+                        qtd = qtd + 1
+                    End If
+                End If
+            End If
+        End If
+proximaLinha:
+    Next i
+
+    ContarStrikesParaPunicao = qtd
+    Exit Function
+
+falha:
+    ContarStrikesParaPunicao = 0
 End Function
 
 

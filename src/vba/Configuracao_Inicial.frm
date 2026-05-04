@@ -13,11 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
 Private Sub Carrega_CAD_SERV_Click()
 On Error GoTo erro_carregamento:
     ' V12: eliminado Sheets.Select + Range.Select (proibidos; formulario modal).
@@ -330,28 +325,28 @@ On Error GoTo erro_carregamento:
     ' Ajustes de interface: acentuacao e rotulos
     On Error Resume Next
         ' Titulo da janela (corrige acentuacao)
-        Me.Caption = "Configura" & ChrW(231) & ChrW(245) & "es Iniciais"
+        Me.caption = "Configura" & ChrW(231) & ChrW(245) & "es Iniciais"
 
         ' Manter a barra azul (Label42) apenas limpando o texto
         With Me.Controls("Label42")
-            .Caption = ""
+            .caption = ""
             .Visible = True
         End With
 
         ' Corrigir textos de rotulos principais pela legenda atual (sem depender do nome do controle)
         For Each ctl In Me.Controls
-            If TypeName(ctl) = "Label" Then
-                txt = LCase$(ctl.Caption)
+            If typeName(ctl) = "Label" Then
+                txt = LCase$(ctl.caption)
 
                 ' Area Gestora do Municipio
                 If InStr(txt, "area gestora") > 0 Then
-                    ctl.Caption = ChrW(193) & "rea Gestora do Munic" & ChrW(237) & "pio"
+                    ctl.caption = ChrW(193) & "rea Gestora do Munic" & ChrW(237) & "pio"
                     ctl.WordWrap = True
                 End If
 
                 ' Municipio (sem o "de")
                 If InStr(txt, "municipio de") > 0 Or InStr(txt, "munic") > 0 Then
-                    ctl.Caption = "Munic" & ChrW(237) & "pio"
+                    ctl.caption = "Munic" & ChrW(237) & "pio"
                 End If
             End If
         Next ctl

@@ -1,0 +1,23 @@
+# Manifesto V3 DELTA MICRO04 - Onda 10 Microdelta 1.4
+# Tema: Teste_V2_Engine.TV2_SetConfigCanonica grava defaults canonicos
+#       da regra de strikes em CONFIG (MAX_STRIKES=1, DIAS_SUSPENSAO_STRIKE=0)
+#
+# Estrategia A - espelho minimalista. ABF-Teste_V2_Engine.bas e o
+# baseline V12-202-S com APENAS 9 linhas inseridas em
+# TV2_SetConfigCanonica (8 linhas comentario + 2 linhas codigo) apos
+# a gravacao de COL_CFG_NOTA_MINIMA. Nenhuma outra mudanca.
+#
+# Por que MICRO04 vem antes de MICRO03 (Svc_Avaliacao bloco 7b):
+#   o bloco 7b consulta GetMaxStrikes() e GetDiasSuspensaoStrike().
+#   Se CONFIG nao tiver as colunas L (MAX_STRIKES) e M (DIAS_SUSPENSAO_STRIKE)
+#   gravadas, getters caem em defaults (3 e 90), mudando comportamento real
+#   vs legado. Por isso 1.4 vem antes de 1.3 — preserva CS_14.
+#
+# Validacao via TV2_RunSmoke (~30s). Trio mínimo so apos 1.5 verde.
+#
+# Uso esperado:
+#   ImportarPacoteV3_Delta "MICRO04", "f7aa84f+ONDA10.MICRO04-Teste_V2_Engine-incremental"
+
+# GRUPO_DELTA_MICRO04_TESTE_V2_ENGINE
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/AAX-App_Release.bas

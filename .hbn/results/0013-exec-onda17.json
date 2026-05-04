@@ -1,0 +1,37 @@
+{
+  "execution_id": "exec-onda17-test-first-2026-05-04",
+  "readback_id": "readback-onda17-test-first-2026-05-03",
+  "agent_id": "codex-cli-bloco-b-onda18",
+  "operator": "Luis Mauricio Junqueira Zanin",
+  "track": "safe_track",
+  "schema_version": "hbn-result/0.3.1",
+  "started_at": "2026-05-03T00:00:00-0300",
+  "completed_at": "2026-05-04T00:00:04-0300",
+  "formalized_at": "2026-05-04T07:40:00-0300",
+  "status": "APROVADO_OPERADOR",
+  "scope": "Onda 17 - test-first, Quinteto Minimo e IntegridadeBase",
+  "note": "ERP formalizado no fechamento MD-17.5; execucao operacional do Bloco A registrada tambem em 0019-exec-onda17-bloco-a.json.",
+  "validacao_release_quinteto": {
+    "vr_id": "VR_20260503_234443",
+    "resultado": "APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0",
+    "csv_path": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuinteto_V12_0_0203_VR_20260503_234443.csv"
+  },
+  "validacao_release_quarteto": {
+    "vr_id": "VR_20260504_000004",
+    "resultado": "APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0"
+  },
+  "resultado_tecnico": [
+    "TV2_RunIntegridadeBase entregue como suite oficial de auditoria passiva.",
+    "RPT_BUGS_CONHECIDOS entregue com upsert por BUG_ID.",
+    "CT_ValidarRelease_QuintetoMinimo entregue como gate oficial.",
+    "Central V2 renumerada com Quinteto oficial.",
+    "DT-17-REATIV-STRIKES documentado e encaminhado para Onda 18."
+  ],
+  "documentos": [
+    "auditoria/03_ondas/onda_17_test_first/14_PROCEDIMENTO_IMPORT_BLOCO_A.md",
+    "auditoria/03_ondas/onda_17_test_first/70_FECHAMENTO_ONDA_17.md",
+    ".hbn/results/0019-exec-onda17-bloco-a.json"
+  ]
+}

@@ -1,0 +1,28 @@
+Private Sub UserForm_Activate()
+    Dim frmMenu As Object
+    ' Ao ativar o fundo, exibe o Menu_Principal uma vez e encerra este formulário,
+    ' evitando que o usuário fique preso em uma cadeia de telas.
+    For Each frmMenu In VBA.UserForms
+        If TypeName(frmMenu) = "Menu_Principal" Then
+            If Not frmMenu.Visible Then frmMenu.Show
+            Unload Me
+            Exit Sub
+        End If
+    Next frmMenu
+
+    Set frmMenu = VBA.UserForms.Add("Menu_Principal")
+    frmMenu.Show
+    Unload Me
+End Sub
+
+
+Private Sub UserForm_Layout()
+    
+    Me.Height = Application.Height 'altura
+    Me.Width = Application.Width    'largura
+    Me.Left = Application.Left      'esquerda
+    Me.Top = Application.Top
+    
+End Sub
+
+

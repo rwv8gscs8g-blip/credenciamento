@@ -33,7 +33,7 @@ Public Enum eEntidadeAfetada
 End Enum
 
 ' Retorna descrição legível do tipo de evento
-Private Function DescricaoEvento(ByVal tipo As eTipoEvento, Optional ByVal entidade As eEntidadeAfetada = 0) As String
+Private Function DescricaoEvento(ByVal tipo As eTipoEvento, Optional ByVal Entidade As eEntidadeAfetada = 0) As String
     Select Case tipo
         Case EVT_CAD_EMP:        DescricaoEvento = "Cadastro de Empresa"
         Case EVT_CRED_ATIV:      DescricaoEvento = "Credenciamento em Atividade"
@@ -46,13 +46,13 @@ Private Function DescricaoEvento(ByVal tipo As eTipoEvento, Optional ByVal entid
         Case EVT_AVALIACAO:      DescricaoEvento = "Avaliacao Registrada"
         Case EVT_SUSPENSAO:      DescricaoEvento = "Empresa Suspensa"
         Case EVT_REATIVACAO
-            If entidade = ENT_ENTIDADE Then
+            If Entidade = ENT_ENTIDADE Then
                 DescricaoEvento = "Entidade Reativada"
             Else
                 DescricaoEvento = "Empresa Reativada"
             End If
         Case EVT_INATIVACAO
-            If entidade = ENT_ENTIDADE Then
+            If Entidade = ENT_ENTIDADE Then
                 DescricaoEvento = "Entidade Inativada"
             Else
                 DescricaoEvento = "Empresa Inativada"

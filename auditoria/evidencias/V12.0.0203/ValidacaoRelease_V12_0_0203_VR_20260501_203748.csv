@@ -1,0 +1,5 @@
+VALIDACAO_ID;BUILD;DATA_HORA;ETAPA;EXECUCAO_ID;OK;FALHA;MANUAL;STATUS;CSV_FALHAS;PRIMEIRA_FALHA;ACAO_IA
+VR_20260501_203748;f7aa84f+ONDA10.MICRO05-Strikes-Suite-fix2-incremental;01/05/2026 20:43:13;V1_RAPIDA;BO-20260501-203748;170;1;0;FALHA;\\Mac\Home\Projetos\Credenciamento\BateriaOficial_Falhas_20260501_204313.csv;"TESTE=BO_330d_NotaMin_0_Suspende; ESPERADO=Media 0 conclui OS e SUSPENDE (0 < 5); OBTIDO=CONCLUIDA | EMP03=ATIVA | MSG=OS 001 avaliada. MEDIA=0,00; IMPORTANCIA=Cobrir fronteira inferior (nota zero)";Corrigir a falha da V1 indicada em PRIMEIRA_FALHA e reexecutar o trio minimo.
+VR_20260501_203748;f7aa84f+ONDA10.MICRO05-Strikes-Suite-fix2-incremental;01/05/2026 20:44:35;V2_SMOKE;TV2_20260501_204313;14;0;0;OK;NAO_EXPORTADO;;Sem acao corretiva.
+VR_20260501_203748;f7aa84f+ONDA10.MICRO05-Strikes-Suite-fix2-incremental;01/05/2026 20:46:50;V2_CANONICO;TV2_20260501_204435;20;0;0;OK;NAO_EXPORTADO;;Sem acao corretiva.
+VR_20260501_203748;f7aa84f+ONDA10.MICRO05-Strikes-Suite-fix2-incremental;01/05/2026 20:46:50;GERAL;;;;;REPROVADO;;;Usar este CSV como evidencia textual da validacao.

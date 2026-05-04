@@ -168,7 +168,7 @@ Private Function FormularioAberto(ByVal nomeFormulario As String, Optional ByVal
     Dim frmFallback As Object
 
     For Each frm In VBA.UserForms
-        If TypeName(frm) = nomeFormulario Then
+        If typeName(frm) = nomeFormulario Then
             On Error Resume Next
             If frm.Visible Then
                 Set FormularioAberto = frm
@@ -194,7 +194,7 @@ End Function
 
 Private Function ControleTemFilhos(ByVal ctl As Object) As Boolean
     On Error GoTo fim
-    ControleTemFilhos = (ctl.Controls.Count >= 0)
+    ControleTemFilhos = (ctl.Controls.count >= 0)
     Exit Function
 fim:
     ControleTemFilhos = False
@@ -472,22 +472,22 @@ Dim idx As Long
 Dim filtroU As String
 
 filtroU = UCase$(Trim$(filtro))
-Cont = 1
+cont = 1
 NItem = 0
 Set lst = ControleFormulario("Menu_Principal", "C_Lista")
 If lst Is Nothing Then Exit Sub
 lst.Clear
 Set wsEnt = ThisWorkbook.Sheets(SHEET_ENTIDADE)
-NLinhas = UltimaLinhaAba(SHEET_ENTIDADE)
+nLinhas = UltimaLinhaAba(SHEET_ENTIDADE)
 
 With lst
     .ColumnCount = 22
     .ColumnWidths = EntidadeLista_MontarColumnWidths(CDbl(.Width))
 End With
 
-If NLinhas < LINHA_DADOS Then Exit Sub
+If nLinhas < LINHA_DADOS Then Exit Sub
 
-For linha = LINHA_DADOS To NLinhas
+For linha = LINHA_DADOS To nLinhas
     If LinhaEntidadeValida(wsEnt, linha) Then
         If EntidadeLinhaPassaFiltro(wsEnt, linha, filtroU) Then total = total + 1
     End If
@@ -497,7 +497,7 @@ If total = 0 Then Exit Sub
 
 ReDim arrayitems(1 To total, 1 To 22)
 idx = 1
-For linha = LINHA_DADOS To NLinhas
+For linha = LINHA_DADOS To nLinhas
     If LinhaEntidadeValida(wsEnt, linha) Then
         If EntidadeLinhaPassaFiltro(wsEnt, linha, filtroU) Then
             For Coluna = 1 To 22
@@ -526,10 +526,10 @@ Dim totalChaves As Long
 Dim i As Long
 Dim linhaUsada As Long
 
-Cont = 1
+cont = 1
 NItem = 0
 Set wsEntInativas = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
-NLinhas = UltimaLinhaAba(SHEET_ENTIDADE_INATIVOS)
+nLinhas = UltimaLinhaAba(SHEET_ENTIDADE_INATIVOS)
 Set lst = ControleFormulario("Reativa_Entidade", "R_Lista")
 If lst Is Nothing Then Exit Sub
 
@@ -539,12 +539,12 @@ With lst
     .ColumnWidths = EntidadeLista_MontarColumnWidths(CDbl(.Width))
 End With
 
-If NLinhas < LINHA_DADOS Then Exit Sub
+If nLinhas < LINHA_DADOS Then Exit Sub
 
 Set vistos = CreateObject("Scripting.Dictionary")
 totalChaves = 0
-ReDim chaves(1 To NLinhas - LINHA_DADOS + 1)
-For linha = LINHA_DADOS To NLinhas
+ReDim chaves(1 To nLinhas - LINHA_DADOS + 1)
+For linha = LINHA_DADOS To nLinhas
     If LinhaEntidadeInativosConsideravel(wsEntInativas, linha) Then
         chave = EntidadeInativos_ChaveDedupeLinha(wsEntInativas, linha)
         If Not vistos.Exists(chave) Then
@@ -589,7 +589,7 @@ Dim lst As Object
 Dim filtroU As String
 
 filtroU = UCase$(Trim$(filtro))
-Cont = 1
+cont = 1
 NItem = 0
 Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
 Set lst = ControleFormulario("Menu_Principal", "A_Lista")
@@ -602,10 +602,10 @@ With lst
     .ColumnWidths = "0; 0; 380; 250; 0; 0; 0; 0; 0"
 End With
 
-NLinhas = UltimaLinhaAba(SHEET_CAD_SERV)
-If NLinhas < LINHA_DADOS Then Exit Sub
+nLinhas = UltimaLinhaAba(SHEET_CAD_SERV)
+If nLinhas < LINHA_DADOS Then Exit Sub
 
-For linha = LINHA_DADOS To NLinhas
+For linha = LINHA_DADOS To nLinhas
     If LinhaServicoValida(wsServ, linha) Then
         cnaeAtual = SafeListVal(BuscarCnaeAtividade(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value))
         textoBusca = SafeListVal(wsServ.Cells(linha, COL_SERV_ID).Value) & " " & _
@@ -623,7 +623,7 @@ If total = 0 Then Exit Sub
 
 ReDim itens(1 To total, 1 To 9)
 idx = 1
-For linha = LINHA_DADOS To NLinhas
+For linha = LINHA_DADOS To nLinhas
     If LinhaServicoValida(wsServ, linha) Then
         cnaeAtual = SafeListVal(BuscarCnaeAtividade(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value))
         textoBusca = SafeListVal(wsServ.Cells(linha, COL_SERV_ID).Value) & " " & _
@@ -657,7 +657,7 @@ Dim totalValidos As Long
 Dim filtroU As String
 
 filtroU = UCase$(Trim$(filtro))
-Cont = 1
+cont = 1
 NItem = 0
 Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
 
@@ -670,15 +670,15 @@ If frmCred Is Nothing Then Exit Sub
 
 CallByName frmCred, "PrepararListaCredenciamentoServico", VbMethod
 
-NLinhas = UltimaLinhaAba(SHEET_CAD_SERV)
-If NLinhas < LINHA_DADOS Then
+nLinhas = UltimaLinhaAba(SHEET_CAD_SERV)
+If nLinhas < LINHA_DADOS Then
     MsgBox "Nenhum servi" & ChrW(231) & "o cadastrado em CAD_SERV." & vbCrLf & _
            "Cadastre servi" & ChrW(231) & "os antes de credenciar.", _
            vbExclamation, "Credenciamento"
     Exit Sub
 End If
 
-For linha = LINHA_DADOS To NLinhas
+For linha = LINHA_DADOS To nLinhas
     If LinhaServicoValida(wsServ, linha) Then totalValidos = totalValidos + 1
 Next linha
 
@@ -689,7 +689,7 @@ If totalValidos = 0 Then
     Exit Sub
 End If
 
-For linha = LINHA_DADOS To NLinhas
+For linha = LINHA_DADOS To nLinhas
     If LinhaServicoValida(wsServ, linha) Then
         If LinhaServicoPassaFiltroCred(wsServ, linha, filtroU) Then total = total + 1
     End If
@@ -711,7 +711,7 @@ Dim arrayitems As Variant
 Dim idx0 As Long
 ReDim arrayitems(0 To total - 1, 0 To 8)
 idx0 = 0
-For linha = LINHA_DADOS To NLinhas
+For linha = LINHA_DADOS To nLinhas
     If LinhaServicoValida(wsServ, linha) Then
         If LinhaServicoPassaFiltroCred(wsServ, linha, filtroU) Then
             For Coluna = 1 To 9
@@ -740,7 +740,7 @@ Dim lst As Object
 Dim filtroU As String
 
 filtroU = UCase$(Trim$(filtro))
-Cont = 1
+cont = 1
 NItem = 0
 Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
 Set lst = ControleFormulario("Menu_Principal", "EMP_Lista")
@@ -754,10 +754,10 @@ With lst
 End With
 
 primeiraLinhaEmp = PrimeiraLinhaDadosEmpresas()
-NLinhas = UltimaLinhaAba(SHEET_EMPRESAS)
-If NLinhas < primeiraLinhaEmp Then Exit Sub
+nLinhas = UltimaLinhaAba(SHEET_EMPRESAS)
+If nLinhas < primeiraLinhaEmp Then Exit Sub
 
-For linha = primeiraLinhaEmp To NLinhas
+For linha = primeiraLinhaEmp To nLinhas
     If LinhaEmpresaValida(wsEmp, linha) Then
         If EmpresaLinhaPassaFiltro(wsEmp, linha, filtroU) Then total = total + 1
     End If
@@ -767,7 +767,7 @@ If total = 0 Then Exit Sub
 
 ReDim arrayitems(1 To total, 1 To 19)
 idx = 1
-For linha = primeiraLinhaEmp To NLinhas
+For linha = primeiraLinhaEmp To nLinhas
     If LinhaEmpresaValida(wsEmp, linha) Then
         If EmpresaLinhaPassaFiltro(wsEmp, linha, filtroU) Then
             For Coluna = 1 To 19
@@ -797,10 +797,10 @@ Dim i As Long
 Dim linhaUsada As Long
 Dim linha As Long
 
-Cont = 1
+cont = 1
 NItem = 0
 Set wsEmpInativas = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
-NLinhas = UltimaLinhaAba(SHEET_EMPRESAS_INATIVAS)
+nLinhas = UltimaLinhaAba(SHEET_EMPRESAS_INATIVAS)
 Set lst = ControleFormulario("Reativa_Empresa", "RM_Lista")
 If lst Is Nothing Then Exit Sub
 
@@ -810,12 +810,12 @@ With lst
     .ColumnWidths = EmpresaLista_MontarColumnWidths(CDbl(.Width))
 End With
 
-If NLinhas < LINHA_DADOS Then Exit Sub
+If nLinhas < LINHA_DADOS Then Exit Sub
 
 Set vistos = CreateObject("Scripting.Dictionary")
 totalChaves = 0
-ReDim chaves(1 To NLinhas - LINHA_DADOS + 1)
-For linha = LINHA_DADOS To NLinhas
+ReDim chaves(1 To nLinhas - LINHA_DADOS + 1)
+For linha = LINHA_DADOS To nLinhas
     If LinhaEmpresaInativosConsideravel(wsEmpInativas, linha) Then
         chave = EmpresaInativos_ChaveDedupeLinha(wsEmpInativas, linha)
         If Not vistos.Exists(chave) Then
@@ -862,7 +862,7 @@ Sub PreencherPreencheOS()
     ' Refatorado: sem Select/ActiveCell, uso de Range.Find seguro e filtro claro de Pré-OS pendentes.
     Dim Linhalistbox As Integer
     Dim linha As Long
-    Dim NLinhas As Long
+    Dim nLinhas As Long
     Dim wsPreOS As Worksheet
     Dim wsEntidade As Worksheet
     Dim wsCadServ As Worksheet
@@ -878,7 +878,7 @@ Sub PreencherPreencheOS()
     If lst Is Nothing Then Exit Sub
 
     Linhalistbox = 0
-    NLinhas = wsPreOS.Range("A1048576").End(xlUp).row
+    nLinhas = wsPreOS.Range("A1048576").End(xlUp).row
 
     lst.Clear
     With lst
@@ -888,7 +888,7 @@ Sub PreencherPreencheOS()
     End With
 
     With wsPreOS
-        For linha = LINHA_DADOS To NLinhas
+        For linha = LINHA_DADOS To nLinhas
             If Trim(CStr(.Cells(linha, COL_PREOS_ID).Value)) <> "" And _
                Trim$(UCase$(CStr(.Cells(linha, COL_PREOS_STATUS).Value))) = STATUS_PREOS_AGUARDANDO_ACEITE Then
 
@@ -1390,13 +1390,13 @@ Dim wsEmp As Worksheet
 Dim total As Long
 Dim idx As Long
 
-Cont = 1
+cont = 1
 NItem = 0
 Set lst = ControleFormulario("Rel_OSEmpresa", "RO_Lista", True)
 If lst Is Nothing Then Exit Sub
 Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
 primeiraLinhaEmp = PrimeiraLinhaDadosEmpresas()
-NLinhas = UltimaLinhaAba(SHEET_EMPRESAS)
+nLinhas = UltimaLinhaAba(SHEET_EMPRESAS)
 
 With lst
     .Clear
@@ -1404,9 +1404,9 @@ With lst
     .ColumnWidths = "0; 0; 210; 0; 200; 0; 0; 0; 0; 0; 0; 0; 70; 0; 0; 0; 0; 0; 0"
 End With
 
-If NLinhas < primeiraLinhaEmp Then Exit Sub
+If nLinhas < primeiraLinhaEmp Then Exit Sub
 
-For linha = primeiraLinhaEmp To NLinhas
+For linha = primeiraLinhaEmp To nLinhas
     If LinhaEmpresaValida(wsEmp, linha) Then total = total + 1
 Next linha
 
@@ -1414,7 +1414,7 @@ If total = 0 Then Exit Sub
 
 ReDim arrayitems(1 To total, 1 To 19)
 idx = 1
-For linha = primeiraLinhaEmp To NLinhas
+For linha = primeiraLinhaEmp To nLinhas
     If LinhaEmpresaValida(wsEmp, linha) Then
         For Coluna = 1 To 19
             arrayitems(idx, Coluna) = SafeListVal(wsEmp.Cells(linha, Coluna).Value)
@@ -1438,12 +1438,12 @@ Dim wsServ As Worksheet
 Dim total As Long
 Dim idx As Long
 
-Cont = 1
+cont = 1
 NItem = 0
 Set lst = ControleFormulario("Rel_Emp_Serv", "SV_CR_Lista")
 If lst Is Nothing Then Exit Sub
 Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
-NLinhas = UltimaLinhaAba(SHEET_CAD_SERV)
+nLinhas = UltimaLinhaAba(SHEET_CAD_SERV)
 
 With lst
     .Clear
@@ -1451,9 +1451,9 @@ With lst
     .ColumnWidths = "0; 0; 350; 350; 0; 0; 0; 0; 0"
 End With
 
-If NLinhas < LINHA_DADOS Then Exit Sub
+If nLinhas < LINHA_DADOS Then Exit Sub
 
-For linha = LINHA_DADOS To NLinhas
+For linha = LINHA_DADOS To nLinhas
     If LinhaServicoValida(wsServ, linha) Then total = total + 1
 Next linha
 
@@ -1461,7 +1461,7 @@ If total = 0 Then Exit Sub
 
 ReDim arrayitems(1 To total, 1 To 9)
 idx = 1
-For linha = LINHA_DADOS To NLinhas
+For linha = LINHA_DADOS To nLinhas
     If LinhaServicoValida(wsServ, linha) Then
         For Coluna = 1 To 9
             arrayitems(idx, Coluna) = SafeListVal(wsServ.Cells(linha, Coluna).Value)
@@ -3204,10 +3204,10 @@ Set lst = ControleFormulario("Menu_Principal", "A_Lista")
 If lst Is Nothing Then Exit Sub
 
 Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
-NLinhas = wsServ.Range("A1048576").End(xlUp).row
+nLinhas = wsServ.Range("A1048576").End(xlUp).row
 
 With wsServ
-    While linha <= NLinhas
+    While linha <= nLinhas
         With lst
             .AddItem
             .List(Linhalistbox, 0) = wsServ.Cells(linha, 1)
@@ -3391,22 +3391,22 @@ Dim textoBusca As String
 Dim total As Long
 Dim idx As Long
 
-Cont = 1
+cont = 1
 Set lst = ControleFormulario("Menu_Principal", "H_Lista")
 If lst Is Nothing Then Exit Sub
 Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
 filtroU = UCase$(Trim$(filtro))
 lst.Clear
-NLinhas = UltimaLinhaAba(SHEET_CAD_SERV)
+nLinhas = UltimaLinhaAba(SHEET_CAD_SERV)
 
 With lst
     .ColumnCount = 10
     .ColumnWidths = "30; 0; 85; 180; 330; 65; 0; 0; 0; 70"
 End With
 
-If NLinhas < LINHA_DADOS Then Exit Sub
+If nLinhas < LINHA_DADOS Then Exit Sub
 
-For linha = LINHA_DADOS To NLinhas
+For linha = LINHA_DADOS To nLinhas
     If LinhaServicoValida(wsServ, linha) Then
         cnaeAtual = SafeListVal(BuscarCnaeAtividade(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value))
         textoBusca = SafeListVal(wsServ.Cells(linha, COL_SERV_ID).Value) & " " & _
@@ -3424,7 +3424,7 @@ If total = 0 Then Exit Sub
 
 ReDim arrayitems(1 To total, 1 To 10)
 idx = 1
-For linha = LINHA_DADOS To NLinhas
+For linha = LINHA_DADOS To nLinhas
     If LinhaServicoValida(wsServ, linha) Then
         cnaeAtual = SafeListVal(BuscarCnaeAtividade(wsServ.Cells(linha, COL_SERV_ATIV_ID).Value))
         textoBusca = SafeListVal(wsServ.Cells(linha, COL_SERV_ID).Value) & " " & _
@@ -3477,7 +3477,7 @@ Sub Limpa_Base()
         Exit Sub
     End If
 
-    If Not Mod_Limpeza_Base.LimpaBaseTotalReset(relatorio) Then
+    If Not LimpaBaseTotalReset(relatorio) Then
         MsgBox "Falha durante a limpeza:" & vbCrLf & vbCrLf & relatorio, _
                vbCritical, "Limpar Base"
         Exit Sub
@@ -3589,7 +3589,7 @@ Public Sub ImportarCNAE_Emergencia()
     On Error GoTo 0
 
     ' 5) Limpar TODA a area de dados.
-    ultimaReal = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ultimaReal = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     If ultimaReal < 2000 Then ultimaReal = 2000
     ws.Range(ws.Cells(LINHA_DADOS, COL_ATIV_ID), ws.Cells(ultimaReal, COL_ATIV_DESCRICAO)).ClearContents
     ws.Cells(1, COL_CONTADOR_AR).Value = 0
@@ -3711,7 +3711,7 @@ Public Function CnaeSnapshotCadServ(Optional ByRef qtdLinhasOut As Long) As Stri
     Loop
 
     Set wsSnap = ThisWorkbook.Worksheets.Add( _
-        After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.count))
     wsSnap.Name = nomeSnap
 
     ' Copia integral (cabecalho + dados, com formatos), preservando
@@ -4001,7 +4001,7 @@ Public Function CnaeConfirmarPodaSnapshots(Optional ByVal manterUltimos As Long 
     Dim listSnaps As Variant
     Dim qtdSnaps As Long
     Dim qtdExcedente As Long
-    Dim resposta As VbMsgBoxResult
+    Dim Resposta As VbMsgBoxResult
 
     On Error GoTo falha
 
@@ -4018,7 +4018,7 @@ Public Function CnaeConfirmarPodaSnapshots(Optional ByVal manterUltimos As Long 
     End If
 
     qtdExcedente = qtdSnaps - manterUltimos
-    resposta = MsgBox( _
+    Resposta = MsgBox( _
         "Existem " & qtdSnaps & " snapshots de CAD_SERV salvos no workbook." & vbCrLf & _
         "Deseja apagar os " & qtdExcedente & " mais antigos, mantendo apenas os " & _
         manterUltimos & " mais recentes?" & vbCrLf & vbCrLf & _
@@ -4026,7 +4026,7 @@ Public Function CnaeConfirmarPodaSnapshots(Optional ByVal manterUltimos As Long 
         vbQuestion + vbYesNo + vbDefaultButton1, _
         "Reset CNAE: limpeza de snapshots")
 
-    If resposta = vbYes Then
+    If Resposta = vbYes Then
         CnaeConfirmarPodaSnapshots = CnaePodarSnapshots(manterUltimos)
     Else
         CnaeConfirmarPodaSnapshots = 0

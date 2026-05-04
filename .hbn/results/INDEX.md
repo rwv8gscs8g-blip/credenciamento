@@ -1,6 +1,6 @@
 ---
 titulo: Results HBN — ERPs vinculados a readbacks
-ultima-atualizacao: 2026-04-28
+ultima-atualizacao: 2026-05-04
 ---
 
 # Results HBN — Credenciamento
@@ -32,3 +32,10 @@ ultima-atualizacao: 2026-04-28
 | ID | Acao | Outcome | Readback | Data |
 |---|---|---|---|---|
 | (pendente — sera gerado ao fechar Onda 6) | — | — | `0001-onda06.json` | — |
+| 0013 | Onda 17 test-first + Quinteto + IntegridadeBase | APROVADO_OPERADOR | `0013-onda17-test-first.json` | 2026-05-04 |
+| 0020 | Onda 18 MD-18.1a schema DT_ULT_REATIV | APROVADO_OPERADOR | `0020-onda18-md18-1a-schema.json` | 2026-05-04 |
+| 0021 | Onda 18 MD-18.1b janela strikes pos-reativacao | APROVADO_OPERADOR | `0021-onda18-md18-1b-reativ-strikes.json` | 2026-05-04 |
+| 0022 | Onda 18 MD-18.3 RPT_BUGS_RESOLVIDOS | APROVADO_OPERADOR | `0022-onda18-md18-3-rpt-bugs-resolvidos.json` | 2026-05-04 |
+| 0023 | Onda 18 MD-18.2 statusbar hint treinamento | APROVADO_OPERADOR | `0023-onda18-md18-2-statusbar-hint.json` | 2026-05-04 |
+| 0024 | MD-17.5 fechamento conjunto Onda 17+18 rc3 | APROVADO_OPERADOR | `0024-onda17-18-fechamento-rc3.json` | 2026-05-04 |
+| 0026 | MICRO30-fix1 ClassificaEmpresa coluna U / R1 final rc4 | APROVADO_OPERADOR | `0026-onda18-micro30-fix1-classifica-empresa-u.json` | 2026-05-04 |

@@ -1,0 +1,235 @@
+{
+  "readback_id": "readback-onda17-md17-1-c-real-2026-05-03",
+  "agent_id": "claude-opus-4-7-cowork",
+  "operator": "Luís Maurício Junqueira Zanin",
+  "track": "safe_track",
+  "started_at": "2026-05-03",
+  "deadline_hard": null,
+  "status": "aguardando_hearback_confirmed",
+  "schema_version": "hbn-readback/0.3.1",
+  "parent_readback": "readback-onda17-test-first-2026-05-03 (0013)",
+
+  "ciclo_imediatamente_anterior": "MD-17.1.b fechada com fix2 em VR_20260503_031425; workbook ancora V12-202-Z003-onda17-md1b-fix2; build f7aa84f+ONDA17.MD1B-fix2-cenarios-aplicados; Quarteto APROVADO V1=171/0+V2_Smoke=14/0+V2_Canonica=23/0+E2E_Strikes=65/0 (MANUAL=1)",
+
+  "tentativa_anterior_revertida": "MD-17.1.c-pre (sincronia M11 dos 4 .code-only.txt) revertida em 2026-05-03 ~04:00 BRT por falha V3 cm.AddFromString Err=50132 em Reativa_Entidade — causa raiz não isolada (M15 candidata). Decisão: NÃO regenerar .code-only.txt nesta MD; em vez disso V4 da MD-17.1.c real adota comparação γ tolerante que TOLERA o drift cosmético existente (3 comentários extras + capitalização Cont/cont + trailing whitespace).",
+
+  "objetivo": "Adicionar suite TV2_RunUiSmokeReadOnly à V2_Smoke cobrindo 4 forms críticos (Reativa_Entidade, Reativa_Empresa, Cadastro_Servico, Credencia_Empresa) com 5 verificações independentes por form (V1-V5). Smoke read-only = SEM instanciar form (sem UserForm_Initialize); enumeração via VBE Extensibility apenas. Cobertura aumenta de Smoke=14 para Smoke=14+(4×5)=14+20=34 cenários (ou estrutura agregada por form — ver §asserts).",
+
+  "premissa_central": "Test-first inegociável: cobertura nova entra ANTES de qualquer mexida em forms (Onda 18+). Cap M10 = 0 imports em forms na Onda 17 mantido. M11 src/vba como fonte de verdade inviolável. V4 γ tolerante absorve drift cosmético existente — drift estrutural (controles, helpers) sempre falha.",
+
+  "ancora_estavel": {
+    "workbook": "V12-202-Z003-onda17-md1b-fix2",
+    "build_label": "f7aa84f+ONDA17.MD1B-fix2-cenarios-aplicados",
+    "app_release_tag": "v12.0.0203-rc1",
+    "app_release_status": "RELEASE_CANDIDATE",
+    "validacao": "VR_20260503_031425 Quarteto APROVADO V1=171/0+V2_Smoke=14/0+V2_Canonica=23/0+E2E_Strikes=65/0 (MANUAL=1)",
+    "tempo_baseline": "14m 41s 91cs (referência para MD-17.1.d.I; alvo Quarteto <10min)",
+    "src_vba_local_ai_aligned": "shasum batendo (revertido pós md1c-pre); validar no passo 0 deste MD"
+  },
+
+  "decisoes_q_md17_1_c_confirmadas_pelo_operador_2026_05_03": {
+    "Q1": "confirmed sim — fechar MD-17.0/17.1.a/17.1.b e abrir MD-17.1.c real",
+    "Q2": "confirmed sim — Q-MD17.1.c.1=B (V5 sempre obrigatório), Q-MD17.1.c.2=A (helpers exatos), Q-MD17.1.c.3=γ tolerante",
+    "Q3": "confirmed sim — V4 γ = (a) strip linhas iniciadas com ' (comentário VBA), (b) RTrim em todas as linhas, (c) lower-case em identificadores fora de strings literais (preservar conteúdo entre aspas duplas)",
+    "Q4": "confirmed sim — V5 sem Trust Center disponível → severidade FALHA (não AMARELO/MANUAL); justificativa: forçar ambiente correto",
+    "Q5": "confirmed (b) — completar backlog Onda 17 (até MD-17.5) e em seguida abrir Onda 18 para resolver DT-17-REATIV-STRIKES de forma definitiva (libera release público v12.0.0203 final/rc3)"
+  },
+
+  "escopo_em": [
+    "Adicionar Public Sub TV2_RunUiSmokeReadOnly() em src/vba/Teste_V2_Roteiros.bas (após TV2_RunSmoke linha 21, antes de TV2_RunFiltros linha 338)",
+    "Wire-up: chamar TV2_RunUiSmokeReadOnly() de dentro de TV2_RunSmoke (preserva contagem por suite V2_Smoke; alternativamente cria suite separada V2_UiSmoke — ver §decisao_arquitetural)",
+    "5 verificações por form × 4 forms = 20 asserts via TV2_LogAssert (cada uma com cenário canônico CS_UISMOKE_<FORM>_V<N>)",
+    "Adicionar 3 helpers Private em Roteiros: TV2_UI_LerArquivoTextoUtf8(path), TV2_UI_NormalizarGamma(linha), TV2_UI_EnumerarControlesCanonicos(formName)",
+    "Adicionar tabela canônica de controles esperados por form (constante interna do módulo, lista hardcoded — Q-MD17.1.c.2=A)",
+    "Adicionar tabela canônica de helpers UI esperados por form (constante interna; ex: Reativa_Entidade → UI_EntidadeInativasTemConflito + UI_AtualizarBotaoOK + ...)",
+    "Bump APP_BUILD_IMPORTADO + GERADO_EM em src/vba/App_Release.bas → label f7aa84f+ONDA17.MD1C-uismoke-readonly",
+    "Espelho local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas + AAX-App_Release.bas com shasum batendo"
+  ],
+
+  "escopo_fora": [
+    "Qualquer toque em .frm/.frx/.code-only.txt (cap M10 = 0 imports em forms na Onda 17)",
+    "Regeneração de .code-only.txt (tentativa MD-17.1.c-pre revertida; γ tolerante absorve drift cosmético)",
+    "Instanciação de UserForm (smoke é READ-ONLY — sem .Show, sem UserForms.Add, sem invocar Initialize)",
+    "Mexida no Engine ABF (apenas Roteiros + App_Release nesta MD; Engine permanece intacto até MD-17.1.d.I)",
+    "Mexida em Mod_Types.bas (TABU C4)",
+    "Implementação de TV2_RunUiFiltros com interação real (Onda 18+)"
+  ],
+
+  "decisao_arquitetural": {
+    "questao": "TV2_RunUiSmokeReadOnly entra DENTRO de TV2_RunSmoke (mesma suite V2_Smoke) ou cria suite separada (V2_UiSmoke)?",
+    "decisao": "DENTRO de V2_Smoke — inclui TV2_RunUiSmokeReadOnly como bloco final do TV2_RunSmoke ANTES de TV2_FinalizarExecucao",
+    "justificativa": [
+      "(a) Quarteto continua com 4 suites — não muda gate (não exige bump de TEST_KEY até MD-17.3 que cria Quinteto)",
+      "(b) TV2_RunSmoke já é o entry point V2_Smoke — economia de TV2_InitExecucao/TV2_FinalizarExecucao",
+      "(c) Sintaxe Quarteto fica V1=171/0+V2_Smoke=34/0+V2_Canonica=23/0+E2E_Strikes=65/0 (Smoke 14→34 com 20 asserts novos)",
+      "(d) Na MD-17.3 quando criar Quinteto, IntegridadeBase vira suite nova; UiSmoke continua dentro de V2_Smoke (não vira suite separada)"
+    ],
+    "alternativa_rejeitada": "Suite separada V2_UiSmoke obrigaria mudar Quarteto para Quinteto JÁ na MD-17.1.c — invade escopo da MD-17.3 e quebra Q5 sequenciamento"
+  },
+
+  "5_verificacoes_v1_a_v5_por_form": {
+    "V1_existencia_controles_canonicos": {
+      "tema": "Para cada nome de controle na lista canônica esperada, verificar que existe em VBE.ActiveVBProject.VBComponents(formName).Designer.Controls",
+      "mecanismo": "On Error Resume Next; ctrl = comp.Designer.Controls(canonicoName); If Err.Number <> 0 Then assert FALHA",
+      "severidade_falha": "FALHA hard (cenário CS_UISMOKE_<FORM>_V1)",
+      "exemplo": "Reativa_Entidade deve ter: lstEntidadesInativas, btnReativar, btnCancelar, lblTitulo, txtFiltro (lista hardcoded definitiva no momento da implementação MD-17.1.c)"
+    },
+    "V2_zero_controles_extras": {
+      "tema": "Enumerar TODOS controles em Designer.Controls; conjunto deve ser EXATAMENTE igual à lista canônica (nem mais, nem menos)",
+      "mecanismo": "Loop For Each ctrl In comp.Designer.Controls; collect names into array; compare set equality contra canônico",
+      "severidade_falha": "FALHA hard se houver extras OU faltantes (Q-MD17.1.c.2=A — manter exato)",
+      "comportamento_diferenca": "Mensagem de assert detalha: 'extras=[a,b]; faltantes=[c,d]'"
+    },
+    "V3_helpers_ui_esperados": {
+      "tema": "Para cada helper esperado da tabela canônica do form, verificar existência via VBE.ActiveVBProject.VBComponents(formName).CodeModule.ProcStartLine(helperName, vbext_pk_Proc)",
+      "mecanismo": "On Error Resume Next; lin = comp.CodeModule.ProcStartLine(helperName, vbext_pk_Proc); If lin <= 0 Then assert FALHA",
+      "severidade_falha": "FALHA hard",
+      "exemplo": "Reativa_Entidade deve ter: UI_EntidadeInativasTemConflito, UI_AtualizarBotaoOK, UI_FiltrarLista (lista hardcoded MD-17.1.c)"
+    },
+    "V4_frm_sincroniza_codeonly_gamma_tolerante": {
+      "tema": "Comparar conteúdo extraído do .frm (seção de código pós-Attribute) com .code-only.txt aplicando normalização γ",
+      "mecanismo_passo_a_passo": [
+        "(1) Ler src/vba/<Form>.frm via Open + Get; localizar marcador 'Attribute VB_Name' e capturar tudo que vier depois (a seção de código)",
+        "(2) Ler local-ai/vba_import/002-formularios/<prefixo>-<Form>.code-only.txt via Open + Get",
+        "(3) Aplicar TV2_UI_NormalizarGamma em cada linha de cada lado: (a) descartar linhas começando com ' (após LTrim), (b) RTrim, (c) lower-case em identificadores fora de strings literais (split por aspas duplas; lower nas posições pares)",
+        "(4) Concatenar linhas normalizadas, comparar igualdade exata"
+      ],
+      "severidade_falha": "FALHA hard se diferença persistir após γ",
+      "tolerancia_explicita": "Drift cosmético atual conhecido (3 comentários extras Reativa_Entidade/Empresa + capitalização Cont/cont + trailing whitespace 2 forms) PASSA pelo γ — verificado mentalmente; reverificado empiricamente na execução do MD-17.1.c real"
+    },
+    "V5_vbe_extensibility_canary": {
+      "tema": "Confirma que VBE.ActiveVBProject está acessível programaticamente — sem isso V1/V2/V3 não conseguem rodar",
+      "mecanismo": "Set vbp = Application.VBE.ActiveVBProject; Set comp = vbp.VBComponents(formName); ?comp.Type — todos via On Error e teste explícito de Err.Number",
+      "severidade_falha": "FALHA hard (Q4 confirmado) — se Trust Center bloqueia, cenário CS_UISMOKE_VBE_CANARY reprova; mensagem orienta operador a habilitar 'Confiar no acesso ao modelo de objeto do projeto VBA' nas Opções do Excel",
+      "ordem_execucao": "PRIMEIRO cenário do bloco UiSmoke — se reprovar, V1-V4 dos 4 forms são SKIP com TV2_LogManual (não FALHA, evita ruído). Apenas V5 conta como FALHA quando Trust Center desabilitado.",
+      "ressalva_q4": "A FALHA é em V5_CANARY apenas; V1-V4 viram SKIP/MANUAL para não inflacionar contagem de falhas com causa raiz idêntica"
+    }
+  },
+
+  "contagem_de_asserts_esperada": {
+    "trust_center_habilitado": "1 (V5_CANARY OK) + 4×4 (V1-V4 verdes para 4 forms) = 17 asserts OK no bloco UiSmoke; somam ao Smoke baseline 14 → Smoke=31/0",
+    "trust_center_desabilitado": "1 V5_CANARY FALHA + 4×4 MANUAL_ASSISTIDO = Smoke=14/1 (FALHA isolada em V5_CANARY); MANUAL=16; Quarteto REPROVADO por essa única falha",
+    "nota": "Contagem precisa pode variar levemente conforme implementação (V2 contar como 1 assert ou N asserts por extras). Critério de aceite usa RESULTADO_GERAL=APROVADO, não contagem exata.",
+    "sintaxe_quarteto_alvo": "V1=171/0+V2_Smoke=31/0+V2_Canonica=23/0+E2E_Strikes=65/0 (MANUAL=1 do CS_E2E_REATIV2STRIKES)"
+  },
+
+  "premissas_e_dependencias": [
+    "Workbook ancora V12-202-Z003-onda17-md1b-fix2 carregado e Trust Center configurado para acesso ao VBE Project (operador valida na pré-condição)",
+    "src/vba/Teste_V2_Roteiros.bas estado atual = 2269 linhas pós-fix2 (estimado)",
+    "src/vba/App_Release.bas estado atual = 194 linhas",
+    "Espelho ABG-Teste_V2_Roteiros.bas + AAX-App_Release.bas alinhados shasum",
+    "Os 4 .frm em src/vba/ existem e têm forma canônica VBE",
+    "Os 4 .code-only.txt em local-ai/vba_import/002-formularios/ existem e estão na versão fix2 (com drift cosmético tolerável)",
+    "VBA Extensibility 5.3 referenciada no projeto (necessária para Application.VBE.* — se não estiver, V5_CANARY detecta e operador adiciona via Tools > References)"
+  ],
+
+  "tier_3_lido_pela_ia_neste_md": {
+    "ABG-Teste_V2_Roteiros.bas (estrutura)": "lido via grep — TV2_RunSmoke linha 21 confirmada como entry V2_Smoke; ponto de inserção do bloco UiSmoke = ANTES de TV2_FinalizarExecucao dentro de TV2_RunSmoke",
+    "ABF-Teste_V2_Engine.bas (estrutura)": "lido via grep — TV2_LogAssert linha 155 + TV2_LogManual linha 186 disponíveis para o novo bloco; TV2_InitExecucao já chamado por TV2_RunSmoke",
+    "AAF/AAH/AAD/AAI .frm headers": "confirmados como UserForm padrão; enumeração completa de controles canônicos será feita VIA grep durante implementação MD-17.1.c — adiada para o momento da escrita do código (não no readback)"
+  },
+
+  "hard_constraints": [
+    "C1 (Regra Ouro 0002): edição src/vba/ PRIMEIRO; espelho local-ai/vba_import/ depois com shasum batendo (M11)",
+    "C4 Mod_Types.bas TABU",
+    "C7 Quarteto continua APROVADO após MD-17.1.c real",
+    "C9 Markers HBN V2 vigentes",
+    "C11 Cap M10 = 0 imports em forms (esta MD não toca .frm/.frx/.code-only.txt)",
+    "G6 sem código VBA solto no chat (este readback é JSON descritivo)",
+    "L14 pre-flight grep assinaturas + UDTs visibilidade obrigatório antes de gerar código novo",
+    "M9 forms VBA têm DOIS espelhos (.frm + .code-only.txt) — V4 desta MD verifica essa sincronia como assert",
+    "M11 src/vba/ fonte de verdade INVIOLÁVEL — cada arquivo tocado revalida shasum",
+    "M14 pacote de fix em onda multi-microdelta cobre TODAS opções de rollback (ver §m14_preflight)",
+    "Hearback explícito por microdelta com escrita em código",
+    "CRLF preservado em todos arquivos VBA (validar com `file <path>` antes do import)"
+  ],
+
+  "m14_preflight": {
+    "checkpoint_estavel_anterior_a_md17_1_c": "V12-202-Z003-onda17-md1b-fix2 (build f7aa84f+ONDA17.MD1B-fix2-cenarios-aplicados; VR_20260503_031425)",
+    "arquivos_modificados_neste_md": [
+      "src/vba/Teste_V2_Roteiros.bas + espelho ABG-Teste_V2_Roteiros.bas",
+      "src/vba/App_Release.bas + espelho AAX-App_Release.bas"
+    ],
+    "opcoes_de_rollback_oferecidas_ao_operador": "Apenas UMA opção (rollback total para fix2) — não há ramificação multi-opção neste MD; M14 trivialmente satisfeito",
+    "verificacao_coerencia": "Pacote MICRO19 contém EXATAMENTE os 2 arquivos modificados; recomendação textual e pacote técnico coerentes (sem ramificação para divergir)"
+  },
+
+  "glasswing_checks": {
+    "G1_macro_nao_confiavel": "ok (nenhuma macro descartável criada)",
+    "G2_config_validada": "nao_aplicavel (sem mudança de schema CONFIG)",
+    "G3_formulas_privilegiadas": "nao_aplicavel",
+    "G4_audit_log_append_only": "ok (RESULTADO_QA_V2 é append-only por design)",
+    "G5_claims_proporcionais": "ok (claims condicionados a evidência VR_<timestamp>; sem 100%/zero risco)",
+    "G6_codigo_no_chat": "ok (este readback é JSON descritivo; nenhum bloco VBA na resposta)",
+    "G7_vba_import_sincronizado": "validar shasum no Passo 0 antes de gerar manifesto MICRO19",
+    "G8_public_type_isolado": "ok (Mod_Types não tocado)"
+  },
+
+  "markers_hbn_v2_ativos": [
+    "✅ HBN ACTIVE — protocolo engajado",
+    "🟢 HBN CHECKPOINT CLEAN — ancora estável V12-202-Z003-onda17-md1b-fix2",
+    "🟡 HBN NEEDS HUMAN DECISION — aguardando hearback confirmed deste readback",
+    "🟤 HBN LICENSE SPLIT REQUIRED — TPGL Credenciamento; lições candidatas a promoção AGPLv3"
+  ],
+
+  "rollback_plan": {
+    "trigger": "Quarteto reprovado após import MD-17.1.c real OU compile error OU crash do Excel",
+    "acao_imediata": "git restore src/vba/Teste_V2_Roteiros.bas src/vba/App_Release.bas local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas local-ai/vba_import/001-modulo/AAX-App_Release.bas; rm local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO19.txt; reabrir backup V12-202-Z003-onda17-md1b-fix2",
+    "ancora_segura": "V12-202-Z003-onda17-md1b-fix2 (intacta)",
+    "limite_iteracoes_em_um_microdelta": "3 fix-attempts; após o 3º fix sem verde, rollback obrigatório e replanejar",
+    "evidencia_obrigatoria_para_seguir": "VR_<timestamp> Quarteto APROVADO com sintaxe esperada (V2_Smoke=31/0 ou similar)"
+  },
+
+  "criterios_de_sucesso": [
+    "Compile manual passa limpo (zero erros, zero warnings)",
+    "GetBuildImportado retorna f7aa84f+ONDA17.MD1C-uismoke-readonly",
+    "CT_ValidarRelease_QuartetoMinimo APROVADO",
+    "V2_Smoke aumenta de 14 para ~31 OK (acréscimo correto dos 17 asserts UiSmoke)",
+    "V1, V2_Canonica, E2E_Strikes preservam contagem (regressão zero)",
+    "RESULTADO_QA_V2 mostra cenário CS_UISMOKE_VBE_CANARY como OK (não AMARELO)",
+    "RESULTADO_QA_V2 mostra 4×4=16 cenários CS_UISMOKE_<FORM>_V1..V4 como OK",
+    "shasum src/vba/Teste_V2_Roteiros.bas == shasum local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas (M11)",
+    "shasum src/vba/App_Release.bas == shasum local-ai/vba_import/001-modulo/AAX-App_Release.bas (M11)"
+  ],
+
+  "estimates": {
+    "ia_horas": 2.5,
+    "operador_horas": 0.6,
+    "etapas_ia": [
+      "(0.4h) Enumerar controles canônicos por form via grep estrutural dos 4 .frm + montagem das tabelas constantes",
+      "(0.4h) Enumerar helpers UI esperados por form via grep CodeModule (Public Sub UI_*) dos 4 .frm",
+      "(1.0h) Escrever TV2_RunUiSmokeReadOnly + 3 helpers Private + bloco V5_CANARY em src/vba/Teste_V2_Roteiros.bas",
+      "(0.2h) Bump src/vba/App_Release.bas + espelhar local-ai/vba_import/",
+      "(0.2h) Validar shasum src/vba <-> local-ai/vba_import + CRLF",
+      "(0.2h) Gerar manifesto MICRO19 + procedimento 06_PROCEDIMENTO_IMPORT_MD17_1_c.md",
+      "(0.1h) Hearback escrita-em-codigo final antes de o operador importar"
+    ],
+    "etapas_operador": [
+      "(0.1h) Reset VBE",
+      "(0.1h) Importar pacote MICRO19",
+      "(0.05h) Compile manual",
+      "(0.25h) CT_ValidarRelease_QuartetoMinimo (~14m41s)",
+      "(0.05h) Validar sintaxe + reportar VR",
+      "(0.05h) Salvar workbook ancora V12-202-Z003-onda17-md1c"
+    ],
+    "duracao_calendario_alvo": "1 sessão IA + 1 janela operador (~3h calendário total)",
+    "risco_overrun": "BAIXO — mecânica VBE.Designer.Controls bem documentada; principal risco é Trust Center desabilitado no operador (V5_CANARY detecta e mensagem é prescritiva)"
+  },
+
+  "next_action": "Aguardar hearback 'confirmed' deste readback do operador. Após confirmed, IA executa etapas (0.4h × 2) de enumeração canônica + escrita do código + manifesto + procedimento. Hearback adicional de escrita-em-código antes de o operador importar.",
+
+  "perguntas_de_hearback_para_o_operador": {
+    "Q-MD17.1.c.real.1": {
+      "pergunta": "Confirma decisão arquitetural §decisao_arquitetural — TV2_RunUiSmokeReadOnly entra DENTRO de TV2_RunSmoke (sem suite separada V2_UiSmoke), mantendo Quarteto com 4 suites?",
+      "default": "SIM (justificativas a-d)"
+    },
+    "Q-MD17.1.c.real.2": {
+      "pergunta": "Confirma comportamento V5_CANARY → SKIP/MANUAL nos V1-V4 quando V5 falha (evita 16 falhas com causa raiz idêntica; só V5 conta como FALHA)?",
+      "default": "SIM (compatível com Q4 — severidade FALHA fica isolada em V5_CANARY, mas operador vê único ponto de ação)"
+    },
+    "Q-MD17.1.c.real.3": {
+      "pergunta": "Lista canônica de controles e helpers por form será derivada por grep automático dos .frm na execução (4 forms, ~30min de IA) e gravada hardcoded no Roteiros — confirma OU prefere que IA proponha lista preliminar agora para você revisar antes da escrita?",
+      "default": "Derivar automático e mostrar a lista no hearback de escrita-em-código antes do import (ciclo único de revisão)"
+    }
+  }
+}

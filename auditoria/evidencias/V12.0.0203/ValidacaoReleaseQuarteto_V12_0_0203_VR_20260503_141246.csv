@@ -1,0 +1,6 @@
+VALIDACAO_ID;BUILD;DATA_HORA;ETAPA;EXECUCAO_ID;OK;FALHA;MANUAL;STATUS;CSV_FALHAS;PRIMEIRA_FALHA;ACAO_IA
+VR_20260503_141246;f7aa84f+ONDA17.MD1C-uismoke-readonly;03/05/2026 14:18:32;V1_RAPIDA;BO-20260503-141246;171;0;0;OK;NAO_EXPORTADO;;Sem acao corretiva.
+VR_20260503_141246;f7aa84f+ONDA17.MD1C-uismoke-readonly;03/05/2026 14:19:56;V2_SMOKE;TV2_20260503_141832;19;4;8;FALHA;\\Mac\Home\Projetos\Credenciamento\TesteV2_SMOKE_Falhas_TV2_20260503_141832.csv;"CENARIO=CS_UISMOKE_Reativa_Entidade_V1; OBJETIVO=Existencia controles canonicos em Reativa_Entidade; ESPERADO=Todos canonicos presentes: R_Lista,mTxtBusca; OBTIDO=FALTANTES=mTxtBusca;; SIGNIFICADO=V1 hardcoded — falha sinaliza form alterado sem atualizar canControles";Corrigir o cenario V2 indicado em PRIMEIRA_FALHA e reexecutar o trio minimo.
+VR_20260503_141246;f7aa84f+ONDA17.MD1C-uismoke-readonly;03/05/2026 15:02:30;V2_CANONICO;TV2_20260503_141956;23;0;0;OK;NAO_EXPORTADO;;Sem acao corretiva.
+VR_20260503_141246;f7aa84f+ONDA17.MD1C-uismoke-readonly;03/05/2026 15:06:30;V2_E2E_STRIKES;TV2_20260503_150230;65;0;1;OK;NAO_EXPORTADO;;Sem acao corretiva.
+VR_20260503_141246;f7aa84f+ONDA17.MD1C-uismoke-readonly;03/05/2026 15:06:30;GERAL;;;;;REPROVADO;;;"Quarteto V1+V2_Smoke+V2_Canonica+E2E_Strikes; usar como evidencia textual."

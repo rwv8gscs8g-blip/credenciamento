@@ -1,0 +1,47 @@
+{
+  "readback_id": "readback-onda17-18-fechamento-rc3-2026-05-04",
+  "agent_id": "codex-cli-bloco-b-onda18",
+  "operator": "Luis Mauricio Junqueira Zanin",
+  "track": "safe_track",
+  "schema_version": "hbn-readback/0.3.1",
+  "created_at": "2026-05-04T07:40:00-0300",
+  "status": "confirmed_by_operator",
+  "hearback_source": "user: MICRO28 importou, compilou, check visual passou e Quinteto VR_20260504_070441 aprovado; diretiva inicial autorizou persistir ate fechamento Bloco B",
+  "scope": "MD-17.5 - fechamento conjunto Onda 17 + Onda 18 como v12.0.0203-rc3",
+  "release_decision": {
+    "tag": "v12.0.0203-rc3",
+    "status": "RELEASE_CANDIDATE",
+    "reason": "conservador: final v12.0.0203 fica para depois da auditoria cruzada Opus + Antigravity"
+  },
+  "precondition": {
+    "bloco_a": "Quinteto VR_20260503_234443 e Quarteto VR_20260504_000004 aprovados",
+    "md18_1a": "Quinteto VR_20260504_054106 aprovado",
+    "md18_1b": "Quinteto VR_20260504_060256 aprovado",
+    "md18_3": "Quinteto VR_20260504_064117 aprovado",
+    "md18_2": "Quinteto VR_20260504_070441 aprovado + visual confirmado"
+  },
+  "files_planned_src_truth": [
+    "src/vba/App_Release.bas",
+    "CHANGELOG.md",
+    "usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md",
+    "auditoria/03_ondas/onda_17_test_first/70_FECHAMENTO_ONDA_17.md",
+    "auditoria/03_ondas/onda_18_reativ_strikes/70_FECHAMENTO_ONDA_18.md"
+  ],
+  "files_planned_import_mirror": [
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO29.txt"
+  ],
+  "expected_gate": {
+    "importador_v3": "M=1/F=0/err=0/skip=0",
+    "compile_manual": "operator",
+    "quinteto": "APROVADO",
+    "expected_syntax": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+  },
+  "hard_constraints": [
+    "rc3, nao final, ate auditoria cruzada verde",
+    "src/vba e fonte de verdade",
+    "local-ai/vba_import e espelho",
+    "CRLF preservado",
+    "M11 shasum match antes de entregar comando"
+  ]
+}

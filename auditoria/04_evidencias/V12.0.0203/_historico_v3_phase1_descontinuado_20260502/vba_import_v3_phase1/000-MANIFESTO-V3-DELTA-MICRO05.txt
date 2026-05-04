@@ -1,0 +1,44 @@
+# Manifesto V3 DELTA MICRO05 - Onda 10 Microdelta 1.5 (ULTIMO da Onda 10)
+# Tema: Suite STRIKES end-to-end via rodizio natural + correcoes acumuladas
+#
+# Versao fix4 (2026-05-01 22:00) — APROVADA por Mauricio:
+#   fix1 = removida qualificacao Repo_Avaliacao.ContarStrikesPorEmpresa (L10)
+#   fix2 = defaults GetMaxStrikes 3->1 e GetDiasSuspensaoStrike 90->0 (L11)
+#   fix3 = ContarStrikesPorEmpresa: removido filtro `mediaVal > 0` (L12)
+#   fix4 = SUITE END-TO-END nova substitui TV2_RunStrikes:
+#          - Removido TV2_RunStrikes/TV2_SetStrikesConfig/TV2_ConsumirStrikeEmpresa
+#          - Adicionado TV2_RunRodizioStrikesEndToEnd + 4 helpers privados
+#          - Adicionado 6 Private Const TV2_E2E_*
+#          - Cenario isolado: ATIV=999, SERV=001, EMP1/2/3 dedicados
+#          - 11 etapas (A-J) com ~14 asserts intermediarios
+#          - Rodizio NATURAL (sem manipulacao de fila)
+#          - Reativacao via DT_FIM_SUSP (mecanismo nativo)
+#          - Idempotente: TV2_PrepararBaselineCanonica reseta tudo
+#          - Central V2 opcao [14] passa a chamar a nova suite
+#
+# Estrategia A - espelho minimalista. Inclui:
+#   - AAN-Repo_Avaliacao.bas (fix3)
+#   - AAD-Util_Config.bas (fix2)
+#   - ABE-Central_Testes_V2.bas (opcao [14] -> nova suite)
+#   - ABG-Teste_V2_Roteiros.bas (fix4 — suite end-to-end + remocao TV2_RunStrikes)
+#   - AAX-App_Release.bas (bump fix4)
+#
+# Pos-import esperado:
+#   - Compile manual passa limpo
+#   - V1 (Bateria_Oficial) 171/0 (BO_330d corrigido pelo fix3)
+#   - V2 Smoke 14/0
+#   - V2 Canonica 20/0
+#   - TV2_RunRodizioStrikesEndToEnd: ~14 asserts todos verdes
+#   - TRIO MINIMO completo APROVADO
+#
+# Apos verde -> promover para V12-202-T-onda10 e fechar Onda 10.
+#
+# Uso esperado:
+#   ImportarPacoteV3_Delta "MICRO05", "f7aa84f+ONDA10.MICRO05-Strikes-Suite-fix9-CodServico-incremental"
+
+# GRUPO_DELTA_MICRO05_STRIKES_E2E_FIX4
+M|001-modulo/AAN-Repo_Avaliacao.bas
+M|001-modulo/AAD-Util_Config.bas
+M|001-modulo/ABE-Central_Testes_V2.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

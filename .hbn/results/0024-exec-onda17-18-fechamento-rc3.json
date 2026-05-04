@@ -1,0 +1,40 @@
+{
+  "execution_id": "exec-onda17-18-fechamento-rc3-2026-05-04",
+  "readback_id": "readback-onda17-18-fechamento-rc3-2026-05-04",
+  "agent_id": "codex-cli-bloco-b-onda18",
+  "operator": "Luis Mauricio Junqueira Zanin",
+  "track": "safe_track",
+  "schema_version": "hbn-result/0.3.1",
+  "started_at": "2026-05-04T07:40:00-0300",
+  "completed_at": "2026-05-04T08:10:51-0300",
+  "status": "APROVADO_OPERADOR",
+  "scope": "MD-17.5 - fechamento conjunto Onda 17 + Onda 18 como v12.0.0203-rc3",
+  "microdelta_final": {
+    "delta": "MICRO29",
+    "build": "f7aa84f+v12.0.0203-rc3",
+    "importador": "ImportarPacoteV3_Delta",
+    "import_status": "confirmado pelo operador: importou e compilou"
+  },
+  "validacao_release_quinteto": {
+    "vr_id": "VR_20260504_075624",
+    "resultado": "APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+    "ok_total": 295,
+    "falha_total": 0,
+    "csv_path": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuinteto_V12_0_0203_VR_20260504_075624.csv"
+  },
+  "evidencia_operador": [
+    "MICRO29 importou.",
+    "Compilacao manual no VBE passou limpa.",
+    "Quinteto aprovado em 2026-05-04 08:10:51 BRT.",
+    "Print do operador mostra Resultado APROVADO e build f7aa84f+v12.0.0203-rc3."
+  ],
+  "resultado_tecnico": [
+    "APP_BUILD_IMPORTADO carimbado como f7aa84f+v12.0.0203-rc3.",
+    "APP_RELEASE_TAG carimbada como v12.0.0203-rc3.",
+    "APP_RELEASE_TEST_KEY carimbada como quinteto-onda18-2026-05-04.",
+    "CHANGELOG, PHAGOCYTOSIS e fechamentos 70 da Onda 17/18 foram preparados.",
+    "Promocao para v12.0.0203 final permanece condicionada a auditoria cruzada."
+  ],
+  "proximo_passo": "Executar auditoria cruzada final com Opus 4.7 e Antigravity antes da devolucao formal do bastao."
+}

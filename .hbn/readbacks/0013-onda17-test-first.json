@@ -1,0 +1,195 @@
+{
+  "readback_id": "readback-onda17-test-first-2026-05-03",
+  "agent_id": "claude-opus-4-7-cowork",
+  "operator": "Luís Maurício Junqueira Zanin",
+  "track": "safe_track",
+  "started_at": "2026-05-03",
+  "deadline_hard": null,
+  "status": "em_execucao",
+  "schema_version": "hbn-readback/0.3.1",
+
+  "ciclo_anterior_fechado": "Onda 11 (V12.0.0203-rc1 publicada em GitHub 2026-05-02 06:50 BRT, tag v12.0.0203-rc1)",
+  "ciclo_imediatamente_anterior": "Onda 16 fechada PARCIALMENTE em 2026-05-03 (MD-16.1 + MD-16.2 + MD-16.3 fix1 entregues; MD-16.4 a MD-16.6 cancelados — workbook restaurado para V12-202-Z003); transplante src/vba <-> local-ai/vba_import sincronizado em 2026-05-03",
+
+  "objetivo": "Construir cobertura adicional de testes (engine + cenários novos + smoke read-only de UI sem instanciar form + suite IntegridadeBase) ANTES de qualquer mexida em forms (test-first inegociável); reduzir tempo do gate via paralelização lógica (isolamento de fixture + namespacing + Calculation manual + ScreenUpdating off + eliminação de Wait/redundância) sem perder determinismo nem invariantes de negócio; entregar visibility rica na barra inferior do Excel (etapa X de Y); simplificar menu de testes removendo opções 'assistido' redundantes mantendo todas as determinísticas; promover gate oficial de Quarteto para Quinteto e bumpar V12.0.0203-rc2.",
+
+  "premissa_central": "NENHUMA alteração em código de produção até cobertura nova estar verde como gate de release. Test-first em sentido estrito. Cap M10 vigente: 0 imports em forms na Onda 17 (mexidas em forms abrem na Onda 18 com Quinteto blindando). M11 (src/vba é fonte de verdade) inviolável após regressão de 2026-05-02.",
+
+  "ancora_estavel": {
+    "workbook": "V12-202-Z003/02_05_2026 20_43_09PlanilhaCredenciamento-Homologacao-V3.xlsm",
+    "build_label": "f7aa84f+ONDA16.MD3-fix1-evolucao-testes-incremental",
+    "app_release_tag": "v12.0.0203-rc1",
+    "app_release_status": "RELEASE_CANDIDATE",
+    "validacao": "VR_20260502_222849 Quarteto APROVADO V1=171/0+V2_Smoke=14/0+V2_Canonica=20/0+E2E_Strikes=64/0",
+    "src_vba_local_ai_aligned": "shasum batendo em 19 .bas + 13 .frm + 13 .frx (transplante 43b)"
+  },
+
+  "hearback_dos_11_pontos": {
+    "Q1_abrir_onda17_test_first": "confirmed sim — fechamento parcial Onda 16 + abertura Onda 17",
+    "Q2_tv2_runuifiltros": "confirmed AJUSTE — TV2_RunUiFiltros (interação real com forms) vai para Onda 18; Onda 17 NÃO toca em forms; foco vira melhorar testes existentes + IntegridadeBase + smoke read-only sobre forms (sem instanciar)",
+    "Q3_integridadebase_enxuto": "confirmed sim — 4 cenários (ENT2 dup ATIVA+INATIVA caso real, EMP dup ATIVA+INATIVA, CNPJ duplicado em 2 linhas EMPRESA, ENT com strikes em 2 linhas)",
+    "Q4_quinteto_gate_oficial": "confirmed AJUSTE — Quinteto (V1+Smoke+Canonica+E2E_Strikes+IntegridadeBase) vira gate oficial rc2+; Quarteto continua como gate intermediário rápido; Sexteto (com UiFiltros) fica para Onda 18+",
+    "Q5_util_pdf_md16_4": "confirmed sim — fica para Onda 18+; segue em quarentena _quarentena_pos_md16_3_2026_05_03/",
+    "Q2_1_melhorar_testes_alternativa": "confirmed (C) — aprofundar cobertura V2 + refatorar engine + adicionar mecanismo de paralelização lógica no mesmo Excel (isolamento + cache + batch I/O + eliminação de redundância); operador esclareceu sem ilusão de multi-thread real",
+    "Q2_2_foco_tematico": "confirmed (a) rodízio/strikes/avaliação + (e) regressão silenciosa em refs UI (precursor Onda 18)",
+    "Q2_3_cap_quantitativo": "confirmed (iii) — Opus propõe, iteramos",
+    "HF7_paralelizacao_no_mesmo_excel": "confirmed sim — isolamento + cache + batch I/O + eliminação de redundância (sem multi-thread real)",
+    "HF8_threshold_alvo": "confirmed (a) <1s por cenário individual",
+    "HF9_estrategia_anti_lento": "confirmed γ+α (refatorar + visibility)",
+    "HF10_bateria_v1_assistida": "confirmed (a) — remover dialog ASSISTIDA vs RÁPIDA; V1 sempre RÁPIDA",
+    "HF11_stress_deterministico": "confirmed (a) — manter [3] Stress determinístico, remover só [4] Stress assistido",
+    "principio_geral_pos_HF11": "confirmed — manter TODOS os determinísticos; remover SÓ os assistidos"
+  },
+
+  "consideracoes_canonizadas": {
+    "C1_INV1": "Loops de repetição de rodízio (ex: N voltas para validar idempotência) são propósito de teste, não redundância. Refatoração γ NÃO consolida esses loops. Cada loop dessa natureza recebe comentário-vacina (estilo L18) explicando o porquê de N voltas + auditoria pre-flight L14",
+    "C2_status_bar_rica": "Barra inferior do Excel mostra contagem (cenário X de N), nome do cenário e etapa intra-cenário (em cenários estimados >500ms). Não precisa ser tempo real. Granularidade controlada por Util_Config.GetStatusBarVerbosity (default nivel 2)",
+    "C3_simplificar_menu": "Remover opções 'assistido' do menu (smoke assistido, stress assistido, dialog ASSISTIDA da Bateria V1). Manter TODAS as determinísticas (smoke rápido, stress determinístico, canônica, E2E_Strikes, filtros, gates)"
+  },
+
+  "invariantes_da_onda": {
+    "INV-1": {
+      "regra": "Loops de repetição de rodízio são propósito de teste, NÃO redundância — refatoração γ NÃO consolida esses loops",
+      "defesa": "Comentário-vacina por loop + pre-flight L14 antes de extrair cenário"
+    },
+    "INV-2": {
+      "regra": "Refatoração γ ataca APENAS: (a) setup duplicado entre cenários compatíveis, (b) Limpa_Base entre cenários do mesmo namespace, (c) loops de I/O célula-a-célula (batch via array), (d) Sleep/Wait sem justificativa, (e) ScreenUpdating ligado durante batch + Calculation=xlCalculationManual durante batch",
+      "defesa": "Whitelist explícita; qualquer otimização fora dessas 5 categorias exige hearback dedicado"
+    },
+    "INV-3": {
+      "regra": "Toda mudança em cenário existente preserva os asserts e seu significado semântico — pode mudar HOW (mais rápido), nunca WHAT (o que valida)",
+      "defesa": "Diff comentado por cenário no procedimento de import + comentário-vacina no cenário"
+    }
+  },
+
+  "escopo_em": [
+    "MD-17.0: Auditoria + readback formal (este documento)",
+    "MD-17.1.a: Engine V2 — TV2_FixtureFactory parametrizada por escopo (string namespace) + namespacing de IDs (EMP_S<N>_*, ATIV_S<N>_*) + helper TV2_RestaurarConfigBaseline generalizado (movido de Roteiros 1891 para Engine, parametrizado maxStrikes+diasSusp) + idempotência cruzada entre suites (cada suite limpa só seu namespace)",
+    "MD-17.1.b: 5 cenários novos — (1) MAX_STRIKES=2 borda em V2_Canonica, (2) MAX_STRIKES=5 borda em V2_Canonica, (3) reativação automática + 2º strike em E2E_Strikes, (4) nota ZERO regressão L12 em V2_Canonica, (5) rodízio com 5 EMPs alternando notas em E2E_Strikes",
+    "MD-17.1.c: TV2_RunUiSmokeReadOnly dentro de V2_Smoke — 4 verificações sem instanciar form: existência de controles canônicos hardcoded (lista por form), nomes canônicos batem (zero heurística), .frm sincronizado com .code-only.txt (hash diff M9), helpers UI esperados existem com assinatura correta (UI_EntidadeInativasTemConflito etc.); leitura prévia obrigatória dos 4 forms-alvo",
+    "MD-17.1.d.I: Performance γ — refatoração dos top-N lentos com whitelist INV-2; alvo: cada cenário <1s (HF8); Application.Calculation=xlCalculationManual durante batch + ScreenUpdating=False em TV2_InitExecucao/TV2_FinalizarExecucao; remoção de Application.Wait não justificado (TV2_PausarVisual vira no-op); medição com DURACAO_MS por cenário (já existe desde MD-16.2)",
+    "MD-17.1.d.II: Visibility α — TV2_StatusBar(suite, cenAtual, totN, nomeCenario, etapa) com 6 níveis de mensagem rica (início bateria, início suite, início cenário, etapa intra-cenário, final suite, final bateria); Util_Config.GetStatusBarVerbosity (níveis 0-3, default 2); contagem prévia de cenários por suite injetada em TV2_InitExecucao",
+    "MD-17.1.e: Limpeza C3 — em src/vba/Central_Testes_V2.bas remover linhas 36 (texto '[2] Smoke assistido'), 39 (texto '[4] Stress assistido'), Case '2' linhas 61-62, Case '4' linhas 64-65, Sub CT2_ExecutarSmokeAssistido linhas 104-107, Sub CT2_ExecutarStressAssistido linhas 114-117; em src/vba/Central_Testes.bas remover dialog ASSISTIDA vs RÁPIDA (linhas 146-152) — V1 passa a chamar BA_SetModoExecucaoVisual(False) sempre; renumerar opções restantes coerentemente",
+    "MD-17.2: TV2_RunIntegridadeBase — 4 cenários (ENT2 dup ATIVA+INATIVA fixture do bug real 2026-05-02, EMP dup ATIVA+INATIVA simétrico, CNPJ duplicado em 2 linhas EMPRESA, ENT com strikes em 2 linhas combinação) + aba RPT_BUGS_CONHECIDOS schema (TIMESTAMP, SUITE, CENARIO, BUG_ID, DETECCAO, ESTADO_OBSERVADO, ESTADO_ESPERADO, ACAO_RECOMENDADA); cenários gravam append-only mas NÃO falham gate (sinal de degradação observada)",
+    "MD-17.3: CT_ValidarRelease_QuintetoMinimo (V1+V2_Smoke+V2_Canonica+E2E_Strikes+IntegridadeBase) replicando padrão do Quarteto em src/vba/Teste_Validacao_Release.bas (etapas 7-11, RESULTADO_GERAL=13, BLOCO_COPIAVEL=14/15) + bump APP_RELEASE_TEST_KEY → 'quinteto-2026-05-04'",
+    "MD-17.4: Validação Quinteto verde + Quarteto continua verde (CT_ValidarRelease_QuartetoMinimo intocado) + métrica de tempo (vs baseline VR_20260502_222849 ~12min Quarteto → alvo Quinteto ~8-10min) + bug duplicata gravado em RPT_BUGS_CONHECIDOS",
+    "MD-17.5: rc2 bump (APP_RELEASE_TAG → v12.0.0203-rc2; APP_BUILD novo) + CHANGELOG + L21+M12 em PHAGOCYTOSIS-VBA-PATTERNS append-only + ERP 0013-exec-onda17.json + auditoria/03_ondas/onda_17_test_first/70_FECHAMENTO_ONDA_17.md + tag git v12.0.0203-rc2 (operador)"
+  ],
+
+  "escopo_fora": [
+    "Mexidas em qualquer .frm/.frx/.code-only.txt — cap M10 = 0 imports em forms na Onda 17",
+    "TV2_RunUiFiltros com interação real (popular ListBox, aplicar filtro, validar resultado) — vai para Onda 18",
+    "Util_PDF + CNPJ no nome — segue em quarentena, vai para Onda 18+",
+    "Paralelização real multi-workbook (orquestrador externo Python/AppleScript/shell) — opcional Onda 18+",
+    "Skip por hash de código (cache de cenário) — risco médio C7, fora da Onda 17",
+    "Mod_Types.bas (TABU C4)",
+    "Reincorporação de Ondas 11+ originais (CNAE/Diag/CFG/IDM/RDZ) — Ondas 12+ pós-rc2",
+    "Refatoração estrutural ampla de 13 forms (heurística zero global) — onda futura",
+    "Drift G7 D1 dos 23 arquivos preservado intencionalmente (não tocado)"
+  ],
+
+  "premissas_e_dependencias": [
+    "Workbook ancora atual: V12-202-Z003 (build f7aa84f+ONDA16.MD3-fix1-evolucao-testes-incremental, Quarteto VR_20260502_222849 APROVADO)",
+    "Importador V3 V3.2-Canonica-Onda10-Fechada operando em local-ai/vba_import/",
+    "TV2_E2E_RestaurarConfigBaseline (Roteiros linha 1891) implementa L16 — base para generalização",
+    "TV2_PrepararBaselineCanonica (Engine linha 620) é entrada padrão de reset — preservado, fixture factory orquestra em torno",
+    "TV2_LogAssert (Engine linha 155) é único ponto de gravação de assertion + StatusBar — extensão por aqui",
+    "Engine status bar atual (linha 233): 'Testes V2: <suite> -> <cenarioId> = <status>' — substituir por TV2_StatusBar rica",
+    "TV2_PausarVisual (Engine 2363) usa Application.Wait — vira no-op pós-17.1.d.I",
+    "Bateria V1 (Teste_Bateria_Oficial.bas) tem variável gDelayVisualMs e atualiza StatusBar em loop (linha 1504) — só V2 escopo da 17.1.d.II; V1 mantém comportamento atual em modo RÁPIDO",
+    "TV2_RunFiltros (Roteiros 338) é filtros de RODÍZIO (A/B/C/D que excluem empresas) — distinto de filtros UI; nome reservado, sem conflito com TV2_RunUiSmokeReadOnly",
+    "Cada microdelta tem build label próprio (ONDA17.MD<NN>) e bump em src/vba/App_Release.bas + espelho local-ai/vba_import/001-modulo/AAX-App_Release.bas com hash batendo",
+    "Cada microdelta entrega procedimento em auditoria/03_ondas/onda_17_test_first/<NN+1>_PROCEDIMENTO_IMPORT.md listando paths com prefixo + diff resumido",
+    "Hearback explícito por microdelta com escrita em código (autoriza geração + import); cap M10 vigente em forms = 0"
+  ],
+
+  "tier_3_lido_pela_ia": {
+    "src/vba/Teste_V2_Engine.bas": "lido via grep estrutural — 80+ Public/Private mapeados; pontos de extensão claros para 17.1.a (FixtureFactory entra antes de TV2_PrepararBaselineCanonica), 17.1.d.I (wrappers Calculation+ScreenUpdating em TV2_InitExecucao/TV2_FinalizarExecucao), 17.1.d.II (TV2_StatusBar substitui linha 233 em TV2_LogLinha)",
+    "src/vba/Teste_V2_Roteiros.bas": "lido via grep estrutural — TV2_Run{Smoke,Filtros,CanonicoFundacao,Stress,RodizioStrikesEndToEnd} + helpers TV2_E2E_* + constantes ATIV_ID=999 SERV_ID=001 NOTA_BAIXA=3 NOTA_ALTA=8 mapeados",
+    "src/vba/Teste_Validacao_Release.bas": "lido integralmente — Quarteto canônico (etapas 7-10, RESULTADO_GERAL=12, BLOCO_COPIAVEL=13/14); Quinteto replica padrão (etapas 7-11, RESULTADO_GERAL=13, BLOCO_COPIAVEL=14/15) com sintaxe V1=A/F+V2_Smoke=A/F+V2_Canonica=A/F+E2E_Strikes=A/F+IntegridadeBase=A/F",
+    "src/vba/Central_Testes_V2.bas": "lido integralmente — 6 pontos de remoção C3 mapeados (linhas 36, 39, 61-62, 64-65, 104-107, 114-117)",
+    "src/vba/Central_Testes.bas": "lido integralmente — dialog ASSISTIDA vs RÁPIDA (linhas 146-152) confirmado para remoção via HF10 (a)",
+    "src/vba/{Reativa_Entidade,Reativa_Empresa,Cadastro_Servico,Credencia_Empresa}.frm": "leitura adiada para fase 17.1.c — necessária para enumerar controles canônicos e helpers UI esperados na TV2_RunUiSmokeReadOnly"
+  },
+
+  "release_gate": {
+    "gate_intermedio_dev": {
+      "nome": "CT_ValidarRelease_QuartetoMinimo",
+      "suites": ["V1_RAPIDA", "V2_SMOKE", "V2_CANONICO", "V2_E2E_STRIKES"],
+      "tempo_baseline": "~12min (VR_20260502_222849)",
+      "tempo_alvo_pos_17_1_d": "~7-9min",
+      "ponto": "preservado intacto após Onda 17"
+    },
+    "gate_oficial_release_rc2_plus": {
+      "nome": "CT_ValidarRelease_QuintetoMinimo",
+      "suites": ["V1_RAPIDA", "V2_SMOKE", "V2_CANONICO", "V2_E2E_STRIKES", "INTEGRIDADE_BASE"],
+      "tempo_alvo": "~8-10min",
+      "app_release_test_key": "quinteto-2026-05-04",
+      "ponto": "introduzido em MD-17.3 substituindo Quarteto como gate oficial"
+    },
+    "gate_futuro_onda_18": {
+      "nome": "CT_ValidarRelease_SextetoMinimo (planejamento)",
+      "diferenca": "promove TV2_RunUiSmokeReadOnly + adiciona TV2_RunUiFiltros (interação real)",
+      "ponto": "fora da Onda 17"
+    }
+  },
+
+  "hard_constraints": [
+    "C1 Regra de Ouro 0002: src/vba/ é fonte de verdade; local-ai/vba_import/ é espelho com prefixos. Edição em src/vba/ PRIMEIRO, espelho depois com hash batendo (M11)",
+    "C4 Mod_Types.bas TABU",
+    "C7 Quarteto continua verde após cada microdelta",
+    "C9 Markers HBN V2 vigentes (.hbn/knowledge/0005)",
+    "C11 Cap M10 = 0 imports em forms na Onda 17",
+    "G6 sem código VBA solto no chat — VBA vive em src/vba ou local-ai/vba_import",
+    "L14 pre-flight grep assinaturas + UDTs visibilidade antes de gerar código novo",
+    "M11 src/vba/ fonte de verdade INVIOLÁVEL — cada microdelta valida shasum src/vba/X == shasum local-ai/vba_import/<prefixo>-X com src/vba/ como autoritativo",
+    "M9 forms VBA têm DOIS espelhos (.frm e .code-only.txt) — qualquer toque sincroniza ambos (NÃO aplicável Onda 17, mas TV2_RunUiSmokeReadOnly verifica essa sincronia como assert)",
+    "Hearback explícito por microdelta com escrita em código",
+    "CRLF preservado em todos os arquivos VBA (validar com `file <path>` antes do import)",
+    "Frontmatter obrigatório em qualquer .md novo criado"
+  ],
+
+  "glasswing_checks": {
+    "G1_macro_nao_confiavel": "ok (nenhuma macro descartável criada na onda)",
+    "G2_config_validada": "nao_aplicavel (sem mudança de schema CONFIG)",
+    "G3_formulas_privilegiadas": "nao_aplicavel",
+    "G4_audit_log_append_only": "ok (RPT_BUGS_CONHECIDOS é append-only por design; AUDIT_LOG não tocado)",
+    "G5_claims_proporcionais": "ok (claims condicionados a evidência VR_<timestamp>; sem '100%' / 'zero risco')",
+    "G6_codigo_no_chat": "ok (este readback é JSON descritivo; nenhum bloco VBA na resposta)",
+    "G7_vba_import_sincronizado": "ok pré-onda (transplante 43b); cada microdelta revalida shasum",
+    "G8_public_type_isolado": "ok (Mod_Types não tocado)"
+  },
+
+  "markers_hbn_v2_ativos": [
+    "✅ HBN ACTIVE — protocolo engajado",
+    "🟢 HBN CHECKPOINT CLEAN — ancora estável V12-202-Z003 atingida",
+    "🟤 HBN LICENSE SPLIT REQUIRED — TPGL Credenciamento; lições candidatas a promoção AGPLv3 no usehbn",
+    "🔵 HBN HANDOFF READY — disponível ao final da onda quando rc2 publicada"
+  ],
+
+  "rollback_plan": {
+    "trigger": "qualquer microdelta com Quarteto vermelho ou crash do Excel ou drift G7 detectado",
+    "acao_imediata": "git restore src/vba/<arquivo> + git restore local-ai/vba_import/001-modulo/<prefixo-arquivo> ; revalidar shasum ; reabrir backup V12-202-Z003 se workbook corrompido",
+    "ancora_segura": "V12-202-Z003 (build f7aa84f+ONDA16.MD3-fix1-evolucao-testes-incremental)",
+    "limite_iteracoes_em_um_microdelta": "3 fix-attempts; após o 3º fix sem verde, rollback obrigatório e replanejar",
+    "evidencia_obrigatoria_para_seguir": "VR_<timestamp> Quarteto APROVADO em cada gate intermediário; VR_<timestamp> Quinteto APROVADO no MD-17.4"
+  },
+
+  "estimates": {
+    "ia_total_horas": 16,
+    "operador_total_horas": 4,
+    "duracao_calendario_alvo_dias_uteis": "3-4",
+    "risco_overrun": "médio — fase 17.1.d.I (γ refatoração) é a mais incerta; se cenários não caírem <1s pode exigir refatoração mais profunda de helpers (Repo_Avaliacao.ContarStrikesPorEmpresa, Svc_Rodizio.SelecionarEmpresa, etc.) — nesse caso renegocia escopo via hearback antes de seguir",
+    "criterio_sucesso_quantitativo": [
+      "Quinteto APROVADO com sintaxe V1=A/F+V2_Smoke=A/F+V2_Canonica=A/F+E2E_Strikes=A/F+IntegridadeBase=A/F (todos zero falhas)",
+      "Quarteto continua APROVADO (regressão zero)",
+      "Quinteto tempo total <10min em workbook ancora",
+      "Cada cenário individual <1s (HF8) na medição DURACAO_MS",
+      "Status bar mostra contagem 'cenário X de N' em cada execução de suite",
+      "Menu V2 sem opções 'assistido'; opções determinísticas preservadas",
+      "RPT_BUGS_CONHECIDOS criada com schema canônico e bug ENT2 dup ATIVA+INATIVA registrado"
+    ]
+  },
+
+  "next_action": "Aguardar hearback 'confirmed' deste readback para iniciar MD-17.1.a (Engine: TV2_FixtureFactory + namespacing + RestaurarConfigBaseline generalizado). MD-17.1.a abre com hearback dedicado descrevendo plano técnico antes de gravar código."
+}

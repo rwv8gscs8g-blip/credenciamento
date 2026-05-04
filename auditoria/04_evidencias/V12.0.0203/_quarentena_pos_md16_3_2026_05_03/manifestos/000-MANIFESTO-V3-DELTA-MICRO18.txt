@@ -1,0 +1,81 @@
+# Manifesto V3 DELTA MICRO18 - Onda 16 MD-16.6.2 (Reativa_Empresa.frm sem heurística)
+# Tema: Segundo form do trabalho colaborativo de filtros.
+#       Mesma refatoracao do MICRO17 (Reativa_Entidade) aplicada
+#       simetricamente: removida UI_PegarTextBoxBuscaTopoDireita +
+#       cascata de fallbacks em UserForm_Initialize substituida por
+#       acesso direto ao TextBox pelo nome canonico do designer.
+#
+# Origem: validacao MD-16.6.1 aprovada pelo operador 2026-05-02
+# (VR_20260502_210628 quarteto verde + filtro Reativa_Entidade
+# funcional). Reativa_Empresa eh form simetrico - aplicar mesma
+# mudanca minima.
+#
+# Mudancas (3 arquivos no canonico + 1 no espelho src/vba):
+#   AAH-Reativa_Empresa.frm:
+#     - REMOVIDA Private Function UI_PegarTextBoxBuscaTopoDireita
+#       (heuristica For Each ctl + Top/Left/Height; identica a do
+#       Reativa_Entidade que ja foi removida em MICRO17).
+#     - UserForm_Initialize: removidas 2 linhas de fallback
+#       heuristico/legado:
+#         "If mTxtBusca Is Nothing Then Set mTxtBusca = UI_PegarTextBoxBuscaTopoDireita()"
+#         "If mTxtBusca Is Nothing Then Set mTxtBusca = UI_TextBoxSeExiste('TextBox16')"
+#       Mantida apenas linha de acesso direto via UI_TextBoxSeExiste
+#       pelo nome canonico do controle no designer:
+#         Set mTxtBusca = UI_TextBoxSeExiste("TxtFiltro_ReativaEmpresa")
+#     - Comentario-vacina inline citando MD-16.6.2.
+#     - Sub/End Sub balanceado: 4/4.
+#     - Function/End Function balanceado: 7/7.
+#     - .frx intocado (binario do designer preservado).
+#
+#   AAH-Reativa_Empresa.code-only.txt:
+#     - Espelho de codigo aplicado as mesmas mudancas.
+#
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = f7aa84f+ONDA16.MD6-2-reativa-empresa-filtro-incremental
+#     - APP_BUILD_GERADO_EM atualizado.
+#
+# Espelho src/vba: hashes batendo. Drift G7 historico (versao "delegada"
+# em src/vba via UtilFiltro_LocalizarTextBoxFiltro vs versao "inline"
+# no canonico) foi alinhado nesta MD: ambos lados agora SEM heuristica.
+#
+# Pre-flight L14 cumprido (identico ao MICRO17):
+#   - mTxtBusca permanece Private WithEvents As MSForms.TextBox.
+#   - UI_TextBoxSeExiste(nome) faz Me.Controls(nome) - acesso por nome
+#     direto, NAO eh heuristica.
+#   - mTxtBusca_Change (handler) inalterado.
+#   - UI_PreencherListaEmpresasInativas (sub principal) inalterada.
+#   - .frx preservado byte-a-byte.
+#   - Sem novo Public Type (G8 OK). C4 OK (nao toca Mod_Types).
+#
+# Pos-import esperado:
+#   - Compile manual passa limpo.
+#   - ?GetBuildImportado = "f7aa84f+ONDA16.MD6-2-reativa-empresa-filtro-incremental".
+#   - Form Reativa_Empresa abre normalmente.
+#   - Filtro mTxtBusca funciona conforme antes (acesso direto pelo
+#     nome do TextBox no designer "TxtFiltro_ReativaEmpresa").
+#   - Idempotencia: digitar XYZ -> apagar -> digitar XYZ produz mesmo recordset.
+#   - Quarteto continua APROVADO (sem regressao).
+#
+# Validacao operacional sugerida:
+#   1. ImportarPacoteV3_Delta "MICRO18", "f7aa84f+ONDA16.MD6-2-reativa-empresa-filtro-incremental"
+#   2. Compile manual.
+#   3. Abrir Reativa_Empresa via Menu Principal.
+#   4. Confirmar lista de empresas inativas carrega.
+#   5. Digitar texto no campo de filtro - lista deve refiltrar.
+#   6. Apagar texto - lista volta ao estado completo.
+#   7. CT_ValidarRelease_QuartetoMinimo - APROVADO esperado.
+#   8. Operador salva como V12-202-AC-onda16-md6-2 (ou convencao local).
+#
+# Apos aprovacao:
+#   - Restam 2 forms: Credencia_Empresa (MD-16.6.3) e Cadastro_Servico
+#     (MD-16.6.4). Em ambos, alem de remover heuristica, talvez seja
+#     necessario alinhar nome do TextBox no designer (mTxtFiltroCredLista
+#     -> mTxtBusca; mTxtBuscaTopo -> mTxtBusca) - decisao por print do
+#     operador.
+#
+# Uso esperado:
+#   ImportarPacoteV3_Delta "MICRO18", "f7aa84f+ONDA16.MD6-2-reativa-empresa-filtro-incremental"
+
+# GRUPO_DELTA_MICRO18_ONDA16_REATIVA_EMPRESA_FILTRO
+F|002-formularios/AAH-Reativa_Empresa.frm
+M|001-modulo/AAX-App_Release.bas

@@ -88,7 +88,7 @@ Public Function SelecionarEmpresa(ByVal ATIV_ID As String) As TRodizioResultado
             If emp.DT_FIM_SUSP > CDate(0) And emp.DT_FIM_SUSP <= Date Then
                 ' Reativar automaticamente - empresa volta a participar
                 resOp = Reativar(cred.EMP_ID)
-                If Not resOp.Sucesso Then
+                If Not resOp.sucesso Then
                     cntFiltroB = cntFiltroB + 1
                     GoTo ProximaEmpresa
                 End If
@@ -193,9 +193,9 @@ Public Function AvancarFila( _
     ' 1. Mover para o fim da fila
     resMove = MoverFinal(EMP_ID, ATIV_ID, Now)
 
-    If Not resMove.Sucesso Then
-        res.Sucesso = False
-        res.Mensagem = "Falha ao mover fila: " & resMove.Mensagem
+    If Not resMove.sucesso Then
+        res.sucesso = False
+        res.mensagem = "Falha ao mover fila: " & resMove.mensagem
         AvancarFila = res
         Exit Function
     End If
@@ -204,23 +204,23 @@ Public Function AvancarFila( _
     If IsPunido Then
         resRec = IncrementarRecusa(EMP_ID, ATIV_ID)
 
-        If Not resRec.Sucesso Then
+        If Not resRec.sucesso Then
             If linhaCredOriginal > 0 Then
                 resRollbackFila = RestaurarPosicaoFila(EMP_ID, ATIV_ID, posicaoOriginal, credOriginal.DT_ULTIMA_IND)
                 RegistrarEvento _
                     EVT_TRANSACAO, ENT_CRED, EMP_ID, _
                     "EMP=" & EMP_ID & "; ATIV=" & ATIV_ID & "; POS_ANTES=" & CStr(posicaoOriginal), _
-                    "ROLLBACK_FILA=" & IIf(resRollbackFila.Sucesso, "OK", "FALHOU") & _
-                    "; MOTIVO=INCREMENTAR_RECUSA_FALHOU; MSG=" & resRec.Mensagem, _
+                    "ROLLBACK_FILA=" & IIf(resRollbackFila.sucesso, "OK", "FALHOU") & _
+                    "; MOTIVO=INCREMENTAR_RECUSA_FALHOU; MSG=" & resRec.mensagem, _
                     "Svc_Rodizio"
             End If
-            res.Sucesso = False
-            res.Mensagem = "Falha ao incrementar recusa: " & resRec.Mensagem
+            res.sucesso = False
+            res.mensagem = "Falha ao incrementar recusa: " & resRec.mensagem
             AvancarFila = res
             Exit Function
         End If
 
-        If resRec.Sucesso Then
+        If resRec.sucesso Then
             ' Evita depender de campos de TResult em projetos antigos; lê o valor persistido.
             Dim empTmp As TEmpresa
             Dim linhaEmpTmp As Long
@@ -254,15 +254,15 @@ Public Function AvancarFila( _
         End If
     End If
 
-    res.Sucesso = True
-    res.Mensagem = "Fila avancada. EMP=" & EMP_ID & " ATIV=" & ATIV_ID & " PUNIDO=" & CStr(IsPunido)
+    res.sucesso = True
+    res.mensagem = "Fila avancada. EMP=" & EMP_ID & " ATIV=" & ATIV_ID & " PUNIDO=" & CStr(IsPunido)
     res.IdGerado = EMP_ID
     AvancarFila = res
     Exit Function
 
 Erro:
-    res.Sucesso = False
-    res.Mensagem = "Erro em AvancarFila: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em AvancarFila: " & Err.Description
     res.CodigoErro = Err.Number
     AvancarFila = res
 End Function
@@ -293,16 +293,16 @@ Public Function Suspender( _
     emp = LerEmpresa(EMP_ID, linhaEmp)
 
     If linhaEmp = 0 Then
-        res.Sucesso = False
-        res.Mensagem = "Empresa nao encontrada: EMP_ID=" & EMP_ID
+        res.sucesso = False
+        res.mensagem = "Empresa nao encontrada: EMP_ID=" & EMP_ID
         Suspender = res
         Exit Function
     End If
 
     If emp.STATUS_GLOBAL = STATUS_EMP_SUSPENSA Then
         ' Já suspensa: não fazer nada (idempotente)
-        res.Sucesso = True
-        res.Mensagem = "Empresa ja estava suspensa."
+        res.sucesso = True
+        res.mensagem = "Empresa ja estava suspensa."
         Suspender = res
         Exit Function
     End If
@@ -333,16 +333,16 @@ Public Function Suspender( _
         IIf(Trim$(motivo) = "", "", "; MOTIVO=" & motivo), _
         "Svc_Rodizio"
 
-    res.Sucesso = True
-    res.Mensagem = "Empresa EMP_ID=" & EMP_ID & " suspensa ate " & Format$(dtFimSusp, "DD/MM/YYYY") & _
+    res.sucesso = True
+    res.mensagem = "Empresa EMP_ID=" & EMP_ID & " suspensa ate " & Format$(dtFimSusp, "DD/MM/YYYY") & _
                    " (BASE=" & base & ")"
     res.IdGerado = EMP_ID
     Suspender = res
     Exit Function
 
 Erro:
-    res.Sucesso = False
-    res.Mensagem = "Erro em Suspender: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em Suspender: " & Err.Description
     res.CodigoErro = Err.Number
     Suspender = res
 End Function
@@ -355,42 +355,105 @@ Public Function Reativar(ByVal EMP_ID As String) As TResult
     Dim res As TResult
     Dim emp As TEmpresa
     Dim linhaEmp As Long
-    Dim statusAnterior As String
 
     On Error GoTo Erro
 
     emp = LerEmpresa(EMP_ID, linhaEmp)
 
     If linhaEmp = 0 Then
-        res.Sucesso = False
-        res.Mensagem = "Empresa nao encontrada: EMP_ID=" & EMP_ID
+        res.sucesso = False
+        res.mensagem = "Empresa nao encontrada: EMP_ID=" & EMP_ID
         Reativar = res
         Exit Function
     End If
 
-    statusAnterior = emp.STATUS_GLOBAL
-
-    ' Zerar QTD_RECUSAS_GLOBAL e remover DT_FIM_SUSPENSAO; STATUS → ATIVA
-    GravarStatusEmpresa linhaEmp, STATUS_EMP_ATIVA, CDate(0), 0
-
-    ' Auditoria
-    RegistrarEvento _
-        EVT_REATIVACAO, ENT_EMP, EMP_ID, _
-        "STATUS=" & statusAnterior & "; QTD_RECUSAS=" & emp.QTD_RECUSAS, _
-        "STATUS=ATIVA; QTD_RECUSAS_GLOBAL=0; DT_FIM_SUSP=(limpa)", _
-        "Svc_Rodizio"
-
-    res.Sucesso = True
-    res.Mensagem = "Empresa EMP_ID=" & EMP_ID & " reativada."
-    res.IdGerado = EMP_ID
-    Reativar = res
+    Reativar = ReativarLinhaEmpresa(linhaEmp, "Svc_Rodizio")
     Exit Function
 
 Erro:
-    res.Sucesso = False
-    res.Mensagem = "Erro em Reativar: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em Reativar: " & Err.Description
     res.CodigoErro = Err.Number
     Reativar = res
+End Function
+
+Public Function ReativarLinhaEmpresa( _
+    ByVal linhaEmp As Long, _
+    Optional ByVal origem As String = "Svc_Rodizio" _
+) As TResult
+    Dim res As TResult
+    Dim ws As Worksheet
+    Dim empId As String
+    Dim idAuditoria As String
+    Dim statusAnterior As String
+    Dim qtdRecusasAnterior As Long
+    Dim dtReativ As Date
+    Dim dtGravada As Variant
+
+    On Error GoTo Erro
+
+    If linhaEmp < PrimeiraLinhaDadosEmpresas() Then
+        res.sucesso = False
+        res.mensagem = "Linha invalida para reativacao: " & CStr(linhaEmp)
+        ReativarLinhaEmpresa = res
+        Exit Function
+    End If
+
+    Set ws = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+    If linhaEmp > UltimaLinhaAba(SHEET_EMPRESAS) Then
+        res.sucesso = False
+        res.mensagem = "Linha fora da aba EMPRESAS: " & CStr(linhaEmp)
+        ReativarLinhaEmpresa = res
+        Exit Function
+    End If
+
+    empId = Trim$(CStr(ws.Cells(linhaEmp, COL_EMP_ID).Value))
+    idAuditoria = empId
+    If Len(idAuditoria) = 0 Then idAuditoria = Trim$(CStr(ws.Cells(linhaEmp, COL_EMP_CNPJ).Value))
+    If Len(idAuditoria) = 0 Then idAuditoria = "LINHA=" & CStr(linhaEmp)
+
+    statusAnterior = Trim$(CStr(ws.Cells(linhaEmp, COL_EMP_STATUS_GLOBAL).Value))
+    qtdRecusasAnterior = CLng(Val("0" & Trim$(CStr(ws.Cells(linhaEmp, COL_EMP_QTD_RECUSAS).Value))))
+    dtReativ = Now
+
+    ' Reativacao centralizada tambem para fluxos UI que movem a linha
+    ' de EMPRESAS_INATIVAS para EMPRESAS antes de chamar o servico.
+    GravarStatusEmpresa linhaEmp, STATUS_EMP_ATIVA, CDate(0), 0, dtReativ
+
+    If Trim$(CStr(ws.Cells(linhaEmp, COL_EMP_STATUS_GLOBAL).Value)) <> STATUS_EMP_ATIVA Then
+        Err.Raise 1004, "ReativarLinhaEmpresa", "STATUS_GLOBAL nao foi gravado como ATIVA."
+    End If
+
+    If CLng(Val("0" & Trim$(CStr(ws.Cells(linhaEmp, COL_EMP_QTD_RECUSAS).Value)))) <> 0 Then
+        Err.Raise 1004, "ReativarLinhaEmpresa", "QTD_RECUSAS_GLOBAL nao foi zerado."
+    End If
+
+    dtGravada = ws.Cells(linhaEmp, COL_EMP_DT_ULT_REATIV).Value
+    If Not IsDate(dtGravada) Then
+        Err.Raise 1004, "ReativarLinhaEmpresa", "DT_ULT_REATIV nao foi gravada."
+    End If
+    If CDate(dtGravada) <= CDate(0) Then
+        Err.Raise 1004, "ReativarLinhaEmpresa", "DT_ULT_REATIV ficou vazia."
+    End If
+
+    RegistrarEvento _
+        EVT_REATIVACAO, ENT_EMP, idAuditoria, _
+        "STATUS=" & statusAnterior & "; QTD_RECUSAS=" & CStr(qtdRecusasAnterior), _
+        "STATUS=ATIVA; QTD_RECUSAS_GLOBAL=0; DT_FIM_SUSP=(limpa); DT_ULT_REATIV=" & _
+            Format$(CDate(dtGravada), "DD/MM/YYYY HH:NN:SS"), _
+        origem
+
+    res.sucesso = True
+    res.mensagem = "Empresa " & idAuditoria & " reativada."
+    res.IdGerado = empId
+    ReativarLinhaEmpresa = res
+    Exit Function
+
+Erro:
+    res.sucesso = False
+    res.mensagem = "Erro em ReativarLinhaEmpresa: " & Err.Description
+    res.CodigoErro = Err.Number
+    ReativarLinhaEmpresa = res
 End Function
 
 ' ============================================================
@@ -462,184 +525,5 @@ Private Function MontarMotivoSemAptos( _
     End If
     MontarMotivoSemAptos = motivo
 End Function
-
-' ============================================================
-' V12.0.0203 ONDA 4 - Diagnostico de rodizio
-' ============================================================
-'
-' Diag_RodizioStatus(ATIV_ID) percorre BuscarFila(ATIV_ID) e produz,
-' linha por linha, uma fotografia auditavel da fila atual:
-'   - posicao na fila;
-'   - EMP_ID, nome da empresa (quando legivel);
-'   - STATUS_CRED em CREDENCIADOS;
-'   - STATUS_GLOBAL em EMPRESAS;
-'   - DT_FIM_SUSP da empresa;
-'   - tem OS aberta na atividade?
-'   - tem Pre-OS pendente na atividade?
-'   - decisao prevista do SelecionarEmpresa: APTA / FILTRO_A / FILTRO_B /
-'     FILTRO_C / FILTRO_D / FILTRO_E / SEM_EMPRESA.
-'
-' Saida: aba RPT_DIAG_RODIZIO. Substitui o conteudo a cada chamada.
-' Nao altera nenhum dado operacional. Pode ser rodada a qualquer
-' momento para entender por que uma empresa esta sendo pulada.
-
-Public Sub Diag_RodizioStatus(ByVal ATIV_ID As String)
-    Const SHEET_DIAG As String = "RPT_DIAG_RODIZIO"
-
-    Dim ws As Worksheet
-    Dim wsEmp As Worksheet
-    Dim fila() As TCredenciamento
-    Dim cred As TCredenciamento
-    Dim emp As TEmpresa
-    Dim linhaEmp As Long
-    Dim i As Long
-    Dim linha As Long
-    Dim decisao As String
-    Dim qtdSelecionavel As Long
-
-    On Error GoTo falha
-
-    ' Garantir aba.
-    On Error Resume Next
-    Set ws = ThisWorkbook.Worksheets(SHEET_DIAG)
-    On Error GoTo falha
-    If ws Is Nothing Then
-        Set ws = ThisWorkbook.Worksheets.Add( _
-            After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
-        ws.Name = SHEET_DIAG
-    End If
-
-    On Error Resume Next
-    If ws.ProtectContents Then ws.Unprotect Password:=Util_SenhaProtecaoPadrao()
-    ws.Cells.Clear
-    On Error GoTo falha
-
-    ws.Cells(1, 1).Value = "DIAGNOSTICO RODIZIO"
-    ws.Cells(2, 1).Value = "ATIV_ID"
-    ws.Cells(2, 2).Value = ATIV_ID
-    ws.Cells(3, 1).Value = "GERADO_EM"
-    ws.Cells(3, 2).Value = Format$(Now, "yyyy-mm-dd hh:nn:ss")
-    ws.Cells(4, 1).Value = "BUILD"
-    ws.Cells(4, 2).Value = APP_BUILD_IMPORTADO
-
-    ' Cabecalho da tabela.
-    ws.Cells(6, 1).Value = "POSICAO"
-    ws.Cells(6, 2).Value = "EMP_ID"
-    ws.Cells(6, 3).Value = "STATUS_CRED"
-    ws.Cells(6, 4).Value = "STATUS_GLOBAL"
-    ws.Cells(6, 5).Value = "DT_FIM_SUSP"
-    ws.Cells(6, 6).Value = "OS_ABERTA?"
-    ws.Cells(6, 7).Value = "PREOS_PEND?"
-    ws.Cells(6, 8).Value = "DECISAO"
-    ws.Cells(6, 9).Value = "EXPLICACAO"
-
-    fila = BuscarFila(ATIV_ID)
-    linha = 7
-    qtdSelecionavel = 0
-
-    If fila(LBound(fila)).CRED_ID = "" Then
-        ws.Cells(linha, 1).Value = "(vazia)"
-        ws.Cells(linha, 9).Value = "Nenhum credenciamento encontrado para a atividade."
-    Else
-        For i = LBound(fila) To UBound(fila)
-            cred = fila(i)
-            ws.Cells(linha, 1).Value = cred.POSICAO_FILA
-            ws.Cells(linha, 2).Value = cred.EMP_ID
-            ws.Cells(linha, 3).Value = cred.STATUS_CRED
-
-            decisao = ""
-            If cred.STATUS_CRED <> STATUS_CRED_ATIVO Then
-                ws.Cells(linha, 4).Value = "(empresa nao consultada)"
-                ws.Cells(linha, 5).Value = ""
-                ws.Cells(linha, 6).Value = ""
-                ws.Cells(linha, 7).Value = ""
-                decisao = "FILTRO_A"
-                ws.Cells(linha, 9).Value = "STATUS_CRED=" & cred.STATUS_CRED & " (esperado=" & STATUS_CRED_ATIVO & ")"
-                GoTo proxLinha
-            End If
-
-            emp = LerEmpresa(cred.EMP_ID, linhaEmp)
-            If linhaEmp = 0 Then
-                ws.Cells(linha, 4).Value = "(empresa nao encontrada)"
-                ws.Cells(linha, 5).Value = ""
-                ws.Cells(linha, 6).Value = ""
-                ws.Cells(linha, 7).Value = ""
-                decisao = "SEM_EMPRESA"
-                ws.Cells(linha, 9).Value = "EMP_ID=" & cred.EMP_ID & " nao consta em EMPRESAS"
-                GoTo proxLinha
-            End If
-
-            ws.Cells(linha, 4).Value = emp.STATUS_GLOBAL
-            If emp.DT_FIM_SUSP > CDate(0) Then
-                ws.Cells(linha, 5).Value = Format$(emp.DT_FIM_SUSP, "dd/mm/yyyy")
-            Else
-                ws.Cells(linha, 5).Value = "(limpa)"
-            End If
-
-            Dim temOs As Boolean
-            Dim temPre As Boolean
-            temOs = TemOSAbertaNaAtividade(cred.EMP_ID, ATIV_ID)
-            temPre = TemPreOSPendenteNaAtividade(cred.EMP_ID, ATIV_ID)
-            ws.Cells(linha, 6).Value = IIf(temOs, "SIM", "nao")
-            ws.Cells(linha, 7).Value = IIf(temPre, "SIM", "nao")
-
-            If emp.STATUS_GLOBAL = STATUS_EMP_SUSPENSA Then
-                If emp.DT_FIM_SUSP > CDate(0) And emp.DT_FIM_SUSP <= Date Then
-                    decisao = "APTA_REATIVAVEL"
-                    ws.Cells(linha, 9).Value = "Suspensa mas DT_FIM_SUSP <= hoje; sera reativada automaticamente"
-                    qtdSelecionavel = qtdSelecionavel + 1
-                Else
-                    decisao = "FILTRO_B"
-                    ws.Cells(linha, 9).Value = "STATUS_GLOBAL=SUSPENSA_GLOBAL ate " & Format$(emp.DT_FIM_SUSP, "dd/mm/yyyy")
-                End If
-            ElseIf emp.STATUS_GLOBAL = STATUS_EMP_INATIVA Then
-                decisao = "FILTRO_C"
-                ws.Cells(linha, 9).Value = "STATUS_GLOBAL=INATIVA"
-            ElseIf temOs Then
-                decisao = "FILTRO_D"
-                ws.Cells(linha, 9).Value = "OS aberta nesta atividade; sera movida para fim sem punicao"
-            ElseIf temPre Then
-                decisao = "FILTRO_E"
-                ws.Cells(linha, 9).Value = "Pre-OS AGUARDANDO_ACEITE nesta atividade"
-            Else
-                decisao = "APTA"
-                ws.Cells(linha, 9).Value = "Empresa pode ser selecionada agora"
-                qtdSelecionavel = qtdSelecionavel + 1
-            End If
-
-proxLinha:
-            ws.Cells(linha, 8).Value = decisao
-            linha = linha + 1
-        Next i
-    End If
-
-    ws.Cells(linha + 1, 1).Value = "RESUMO"
-    ws.Cells(linha + 1, 2).Value = "Aptas/Reativaveis: " & qtdSelecionavel
-
-    ws.Columns("A:I").AutoFit
-    On Error Resume Next
-    ws.Protect Password:=Util_SenhaProtecaoPadrao(), UserInterfaceOnly:=True
-    On Error GoTo falha
-
-    ws.Activate
-    ws.Cells(1, 1).Select
-
-    Exit Sub
-
-falha:
-    On Error Resume Next
-    MsgBox "Erro em Diag_RodizioStatus: " & Err.Description, vbExclamation, "Diagnostico Rodizio"
-End Sub
-
-Public Sub Diag_RodizioStatusInteractive()
-    Dim ATIV_ID As String
-    ATIV_ID = Trim$(InputBox( _
-        "Informe o ATIV_ID a diagnosticar (ex.: 001):" & vbCrLf & vbCrLf & _
-        "O relatorio sera gravado em RPT_DIAG_RODIZIO mostrando" & vbCrLf & _
-        "qual filtro barra cada empresa credenciada.", _
-        "Diagnostico de Rodizio", "001"))
-    If ATIV_ID = "" Then Exit Sub
-    Diag_RodizioStatus ATIV_ID
-End Sub
 
 

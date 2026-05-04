@@ -1,0 +1,24 @@
+# Manifesto V3 DELTA MICRO02 - Onda 10 Microdelta 1.2
+# Tema: Svc_Rodizio.Suspender com parametros opcionais (diasSuspensao + motivo)
+#
+# Estrategia A - espelho minimalista. AAP-Svc_Rodizio.bas tem o
+# baseline V12-202-S preservado, com APENAS a funcao Suspender
+# substituida pela versao Onda 1 (assinatura ampliada com 2 params
+# opcionais + audit BASE=DIAS|MESES + tratamento de motivo).
+#
+# Diag_RodizioStatus / Diag_RodizioStatusInteractive (Onda 4) NAO
+# entram aqui - ficam para Onda 13 dedicada a Diag rodizio.
+#
+# Retrocompatibilidade preservada via Optional + default 0:
+#   chamadas antigas Suspender(EMP_ID) continuam funcionando
+#   identicas ao baseline (caem em fallback meses BASE=MESES).
+#
+# Atencao especial: V2 Canonica CS_14 chama Suspender. Verificar
+# que trio continua 171/0+14/0+20/0 apos import.
+#
+# Uso esperado:
+#   ImportarPacoteV3_Delta "MICRO02", "f7aa84f+ONDA10.MICRO02-Svc_Rodizio-incremental"
+
+# GRUPO_DELTA_MICRO02_SVC_RODIZIO
+M|001-modulo/AAP-Svc_Rodizio.bas
+M|001-modulo/AAX-App_Release.bas

@@ -1,0 +1,166 @@
+{
+  "readback_id": "readback-onda17-md17-2-2026-05-03",
+  "agent_id": "claude-opus-4-7-cowork-chat-3-scoping",
+  "operator": "Luís Maurício Junqueira Zanin",
+  "track": "safe_track",
+  "started_at": "2026-05-03 (chat 3 — fase de scoping)",
+  "status": "scoping_completo_aguardando_implementacao_no_chat_4",
+  "schema_version": "hbn-readback/0.3.1",
+  "parent_readback": "readback-onda17-md17-1-e-2026-05-03 (0017) — APROVADA com Quarteto VR_20260503_202623",
+
+  "ciclo_imediatamente_anterior": "MD-17.1.e APROVADA. Quarteto sintaxe IDENTICA ao md1d3. Workbook Z010 e baseline (operador re-salvou apos suite das Subs assistidas + commit local). Debito DT-MD17.1.e-STATUSBAR-HINT registrado para Onda 18 (toca form Menu_Principal — viola C11). Bastao mantido em Opus 4.7 chat 3 -> sera transferido para chat 4 conforme prompt de retomada 51.",
+
+  "objetivo": "Implementar suite NOVA TV2_RunIntegridadeBase em Teste_V2_Roteiros.bas com 4 cenarios enxutos cobrindo integridade entre abas (entidade dup ATIVA+INATIVA, empresa dup ATIVA+INATIVA, CNPJ duplicado em EMPRESAS, referencia orfa em CAD_OS). Criar aba RPT_BUGS_CONHECIDOS (schema 10 colunas) populada via helper Public RegistrarBugConhecido. Suite e PURE READ (zero modificacao em abas operacionais). Idempotente por design.",
+
+  "scoping_completo_no_chat_3": {
+    "decisoes_arquiteturais_firmes": [
+      "Localizacao da Sub: Teste_V2_Roteiros.bas (padrao TV2_Run*; respeita V203 §8 sem modulo novo)",
+      "Suite name (string identificadora): \"INTEGRIDADE_BASE\"",
+      "Assinatura: Public Sub TV2_RunIntegridadeBase(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False) — espelha TV2_RunSmoke/RunFiltros/etc",
+      "Helpers Private no proprio Roteiros: TV2_AbaRPTBugsGarantirEstrutura, TV2_DetectarEntidadeDuplicadaAtivaInativa, TV2_DetectarEmpresaDuplicadaAtivaInativa, TV2_DetectarCnpjDuplicado, TV2_DetectarRefOrfaCAD_OS",
+      "Helper Public no Roteiros: RegistrarBugConhecido(bugId, titulo, descobertoEm, descobertoPor, gravidade, suiteDetectora, cenarioAssociado, status, resolucaoPrevista, docRef) — upsert por BUG_ID",
+      "Helper Public no Roteiros: TV2_AbrirRPTBugsConhecidos (atalho para futura entrada do menu Central V2)",
+      "Idempotencia: PURE READ em EMPRESAS, EMPRESAS_INATIVAS, ATIVIDADES, CAD_OS. UPSERT em RPT_BUGS_CONHECIDOS por BUG_ID. Append-only em RESULTADO_QA_V2 (padrao do Engine V2).",
+      "Forms: 0 forms tocados (C11 Cap M10=0 vigente)",
+      "Mod_Types: intacto (TABU C4)"
+    ],
+
+    "schema_aba_rpt_bugs_conhecidos": {
+      "nome_aba": "RPT_BUGS_CONHECIDOS",
+      "criacao": "Helper Private TV2_AbaRPTBugsGarantirEstrutura cria aba se nao existir; valida header se existir. Idempotente.",
+      "linhas_iniciais": "Header (linha 1) + uma entrada DT-17-REATIV-STRIKES (linha 2) populada via RegistrarBugConhecido na primeira run da TV2_RunIntegridadeBase",
+      "colunas": [
+        {"col": "A", "header": "BUG_ID", "tipo": "String", "exemplo": "DT-17-REATIV-STRIKES"},
+        {"col": "B", "header": "TITULO", "tipo": "String", "exemplo": "Reativacao empresa nao zera contador strikes"},
+        {"col": "C", "header": "DESCOBERTO_EM", "tipo": "Date", "exemplo": "2026-05-03"},
+        {"col": "D", "header": "DESCOBERTO_POR", "tipo": "String", "exemplo": "operador / suite TV2_RunRodizioStrikesEndToEnd"},
+        {"col": "E", "header": "GRAVIDADE", "tipo": "String", "exemplo": "MEDIA (BAIXA/MEDIA/ALTA)"},
+        {"col": "F", "header": "SUITE_DETECTORA", "tipo": "String", "exemplo": "TV2_RunRodizioStrikesEndToEnd / TV2_RunIntegridadeBase"},
+        {"col": "G", "header": "CENARIO_ASSOCIADO", "tipo": "String", "exemplo": "CS_E2E_REATIV2STRIKES / CS_INT_01"},
+        {"col": "H", "header": "STATUS", "tipo": "String", "exemplo": "ABERTO / EM_RESOLUCAO / RESOLVIDO"},
+        {"col": "I", "header": "RESOLUCAO_PREVISTA", "tipo": "String", "exemplo": "Onda 18 MD-18.1"},
+        {"col": "J", "header": "DOC_REFERENCIA", "tipo": "String", "exemplo": "auditoria/00_status/44_DEBITO_DT_17_REATIV_STRIKES.md"}
+      ],
+      "rpt_bugs_resolvidos": "NAO criar nesta MD; chega na Onda 18 quando primeiro bug resolver. Spec basica em doc 44 §6 (linha 123)."
+    },
+
+    "cenarios_enxutos_4": [
+      {
+        "id": "CS_INT_01",
+        "tema": "Entidade duplicada ATIVA + INATIVA",
+        "descricao": "Detecta ATIV_ID que aparece simultaneamente em ATIVIDADES (ATIV_STATUS=ATIVA) e EMPRESAS_INATIVAS (?). Caso real descoberto 2026-05-02.",
+        "tipo": "AMARELO via TV2_LogManual (bug existente conhecido — registrar em RPT_BUGS_CONHECIDOS na primeira deteccao)",
+        "logica_inicial": "Iterar ATIVIDADES; para cada ATIV_ID, checar se mesma id aparece em EMPRESAS_INATIVAS (revisar: entidades vivem onde quando inativadas? Pre-flight obrigatorio chat 4)"
+      },
+      {
+        "id": "CS_INT_02",
+        "tema": "Empresa duplicada ATIVA + INATIVA",
+        "descricao": "Detecta EMP_ID em EMPRESAS (STATUS_GLOBAL=ATIVA) com mesma id ja em EMPRESAS_INATIVAS. Caso simetrico CS_INT_01.",
+        "tipo": "VERDE se nao houver duplicata; AMARELO via TV2_LogManual + RegistrarBugConhecido se houver",
+        "logica_inicial": "Set de EMP_ID em EMPRESAS_INATIVAS (Dictionary); iterar EMPRESAS; reportar interseccao."
+      },
+      {
+        "id": "CS_INT_03",
+        "tema": "CNPJ duplicado em EMPRESAS",
+        "descricao": "Mesmo CNPJ em 2+ linhas de EMPRESAS (snapshot e raw). Excluindo INATIVAS.",
+        "tipo": "VERDE se zero ocorrencia; AMARELO via TV2_LogManual + RegistrarBugConhecido se houver",
+        "logica_inicial": "Dictionary CNPJ -> count; iterar EMPRESAS; reportar count > 1"
+      },
+      {
+        "id": "CS_INT_04",
+        "tema": "Referencia orfa em CAD_OS",
+        "descricao": "EMP_ID ou ATIV_ID referenciado em CAD_OS que nao existe em EMPRESAS+EMPRESAS_INATIVAS+ATIVIDADES.",
+        "tipo": "VERDE se zero orfas; AMARELO via TV2_LogManual + RegistrarBugConhecido se houver",
+        "logica_inicial": "Sets EMP_ID + ATIV_ID conhecidos (uniao EMPRESAS+INATIVAS / ATIVIDADES); iterar CAD_OS; reportar orfas"
+      }
+    ],
+
+    "integracao_com_quinteto_md_17_3": "Quinteto Minimo = V1 + V2_Smoke + V2_Canonica + E2E_Strikes + IntegridadeBase. Sera implementado em CT_ValidarRelease_QuintetoMinimo na MD-17.3. Quarteto Minimo continua como gate intermediario rapido. APP_RELEASE_TEST_KEY bumpado para 'quinteto-2026-05-XX' na MD-17.3.",
+
+    "dependencias_a_validar_no_chat_4_pre_flight_l14": [
+      "src/vba/Repo_Empresa.bas: assinatura de LerEmpresa(empId), helpers para iterar EMPRESAS sem perder linhas",
+      "src/vba/Repo_Avaliacao.bas: helpers de leitura de CAD_OS",
+      "src/vba/Const_Colunas.bas: constantes COL_EMP_ID, COL_EMP_CNPJ, COL_EMP_INAT_ID, COL_ATIV_ID, COL_ATIV_STATUS, COL_OS_EMP_ID, COL_OS_ATIV_ID",
+      "src/vba/Mod_Types.bas: TEmpresa, TEntidade, TOS — sem alterar (TABU C4)",
+      "src/vba/Funcoes.bas: helpers de Dictionary + leitura de Range",
+      "Padrao de iteracao 'sem perder linhas' — ver L12 (filtros defensivos valor>0 excluem casos limite)"
+    ]
+  },
+
+  "escopo_em_chat_4": [
+    "src/vba/Teste_V2_Roteiros.bas: adicionar Public Sub TV2_RunIntegridadeBase + 4 Private helpers de deteccao + Public Sub RegistrarBugConhecido + Public Sub TV2_AbrirRPTBugsConhecidos + Private Sub TV2_AbaRPTBugsGarantirEstrutura. Estimativa: ~250 linhas novas.",
+    "src/vba/App_Release.bas: bump APP_BUILD_IMPORTADO -> f7aa84f+ONDA17.MD2-integridade-base + APP_BUILD_GERADO_EM atualizado + comentario MD-17.2 (~12 linhas)",
+    "Espelhar para local-ai/vba_import/001-modulo/ (ABG-Teste_V2_Roteiros.bas + AAX-App_Release.bas) — shasum batendo (M11)",
+    "Manifesto V3: local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO24.txt com bloco GRUPO_DELTA_MICRO24_* + 2 linhas M|... (NAO esquecer o bloco — licao M20 candidata da MD-17.1.e)",
+    "Procedimento de import: auditoria/03_ondas/onda_17_test_first/14_PROCEDIMENTO_IMPORT_MD17_2.md"
+  ],
+
+  "escopo_fora_do_chat_4": [
+    "Forms (.frm/.frx/.code-only.txt) — cap M11=0 mantido",
+    "Mod_Types.bas (TABU C4)",
+    "RPT_BUGS_RESOLVIDOS — chega na Onda 18 quando primeiro bug for resolvido",
+    "CT_ValidarRelease_QuintetoMinimo — chega na MD-17.3",
+    "Util_PDF + CNPJ no nome — fora de Onda 17 (decisao Q5 do doc 43)",
+    "RegistrarBugConhecido como entrada [N] do menu Central V2 — opcional MD-17.3 ou Onda 18"
+  ],
+
+  "criterios_de_sucesso_chat_4": [
+    "Compile manual passa limpo",
+    "GetBuildImportado retorna f7aa84f+ONDA17.MD2-integridade-base",
+    "TV2_RunIntegridadeBase executa standalone (?TV2_RunIntegridadeBase no Imediato)",
+    "Aba RPT_BUGS_CONHECIDOS criada com 10 colunas + DT-17-REATIV-STRIKES como entrada inicial",
+    "RESULTADO_QA_V2 ganha 4 linhas com cenario_id CS_INT_01..04 e status correto",
+    "Quarteto APROVADO com sintaxe IDENTICA ao md1e (V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0; MANUAL=5)",
+    "shasum batendo M11 nos 2 arquivos (ABG, AAX)",
+    "CRLF preservado",
+    "Idempotencia empirica: re-run TV2_RunIntegridadeBase produz numero IDENTICO de linhas em RESULTADO_QA_V2 (delta=4) e mesmo numero de bugs em RPT_BUGS_CONHECIDOS (delta=0)"
+  ],
+
+  "estimates_chat_4": {
+    "ia_horas": 2.5,
+    "operador_horas": 0.4,
+    "etapas_ia": [
+      "(0.3h) Pre-flight L14 (grep assinaturas Repo_*, Const_Colunas, Mod_Types) + leitura padrao iteracao em outros TV2_Run*",
+      "(0.5h) Edit Teste_V2_Roteiros.bas: TV2_AbaRPTBugsGarantirEstrutura + RegistrarBugConhecido + TV2_AbrirRPTBugsConhecidos",
+      "(0.8h) Edit Teste_V2_Roteiros.bas: TV2_RunIntegridadeBase + 4 helpers Private de deteccao + asserts",
+      "(0.1h) Edit App_Release.bas (bump label)",
+      "(0.2h) Mirror local-ai/vba_import + shasum + CRLF",
+      "(0.3h) Manifesto MICRO24 (com bloco GRUPO_+M|) + procedimento 14",
+      "(0.3h) Sanity check final (Sub/Function balance, grep TV2_RunIntegridadeBase, smoke da assinatura)"
+    ],
+    "etapas_operador": [
+      "(0.05h) VBE Reset",
+      "(0.05h) ImportarPacoteV3_Delta MICRO24",
+      "(0.05h) Compile manual",
+      "(0.1h) Smoke standalone: ?TV2_RunIntegridadeBase + verificar aba RPT_BUGS_CONHECIDOS criada",
+      "(0.15h) Quarteto APROVADO sintaxe IDENTICA"
+    ],
+    "duracao_calendario_alvo": "~3h calendario total",
+    "context_consumption": "estimar 60-70% de um chat fresco; chat 4 deve ter folga para chegar ao Quarteto verde sem precisar handoff"
+  },
+
+  "hard_constraints_chat_4": [
+    "C1 src/vba/ primeiro; espelho local-ai/vba_import depois com shasum batendo (M11)",
+    "C4 Mod_Types.bas TABU",
+    "C7 Quarteto continua APROVADO apos MD-17.2",
+    "C9 Markers HBN V2",
+    "C11 Cap M10 = 0 imports em forms",
+    "G6 sem codigo VBA solto no chat",
+    "L14 pre-flight grep assinaturas + UDTs feito ANTES de gerar codigo",
+    "M9/M11 forms intocados",
+    "M11 src/vba fonte de verdade",
+    "M20 (candidato): manifesto V3 EXIGE bloco GRUPO_<NOME> + linhas M|<path> no fim (separados de comentarios por linha em branco). Comparar com MICRO22/MICRO23 byte-a-byte na seccao critica.",
+    "Hearback explicito por microdelta com escrita em codigo",
+    "CRLF preservado",
+    "INVARIANTE: TV2_RunIntegridadeBase e PURE READ (zero modificacao em abas operacionais)"
+  ],
+
+  "m14_preflight_chat_4": {
+    "checkpoint_estavel_anterior": "V12-202-Z010 (operador confirmou em 2026-05-03; Z010 compila os avancos ate MD-17.1.e)",
+    "arquivos_modificados_neste_md": ["src/vba/Teste_V2_Roteiros.bas + ABG", "src/vba/App_Release.bas + AAX"],
+    "opcoes_de_rollback_oferecidas": "Apenas UMA (rollback total para Z010) — M14 trivialmente satisfeito",
+    "validacao_M14": "pacote MICRO24 contem os 2 arquivos modificados; nenhuma opcao alternativa que pudesse deixar arquivo de fora"
+  },
+
+  "next_action": "Operador abre chat 4 com prompt de retomada em auditoria/00_status/51_TRANSICAO_CHAT_3_PARA_4.md. Chat 4 le Tier 1+2+3 (mais focado que chat 3) + executa pre-flight L14 + implementa pacote MICRO24."
+}

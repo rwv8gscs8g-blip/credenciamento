@@ -1,0 +1,55 @@
+{
+  "execution_id": "exec-onda18-md18-1b-reativ-strikes-2026-05-04",
+  "readback_id": "readback-onda18-md18-1b-reativ-strikes-2026-05-04",
+  "agent_id": "codex-cli-bloco-b-onda18",
+  "operator": "Luis Mauricio Junqueira Zanin",
+  "track": "safe_track",
+  "schema_version": "hbn-result/0.3.1",
+  "started_at": "2026-05-04T05:40:00-0300",
+  "completed_at": "2026-05-04T06:02:56-0300",
+  "status": "APROVADO_OPERADOR",
+  "scope": "Onda 18 MD-18.1b - janela de punicao por strikes apos reativacao",
+  "microdelta_final": {
+    "delta": "MICRO26",
+    "build": "f7aa84f+ONDA18.MD18.1b-reativ-strikes-window",
+    "importador": "ImportarPacoteV3_Delta",
+    "import_status": "confirmado pelo operador: importou e compilou"
+  },
+  "validacao_release_quinteto": {
+    "vr_id": "VR_20260504_060256",
+    "resultado": "APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+    "ok_total": 295,
+    "falha_total": 0,
+    "csv_path": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuinteto_V12_0_0203_VR_20260504_060256.csv"
+  },
+  "evidencia_operador": [
+    "MICRO26 importada.",
+    "Compilacao manual no VBE passou limpa.",
+    "Quinteto aprovado em 2026-05-04 06:02:56 BRT."
+  ],
+  "arquivos_fonte_verdade": [
+    "src/vba/Repo_Avaliacao.bas",
+    "src/vba/Svc_Avaliacao.bas",
+    "src/vba/Repo_Empresa.bas",
+    "src/vba/Svc_Rodizio.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas"
+  ],
+  "resultado_tecnico": [
+    "Svc_Rodizio.Reativar grava DT_ULT_REATIV=Now em EMPRESAS.",
+    "Repo_Avaliacao.ContarStrikesParaPunicao filtra por COL_OS_DT_FECHAMENTO > DT_ULT_REATIV.",
+    "Svc_Avaliacao usa contador de punicao sem alterar contador historico total.",
+    "CS_E2E_REATIV2STRIKES passou de amarelo/manual para verde/assertivo.",
+    "Suite E2E_Strikes subiu de 65/0 para 71/0 com seis cenarios/assercoes novos."
+  ],
+  "debitos_remanescentes": [
+    "INT-CAD-OS-REF-ORFA permanece aberto em RPT_BUGS_CONHECIDOS / CS_INT_04.",
+    "DT-FRENTE1-FORMS-BYPASS-REATIV permanece deferido.",
+    "DT-FRENTE1-GRAVARSTATUSEMPRESA-SILENT permanece deferido.",
+    "DT-FRENTE1-REATIV-NOOP-ATIVA permanece deferido.",
+    "DT-FRENTE1-BACKFILL-AUDIT permanece deferido.",
+    "DT-FRENTE1-CONTARSTRIKES-ERRO-MUDO permanece deferido."
+  ],
+  "proximo_passo": "MD-18.3: criar RPT_BUGS_RESOLVIDOS e mover DT-17-REATIV-STRIKES da fila aberta."
+}

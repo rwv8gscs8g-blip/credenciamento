@@ -1,0 +1,21 @@
+# Manifesto V3 DELTA MICRO01 - Onda 10 Microdelta 1.1
+# Tema: Repo_Avaliacao.ContarStrikesPorEmpresa (funcao pura, isolada)
+#
+# Estrategia: Espelho minimalista (Estrategia A aprovada 2026-05-01).
+# AAN-Repo_Avaliacao.bas contem baseline V12-202-S + apenas a funcao
+# ContarStrikesPorEmpresa apendada ao final. Nao traz outros hotfixes
+# residuais (case fixes, em-dash fixes) que ficam para Phase A.6.
+#
+# O modulo AAX-App_Release.bas e SEMPRE o ultimo item de qualquer
+# manifesto delta - garante que o bump auto via IV3_AtualizarConstantesAppRelease
+# antes do processamento receba o build label novo no workbook.
+#
+# Uso esperado:
+#   ImportarPacoteV3_Delta "MICRO01", "f7aa84f+ONDA10.MICRO01-Repo_Avaliacao-incremental"
+#
+# Backup automatico V3 antes do processamento. Compile + trio
+# minimo continuam sendo gates manuais do operador.
+
+# GRUPO_DELTA_MICRO01_REPO_AVALIACAO
+M|001-modulo/AAN-Repo_Avaliacao.bas
+M|001-modulo/AAX-App_Release.bas

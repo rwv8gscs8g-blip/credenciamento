@@ -1,0 +1,114 @@
+{
+  "execution_id": "exec-onda10-reincorporacao-onda01-2026-05-02",
+  "readback_id": "readback-onda10-reincorporacao-onda01-2026-05-01",
+  "agent_id": "claude-opus-4-7-cowork",
+  "track": "safe_track",
+  "status": "FECHADA_COM_DEBITO_DOCUMENTADO",
+  "started_at": "2026-05-01T15:00:00",
+  "completed_at": "2026-05-02T02:35:00",
+  "duration_real": "~36 horas (incluindo 9 fixes encadeados, 1 erro grave de pasta canonica corrigido, e 7 etapas de consolidacao final)",
+  "operator": "Luis Mauricio Junqueira Zanin",
+
+  "objetivo_alcancado": "Reincorporacao da Onda 1 (regra de strikes na avaliacao) ao baseline V12-202-S via 6 microdeltas (1.0 a 1.5) com gates compile + suite oficial + trio minimo. Consolidacao canonica final restaurando pasta local-ai/vba_import/ como UNICA fonte de import (Regra de Ouro 0002 reafirmada). Workbook V12-202-T-onda10 estavel.",
+
+  "metricas": {
+    "microdeltas_executados": 6,
+    "fixes_encadeados_microdelta_1_5": 9,
+    "validacoes_release_aprovadas": 4,
+    "ultima_validacao_release_id": "VR_20260501_233424",
+    "trio_minimo_final": "V1=171/0; V2_Smoke=14/0; V2_Canonica=20/0",
+    "linhas_codigo_adicionadas_total": 1095,
+    "arquivos_modificados": 9,
+    "manifestos_delta_criados": 5,
+    "licoes_canonicas_documentadas": 6,
+    "debitos_tecnicos_abertos": 5
+  },
+
+  "microdeltas": [
+    {"id": "1.0", "tema": "Extensao V3 capacidade delta + bump auto", "status": "APROVADO", "validacao": "VR_20260501_173310", "build": "f7aa84f+ONDA10.MICRO00-V3-Delta-Capability-incremental"},
+    {"id": "1.1", "tema": "Repo_Avaliacao.ContarStrikesPorEmpresa", "status": "APROVADO", "validacao": "VR_20260501_180949", "build": "f7aa84f+ONDA10.MICRO01-Repo_Avaliacao-incremental"},
+    {"id": "1.2", "tema": "Svc_Rodizio.Suspender params opcionais", "status": "APROVADO", "validacao": "TV2_20260501_184237 SMOKE 14/0", "build": "f7aa84f+ONDA10.MICRO02-Svc_Rodizio-incremental"},
+    {"id": "1.4", "tema": "Teste_V2_Engine grava MAX_STRIKES + DIAS_SUSPENSAO_STRIKE", "status": "APROVADO", "validacao": "TV2_20260501_185512 SMOKE 14/0", "build": "f7aa84f+ONDA10.MICRO04-Teste_V2_Engine-incremental"},
+    {"id": "1.3", "tema": "Svc_Avaliacao bloco 7b ATIVA strikes em producao", "status": "APROVADO (apos fix1)", "validacao": "TV2_20260501_194706 SMOKE 14/0", "build": "f7aa84f+ONDA10.MICRO03-Svc_Avaliacao-fix1-incremental"},
+    {"id": "1.5", "tema": "Suite TV2_RunRodizioStrikesEndToEnd + opcao [14] Central V2", "status": "APROVADO COM DEBITO (compile e smoke verdes; suite e2e 4/16 — diagnostico DT-3)", "validacao": "TV2_20260501_215616 SMOKE 14/0", "build": "f7aa84f+ONDA10.MICRO05-Strikes-Suite-fix9-CodServico-incremental"}
+  ],
+
+  "consolidacao_canonica_2026_05_02": {
+    "evento": "Restauracao da Regra de Ouro 0002 - vba_import como UNICA fonte de import",
+    "motivo": "Solucao de contorno emergencial (vba_import_v3_phase1/) criada na Phase 1 do V3 (Onda 9) foi mantida por inercia em Onda 10. Operador detectou e corrigiu a violacao",
+    "etapas_executadas": [
+      "1. Backup forense (5.2MB canonico + 5.0MB SCEV3) com hashes SHA1 em auditoria/04_evidencias/V12.0.0203/_backups_consolidacao_canonica_20260502_015148/",
+      "2. Copia exata SCEV3 -> vba_import canonico (9 arquivos modificados + 5 manifestos delta + bootstrap + LEIA-ME)",
+      "3. Limpeza orfaos do canonico (operador rm manual: 11 arquivos)",
+      "4. Move importadores legados (Importador_VBA.bas, Importar_Agora.bas) para auditoria/04_evidencias/V12.0.0203/_historico_importadores_legados/",
+      "5. Atualizacao Importador_V3.bas: 4 constantes apontam local-ai\\vba_import\\ (V3.2-Canonica-Onda10-Fechada)",
+      "6. Validacao operador: re-import V3 manual, compile limpo, TV2_RunSmoke 14/0, trio 171/0+14/0+20/0",
+      "7. Build label final: f7aa84f+ONDA10-canonica-fechada-com-debito-strikes (no espelho; aguardando bump operador no workbook)"
+    ],
+    "validacao_final_id": "VR_20260501_233424",
+    "validacao_final_resultado": "APROVADO",
+    "ancora_workbook": "V12-202-T-onda10 (a salvar pelo operador como PlanilhaCredenciamento-Homologacao-V3.xlsm)"
+  },
+
+  "licoes_documentadas_em_phagocytosis": [
+    "L10 - Standard module em VBA nao e qualificavel como Modulo.Funcao(...) em todas as versoes",
+    "L11 - Defaults novos em getters quebram testes legados que dependem do estado natural",
+    "L12 - Filtros defensivos do tipo `valor > 0` excluem casos limite legitimos",
+    "L13 - Testes end-to-end via fluxo natural sao mais robustos que helpers de unidade",
+    "L14 - Pre-flight check obrigatorio de assinaturas e tipos UDT antes de gerar codigo novo",
+    "L15 - Pasta de importacao deve ser semanticamente homogenea (apenas artefatos vigentes)"
+  ],
+
+  "licoes_meta_documentadas_em_knowledge_0009": [
+    "M6 - Smoke ad-hoc no Imediato com retorno UDT e antipadrao"
+  ],
+
+  "debitos_tecnicos_abertos": [
+    {"id": "DT-1", "tema": "Smoke teste alertando false-positives", "prioridade": "ALTA", "deadline_sugerida": "antes release V12.0.0203 publico"},
+    {"id": "DT-2", "tema": "Padronizar todas as baterias V1/V2 para padrao TV2-14 end-to-end", "prioridade": "MEDIA"},
+    {"id": "DT-3", "tema": "Diagnostico das 12 falhas em TV2_RunRodizioStrikesEndToEnd (avaliacao nao persiste para empresa esperada)", "prioridade": "ALTA", "candidato_auditoria_externa": true},
+    {"id": "DT-4", "tema": "Limpeza semantica de vba_import (apenas codigo de import; documentacao em docs/)", "prioridade": "BAIXA"},
+    {"id": "DT-5", "tema": "Geracao de PDFs por ciclo de rodizio (proposta Mauricio 2026-05-01)", "prioridade": "MEDIA"}
+  ],
+
+  "proximas_ondas_planejadas": [
+    "Onda 11 - Reincorporacao Onda 2 (CNAE snapshot/dedup - TV2_RunCnae + opcao [15])",
+    "Onda 12 - Reincorporacao Onda 3 (CNAE dedup automatico - cenarios CNAE_004..006)",
+    "Onda 13 - Reincorporacao Onda 4 (Diag_RodizioStatus + TV2_RunCfg + opcoes [16][17])",
+    "Onda 14 - Phase A.6 - auditoria caso-a-caso dos divergentes residuais",
+    "Onda 15 - Reincorporacao Onda 7 (IDM_*/RDZ_*)",
+    "Onda 16 - Reincorporacao Onda 8 (heuristica zero forms)",
+    "Onda 17 - DT-3 + DT-5 (correcao testes strikes + geracao de PDFs)",
+    "Onda 18 - DT-1 + DT-2 (smoke reforcado + padronizacao baterias)",
+    "Onda 19 - Auditoria externa (Antigravity, Codex)",
+    "Onda FECH - Build label v12.0.0203-rc1 + CHANGELOG + tag + push GitHub"
+  ],
+
+  "promocao_workbook": {
+    "ancora_alvo": "V12-202-T-onda10",
+    "nome_arquivo_alvo": "PlanilhaCredenciamento-Homologacao-V3.xlsm",
+    "build_label_alvo_no_workbook": "f7aa84f+ONDA10-canonica-fechada-com-debito-strikes",
+    "instrucao_operador": "Apos confirmar este ERP, rodar IV3_BumpBuildLabel para aplicar build label final no workbook, depois Save As para a nova ancora"
+  },
+
+  "artefatos_entregues": [
+    "src/vba/Importador_V3.bas (V3.2-Canonica-Onda10-Fechada, 1379 linhas)",
+    "local-ai/vba_import/ (canonico restaurado: 36 .bas + 39 forms + manifestos)",
+    "auditoria/04_evidencias/V12.0.0203/_backups_consolidacao_canonica_20260502_015148/ (forense pre-consolidacao)",
+    "auditoria/04_evidencias/V12.0.0203/_historico_importadores_legados/ (Importador_VBA.bas + Importar_Agora.bas)",
+    "auditoria/03_ondas/onda_10_reincorporacao_onda01/ (60_TECNICO + 6 procedimentos por microdelta + 70_FECHAMENTO)",
+    "auditoria/00_status/32_ERRO_E_CORRECAO_PASTA_CANONICA.md (transparencia)",
+    "auditoria/00_status/33_HANDOFF_NOVA_SESSAO_OPUS.md (prompt de retomada)",
+    ".hbn/readbacks/0010-onda10-reincorporacao-onda01.json",
+    ".hbn/results/0010-exec-onda10.json (este arquivo)",
+    ".hbn/knowledge/0009-licoes-importador-v3-phase1.md (atualizado com M6)",
+    "usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md (atualizado com L10-L15)"
+  ],
+
+  "candidatos_auditoria_externa": [
+    "DT-3: testes de strikes - por que ContarStrikesPorEmpresa retorna 0 mesmo apos avaliacoes persistidas? (CSV: TesteV2_STRIKES_E2E_Falhas_TV2_20260501_221038.csv)",
+    "Revisao da metodologia 'fagocitose' do protocolo usehbn (PHAGOCYTOSIS-VBA-PATTERNS.md)",
+    "Revisao das licoes L1-L15 + M1-M6 - completude, clareza, generalizacao para outros projetos VBA",
+    "Validacao do padrao de microdeltas com gates compile + smoke + trio - aplicavel a outros projetos legacy?"
+  ]
+}

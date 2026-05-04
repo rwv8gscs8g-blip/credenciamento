@@ -1,0 +1,177 @@
+{
+  "readback_id": "readback-onda17-md17-1-e-2026-05-03",
+  "agent_id": "claude-opus-4-7-cowork",
+  "operator": "Luís Maurício Junqueira Zanin",
+  "track": "safe_track",
+  "started_at": "2026-05-03",
+  "status": "aguardando_hearback_escrita_em_codigo",
+  "schema_version": "hbn-readback/0.3.1",
+  "parent_readback": "readback-onda17-md17-1-d-II-2026-05-03 (0016) -- chat 2; sequencia em chat 3 (Antigravity-equivalente VS Code Extension)",
+
+  "ciclo_imediatamente_anterior": "MD-17.1.d.III fechada com Quarteto APROVADO em VR_20260503_181718 (V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0, MANUAL=5). Idempotencia empirica confirmada Run 1 + Run 2. Visibility funcionando em V1+V2+CT_ValidarRelease. CSV msg corrigida. Workbook ancorado em V12-202-Z003-onda17-md1d3 e backups Z004-Z008 gerados pelo operador apos validacao.",
+
+  "objetivo": "Limpeza C3 do menu Central V2 + renumeracao semantica + entrada unica V1 dentro V2 + atalho 'Limpar testes antigos'. Mensagem do menu fica auto-explicativa para usuario que escolhe o que rodar antes de homologar. Idempotencia trivial (mensagem visual + Select Case = roteamento).",
+
+  "decisoes_q_md17_1_e_confirmadas_pelo_operador_2026_05_03": {
+    "1": "confirmed sim — Z008 e referencia de paridade 100% workbook real <-> repo; rollback via pasta /V12-202-Z008/",
+    "2": "confirmed sim — escopo = remover [2] Smoke assistido, [4] Stress assistido, [6] Roteiro assistido V2 da string prompt do InputBox em CT2_AbrirCentral. NAO mexer nos Subs CT2_ExecutarSmokeAssistido / CT2_ExecutarStressAssistido / TV2_AbrirRoteiroAssistido (continuam Public, callable do VBE). Status bar ja entregue em MD-17.1.d resolveu funcao pedagogica do 'assistido'.",
+    "3a": "confirmed sim — estrutura semantica: Gates de Release primeiro, depois Bateria V1 direto, depois Suites Parciais V2, depois Visualizacao, depois Utilitarios.",
+    "3b_quinteto": "confirmed opcao 2 — [1]=Quarteto agora; Quinteto chega na MD-17.3 (renumera para [1] entao). Default conservador para evitar falso positivo (L18: determinismo > narrativa).",
+    "3c_v1_no_v2": "confirmed sim — uma unica porta de entrada (Central V2). [3] V1 - Bateria Oficial entra direto + nova entrada [16] Limpar testes antigos. Central_Testes.CT_AbrirCentral (V1 menu) fica intacto nesta MD; evolucao em onda futura."
+  },
+
+  "ancora_estavel": {
+    "workbook": "V12-202-Z008 (mais recente; herda md1d3)",
+    "build_label": "f7aa84f+ONDA17.MD1D3-hotfix-v1visibility-csvmsg",
+    "validacao_canonica": "VR_20260503_181718 Quarteto APROVADO",
+    "sintaxe_quarteto": "V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 (MANUAL=5)",
+    "idempotencia": "empirica confirmada Run 1 + Run 2 no chat 2"
+  },
+
+  "escopo_em": [
+    "src/vba/Central_Testes_V2.bas: substituir string prompt no CT2_AbrirCentral por nova estrutura semantica (>>GATES, >>BATERIA V1, >>BATERIA V2, >>VISUALIZACAO, >>UTILITARIOS) com numeracao [1]-[16] sequencial",
+    "src/vba/Central_Testes_V2.bas: substituir Select Case op pelo novo mapeamento [1]=Quarteto [2]=Trio [3]=V1 Bateria [4]-[8]=V2 suites [9]-[14]=Visualizacao [15]=Roteiro Assistido [16]=Limpar Testes Antigos",
+    "src/vba/Central_Testes_V2.bas: adicionar 2 Subs Public novas: CT2_ExecutarBateriaV1 (chama RunBateriaOficial) + CT2_ExecutarLimparTestes (chama CT_LimparTestesAntigos com confirmacao)",
+    "src/vba/Central_Testes_V2.bas: PRESERVAR Subs CT2_ExecutarSmokeAssistido + CT2_ExecutarStressAssistido (continuam Public, callable do VBE; apenas saem da mensagem do menu)",
+    "src/vba/Central_Testes.bas: adicionar wrapper Public CT_LimparTestesAntigos no fim do modulo, com prompt de confirmacao listando abas afetadas e chamando CT_LimparArtefatosTesteV1 (Private, ja existente)",
+    "src/vba/App_Release.bas: bump APP_BUILD_IMPORTADO para f7aa84f+ONDA17.MD1E-menu-renumeracao-limpeza-c3 + APP_BUILD_GERADO_EM atualizado + comentario MD-17.1.e"
+  ],
+
+  "escopo_fora": [
+    "Central_Testes.CT_AbrirCentral (V1 menu) — intacto nesta MD; evolucao para 'porta unica V2' fica para onda futura",
+    "Mod_Types.bas (TABU C4)",
+    "Forms (.frm/.frx/.code-only.txt) — cap M11=0 mantido",
+    "[1] Quinteto Minimo — chega na MD-17.3 com CT_ValidarRelease_QuintetoMinimo",
+    "[N] V2 Integridade Base — chega na MD-17.2 com TV2_RunIntegridadeBase",
+    "Auto_Open.bas, Menu_Principal — intactos (entrypoint user para Central V2 nao muda)"
+  ],
+
+  "nova_estrutura_menu_central_v2": {
+    "header": "=== CENTRAL DE TESTES V2 ===\\nBuild: <buildLabel>\\nGate oficial vigente: [1] Quarteto Minimo",
+    "gates_de_release": {
+      "1": "Quarteto Minimo (V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes) *** OFICIAL ***",
+      "2": "Trio Minimo (V1 + V2 Smoke + V2 Canonica) -- legado"
+    },
+    "bateria_v1": {
+      "3": "V1 - Bateria Oficial completa (~5 min)"
+    },
+    "bateria_v2_suites_parciais": {
+      "4": "V2 Smoke rapido (~30 s)",
+      "5": "V2 Suite Canonica (~3 min)",
+      "6": "V2 Stress deterministico (~3 min)",
+      "7": "V2 Filtros deterministicos (~1 min)",
+      "8": "V2 E2E Strikes (~2 min)"
+    },
+    "visualizacao": {
+      "9": "RESULTADO_QA_V2",
+      "10": "CATALOGO_CENARIOS_V2",
+      "11": "HISTORICO_QA_V2",
+      "12": "TESTE_TRILHA",
+      "13": "AUDIT_TESTES",
+      "14": "EVOLUCAO_TESTES (regressao + media movel)"
+    },
+    "utilitarios": {
+      "15": "Roteiro Assistido V2 (navegacao guiada)",
+      "16": "Limpar testes antigos (apaga RESULTADO_QA*, HISTORICO_QA*, RPT_*, SNAPV2_*)"
+    },
+    "default_input": "1"
+  },
+
+  "mapeamento_select_case_novo": {
+    "1": "CT_ValidarRelease_QuartetoMinimo",
+    "2": "CT_ValidarRelease_TrioMinimo",
+    "3": "CT2_ExecutarBateriaV1 (NOVO; chama RunBateriaOficial)",
+    "4": "CT2_ExecutarSmokeRapido",
+    "5": "CT2_ExecutarCanonicoFundacao",
+    "6": "CT2_ExecutarStress",
+    "7": "CT2_ExecutarFiltrosDeterministicos",
+    "8": "CT2_ExecutarStrikes",
+    "9": "TV2_AbrirResultado",
+    "10": "TV2_AbrirCatalogo",
+    "11": "TV2_AbrirHistorico",
+    "12": "TV2_AbrirTrilha",
+    "13": "TV2_AbrirAuditTestes",
+    "14": "Util_Evolucao_AbrirEMostrar",
+    "15": "TV2_AbrirRoteiroAssistido",
+    "16": "CT2_ExecutarLimparTestes (NOVO; chama CT_LimparTestesAntigos)"
+  },
+
+  "subs_publics_preservados_mas_invisiveis_na_mensagem": [
+    "CT2_ExecutarSmokeAssistido (era [2] no menu antigo)",
+    "CT2_ExecutarStressAssistido (era [4] no menu antigo)"
+  ],
+
+  "analise_idempotencia": {
+    "principio": "Menu = roteamento + apresentacao. Zero efeito em business logic, contagens, asserts. Trivialmente idempotente.",
+    "rerun_quarteto_apos_md1e": "deve produzir sintaxe IDENTICA ao md1d3 (V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0, MANUAL=5)",
+    "limpar_testes_antigos": "operacao destrutiva mas com confirmacao explicita (MsgBox vbYesNo); chama CT_LimparArtefatosTesteV1 ja existente e ja usado em CT_IniciarBateria"
+  },
+
+  "premissas_e_dependencias": [
+    "src/vba/Central_Testes_V2.bas estado atual: 137 linhas",
+    "src/vba/Central_Testes.bas estado atual: 806 linhas",
+    "src/vba/App_Release.bas estado atual: ~293 linhas",
+    "src/vba/Teste_Bateria_Oficial.bas: RunBateriaOficial Public em linha 73",
+    "CT_LimparArtefatosTesteV1 existe Private em Central_Testes.bas linha 192-220 (mantido inalterado)",
+    "CT_EhArtefatoTeste existe Private em Central_Testes.bas linha 222-237 (mantido inalterado)"
+  ],
+
+  "hard_constraints": [
+    "C1 src/vba/ primeiro; espelho local-ai/vba_import depois com shasum batendo (M11)",
+    "C4 Mod_Types.bas TABU",
+    "C7 Quarteto continua APROVADO apos MD-17.1.e (sem mudanca de business logic)",
+    "C9 Markers HBN V2",
+    "C11 Cap M10 = 0 imports em forms",
+    "G6 sem codigo VBA solto no chat",
+    "L14 pre-flight grep assinaturas + UDTs feito",
+    "L25 Application.* salvar-restaurar com handler — N/A (sem mudanca de Application.*)",
+    "L26 StatusBar update SEMPRE em testes — N/A (sem mudanca de StatusBar)",
+    "M9/M11 forms intocados",
+    "M14 pacote de fix cobre TODAS opcoes de rollback — N/A (sem fix; mudanca direta)",
+    "Hearback explicito por microdelta com escrita em codigo",
+    "CRLF preservado",
+    "INVARIANTE: idempotencia trivial (menu = roteamento+apresentacao)"
+  ],
+
+  "m14_preflight": {
+    "checkpoint_estavel_anterior": "V12-202-Z008 (workbook real apos md1d3)",
+    "arquivos_modificados_neste_md": ["src/vba/Central_Testes_V2.bas + ABE", "src/vba/Central_Testes.bas + AAZ", "src/vba/App_Release.bas + AAX"],
+    "opcoes_de_rollback_oferecidas": "Apenas UMA (rollback total para Z008) — M14 trivialmente satisfeito",
+    "validacao_M14": "pacote MICRO23 contem os 3 arquivos modificados; nenhuma opcao alternativa que pudesse deixar arquivo de fora"
+  },
+
+  "criterios_de_sucesso": [
+    "Compile manual passa limpo",
+    "GetBuildImportado retorna f7aa84f+ONDA17.MD1E-menu-renumeracao-limpeza-c3",
+    "CT2_AbrirCentral mostra mensagem nova com 16 opcoes (sem [2]/[4]/[6] do antigo, sem Quinteto/Integridade Base)",
+    "Operador testa cada uma das 16 opcoes manualmente — todas roteiam corretamente",
+    "Quarteto APROVADO com sintaxe IDENTICA ao md1d3 (V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0, MANUAL=5)",
+    "Tempo Quarteto similar ao md1d3 (~13min) — sem regressao perf",
+    "shasum batendo M11 nos 3 arquivos",
+    "Subs CT2_ExecutarSmokeAssistido + CT2_ExecutarStressAssistido continuam executaveis via janela Imediato (?CT2_ExecutarSmokeAssistido)"
+  ],
+
+  "estimates": {
+    "ia_horas": 0.7,
+    "operador_horas": 0.4,
+    "etapas_ia": [
+      "(0.2h) Edit Central_Testes_V2.bas (substituicao prompt + Select Case + 2 Subs novas)",
+      "(0.1h) Edit Central_Testes.bas (wrapper CT_LimparTestesAntigos no fim)",
+      "(0.05h) Edit App_Release.bas (bump label + timestamp + comentario)",
+      "(0.1h) Mirror para local-ai/vba_import + shasum 3 arquivos batendo + CRLF",
+      "(0.15h) Manifesto MICRO23 + procedimento 13",
+      "(0.1h) Validacao final + hearback de escrita-em-codigo"
+    ],
+    "etapas_operador": [
+      "(0.05h) Salvar workbook como copia trabalho (apoio para rollback rapido)",
+      "(0.05h) VBE Reset",
+      "(0.05h) ImportarPacoteV3_Delta MICRO23",
+      "(0.05h) Compile manual",
+      "(0.1h) ?GetBuildImportado + abrir CT2_AbrirCentral + verificar visualmente as 16 opcoes",
+      "(0.1h) Quarteto + comparar sintaxe com md1d3"
+    ],
+    "duracao_calendario_alvo": "~1.1h calendario total"
+  },
+
+  "next_action": "Executar edits + manifesto + procedimento + hearback de escrita-em-codigo final."
+}

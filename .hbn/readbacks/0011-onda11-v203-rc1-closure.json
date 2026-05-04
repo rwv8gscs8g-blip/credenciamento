@@ -1,0 +1,106 @@
+{
+  "readback_id": "readback-onda11-v203-rc1-closure-2026-05-02",
+  "agent_id": "claude-opus-4-7-cowork",
+  "operator": "Luís Maurício Junqueira Zanin",
+  "track": "safe_track",
+  "started_at": "2026-05-02",
+  "deadline_hard": "2026-05-03T23:59:00-03:00",
+  "status": "em_execucao",
+  "ciclo_anterior_fechado": "Onda 10 (FECHADA NA CANONICA com debito DT-3 documentado em 2026-05-02 02:35)",
+  "renumeracao_aprovada": {
+    "onda_11_corretiva": "V12.0.0203-rc1 Closure (esta onda)",
+    "onda_12_seguinte": "Reincorporacao Onda 2 (CNAE) — adiada do roadmap original"
+  },
+
+  "objetivo": "Fechar V12.0.0203-rc1 ate domingo 2026-05-03 23:59 BRT corrigindo drift G7 entre src/vba e local-ai/vba_import (achado critico da cadeia Antigravity → Codex), instrumentando E2E strikes para diagnostico real do DT-3, e resolvendo DT-1, path de evidencia, e bump de release coerente",
+
+  "premissa_central": "A cadeia Antigravity → Codex (2026-05-02) revelou que src/vba diverge do canonico local-ai/vba_import em 6 modulos do dominio strikes. Antigravity diagnosticou DT-3 contra a fonte errada (suite antiga em src/vba), enquanto a suite canonica (em local-ai/vba_import) ja recebeu fix1-fix9 da Onda 10. Antes de qualquer fix de regra de negocio, o canonico volta para src/vba (decisao Q1 do operador, 2026-05-02).",
+
+  "hearback_dos_7_pontos": {
+    "Q1_drift_G7": "confirmed — copiar canonico de volta para src/vba",
+    "Q2_DT3_sequencia": "confirmed — fluxo Codex (instrumentar → operador roda → fix sobre evidencia)",
+    "Q3_DT5_PDFs": "confirmed condicional — adiar para V12.0.0204; antecipar APENAS se MD-2 nao conseguir estabilizar a regra de strikes (testes nao conclusivos)",
+    "Q4_phagocytosis_A_plus_D": "confirmed — implementar A (Markdown/Obsidian) com campos de capsule de D desde o inicio; B/C revisita depois",
+    "Q5_markers_v2": "confirmed AGORA — knowledge/0004-protocolo-markers-v2.md eh canon a partir desta onda",
+    "Q6_renumeracao": "confirmed — Onda 11 corretiva, Onda 12 e seguintes deslocadas",
+    "Q7_stack_automacao": "confirmed — Typer + uv + GitHub Actions + signed commits PR-only para Wave 11+ (segunda 2026-05-04)"
+  },
+
+  "escopo_em": [
+    "MD-0: Drift G7 sync — copiar 6 arquivos do canonico (local-ai/vba_import/001-modulo/) de volta para src/vba/",
+    "MD-1: Instrumentacao E2E strikes — adicionar asserts de integridade transacional por rodada em Teste_V2_Roteiros (preselected EMP, PREOS_ID, PRE_OS.EMP_ID, OS_ID, CAD_OS.EMP_ID, STATUS, MEDIA, strike count)",
+    "Operador roda E2E e cola CSV novo (gate cirurgico)",
+    "MD-2: Fix DT-3 sobre evidencia nova — uma causa por vez",
+    "MD-3: DT-1 honestidade do gate — smoke nao declara verde se E2E strikes vermelho",
+    "MD-4: Mover CSV de evidencia (TesteV2_STRIKES_E2E_Falhas_TV2_20260501_221038.csv) da raiz do repo para auditoria/04_evidencias/V12.0.0203/",
+    "MD-5: Bump App_Release para v12.0.0203-rc1 + CHANGELOG + status final",
+    "Trio minimo + V2 Canonica + E2E strikes (gate principal)",
+    "Tag/push/PR release candidate ou rollback documentado"
+  ],
+
+  "escopo_fora": [
+    "DT-2 (padronizacao de baterias V1/V2) — adiada para Onda 13+",
+    "DT-4 (limpeza semantica de vba_import) — adiada para Onda 13+",
+    "DT-5 (PDFs por ciclo de rodizio) — adiada para V12.0.0204 salvo override Q3 — spec em auditoria/00_status/35_SPEC_DT5_PDFs_V12_0204.md",
+    "DT-6 (validacao UI Configuracao_Inicial parametrizada por MAX_STRIKES e DIAS_SUSPENSAO_STRIKE) — NOVO debito identificado pelo operador em 2026-05-02 — adiado para Onda 12 / V12.0.0204 — spec em auditoria/00_status/36_SPEC_DT6_Validacao_UI_Configuracao_V12_0204.md",
+    "Reincorporacao das Ondas 2-8 originais (CNAE, IDM/RDZ, heuristica zero forms) — Ondas 12+",
+    "Mod_Types.bas — TABU mantido"
+  ],
+
+  "premissas_e_dependencias": [
+    "src/vba sera SOBRESCRITO pelos arquivos canonicos do pacote em MD-0; backup automatico via git status pre-MD-0",
+    "Workbook ancora atual: V12-202-T-onda10/PlanilhaCredenciamento-Homologacao-V3.xlsm (build f7aa84f+ONDA10-canonica-fechada-com-debito-strikes)",
+    "Apos MD-0, hash src/vba == hash local-ai/vba_import para os 6 arquivos criticos",
+    "MD-1 nao altera regra de negocio; somente adiciona LogAssert por etapa do E2E",
+    "Operador executa compile manual + suites; IA nao executa workbook",
+    "Cada microdelta tem build label proprio (ONDA11.MD0..MD5) e bump em local-ai/vba_import/001-modulo/AAX-App_Release.bas + espelho em src/vba",
+    "Diretiva de minimo tempo de resposta sem comprometer qualidade — vigente"
+  ],
+
+  "arquivos_md0_drift_sync": [
+    {"src": "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas", "dst": "src/vba/Svc_Avaliacao.bas", "hash_canonico": "a3a61283d0bb030f1a480072be615d2e67f1e1cf", "hash_src_atual": "1dad29663fd375da0c53bc75f32534f45f3e4aec"},
+    {"src": "local-ai/vba_import/001-modulo/AAN-Repo_Avaliacao.bas", "dst": "src/vba/Repo_Avaliacao.bas", "hash_canonico": "916b6bc067abec791c05c17d1e2a25f0f2686a50", "hash_src_atual": "f82b5740f5a7dfa3675de2ad39e1e50bf708604f"},
+    {"src": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas", "dst": "src/vba/Teste_V2_Roteiros.bas", "hash_canonico": "a5b92644fe02b374e59e16fc711cd7d362976bad", "hash_src_atual": "ad06b5a7aab1de3e5600d6e6628a0bd11779946c"},
+    {"src": "local-ai/vba_import/001-modulo/AAD-Util_Config.bas", "dst": "src/vba/Util_Config.bas", "hash_canonico": "1191af87195f925a31ca37c1ce1afda855486761", "hash_src_atual": "25c320864a944b891017045deceaf01432cc6f3e"},
+    {"src": "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas", "dst": "src/vba/Svc_PreOS.bas", "hash_canonico": "717da9890f682b15b6e879256622f60b921d633a", "hash_src_atual": "26775eaf88610d548f18ef9e6cfad58734929345"},
+    {"src": "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas", "dst": "src/vba/Svc_Rodizio.bas", "hash_canonico": "f5885b1631b722b034acddd2fd933bec47aebd90", "hash_src_atual": "a1b5e6b0c728e35dbed4da41d3fa71d3125cc68f"}
+  ],
+
+  "gates_por_microdelta": {
+    "MD-0": "diff hash src/vba == hash canonico para os 6 arquivos; nenhum efeito sobre workbook (workbook ja esta importado com canonico)",
+    "MD-1": "manual compile + TV2_RunSmoke 14/0 (sem regressao)",
+    "operador_roda_E2E": "CSV novo capturado com asserts por rodada",
+    "MD-2": "manual compile + TV2_RunSmoke 14/0 + TV2_RunRodizioStrikesEndToEnd 0 falhas",
+    "MD-3": "smoke reflete dependencia critica OU release checklist explicito separa E2E como gate independente",
+    "MD-4": "CSV em auditoria/04_evidencias/V12.0.0203/ + referenciado em ERP",
+    "MD-5": "App_Release coerente em src/vba e em local-ai/vba_import/001-modulo/AAX-App_Release.bas"
+  },
+
+  "rollback_plan": "Para cada microdelta: git diff antes; se gate vermelho, restaurar arquivo do estado pre-MD via git checkout. Onda 11 inteira pode ser revertida deixando workbook V12-202-T-onda10 como ancora estavel; src/vba volta ao hash de pre-Onda-11 via git revert do commit consolidado.",
+
+  "marcadores_canon_v2_aplicaveis": [
+    "✅ HBN ACTIVE",
+    "🔵 HBN HANDOFF READY",
+    "🟠 HBN SOURCE DRIFT DETECTED (resolvido em MD-0)",
+    "⚪ HBN AUDIT-ONLY (Codex; nao se aplica a Opus nesta onda — bastao executor)",
+    "🟢 HBN CHECKPOINT CLEAN (gate de fim de cada microdelta)",
+    "🔴 HBN RELEASE BLOCKER (gate de fim de onda)",
+    "🟤 HBN LICENSE SPLIT REQUIRED (TPGL para Credenciamento; AGPLv3 para futuras contribuicoes usehbn)",
+    "🟡 HBN NEEDS HUMAN DECISION (entre microdeltas)"
+  ],
+
+  "licenca_target_artefatos": "Credenciamento: TPGL v1.1. Quaisquer artefatos de protocolo/automacao usehbn produzidos nesta onda: AGPLv3 declarado em frontmatter.",
+
+  "anchor_pos_onda": "V12-202-U-onda11 (apos MD-5 verde + tag rc1)",
+
+  "build_labels_planejados": [
+    "f7aa84f+ONDA11.MD0-G7-sync (apos MD-0)",
+    "f7aa84f+ONDA11.MD1-DT3-diagnostic (apos MD-1)",
+    "f7aa84f+ONDA11.MD2-DT3-fix (apos MD-2)",
+    "f7aa84f+ONDA11.MD3-DT1-gate (apos MD-3)",
+    "f7aa84f+ONDA11.MD4-evidence-path (apos MD-4)",
+    "v12.0.0203-rc1 (apos MD-5 + trio + E2E + tag)"
+  ],
+
+  "hearback_status": "confirmed (operador aprovou Q1-Q7 e disse 'Pode comecar a implementacao' em 2026-05-02)"
+}

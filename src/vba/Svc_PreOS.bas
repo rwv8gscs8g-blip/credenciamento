@@ -42,29 +42,29 @@ Public Function MontarParametrosEmissaoPreOS( _
     servNorm = Trim$(SERV_ID)
 
     If ativNorm = "" Or servNorm = "" Then
-        res.Sucesso = False
-        res.Mensagem = "Selecione um servico valido antes de emitir a Pre-OS."
+        res.sucesso = False
+        res.mensagem = "Selecione um servico valido antes de emitir a Pre-OS."
         MontarParametrosEmissaoPreOS = res
         Exit Function
     End If
 
     If Trim$(ENT_ID) = "" Then
-        res.Sucesso = False
-        res.Mensagem = "Selecione uma entidade para emissao da Pre-OS."
+        res.sucesso = False
+        res.mensagem = "Selecione uma entidade para emissao da Pre-OS."
         MontarParametrosEmissaoPreOS = res
         Exit Function
     End If
 
     If Not EntidadeAtivaExiste(ENT_ID) Then
-        res.Sucesso = False
-        res.Mensagem = "Entidade inexistente ou inativa: ENT_ID=" & ENT_ID
+        res.sucesso = False
+        res.mensagem = "Entidade inexistente ou inativa: ENT_ID=" & ENT_ID
         MontarParametrosEmissaoPreOS = res
         Exit Function
     End If
 
     If Not BuscarValorServico(ativNorm, servNorm, valorUnitMoeda) Then
-        res.Sucesso = False
-        res.Mensagem = "Servico nao encontrado em CAD_SERV: ATIV=" & ativNorm & " SERV=" & servNorm
+        res.sucesso = False
+        res.mensagem = "Servico nao encontrado em CAD_SERV: ATIV=" & ativNorm & " SERV=" & servNorm
         MontarParametrosEmissaoPreOS = res
         Exit Function
     End If
@@ -76,8 +76,8 @@ Public Function MontarParametrosEmissaoPreOS( _
     VALOR_UNIT = CDbl(valorUnitMoeda)
     VALOR_ESTIMADO = VALOR_UNIT * QT_ESTIMADA
 
-    res.Sucesso = True
-    res.Mensagem = "Parametros da Pre-OS montados com sucesso."
+    res.sucesso = True
+    res.mensagem = "Parametros da Pre-OS montados com sucesso."
     MontarParametrosEmissaoPreOS = res
 End Function
 
@@ -128,30 +128,30 @@ Public Function EmitirPreOS( _
 
     ' 1. Validar e extrair IDs do código (critério 1)
     If Not ExtrairIdsCodServico(COD_SERVICO, ATIV_ID, SERV_ID) Then
-        res.Sucesso = False
-        res.Mensagem = "COD_SERVICO invalido: " & COD_SERVICO
+        res.sucesso = False
+        res.mensagem = "COD_SERVICO invalido: " & COD_SERVICO
         EmitirPreOS = res
         Exit Function
     End If
 
     If Not EntidadeAtivaExiste(ENT_ID) Then
-        res.Sucesso = False
-        res.Mensagem = "Entidade inexistente ou inativa: ENT_ID=" & ENT_ID
+        res.sucesso = False
+        res.mensagem = "Entidade inexistente ou inativa: ENT_ID=" & ENT_ID
         EmitirPreOS = res
         Exit Function
     End If
 
     If QT_ESTIMADA <= 0 Then
-        res.Sucesso = False
-        res.Mensagem = "QT_ESTIMADA deve ser maior que zero."
+        res.sucesso = False
+        res.mensagem = "QT_ESTIMADA deve ser maior que zero."
         EmitirPreOS = res
         Exit Function
     End If
 
     ' 2. Buscar VALOR_UNIT em CAD_SERV (critério 2)
     If Not BuscarValorServico(ATIV_ID, SERV_ID, valorUnit) Then
-        res.Sucesso = False
-        res.Mensagem = "Servico nao encontrado em CAD_SERV: ATIV=" & ATIV_ID & " SERV=" & SERV_ID
+        res.sucesso = False
+        res.mensagem = "Servico nao encontrado em CAD_SERV: ATIV=" & ATIV_ID & " SERV=" & SERV_ID
         EmitirPreOS = res
         Exit Function
     End If
@@ -159,15 +159,15 @@ Public Function EmitirPreOS( _
     ' 3. Executar rodízio (critério 3)
     rodizio = SelecionarEmpresa(ATIV_ID)
     If Not rodizio.encontrou Then
-        res.Sucesso = False
+        res.sucesso = False
         Select Case UCase$(Trim$(rodizio.MotivoFalha))
             Case "SEM_CREDENCIADOS_CADASTRADOS", "SEM_CREDENCIADOS_APTOS"
-                res.Mensagem = "Nao ha empresas credenciadas aptas para esta atividade. Credencie ao menos uma empresa na atividade selecionada."
+                res.mensagem = "Nao ha empresas credenciadas aptas para esta atividade. Credencie ao menos uma empresa na atividade selecionada."
             Case Else
-                res.Mensagem = "Rodizio sem empresa apta: " & rodizio.MotivoFalha
+                res.mensagem = "Rodizio sem empresa apta: " & rodizio.MotivoFalha
         End Select
         If InStr(1, UCase$(rodizio.MotivoFalha), "SEM_CREDENCIADOS_APTOS", vbTextCompare) > 0 Then
-            res.Mensagem = "Nao ha empresas credenciadas aptas para esta atividade. " & rodizio.MotivoFalha
+            res.mensagem = "Nao ha empresas credenciadas aptas para esta atividade. " & rodizio.MotivoFalha
         End If
         EmitirPreOS = res
         Exit Function
@@ -181,8 +181,8 @@ Public Function EmitirPreOS( _
     ' 5. Gravar linha PRE_OS (critérios 4-8)
     Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar PRE_OS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar PRE_OS para escrita."
         EmitirPreOS = res
         Exit Function
     End If
@@ -214,8 +214,8 @@ Public Function EmitirPreOS( _
         "; DT_LIMITE=" & Format$(dtLimite, "DD/MM/YYYY"), _
         "Svc_PreOS"
 
-    res.Sucesso = True
-    res.Mensagem = "Pre-OS emitida. PREOS_ID=" & preosId & _
+    res.sucesso = True
+    res.mensagem = "Pre-OS emitida. PREOS_ID=" & preosId & _
                    "; EMP_ID=" & rodizio.Empresa.EMP_ID & _
                    "; DT_LIMITE=" & Format$(dtLimite, "DD/MM/YYYY")
     res.IdGerado = preosId   ' critério 10
@@ -227,8 +227,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro em EmitirPreOS: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em EmitirPreOS: " & Err.Description
     res.CodigoErro = Err.Number
     EmitirPreOS = res
 End Function
@@ -262,25 +262,25 @@ Public Function RecusarPreOS( _
     LerPreOS PREOS_ID, linhaPreOS, empId, ativId, statusAtual
 
     If linhaPreOS = 0 Then
-        res.Sucesso = False
-        res.Mensagem = "Pre-OS nao encontrada: PREOS_ID=" & PREOS_ID
+        res.sucesso = False
+        res.mensagem = "Pre-OS nao encontrada: PREOS_ID=" & PREOS_ID
         RecusarPreOS = res
         Exit Function
     End If
 
     ' 2. Validar status (critério 12)
     If statusAtual <> STATUS_AGUARDANDO Then
-        res.Sucesso = False
-        res.Mensagem = "Pre-OS nao pode ser recusada. STATUS=" & statusAtual
+        res.sucesso = False
+        res.mensagem = "Pre-OS nao pode ser recusada. STATUS=" & statusAtual
         RecusarPreOS = res
         Exit Function
     End If
 
     ' 3. AvancarFila ANTES de gravar PRE_OS (critérios 14 e 46)
     resAv = AvancarFila(empId, ativId, True, "RECUSA_EXPLICITA")
-    If Not resAv.Sucesso Then
-        res.Sucesso = False
-        res.Mensagem = "Falha ao avançar fila: " & resAv.Mensagem & _
+    If Not resAv.sucesso Then
+        res.sucesso = False
+        res.mensagem = "Falha ao avançar fila: " & resAv.mensagem & _
                        " | PRE_OS nao alterada. Tente novamente."
         RecusarPreOS = res
         Exit Function
@@ -289,8 +289,8 @@ Public Function RecusarPreOS( _
     ' 4. Gravar STATUS e Motivo (critério 13)
     Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar PRE_OS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar PRE_OS para escrita."
         RecusarPreOS = res
         Exit Function
     End If
@@ -305,8 +305,8 @@ Public Function RecusarPreOS( _
         "; EMP_ID=" & empId & "; ATIV_ID=" & ativId, _
         "Svc_PreOS"
 
-    res.Sucesso = True
-    res.Mensagem = "Pre-OS " & PREOS_ID & " recusada. EMP_ID=" & empId
+    res.sucesso = True
+    res.mensagem = "Pre-OS " & PREOS_ID & " recusada. EMP_ID=" & empId
     res.IdGerado = PREOS_ID
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     RecusarPreOS = res
@@ -316,8 +316,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro em RecusarPreOS: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em RecusarPreOS: " & Err.Description
     res.CodigoErro = Err.Number
     RecusarPreOS = res
 End Function
@@ -342,24 +342,24 @@ Public Function ExpirarPreOS(ByVal PREOS_ID As String) As TResult
     LerPreOS PREOS_ID, linhaPreOS, empId, ativId, statusAtual
 
     If linhaPreOS = 0 Then
-        res.Sucesso = False
-        res.Mensagem = "Pre-OS nao encontrada: PREOS_ID=" & PREOS_ID
+        res.sucesso = False
+        res.mensagem = "Pre-OS nao encontrada: PREOS_ID=" & PREOS_ID
         ExpirarPreOS = res
         Exit Function
     End If
 
     If statusAtual <> STATUS_AGUARDANDO Then
-        res.Sucesso = False
-        res.Mensagem = "Pre-OS nao pode ser expirada. STATUS=" & statusAtual
+        res.sucesso = False
+        res.mensagem = "Pre-OS nao pode ser expirada. STATUS=" & statusAtual
         ExpirarPreOS = res
         Exit Function
     End If
 
     ' AvancarFila ANTES de gravar PRE_OS (critérios 18 e 47)
     resAv = AvancarFila(empId, ativId, True, "PRAZO_EXPIRADO")
-    If Not resAv.Sucesso Then
-        res.Sucesso = False
-        res.Mensagem = "Falha ao avançar fila: " & resAv.Mensagem & _
+    If Not resAv.sucesso Then
+        res.sucesso = False
+        res.mensagem = "Falha ao avançar fila: " & resAv.mensagem & _
                        " | PRE_OS nao alterada. Tente novamente."
         ExpirarPreOS = res
         Exit Function
@@ -368,8 +368,8 @@ Public Function ExpirarPreOS(ByVal PREOS_ID As String) As TResult
     ' Gravar STATUS (critério 17)
     Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar PRE_OS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar PRE_OS para escrita."
         ExpirarPreOS = res
         Exit Function
     End If
@@ -384,8 +384,8 @@ Public Function ExpirarPreOS(ByVal PREOS_ID As String) As TResult
         "; ATIV_ID=" & ativId, _
         "Svc_PreOS"
 
-    res.Sucesso = True
-    res.Mensagem = "Pre-OS " & PREOS_ID & " expirada. EMP_ID=" & empId
+    res.sucesso = True
+    res.mensagem = "Pre-OS " & PREOS_ID & " expirada. EMP_ID=" & empId
     res.IdGerado = PREOS_ID
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     ExpirarPreOS = res
@@ -395,8 +395,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro em ExpirarPreOS: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em ExpirarPreOS: " & Err.Description
     res.CodigoErro = Err.Number
     ExpirarPreOS = res
 End Function

@@ -1,0 +1,115 @@
+{
+  "readback_id": "readback-onda17-md17-1-d-II-2026-05-03",
+  "agent_id": "claude-opus-4-7-cowork",
+  "operator": "Luís Maurício Junqueira Zanin",
+  "track": "safe_track",
+  "started_at": "2026-05-03",
+  "status": "aguardando_hearback_escrita_em_codigo",
+  "schema_version": "hbn-readback/0.3.1",
+  "parent_readback": "readback-onda17-md17-1-d-I-2026-05-03 (0015)",
+
+  "ciclo_imediatamente_anterior": "MD-17.1.d.I fechada com Run 1+Run 2 APROVADOS (idempotencia empirica confirmada). Speed-up parcial 11.5% (1m41s); alvo HF8 <10min nao atingido (13:00 vs alvo <10min). Decisao Q-MD17.1.d.I.C: fechar e abrir MD-17.1.d.I.b como debito tecnico para gamma profundo (task #10 criada).",
+
+  "objetivo": "Adicionar visibility α (status bar rica) durante execucao do Quarteto/suites V2. Operador deixa de ter sensacao de 'Quarteto travou' durante ~13min de execucao silenciosa. Idempotencia trivial (StatusBar e puramente apresentacao visual).",
+
+  "decisoes_q_md17_1_d_II_confirmadas_pelo_operador_2026_05_03": {
+    "A": "confirmed sim — Verbosity default=2 ('V2 [SMOKE] X/N: cenarioId = status')",
+    "B": "confirmed sim — StatusBar update SEMPRE (nao apenas em modo visual). Resolve sensacao de Quarteto travado.",
+    "C": "confirmed sim — escopo conservador: Run*s atuais ficam com totalCenarios=0; MD futura ajusta cada Run* para passar total real."
+  },
+
+  "ancora_estavel": {
+    "workbook": "V12-202-Z003-onda17-md1d1",
+    "build_label": "f7aa84f+ONDA17.MD1D1-perf-gamma-conservador",
+    "validacao_dupla": "VR_20260503_165930 Run 1 + VR_20260503_171717 Run 2 — sintaxe IDENTICA confirma idempotencia empirica",
+    "tempo_run_2": "13m 00s 26cs (vs baseline 14m 41s 91cs = speed-up 11.5%)"
+  },
+
+  "escopo_em": [
+    "Util_Config.bas: adicionar Public Function GetStatusBarVerbosity() As Long (default 2; range 0-3) seguindo padrao GetThresholdTesteLentoMS",
+    "Engine top: 2 globals Private — gTV2VerbosityCached As Long, gTV2TotalCenarios As Long",
+    "Engine: helper Public Sub TV2_StatusBar(suite, cenAtual, totN, nomeCenario, etapa) com 4 niveis de verbosity (0/1/2/3)",
+    "Engine TV2_InitExecucao: Optional ByVal totalCenarios As Long = 0 + cachear verbosity (1 leitura por execucao) + reset gTV2TotalCenarios",
+    "Engine TV2_LogLinha (linha 270-277): substituir update inline simples por chamada a TV2_StatusBar SEMPRE (mover for a do If gTV2Visual Then; gTV2Visual continua controlando .Activate/.Select)",
+    "Engine TV2_FinalizarExecucao: chamar TV2_StatusBar com nivel 'fim suite' antes do MsgBox + reset",
+    "App_Release.bas: bump APP_BUILD_IMPORTADO para f7aa84f+ONDA17.MD1D2-visibility-status-bar-rica + comentario MD-17.1.d.II"
+  ],
+
+  "escopo_fora": [
+    "Modificar cada TV2_Run* (TV2_RunSmoke, RunFiltros, etc.) para passar totalCenarios real — fica para MD futura (refinement opcional)",
+    "Custom progress widgets (UserForm dedicado de progresso) — overkill",
+    "Telemetria persistente de tempos por cenario — DURACAO_MS ja cobre por suite",
+    "Mod_Types.bas (TABU C4)",
+    "Forms (.frm/.frx/.code-only.txt) — cap M11=0 mantido"
+  ],
+
+  "verbosity_levels": {
+    "0_silent": "no-op (Application.StatusBar nao atualiza)",
+    "1_minimum": "so transicao de suite — 'V2 [SMOKE] iniciando' / 'V2 [SMOKE] concluido OK=X FALHA=Y MANUAL=Z'",
+    "2_default": "'V2 [SMOKE] X/N: CS_xxx = OK' (X = OK+FALHA+MANUAL atual; N = totalCenarios)",
+    "3_verbose": "'V2 [SMOKE] X/N: CS_xxx = OK [etapa]' (etapa opcional)"
+  },
+
+  "analise_idempotencia": {
+    "principio": "StatusBar e PURAMENTE apresentacao visual. Zero efeito em business logic, contagens, asserts. Trivialmente idempotente.",
+    "verbosity_getter": "Cacheado uma vez por execucao em gTV2VerbosityCached para evitar leitura repetida de CONFIG (perf). Read deterministico de CONFIG.",
+    "totalCenarios": "Apenas afeta string mostrada; nenhum efeito em contagens reais"
+  },
+
+  "premissas_e_dependencias": [
+    "src/vba/Teste_V2_Engine.bas estado atual: 3142 linhas (pos-MD-17.1.d.I)",
+    "src/vba/Util_Config.bas estado atual: ~150 linhas (estimar)",
+    "src/vba/App_Release.bas estado atual: 269 linhas",
+    "Verbosity getter NAO precisa coluna nova em CONFIG (default 2 quando coluna ausente; usuario pode adicionar coluna se quiser custom)"
+  ],
+
+  "hard_constraints": [
+    "C1 src/vba/ primeiro; espelho local-ai/vba_import depois com shasum batendo (M11)",
+    "C4 Mod_Types.bas TABU",
+    "C7 Quarteto continua APROVADO apos MD-17.1.d.II (sem mudanca de business logic)",
+    "C9 Markers HBN V2",
+    "C11 Cap M10 = 0 imports em forms",
+    "G6 sem codigo VBA solto no chat",
+    "L14 pre-flight grep assinaturas + UDTs feito",
+    "M9/M11 forms intocados",
+    "Hearback explicito por microdelta com escrita em codigo",
+    "CRLF preservado",
+    "INVARIANTE: idempotencia trivial (StatusBar = visual only)"
+  ],
+
+  "m14_preflight": {
+    "checkpoint_estavel_anterior": "V12-202-Z003-onda17-md1d1",
+    "arquivos_modificados_neste_md": ["src/vba/Util_Config.bas + UAQ-", "src/vba/Teste_V2_Engine.bas + ABF-", "src/vba/App_Release.bas + AAX-"],
+    "opcoes_de_rollback_oferecidas": "Apenas UMA (rollback total para md1d1) — M14 trivialmente satisfeito"
+  },
+
+  "criterios_de_sucesso": [
+    "Compile manual passa limpo",
+    "GetBuildImportado retorna f7aa84f+ONDA17.MD1D2-visibility-status-bar-rica",
+    "Quarteto APROVADO com sintaxe IDENTICA (V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0)",
+    "Operador confirma visualmente que durante Quarteto, StatusBar atualiza com 'V2 [<suite>] X: cenarioId = status'",
+    "Tempo Quarteto similar ao MD-17.1.d.I (~13min) — sem regressao perf",
+    "shasum batendo M11 nos 3 arquivos"
+  ],
+
+  "estimates": {
+    "ia_horas": 1.0,
+    "operador_horas": 0.3,
+    "etapas_ia": [
+      "(0.2h) Edit Util_Config.bas (GetStatusBarVerbosity)",
+      "(0.4h) Edit Engine (2 globals + TV2_StatusBar + InitExecucao + LogLinha + FinalizarExecucao)",
+      "(0.1h) Bump App_Release",
+      "(0.1h) Mirror + shasum + CRLF + balance",
+      "(0.2h) Manifesto MICRO21 + procedimento 11"
+    ],
+    "etapas_operador": [
+      "(0.05h) Reset VBE",
+      "(0.05h) Import",
+      "(0.05h) Compile",
+      "(0.15h) Quarteto + observar StatusBar"
+    ],
+    "duracao_calendario_alvo": "~1.5h calendario total"
+  },
+
+  "next_action": "Executar edits + manifesto + procedimento + hearback de escrita-em-codigo final."
+}

@@ -13,8 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
 ' V12.0.0009: ID da empresa armazenado internamente ao abrir o formulario.
 ' Elimina a dependencia de acessar M_Lista do Menu_Principal (que falha quando
 ' M_Lista esta dentro de MultiPage e nao e acessivel via Controls("M_Lista")).
@@ -47,7 +45,7 @@ Private Sub AjustarLabelEdicaoPorCampo(ByVal container As Object, ByVal nomeCamp
     Set lblCampo = BuscarLabelEdicaoDoCampo(container, ctrlCampo)
     If lblCampo Is Nothing Then Exit Sub
 
-    lblCampo.Caption = novoCaption
+    lblCampo.caption = novoCaption
 End Sub
 
 Private Function BuscarControleEdicaoRecursivo(ByVal container As Object, ByVal nomeControle As String) As Object
@@ -87,7 +85,7 @@ Private Sub LocalizarMelhorLabelEdicao(ByVal container As Object, ByVal ctrlCamp
     leftCampo = PosicaoEsquerdaAbsolutaEdicao(ctrlCampo)
 
     For Each ctl In container.Controls
-        If TypeName(ctl) = "Label" Then
+        If typeName(ctl) = "Label" Then
             topLabel = PosicaoTopoAbsolutaEdicao(ctl)
             leftLabel = PosicaoEsquerdaAbsolutaEdicao(ctl)
             If Abs(topLabel - topCampo) <= 280 And leftLabel < leftCampo Then
@@ -115,19 +113,19 @@ End Function
 
 Private Function PosicaoEsquerdaAbsolutaEdicao(ByVal ctl As Object) As Double
     Dim p As Object
-    Dim X As Double
+    Dim x As Double
 
     On Error GoTo fim
-    X = ctl.Left
+    x = ctl.Left
     Set p = ctl.Parent
     Do While Not p Is Nothing
-        Select Case TypeName(p)
+        Select Case typeName(p)
             Case "Frame", "Page", "MultiPage"
-                X = X + p.Left
+                x = x + p.Left
         End Select
         Set p = p.Parent
     Loop
-    PosicaoEsquerdaAbsolutaEdicao = X
+    PosicaoEsquerdaAbsolutaEdicao = x
     Exit Function
 fim:
     PosicaoEsquerdaAbsolutaEdicao = ctl.Left
@@ -135,19 +133,19 @@ End Function
 
 Private Function PosicaoTopoAbsolutaEdicao(ByVal ctl As Object) As Double
     Dim p As Object
-    Dim Y As Double
+    Dim y As Double
 
     On Error GoTo fim
-    Y = ctl.Top
+    y = ctl.Top
     Set p = ctl.Parent
     Do While Not p Is Nothing
-        Select Case TypeName(p)
+        Select Case typeName(p)
             Case "Frame", "Page", "MultiPage"
-                Y = Y + p.Top
+                y = y + p.Top
         End Select
         Set p = p.Parent
     Loop
-    PosicaoTopoAbsolutaEdicao = Y
+    PosicaoTopoAbsolutaEdicao = y
     Exit Function
 fim:
     PosicaoTopoAbsolutaEdicao = ctl.Top
@@ -200,8 +198,8 @@ Private Function UI_EncontrarBotaoPorTextos(ByVal container As Object, ByVal tex
     Dim ctl As Object
 
     For Each ctl In container.Controls
-        If TypeName(ctl) = "CommandButton" Then
-            If UI_CaptionContemTodos(CStr(ctl.Caption), texto1, texto2) Then
+        If typeName(ctl) = "CommandButton" Then
+            If UI_CaptionContemTodos(CStr(ctl.caption), texto1, texto2) Then
                 Set UI_EncontrarBotaoPorTextos = ctl
                 Exit Function
             End If

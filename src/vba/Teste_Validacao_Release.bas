@@ -2,7 +2,9 @@ Attribute VB_Name = "Teste_Validacao_Release"
 Option Explicit
 
 ' Orquestrador minimo de homologacao da release:
-' V1 rapida + V2 Smoke + V2 Canonica, com evidencia copiavel para IA/humano.
+' Trio Minimo  : V1 rapida + V2 Smoke + V2 Canonica.
+' Quarteto Min.: V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes (Onda 11 MD-3 / DT-1).
+' Cada gate escreve evidencia copiavel para IA/humano em VALIDACAO_RELEASE.
 
 Private Const VR_SHEET As String = "VALIDACAO_RELEASE"
 Private Const VR_RELEASE_ALVO As String = "V12.0.0203"
@@ -44,10 +46,23 @@ Public Sub CT_ValidarRelease_TrioMinimo()
     ws.Activate
     ws.Range("A1").Select
 
+    ' V12.0.0203 ONDA 17 MD-17.1.d.III - verificar se CSV foi realmente gerado
+    ' antes de mostrar caminho. Antes desse fix, mensagem mostrava path mesmo
+    ' quando arquivo nao existia (passava imagem errada ao operador).
+    Dim csvStatusMsg As String
+    If Len(csvResumo) > 0 And Dir(csvResumo) <> "" Then
+        csvStatusMsg = "CSV resumo (gerado):" & vbCrLf & csvResumo
+    ElseIf Len(csvResumo) > 0 Then
+        csvStatusMsg = "CSV resumo NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
+                       "(verificar permissoes ou erro de I/O - caminho retornado pelo exporter mas Dir() vazio)"
+    Else
+        csvStatusMsg = "CSV resumo: nao exportado (caminho vazio)"
+    End If
+
     msgFinal = "Validacao consolidada concluida." & vbCrLf & _
                "ID: " & validacaoId & vbCrLf & _
                "Resultado: " & statusGeral & vbCrLf & vbCrLf & _
-               "CSV resumo:" & vbCrLf & csvResumo
+               csvStatusMsg
     If statusGeral = "APROVADO" Then
         estiloMsg = vbInformation
     Else
@@ -73,6 +88,97 @@ Public Sub VR_AbrirValidacaoRelease()
     Set ws = VR_EnsureSheet()
     ws.Activate
     ws.Range("A1").Select
+End Sub
+
+'======================================================================
+' Quarteto Minimo (Onda 11 MD-3 - DT-1 release gate honesty)
+'   Etapas (linhas em VALIDACAO_RELEASE):
+'     7  V1_RAPIDA
+'     8  V2_SMOKE
+'     9  V2_CANONICO
+'     10 V2_E2E_STRIKES
+'     12 RESULTADO_GERAL
+'     13 BLOCO_COPIAVEL_PARA_IA (label)
+'     14 bloco merge
+'   Sintaxe canonica do bloco IA (linha SINTAXE):
+'     V1=A/F+V2_Smoke=A/F+V2_Canonica=A/F+E2E_Strikes=A/F
+'   CT_ValidarRelease_TrioMinimo permanece intocado: cada gate valida
+'   tudo dentro do seu dominio sem dependencia cruzada.
+'======================================================================
+Public Sub CT_ValidarRelease_QuartetoMinimo()
+    Dim ws As Worksheet
+    Dim validacaoId As String
+    Dim statusGeral As String
+    Dim csvResumo As String
+    Dim msgFinal As String
+    Dim estiloMsg As Long
+
+    On Error GoTo falha
+
+    validacaoId = "VR_" & Format$(Now, "yyyymmdd_hhnnss")
+    Set ws = VR_PrepararSheet(validacaoId)
+
+    Application.StatusBar = "Validacao Quarteto: V1 rapida"
+    BA_SetModoExecucaoVisual False
+    RunBateriaOficial True
+    VR_RegistrarEtapaV1 ws, validacaoId, 7
+
+    Application.StatusBar = "Validacao Quarteto: V2 Smoke"
+    TV2_RunSmoke False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 8, "V2_SMOKE", TV2_ExecucaoAtualId()
+
+    Application.StatusBar = "Validacao Quarteto: V2 Canonica"
+    TV2_RunCanonicoFundacao False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 9, "V2_CANONICO", TV2_ExecucaoAtualId()
+
+    Application.StatusBar = "Validacao Quarteto: E2E Strikes"
+    TV2_RunRodizioStrikesEndToEnd False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 10, "V2_E2E_STRIKES", TV2_ExecucaoAtualId()
+
+    statusGeral = VR_StatusGeralQuarteto(ws)
+    csvResumo = VR_ExportarResumoCSVQuarteto(ws, validacaoId, statusGeral)
+    VR_EscreverResumoIAQuarteto ws, validacaoId, statusGeral, csvResumo
+    VR_FormatarSheetQuarteto ws, statusGeral
+
+    Application.StatusBar = False
+    ws.Activate
+    ws.Range("A1").Select
+
+    ' V12.0.0203 ONDA 17 MD-17.1.d.III - verificar se CSV foi realmente gerado
+    ' antes de mostrar caminho. Antes: caminho aparecia mesmo sem arquivo.
+    Dim csvStatusMsgQ As String
+    If Len(csvResumo) > 0 And Dir(csvResumo) <> "" Then
+        csvStatusMsgQ = "CSV resumo (gerado):" & vbCrLf & csvResumo
+    ElseIf Len(csvResumo) > 0 Then
+        csvStatusMsgQ = "CSV resumo NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
+                        "(verificar permissoes ou erro de I/O - caminho retornado pelo exporter mas Dir() vazio)"
+    Else
+        csvStatusMsgQ = "CSV resumo: nao exportado (caminho vazio)"
+    End If
+
+    msgFinal = "Validacao Quarteto concluida." & vbCrLf & _
+               "ID: " & validacaoId & vbCrLf & _
+               "Resultado: " & statusGeral & vbCrLf & vbCrLf & _
+               "Sintaxe: " & VR_SintaxeQuarteto(ws) & vbCrLf & vbCrLf & _
+               csvStatusMsgQ
+    If statusGeral = "APROVADO" Then
+        estiloMsg = vbInformation
+    Else
+        estiloMsg = vbExclamation
+    End If
+    MsgBox msgFinal, estiloMsg, "Validacao Release Quarteto"
+    Exit Sub
+
+falha:
+    Application.StatusBar = False
+    MsgBox "Erro na validacao Quarteto: " & Err.Description & vbCrLf & _
+           "Codigo: " & CStr(Err.Number) & vbCrLf & _
+           "Origem: " & Err.Source, _
+           vbCritical, "Validacao Release Quarteto"
+End Sub
+
+Public Sub VR_ValidarReleaseQuartetoMinimo()
+    CT_ValidarRelease_QuartetoMinimo
 End Sub
 
 Private Function VR_PrepararSheet(ByVal validacaoId As String) As Worksheet
@@ -117,7 +223,7 @@ Private Function VR_EnsureSheet() As Worksheet
     On Error GoTo 0
 
     If ws Is Nothing Then
-        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.Count))
+        Set ws = ThisWorkbook.Worksheets.Add(After:=ThisWorkbook.Worksheets(ThisWorkbook.Worksheets.count))
         ws.Name = VR_SHEET
     End If
 
@@ -259,7 +365,7 @@ Private Function VR_PrimeiraFalhaV1(ByVal execId As String) As String
     On Error GoTo 0
     If ws Is Nothing Then Exit Function
 
-    ult = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ult = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     For r = 7 To ult
         If Trim$(CStr(ws.Cells(r, 1).Value)) = execId Then
             If UCase$(Trim$(CStr(ws.Cells(r, 7).Value))) = VR_STATUS_FAIL Then
@@ -283,7 +389,7 @@ Private Function VR_PrimeiraFalhaV2(ByVal execId As String) As String
     On Error GoTo 0
     If ws Is Nothing Then Exit Function
 
-    ult = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ult = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     For r = 2 To ult
         If Trim$(CStr(ws.Cells(r, 1).Value)) = execId Then
             If UCase$(Trim$(CStr(ws.Cells(r, 8).Value))) = VR_STATUS_FAIL Then
@@ -308,7 +414,7 @@ Private Function VR_CsvFalhasV2(ByVal execId As String) As String
     On Error GoTo 0
     If ws Is Nothing Then Exit Function
 
-    ult = ws.Cells(ws.Rows.Count, 1).End(xlUp).Row
+    ult = ws.Cells(ws.Rows.count, 1).End(xlUp).row
     For r = ult To 2 Step -1
         If Trim$(CStr(ws.Cells(r, 1).Value)) = execId Then
             VR_CsvFalhasV2 = Trim$(CStr(ws.Cells(r, 8).Value))
@@ -475,6 +581,374 @@ Private Sub VR_FormatarSheet(ByVal ws As Worksheet, ByVal statusGeral As String)
     ws.Columns(12).ColumnWidth = 42
     ws.Range(ws.Cells(6, 1), ws.Cells(9, 12)).AutoFilter
     ws.Range(ws.Cells(1, 1), ws.Cells(13, 12)).Borders.LineStyle = xlContinuous
+    ws.Cells.WrapText = True
+    On Error GoTo 0
+End Sub
+
+'======================================================================
+' Helpers privados do Quarteto (Onda 11 MD-3 / DT-1)
+' Espelham VR_StatusGeral / VR_EscreverResumoIA / VR_ExportarResumoCSV /
+' VR_FormatarSheet, mas operam sobre 4 etapas (linhas 7..10) com layout
+' RESULTADO_GERAL=12, BLOCO_COPIAVEL_PARA_IA=13/14.
+'======================================================================
+Private Function VR_StatusGeralQuarteto(ByVal ws As Worksheet) As String
+    Dim r As Long
+    For r = 7 To 10
+        If UCase$(Trim$(CStr(ws.Cells(r, 9).Value))) <> VR_STATUS_OK Then
+            VR_StatusGeralQuarteto = "REPROVADO"
+            Exit Function
+        End If
+    Next r
+    VR_StatusGeralQuarteto = "APROVADO"
+End Function
+
+Private Function VR_SintaxeQuarteto(ByVal ws As Worksheet) As String
+    ' Sintaxe canonica: V1=A/F+V2_Smoke=A/F+V2_Canonica=A/F+E2E_Strikes=A/F
+    Dim s As String
+    s = "V1=" & CStr(ws.Cells(7, 6).Value) & "/" & CStr(ws.Cells(7, 7).Value)
+    s = s & "+V2_Smoke=" & CStr(ws.Cells(8, 6).Value) & "/" & CStr(ws.Cells(8, 7).Value)
+    s = s & "+V2_Canonica=" & CStr(ws.Cells(9, 6).Value) & "/" & CStr(ws.Cells(9, 7).Value)
+    s = s & "+E2E_Strikes=" & CStr(ws.Cells(10, 6).Value) & "/" & CStr(ws.Cells(10, 7).Value)
+    VR_SintaxeQuarteto = s
+End Function
+
+Private Sub VR_EscreverResumoIAQuarteto(ByVal ws As Worksheet, ByVal validacaoId As String, ByVal statusGeral As String, ByVal csvResumo As String)
+    Dim bloco As String
+
+    bloco = "VALIDACAO_RELEASE=" & validacaoId & vbLf
+    bloco = bloco & "BUILD=" & VR_BuildImportado() & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 7) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 8) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 9) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 10) & vbLf
+    bloco = bloco & "RESULTADO=" & statusGeral & vbLf
+    bloco = bloco & "SINTAXE=" & VR_SintaxeQuarteto(ws) & vbLf
+    bloco = bloco & "CSV_RESUMO=" & csvResumo
+
+    ws.Cells(13, 1).Value = "BLOCO_COPIAVEL_PARA_IA"
+    ws.Cells(14, 1).Value = bloco
+    ws.Range(ws.Cells(14, 1), ws.Cells(14, 12)).Merge
+    ws.Cells(14, 1).WrapText = True
+    ws.Rows(14).RowHeight = 130
+End Sub
+
+Private Function VR_ExportarResumoCSVQuarteto(ByVal ws As Worksheet, ByVal validacaoId As String, ByVal statusGeral As String) As String
+    Dim pasta As String
+    Dim caminho As String
+    Dim fNum As Integer
+    Dim r As Long
+
+    On Error GoTo falha
+
+    pasta = VR_PastaSaida()
+    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseQuarteto_V12_0_0203_" & validacaoId & ".csv"
+
+    fNum = FreeFile
+    Open caminho For Output As #fNum
+    Print #fNum, "VALIDACAO_ID;BUILD;DATA_HORA;ETAPA;EXECUCAO_ID;OK;FALHA;MANUAL;STATUS;CSV_FALHAS;PRIMEIRA_FALHA;ACAO_IA"
+
+    For r = 7 To 10
+        Print #fNum, VR_CsvLinha(ws, r)
+    Next r
+
+    Print #fNum, VR_CsvCell(validacaoId) & ";" & VR_CsvCell(VR_BuildImportado()) & ";" & _
+        VR_CsvCell(Format$(Now, "dd/mm/yyyy hh:nn:ss")) & ";GERAL;;;;;" & _
+        VR_CsvCell(statusGeral) & ";;;" & _
+        VR_CsvCell("Quarteto V1+V2_Smoke+V2_Canonica+E2E_Strikes; usar como evidencia textual.")
+
+    Close #fNum
+    VR_ExportarResumoCSVQuarteto = caminho
+    Exit Function
+
+falha:
+    On Error Resume Next
+    If fNum <> 0 Then Close #fNum
+    VR_ExportarResumoCSVQuarteto = ""
+End Function
+
+Private Sub VR_FormatarSheetQuarteto(ByVal ws As Worksheet, ByVal statusGeral As String)
+    Dim r As Long
+
+    On Error Resume Next
+
+    With ws.Range(ws.Cells(1, 1), ws.Cells(1, 12))
+        .Merge
+        .Font.Bold = True
+        .Font.Size = 14
+        .HorizontalAlignment = xlCenter
+        .Interior.Color = RGB(0, 51, 102)
+        .Font.Color = RGB(255, 255, 255)
+    End With
+
+    With ws.Range(ws.Cells(6, 1), ws.Cells(6, 12))
+        .Font.Bold = True
+        .Interior.Color = RGB(0, 51, 102)
+        .Font.Color = RGB(255, 255, 255)
+        .HorizontalAlignment = xlCenter
+    End With
+
+    For r = 7 To 10
+        If UCase$(Trim$(CStr(ws.Cells(r, 9).Value))) = VR_STATUS_OK Then
+            ws.Cells(r, 9).Interior.Color = RGB(198, 239, 206)
+        Else
+            ws.Range(ws.Cells(r, 1), ws.Cells(r, 12)).Interior.Color = RGB(255, 199, 206)
+        End If
+    Next r
+
+    ws.Cells(12, 1).Value = "RESULTADO_GERAL"
+    ws.Cells(12, 2).Value = statusGeral
+    ws.Cells(12, 2).Font.Bold = True
+    If statusGeral = "APROVADO" Then
+        ws.Cells(12, 2).Interior.Color = RGB(198, 239, 206)
+    Else
+        ws.Cells(12, 2).Interior.Color = RGB(255, 199, 206)
+    End If
+
+    ws.Columns(1).ColumnWidth = 23
+    ws.Columns(2).ColumnWidth = 16
+    ws.Columns(3).ColumnWidth = 19
+    ws.Columns(4).ColumnWidth = 16
+    ws.Columns(5).ColumnWidth = 24
+    ws.Columns(6).ColumnWidth = 8
+    ws.Columns(7).ColumnWidth = 8
+    ws.Columns(8).ColumnWidth = 8
+    ws.Columns(9).ColumnWidth = 12
+    ws.Columns(10).ColumnWidth = 42
+    ws.Columns(11).ColumnWidth = 70
+    ws.Columns(12).ColumnWidth = 42
+    ws.Range(ws.Cells(6, 1), ws.Cells(10, 12)).AutoFilter
+    ws.Range(ws.Cells(1, 1), ws.Cells(14, 12)).Borders.LineStyle = xlContinuous
+    ws.Cells.WrapText = True
+    On Error GoTo 0
+End Sub
+
+'======================================================================
+' Quinteto Minimo (Onda 17 MD-17.3 - Bloco A Caminho C)
+'   Etapas (linhas em VALIDACAO_RELEASE):
+'     7  V1_RAPIDA
+'     8  V2_SMOKE
+'     9  V2_CANONICO
+'     10 V2_E2E_STRIKES
+'     11 V2_INTEGRIDADE_BASE
+'     13 RESULTADO_GERAL
+'     14 BLOCO_COPIAVEL_PARA_IA (label)
+'     15 bloco merge
+'   Sintaxe canonica do bloco IA (linha SINTAXE):
+'     V1=A/F+V2_Smoke=A/F+V2_Canonica=A/F+E2E_Strikes=A/F+IntegridadeBase=A/F
+'   Quarteto continua APROVADO sintaxe IDENTICA (espelhada via Quinteto
+'   nas mesmas 4 primeiras suites). IntegridadeBase e PURE READ; sua
+'   chamada apos o Quarteto nao contamina estado. CT_ValidarRelease_
+'   QuartetoMinimo / TrioMinimo permanecem intocados.
+'======================================================================
+Public Sub CT_ValidarRelease_QuintetoMinimo()
+    Dim ws As Worksheet
+    Dim validacaoId As String
+    Dim statusGeral As String
+    Dim csvResumo As String
+    Dim msgFinal As String
+    Dim estiloMsg As Long
+
+    On Error GoTo falha
+
+    validacaoId = "VR_" & Format$(Now, "yyyymmdd_hhnnss")
+    Set ws = VR_PrepararSheet(validacaoId)
+
+    Application.StatusBar = "Validacao Quinteto: V1 rapida"
+    BA_SetModoExecucaoVisual False
+    RunBateriaOficial True
+    VR_RegistrarEtapaV1 ws, validacaoId, 7
+
+    Application.StatusBar = "Validacao Quinteto: V2 Smoke"
+    TV2_RunSmoke False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 8, "V2_SMOKE", TV2_ExecucaoAtualId()
+
+    Application.StatusBar = "Validacao Quinteto: V2 Canonica"
+    TV2_RunCanonicoFundacao False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 9, "V2_CANONICO", TV2_ExecucaoAtualId()
+
+    Application.StatusBar = "Validacao Quinteto: E2E Strikes"
+    TV2_RunRodizioStrikesEndToEnd False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 10, "V2_E2E_STRIKES", TV2_ExecucaoAtualId()
+
+    Application.StatusBar = "Validacao Quinteto: IntegridadeBase"
+    TV2_RunIntegridadeBase False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 11, "V2_INTEGRIDADE_BASE", TV2_ExecucaoAtualId()
+
+    statusGeral = VR_StatusGeralQuinteto(ws)
+    csvResumo = VR_ExportarResumoCSVQuinteto(ws, validacaoId, statusGeral)
+    VR_EscreverResumoIAQuinteto ws, validacaoId, statusGeral, csvResumo
+    VR_FormatarSheetQuinteto ws, statusGeral
+
+    Application.StatusBar = False
+    ws.Activate
+    ws.Range("A1").Select
+
+    ' V12.0.0203 ONDA 17 MD-17.1.d.III pattern - verificar se CSV foi gerado
+    ' antes de mostrar caminho.
+    Dim csvStatusMsgQ5 As String
+    If Len(csvResumo) > 0 And Dir(csvResumo) <> "" Then
+        csvStatusMsgQ5 = "CSV resumo (gerado):" & vbCrLf & csvResumo
+    ElseIf Len(csvResumo) > 0 Then
+        csvStatusMsgQ5 = "CSV resumo NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
+                         "(verificar permissoes ou erro de I/O - caminho retornado pelo exporter mas Dir() vazio)"
+    Else
+        csvStatusMsgQ5 = "CSV resumo: nao exportado (caminho vazio)"
+    End If
+
+    msgFinal = "Validacao Quinteto concluida." & vbCrLf & _
+               "ID: " & validacaoId & vbCrLf & _
+               "Resultado: " & statusGeral & vbCrLf & vbCrLf & _
+               "Sintaxe: " & VR_SintaxeQuinteto(ws) & vbCrLf & vbCrLf & _
+               csvStatusMsgQ5
+    If statusGeral = "APROVADO" Then
+        estiloMsg = vbInformation
+    Else
+        estiloMsg = vbExclamation
+    End If
+    MsgBox msgFinal, estiloMsg, "Validacao Release Quinteto"
+    Exit Sub
+
+falha:
+    Application.StatusBar = False
+    MsgBox "Erro na validacao Quinteto: " & Err.Description & vbCrLf & _
+           "Codigo: " & CStr(Err.Number) & vbCrLf & _
+           "Origem: " & Err.Source, _
+           vbCritical, "Validacao Release Quinteto"
+End Sub
+
+Public Sub VR_ValidarReleaseQuintetoMinimo()
+    CT_ValidarRelease_QuintetoMinimo
+End Sub
+
+Private Function VR_StatusGeralQuinteto(ByVal ws As Worksheet) As String
+    Dim r As Long
+    For r = 7 To 11
+        If UCase$(Trim$(CStr(ws.Cells(r, 9).Value))) <> VR_STATUS_OK Then
+            VR_StatusGeralQuinteto = "REPROVADO"
+            Exit Function
+        End If
+    Next r
+    VR_StatusGeralQuinteto = "APROVADO"
+End Function
+
+Private Function VR_SintaxeQuinteto(ByVal ws As Worksheet) As String
+    ' Sintaxe canonica: V1=A/F+V2_Smoke=A/F+V2_Canonica=A/F+E2E_Strikes=A/F+IntegridadeBase=A/F
+    Dim s As String
+    s = "V1=" & CStr(ws.Cells(7, 6).Value) & "/" & CStr(ws.Cells(7, 7).Value)
+    s = s & "+V2_Smoke=" & CStr(ws.Cells(8, 6).Value) & "/" & CStr(ws.Cells(8, 7).Value)
+    s = s & "+V2_Canonica=" & CStr(ws.Cells(9, 6).Value) & "/" & CStr(ws.Cells(9, 7).Value)
+    s = s & "+E2E_Strikes=" & CStr(ws.Cells(10, 6).Value) & "/" & CStr(ws.Cells(10, 7).Value)
+    s = s & "+IntegridadeBase=" & CStr(ws.Cells(11, 6).Value) & "/" & CStr(ws.Cells(11, 7).Value)
+    VR_SintaxeQuinteto = s
+End Function
+
+Private Sub VR_EscreverResumoIAQuinteto(ByVal ws As Worksheet, ByVal validacaoId As String, ByVal statusGeral As String, ByVal csvResumo As String)
+    Dim bloco As String
+
+    bloco = "VALIDACAO_RELEASE=" & validacaoId & vbLf
+    bloco = bloco & "BUILD=" & VR_BuildImportado() & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 7) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 8) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 9) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 10) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 11) & vbLf
+    bloco = bloco & "RESULTADO=" & statusGeral & vbLf
+    bloco = bloco & "SINTAXE=" & VR_SintaxeQuinteto(ws) & vbLf
+    bloco = bloco & "CSV_RESUMO=" & csvResumo
+
+    ws.Cells(14, 1).Value = "BLOCO_COPIAVEL_PARA_IA"
+    ws.Cells(15, 1).Value = bloco
+    ws.Range(ws.Cells(15, 1), ws.Cells(15, 12)).Merge
+    ws.Cells(15, 1).WrapText = True
+    ws.Rows(15).RowHeight = 145
+End Sub
+
+Private Function VR_ExportarResumoCSVQuinteto(ByVal ws As Worksheet, ByVal validacaoId As String, ByVal statusGeral As String) As String
+    Dim pasta As String
+    Dim caminho As String
+    Dim fNum As Integer
+    Dim r As Long
+
+    On Error GoTo falha
+
+    pasta = VR_PastaSaida()
+    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseQuinteto_V12_0_0203_" & validacaoId & ".csv"
+
+    fNum = FreeFile
+    Open caminho For Output As #fNum
+    Print #fNum, "VALIDACAO_ID;BUILD;DATA_HORA;ETAPA;EXECUCAO_ID;OK;FALHA;MANUAL;STATUS;CSV_FALHAS;PRIMEIRA_FALHA;ACAO_IA"
+
+    For r = 7 To 11
+        Print #fNum, VR_CsvLinha(ws, r)
+    Next r
+
+    Print #fNum, VR_CsvCell(validacaoId) & ";" & VR_CsvCell(VR_BuildImportado()) & ";" & _
+        VR_CsvCell(Format$(Now, "dd/mm/yyyy hh:nn:ss")) & ";GERAL;;;;;" & _
+        VR_CsvCell(statusGeral) & ";;;" & _
+        VR_CsvCell("Quinteto V1+V2_Smoke+V2_Canonica+E2E_Strikes+IntegridadeBase; usar como evidencia textual.")
+
+    Close #fNum
+    VR_ExportarResumoCSVQuinteto = caminho
+    Exit Function
+
+falha:
+    On Error Resume Next
+    If fNum <> 0 Then Close #fNum
+    VR_ExportarResumoCSVQuinteto = ""
+End Function
+
+Private Sub VR_FormatarSheetQuinteto(ByVal ws As Worksheet, ByVal statusGeral As String)
+    Dim r As Long
+
+    On Error Resume Next
+
+    With ws.Range(ws.Cells(1, 1), ws.Cells(1, 12))
+        .Merge
+        .Font.Bold = True
+        .Font.Size = 14
+        .HorizontalAlignment = xlCenter
+        .Interior.Color = RGB(0, 51, 102)
+        .Font.Color = RGB(255, 255, 255)
+    End With
+
+    With ws.Range(ws.Cells(6, 1), ws.Cells(6, 12))
+        .Font.Bold = True
+        .Interior.Color = RGB(0, 51, 102)
+        .Font.Color = RGB(255, 255, 255)
+        .HorizontalAlignment = xlCenter
+    End With
+
+    For r = 7 To 11
+        If UCase$(Trim$(CStr(ws.Cells(r, 9).Value))) = VR_STATUS_OK Then
+            ws.Cells(r, 9).Interior.Color = RGB(198, 239, 206)
+        Else
+            ws.Range(ws.Cells(r, 1), ws.Cells(r, 12)).Interior.Color = RGB(255, 199, 206)
+        End If
+    Next r
+
+    ws.Cells(13, 1).Value = "RESULTADO_GERAL"
+    ws.Cells(13, 2).Value = statusGeral
+    ws.Cells(13, 2).Font.Bold = True
+    If statusGeral = "APROVADO" Then
+        ws.Cells(13, 2).Interior.Color = RGB(198, 239, 206)
+    Else
+        ws.Cells(13, 2).Interior.Color = RGB(255, 199, 206)
+    End If
+
+    ws.Columns(1).ColumnWidth = 23
+    ws.Columns(2).ColumnWidth = 16
+    ws.Columns(3).ColumnWidth = 19
+    ws.Columns(4).ColumnWidth = 19
+    ws.Columns(5).ColumnWidth = 24
+    ws.Columns(6).ColumnWidth = 8
+    ws.Columns(7).ColumnWidth = 8
+    ws.Columns(8).ColumnWidth = 8
+    ws.Columns(9).ColumnWidth = 12
+    ws.Columns(10).ColumnWidth = 42
+    ws.Columns(11).ColumnWidth = 70
+    ws.Columns(12).ColumnWidth = 42
+    ws.Range(ws.Cells(6, 1), ws.Cells(11, 12)).AutoFilter
+    ws.Range(ws.Cells(1, 1), ws.Cells(15, 12)).Borders.LineStyle = xlContinuous
     ws.Cells.WrapText = True
     On Error GoTo 0
 End Sub

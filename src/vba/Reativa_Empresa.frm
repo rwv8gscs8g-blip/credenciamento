@@ -13,9 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
 Private WithEvents mTxtBusca As MSForms.TextBox
 Attribute mTxtBusca.VB_VarHelpID = -1
 
@@ -28,11 +25,27 @@ Private Function UI_TextBoxSeExiste(ByVal nome As String) As MSForms.TextBox
 End Function
 
 Private Function UI_PegarTextBoxBuscaTopoDireita() As MSForms.TextBox
-    ' Onda 8 (V12.0.0203): heuristica delegada para Util_Filtro_Lista
-    ' (criterio de aceite: zero heuristica posicional em .frm).
-    On Error Resume Next
-    Set UI_PegarTextBoxBuscaTopoDireita = UtilFiltro_LocalizarTextBoxFiltro(Me)
-    On Error GoTo 0
+    Dim ctl As Object
+    Dim melhor As MSForms.TextBox
+    Dim leftMax As Double
+
+    On Error GoTo fim
+
+    leftMax = -1
+    For Each ctl In Me.Controls
+        If typeName(ctl) = "TextBox" Then
+            If ctl.Top <= 20 And ctl.Height <= 22 Then
+                If CDbl(ctl.Left) > leftMax Then
+                    leftMax = CDbl(ctl.Left)
+                    Set melhor = ctl
+                End If
+            End If
+        End If
+    Next ctl
+
+    Set UI_PegarTextBoxBuscaTopoDireita = melhor
+    Exit Function
+fim:
 End Function
 
 Private Function UI_SafeListVal(ByVal valor As Variant) As String
@@ -80,7 +93,7 @@ Private Function UI_ChaveNormalizadaId(ByVal valor As Variant) As String
 End Function
 
 Private Function UI_EmpresaInativosTemConflito(ByVal wsEmpInativas As Worksheet, ByRef linhas As Variant) As Boolean
-    Dim ids As Object
+    Dim idS As Object
     Dim docs As Object
     Dim nomes As Object
     Dim i As Long
@@ -89,7 +102,7 @@ Private Function UI_EmpresaInativosTemConflito(ByVal wsEmpInativas As Worksheet,
     Dim docAtual As String
     Dim nomeAtual As String
 
-    Set ids = CreateObject("Scripting.Dictionary")
+    Set idS = CreateObject("Scripting.Dictionary")
     Set docs = CreateObject("Scripting.Dictionary")
     Set nomes = CreateObject("Scripting.Dictionary")
 
@@ -103,7 +116,7 @@ Private Function UI_EmpresaInativosTemConflito(ByVal wsEmpInativas As Worksheet,
         nomeAtual = UCase$(Trim$(CStr(wsEmpInativas.Cells(linhaAtual, COL_EMP_RAZAO).Value)))
 
         If idAtual <> "" Then
-            If Not ids.Exists(idAtual) Then ids.Add idAtual, True
+            If Not idS.Exists(idAtual) Then idS.Add idAtual, True
         End If
         If docAtual <> "" Then
             If Not docs.Exists(docAtual) Then docs.Add docAtual, True
@@ -113,7 +126,7 @@ Private Function UI_EmpresaInativosTemConflito(ByVal wsEmpInativas As Worksheet,
         End If
     Next i
 
-    UI_EmpresaInativosTemConflito = (ids.Count > 1) Or (docs.Count > 1) Or (nomes.Count > 1)
+    UI_EmpresaInativosTemConflito = (idS.count > 1) Or (docs.count > 1) Or (nomes.count > 1)
 End Function
 
 Private Sub UI_PreencherListaEmpresasInativas(Optional ByVal filtro As String = "")
@@ -134,10 +147,10 @@ Dim linhaUsada As Long
 
 mListaEmpInativCarregando = True
 filtroU = UCase$(Trim$(filtro))
-Cont = 1
+cont = 1
 NItem = 0
 Set wsEmpInativas = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
-NLinhas = UltimaLinhaAba(SHEET_EMPRESAS_INATIVAS)
+nLinhas = UltimaLinhaAba(SHEET_EMPRESAS_INATIVAS)
 Set lst = Me.Controls("RM_Lista")
 If lst Is Nothing Then GoTo fimEmp
 
@@ -147,10 +160,10 @@ With lst
     .ColumnWidths = EmpresaLista_MontarColumnWidths(CDbl(.Width))
 End With
 
-If NLinhas < LINHA_DADOS Then GoTo fimEmp
+If nLinhas < LINHA_DADOS Then GoTo fimEmp
 
 Set vistos = CreateObject("Scripting.Dictionary")
-For linhaAtual = LINHA_DADOS To NLinhas
+For linhaAtual = LINHA_DADOS To nLinhas
     If UI_LinhaEmpresaValida(wsEmpInativas, linhaAtual) Then
         If UI_LinhaEmpresaPassaFiltro(wsEmpInativas, linhaAtual, filtroU) Then
             chave = EmpresaInativos_ChaveDedupeLinha(wsEmpInativas, linhaAtual)
@@ -231,6 +244,7 @@ On Error GoTo erro_carregamento:
     Dim tmp As Long
     Dim idParaDup As String
     Dim idParaCred As String
+    Dim resReativ As TResult
 
     If RM_Lista.ListIndex < 0 Then Exit Sub
 
@@ -292,6 +306,11 @@ On Error GoTo erro_carregamento:
     wsInativas.Rows(linhaCopia).Copy Destination:=wsEmpresas.Cells(linhaDestino, 1)
     Call Util_RestaurarProtecaoAba(wsEmpresas, estProt, Senha)
     Application.CutCopyMode = False
+
+    resReativ = ReativarLinhaEmpresa(linhaDestino, "Reativa_Empresa.frm")
+    If Not resReativ.sucesso Then
+        Err.Raise 1004, "Reativar_Empresa", resReativ.mensagem
+    End If
 
     nDel = qtdLinhasMesmaChave
     ReDim linhasDel(1 To nDel)

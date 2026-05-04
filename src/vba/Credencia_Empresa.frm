@@ -12,8 +12,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
 Option Explicit
 
 Private Const STATUS_CRED_ATIVO As String = "ATIVO"
@@ -53,7 +51,7 @@ Private Sub CR_EnsureFiltroListaDinamico()
         End With
         Set lblCr = Me.Controls.Add("Forms.Label.1", "LblFiltro_CredenciamentoServico", True)
         With lblCr
-            .Caption = "Buscar atividade / servi" & ChrW(231) & "o:"
+            .caption = "Buscar atividade / servi" & ChrW(231) & "o:"
             .Top = mTxtFiltroCredLista.Top - 16
             .Left = CR_Lista.Left
             .Width = CR_Lista.Width
