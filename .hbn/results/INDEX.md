@@ -39,3 +39,4 @@ ultima-atualizacao: 2026-05-04
 | 0023 | Onda 18 MD-18.2 statusbar hint treinamento | APROVADO_OPERADOR | `0023-onda18-md18-2-statusbar-hint.json` | 2026-05-04 |
 | 0024 | MD-17.5 fechamento conjunto Onda 17+18 rc3 | APROVADO_OPERADOR | `0024-onda17-18-fechamento-rc3.json` | 2026-05-04 |
 | 0026 | MICRO30-fix1 ClassificaEmpresa coluna U / R1 final rc4 | APROVADO_OPERADOR | `0026-onda18-micro30-fix1-classifica-empresa-u.json` | 2026-05-04 |
+| 0027 | Onda 19 publicacao V203 rc4, treinamento e auditoria V204 | APROVADO_OPERADOR | `0027-onda19-publicacao-v203-treinamento-auditoria-v204.json` | 2026-05-04 |

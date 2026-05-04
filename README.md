@@ -5,9 +5,10 @@
 > prestadores de pequenos reparos em Excel/VBA.
 
 [![Release](https://img.shields.io/badge/release-V12.0.0202-blue)](obsidian-vault/releases/V12.0.0202.md)
+[![Linha V203](https://img.shields.io/badge/V12.0.0203-rc4%20teste%20manual-yellow)](auditoria/03_ondas/onda_18_reativ_strikes/70_FECHAMENTO_ONDA_18.md)
 [![Status](https://img.shields.io/badge/status-VALIDADO-brightgreen)](obsidian-vault/releases/STATUS-OFICIAL.md)
 [![Licença](https://img.shields.io/badge/licenca-TPGL%20v1.1-6f42c1)](LICENSE)
-[![Auditoria](https://img.shields.io/badge/auditoria-publica-0a7f5a)](auditoria/00_SUMARIO_EXECUTIVO.md)
+[![Auditoria](https://img.shields.io/badge/auditoria-publica-0a7f5a)](auditoria/00_status/00_SUMARIO_EXECUTIVO.md)
 
 Este repositório publica o código-fonte VBA vivo, a trilha de auditoria, a
 matriz de testes e a documentação mínima de governança da linha oficial do
@@ -87,6 +88,9 @@ operacional controlada da documentação institucional auditável.
 ### Para humanos
 
 - [docs/INDEX.md](docs/INDEX.md) — indice publico Diataxis-aware
+- [docs/tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md](docs/tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md) — treinamento para testes manuais da V203 rc4
+- [docs/how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md](docs/how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md) — como rodar o Quinteto de validacao
+- [docs/reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md](docs/reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md) — roteiro manual da rc4
 - [docs/explanation/ARQUITETURA.md](docs/explanation/ARQUITETURA.md)
 - [docs/reference/COMPLIANCE_CMMI_ISO.md](docs/reference/COMPLIANCE_CMMI_ISO.md)
 - [docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
@@ -128,9 +132,13 @@ Este projeto e o primeiro [case study](https://github.com/...) production-scale 
 
 Linha oficial: `V12.0.0202`
 
+Linha em testes manuais formais: `V12.0.0203-rc4`
+
 - compilação limpa validada por operador humano
 - bateria oficial recente sem falhas bloqueantes
 - evidência pública da bateria oficial já publicada nesta linha
 - evidência fresca da V2 validada por operador humano e publicada em `auditoria/evidencias/V12.0.0202/`
 - linha pública oficial já promovida no `main`, com fechamento institucional residual voltado à nova auditoria externa
 - governança documental e de release agora endurecida por checagens automáticas de coerência
+- V203 rc4 verde no Quinteto `VR_20260504_171048`, autorizada para teste manual e nao para producao
+- V204 prevista como linha de estabilizacao final de debitos tecnicos e producao

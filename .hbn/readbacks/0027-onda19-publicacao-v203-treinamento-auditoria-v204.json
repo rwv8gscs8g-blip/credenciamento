@@ -1,0 +1,48 @@
+{
+  "hbn_protocol": "HBN-0.3.1",
+  "readback_id": "0027-onda19-publicacao-v203-treinamento-auditoria-v204",
+  "data": "2026-05-04",
+  "agente": "Codex CLI",
+  "frente": "Frente 1 Credenciamento",
+  "track": "safe_track",
+  "status": "confirmed",
+  "hearback_operador": {
+    "data": "2026-05-04",
+    "resumo": "Operador aprovou os itens 1 a 6 da esteira: faxina/publicacao V203, material de treinamento, prompts de auditoria cruzada e abertura planejada da V204."
+  },
+  "escopo": {
+    "onda": "19",
+    "tema": "publicacao V203 rc4, treinamento humano e auditoria cruzada para V204",
+    "release_base": "V12.0.0203-rc4",
+    "gate_base": "VR_20260504_171048",
+    "decisao_base": "V203 liberada para testes manuais formais, nao producao"
+  },
+  "arquivos_planejados": [
+    "docs/tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md",
+    "docs/how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md",
+    "docs/reference/testes/02_MAPA_TESTES_V203_QUINTETO.md",
+    "docs/reference/testes/03_CATALOGO_CENARIOS_V2_V203.md",
+    "docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md",
+    "docs/reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md",
+    "auditoria/00_status/62_PROMPT_AUDITORIA_OPUS_V203_RC4_E_V204_2026_05_04.md",
+    "auditoria/00_status/63_PROMPT_AUDITORIA_ANTIGRAVITY_V203_RC4_E_V204_2026_05_04.md",
+    "auditoria/02_planos/28_PLANO_V204_ESTABILIZACAO_FINAL_DEBITOS_TESTES.md",
+    "auditoria/03_ondas/onda_19_publicacao_v203_v204/01_TECNICO_PUBLICACAO_TREINAMENTO_AUDITORIA.md",
+    "docs/INDEX.md",
+    "docs/reference/testes/INDEX.md",
+    "llms.txt"
+  ],
+  "gates_planejados": [
+    "validar JSON HBN",
+    "validar CRLF dos arquivos editados",
+    "validar Glasswing G7/G8",
+    "montar branch limpa para GitHub sem material interno em evolucao",
+    "abrir PR draft para revisao publica"
+  ],
+  "fora_de_escopo": [
+    "Criar auditorias 64 e 65 sem execucao real das IAs externas",
+    "Declarar V203 pronta para producao",
+    "Implementar codigo VBA novo",
+    "Resolver debitos tecnicos da V204 nesta onda"
+  ]
+}

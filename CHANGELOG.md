@@ -9,6 +9,18 @@ tratam apenas da linha pública oficial.
 > a ressalva R1 das auditorias cruzadas 58/59 antes de liberar a V203 para
 > homologação manual. Continua não sendo produção.
 
+### Publicacao e treinamento
+
+- Preparado pacote documental de vitrine publica da V203 rc4 para GitHub.
+- Criado guia humano de treinamento de testes manuais da V203.
+- Criado procedimento do Quinteto de validacao release.
+- Criados mapa do Quinteto, catalogo de cenarios V2, matriz de cobertura
+  de regras de negocio e roteiro manual da rc4.
+- Criados prompts de auditoria cruzada para Opus e Antigravity cobrindo
+  regras de negocio, seguranca, cobertura combinatoria e proposta V204.
+- Criado plano inicial `V12.0.0204` para estabilizacao final dos debitos
+  tecnicos conhecidos antes de producao.
+
 ### Corrigido
 
 - **DT-FRENTE1-FORMS-BYPASS-REATIV / R1** — `Reativa_Empresa.frm` deixa

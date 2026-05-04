@@ -21,21 +21,22 @@ documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 
 ## docs/tutorials/ — aprender (passo-a-passo)
 
-> Conteudo em construcao na Onda 6+. Sera populado com tutoriais para:
->
-> - Operador municipal: primeira vez usando o sistema
-> - Contribuidor publico: primeiro pull request
-> - Auditor externo: primeiro audit completo
+- [`tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md`](tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md) — treinamento humano para testes manuais da V203 rc4
 
 ## docs/how-to/ — cookbook (problema concreto)
 
 - [`how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md`](how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md) — acesso a materiais operacionais controlados
+- [`how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md) — procedimento para rodar o Quinteto de validacao
 
 ## docs/reference/ — consulta (regras, API, governanca)
 
 - [`reference/COMPLIANCE_CMMI_ISO.md`](reference/COMPLIANCE_CMMI_ISO.md) — mapeamento CMMI/ISO
 - [`reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`](reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md) — governanca de release
 - [`reference/testes/INDEX.md`](reference/testes/INDEX.md) — indice de testes
+- [`reference/testes/02_MAPA_TESTES_V203_QUINTETO.md`](reference/testes/02_MAPA_TESTES_V203_QUINTETO.md) — mapa humano do Quinteto V203
+- [`reference/testes/03_CATALOGO_CENARIOS_V2_V203.md`](reference/testes/03_CATALOGO_CENARIOS_V2_V203.md) — catalogo dos cenarios V2
+- [`reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md`](reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md) — matriz de cobertura por regra
+- [`reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md`](reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md) — roteiro manual da rc4
 - [`reference/licenca/README.md`](reference/licenca/README.md) — modelo de licenca
 - [`reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md`](reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md) — template CLA institucional
 
@@ -49,6 +50,7 @@ documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 - [`auditoria/00_status/`](../auditoria/00_status/) — snapshots de estado (00, 22, 24, 26)
 - [`auditoria/01_regras_e_governanca/`](../auditoria/01_regras_e_governanca/) — regras canonicas (00 inegociaveis, 03, 04, 14, 16, 17, 18, 19, 21, 23)
 - [`auditoria/02_planos/`](../auditoria/02_planos/) — planos (15, 20, 25, 27)
+- [`auditoria/02_planos/28_PLANO_V204_ESTABILIZACAO_FINAL_DEBITOS_TESTES.md`](../auditoria/02_planos/28_PLANO_V204_ESTABILIZACAO_FINAL_DEBITOS_TESTES.md) — abertura planejada da V204
 - [`auditoria/03_ondas/`](../auditoria/03_ondas/) — documentacao tecnica de cada onda (28-41)
 - [`auditoria/04_evidencias/`](../auditoria/04_evidencias/) — CSVs e manifestos hashados
 - [`auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md`](../auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md) — auditoria honesta + plano (raiz)
