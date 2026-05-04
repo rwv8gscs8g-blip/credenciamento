@@ -2,16 +2,16 @@ Attribute VB_Name = "Central_Testes_Relatorio"
 Option Explicit
 
 ' ============================================================
-' Central_Testes_Relatorio — Geração de relatórios imprimíveis V12
+' Central_Testes_Relatorio - Geração de relatórios imprimíveis V12
 '
 ' Propósito: Gerar relatórios formatados A4 Portrait para impressão.
 ' Dependencias: Central_Testes.bas, Teste_Bateria_Oficial.bas
 ' Abas que cria: RPT_ROTEIRO, RPT_BATERIA, RPT_CK136, RPT_CONSOLIDADO
 ' Funcoes publicas:
-'   CTR_GerarRelatorioRoteiro      — relatório imprimível do Roteiro Rápido
-'   CTR_GerarRelatorioBateria      — relatório imprimível da Bateria Oficial
-'   CTR_GerarRelatorioChecklist136 — relatório imprimível da Validação Humana 136
-'   CTR_GerarRelatorioConsolidado  — relatório consolidado de todos os testes
+'   CTR_GerarRelatorioRoteiro      - relatório imprimível do Roteiro Rápido
+'   CTR_GerarRelatorioBateria      - relatório imprimível da Bateria Oficial
+'   CTR_GerarRelatorioChecklist136 - relatório imprimível da Validação Humana 136
+'   CTR_GerarRelatorioConsolidado  - relatório consolidado de todos os testes
 '
 ' Data: 27/03/2026
 ' ============================================================
@@ -436,7 +436,7 @@ Public Sub CTR_GerarRelatorioChecklist136()
         .HorizontalAlignment = xlCenter
     End With
     
-    ' Copiar dados — header do CHECKLIST_136 esta na row 3, dados a partir de row 4
+    ' Copiar dados - header do CHECKLIST_136 esta na row 3, dados a partir de row 4
     Dim cConfirmado As Long, cDivergente As Long, cPendente As Long, cNA As Long
     Dim cAutoOK As Long, cAutoFalha As Long, cAutoManual As Long
     cConfirmado = 0: cDivergente = 0: cPendente = 0: cNA = 0
@@ -502,7 +502,7 @@ Public Sub CTR_GerarRelatorioChecklist136()
     ultDados = 4 + totalLinhas
     wsRpt.Range(wsRpt.Cells(5, 1), wsRpt.Cells(ultDados, 8)).Borders.LineStyle = xlContinuous
     
-    ' Resumo — AUTOMATIZADO
+    ' Resumo - AUTOMATIZADO
     r = ultDados + 2
     wsRpt.Range("A" & r & ":H" & r).Merge
     wsRpt.Cells(r, 1).Value = "RESULTADO AUTOMATIZADO: " & cAutoOK & " OK  |  " & cAutoFalha & " FALHA  |  " & cAutoManual & " MANUAL"
@@ -515,7 +515,7 @@ Public Sub CTR_GerarRelatorioChecklist136()
         wsRpt.Cells(r, 1).Interior.Color = RGB(198, 239, 206)
     End If
     
-    ' Resumo — VALIDACAO HUMANA
+    ' Resumo - VALIDACAO HUMANA
     r = r + 1
     wsRpt.Range("A" & r & ":H" & r).Merge
     wsRpt.Cells(r, 1).Value = "VALIDAÇÃO HUMANA: " & cConfirmado & " CONFIRMADO  |  " & cDivergente & " DIVERGENTE  |  " & cPendente & " PENDENTE  |  " & cNA & " N/A"
@@ -829,13 +829,13 @@ Public Sub CTR_GerarRelatorioConsolidado()
     End If
     
     If temFalha Then
-        veredicto = "REPROVADO — Existem falhas ou divergências que precisam ser corrigidas."
+        veredicto = "REPROVADO - Existem falhas ou divergências que precisam ser corrigidas."
         corVeredicto = RGB(255, 199, 206)
     ElseIf temPendente Then
-        veredicto = "PENDENTE — Existem itens ainda não validados."
+        veredicto = "PENDENTE - Existem itens ainda não validados."
         corVeredicto = RGB(255, 235, 156)
     Else
-        veredicto = "APROVADO — Todos os testes e validações foram concluídos com sucesso."
+        veredicto = "APROVADO - Todos os testes e validações foram concluídos com sucesso."
         corVeredicto = RGB(198, 239, 206)
     End If
     
@@ -894,7 +894,7 @@ falha:
 End Sub
 
 ' ============================================================
-' EXPORTAR CSV — RESULTADO_QA (nome com data/hora da execucao)
+' EXPORTAR CSV - RESULTADO_QA (nome com data/hora da execucao)
 ' ============================================================
 Public Function CTR_ExportarTesteOficialCSV() As String
     CTR_ExportarTesteOficialCSV = CTR_ExportarTesteOficialCSVInterno(False)
@@ -1073,4 +1073,5 @@ Private Sub CTR_ColorirResumo(ByVal ws As Worksheet, ByVal startRow As Long, ByV
     ws.Cells(startRow + 2, 2).Font.Bold = True
     ws.Range(ws.Cells(startRow, 1), ws.Cells(startRow + 2, 2)).Borders.LineStyle = xlContinuous
 End Sub
+
 

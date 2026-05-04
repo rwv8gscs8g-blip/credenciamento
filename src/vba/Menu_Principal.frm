@@ -12,22 +12,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Option Explicit
 
 ' =========================
@@ -63,8 +47,8 @@ Public Sub Menu_RecolherParaBateria()
     On Error Resume Next
     Me.Hide
     DoEvents
-    For i = VBA.UserForms.Count - 1 To 0 Step -1
-        If TypeName(VBA.UserForms(i)) = "Menu_Principal" Then
+    For i = VBA.UserForms.count - 1 To 0 Step -1
+        If typeName(VBA.UserForms(i)) = "Menu_Principal" Then
             VBA.UserForms(i).Hide
             Unload VBA.UserForms(i)
         End If
@@ -115,7 +99,7 @@ If os.OS_ID <> "" Then
         mAvaliacaoDefaultsDtPagamento, _
         mAvaliacaoDefaultsQtExecutada, _
         mAvaliacaoDefaultsValorExecutado)
-    If resDefaults.Sucesso Then
+    If resDefaults.sucesso Then
         AV_N_Empenho.Value = mAvaliacaoDefaultsEmpenho
         AV_DataFechamento.Value = mAvaliacaoDefaultsDtFechamento
         AV_QtHoras.Value = Format$(mAvaliacaoDefaultsQtExecutada, "0.00")
@@ -128,10 +112,10 @@ AV_DataFechamento.SetFocus
 Exit Sub
 erro_carregamento:
 End Sub
-Private Function AV_MontarObservacaoImpressao(ByVal observacaoTexto As String, ByVal justificativaTexto As String) As String
+Private Function AV_MontarObservacaoImpressao(ByVal ObservacaoTexto As String, ByVal justificativaTexto As String) As String
     Dim obs As String
 
-    obs = Trim$(observacaoTexto)
+    obs = Trim$(ObservacaoTexto)
     If Trim$(justificativaTexto) = "" Then
         AV_MontarObservacaoImpressao = obs
         Exit Function
@@ -354,7 +338,7 @@ Private Sub UI_DescartarFormVisivel(ByVal nomeFormulario As String)
 
     On Error Resume Next
     For Each frm In VBA.UserForms
-        If TypeName(frm) = nomeFormulario Then
+        If typeName(frm) = nomeFormulario Then
             If frm.Visible Then Unload frm
         End If
     Next frm
@@ -439,7 +423,7 @@ Private Sub BE_ImprimeOS_Click()
         CStr(N_Empenho.Value), _
         dtPrev, _
         numEmp)
-    If Not resPrepOS.Sucesso Then
+    If Not resPrepOS.sucesso Then
         MsgBox resPrepOS.mensagem, vbExclamation, "Emitir OS"
         ErrorBoundary.RollbackWrite silent:=True
         Exit Sub
@@ -458,7 +442,7 @@ Private Sub BE_ImprimeOS_Click()
     Dim res As TResult
     res = EmitirOS(preosId, dtPrev, numEmp)
 
-    If Not res.Sucesso Then
+    If Not res.sucesso Then
         MsgBox "Erro ao emitir OS: " & res.mensagem, vbCritical, "Emitir OS"
         ErrorBoundary.RollbackWrite silent:=True
         GoTo LimparFalha
@@ -511,7 +495,7 @@ Private Sub BE_ImprimeOS_Click()
     Call PreencherPreencheOS
     Call PreencherAvaliarOS
 
-Limpar:
+limpar:
     OS_QT_Estimada = Empty
     OS_DT_Fim = Empty
     OS_CNPJ = Empty
@@ -645,13 +629,15 @@ Private Function Treinamento_ConfirmarUso() As Boolean
     Dim msg As String
     msg = "ATEN" & ChrW(199) & ChrW(195) & "O: o modo de treinamento altera dados reais desta planilha." & vbCrLf & _
           "Use somente em base de testes. Esta planilha n" & ChrW(227) & "o deve ser utilizada em produ" & ChrW(231) & ChrW(227) & "o." & vbCrLf & vbCrLf & _
+          "Acompanhe o progresso no canto inferior esquerdo da tela" & vbCrLf & _
+          "(barra de status com cenario atual / total)." & vbCrLf & vbCrLf & _
           "Deseja continuar?"
     Treinamento_ConfirmarUso = (MsgBox(msg, vbExclamation + vbYesNo, "Modo Treinamento") = vbYes)
 End Function
 
 Private Sub Credencia_Empresa_Click()
 On Error GoTo erro_carregamento:
-    ' V12: Bug corrigido — ordem de criacao de instancia do formulario estava invertida.
+    ' V12: Bug corrigido - ordem de criacao de instancia do formulario estava invertida.
     ' PreenchimentoCRServico criava Instancia A e populava CR_Lista nela.
     ' UserForms.Add criava Instancia B (CR_Lista vazia) e essa era exibida.
     ' Solucao: criar a instancia ANTES, definir empresa, entao chamar PreenchimentoCRServico
@@ -719,7 +705,7 @@ On Error GoTo erro_carregamento:
     ' Fechar instancias fantasma de Credencia_Empresa que possam ter ficado abertas
     On Error Resume Next
     For Each frmExistente In VBA.UserForms
-        If TypeName(frmExistente) = "Credencia_Empresa" Then Unload frmExistente
+        If typeName(frmExistente) = "Credencia_Empresa" Then Unload frmExistente
     Next frmExistente
     On Error GoTo erro_carregamento:
 
@@ -791,22 +777,22 @@ Private Sub EncerraOS_Click()
 
     If AV_Lista.ListIndex < 0 Then
         MsgBox "Selecione uma OS para avaliar!", vbExclamation, "Avaliação"
-        GoTo Limpar
+        GoTo limpar
     End If
 
     osId = AVListaCol(0)
     If Trim$(osId) = "" Then
         MsgBox "Selecione uma OS válida para avaliar!", vbExclamation, "Avaliação"
-        GoTo Limpar
+        GoTo limpar
     End If
 
     resNotas = MontarNotasAvaliacao( _
         AV_Nota1.Value, AV_Nota2.Value, AV_Nota3.Value, AV_Nota4.Value, AV_Nota5.Value, _
         AV_Nota6.Value, AV_Nota7.Value, AV_Nota8.Value, AV_Nota9.Value, AV_Nota10.Value, _
         notas, mediaLocal)
-    If Not resNotas.Sucesso Then
-        MsgBox "Erro ao montar notas da avaliação: " & resNotas.Mensagem, vbExclamation, "Avaliação"
-        GoTo Limpar
+    If Not resNotas.sucesso Then
+        MsgBox "Erro ao montar notas da avaliação: " & resNotas.mensagem, vbExclamation, "Avaliação"
+        GoTo limpar
     End If
 
     media = mediaLocal  ' Atribuir a variavel publica usada por PreencherAvaliacaoOS
@@ -823,7 +809,7 @@ Private Sub EncerraOS_Click()
               vbQuestion + vbYesNo, "Avaliação") <> vbYes Then
         MsgBox "Avaliação cancelada pelo usuário.", _
                vbInformation, "Avaliação"
-        GoTo Limpar
+        GoTo limpar
     End If
 
     qtExec = Util_Conversao.ToDouble(SafeListVal(AV_QtHoras.Value))
@@ -841,16 +827,16 @@ Private Sub EncerraOS_Click()
             mAvaliacaoDefaultsDtPagamento, _
             mAvaliacaoDefaultsQtExecutada, _
             mAvaliacaoDefaultsValorExecutado)
-        If Not resDefaults.Sucesso Then
-            MsgBox "Erro ao carregar defaults da avaliação: " & resDefaults.Mensagem, vbExclamation, "Avaliação"
-            GoTo Limpar
+        If Not resDefaults.sucesso Then
+            MsgBox "Erro ao carregar defaults da avaliação: " & resDefaults.mensagem, vbExclamation, "Avaliação"
+            GoTo limpar
         End If
     End If
 
     If Trim$(SafeListVal(AV_DataFechamento.Value)) <> "" Then
         If Not TryParseDataBR(CStr(AV_DataFechamento.Value), dtFechamentoTmp) Then
             MsgBox "Data de fechamento inválida. Use o formato DD/MM/AAAA.", vbExclamation, "Avaliação"
-            GoTo Limpar
+            GoTo limpar
         End If
         dtFechamentoInformado = dtFechamentoTmp
     End If
@@ -858,7 +844,7 @@ Private Sub EncerraOS_Click()
     If Trim$(SafeListVal(AV_Dt_Pagto.Value)) <> "" Then
         If Not TryParseDataBR(CStr(AV_Dt_Pagto.Value), dtPagtoTmp) Then
             MsgBox "Data de pagamento inválida. Use o formato DD/MM/AAAA.", vbExclamation, "Avaliação"
-            GoTo Limpar
+            GoTo limpar
         End If
         dtPagtoInformado = dtPagtoTmp
     End If
@@ -875,14 +861,14 @@ Private Sub EncerraOS_Click()
         AV_Vl_OS.Value, _
         houveEdicaoDefaults, _
         resumoEdicoes)
-    If Not resMudancas.Sucesso Then
-        MsgBox "Erro ao comparar valores pré-preenchidos: " & resMudancas.Mensagem, vbExclamation, "Avaliação"
-        GoTo Limpar
+    If Not resMudancas.sucesso Then
+        MsgBox "Erro ao comparar valores pré-preenchidos: " & resMudancas.mensagem, vbExclamation, "Avaliação"
+        GoTo limpar
     End If
 
     precisaJustificativa = (Abs(vlOS - vlOrcado) > 0.0001 Or Abs(qtExec - qtOrcada) > 0.0001 Or houveEdicaoDefaults)
 
-    ' V12.0.0010: validacao reforçada — justificativa obrigatoria quando diverge
+    ' V12.0.0010: validacao reforçada - justificativa obrigatoria quando diverge
     If precisaJustificativa Then
         justfInput = ""
         If houveEdicaoDefaults Then
@@ -902,7 +888,7 @@ Private Sub EncerraOS_Click()
             MsgBox "Justificativa obrigatória quando há divergência ou edição dos valores pré-preenchidos." & vbCrLf & _
                    "Avaliação não registrada.", _
                    vbExclamation, "Avaliação"
-            GoTo Limpar
+            GoTo limpar
         End If
         justifDiv = Funcoes.NormalizarTextoPTBR(SafeListVal(justfInput))
     End If
@@ -922,17 +908,17 @@ Private Sub EncerraOS_Click()
         payloadObservacao, _
         payloadJustifDivergencia, _
         payloadMediaNotas)
-    If Not resPayload.Sucesso Then
-        MsgBox "Erro ao montar payload da avaliação: " & resPayload.Mensagem, vbExclamation, "Avaliação"
-        GoTo Limpar
+    If Not resPayload.sucesso Then
+        MsgBox "Erro ao montar payload da avaliação: " & resPayload.mensagem, vbExclamation, "Avaliação"
+        GoTo limpar
     End If
 
     qtExec = payloadQtExecutada
     media = payloadMediaNotas
     res = AvaliarOS(payloadOSID, payloadAvaliador, notas, payloadQtExecutada, payloadObservacao, payloadJustifDivergencia, dtFechamentoInformado, dtPagtoInformado, AV_Vl_OS.Value, CStr(AV_N_Empenho.Value))
-    If Not res.Sucesso Then
+    If Not res.sucesso Then
         MsgBox "Erro ao avaliar OS: " & res.mensagem, vbCritical, "Avaliação"
-        GoTo Limpar
+        GoTo limpar
     End If
 
     MsgBox "Avaliação cadastrada com sucesso!", vbInformation, "Avaliação de serviço"
@@ -964,16 +950,16 @@ Private Sub EncerraOS_Click()
         Call LimparAvaliacaoOS
         On Error GoTo erro_carregamento
     End If
-    GoTo Limpar
+    GoTo limpar
 
 errPrint:
     MsgBox "Avaliação registrada com sucesso, porém houve erro ao imprimir: " & Err.Description, vbExclamation, "Avaliação"
     On Error Resume Next
     Call LimparAvaliacaoOS
     On Error GoTo erro_carregamento
-    GoTo Limpar
+    GoTo limpar
 
-Limpar:
+limpar:
     AVCNPJ = Empty: AVEmpresa = Empty: AV_N_Empenho = Empty
     AV_DataFechamento = Empty: AV_QtHoras = Empty: AV_Vl_OS = Empty
     AV_Dt_Pagto = Empty: AV_Nota1 = Empty: AV_Nota2 = Empty
@@ -985,7 +971,7 @@ Limpar:
     Exit Sub
 erro_carregamento:
     MsgBox "Erro inesperado em EncerraOS_Click: " & Err.Description, vbCritical, "Erro"
-    Resume Limpar
+    Resume limpar
 End Sub
 
 Private Sub Entidades_Cadastradas_Click()
@@ -1059,7 +1045,7 @@ End Sub
 Private Sub H_Lista_Click()
 On Error GoTo erro_carregamento:
     ' V12: eliminado Sheets("CAD_SERV").Select (proibido; formulario modal).
-    ' Leitura direta das colunas do ListBox — sem acesso a planilha necessario aqui.
+    ' Leitura direta das colunas do ListBox - sem acesso a planilha necessario aqui.
     H_Atividade = H_Lista.Column(3)
     H_Servico = H_Lista.Column(4)
     H_Vl_Hora.SetFocus
@@ -1539,7 +1525,7 @@ On Error GoTo erro_carregamento:
 
     ' V12: eliminado .Select + Application.GoTo + ActiveCell (proibidos; causavam saida
     ' prematura via erro_carregamento dentro de formulario modal, zerando as variaveis).
-    ' Leitura direta do ListBox — sem efeitos colaterais no workbook.
+    ' Leitura direta do ListBox - sem efeitos colaterais no workbook.
     A_Cad = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 2))     ' Razao Social (legado)
     C_Cad = CInt(Val(empIdSel))                                  ' ID numerico (legado)
     M_ID_Empresa = empIdSel
@@ -1581,7 +1567,7 @@ On Error GoTo erro_carregamento:
     Dim frmAltera As Object
 
     Set frmAltera = VBA.UserForms.Add("Altera_Empresa")
-    ' V12.0.0010: corrigido — col 0 (ID) removido da CallByName.
+    ' V12.0.0010: corrigido - col 0 (ID) removido da CallByName.
     ' O ID e lido da global M_ID_Empresa.
     ' Garantia explicitamente definida aqui antes de chamar:
     M_ID_Empresa = SafeListVal(EMP_Lista.List(EMP_Lista.ListIndex, 0))
@@ -1873,7 +1859,7 @@ Private Sub B_PreOS_Click()
         qtdPreparada, _
         valorUnit, _
         valorEstimadoPrep)
-    If Not resPrep.Sucesso Then
+    If Not resPrep.sucesso Then
         MsgBox MensagemAmigavelPreOS(resPrep.mensagem), vbExclamation, "Pre-OS"
         ErrorBoundary.RollbackWrite silent:=True
         Exit Sub
@@ -1899,7 +1885,7 @@ Private Sub B_PreOS_Click()
         QT_ESTIMADA, _
         VL_Pagto, _
         Vl_estimado)
-    If Not resPrep.Sucesso Then
+    If Not resPrep.sucesso Then
         MsgBox MensagemAmigavelPreOS(resPrep.mensagem), vbExclamation, "Pre-OS"
         ErrorBoundary.RollbackWrite silent:=True
         Exit Sub
@@ -1909,7 +1895,7 @@ Private Sub B_PreOS_Click()
     Dim res As TResult
     res = EmitirPreOS(CStr(Entidade), codServico, QT_ESTIMADA)
 
-    If Not res.Sucesso Then
+    If Not res.sucesso Then
         MsgBox MensagemAmigavelPreOS(res.mensagem), vbCritical, "Pre-OS"
         ErrorBoundary.RollbackWrite silent:=True
         GoTo LimparFalha
@@ -1961,7 +1947,7 @@ Private Sub B_PreOS_Click()
         Call LimparPREOS
     End If
 
-Limpar:
+limpar:
     'AM_NomeEmpresa = Empty
     'R_TelEmpresa = Empty
     Entidade = ""
@@ -1995,8 +1981,7 @@ Private Sub RefreshPosPreOS()
     On Error Resume Next
     Call PreenchimentoEscolhaAtividade
     If Err.Number <> 0 Then Err.Clear
-    Call PreenchimentoEntidadeRodizio
-    If Err.Number <> 0 Then Err.Clear
+    Call Rodizio_RecarregarAtribuicao(True, True)
     Call PreencherPreencheOS
     If Err.Number <> 0 Then Err.Clear
     On Error GoTo 0
@@ -2065,7 +2050,7 @@ Private Sub RejeitarPreOSSelecionada()
     End If
 
     res = RecusarPreOS(preosId, motivo)
-    If Not res.Sucesso Then
+    If Not res.sucesso Then
         MsgBox "Falha ao rejeitar Pre-OS: " & res.mensagem, vbCritical, "Rejeitar Pre-OS"
         ErrorBoundary.RollbackWrite silent:=True
         Exit Sub
@@ -2129,7 +2114,7 @@ Private Sub ExpirarPreOSSelecionada()
     End If
 
     res = ExpirarPreOS(preosId)
-    If Not res.Sucesso Then
+    If Not res.sucesso Then
         MsgBox "Falha ao expirar Pre-OS: " & res.mensagem, vbCritical, "Expirar Pre-OS"
         ErrorBoundary.RollbackWrite silent:=True
         Exit Sub
@@ -2179,7 +2164,7 @@ Private Sub CancelarOSSelecionada()
     End If
 
     res = CancelarOS(osId, motivo)
-    If Not res.Sucesso Then
+    If Not res.sucesso Then
         MsgBox "Falha ao cancelar OS: " & res.mensagem, vbCritical, "Cancelar OS"
         ErrorBoundary.RollbackWrite silent:=True
         Exit Sub
@@ -3103,7 +3088,7 @@ Private Function BuscarDescricaoServicoPorCod(ByVal codServRaw As Variant, ByVal
 End Function
 
 Private Sub Btn_Rel_OS_Empresa_Click()
-    ' Relatorio "Ordens de Servico por Empresa" — nome separado do TextBox TXT_OS_NomeEmpresa (evita colisao OS_Empresa).
+    ' Relatorio "Ordens de Servico por Empresa" - nome separado do TextBox TXT_OS_NomeEmpresa (evita colisao OS_Empresa).
     On Error GoTo falha
     Dim frmRelOSEmpresa As Object
     Call PreenchimentoRelatorioOSEmpresa
@@ -3310,7 +3295,7 @@ Private Sub UI_AjustarUmBotaoReativaSeAplicavel(ByVal ctl As Object)
     On Error Resume Next
     Dim btn As MSForms.CommandButton
     Dim cap As String
-    If TypeName(ctl) <> "CommandButton" Then Exit Sub
+    If typeName(ctl) <> "CommandButton" Then Exit Sub
     cap = UCase$(Trim$(CStr(ctl.caption)))
     If InStr(1, cap, "REATIVA", vbTextCompare) = 0 Then Exit Sub
     Set btn = ctl
@@ -3379,9 +3364,54 @@ Private Sub UserForm_Initialize()
 End Sub
 
 Private Sub AplicarFiltrosAtribuicao()
+    Call Rodizio_RecarregarAtribuicao(False, False)
+End Sub
+
+Private Function UI_TextoFiltro(ByVal tb As MSForms.TextBox) As String
+    On Error GoTo usarText
+    UI_TextoFiltro = Trim$(SafeListVal(tb.Value))
+    Exit Function
+usarText:
     On Error Resume Next
-    If Not mTxtFiltroServico Is Nothing Then Call PreenchimentoServico(mTxtFiltroServico.Text)
-    If Not mTxtFiltroRodizio Is Nothing Then Call PreenchimentoEntidadeRodizio(mTxtFiltroRodizio.Text)
+    UI_TextoFiltro = Trim$(tb.Text)
+    On Error GoTo 0
+End Function
+
+Private Sub Rodizio_LimparSelecaoEntidade()
+    On Error Resume Next
+    C_ListaRodizio.ListIndex = -1
+    Entidade = ""
+    Desc_entidade = ""
+    cont_entidade = ""
+    telcont_entidade = ""
+    END_ENTIDADE = ""
+    On Error GoTo 0
+End Sub
+
+Private Sub Rodizio_RecarregarAtribuicao(Optional ByVal limparFiltros As Boolean = False, Optional ByVal limparSelecaoEntidade As Boolean = False)
+    Dim filtroServico As String
+    Dim filtroRodizio As String
+    Dim estavaInicializando As Boolean
+
+    On Error Resume Next
+    estavaInicializando = mInicializando
+    If limparFiltros Then mInicializando = True
+
+    If limparFiltros Then
+        If Not mTxtFiltroServico Is Nothing Then mTxtFiltroServico.Value = vbNullString
+        If Not mTxtFiltroRodizio Is Nothing Then mTxtFiltroRodizio.Value = vbNullString
+    End If
+
+    If Not mTxtFiltroServico Is Nothing Then filtroServico = UI_TextoFiltro(mTxtFiltroServico)
+    If Not mTxtFiltroRodizio Is Nothing Then filtroRodizio = UI_TextoFiltro(mTxtFiltroRodizio)
+
+    If limparFiltros Then mInicializando = estavaInicializando
+    If limparSelecaoEntidade Or filtroRodizio = "" Then Call Rodizio_LimparSelecaoEntidade
+
+    Call PreenchimentoServico(filtroServico)
+    If Err.Number <> 0 Then Err.Clear
+    Call PreenchimentoEntidadeRodizio(filtroRodizio)
+    If Err.Number <> 0 Then Err.Clear
     On Error GoTo 0
 End Sub
 
@@ -3412,7 +3442,7 @@ Private Function UI_EncontrarBotaoPorTextos(ByVal texto1 As String, Optional ByV
     On Error GoTo fim
 
     For Each ctl In Me.Controls
-        If TypeName(ctl) = "CommandButton" Then
+        If typeName(ctl) = "CommandButton" Then
             If UI_CaptionContemTodos(CStr(ctl.caption), texto1, texto2) Then
                 Set UI_EncontrarBotaoPorTextos = ctl
                 Exit Function
@@ -3425,7 +3455,7 @@ Private Function UI_EncontrarBotaoPorTextos(ByVal texto1 As String, Optional ByV
     If Not mp Is Nothing Then
         For Each pg In mp.Pages
             For Each ctl In pg.Controls
-                If TypeName(ctl) = "CommandButton" Then
+                If typeName(ctl) = "CommandButton" Then
                     If UI_CaptionContemTodos(CStr(ctl.caption), texto1, texto2) Then
                         Set UI_EncontrarBotaoPorTextos = ctl
                         Exit Function
@@ -3522,7 +3552,7 @@ Private Sub BT_GITHUB_Click()
 End Sub
 
 ' ============================================================
-' HANDLERS LEGADOS (designer) — manter enquanto existirem CommandButton13/14/15
+' HANDLERS LEGADOS (designer) - manter enquanto existirem CommandButton13/14/15
 ' ============================================================
 Private Sub CommandButton15_Click()
     Call Menu_TelaInicial_AbrirCentralTestes
@@ -3572,7 +3602,7 @@ Private Sub UI_PegarMelhorTextBoxBuscaRecursivo(ByVal container As Object, ByVal
     Dim leftAbs As Double
 
     For Each ctl In container.Controls
-        If TypeName(ctl) = "TextBox" Then
+        If typeName(ctl) = "TextBox" Then
             topAbs = UI_PosicaoTopoAbsoluta(ctl)
             leftAbs = UI_PosicaoEsquerdaAbsoluta(ctl)
             If topAbs <= topoMax And topAbs >= topoMin Then
@@ -3599,7 +3629,7 @@ Private Function UI_PosicaoTopoAbsoluta(ByVal ctl As Object) As Double
     y = ctl.Top
     Set p = ctl.Parent
     Do While Not p Is Nothing
-        Select Case TypeName(p)
+        Select Case typeName(p)
             Case "Frame", "Page", "MultiPage"
                 y = y + p.Top
         End Select
@@ -3619,7 +3649,7 @@ Private Function UI_PosicaoEsquerdaAbsoluta(ByVal ctl As Object) As Double
     x = ctl.Left
     Set p = ctl.Parent
     Do While Not p Is Nothing
-        Select Case TypeName(p)
+        Select Case typeName(p)
             Case "Frame", "Page", "MultiPage"
                 x = x + p.Left
         End Select
@@ -3654,8 +3684,9 @@ Private Sub Filtros_CriarDinamico()
     Dim lblServ As Object
     Dim tbFiltroEnt As MSForms.TextBox
 
-    ' Busca na lista de Empresas (EMP_Lista)
-    Set mTxtFiltroEmpresa = UI_TextBoxSeExisteRecursivo(EMP_Lista.Parent, "TextBox17")
+    ' Busca na lista de Empresas (EMP_Lista): canonico primeiro, legado depois.
+    Set mTxtFiltroEmpresa = UI_TextBoxSeExisteRecursivo(EMP_Lista.Parent, "TxtFiltro_Empresa")
+    If mTxtFiltroEmpresa Is Nothing Then Set mTxtFiltroEmpresa = UI_TextBoxSeExisteRecursivo(EMP_Lista.Parent, "TextBox17")
     If mTxtFiltroEmpresa Is Nothing Then Set mTxtFiltroEmpresa = UI_PegarTextBoxBuscaDaLista(EMP_Lista)
     If mTxtFiltroEmpresa Is Nothing Then Set mTxtFiltroEmpresa = UI_TextBoxSeExistePagina(EMP_Lista.Parent, "TxtFiltroEmpresaDin")
     If mTxtFiltroEmpresa Is Nothing Then
@@ -3693,12 +3724,18 @@ Private Sub Filtros_CriarDinamico()
     End If
     Set mTxtFiltroEntidade = tbFiltroEnt
 
-    ' Filtros do Rodizio/Atribuicao (pagina PAGINAS=3): deterministico, sem TextBox18/TextBox22.
-    Set mTxtFiltroServico = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_Servico")
-    Set mTxtFiltroRodizio = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_EntidadeRodizio")
+    ' Filtros do Rodizio/Atribuicao (pagina PAGINAS=3): canonico primeiro, legado ate reexportar o .frx.
+    Set mTxtFiltroServico = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_RodizioServico")
+    If mTxtFiltroServico Is Nothing Then Set mTxtFiltroServico = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_Servico")
+    If mTxtFiltroServico Is Nothing Then Set mTxtFiltroServico = UI_TextBoxSeExisteRecursivo(Me, "TextBox18")
+
+    Set mTxtFiltroRodizio = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_RodizioEntidade")
+    If mTxtFiltroRodizio Is Nothing Then Set mTxtFiltroRodizio = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_EntidadeRodizio")
+    If mTxtFiltroRodizio Is Nothing Then Set mTxtFiltroRodizio = UI_TextBoxSeExisteRecursivo(Me, "TextBox22")
 
     ' Busca na lista de manutencao de servicos (H_Lista)
-    Set mTxtFiltroCadServ = UI_PegarTextBoxBuscaDaLista(H_Lista)
+    Set mTxtFiltroCadServ = UI_TextBoxSeExisteRecursivo(H_Lista.Parent, "TxtFiltro_CadServ")
+    If mTxtFiltroCadServ Is Nothing Then Set mTxtFiltroCadServ = UI_PegarTextBoxBuscaDaLista(H_Lista)
     If mTxtFiltroCadServ Is Nothing Then Set mTxtFiltroCadServ = UI_TextBoxSeExisteRecursivo(H_Lista.Parent, "TxtFiltroCadServDin")
     If mTxtFiltroCadServ Is Nothing Then
         Set mTxtFiltroCadServ = H_Lista.Parent.Controls.Add("Forms.TextBox.1", "TxtFiltroCadServDin", True)
@@ -3743,13 +3780,14 @@ End Sub
 Private Sub mTxtFiltroServico_Change()
     If mInicializando Then Exit Sub
     If mTxtFiltroServico Is Nothing Then Exit Sub
-    Call PreenchimentoServico(mTxtFiltroServico.Text)
+    Call PreenchimentoServico(UI_TextoFiltro(mTxtFiltroServico))
 End Sub
 
 Private Sub mTxtFiltroRodizio_Change()
     If mInicializando Then Exit Sub
     If mTxtFiltroRodizio Is Nothing Then Exit Sub
-    Call PreenchimentoEntidadeRodizio(mTxtFiltroRodizio.Text)
+    Call PreenchimentoEntidadeRodizio(UI_TextoFiltro(mTxtFiltroRodizio))
+    If UI_TextoFiltro(mTxtFiltroRodizio) = "" Then Call Rodizio_LimparSelecaoEntidade
 End Sub
 Private Sub mTxtFiltroCadServ_Change()
     If mInicializando Then Exit Sub
@@ -3761,3 +3799,5 @@ Private Sub TextBox17_Change()
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0
 End Sub
+
+

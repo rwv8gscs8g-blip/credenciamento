@@ -1,7 +1,7 @@
 Attribute VB_Name = "Repo_PreOS"
 Option Explicit
 
-' Repositório da aba PRE_OS — V10
+' Repositório da aba PRE_OS - V10
 ' Usa Const_Colunas para mapeamento. Sem Select/ActiveCell.
 
 Private Const STATUS_PREOS_AGUARDANDO_ACEITE As String = "AGUARDANDO_ACEITE"
@@ -19,8 +19,8 @@ Public Function Inserir(ByRef p As TPreOS) As TResult
 
     Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar PRE_OS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar PRE_OS para escrita."
         Inserir = res
         Exit Function
     End If
@@ -47,8 +47,8 @@ Public Function Inserir(ByRef p As TPreOS) As TResult
     ws.Cells(linha, COL_PREOS_MOTIVO).Value = p.MOTIVO_STATUS
     ' COL_PREOS_OS_ID fica vazio
 
-    res.Sucesso = True
-    res.Mensagem = "Pre-OS inserida com sucesso."
+    res.sucesso = True
+    res.mensagem = "Pre-OS inserida com sucesso."
     res.IdGerado = p.PREOS_ID
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     Inserir = res
@@ -58,8 +58,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro ao inserir Pre-OS: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro ao inserir Pre-OS: " & Err.Description
     res.CodigoErro = Err.Number
     Inserir = res
 End Function
@@ -152,7 +152,7 @@ Public Function TemPreOSPendenteNaAtividade( _
 fim:
 End Function
 
-' IdsIguais removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
+' IdsIguais removida - usar Util_Planilha.IdsIguais (V12-CLEAN).
 
 ' Atualiza status e motivo de uma Pré-OS.
 Public Function AtualizarStatus( _
@@ -171,8 +171,8 @@ Public Function AtualizarStatus( _
 
     Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar PRE_OS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar PRE_OS para escrita."
         AtualizarStatus = res
         Exit Function
     End If
@@ -186,8 +186,8 @@ Public Function AtualizarStatus( _
                 ws.Cells(i, COL_PREOS_DT_EM_OS).Value = Now
             End If
 
-            res.Sucesso = True
-            res.Mensagem = "Status atualizado para " & NovoStatus
+            res.sucesso = True
+            res.mensagem = "Status atualizado para " & NovoStatus
             res.IdGerado = PREOS_ID
             Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
             AtualizarStatus = res
@@ -195,8 +195,8 @@ Public Function AtualizarStatus( _
         End If
     Next i
 
-    res.Sucesso = False
-    res.Mensagem = "Pre-OS ID " & PREOS_ID & " nao encontrada."
+    res.sucesso = False
+    res.mensagem = "Pre-OS ID " & PREOS_ID & " nao encontrada."
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     AtualizarStatus = res
     Exit Function
@@ -205,8 +205,8 @@ Erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro ao atualizar Pre-OS: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro ao atualizar Pre-OS: " & Err.Description
     res.CodigoErro = Err.Number
     AtualizarStatus = res
 End Function

@@ -5,9 +5,10 @@
 > prestadores de pequenos reparos em Excel/VBA.
 
 [![Release](https://img.shields.io/badge/release-V12.0.0202-blue)](obsidian-vault/releases/V12.0.0202.md)
+[![Linha V203](https://img.shields.io/badge/V12.0.0203-rc4%20teste%20manual-yellow)](auditoria/03_ondas/onda_18_reativ_strikes/70_FECHAMENTO_ONDA_18.md)
 [![Status](https://img.shields.io/badge/status-VALIDADO-brightgreen)](obsidian-vault/releases/STATUS-OFICIAL.md)
 [![Licença](https://img.shields.io/badge/licenca-TPGL%20v1.1-6f42c1)](LICENSE)
-[![Auditoria](https://img.shields.io/badge/auditoria-publica-0a7f5a)](auditoria/00_SUMARIO_EXECUTIVO.md)
+[![Auditoria](https://img.shields.io/badge/auditoria-publica-0a7f5a)](auditoria/00_status/00_SUMARIO_EXECUTIVO.md)
 
 Este repositório publica o código-fonte VBA vivo, a trilha de auditoria, a
 matriz de testes e a documentação mínima de governança da linha oficial do
@@ -65,8 +66,8 @@ dependência pública de um instalador ou compilador específico deste repositó
 Integradores podem:
 
 1. baixar o código em [src/vba](src/vba)
-2. revisar as regras em [auditoria/03_AUDITORIA_REGRAS_DE_NEGOCIO.md](auditoria/03_AUDITORIA_REGRAS_DE_NEGOCIO.md)
-3. revisar a matriz de testes em [auditoria/04_MATRIZ_MESTRE_DE_TESTES.md](auditoria/04_MATRIZ_MESTRE_DE_TESTES.md)
+2. revisar as regras em [auditoria/01_regras_e_governanca/03_AUDITORIA_REGRAS_DE_NEGOCIO.md](auditoria/01_regras_e_governanca/03_AUDITORIA_REGRAS_DE_NEGOCIO.md)
+3. revisar a matriz de testes em [auditoria/01_regras_e_governanca/04_MATRIZ_MESTRE_DE_TESTES.md](auditoria/01_regras_e_governanca/04_MATRIZ_MESTRE_DE_TESTES.md)
 4. compilar/incorporar o VBA no processo que julgarem adequado
 
 ## Materiais operacionais complementares
@@ -84,14 +85,43 @@ operacional controlada da documentação institucional auditável.
 
 ## Leitura recomendada
 
-- [docs/INDEX.md](docs/INDEX.md)
-- [docs/ARQUITETURA.md](docs/ARQUITETURA.md)
-- [docs/COMPLIANCE_CMMI_ISO.md](docs/COMPLIANCE_CMMI_ISO.md)
-- [docs/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](docs/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
+### Para humanos
+
+- [docs/INDEX.md](docs/INDEX.md) — indice publico Diataxis-aware
+- [docs/tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md](docs/tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md) — treinamento para testes manuais da V203 rc4
+- [docs/how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md](docs/how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md) — como rodar o Quinteto de validacao
+- [docs/reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md](docs/reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md) — roteiro manual da rc4
+- [docs/explanation/ARQUITETURA.md](docs/explanation/ARQUITETURA.md)
+- [docs/reference/COMPLIANCE_CMMI_ISO.md](docs/reference/COMPLIANCE_CMMI_ISO.md)
+- [docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
+- [obsidian-vault/00-DASHBOARD.md](obsidian-vault/00-DASHBOARD.md) — dashboard executivo
 - [SECURITY.md](SECURITY.md)
 - [CONTRIBUTING.md](CONTRIBUTING.md)
 - [CLA.md](CLA.md)
 - [LICENSE](LICENSE)
+
+### Para IAs
+
+- [AGENTS.md](AGENTS.md) — entrada canonica (padrao [agents.md](https://agents.md/))
+- [llms.txt](llms.txt) — mapa curado para LLMs (padrao [llmstxt.org](https://llmstxt.org/))
+- [llms-full.txt](llms-full.txt) — indice exaustivo
+- [.hbn/relay/INDEX.md](.hbn/relay/INDEX.md) — bastao + ciclo ativo (HBN)
+- [.hbn/knowledge/0001-regras-v203-inegociaveis.md](.hbn/knowledge/0001-regras-v203-inegociaveis.md) — 10 regras V203
+
+## Metodologia
+
+Este projeto adotou em 28/04/2026 a metodologia hibrida composta por:
+
+| Protocolo | Papel |
+|---|---|
+| [HBN](https://usehbn.org) | core de coordenacao inter-IA (relay, readback, hearback, truth barrier) |
+| [Diataxis](https://diataxis.fr/) | docs/ para humanos (4 quadrantes) |
+| [llms.txt](https://llmstxt.org/) | docs/ para LLMs (mapa curado) |
+| [agents.md](https://agents.md/) | contrato unificado de agentes |
+| Glasswing-style preventive | seguranca preventiva (5 vetores domain-specific) |
+
+Detalhes em [obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md](obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md).
+Este projeto e o primeiro [case study](https://github.com/...) production-scale do `usehbn`.
 
 ## Créditos
 
@@ -102,9 +132,13 @@ operacional controlada da documentação institucional auditável.
 
 Linha oficial: `V12.0.0202`
 
+Linha em testes manuais formais: `V12.0.0203-rc4`
+
 - compilação limpa validada por operador humano
 - bateria oficial recente sem falhas bloqueantes
 - evidência pública da bateria oficial já publicada nesta linha
 - evidência fresca da V2 validada por operador humano e publicada em `auditoria/evidencias/V12.0.0202/`
 - linha pública oficial já promovida no `main`, com fechamento institucional residual voltado à nova auditoria externa
 - governança documental e de release agora endurecida por checagens automáticas de coerência
+- V203 rc4 verde no Quinteto `VR_20260504_171048`, autorizada para teste manual e nao para producao
+- V204 prevista como linha de estabilizacao final de debitos tecnicos e producao

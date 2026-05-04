@@ -59,14 +59,65 @@ histórico público.
 
 Quando a contribuição vier de empresa, órgão público ou terceiro contratado,
 o mantenedor poderá exigir instrumento complementar assinado pelo representante
-legal da instituição.
+legal da instituição. Modelo de instrumento em
+[`docs/reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md`](docs/reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md).
 
-Materiais operacionais complementares, como guia detalhado de importação do
-código-fonte e vídeo tutorial, podem ser disponibilizados por canal controlado
-após aceite rastreável deste CLA e validação do enquadramento do solicitante
-como contribuinte ou município usuário.
+## 8. Acesso a ferramentas operacionais (CLA-controlado)
 
-## 8. Lei aplicável
+Materiais operacionais complementares — incluindo o pacote de import
+`local-ai/vba_import/`, ferramentas de sincronização e auditoria
+`local-ai/scripts/` (publicar_vba_import_v2, glasswing-checks,
+Importador V2 e instaladores), guia detalhado de importação do código-fonte,
+exports do workbook e vídeo tutorial de incorporação — são fornecidos
+por **canal controlado** após:
+
+- aceite rastreável deste CLA conforme seção 6
+- validação do enquadramento do solicitante como contribuinte ativo,
+  município usuário, ou parceiro institucional autorizado pelo mantenedor
+
+### 8.1 Modelo de distribuição vigente
+
+A distribuição segue o **modelo B — release zip** (decidido em 29/04/2026
+durante a Onda 9 antecipada da V12.0.0203):
+
+- a cada release oficial, o mantenedor empacota `local-ai/` em arquivo
+  zip cifrado
+- o sha256 do zip é registrado internamente
+- o link de download e a senha de descriptografia são enviados por
+  canais separados ao solicitante CLA-validado
+
+Detalhes do fluxo operacional em
+[`docs/how-to/COMO_OBTER_FERRAMENTAS_VBA.md`](docs/how-to/COMO_OBTER_FERRAMENTAS_VBA.md).
+
+### 8.2 Responsabilidades adicionais
+
+Ao receber acesso ao ferramental CLA-controlado, o contribuinte
+adicionalmente declara que:
+
+- não republicará o pacote, scripts ou conteúdo recebido para terceiros
+  sem CLA validado
+- não modificará `local-ai/vba_import/` para gerar versão alternativa
+  do produto distribuída como oficial
+- não promoverá conteúdo CLA-controlado para áreas públicas do
+  repositório (`git add -f` ou similar) sem aprovação explícita do
+  mantenedor
+- comunicará ao mantenedor caso identifique violação dessas regras por
+  outros contribuintes
+
+A violação destas obrigações pode resultar em revogação do acesso a
+futuras releases, sem prejuízo de medidas legais cabíveis.
+
+### 8.3 Auto-conversão TPGL → Apache 2.0
+
+A restrição operacional desta seção 8 segue o calendário de
+auto-conversão da [TPGL v1.1](LICENSE). Após a Data de Conversão de
+cada release, todo o conteúdo da release torna-se publicado sob
+Apache 2.0 sem restrições adicionais — incluindo o ferramental aqui
+descrito.
+
+A restrição operacional **expira automaticamente** com a conversão.
+
+## 9. Lei aplicável
 
 Este CLA segue a legislação brasileira e deve ser lido em conjunto com a
 [TPGL v1.1](LICENSE).

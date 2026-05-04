@@ -1,7 +1,7 @@
 Attribute VB_Name = "Repo_Credenciamento"
 Option Explicit
 
-' Repositório da aba CREDENCIADOS — V10
+' Repositório da aba CREDENCIADOS - V10
 ' Gerencia fila de rodízio por atividade.
 ' Usa Const_Colunas. Sem Select/ActiveCell/On Error Resume Next silencioso.
 ' Nota: helpers de EMPRESAS aqui são temporários até Repo_Empresa existir (Sprint 4).
@@ -54,7 +54,7 @@ Public Function BuscarFila(ByVal ATIV_ID As String) As TCredenciamento()
         End If
     Next i
 
-    ' Ordenação por POSICAO_FILA (bubble sort — fila tipicamente pequena)
+    ' Ordenação por POSICAO_FILA (bubble sort - fila tipicamente pequena)
     Dim trocou As Boolean
     Do
         trocou = False
@@ -129,16 +129,16 @@ Public Function MoverFinal( _
     cred = BuscarPorEmpresaAtividade(EMP_ID, ATIV_ID, linhaAlvo)
 
     If linhaAlvo = 0 Then
-        res.Sucesso = False
-        res.Mensagem = "Credenciamento nao encontrado: EMP=" & EMP_ID & " ATIV=" & ATIV_ID
+        res.sucesso = False
+        res.mensagem = "Credenciamento nao encontrado: EMP=" & EMP_ID & " ATIV=" & ATIV_ID
         MoverFinal = res
         Exit Function
     End If
 
     novaPos = MaxPosicaoFila(ATIV_ID) + 1
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar CREDENCIADOS para escrita."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar CREDENCIADOS para escrita."
         MoverFinal = res
         Exit Function
     End If
@@ -153,8 +153,8 @@ Public Function MoverFinal( _
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     abaPreparada = False
 
-    res.Sucesso = True
-    res.Mensagem = "Empresa EMP_ID=" & EMP_ID & " movida para posicao " & novaPos & " na fila ATIV=" & ATIV_ID
+    res.sucesso = True
+    res.mensagem = "Empresa EMP_ID=" & EMP_ID & " movida para posicao " & novaPos & " na fila ATIV=" & ATIV_ID
     res.IdGerado = EMP_ID
     MoverFinal = res
     Exit Function
@@ -163,8 +163,8 @@ Erro:
     On Error Resume Next
     If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro em MoverFinal: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em MoverFinal: " & Err.Description
     res.CodigoErro = Err.Number
     MoverFinal = res
 End Function
@@ -189,15 +189,15 @@ Public Function RestaurarPosicaoFila( _
     cred = BuscarPorEmpresaAtividade(EMP_ID, ATIV_ID, linhaAlvo)
 
     If linhaAlvo = 0 Then
-        res.Sucesso = False
-        res.Mensagem = "Credenciamento nao encontrado para restaurar fila: EMP=" & EMP_ID & " ATIV=" & ATIV_ID
+        res.sucesso = False
+        res.mensagem = "Credenciamento nao encontrado para restaurar fila: EMP=" & EMP_ID & " ATIV=" & ATIV_ID
         RestaurarPosicaoFila = res
         Exit Function
     End If
 
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.Sucesso = False
-        res.Mensagem = "Nao foi possivel preparar CREDENCIADOS para restaurar fila."
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar CREDENCIADOS para restaurar fila."
         RestaurarPosicaoFila = res
         Exit Function
     End If
@@ -215,8 +215,8 @@ Public Function RestaurarPosicaoFila( _
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     abaPreparada = False
 
-    res.Sucesso = True
-    res.Mensagem = "Posicao restaurada para " & posicaoOriginal
+    res.sucesso = True
+    res.mensagem = "Posicao restaurada para " & posicaoOriginal
     res.IdGerado = EMP_ID
     RestaurarPosicaoFila = res
     Exit Function
@@ -225,8 +225,8 @@ Erro:
     On Error Resume Next
     If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
-    res.Sucesso = False
-    res.Mensagem = "Erro em RestaurarPosicaoFila: " & Err.Description
+    res.sucesso = False
+    res.mensagem = "Erro em RestaurarPosicaoFila: " & Err.Description
     res.CodigoErro = Err.Number
     RestaurarPosicaoFila = res
 End Function
@@ -284,13 +284,13 @@ Public Function IncrementarRecusa( _
     Next i
 
     If linhaCred = 0 Or linhaEmp = 0 Then
-        res.Sucesso = False
+        res.sucesso = False
         If linhaCred = 0 And linhaEmp = 0 Then
-            res.Mensagem = "Credenciamento e empresa nao encontrados: EMP=" & EMP_ID & " ATIV=" & ATIV_ID
+            res.mensagem = "Credenciamento e empresa nao encontrados: EMP=" & EMP_ID & " ATIV=" & ATIV_ID
         ElseIf linhaCred = 0 Then
-            res.Mensagem = "Credenciamento nao encontrado: EMP=" & EMP_ID & " ATIV=" & ATIV_ID
+            res.mensagem = "Credenciamento nao encontrado: EMP=" & EMP_ID & " ATIV=" & ATIV_ID
         Else
-            res.Mensagem = "Empresa nao encontrada: EMP=" & EMP_ID
+            res.mensagem = "Empresa nao encontrada: EMP=" & EMP_ID
         End If
         IncrementarRecusa = res
         Exit Function
@@ -326,8 +326,8 @@ Public Function IncrementarRecusa( _
 
     Transacao_Commit
 
-    res.Sucesso = True
-    res.Mensagem = "Recusas: ATIV=" & novaRecusaAtiv & " GLOBAL=" & novaRecusaGlobal
+    res.sucesso = True
+    res.mensagem = "Recusas: ATIV=" & novaRecusaAtiv & " GLOBAL=" & novaRecusaGlobal
     res.IdGerado = CStr(novaRecusaGlobal)   ' Svc_Rodizio usa para verificar suspensão
     IncrementarRecusa = res
     Exit Function
@@ -349,8 +349,8 @@ Erro:
         "ROLLBACK=" & IIf(rollbackOk, "OK", "FALHOU") & "; ERRO=" & mensagemErro, _
         "Repo_Credenciamento"
 
-    res.Sucesso = False
-    res.Mensagem = "Erro em IncrementarRecusa: " & mensagemErro
+    res.sucesso = False
+    res.mensagem = "Erro em IncrementarRecusa: " & mensagemErro
     res.CodigoErro = numeroErro
     IncrementarRecusa = res
 End Function
@@ -384,7 +384,7 @@ fim:
     MaxPosicaoFila = maxPos
 End Function
 
-' IdsIguais removida — usar Util_Planilha.IdsIguais (V12-CLEAN).
+' IdsIguais removida - usar Util_Planilha.IdsIguais (V12-CLEAN).
 
 ' Preenche um TCredenciamento a partir de uma linha da aba CREDENCIADOS.
 Private Function LerCredenciamento(ByVal ws As Worksheet, ByVal linha As Long) As TCredenciamento

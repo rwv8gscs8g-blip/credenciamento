@@ -37,7 +37,7 @@ End Function
 Public Sub Transacao_RegistrarWrite( _
     ByVal nomeAba As String, _
     ByVal linha As Long, _
-    ByVal coluna As Long, _
+    ByVal Coluna As Long, _
     ByVal valorAnterior As Variant _
 )
     Dim payload(1 To 4) As Variant
@@ -46,7 +46,7 @@ Public Sub Transacao_RegistrarWrite( _
 
     payload(1) = nomeAba
     payload(2) = linha
-    payload(3) = coluna
+    payload(3) = Coluna
     payload(4) = valorAnterior
     gTransacaoWriteCount = gTransacaoWriteCount + 1
     ReDim Preserve gTransacaoWrites(1 To gTransacaoWriteCount)
@@ -128,3 +128,5 @@ End Function
 Private Function Transacao_QtdWrites() As Long
     Transacao_QtdWrites = gTransacaoWriteCount
 End Function
+
+

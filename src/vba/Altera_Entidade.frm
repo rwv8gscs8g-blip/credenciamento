@@ -13,10 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
 Private m_entidadeId As String
 
 Public Sub DefinirIdEdicaoEntidade(ByVal entidadeId As String)

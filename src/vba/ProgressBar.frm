@@ -13,11 +13,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-
-
-
-
-
 Option Explicit
 
 Private Sub UserForm_QueryClose(Cancel As Integer, CloseMode As Integer)
@@ -31,7 +26,7 @@ On Error GoTo erro_carregamento
 
     Application.Cursor = xlWait
     ProgressBar.MousePointer = fmMousePointerHourGlass
-    Application.CutCopyMode = False 'Limpa a área de transferência
+    Application.CutCopyMode = False 'Limpa a ï¿½rea de transferï¿½ncia
     
     Call CalculateData
     Application.Cursor = xlDefault
@@ -56,34 +51,34 @@ End Sub
 Sub CalculateData()
 On Error GoTo erro_carregamento
 
-Dim TotaL1, Total2, Y, X    As Integer
-Dim Cont, i, a, b           As Long
+Dim TotaL1, Total2, y, x    As Integer
+Dim cont, i, a, b           As Long
 
     TotaL1 = 1
     Total2 = 10
     a = 0.1
         
     On Error Resume Next
-    For Y = 1 To Total2
-        Barra_Carrega.Width = (Y / Total2) * 248
+    For y = 1 To Total2
+        Barra_Carrega.Width = (y / Total2) * 248
         DoEvents
         
-        Percent_Label.Caption = "Calculando: " & Format(Y / a, "00") & "%"
-        If (Y / a) >= 85 Then
-            Percent_Label.Caption = "Salvando dados..." & Format(Y / a, "00") & "%"
-            If (Y / a) = 90 Then
+        Percent_Label.caption = "Calculando: " & Format(y / a, "00") & "%"
+        If (y / a) >= 85 Then
+            Percent_Label.caption = "Salvando dados..." & Format(y / a, "00") & "%"
+            If (y / a) = 90 Then
                 Application.ThisWorkbook.Save
             End If
         End If
-        'Fração de Segundo
-        For Cont = 1 To 1
+        'Fraï¿½ï¿½o de Segundo
+        For cont = 1 To 1
             timedelay (0.01)
-        Next Cont
-    Next Y
+        Next cont
+    Next y
 
     Total2 = Empty
-    X = Empty
-    Y = Empty
+    x = Empty
+    y = Empty
 
 Exit Sub
 erro_carregamento:
@@ -92,12 +87,12 @@ End Sub
 Sub timedelay(segundos As Double)
 On Error GoTo erro_carregamento
 
-Dim X As Single
+Dim x As Single
 Dim i As Long
     
-    X = DateTime.Timer
+    x = DateTime.Timer
     
-    While DateTime.Timer - X < segundos
+    While DateTime.Timer - x < segundos
         
     Wend
 

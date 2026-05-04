@@ -60,8 +60,8 @@ Public Sub RollbackWrite(Optional ByVal silent As Boolean = False)
     g_emOperacao = False
 
     If Not silent And errNum <> 0 Then
-        MsgBox "Ocorreu uma falha crítica durante a operação." & vbCrLf & _
-               "Erro: " & errNum & " - " & errDesc, vbCritical, "Erro de execução"
+        MsgBox "Ocorreu uma falha critica durante a operacao." & vbCrLf & _
+               "Erro: " & errNum & " - " & errDesc, vbCritical, "Erro de Execucao"
     End If
     On Error GoTo 0
 End Sub
