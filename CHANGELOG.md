@@ -32,6 +32,9 @@ tratam apenas da linha pública oficial.
   chamadas qualificadas `Repo_OS.*` por wrappers publicos `RepoOS_*`.
 - **Onda 21 / MICRO35-fix2** — remove chamadas remanescentes
   `Repo_OS.BuscarPorId` em servico, UI e testes V2.
+- **Onda 21 / MICRO35-fix3** — torna o pacote de compilacao cumulativo,
+  reimportando `Svc_OS` junto dos wrappers para cobrir workbook reaberto
+  sem salvar o `MICRO35-fix1`.
 
 ### Validação
 
@@ -51,6 +54,8 @@ tratam apenas da linha pública oficial.
   `f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix1`.
 - MICRO35-fix2 entregue para importacao como
   `f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix2`.
+- MICRO35-fix3 entregue para importacao como
+  `f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix3`.
 
 ## [v12.0.0203-rc4] — 2026-05-04
 

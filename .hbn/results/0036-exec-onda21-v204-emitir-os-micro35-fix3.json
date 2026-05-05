@@ -1,0 +1,26 @@
+{
+  "execution_id": "0036-exec-onda21-v204-emitir-os-micro35-fix3",
+  "data": "2026-05-05",
+  "readback_id": "0036-onda21-v204-emitir-os-micro35-fix3",
+  "action": "Gerar MICRO35-fix3 cumulativo para corrigir workbook reaberto sem Svc_OS do fix1.",
+  "status": "ENTREGUE_IMPORT",
+  "changes": {
+    "microdelta": "MICRO35-fix3",
+    "build": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix3",
+    "implemented": [
+      "Manifesto cumulativo inclui Svc_OS para trazer RepoOS_Inserir e RepoOS_ExcluirPorId ao workbook",
+      "Manifesto tambem inclui Repo_OS, Svc_Avaliacao, Teste_V2_Engine, Teste_V2_Roteiros, Menu_Principal e App_Release",
+      "App_Release atualizado para build fix3"
+    ],
+    "validation_local": [
+      "vba_import sincronizado por publicar_vba_import_v2.sh --check",
+      "busca por chamadas qualificadas Repo_OS zerada no codigo importavel"
+    ]
+  },
+  "operator_next_steps": [
+    "ImportarPacoteV3_Delta \"MICRO35-fix3\", \"f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix3\"",
+    "Compilar VBAProject",
+    "CT_ValidarRelease_QuintetoMinimo"
+  ],
+  "expected_gate": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+}

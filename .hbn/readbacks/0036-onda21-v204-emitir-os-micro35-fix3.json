@@ -1,0 +1,25 @@
+{
+  "readback_id": "0036-onda21-v204-emitir-os-micro35-fix3",
+  "data": "2026-05-05",
+  "agente": "Codex CLI",
+  "bastao": "Frente 1 Credenciamento",
+  "status": "confirmed",
+  "origem_hearback": "Operador informou que fechou sem salvar, reimportou MICRO35-fix2 e a compilacao ainda parou em Svc_OS, na chamada Repo_OS.Inserir.",
+  "escopo": {
+    "versao": "V12.0.0204-dev",
+    "onda": 21,
+    "microdelta": "MICRO35-fix3",
+    "tema": "Pacote cumulativo dos fixes de compilacao Repo_OS para EmitirOS",
+    "build": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix3"
+  },
+  "decisao": [
+    "MICRO35-fix2 era incremental e nao reimportava Svc_OS",
+    "MICRO35-fix3 passa a ser cumulativo para suportar workbook reaberto sem salvar fix1",
+    "Svc_OS sera importado junto com Repo_OS, Svc_Avaliacao, testes, Menu_Principal e App_Release"
+  ],
+  "gate_planejado": [
+    "Importar MICRO35-fix3",
+    "Compilar VBAProject",
+    "Rodar CT_ValidarRelease_QuintetoMinimo"
+  ]
+}

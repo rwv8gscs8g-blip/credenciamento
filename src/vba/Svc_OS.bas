@@ -154,7 +154,7 @@ Public Function EmitirOS( _
     preosOldOsId = wsPreOS.Cells(linhaPreOS, COL_PREOS_OS_ID).Value
     preosOldDtEmOs = wsPreOS.Cells(linhaPreOS, COL_PREOS_DT_EM_OS).Value
 
-    ' 4. Inserir OS via Repo_OS (os.OS_ID preenchido ByRef - critérios 23-24)
+    ' 4. Inserir OS via wrapper do repositorio de OS (os.OS_ID preenchido ByRef - critérios 23-24)
     resInsert = RepoOS_Inserir(os)
     If Not resInsert.sucesso Then
         res.sucesso = False
