@@ -2,10 +2,10 @@
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1
 proprietario-bastao: Codex CLI (sessao codex-cli-bloco-b-onda18-2026-05-04) — BASTAO RECEBIDO do Opus 4.7 em 2026-05-04T01:34:31-0300; proprietario unico de implementacao da Frente 1 ate devolucao formal via doc 60.
-ciclo-ativo: V12.0.0204-dev Onda 21 transacional sob Codex CLI. Roadmaps V204 Onda 20-25 aprovados pelo operador em 2026-05-05; MICRO31 e MICRO32 informadas como aprovadas no Quinteto pelo operador em 2026-05-05; MICRO33 entregue para importacao com AvaliarOS propagando falhas de Suspender/AvancarFila.
+ciclo-ativo: V12.0.0204-dev Onda 21 transacional sob Codex CLI. Roadmaps V204 Onda 20-25 aprovados pelo operador em 2026-05-05; MICRO31, MICRO32 e MICRO33 informadas como aprovadas no Quinteto pelo operador em 2026-05-05; MICRO34 entregue para importacao com ContarStrikes* em caminho de resultado explicito.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Operador importar MICRO33, compilar e rodar CT_ValidarRelease_QuintetoMinimo. Esperado: V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0. Se verde, iniciar MD-21.4 ContarStrikes* com resultado explicito.
-ultima-atualizacao: 2026-05-05T17:42:57-0300 (MICRO33 Onda 21 V204 AvaliarOS entregue por Codex)
+proxima-acao: Operador importar MICRO34, compilar e rodar CT_ValidarRelease_QuintetoMinimo. Esperado: V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0. Se verde, iniciar MD-21.5 EmitirOS rollback/ordem segura.
+ultima-atualizacao: 2026-05-05T18:43:15-0300 (MICRO34 Onda 21 V204 ContarStrikes entregue por Codex)
 ---
 
 > ⚠️ **REGRA INVIOLAVEL (M11 destilada 2026-05-03)**: A IA le `src/vba/`

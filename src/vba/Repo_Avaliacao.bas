@@ -120,6 +120,24 @@ Public Function ContarStrikesPorEmpresa( _
     ByVal EMP_ID As String, _
     ByVal notaCorte As Double _
 ) As Long
+    Dim res As TResult
+    Dim qtd As Long
+
+    res = ContarStrikesPorEmpresaResultado(EMP_ID, notaCorte, qtd)
+    If res.sucesso Then
+        ContarStrikesPorEmpresa = qtd
+    Else
+        Err.Raise IIf(res.CodigoErro <> 0, res.CodigoErro, 1004), _
+                  "ContarStrikesPorEmpresa", res.mensagem
+    End If
+End Function
+
+Public Function ContarStrikesPorEmpresaResultado( _
+    ByVal EMP_ID As String, _
+    ByVal notaCorte As Double, _
+    ByRef qtdOut As Long _
+) As TResult
+    Dim res As TResult
     Dim ws As Worksheet
     Dim ultima As Long
     Dim i As Long
@@ -130,15 +148,20 @@ Public Function ContarStrikesPorEmpresa( _
 
     On Error GoTo falha
 
+    qtdOut = 0
     If Trim$(EMP_ID) = "" Then
-        ContarStrikesPorEmpresa = 0
+        res.sucesso = False
+        res.mensagem = "EMP_ID obrigatorio para contar strikes."
+        ContarStrikesPorEmpresaResultado = res
         Exit Function
     End If
 
     Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
     ultima = UltimaLinhaAba(SHEET_CAD_OS)
     If ultima < LINHA_DADOS Then
-        ContarStrikesPorEmpresa = 0
+        res.sucesso = True
+        res.mensagem = "Nenhuma OS para contar strikes."
+        ContarStrikesPorEmpresaResultado = res
         Exit Function
     End If
 
@@ -164,17 +187,41 @@ Public Function ContarStrikesPorEmpresa( _
         End If
     Next i
 
-    ContarStrikesPorEmpresa = qtd
+    qtdOut = qtd
+    res.sucesso = True
+    res.mensagem = "Strikes historicos contados: " & CStr(qtd)
+    ContarStrikesPorEmpresaResultado = res
     Exit Function
 
 falha:
-    ContarStrikesPorEmpresa = 0
+    res.sucesso = False
+    res.mensagem = "Erro em ContarStrikesPorEmpresaResultado: " & Err.Description
+    res.CodigoErro = Err.Number
+    ContarStrikesPorEmpresaResultado = res
 End Function
 
 Public Function ContarStrikesParaPunicao( _
     ByVal EMP_ID As String, _
     ByVal notaCorte As Double _
 ) As Long
+    Dim res As TResult
+    Dim qtd As Long
+
+    res = ContarStrikesParaPunicaoResultado(EMP_ID, notaCorte, qtd)
+    If res.sucesso Then
+        ContarStrikesParaPunicao = qtd
+    Else
+        Err.Raise IIf(res.CodigoErro <> 0, res.CodigoErro, 1004), _
+                  "ContarStrikesParaPunicao", res.mensagem
+    End If
+End Function
+
+Public Function ContarStrikesParaPunicaoResultado( _
+    ByVal EMP_ID As String, _
+    ByVal notaCorte As Double, _
+    ByRef qtdOut As Long _
+) As TResult
+    Dim res As TResult
     Dim ws As Worksheet
     Dim ultima As Long
     Dim i As Long
@@ -190,21 +237,30 @@ Public Function ContarStrikesParaPunicao( _
 
     On Error GoTo falha
 
+    qtdOut = 0
     If Trim$(EMP_ID) = "" Then
-        ContarStrikesParaPunicao = 0
+        res.sucesso = False
+        res.mensagem = "EMP_ID obrigatorio para contar strikes de punicao."
+        ContarStrikesParaPunicaoResultado = res
         Exit Function
     End If
 
     emp = LerEmpresa(EMP_ID, linhaEmp)
-    If linhaEmp > 0 Then
-        dtCorte = emp.DT_ULT_REATIV
-        usarJanela = (dtCorte > CDate(0))
+    If linhaEmp = 0 Then
+        res.sucesso = False
+        res.mensagem = "Empresa nao encontrada para contar strikes de punicao: EMP_ID=" & EMP_ID
+        ContarStrikesParaPunicaoResultado = res
+        Exit Function
     End If
+    dtCorte = emp.DT_ULT_REATIV
+    usarJanela = (dtCorte > CDate(0))
 
     Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
     ultima = UltimaLinhaAba(SHEET_CAD_OS)
     If ultima < LINHA_DADOS Then
-        ContarStrikesParaPunicao = 0
+        res.sucesso = True
+        res.mensagem = "Nenhuma OS para contar strikes de punicao."
+        ContarStrikesParaPunicaoResultado = res
         Exit Function
     End If
 
@@ -230,11 +286,17 @@ Public Function ContarStrikesParaPunicao( _
 proximaLinha:
     Next i
 
-    ContarStrikesParaPunicao = qtd
+    qtdOut = qtd
+    res.sucesso = True
+    res.mensagem = "Strikes para punicao contados: " & CStr(qtd)
+    ContarStrikesParaPunicaoResultado = res
     Exit Function
 
 falha:
-    ContarStrikesParaPunicao = 0
+    res.sucesso = False
+    res.mensagem = "Erro em ContarStrikesParaPunicaoResultado: " & Err.Description
+    res.CodigoErro = Err.Number
+    ContarStrikesParaPunicaoResultado = res
 End Function
 
 

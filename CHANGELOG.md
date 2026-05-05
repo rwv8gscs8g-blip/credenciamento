@@ -22,6 +22,9 @@ tratam apenas da linha pública oficial.
 - **Onda 21 / MICRO33** — `Svc_Avaliacao.AvaliarOS` passa a retornar
   falha explicita quando `Suspender` ou `AvancarFila` falha apos a
   avaliacao ja persistida, registrando `AUDIT_LOG` com `OS_JA_AVALIADA=SIM`.
+- **Onda 21 / MICRO34** — `Repo_Avaliacao` ganha contadores de strikes
+  com `TResult` e `qtdOut`; `AvaliarOS` usa o caminho verificavel antes
+  de decidir suspensao, evitando zero silencioso em erro.
 
 ### Validação
 
@@ -31,6 +34,8 @@ tratam apenas da linha pública oficial.
   `f7aa84f+ONDA21.MD21.1-status-empresa-result`.
 - MICRO33 entregue para importacao como
   `f7aa84f+ONDA21.MD21.2-3-avaliar-os-falhas`.
+- MICRO34 entregue para importacao como
+  `f7aa84f+ONDA21.MD21.4-contar-strikes-result`.
 
 ## [v12.0.0203-rc4] — 2026-05-04
 

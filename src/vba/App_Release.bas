@@ -197,12 +197,15 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0202|DESENVOLVIMENTO|V12.0
 ' V12.0.0204 ONDA 21 MD-21.2-21.3 (2026-05-05) - AvaliarOS nao declara
 ' sucesso quando Suspender ou AvancarFila falha apos a avaliacao ja salva;
 ' retorna falha explicita com IdGerado da OS para triagem operacional.
-Public Const APP_BUILD_IMPORTADO As String = "f7aa84f+ONDA21.MD21.2-3-avaliar-os-falhas"
+' V12.0.0204 ONDA 21 MD-21.4 (2026-05-05) - ContarStrikes* ganha caminho
+' com TResult + qtd ByRef; AvaliarOS usa ContarStrikesParaPunicaoResultado
+' para impedir decisao punitiva baseada em zero silencioso.
+Public Const APP_BUILD_IMPORTADO As String = "f7aa84f+ONDA21.MD21.4-contar-strikes-result"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0203-governanca-testes"
 Public Const APP_BUILD_GERADO_EM As String = "2026-05-05 00:00"
 Public Const APP_RELEASE_TAG As String = "v12.0.0204-dev"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0204"
-Public Const APP_RELEASE_TEST_KEY As String = "quinteto-v204-onda21-md21-2-3-2026-05-05"
+Public Const APP_RELEASE_TEST_KEY As String = "quinteto-v204-onda21-md21-4-2026-05-05"
 Public Const APP_GITHUB_REPO_URL As String = "https://github.com/rwv8gscs8g-blip/credenciamento"
 Public Const APP_GITHUB_RELEASE_NOTES_URL As String = APP_GITHUB_REPO_URL & "/tree/main/obsidian-vault/releases"
 

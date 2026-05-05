@@ -378,9 +378,24 @@ Public Function AvaliarOS( _
         Dim maxStrikes As Long
         Dim strikesAtuais As Long
         Dim diasSusp As Long
+        Dim resStrikes As TResult
 
         maxStrikes = GetMaxStrikes()
-        strikesAtuais = ContarStrikesParaPunicao(os.EMP_ID, notaMin)
+        resStrikes = ContarStrikesParaPunicaoResultado(os.EMP_ID, notaMin, strikesAtuais)
+        If Not resStrikes.sucesso Then
+            RegistrarEvento _
+                EVT_AVALIACAO, ENT_OS, OS_ID, _
+                "MEDIA=" & FormatarMediaAvaliacao(media) & "; EMP_ID=" & os.EMP_ID, _
+                "FALHA_CONTAR_STRIKES_PUNICAO=" & resStrikes.mensagem & _
+                "; OS_JA_AVALIADA=SIM", _
+                "Svc_Avaliacao"
+            res.sucesso = False
+            res.mensagem = "Avaliacao salva, mas falha ao contar strikes para punicao: " & resStrikes.mensagem
+            res.CodigoErro = resStrikes.CodigoErro
+            res.IdGerado = OS_ID
+            AvaliarOS = res
+            Exit Function
+        End If
 
         ' Auditoria do strike (mesmo quando ainda nao suspende).
         RegistrarEvento _
