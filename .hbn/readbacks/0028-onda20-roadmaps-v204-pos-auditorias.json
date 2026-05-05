@@ -1,0 +1,29 @@
+{
+  "hbn_protocol": "HBN-0.3.1",
+  "readback_id": "0028-onda20-roadmaps-v204-pos-auditorias",
+  "data": "2026-05-05",
+  "agente": "Codex CLI",
+  "frente": "Frente 1 Credenciamento",
+  "track": "safe_track",
+  "status": "confirmed",
+  "hearback_operador": {
+    "data": "2026-05-05",
+    "resumo": "Operador informou que auditorias cruzadas 64/65 foram realizadas e solicitou analise, ajustes e roadmaps de implementacao para V204."
+  },
+  "escopo": {
+    "tema": "sintese das auditorias 64/65 e roadmaps V204",
+    "base": "V12.0.0203-rc4",
+    "proxima_linha": "V12.0.0204",
+    "tipo": "documentacao de planejamento; sem edicao VBA"
+  },
+  "arquivos_planejados": [
+    "auditoria/00_status/66_SINTESE_AUDITORIA_CRUZADA_V203_RC4_E_ABERTURA_V204_2026_05_05.md",
+    "auditoria/02_planos/29_ROADMAP_IMPLEMENTACAO_V204_2026_05_05.md",
+    "auditoria/03_ondas/onda_20_v204_roadmaps_preparatorios/*.md"
+  ],
+  "fora_de_escopo": [
+    "Implementar codigo VBA da V204 antes de aprovacao dos roadmaps",
+    "Alterar local-ai/vba_import",
+    "Declarar V203 ou V204 pronta para producao"
+  ]
+}

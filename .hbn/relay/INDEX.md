@@ -4,8 +4,8 @@ versao-protocolo: HBN 0.3.1
 proprietario-bastao: Codex CLI (sessao codex-cli-bloco-b-onda18-2026-05-04) — BASTAO RECEBIDO do Opus 4.7 em 2026-05-04T01:34:31-0300; proprietario unico de implementacao da Frente 1 ate devolucao formal via doc 60.
 ciclo-ativo: V12.0.0203 rc4 liberada para testes manuais formais sob Codex CLI. Auditorias cruzadas 58/59 aprovaram rc3 com ressalvas; operador decidiu corrigir R1 antes dos testes manuais e manter V203 fora de producao. MICRO30-fix1 aprovado em VR_20260504_171048 apos corrigir ClassificaEmpresa A:T -> A:U.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Iniciar testes manuais formais da V12.0.0203-rc4; apos testes formais, abrir V12.0.0204 para revisao de todos os debitos tecnicos conhecidos e estabilizacao publica.
-ultima-atualizacao: 2026-05-04T17:34:00-0300 (MICRO30-fix1 Quinteto APROVADO VR_20260504_171048)
+proxima-acao: Aprovar roadmaps V204 pos-auditorias 64/65; primeira onda proposta e Onda 20 P0 UI (reativacao entidade, reentrada, decisao ATIV_ID), sem iniciar codigo antes do hearback.
+ultima-atualizacao: 2026-05-05T00:00:00-0300 (roadmaps V204 pos-auditorias 64/65 preparados por Codex)
 ---
 
 > ⚠️ **REGRA INVIOLAVEL (M11 destilada 2026-05-03)**: A IA le `src/vba/`

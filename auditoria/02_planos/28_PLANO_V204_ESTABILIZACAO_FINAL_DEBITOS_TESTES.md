@@ -24,11 +24,17 @@ formal.
 
 | ID | Tema | Severidade inicial | Motivo |
 |---|---|---|---|
+| `DT-V204-UI-REATIVA-ENTIDADE-SERVICE` | reativacao de entidade sem servico/auditoria | P0 | bypass direto em form |
+| `DT-V204-UI-REENTRADA-GUARD` | duplo clique/reentrada em forms mutadores | P0 | risco de duplicidade/corrupcao |
+| `DT-V204-REATIVA-EMPRESA-ATIV-ID` | reativacao de empresa zera `COL_CRED_ATIV_ID` | P0 decisao | comportamento de produto nao documentado |
 | `INT-CAD-OS-REF-ORFA` | referencias orfas em `CAD_OS` | P1 | integridade de dados |
 | `DT-FRENTE1-GRAVARSTATUSEMPRESA-SILENT` | falha silenciosa em status | P1 | mascara erro operacional |
 | `DT-FRENTE1-REATIV-NOOP-ATIVA` | reativar empresa ativa | P2 | comportamento pouco explicito |
 | `DT-FRENTE1-BACKFILL-AUDIT` | migracao auditavel de historico | P1 | bases antigas podem ter campo vazio |
 | `DT-FRENTE1-CONTARSTRIKES-ERRO-MUDO` | contador pode falhar sem origem | P1 | diagnostico insuficiente |
+| `DT-V204-AVALIAROS-PROPAGA-FALHAS` | `AvaliarOS` ignora falha de suspensao/fila | P1 | sucesso falso |
+| `DT-V204-LEREMPRESA-DATA-INVALIDA` | data invalida vira modo legado silencioso | P1 | diagnostico insuficiente |
+| `DT-V204-EMITIR-OS-ROLLBACK` | `EmitirOS` pode deixar OS/PRE_OS parcial | P1 | atomicidade insuficiente |
 | `DT-FRENTE1-FORMS-BYPASS-REATIV` | forms podem burlar service | P1 | regra pode depender da entrada |
 | `DT-FRENTE1-REENTRADA-UI` | duplo clique/reentrada | P2 | risco de duplicidade |
 | `DT-FRENTE1-MENSAGENS-VAGAS` | mensagens sem origem | P2 | suporte e auditoria piores |
@@ -37,14 +43,12 @@ formal.
 
 | Onda | Objetivo | Gate minimo |
 |---|---|---|
-| V204-01 | auditoria cruzada e triagem P0/P1/P2 | docs 64/65 recebidos |
-| V204-02 | integridade de dados e orfaos `CAD_OS` | IntegridadeBase ampliada |
-| V204-03 | endurecer `GravarStatusEmpresa` e logs | V2 Canonica verde |
-| V204-04 | reativacao: no-op, forms e backfill | E2E Strikes verde |
-| V204-05 | reentrada UI e confirmacoes destrutivas | testes assistidos |
-| V204-06 | mensagens de erro e observabilidade | Quinteto verde |
-| V204-07 | matriz combinatoria e stress | nova bateria V204 verde |
-| V204-08 | fechamento candidato a producao | auditoria cruzada final |
+| V204-20 | P0 UI: entidade, reentrada, `ATIV_ID` | Quinteto verde |
+| V204-21 | P1 transacional: status, avaliacao, OS, strikes | Quinteto verde |
+| V204-22 | dados legados: backfill, orfaos, datas | IntegridadeBase ampliada |
+| V204-23 | baterias adversariais e combinatoria | Sexteto verde |
+| V204-24 | seguranca preventiva e usabilidade | Sexteto verde |
+| V204-25 | fechamento candidato a producao | auditoria cruzada final |
 
 ## 4. Evolucao das baterias
 
@@ -73,9 +77,10 @@ formal.
 
 1. `auditoria/00_status/64_AUDITORIA_OPUS_V203_RC4_E_V204_2026_05_04.md`
 2. `auditoria/00_status/65_AUDITORIA_ANTIGRAVITY_V203_RC4_E_V204_2026_05_04.md`
-3. `auditoria/00_status/66_SINTESE_AUDITORIA_CRUZADA_V203_RC4_E_ABERTURA_V204_2026_05_04.md`
+3. `auditoria/00_status/66_SINTESE_AUDITORIA_CRUZADA_V203_RC4_E_ABERTURA_V204_2026_05_05.md`
 4. `docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md`
 5. `docs/reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md`
+6. `auditoria/02_planos/29_ROADMAP_IMPLEMENTACAO_V204_2026_05_05.md`
 
 ## 7. Regra de governanca
 
