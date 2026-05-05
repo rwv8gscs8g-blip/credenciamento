@@ -1,0 +1,41 @@
+{
+  "execution_id": "0031-exec-onda21-v204-avaliaros-micro33",
+  "data": "2026-05-05",
+  "readback_id": "0031-onda21-v204-avaliaros-micro33",
+  "action": "Implementar MICRO33 da Onda 21 V204: AvaliarOS propaga falhas de Suspender e AvancarFila.",
+  "status": "ENTREGUE_IMPORT",
+  "changes": {
+    "microdelta": "MICRO33",
+    "build": "f7aa84f+ONDA21.MD21.2-3-avaliar-os-falhas",
+    "implemented": [
+      "AvaliarOS retorna sucesso=False quando Suspender falha apos avaliacao persistida",
+      "AvaliarOS retorna sucesso=False quando AvancarFila falha apos avaliacao persistida",
+      "Falhas parciais registram AUDIT_LOG com OS_JA_AVALIADA=SIM",
+      "TResult de falha preserva IdGerado=OS_ID para triagem operacional",
+      "Manifesto MICRO33 inclui dependencias da MICRO32 para tolerar workbook visualmente defasado"
+    ],
+    "validation_local": [
+      "vba_import sincronizado por publicar_vba_import_v2.sh --check",
+      "manifesto MICRO33 gerado"
+    ]
+  },
+  "operator_next_steps": [
+    "ImportarPacoteV3_Delta \"MICRO33\", \"f7aa84f+ONDA21.MD21.2-3-avaliar-os-falhas\"",
+    "Compilar VBAProject",
+    "CT_ValidarRelease_QuintetoMinimo"
+  ],
+  "expected_gate": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+  "files_changed": [
+    "src/vba/Svc_Avaliacao.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO33.txt",
+    "auditoria/03_ondas/onda_21_v204_transacional/32_TECNICO_MICRO33_AVALIAROS_FALHAS.md",
+    "auditoria/03_ondas/onda_21_v204_transacional/33_PROCEDIMENTO_IMPORT_MICRO33.md",
+    ".hbn/readbacks/0031-onda21-v204-avaliaros-micro33.json",
+    ".hbn/results/0031-exec-onda21-v204-avaliaros-micro33.json"
+  ],
+  "next": [
+    "Apos Quinteto verde, iniciar MD-21.4 ContarStrikes* com resultado explicito",
+    "Depois, MD-21.5 EmitirOS rollback/ordem segura"
+  ]
+}

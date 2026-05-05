@@ -400,6 +400,20 @@ Public Function AvaliarOS( _
                 resSusp = Suspender(os.EMP_ID, 0, "STRIKES=" & CStr(strikesAtuais) & "; FALLBACK_MESES")
             End If
             ' Suspender registra sua propria auditoria.
+            If Not resSusp.sucesso Then
+                RegistrarEvento _
+                    EVT_AVALIACAO, ENT_OS, OS_ID, _
+                    "MEDIA=" & FormatarMediaAvaliacao(media) & "; STRIKES=" & CStr(strikesAtuais), _
+                    "FALHA_SUSPENSAO_APOS_AVALIACAO=" & resSusp.mensagem & _
+                    "; OS_JA_AVALIADA=SIM", _
+                    "Svc_Avaliacao"
+                res.sucesso = False
+                res.mensagem = "Avaliacao salva, mas falha ao suspender empresa: " & resSusp.mensagem
+                res.CodigoErro = resSusp.CodigoErro
+                res.IdGerado = OS_ID
+                AvaliarOS = res
+                Exit Function
+            End If
         End If
     End If
 
@@ -413,8 +427,15 @@ Public Function AvaliarOS( _
         RegistrarEvento _
             EVT_AVALIACAO, ENT_OS, OS_ID, _
             "", _
-            "AVISO: Falha ao avancar fila apos avaliacao: " & resAvancar.mensagem, _
+            "FALHA_AVANCAR_FILA_APOS_AVALIACAO=" & resAvancar.mensagem & _
+            "; OS_JA_AVALIADA=SIM", _
             "Svc_Avaliacao"
+        res.sucesso = False
+        res.mensagem = "Avaliacao salva, mas falha ao avancar fila: " & resAvancar.mensagem
+        res.CodigoErro = resAvancar.CodigoErro
+        res.IdGerado = OS_ID
+        AvaliarOS = res
+        Exit Function
     End If
 
     ' 9. Auditoria (critério 37)

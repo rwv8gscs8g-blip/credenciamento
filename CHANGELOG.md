@@ -19,6 +19,9 @@ tratam apenas da linha pública oficial.
   `EMPRESAS` falha ou nao confirma o estado esperado.
 - `Svc_Rodizio.AvancarFila` deixa de mascarar falha de `Suspender` apos
   recusa punivel.
+- **Onda 21 / MICRO33** — `Svc_Avaliacao.AvaliarOS` passa a retornar
+  falha explicita quando `Suspender` ou `AvancarFila` falha apos a
+  avaliacao ja persistida, registrando `AUDIT_LOG` com `OS_JA_AVALIADA=SIM`.
 
 ### Validação
 
@@ -26,6 +29,8 @@ tratam apenas da linha pública oficial.
   `V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
 - MICRO32 entregue para importacao como
   `f7aa84f+ONDA21.MD21.1-status-empresa-result`.
+- MICRO33 entregue para importacao como
+  `f7aa84f+ONDA21.MD21.2-3-avaliar-os-falhas`.
 
 ## [v12.0.0203-rc4] — 2026-05-04
 
