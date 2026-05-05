@@ -1,0 +1,25 @@
+{
+  "readback_id": "0035-onda21-v204-emitir-os-micro35-fix2",
+  "data": "2026-05-05",
+  "agente": "Codex CLI",
+  "bastao": "Frente 1 Credenciamento",
+  "status": "confirmed",
+  "origem_hearback": "Operador reportou novo erro de compilacao apos MICRO35-fix1: Metodo ou membro de dados nao encontrado em Repo_OS.BuscarPorId em Svc_Avaliacao.",
+  "escopo": {
+    "versao": "V12.0.0204-dev",
+    "onda": 21,
+    "microdelta": "MICRO35-fix2",
+    "tema": "Eliminar chamadas qualificadas Repo_OS.BuscarPorId remanescentes",
+    "build": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix2"
+  },
+  "fix": [
+    "Adicionar wrapper RepoOS_BuscarPorId em Repo_OS",
+    "Trocar Repo_OS.BuscarPorId por RepoOS_BuscarPorId em Svc_Avaliacao",
+    "Trocar Repo_OS.BuscarPorId por RepoOS_BuscarPorId em Menu_Principal e testes V2"
+  ],
+  "gate_planejado": [
+    "Importar MICRO35-fix2",
+    "Compilar VBAProject",
+    "Rodar CT_ValidarRelease_QuintetoMinimo"
+  ]
+}

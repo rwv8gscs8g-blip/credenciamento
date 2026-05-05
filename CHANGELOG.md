@@ -30,6 +30,8 @@ tratam apenas da linha pública oficial.
   impeça concluir a conversao; falha de fila ganha auditoria transacional.
 - **Onda 21 / MICRO35-fix1** — corrige compilacao no VBE substituindo
   chamadas qualificadas `Repo_OS.*` por wrappers publicos `RepoOS_*`.
+- **Onda 21 / MICRO35-fix2** — remove chamadas remanescentes
+  `Repo_OS.BuscarPorId` em servico, UI e testes V2.
 
 ### Validação
 
@@ -47,6 +49,8 @@ tratam apenas da linha pública oficial.
   `f7aa84f+ONDA21.MD21.5-emitir-os-rollback`.
 - MICRO35-fix1 entregue para importacao como
   `f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix1`.
+- MICRO35-fix2 entregue para importacao como
+  `f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix2`.
 
 ## [v12.0.0203-rc4] — 2026-05-04
 

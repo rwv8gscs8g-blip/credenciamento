@@ -2745,7 +2745,7 @@ Private Function TV2_E2E_AtenderProximaEmpresa(ByVal notaE1 As Integer, _
         Exit Function
     End If
 
-    osReg = Repo_OS.BuscarPorId(resOs.IdGerado)
+    osReg = RepoOS_BuscarPorId(resOs.IdGerado)
     TV2_LogInfo "STRIKES_E2E", "DIAG_OS", _
         "OS persistida apos EmitirOS", _
         "OS_ID=" & osReg.OS_ID & " EMP_REAL=" & osReg.EMP_ID & " STATUS=" & osReg.STATUS_OS & " EMP_PRESEL=" & empPresel
@@ -2758,7 +2758,7 @@ Private Function TV2_E2E_AtenderProximaEmpresa(ByVal notaE1 As Integer, _
             "Erro: " & resAval.mensagem
     End If
 
-    osReg = Repo_OS.BuscarPorId(resOs.IdGerado)
+    osReg = RepoOS_BuscarPorId(resOs.IdGerado)
     notaMin = GetNotaMinimaAvaliacao()
     strikesPresel = ContarStrikesPorEmpresa(empPresel, notaMin)
     strikesReal = ContarStrikesPorEmpresa(osReg.EMP_ID, notaMin)

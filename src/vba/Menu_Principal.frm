@@ -90,7 +90,7 @@ If AV_Lista.ListIndex < 0 Then Exit Sub
 
 AVCNPJ = AVListaCol(8)
 AVEmpresa = AVListaCol(3)
-os = Repo_OS.BuscarPorId(AVListaCol(0))
+os = RepoOS_BuscarPorId(AVListaCol(0))
 If os.OS_ID <> "" Then
     resDefaults = MontarDefaultsAvaliacao( _
         os, _
@@ -825,7 +825,7 @@ Private Sub EncerraOS_Click()
     vlOrcado = Util_Conversao.ToDouble(AVListaCol(6))
 
     If Trim$(mAvaliacaoDefaultsOSID) <> Trim$(osId) Then
-        osAtual = Repo_OS.BuscarPorId(osId)
+        osAtual = RepoOS_BuscarPorId(osId)
         resDefaults = MontarDefaultsAvaliacao( _
             osAtual, _
             mAvaliacaoDefaultsOSID, _

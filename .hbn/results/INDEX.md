@@ -47,3 +47,4 @@ ultima-atualizacao: 2026-05-05
 | 0032 | Onda 21 V204 MICRO34 ContarStrikes resultado explicito | ENTREGUE_IMPORT | `0032-onda21-v204-contarstrikes-micro34.json` | 2026-05-05 |
 | 0033 | Onda 21 V204 MICRO35 EmitirOS rollback local | ENTREGUE_IMPORT | `0033-onda21-v204-emitir-os-micro35.json` | 2026-05-05 |
 | 0034 | Onda 21 V204 MICRO35-fix1 compilacao Repo_OS | ENTREGUE_IMPORT | `0034-onda21-v204-emitir-os-micro35-fix1.json` | 2026-05-05 |
+| 0035 | Onda 21 V204 MICRO35-fix2 RepoOS_BuscarPorId | ENTREGUE_IMPORT | `0035-onda21-v204-emitir-os-micro35-fix2.json` | 2026-05-05 |

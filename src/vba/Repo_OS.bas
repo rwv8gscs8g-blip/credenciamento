@@ -101,6 +101,10 @@ fim:
     BuscarPorId = O
 End Function
 
+Public Function RepoOS_BuscarPorId(ByVal OS_ID As String) As TOS
+    RepoOS_BuscarPorId = BuscarPorId(OS_ID)
+End Function
+
 Private Function ExtrairServId(ByVal codServ As String, ByVal ativId As String) As String
     Dim p As Long
     Dim s As String

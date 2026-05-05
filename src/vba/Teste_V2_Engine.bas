@@ -1282,7 +1282,7 @@ End Function
 
 Public Function TV2_StatusOS(ByVal osId As String) As String
     Dim os As TOS
-    os = Repo_OS.BuscarPorId(osId)
+    os = RepoOS_BuscarPorId(osId)
     TV2_StatusOS = Trim$(os.STATUS_OS)
 End Function
 

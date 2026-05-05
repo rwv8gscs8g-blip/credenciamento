@@ -275,7 +275,7 @@ Public Function AvaliarOS( _
     On Error GoTo Erro
 
     ' 1. Buscar OS (critério 32)
-    os = Repo_OS.BuscarPorId(OS_ID)
+    os = RepoOS_BuscarPorId(OS_ID)
     If os.OS_ID = "" Then
         res.sucesso = False
         res.mensagem = "OS nao encontrada: OS_ID=" & OS_ID

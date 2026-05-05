@@ -1,0 +1,27 @@
+{
+  "execution_id": "0035-exec-onda21-v204-emitir-os-micro35-fix2",
+  "data": "2026-05-05",
+  "readback_id": "0035-onda21-v204-emitir-os-micro35-fix2",
+  "action": "Gerar MICRO35-fix2 para corrigir falha de compilacao em Repo_OS.BuscarPorId.",
+  "status": "ENTREGUE_IMPORT",
+  "changes": {
+    "microdelta": "MICRO35-fix2",
+    "build": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix2",
+    "implemented": [
+      "Repo_OS recebe RepoOS_BuscarPorId",
+      "Svc_Avaliacao usa RepoOS_BuscarPorId",
+      "Teste_V2_Engine, Teste_V2_Roteiros e Menu_Principal usam RepoOS_BuscarPorId",
+      "App_Release atualizado para build fix2"
+    ],
+    "validation_local": [
+      "vba_import sincronizado por publicar_vba_import_v2.sh --check",
+      "manifesto MICRO35-fix2 gerado"
+    ]
+  },
+  "operator_next_steps": [
+    "ImportarPacoteV3_Delta \"MICRO35-fix2\", \"f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix2\"",
+    "Compilar VBAProject",
+    "CT_ValidarRelease_QuintetoMinimo"
+  ],
+  "expected_gate": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+}
