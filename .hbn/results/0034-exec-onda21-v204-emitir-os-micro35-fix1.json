@@ -1,0 +1,26 @@
+{
+  "execution_id": "0034-exec-onda21-v204-emitir-os-micro35-fix1",
+  "data": "2026-05-05",
+  "readback_id": "0034-onda21-v204-emitir-os-micro35-fix1",
+  "action": "Gerar MICRO35-fix1 para corrigir falha de compilacao em Repo_OS.Inserir.",
+  "status": "ENTREGUE_IMPORT",
+  "changes": {
+    "microdelta": "MICRO35-fix1",
+    "build": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix1",
+    "implemented": [
+      "Repo_OS recebe RepoOS_Inserir e RepoOS_ExcluirPorId",
+      "Svc_OS deixa de chamar Repo_OS.Inserir e Repo_OS.ExcluirPorId diretamente",
+      "App_Release atualizado para build fix1"
+    ],
+    "validation_local": [
+      "vba_import sincronizado por publicar_vba_import_v2.sh --check",
+      "manifesto MICRO35-fix1 gerado"
+    ]
+  },
+  "operator_next_steps": [
+    "ImportarPacoteV3_Delta \"MICRO35-fix1\", \"f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix1\"",
+    "Compilar VBAProject",
+    "CT_ValidarRelease_QuintetoMinimo"
+  ],
+  "expected_gate": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+}

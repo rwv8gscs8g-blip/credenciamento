@@ -1,0 +1,29 @@
+{
+  "readback_id": "0034-onda21-v204-emitir-os-micro35-fix1",
+  "data": "2026-05-05",
+  "agente": "Codex CLI",
+  "bastao": "Frente 1 Credenciamento",
+  "status": "confirmed",
+  "origem_hearback": "Operador reportou erro de compilacao no MICRO35: Metodo ou membro de dados nao encontrado em Repo_OS.Inserir durante V1.",
+  "escopo": {
+    "versao": "V12.0.0204-dev",
+    "onda": 21,
+    "microdelta": "MICRO35-fix1",
+    "tema": "Corrigir resolucao VBE de chamada qualificada Repo_OS.*",
+    "build": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix1"
+  },
+  "entradas_lidas": [
+    "src/vba/Svc_OS.bas",
+    "src/vba/Repo_OS.bas",
+    "print do operador com erro em Repo_OS.Inserir"
+  ],
+  "fix": [
+    "Adicionar wrappers publicos RepoOS_Inserir e RepoOS_ExcluirPorId em Repo_OS",
+    "Substituir chamadas qualificadas Repo_OS.* em Svc_OS por wrappers de nome unico"
+  ],
+  "gate_planejado": [
+    "Importar MICRO35-fix1",
+    "Compilar VBAProject",
+    "Rodar CT_ValidarRelease_QuintetoMinimo"
+  ]
+}

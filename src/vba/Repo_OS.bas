@@ -61,6 +61,10 @@ Erro:
     Inserir = res
 End Function
 
+Public Function RepoOS_Inserir(ByRef O As TOS) As TResult
+    RepoOS_Inserir = Inserir(O)
+End Function
+
 ' Busca OS por ID.
 Public Function BuscarPorId(ByVal OS_ID As String) As TOS
     Dim O As TOS
@@ -180,6 +184,10 @@ Erro:
     res.mensagem = "Erro ao excluir OS: " & Err.Description
     res.CodigoErro = Err.Number
     ExcluirPorId = res
+End Function
+
+Public Function RepoOS_ExcluirPorId(ByVal OS_ID As String) As TResult
+    RepoOS_ExcluirPorId = ExcluirPorId(OS_ID)
 End Function
 
 ' Atualiza registro de OS existente.

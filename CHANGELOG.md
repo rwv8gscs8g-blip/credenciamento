@@ -28,6 +28,8 @@ tratam apenas da linha pública oficial.
 - **Onda 21 / MICRO35** — `Svc_OS.EmitirOS` passa a preparar `PRE_OS`
   antes de criar OS e remove a OS recem-criada caso uma falha posterior
   impeça concluir a conversao; falha de fila ganha auditoria transacional.
+- **Onda 21 / MICRO35-fix1** — corrige compilacao no VBE substituindo
+  chamadas qualificadas `Repo_OS.*` por wrappers publicos `RepoOS_*`.
 
 ### Validação
 
@@ -43,6 +45,8 @@ tratam apenas da linha pública oficial.
   `V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
 - MICRO35 entregue para importacao como
   `f7aa84f+ONDA21.MD21.5-emitir-os-rollback`.
+- MICRO35-fix1 entregue para importacao como
+  `f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix1`.
 
 ## [v12.0.0203-rc4] — 2026-05-04
 

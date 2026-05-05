@@ -155,7 +155,7 @@ Public Function EmitirOS( _
     preosOldDtEmOs = wsPreOS.Cells(linhaPreOS, COL_PREOS_DT_EM_OS).Value
 
     ' 4. Inserir OS via Repo_OS (os.OS_ID preenchido ByRef - critérios 23-24)
-    resInsert = Repo_OS.Inserir(os)
+    resInsert = RepoOS_Inserir(os)
     If Not resInsert.sucesso Then
         res.sucesso = False
         res.mensagem = "Falha ao inserir OS: " & resInsert.mensagem
@@ -228,7 +228,7 @@ Erro:
         End If
     End If
     If osCriada And Not operacaoConcluida Then
-        resRollbackOS = Repo_OS.ExcluirPorId(os.OS_ID)
+        resRollbackOS = RepoOS_ExcluirPorId(os.OS_ID)
         rollbackOSOk = resRollbackOS.sucesso
     Else
         rollbackOSOk = True
