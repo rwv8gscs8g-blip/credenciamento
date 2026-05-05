@@ -122,6 +122,66 @@ Private Function ExtrairServId(ByVal codServ As String, ByVal ativId As String) 
     If Len(s) >= 4 Then ExtrairServId = Mid$(s, 4)
 End Function
 
+' Remove OS por ID. Uso principal: rollback de emissao quando etapa posterior
+' falha antes da conclusao transacional.
+Public Function ExcluirPorId(ByVal OS_ID As String) As TResult
+    Dim res As TResult
+    Dim ws As Worksheet
+    Dim i As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+
+    On Error GoTo Erro
+
+    If Trim$(OS_ID) = "" Then
+        res.sucesso = False
+        res.mensagem = "OS_ID obrigatorio para exclusao."
+        ExcluirPorId = res
+        Exit Function
+    End If
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
+    For i = LINHA_DADOS To UltimaLinhaAba(SHEET_CAD_OS)
+        If IdsIguais(ws.Cells(i, COL_OS_ID).Value, OS_ID) Then
+            If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+                res.sucesso = False
+                res.mensagem = "Nao foi possivel preparar CAD_OS para exclusao."
+                ExcluirPorId = res
+                Exit Function
+            End If
+
+            If Not Util_ExcluirLinhaSegura(ws, i) Then
+                res.sucesso = False
+                res.mensagem = "Nao foi possivel excluir OS_ID=" & OS_ID
+                Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+                ExcluirPorId = res
+                Exit Function
+            End If
+
+            res.sucesso = True
+            res.mensagem = "OS excluida com sucesso."
+            res.IdGerado = OS_ID
+            Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+            ExcluirPorId = res
+            Exit Function
+        End If
+    Next i
+
+    res.sucesso = False
+    res.mensagem = "OS_ID " & OS_ID & " nao encontrada para exclusao."
+    ExcluirPorId = res
+    Exit Function
+
+Erro:
+    On Error Resume Next
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    res.sucesso = False
+    res.mensagem = "Erro ao excluir OS: " & Err.Description
+    res.CodigoErro = Err.Number
+    ExcluirPorId = res
+End Function
+
 ' Atualiza registro de OS existente.
 Public Function Atualizar(ByRef O As TOS) As TResult
     Dim res As TResult

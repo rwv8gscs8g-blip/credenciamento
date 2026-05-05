@@ -1,0 +1,36 @@
+{
+  "readback_id": "0033-onda21-v204-emitir-os-micro35",
+  "data": "2026-05-05",
+  "agente": "Codex CLI",
+  "bastao": "Frente 1 Credenciamento",
+  "status": "confirmed",
+  "origem_hearback": "Operador informou MICRO34 importada, build confirmado e Quinteto aprovado em VR_20260505_185750; autorizacao sequencial ja vigente para Ondas 20-25.",
+  "escopo": {
+    "versao": "V12.0.0204-dev",
+    "onda": 21,
+    "microdelta": "MICRO35",
+    "tema": "EmitirOS com ordem segura e rollback de OS recem-criada",
+    "build": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback"
+  },
+  "entradas_lidas": [
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_20_v204_roadmaps_preparatorios/02_ROADMAP_ONDA_21_TRANSACIONAL.md",
+    "auditoria/00_status/56_QA_CODEX_2026_05_04.md",
+    "auditoria/00_status/65_AUDITORIA_ANTIGRAVITY_V203_RC4_E_V204_2026_05_04.md",
+    "src/vba/Svc_OS.bas",
+    "src/vba/Repo_OS.bas",
+    "src/vba/Repo_PreOS.bas",
+    "src/vba/Svc_Transacao.bas",
+    "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuinteto_V12_0_0203_VR_20260505_185750.csv"
+  ],
+  "fora_de_escopo": [
+    "Svc_Transacao detecta aninhamento",
+    "Bateria automatizada de fault injection",
+    "Mudanca da politica de AvancarFila em EmitirOS para sucesso=False"
+  ],
+  "gate_planejado": [
+    "Importar MICRO35",
+    "Compilar VBAProject",
+    "Rodar CT_ValidarRelease_QuintetoMinimo"
+  ]
+}

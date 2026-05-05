@@ -8,8 +8,9 @@ Option Explicit
 ' Sem Select/ActiveCell/On Error Resume Next silencioso.
 '
 ' POLÍTICA AvancarFila em EmitirOS (critério 48):
-'   Auditoria gravada ANTES de AvancarFila.
-'   Se AvancarFila falhar: res.Sucesso=True, res.Mensagem inclui "AVISO:".
+'   Auditoria de OS gravada ANTES de AvancarFila.
+'   Se AvancarFila falhar: OS/PRE_OS permanecem consistentes, res.Sucesso=True,
+'   res.Mensagem inclui "AVISO:" e AUDIT_LOG registra falha transacional.
 
 Private Const STATUS_OS_EXEC    As String = "EM_EXECUCAO"
 Private Const STATUS_OS_CANCEL  As String = "CANCELADA"
@@ -79,11 +80,23 @@ Public Function EmitirOS( _
     Dim linhaPreOS As Long
     Dim preos As TPreOS
     Dim os As TOS
-    Dim ws As Worksheet
+    Dim wsPreOS As Worksheet
     Dim resInsert As TResult
     Dim resAv As TResult
+    Dim resRollbackOS As TResult
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
+    Dim preosPreparada As Boolean
+    Dim preosConvertida As Boolean
+    Dim osCriada As Boolean
+    Dim operacaoConcluida As Boolean
+    Dim preosOldStatus As Variant
+    Dim preosOldOsId As Variant
+    Dim preosOldDtEmOs As Variant
+    Dim erroNumero As Long
+    Dim erroMensagem As String
+    Dim rollbackPreOSOk As Boolean
+    Dim rollbackOSOk As Boolean
 
     On Error GoTo Erro
 
@@ -127,28 +140,46 @@ Public Function EmitirOS( _
     os.STATUS_OS = STATUS_OS_EXEC
     os.JUSTIF_DIVERGENCIA = ""
 
-    ' 3. Inserir OS via Repo_OS (os.OS_ID preenchido ByRef - critérios 23-24)
+    ' 3. Preparar PRE_OS antes de inserir CAD_OS. Se esta etapa falhar,
+    ' nenhuma OS e criada.
+    Set wsPreOS = ThisWorkbook.Sheets(SHEET_PREOS)
+    If Not Util_PrepararAbaParaEscrita(wsPreOS, estavaProtegida, senhaProtecao) Then
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar PRE_OS para escrita. OS nao criada."
+        EmitirOS = res
+        Exit Function
+    End If
+    preosPreparada = True
+    preosOldStatus = wsPreOS.Cells(linhaPreOS, COL_PREOS_STATUS).Value
+    preosOldOsId = wsPreOS.Cells(linhaPreOS, COL_PREOS_OS_ID).Value
+    preosOldDtEmOs = wsPreOS.Cells(linhaPreOS, COL_PREOS_DT_EM_OS).Value
+
+    ' 4. Inserir OS via Repo_OS (os.OS_ID preenchido ByRef - critérios 23-24)
     resInsert = Repo_OS.Inserir(os)
     If Not resInsert.sucesso Then
         res.sucesso = False
         res.mensagem = "Falha ao inserir OS: " & resInsert.mensagem
+        Util_RestaurarProtecaoAba wsPreOS, estavaProtegida, senhaProtecao
+        preosPreparada = False
         EmitirOS = res
         Exit Function
     End If
+    osCriada = True
 
-    ' 4. Atualizar PRE_OS (critério 25)
-    Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
-    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-        res.sucesso = False
-        res.mensagem = "Nao foi possivel preparar PRE_OS para escrita."
-        EmitirOS = res
-        Exit Function
+    ' 5. Atualizar PRE_OS (critério 25). Qualquer erro posterior aciona
+    ' rollback da OS recem-criada e restaura os campos antigos da PRE_OS.
+    wsPreOS.Cells(linhaPreOS, COL_PREOS_STATUS).Value = STATUS_PREOS_CONV
+    wsPreOS.Cells(linhaPreOS, COL_PREOS_OS_ID).Value = os.OS_ID
+    wsPreOS.Cells(linhaPreOS, COL_PREOS_DT_EM_OS).Value = Now
+    If CStr(wsPreOS.Cells(linhaPreOS, COL_PREOS_STATUS).Value) <> STATUS_PREOS_CONV Or _
+       Not IdsIguais(wsPreOS.Cells(linhaPreOS, COL_PREOS_OS_ID).Value, os.OS_ID) Then
+        Err.Raise 1004, "Svc_OS.EmitirOS", "Falha ao verificar conversao da PRE_OS."
     End If
-    ws.Cells(linhaPreOS, COL_PREOS_STATUS).Value = STATUS_PREOS_CONV
-    ws.Cells(linhaPreOS, COL_PREOS_OS_ID).Value = os.OS_ID
-    ws.Cells(linhaPreOS, COL_PREOS_DT_EM_OS).Value = Now
+    preosConvertida = True
+    Util_RestaurarProtecaoAba wsPreOS, estavaProtegida, senhaProtecao
+    preosPreparada = False
 
-    ' 5. Auditoria ANTES de AvancarFila (critério 27)
+    ' 6. Auditoria ANTES de AvancarFila (critério 27)
     RegistrarEvento _
         EVT_OS_EMITIDA, ENT_OS, os.OS_ID, _
         "", _
@@ -159,7 +190,7 @@ Public Function EmitirOS( _
         "; DT_PREV=" & Format$(DT_PREV_TERMINO, "DD/MM/YYYY"), _
         "Svc_OS"
 
-    ' 6. AvancarFila SEM punição (critério 26) - falha = AVISO (critério 48)
+    ' 7. AvancarFila SEM punição (critério 26) - falha = AVISO (critério 48)
     resAv = AvancarFila(preos.EMP_ID, preos.ATIV_ID, False, "ACEITE_OS_EMITIDA")
 
     res.sucesso = True
@@ -167,20 +198,53 @@ Public Function EmitirOS( _
     If resAv.sucesso Then
         res.mensagem = "OS emitida. OS_ID=" & os.OS_ID & "; PREOS_ID=" & PREOS_ID
     Else
+        RegistrarEvento _
+            EVT_TRANSACAO, ENT_OS, os.OS_ID, _
+            "EMITIR_OS=OK; PREOS_ID=" & PREOS_ID, _
+            "AVANCAR_FILA_FALHOU; OS_MANTIDA=SIM; MSG=" & resAv.mensagem, _
+            "Svc_OS"
         res.mensagem = "OS emitida. OS_ID=" & os.OS_ID & "; PREOS_ID=" & PREOS_ID & _
                        " | AVISO: falha ao avançar fila: " & resAv.mensagem
     End If
-    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    operacaoConcluida = True
     EmitirOS = res
     Exit Function
 
 Erro:
+    erroNumero = Err.Number
+    erroMensagem = Err.Description
     On Error Resume Next
-    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    If preosPreparada Or preosConvertida Then
+        If Not preosPreparada Then
+            Set wsPreOS = ThisWorkbook.Sheets(SHEET_PREOS)
+            preosPreparada = Util_PrepararAbaParaEscrita(wsPreOS, estavaProtegida, senhaProtecao)
+        End If
+        If preosPreparada Then
+            wsPreOS.Cells(linhaPreOS, COL_PREOS_STATUS).Value = preosOldStatus
+            wsPreOS.Cells(linhaPreOS, COL_PREOS_OS_ID).Value = preosOldOsId
+            wsPreOS.Cells(linhaPreOS, COL_PREOS_DT_EM_OS).Value = preosOldDtEmOs
+            rollbackPreOSOk = True
+            Util_RestaurarProtecaoAba wsPreOS, estavaProtegida, senhaProtecao
+        End If
+    End If
+    If osCriada And Not operacaoConcluida Then
+        resRollbackOS = Repo_OS.ExcluirPorId(os.OS_ID)
+        rollbackOSOk = resRollbackOS.sucesso
+    Else
+        rollbackOSOk = True
+    End If
+    RegistrarEvento _
+        EVT_TRANSACAO, ENT_OS, IIf(os.OS_ID <> "", os.OS_ID, PREOS_ID), _
+        "ERRO=" & CStr(erroNumero) & "; MSG=" & erroMensagem, _
+        "ROLLBACK_PREOS=" & IIf(rollbackPreOSOk Or Not preosConvertida, "OK", "FALHOU") & _
+        "; ROLLBACK_OS=" & IIf(rollbackOSOk, "OK", "FALHOU"), _
+        "Svc_OS"
     On Error GoTo 0
     res.sucesso = False
-    res.mensagem = "Erro em EmitirOS: " & Err.Description
-    res.CodigoErro = Err.Number
+    res.mensagem = "Erro em EmitirOS: " & erroMensagem & _
+                   " | Rollback PRE_OS=" & IIf(rollbackPreOSOk Or Not preosConvertida, "OK", "FALHOU") & _
+                   "; OS=" & IIf(rollbackOSOk, "OK", "FALHOU")
+    res.CodigoErro = erroNumero
     EmitirOS = res
 End Function
 

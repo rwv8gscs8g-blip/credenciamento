@@ -1,0 +1,41 @@
+{
+  "execution_id": "0033-exec-onda21-v204-emitir-os-micro35",
+  "data": "2026-05-05",
+  "readback_id": "0033-onda21-v204-emitir-os-micro35",
+  "action": "Implementar MICRO35 da Onda 21 V204: EmitirOS com ordem segura e rollback local.",
+  "status": "ENTREGUE_IMPORT",
+  "changes": {
+    "microdelta": "MICRO35",
+    "build": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback",
+    "implemented": [
+      "Repo_OS.ExcluirPorId para rollback da OS recem-criada",
+      "EmitirOS prepara PRE_OS antes de inserir CAD_OS",
+      "EmitirOS restaura campos antigos da PRE_OS se falha apos criacao da OS",
+      "EmitirOS remove a OS recem-criada em erro posterior",
+      "Falha de AvancarFila em EmitirOS permanece como aviso compativel, mas registra EVT_TRANSACAO"
+    ],
+    "validation_local": [
+      "vba_import sincronizado por publicar_vba_import_v2.sh --check",
+      "manifesto MICRO35 gerado"
+    ]
+  },
+  "operator_next_steps": [
+    "ImportarPacoteV3_Delta \"MICRO35\", \"f7aa84f+ONDA21.MD21.5-emitir-os-rollback\"",
+    "Compilar VBAProject",
+    "CT_ValidarRelease_QuintetoMinimo"
+  ],
+  "expected_gate": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+  "files_changed": [
+    "src/vba/Repo_OS.bas",
+    "src/vba/Svc_OS.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO35.txt",
+    "auditoria/03_ondas/onda_21_v204_transacional/36_TECNICO_MICRO35_EMITIR_OS_ROLLBACK.md",
+    "auditoria/03_ondas/onda_21_v204_transacional/37_PROCEDIMENTO_IMPORT_MICRO35.md",
+    ".hbn/readbacks/0033-onda21-v204-emitir-os-micro35.json",
+    ".hbn/results/0033-exec-onda21-v204-emitir-os-micro35.json"
+  ],
+  "next": [
+    "Apos Quinteto verde, iniciar MD-21.6 Svc_Transacao detecta aninhamento"
+  ]
+}
