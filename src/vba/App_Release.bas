@@ -7,8 +7,8 @@ Option Explicit
 Public Const APP_RELEASE_ATUAL As String = "V12.0.0202"
 Public Const APP_RELEASE_STATUS As String = "RELEASE_CANDIDATE"
 Public Const APP_RELEASE_CANAL As String = "DESENVOLVIMENTO"
-Public Const APP_RELEASE_ALVO As String = "V12.0.0203"
-Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0202|DESENVOLVIMENTO|V12.0.0203"
+Public Const APP_RELEASE_ALVO As String = "V12.0.0204"
+Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0202|DESENVOLVIMENTO|V12.0.0204"
 ' V12.0.0203 ONDA 5 - carimbo manual do build (sem rodar publicar_vba_import.sh).
 ' V12.0.0203 ONDA 10 - bump auto via IV3_BumpBuildLabel / ImportarPacoteV3_Delta.
 ' V12.0.0203 ONDA 11 - rc1 bump: TAG=v12.0.0203-rc1, STATUS=RELEASE_CANDIDATE,
@@ -186,12 +186,16 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0202|DESENVOLVIMENTO|V12.0
 ' de EMPRESAS_INATIVAS para EMPRESAS, gravando DT_ULT_REATIV e auditoria.
 ' MICRO30-fix1: ClassificaEmpresa passa a ordenar tambem a coluna U para
 ' preservar DT_ULT_REATIV apos a reativacao e classificacao da aba.
-Public Const APP_BUILD_IMPORTADO As String = "f7aa84f+v12.0.0203-rc4-r1-forms-reativ-fix1-classifica-u"
+' V12.0.0204 ONDA 20 MD-20.1-20.5 (2026-05-05) - P0 UI:
+' Reativa_Entidade passa por Svc_Entidade + AUDIT_LOG; reativacao de
+' empresa preserva/restaura credenciamentos por atividade; handlers
+' mutadores ganham guard de reentrada.
+Public Const APP_BUILD_IMPORTADO As String = "f7aa84f+ONDA20.MD20-p0-ui-reativacao"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0203-governanca-testes"
-Public Const APP_BUILD_GERADO_EM As String = "2026-05-04 17:09"
-Public Const APP_RELEASE_TAG As String = "v12.0.0203-rc4"
-Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0203"
-Public Const APP_RELEASE_TEST_KEY As String = "quinteto-v203-rc4-2026-05-04"
+Public Const APP_BUILD_GERADO_EM As String = "2026-05-05 00:00"
+Public Const APP_RELEASE_TAG As String = "v12.0.0204-dev"
+Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0204"
+Public Const APP_RELEASE_TEST_KEY As String = "quinteto-v204-onda20-2026-05-05"
 Public Const APP_GITHUB_REPO_URL As String = "https://github.com/rwv8gscs8g-blip/credenciamento"
 Public Const APP_GITHUB_RELEASE_NOTES_URL As String = APP_GITHUB_REPO_URL & "/tree/main/obsidian-vault/releases"
 

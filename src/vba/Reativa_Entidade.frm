@@ -18,6 +18,7 @@ Attribute mTxtBusca.VB_VarHelpID = -1
 
 ' Evita reentrancia mTxtBusca_Change durante UI_PreencherListaEntidadesInativas.
 Private mListaEntInativCarregando As Boolean
+Private mReativacaoEmAndamento As Boolean
 
 Private Function UI_TextBoxSeExiste(ByVal nome As String) As MSForms.TextBox
     On Error Resume Next
@@ -239,27 +240,9 @@ End Sub
 
 Private Sub R_Lista_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
 On Error GoTo erro_carregamento:
-    ' Copia uma linha canonica para ENTIDADE e remove TODAS as linhas correspondentes em ENTIDADE_INATIVOS
-    ' (duplicatas com mesmo ID; fantasma com ID vazio e mesmo CNPJ).
-    Dim wsInativas As Worksheet
-    Dim wsEntidade As Worksheet
-    Dim linhaDestino As Long
-    Dim estProt As Boolean
-    Dim Senha As String
     Dim entidadeIdReativ As String
     Dim cnpjLista As String
-    Dim cnpjReativ As String
-    Dim linhaDuplicada As Long
-    Dim linhasMesmaChave As Variant
-    Dim qtdLinhasMesmaChave As Long
-    Dim baseLinhas As Long
-    Dim linhaCopia As Long
-    Dim k As Long
-    Dim j As Long
-    Dim nDel As Long
-    Dim linhasDel() As Long
-    Dim tmp As Long
-    Dim idParaDup As String
+    Dim resReativ As TResult
 
     If R_Lista.ListIndex < 0 Then Exit Sub
 
@@ -271,86 +254,27 @@ On Error GoTo erro_carregamento:
         Exit Sub
     End If
 
-    Set wsInativas = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
-    Set wsEntidade = ThisWorkbook.Sheets(SHEET_ENTIDADE)
-
-    linhasMesmaChave = Util_EntidadeInativos_ColetarLinhasMesmaChave(wsInativas, LINHA_DADOS, entidadeIdReativ, cnpjLista)
-    If Not IsArray(linhasMesmaChave) Then GoTo nao_achou
-    baseLinhas = LBound(linhasMesmaChave)
-    qtdLinhasMesmaChave = UBound(linhasMesmaChave) - baseLinhas + 1
-    If qtdLinhasMesmaChave <= 0 Then GoTo nao_achou
-
-    If UI_EntidadeInativasTemConflito(wsInativas, linhasMesmaChave) Then
-        MsgBox "Reativacao bloqueada: existem linhas conflitantes para a mesma entidade em ENTIDADE_INATIVOS." & vbCrLf & _
-               "Faca o saneamento da base antes de reativar.", _
-               vbExclamation, "Integridade de Dados"
-        Exit Sub
-    End If
-
-    linhaCopia = CLng(linhasMesmaChave(baseLinhas))
-    For k = baseLinhas + 1 To UBound(linhasMesmaChave)
-        If CLng(linhasMesmaChave(k)) > linhaCopia Then linhaCopia = CLng(linhasMesmaChave(k))
-    Next k
-
-    cnpjReativ = Trim$(CStr(wsInativas.Cells(linhaCopia, COL_ENT_CNPJ).Value))
-    idParaDup = Trim$(CStr(wsInativas.Cells(linhaCopia, COL_ENT_ID).Value))
-    If Len(idParaDup) = 0 Then idParaDup = entidadeIdReativ
-
-    linhaDuplicada = Util_LinhaDuplicadaIdOuDocumento( _
-                        wsEntidade, _
-                        LINHA_DADOS, _
-                        COL_ENT_ID, _
-                        idParaDup, _
-                        COL_ENT_CNPJ, _
-                        cnpjReativ)
-    If linhaDuplicada > 0 Then
-        MsgBox "Reativa" & ChrW(231) & ChrW(227) & "o bloqueada: j" & ChrW(225) & " existe entidade ativa com o mesmo ID ou CNPJ na aba ENTIDADE." & vbCrLf & _
-               "Linha ativa: " & CStr(linhaDuplicada) & vbCrLf & _
-               "Fa" & ChrW(231) & "a o saneamento da base antes de reativar.", _
-               vbExclamation, "Integridade de Dados"
-        Exit Sub
-    End If
-
     If MsgBox("Tem certeza que deseja REATIVAR esta Entidade?", vbQuestion + vbYesNo, "Reativa" & ChrW(231) & ChrW(227) & "o") <> vbYes Then Exit Sub
 
-    linhaDestino = wsEntidade.Cells(wsEntidade.Rows.count, 1).End(xlUp).row + 1
-    Call Util_PrepararAbaParaEscrita(wsEntidade, estProt, Senha)
-    wsInativas.Rows(linhaCopia).Copy Destination:=wsEntidade.Cells(linhaDestino, 1)
-    Call Util_RestaurarProtecaoAba(wsEntidade, estProt, Senha)
-    Application.CutCopyMode = False
+    If mReativacaoEmAndamento Then
+        Cancel = True
+        MsgBox "Reativacao de entidade ja em andamento. Aguarde a conclusao.", vbInformation, "Reativacao"
+        Exit Sub
+    End If
+    mReativacaoEmAndamento = True
 
-    nDel = qtdLinhasMesmaChave
-    ReDim linhasDel(1 To nDel)
-    For k = 1 To nDel
-        linhasDel(k) = CLng(linhasMesmaChave(baseLinhas + k - 1))
-    Next k
-    For k = 1 To nDel - 1
-        For j = k + 1 To nDel
-            If linhasDel(k) < linhasDel(j) Then
-                tmp = linhasDel(k)
-                linhasDel(k) = linhasDel(j)
-                linhasDel(j) = tmp
-            End If
-        Next j
-    Next k
+    resReativ = ReativarEntidadePorChave(entidadeIdReativ, cnpjLista, "Reativa_Entidade.frm")
+    If Not resReativ.sucesso Then
+        Err.Raise 1004, "Reativar_Entidade", resReativ.mensagem
+    End If
 
-    Call Util_PrepararAbaParaEscrita(wsInativas, estProt, Senha)
-    For k = 1 To nDel
-        If Not Util_ExcluirLinhaSegura(wsInativas, linhasDel(k)) Then
-            Err.Raise 1004, "Reativar_Entidade", "Nao foi possivel excluir linha " & CStr(linhasDel(k)) & " em ENTIDADE_INATIVOS."
-        End If
-    Next k
-    Call Util_RestaurarProtecaoAba(wsInativas, estProt, Senha)
-
-    Call ClassificaEntidade
     MsgBox "Entidade Reativada com sucesso!", vbExclamation, "Reativa" & ChrW(231) & ChrW(227) & "o"
+    mReativacaoEmAndamento = False
     Unload Me
     Exit Sub
 
-nao_achou:
-    MsgBox "Entidade n" & ChrW(227) & "o encontrada nas inativas.", vbExclamation, "Reativa" & ChrW(231) & ChrW(227) & "o"
-    Exit Sub
 erro_carregamento:
+    mReativacaoEmAndamento = False
     MsgBox "Erro ao reativar entidade: " & Err.Description, vbCritical, "Erro"
 End Sub
 

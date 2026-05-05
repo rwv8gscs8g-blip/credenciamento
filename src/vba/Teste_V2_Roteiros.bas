@@ -465,6 +465,8 @@ Public Sub TV2_RunUiSmokeReadOnly(Optional ByVal silencioso As Boolean = False)
         ' V4 (filesystem) independe de VBE; sempre roda.
         TV2_UI_VerificarV4 formNames(i), frmPath, coPath
     Next i
+
+    TV2_UI_VerificarGuardReentrada repoRoot
 End Sub
 
 ' --- Helpers Private TV2_UI_* (MD-17.1.c) ---
@@ -718,6 +720,59 @@ erro:
                   "Leitura sem erro", erMsg, _
                   "Possivel permissao de leitura ou path inacessivel", False
 End Sub
+
+Private Sub TV2_UI_VerificarGuardReentrada(ByVal repoRoot As String)
+    Dim faltantes As String
+    Dim manuais As String
+
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Reativa_Empresa.frm", "mReativacaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Reativa_Entidade.frm", "mReativacaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Altera_Empresa.frm", "mAlteracaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Altera_Empresa.frm", "mInativacaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Altera_Entidade.frm", "mAlteracaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Altera_Entidade.frm", "mInativacaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Limpar_Base.frm", "mLimpezaEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Menu_Principal.frm", "mEncerraOSEmProcessamento", manuais)
+
+    If manuais <> "" Then
+        TV2_LogManual "SMOKE", "CS_UISMOKE_REENTRADA_GUARDS", _
+                      "Verificar guards de reentrada nos forms mutadores", _
+                      "Repo local indisponivel para leitura: " & manuais, _
+                      "Validar manualmente no pacote importado"
+    Else
+        TV2_LogAssert "SMOKE", "CS_UISMOKE_REENTRADA_GUARDS", "AUTO", _
+                      "Verificar guards de reentrada nos forms mutadores", _
+                      "Cada flag tem declaracao, teste If, set True e reset False", _
+                      IIf(faltantes = "", "OK", "FALTANTES=" & faltantes), _
+                      "Evita duplo clique ou chamada repetida criando mutacao duplicada", _
+                      (faltantes = "")
+    End If
+End Sub
+
+Private Function TV2_UI_CheckGuardArquivo( _
+    ByVal repoRoot As String, _
+    ByVal arquivo As String, _
+    ByVal flag As String, _
+    ByRef manuais As String _
+) As String
+    Dim path As String
+    Dim codigo As String
+    Dim falta As String
+
+    path = repoRoot & "\src\vba\" & arquivo
+    If Dir(path) = "" Then
+        manuais = manuais & arquivo & ";"
+        Exit Function
+    End If
+
+    codigo = TV2_UI_LerArquivoTexto(path)
+    If InStr(1, codigo, flag, vbTextCompare) = 0 Then falta = falta & arquivo & ":" & flag & ":DECL;"
+    If InStr(1, codigo, "If " & flag & " Then", vbTextCompare) = 0 Then falta = falta & arquivo & ":" & flag & ":IF;"
+    If InStr(1, codigo, flag & " = True", vbTextCompare) = 0 Then falta = falta & arquivo & ":" & flag & ":TRUE;"
+    If InStr(1, codigo, flag & " = False", vbTextCompare) = 0 Then falta = falta & arquivo & ":" & flag & ":FALSE;"
+
+    TV2_UI_CheckGuardArquivo = falta
+End Function
 
 Private Function TV2_UI_LerArquivoTexto(ByVal path As String) As String
     Dim fnum As Integer
@@ -1049,11 +1104,20 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
     Dim linhaEmpReat23 As Long
     Dim qtdEntAtivas24 As Long
     Dim qtdEntInativas24 As Long
+    Dim qtdItem23 As Long
+    Dim qtdItem25 As Long
+    Dim linhaCred25 As Long
+    Dim wsCred25 As Worksheet
+    Dim estProtCred25 As Boolean
+    Dim senhaCred25 As String
+    Dim resCred25 As TResult
     Dim obtido23 As String
     Dim obtido24 As String
+    Dim obtido25 As String
     Dim obtido21 As String
     Dim ok23 As Boolean
     Dim ok24 As Boolean
+    Dim ok25 As Boolean
     Dim ok21 As Boolean
     Dim senhaFalhaAba As String
 
@@ -1496,6 +1560,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
     empReat23 = LerEmpresa("001", linhaEmpReat23)
     qtdEmpAtivas23 = TV2_CountOcorrenciasRegistro(SHEET_EMPRESAS, PrimeiraLinhaDadosEmpresas(), COL_EMP_ID, "001", COL_EMP_CNPJ, TV2_CNPJEmpresa("001"))
     qtdEmpInativas23 = TV2_CountOcorrenciasRegistro(SHEET_EMPRESAS_INATIVAS, LINHA_DADOS, COL_EMP_ID, "001", COL_EMP_CNPJ, TV2_CNPJEmpresa("001"))
+    qtdItem23 = TV2_QtdCredenciadosNoItem(TV2_AtivCanonA(), "001")
     obtido23 = "SUCESSO_INAT=" & CStr(resInatEmp.sucesso) & _
                "; SUCESSO_PREOS_B=" & CStr(resPre.sucesso) & _
                "; EMP_PREOS_B=" & TV2_EmpIdPreOS(resPre.IdGerado) & _
@@ -1505,6 +1570,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
                "; STATUS_A=" & TV2_StatusEmpresa("001") & _
                "; DT_ULT_REATIV_A=" & IIf(empReat23.DT_ULT_REATIV > CDate(0), Format$(empReat23.DT_ULT_REATIV, "dd/mm/yyyy hh:nn:ss"), "(vazia)") & _
                "; FILA=" & TV2_FilaCsv(TV2_AtivCanonA()) & _
+               "; QTD_CRED_ITEM=" & CStr(qtdItem23) & _
                "; ATIVAS=" & CStr(qtdEmpAtivas23) & _
                "; INATIVAS=" & CStr(qtdEmpInativas23) & _
                "; TOTAL=" & CStr(TV2_CountOcorrenciasEmpresa("001")) & _
@@ -1516,16 +1582,49 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
     ok23 = ok23 And TV2_StatusEmpresa("001") = "ATIVA"
     ok23 = ok23 And empReat23.DT_ULT_REATIV > CDate(0)
     ok23 = ok23 And TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003"
-    ok23 = ok23 And TV2_QtdCredenciadosNoItem(TV2_AtivCanonA(), "001") = 3
+    ok23 = ok23 And qtdItem23 = 3
     ok23 = ok23 And qtdEmpAtivas23 = 1 And qtdEmpInativas23 = 0 And TV2_CountOcorrenciasEmpresa("001") = 1
     ok23 = ok23 And (auditInatDepois - auditInatAntes) = 1
     ok23 = ok23 And (auditReatDepois - auditReatAntes) = 1
     TV2_LogAssert "CANONICO", "CS_23", "AUTO", _
                   "Validar ida e volta de empresa entre ativo e inativo", _
-                  "A some da seleção enquanto inativa e volta com DT_ULT_REATIV preenchida, sem duplicidade cadastral", _
+                  "A some da seleção enquanto inativa e volta com DT_ULT_REATIV preenchida, sem duplicidade cadastral e com 3 credenciamentos ativos no item", _
                   obtido23, _
                   "Fecha ida e volta de empresa com preservação da fila lógica", _
                   ok23
+
+    TV2_PrepararCenarioTriploCanonico
+    Set wsCred25 = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    linhaCred25 = 0
+    For i = LINHA_DADOS To UltimaLinhaAba(SHEET_CREDENCIADOS)
+        If IdsIguais(wsCred25.Cells(i, COL_CRED_EMP_ID).Value, "001") And _
+           IdsIguais(wsCred25.Cells(i, COL_CRED_ATIV_ID).Value, TV2_AtivCanonA()) Then
+            linhaCred25 = i
+            Exit For
+        End If
+    Next i
+    If linhaCred25 > 0 Then
+        Call Util_PrepararAbaParaEscrita(wsCred25, estProtCred25, senhaCred25)
+        wsCred25.Cells(linhaCred25, COL_CRED_ATIV_ID).Value = "X"
+        wsCred25.Cells(linhaCred25, COL_CRED_COD_ATIV_SERV).Value = ""
+        Call Util_RestaurarProtecaoAba(wsCred25, estProtCred25, senhaCred25)
+    End If
+    resCred25 = RestaurarCredenciamentosEmpresa("001", "Teste_V2_Roteiros.CS_25")
+    qtdItem25 = TV2_QtdCredenciadosNoItem(TV2_AtivCanonA(), "001")
+    obtido25 = "LINHA_CRED=" & CStr(linhaCred25) & _
+               "; SUCESSO_RESTAURA=" & CStr(resCred25.sucesso) & _
+               "; MSG=" & resCred25.mensagem & _
+               "; QTD_CRED_ITEM=" & CStr(qtdItem25)
+    ok25 = (linhaCred25 > 0)
+    ok25 = ok25 And Not resCred25.sucesso
+    ok25 = ok25 And InStr(1, resCred25.mensagem, "sem ATIV_ID restauravel", vbTextCompare) > 0
+    ok25 = ok25 And qtdItem25 = 2
+    TV2_LogAssert "CANONICO", "CS_25", "AUTO", _
+                  "Bloquear restauracao silenciosa de credenciamento sem atividade derivavel", _
+                  "Servico falha de forma explicita quando ATIV_ID esta vazio/X e COD_ATIV_SERV nao permite derivar a atividade", _
+                  obtido25, _
+                  "Formaliza a decisao da Onda 20: preservar/restaurar vinculo existente; recredenciamento novo exige acao explicita", _
+                  ok25
 
     TV2_PrepararCenarioTriploCanonico
     auditEntInatAntes = TV2_AuditCount("Entidade Inativada")

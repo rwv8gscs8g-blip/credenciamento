@@ -17,6 +17,7 @@ Private WithEvents mTxtBusca As MSForms.TextBox
 Attribute mTxtBusca.VB_VarHelpID = -1
 
 Private mListaEmpInativCarregando As Boolean
+Private mReativacaoEmAndamento As Boolean
 
 Private Function UI_TextBoxSeExiste(ByVal nome As String) As MSForms.TextBox
     On Error Resume Next
@@ -223,10 +224,7 @@ Private Sub RM_Lista_DblClick(ByVal Cancel As MSForms.ReturnBoolean)
 On Error GoTo erro_carregamento:
     Dim wsInativas As Worksheet
     Dim wsEmpresas As Worksheet
-    Dim wsCred As Worksheet
     Dim linhaDestino As Long
-    Dim linhaCredAtual As Long
-    Dim ultimaLinhaCred As Long
     Dim estProt As Boolean
     Dim Senha As String
     Dim empresaIdReativ As String
@@ -245,6 +243,10 @@ On Error GoTo erro_carregamento:
     Dim idParaDup As String
     Dim idParaCred As String
     Dim resReativ As TResult
+    Dim resCred As TResult
+    Dim copiou As Boolean
+    Dim erroNumero As Long
+    Dim erroMensagem As String
 
     If RM_Lista.ListIndex < 0 Then Exit Sub
 
@@ -258,7 +260,6 @@ On Error GoTo erro_carregamento:
 
     Set wsInativas = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
     Set wsEmpresas = ThisWorkbook.Sheets(SHEET_EMPRESAS)
-    Set wsCred = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
 
     linhasMesmaChave = Util_EmpresaInativos_ColetarLinhasMesmaChave(wsInativas, LINHA_DADOS, empresaIdReativ, cnpjLista)
     If Not IsArray(linhasMesmaChave) Then GoTo nao_achou_emp
@@ -301,15 +302,28 @@ On Error GoTo erro_carregamento:
 
     If MsgBox("Tem certeza que deseja REATIVAR esta Empresa?", vbQuestion + vbYesNo, "Reativa" & ChrW(231) & ChrW(227) & "o") <> vbYes Then Exit Sub
 
+    If mReativacaoEmAndamento Then
+        Cancel = True
+        MsgBox "Reativacao de empresa ja em andamento. Aguarde a conclusao.", vbInformation, "Reativacao"
+        Exit Sub
+    End If
+    mReativacaoEmAndamento = True
+
     linhaDestino = wsEmpresas.Cells(wsEmpresas.Rows.count, 1).End(xlUp).row + 1
     Call Util_PrepararAbaParaEscrita(wsEmpresas, estProt, Senha)
     wsInativas.Rows(linhaCopia).Copy Destination:=wsEmpresas.Cells(linhaDestino, 1)
     Call Util_RestaurarProtecaoAba(wsEmpresas, estProt, Senha)
     Application.CutCopyMode = False
+    copiou = True
 
     resReativ = ReativarLinhaEmpresa(linhaDestino, "Reativa_Empresa.frm")
     If Not resReativ.sucesso Then
         Err.Raise 1004, "Reativar_Empresa", resReativ.mensagem
+    End If
+
+    resCred = RestaurarCredenciamentosEmpresa(idParaCred, "Reativa_Empresa.frm")
+    If Not resCred.sucesso Then
+        Err.Raise 1004, "Reativar_Empresa", resCred.mensagem
     End If
 
     nDel = qtdLinhasMesmaChave
@@ -334,24 +348,10 @@ On Error GoTo erro_carregamento:
         End If
     Next k
     Call Util_RestaurarProtecaoAba(wsInativas, estProt, Senha)
-
-    ultimaLinhaCred = UltimaLinhaAba(SHEET_CREDENCIADOS)
-    If ultimaLinhaCred >= LINHA_DADOS Then
-        Call Util_PrepararAbaParaEscrita(wsCred, estProt, Senha)
-        Call ClassificaCredenciadoInativo
-        For linhaCredAtual = LINHA_DADOS To ultimaLinhaCred
-            If Trim$(CStr(wsCred.Cells(linhaCredAtual, COL_CRED_EMP_ID).Value)) <> "" Then
-                If Len(Trim$(idParaCred)) > 0 Then
-                    If CLng(Val("0" & Trim$(CStr(wsCred.Cells(linhaCredAtual, COL_CRED_EMP_ID).Value)))) = CLng(Val("0" & Trim$(idParaCred))) Then
-                        wsCred.Cells(linhaCredAtual, COL_CRED_ATIV_ID).Value = ""
-                    End If
-                End If
-            End If
-        Next linhaCredAtual
-        Call Util_RestaurarProtecaoAba(wsCred, estProt, Senha)
-    End If
+    copiou = False
 
     MsgBox "Empresa Reativada com sucesso!", vbExclamation, "Reativa" & ChrW(231) & ChrW(227) & "o"
+    mReativacaoEmAndamento = False
     Unload Me
     Exit Sub
 
@@ -359,7 +359,18 @@ nao_achou_emp:
     MsgBox "Empresa n" & ChrW(227) & "o encontrada nas inativas.", vbExclamation, "Reativa" & ChrW(231) & ChrW(227) & "o"
     Exit Sub
 erro_carregamento:
-    MsgBox "Erro ao reativar empresa: " & Err.Description, vbCritical, "Erro"
+    erroNumero = Err.Number
+    erroMensagem = Err.Description
+    On Error Resume Next
+    If copiou Then
+        Call Util_PrepararAbaParaEscrita(wsEmpresas, estProt, Senha)
+        Call Util_ExcluirLinhaSegura(wsEmpresas, linhaDestino)
+        Call Util_RestaurarProtecaoAba(wsEmpresas, estProt, Senha)
+    End If
+    Application.CutCopyMode = False
+    On Error GoTo 0
+    mReativacaoEmAndamento = False
+    MsgBox "Erro ao reativar empresa: " & erroMensagem, vbCritical, "Erro " & CStr(erroNumero)
 End Sub
 
 

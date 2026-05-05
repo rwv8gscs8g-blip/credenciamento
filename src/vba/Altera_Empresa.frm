@@ -19,6 +19,8 @@ Attribute VB_Exposed = False
 Private m_empresaId As String
 Private WithEvents mBtnInativarEmpresa As MSForms.CommandButton
 Attribute mBtnInativarEmpresa.VB_VarHelpID = -1
+Private mAlteracaoEmAndamento As Boolean
+Private mInativacaoEmAndamento As Boolean
 
 Private Sub UserForm_Initialize()
     Call PadronizarRotulosEdicaoEmpresa
@@ -286,7 +288,7 @@ Private Sub M_Alterar_Click()
 On Error GoTo erro_carregamento:
     ' V12.0.0009: usa m_empresaId (armazenado em DefinirDadosEdicaoEmpresa) em vez de
     ' acessar M_Lista do Menu_Principal (que falha dentro de MultiPage).
-    ' Substituido Range.Find por loop normalizado CLng(Val(...)) para robustecer
+    ' Substituido Range.Find por loop com IdsIguais para robustecer
     ' comparacao de IDs numericos vs texto.
     Dim wsEmpAlt As Worksheet
     Dim linhaAlt As Long
@@ -309,14 +311,19 @@ On Error GoTo erro_carregamento:
 
     If MsgBox("Deseja realmente continuar?", vbQuestion + vbYesNo, "Alteração") <> vbYes Then Exit Sub
 
+    If mAlteracaoEmAndamento Then
+        MsgBox "Alteracao de empresa ja em andamento. Aguarde a conclusao.", vbInformation, "Alteracao"
+        Exit Sub
+    End If
+    mAlteracaoEmAndamento = True
+
     Set wsEmpAlt = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     linhaFinalAlt = UltimaLinhaAba(SHEET_EMPRESAS)
     Set EncontrarID = Nothing
 
     For linhaAlt = LINHA_DADOS To linhaFinalAlt
         If Trim$(CStr(wsEmpAlt.Cells(linhaAlt, COL_EMP_ID).Value)) <> "" Then
-            If CLng(Val("0" & Trim$(CStr(wsEmpAlt.Cells(linhaAlt, COL_EMP_ID).Value)))) = _
-               CLng(Val("0" & m_empresaId)) Then
+            If IdsIguais(wsEmpAlt.Cells(linhaAlt, COL_EMP_ID).Value, m_empresaId) Then
                 Set EncontrarID = wsEmpAlt.Cells(linhaAlt, COL_EMP_ID)
                 Exit For
             End If
@@ -325,6 +332,7 @@ On Error GoTo erro_carregamento:
 
     If EncontrarID Is Nothing Then
         MsgBox "Empresa n" & ChrW(227) & "o encontrada na aba EMPRESAS.", vbExclamation, "Alteração"
+        mAlteracaoEmAndamento = False
         Exit Sub
     End If
 
@@ -366,9 +374,11 @@ On Error GoTo erro_carregamento:
 
     Call AtualizarListaEmpresaMenuAtual
     MsgBox "Empresa alterada com sucesso!", vbInformation, "Alterar Empresa"
+    mAlteracaoEmAndamento = False
     Unload Me
 Exit Sub
 erro_carregamento:
+    mAlteracaoEmAndamento = False
     MsgBox "Erro ao alterar empresa: " & Err.Description, vbCritical, "Erro"
 End Sub
 
@@ -376,7 +386,7 @@ Private Sub Empresa_InativarSelecionada()
 On Error GoTo erro_carregamento:
     ' V12.0.0009: usa m_empresaId (armazenado em DefinirDadosEdicaoEmpresa) em vez de
     ' acessar M_Lista do Menu_Principal (que falha dentro de MultiPage).
-    ' Range.Find substituido por loop normalizado CLng(Val(...)) (mesmo padrao de Reativa_Empresa).
+    ' Range.Find substituido por loop com IdsIguais (mesmo padrao de Reativa_Empresa).
     Dim wsEmp As Worksheet
     Dim wsInativas As Worksheet
     Dim wsCred As Worksheet
@@ -410,6 +420,12 @@ On Error GoTo erro_carregamento:
 
     If MsgBox("Tem certeza que deseja Inativar esta Empresa?", vbQuestion + vbYesNo, "Inativar Empresa") <> vbYes Then Exit Sub
 
+    If mInativacaoEmAndamento Then
+        MsgBox "Inativacao de empresa ja em andamento. Aguarde a conclusao.", vbInformation, "Inativar Empresa"
+        Exit Sub
+    End If
+    mInativacaoEmAndamento = True
+
     Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     Set wsInativas = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
     Set wsCred = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
@@ -420,8 +436,7 @@ On Error GoTo erro_carregamento:
     Set EncontrarID = Nothing
     For linhaInativAtual = primeiraLinhaEmp To linhaFinalEmp
         If Trim$(CStr(wsEmp.Cells(linhaInativAtual, COL_EMP_ID).Value)) <> "" Then
-            If CLng(Val("0" & Trim$(CStr(wsEmp.Cells(linhaInativAtual, COL_EMP_ID).Value)))) = _
-               CLng(Val("0" & m_empresaId)) Then
+            If IdsIguais(wsEmp.Cells(linhaInativAtual, COL_EMP_ID).Value, m_empresaId) Then
                 Set EncontrarID = wsEmp.Cells(linhaInativAtual, COL_EMP_ID)
                 Exit For
             End If
@@ -430,6 +445,7 @@ On Error GoTo erro_carregamento:
 
     If EncontrarID Is Nothing Then
         MsgBox "Empresa n" & ChrW(227) & "o encontrada na aba EMPRESAS.", vbExclamation, "Inativação"
+        mInativacaoEmAndamento = False
         Exit Sub
     End If
 
@@ -456,6 +472,7 @@ On Error GoTo erro_carregamento:
 
             If Not Util_PrepararAbaParaEscrita(wsInativas, estProtInativas, senhaInativas) Then
                 MsgBox "Não foi possível preparar EMPRESAS_INATIVAS para escrita.", vbCritical, "Inativação"
+                mInativacaoEmAndamento = False
                 Exit Sub
             End If
             For kDup = 1 To nDelDup
@@ -471,6 +488,7 @@ On Error GoTo erro_carregamento:
     linhaInativa = wsInativas.Cells(wsInativas.Rows.count, 1).End(xlUp).row + 1
     If Not Util_PrepararAbaParaEscrita(wsInativas, estProtInativas, senhaInativas) Then
         MsgBox "Não foi possível preparar EMPRESAS_INATIVAS para escrita.", vbCritical, "Inativação"
+        mInativacaoEmAndamento = False
         Exit Sub
     End If
     EncontrarID.EntireRow.Copy Destination:=wsInativas.Cells(linhaInativa, 1)
@@ -483,6 +501,7 @@ On Error GoTo erro_carregamento:
     ' Remover linha da aba ativa
     If Not Util_PrepararAbaParaEscrita(wsEmp, estProtEmp, senhaEmp) Then
         MsgBox "Não foi possível preparar EMPRESAS para escrita.", vbCritical, "Inativação"
+        mInativacaoEmAndamento = False
         Exit Sub
     End If
     If Not Util_ExcluirLinhaSegura(wsEmp, EncontrarID.row) Then
@@ -493,10 +512,11 @@ On Error GoTo erro_carregamento:
     ' V12.0.0007: desproteger CREDENCIADOS antes do sort + escrita de inativacao.
     ' ClassificaCredenciadoInativo usa Sort.SortFields.Add2; aba protegida pode rejeitar Sort
     ' mesmo com UserInterfaceOnly:=True em certas versoes do Excel.
-    ' Comparacao de ID usa CLng(Val(...)) (normalizada) em vez de CStr direto (fragil
+    ' Comparacao de ID usa IdsIguais em vez de CStr direto (fragil
     ' quando o ID e "001" texto vs 1 numerico).
     If Not Util_PrepararAbaParaEscrita(wsCred, estProtCred, senhaCred) Then
         MsgBox "Não foi possível preparar CREDENCIADOS para escrita.", vbCritical, "Inativação"
+        mInativacaoEmAndamento = False
         Exit Sub
     End If
     Call ClassificaCredenciadoInativo
@@ -504,7 +524,7 @@ On Error GoTo erro_carregamento:
     If ultimaLinhaCred >= LINHA_DADOS Then
         For linhaCredAtual = LINHA_DADOS To ultimaLinhaCred
             If Trim$(CStr(wsCred.Cells(linhaCredAtual, COL_CRED_EMP_ID).Value)) <> "" Then
-                If CLng(Val("0" & Trim$(CStr(wsCred.Cells(linhaCredAtual, COL_CRED_EMP_ID).Value)))) = CLng(Val("0" & Trim$(ID_Empresa))) Then
+                If IdsIguais(wsCred.Cells(linhaCredAtual, COL_CRED_EMP_ID).Value, ID_Empresa) Then
                     wsCred.Cells(linhaCredAtual, COL_CRED_ATIV_ID).Value = "X"
                 End If
             End If
@@ -514,9 +534,11 @@ On Error GoTo erro_carregamento:
 
     Call ClassificaEmpresa
     MsgBox "Empresa inativada com sucesso!", vbExclamation, "Inativação"
+    mInativacaoEmAndamento = False
     Unload Me
 Exit Sub
 erro_carregamento:
+    mInativacaoEmAndamento = False
     MsgBox "Erro ao inativar empresa: " & Err.Description, vbCritical, "Erro"
 End Sub
 Private Sub M_Empresa_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)

@@ -14,6 +14,8 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private m_entidadeId As String
+Private mAlteracaoEmAndamento As Boolean
+Private mInativacaoEmAndamento As Boolean
 
 Public Sub DefinirIdEdicaoEntidade(ByVal entidadeId As String)
     m_entidadeId = Trim$(entidadeId)
@@ -44,14 +46,19 @@ On Error GoTo erro_carregamento:
 
     If MsgBox("Deseja realmente continuar?", vbQuestion + vbYesNo, "Altera" & ChrW(231) & ChrW(227) & "o") <> vbYes Then Exit Sub
 
+    If mAlteracaoEmAndamento Then
+        MsgBox "Alteracao de entidade ja em andamento. Aguarde a conclusao.", vbInformation, "Alteracao"
+        Exit Sub
+    End If
+    mAlteracaoEmAndamento = True
+
     Set wsEnt = ThisWorkbook.Sheets(SHEET_ENTIDADE)
     linhaFinal = UltimaLinhaAba(SHEET_ENTIDADE)
     Set EncontrarID = Nothing
 
     For linhaAtual = LINHA_DADOS To linhaFinal
         If Trim$(CStr(wsEnt.Cells(linhaAtual, COL_ENT_ID).Value)) <> "" Then
-            If CLng(Val("0" & Trim$(CStr(wsEnt.Cells(linhaAtual, COL_ENT_ID).Value)))) = _
-               CLng(Val("0" & m_entidadeId)) Then
+            If IdsIguais(wsEnt.Cells(linhaAtual, COL_ENT_ID).Value, m_entidadeId) Then
                 Set EncontrarID = wsEnt.Cells(linhaAtual, COL_ENT_ID)
                 Exit For
             End If
@@ -60,6 +67,7 @@ On Error GoTo erro_carregamento:
 
     If EncontrarID Is Nothing Then
         MsgBox "Entidade n" & ChrW(227) & "o encontrada na aba ENTIDADE.", vbExclamation, "Altera" & ChrW(231) & ChrW(227) & "o"
+        mAlteracaoEmAndamento = False
         Exit Sub
     End If
 
@@ -88,12 +96,14 @@ On Error GoTo erro_carregamento:
     Call Util_RestaurarProtecaoAba(wsEnt, estProt, senhaProt)
 
     Call AtualizarListaEntidadeMenuAtual
+    mAlteracaoEmAndamento = False
     Unload Me
 Exit Sub
 erro_carregamento:
     On Error Resume Next
     Call Util_RestaurarProtecaoAba(wsEnt, estProt, senhaProt)
     On Error GoTo 0
+    mAlteracaoEmAndamento = False
 End Sub
 
 Private Sub C_Inativa_Entidade_Click()
@@ -125,6 +135,12 @@ On Error GoTo erro_carregamento:
 
     If MsgBox("Tem certeza que deseja Inativar esta Entidade?", vbQuestion + vbYesNo, "Inativar Entidade") <> vbYes Then Exit Sub
 
+    If mInativacaoEmAndamento Then
+        MsgBox "Inativacao de entidade ja em andamento. Aguarde a conclusao.", vbInformation, "Inativar Entidade"
+        Exit Sub
+    End If
+    mInativacaoEmAndamento = True
+
     Set wsEnt = ThisWorkbook.Sheets(SHEET_ENTIDADE)
     Set wsEntInativas = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
 
@@ -132,8 +148,7 @@ On Error GoTo erro_carregamento:
     Set EncontrarID = Nothing
     For linhaAtual = LINHA_DADOS To linhaFinal
         If Trim$(CStr(wsEnt.Cells(linhaAtual, COL_ENT_ID).Value)) <> "" Then
-            If CLng(Val("0" & Trim$(CStr(wsEnt.Cells(linhaAtual, COL_ENT_ID).Value)))) = _
-               CLng(Val("0" & m_entidadeId)) Then
+            If IdsIguais(wsEnt.Cells(linhaAtual, COL_ENT_ID).Value, m_entidadeId) Then
                 Set EncontrarID = wsEnt.Cells(linhaAtual, COL_ENT_ID)
                 Exit For
             End If
@@ -142,6 +157,7 @@ On Error GoTo erro_carregamento:
 
     If EncontrarID Is Nothing Then
         MsgBox "Entidade n" & ChrW(227) & "o encontrada.", vbExclamation, "Inativação"
+        mInativacaoEmAndamento = False
         Exit Sub
     End If
 
@@ -192,6 +208,7 @@ On Error GoTo erro_carregamento:
 
     Call ClassificaEntidade
     MsgBox "Entidade Inativada com sucesso!", vbExclamation, "Inativa" & ChrW(231) & ChrW(227) & "o"
+    mInativacaoEmAndamento = False
     Unload Me
 Exit Sub
 erro_carregamento:
@@ -199,6 +216,7 @@ erro_carregamento:
     Call Util_RestaurarProtecaoAba(wsEntInativas, estEntInativProt, senhaEntInativ)
     Call Util_RestaurarProtecaoAba(wsEnt, estEntInativProt, senhaEntInativ)
     On Error GoTo 0
+    mInativacaoEmAndamento = False
     MsgBox "Erro ao inativar entidade: " & Err.Description, vbCritical, "Erro"
 End Sub
 

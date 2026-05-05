@@ -1,6 +1,6 @@
 ---
 titulo: Results HBN — ERPs vinculados a readbacks
-ultima-atualizacao: 2026-05-04
+ultima-atualizacao: 2026-05-05
 ---
 
 # Results HBN — Credenciamento
@@ -41,3 +41,4 @@ ultima-atualizacao: 2026-05-04
 | 0026 | MICRO30-fix1 ClassificaEmpresa coluna U / R1 final rc4 | APROVADO_OPERADOR | `0026-onda18-micro30-fix1-classifica-empresa-u.json` | 2026-05-04 |
 | 0027 | Onda 19 publicacao V203 rc4, treinamento e auditoria V204 | APROVADO_OPERADOR | `0027-onda19-publicacao-v203-treinamento-auditoria-v204.json` | 2026-05-04 |
 | 0028 | Roadmaps V204 pos-auditorias cruzadas 64/65 | APROVADO_OPERADOR | `0028-onda20-roadmaps-v204-pos-auditorias.json` | 2026-05-05 |
+| 0029 | Onda 20 V204 P0 UI MICRO31 entregue para importacao | ENTREGUE_IMPORT | `0029-onda20-v204-p0-ui-micro31.json` | 2026-05-05 |

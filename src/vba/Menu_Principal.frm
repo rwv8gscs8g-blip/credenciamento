@@ -37,6 +37,7 @@ Private mAvaliacaoDefaultsDtFechamento As String
 Private mAvaliacaoDefaultsDtPagamento As String
 Private mAvaliacaoDefaultsQtExecutada As Double
 Private mAvaliacaoDefaultsValorExecutado As Currency
+Private mEncerraOSEmProcessamento As Boolean
 Private Const SHEET_REL_UI As String = "RELATORIO"
 Private Const PRAZO_PADRAO_OS_DIAS As Long = 30
 
@@ -775,6 +776,12 @@ Private Sub EncerraOS_Click()
     Dim payloadJustifDivergencia As String
     Dim payloadMediaNotas As Double
 
+    If mEncerraOSEmProcessamento Then
+        MsgBox "Avaliacao de OS ja em andamento. Aguarde a conclusao.", vbInformation, "Avaliação"
+        Exit Sub
+    End If
+    mEncerraOSEmProcessamento = True
+
     If AV_Lista.ListIndex < 0 Then
         MsgBox "Selecione uma OS para avaliar!", vbExclamation, "Avaliação"
         GoTo limpar
@@ -960,6 +967,7 @@ errPrint:
     GoTo limpar
 
 limpar:
+    mEncerraOSEmProcessamento = False
     AVCNPJ = Empty: AVEmpresa = Empty: AV_N_Empenho = Empty
     AV_DataFechamento = Empty: AV_QtHoras = Empty: AV_Vl_OS = Empty
     AV_Dt_Pagto = Empty: AV_Nota1 = Empty: AV_Nota2 = Empty

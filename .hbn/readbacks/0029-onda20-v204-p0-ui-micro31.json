@@ -1,0 +1,47 @@
+{
+  "hbn_protocol": "HBN-0.3.1",
+  "readback_id": "0029-onda20-v204-p0-ui-micro31",
+  "data": "2026-05-05",
+  "agente": "Codex CLI",
+  "frente": "Frente 1 Credenciamento",
+  "track": "safe_track",
+  "status": "confirmed",
+  "hearback_operador": {
+    "data": "2026-05-05",
+    "resumo": "Operador aprovou as ondas 20 a 25 e a decisao recomendada: reativacao de empresa preserva/restaura COL_CRED_ATIV_ID; recredenciamento novo deve ser explicito e auditado."
+  },
+  "escopo": {
+    "tema": "V204 Onda 20 P0 UI: reativacao via servico, preservacao de credenciamento e guards de reentrada",
+    "base": "V12.0.0203-rc4",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO31",
+    "build": "f7aa84f+ONDA20.MD20-p0-ui-reativacao"
+  },
+  "arquivos_planejados": [
+    "src/vba/Svc_Entidade.bas",
+    "src/vba/Svc_Rodizio.bas",
+    "src/vba/Reativa_Entidade.frm",
+    "src/vba/Reativa_Empresa.frm",
+    "src/vba/Altera_Empresa.frm",
+    "src/vba/Altera_Entidade.frm",
+    "src/vba/Limpar_Base.frm",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO31.txt"
+  ],
+  "criterios_aceite": [
+    "Reativa_Entidade delega a reativacao para servico com AUDIT_LOG",
+    "Reativa_Empresa nao zera COL_CRED_ATIV_ID silenciosamente",
+    "Restauracao de credenciamento falha explicitamente se ATIV_ID nao puder ser derivado",
+    "Forms mutadores tem guard de reentrada",
+    "src/vba e local-ai/vba_import ficam sincronizados por shasum",
+    "Operador importa MICRO31, compila e roda Quinteto minimo"
+  ],
+  "fora_de_escopo": [
+    "Implementar transacoes OS/PreOS da Onda 21",
+    "Backfill de dados legados da Onda 22",
+    "Promover V12.0.0204 para release final antes dos gates das ondas 20-25"
+  ]
+}

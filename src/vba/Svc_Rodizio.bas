@@ -456,6 +456,114 @@ Erro:
     ReativarLinhaEmpresa = res
 End Function
 
+Public Function RestaurarCredenciamentosEmpresa( _
+    ByVal EMP_ID As String, _
+    Optional ByVal origem As String = "Svc_Rodizio" _
+) As TResult
+    Dim res As TResult
+    Dim ws As Worksheet
+    Dim i As Long
+    Dim ult As Long
+    Dim atual As String
+    Dim codItem As String
+    Dim ativRestaurada As String
+    Dim qtdLinhas As Long
+    Dim qtdRestaurada As Long
+    Dim precisaRestaurar As Boolean
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim abaPreparada As Boolean
+    Dim erroNumero As Long
+    Dim erroMensagem As String
+
+    On Error GoTo Erro
+
+    EMP_ID = Trim$(CStr(EMP_ID))
+    If EMP_ID = "" Then
+        res.sucesso = True
+        res.mensagem = "Sem EMP_ID para restaurar credenciamentos."
+        RestaurarCredenciamentosEmpresa = res
+        Exit Function
+    End If
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    ult = UltimaLinhaAba(SHEET_CREDENCIADOS)
+
+    For i = LINHA_DADOS To ult
+        If IdsIguais(ws.Cells(i, COL_CRED_EMP_ID).Value, EMP_ID) Then
+            qtdLinhas = qtdLinhas + 1
+            atual = Trim$(CStr(ws.Cells(i, COL_CRED_ATIV_ID).Value))
+            precisaRestaurar = (atual = "" Or UCase$(atual) = "X")
+            If precisaRestaurar Then
+                codItem = Trim$(CStr(ws.Cells(i, COL_CRED_COD_ATIV_SERV).Value))
+                ativRestaurada = Left$(codItem, 3)
+                If Len(codItem) < 3 Or Len(ativRestaurada) = 0 Or UCase$(ativRestaurada) = "X" Then
+                    res.sucesso = False
+                    res.mensagem = "Credenciamento sem ATIV_ID restauravel para EMP_ID=" & EMP_ID & " na linha " & CStr(i) & "."
+                    RestaurarCredenciamentosEmpresa = res
+                    Exit Function
+                End If
+            End If
+        End If
+    Next i
+
+    If qtdLinhas = 0 Then
+        res.sucesso = True
+        res.mensagem = "Nenhum credenciamento encontrado para EMP_ID=" & EMP_ID & "."
+        RestaurarCredenciamentosEmpresa = res
+        Exit Function
+    End If
+
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar CREDENCIADOS para restaurar credenciamentos."
+        RestaurarCredenciamentosEmpresa = res
+        Exit Function
+    End If
+    abaPreparada = True
+
+    For i = LINHA_DADOS To ult
+        If IdsIguais(ws.Cells(i, COL_CRED_EMP_ID).Value, EMP_ID) Then
+            atual = Trim$(CStr(ws.Cells(i, COL_CRED_ATIV_ID).Value))
+            If atual = "" Or UCase$(atual) = "X" Then
+                codItem = Trim$(CStr(ws.Cells(i, COL_CRED_COD_ATIV_SERV).Value))
+                ativRestaurada = Left$(codItem, 3)
+                ws.Cells(i, COL_CRED_ATIV_ID).Value = ativRestaurada
+                qtdRestaurada = qtdRestaurada + 1
+            End If
+        End If
+    Next i
+
+    If qtdRestaurada > 0 Then ClassificaCredenciadoOrdem
+
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    abaPreparada = False
+
+    If qtdRestaurada > 0 Then
+        RegistrarEvento EVT_TRANSACAO, ENT_CRED, EMP_ID, _
+                        "CRED_ATIV_ID vazio/X em reativacao", _
+                        "CRED_ATIV_ID restaurado de COD_ATIV_SERV; linhas=" & CStr(qtdRestaurada), _
+                        origem
+    End If
+
+    res.sucesso = True
+    res.mensagem = "Credenciamentos preservados/restaurados para EMP_ID=" & EMP_ID & "; linhas=" & CStr(qtdLinhas) & "; restaurados=" & CStr(qtdRestaurada)
+    res.IdGerado = EMP_ID
+    RestaurarCredenciamentosEmpresa = res
+    Exit Function
+
+Erro:
+    erroNumero = Err.Number
+    erroMensagem = Err.Description
+    On Error Resume Next
+    If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    res.sucesso = False
+    res.mensagem = "Erro em RestaurarCredenciamentosEmpresa: " & erroMensagem
+    res.CodigoErro = erroNumero
+    RestaurarCredenciamentosEmpresa = res
+End Function
+
 ' ============================================================
 ' SEÇÃO 4: HELPERS PRIVADOS
 ' ============================================================

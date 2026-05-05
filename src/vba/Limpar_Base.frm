@@ -13,7 +13,10 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
+Private mLimpezaEmAndamento As Boolean
+
 Private Sub CommandButton1_Click()
+On Error GoTo erro_limpeza
 
   If Cod_Senha <> "sebrae2024" Then
     MsgBox "A senha est" & ChrW$(225) & " incorreta!"
@@ -22,10 +25,22 @@ Private Sub CommandButton1_Click()
     Me.Hide
     Exit Sub
   Else
+    If mLimpezaEmAndamento Then
+      MsgBox "Limpeza da base ja em andamento. Aguarde a conclusao.", vbInformation, "Limpar Base"
+      Exit Sub
+    End If
+    mLimpezaEmAndamento = True
     Me.Hide
     Call Limpa_Base
   End If
+  mLimpezaEmAndamento = False
   Cod_Senha = ""
+  Exit Sub
+
+erro_limpeza:
+  mLimpezaEmAndamento = False
+  Cod_Senha = ""
+  MsgBox "Erro ao limpar base: " & Err.Description, vbCritical, "Limpar Base"
 End Sub
 
 

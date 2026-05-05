@@ -1,0 +1,56 @@
+{
+  "execution_id": "0029-exec-onda20-v204-p0-ui-micro31",
+  "agent_id": "codex-cli",
+  "readback_id": "0029-onda20-v204-p0-ui-micro31",
+  "action": "Implementar Onda 20 V204 P0 UI e entregar manifesto MICRO31 para importacao no workbook.",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "high",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "V12.0.0203-rc4",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO31",
+    "build": "f7aa84f+ONDA20.MD20-p0-ui-reativacao"
+  },
+  "validation": {
+    "local_static_checks": [
+      "src_vba_to_local_ai_shasum_match_11_pairs",
+      "manifest_MICRO31_created",
+      "json_readback_result_valid",
+      "CRLF_preserved_for_changed_vba_and_docs"
+    ],
+    "operator_gate_pending": [
+      "ImportarPacoteV3_Delta \"MICRO31\", \"f7aa84f+ONDA20.MD20-p0-ui-reativacao\"",
+      "VBE > Depurar > Compilar VBAProject",
+      "CT_ValidarRelease_QuintetoMinimo"
+    ],
+    "expected_quinteto_syntax": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+  },
+  "files_changed": [
+    "src/vba/Svc_Entidade.bas",
+    "src/vba/Svc_Rodizio.bas",
+    "src/vba/Reativa_Entidade.frm",
+    "src/vba/Reativa_Empresa.frm",
+    "src/vba/Altera_Empresa.frm",
+    "src/vba/Altera_Entidade.frm",
+    "src/vba/Limpar_Base.frm",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO31.txt",
+    "local-ai/vba_import/001-modulo/ABM-Svc_Entidade.bas",
+    "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAF-Reativa_Entidade.frm",
+    "local-ai/vba_import/002-formularios/AAH-Reativa_Empresa.frm",
+    "local-ai/vba_import/002-formularios/AAG-Altera_Empresa.frm",
+    "local-ai/vba_import/002-formularios/AAE-Altera_Entidade.frm",
+    "local-ai/vba_import/002-formularios/AAJ-Limpar_Base.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm"
+  ],
+  "created_at": "2026-05-05T11:07:38-0300"
+}

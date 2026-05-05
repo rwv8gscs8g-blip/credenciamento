@@ -629,8 +629,9 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "CS_20", "CANONICO", "COMPLETO", "AUTO", "Cadastro", "Empresa inativa fica fora do rodízio", "Base canônica limpa com A marcada como INATIVA", "Validar filtro cadastral terminal no item canônico", "B escolhida; A inativa; posição preservada", "Isola o efeito do status global INATIVA", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_21", "CANONICO", "COMPLETO", "AUTO", "Auditoria", "Completude mínima das famílias de evento", "Base canônica limpa com fluxo controlado de recusa, expiração, OS, avaliação, suspensão, inativação e rollback", "Validar presença mínima das famílias críticas no AUDIT_LOG", "Famílias críticas presentes e capturadas por cenário", "Fecha a lacuna de completude do Audit_Log", "AUTOMATIZADO_0203", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_22", "CANONICO", "COMPLETO", "AUTO", "Integridade", "Associação da atividade preservada em múltiplas emissões", "Item canônico emitido repetidamente", "Validar vínculo estável entre atividade e serviço", "ATIV_ID e SERV_ID corretos em todas as emissões", "Protege contra regressão de CNAE/CAD_SERV", "AUTOMATIZADO_0203", "Executado na suíte canônica"
-    TV2_AddCatalogo ws, nr, "CS_23", "CANONICO", "COMPLETO", "AUTO", "Cadastro", "Empresa faz ida e volta entre ativo e inativo", "Base canônica limpa; empresa A inativada e depois reativada", "Validar inativação terminal até reativação sem duplicidade semântica", "A some da seleção; volta a ser escolhida após reativação; cadastro permanece único", "Fecha ida e volta cadastral de empresa com preservação da fila lógica", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_23", "CANONICO", "COMPLETO", "AUTO", "Cadastro", "Empresa faz ida e volta entre ativo e inativo", "Base canônica limpa; empresa A inativada e depois reativada", "Validar inativação terminal até reativação sem duplicidade semântica", "A some da seleção; volta a ser escolhida após reativação; cadastro permanece único; 3 credenciamentos ativos no item", "Fecha ida e volta cadastral de empresa com preservação da fila lógica", "AUTOMATIZADO_0204", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "CS_24", "CANONICO", "COMPLETO", "AUTO", "Cadastro", "Entidade faz ida e volta entre ativo e inativo", "Base canônica limpa; entidade 001 inativada e depois reativada", "Validar bloqueio e retomada de emissão por entidade inativa", "Emissão falha com entidade inativa e volta a funcionar após reativação", "Fecha ida e volta cadastral de entidade com rastreabilidade explícita", "AUTOMATIZADO_0203", "Executado na suíte canônica"
+    TV2_AddCatalogo ws, nr, "CS_25", "CANONICO", "COMPLETO", "AUTO", "Cadastro", "Credenciamento sem atividade derivavel falha", "Base canônica limpa; um credenciamento de A fica com ATIV_ID=X e COD_ATIV_SERV vazio", "Validar que restauracao de credenciamento nao inventa atividade", "Servico falha explicitamente e nao transforma o caso em recredenciamento silencioso", "Formaliza a decisao V204 de preservar/restaurar vinculo existente; novo credenciamento exige acao explicita", "AUTOMATIZADO_0204", "Executado na suíte canônica"
     TV2_AddCatalogo ws, nr, "STR_001", "STRESS", "COMPLETO", "AUTO", "Integridade", "Giros repetidos com recusa e conclusao", "Sequencia deterministica de 12 iteracoes", "Verificar invariantes de fila em repeticao", "IDs 001,002,003 sem duplicidade; 3 credenciamentos no item; ordem relativa integra e posicoes estritamente crescentes", "Captura regressao estrutural em lote", "AUTOMATIZADO_ATUAL", "Executado no stress"
     TV2_AddCatalogo ws, nr, "ASS_001", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do smoke assistido", "Humano acompanha fechamento do menu, status bar e abertura do resultado", "Dar leitura operacional do smoke", "Operador entende o que esta sendo testado", "Suporta homologacao observada", "PREVISTO_V2", "Executar smoke assistido"
     TV2_AddCatalogo ws, nr, "ASS_002", "ASSISTIDO", "ASSISTIDO", "ASSISTIDO", "UI", "Fluxo visual do stress assistido", "Humano acompanha lote deterministico sem precisar abrir o menu", "Dar leitura operacional do stress", "Operador acompanha o teste de repeticao sem perder contexto", "Suporta homologacao observada", "PREVISTO_V2", "Executar stress assistido"
@@ -1643,19 +1644,26 @@ Public Function TV2_InativarEmpresaCadastro(ByVal empId As String) As TResult
     Dim res As TResult
     Dim wsOrigem As Worksheet
     Dim wsDestino As Worksheet
+    Dim wsCred As Worksheet
     Dim linhaOrigem As Long
     Dim linhaDestino As Long
     Dim linhaDuplicada As Long
+    Dim linhaCred As Long
+    Dim ultimaLinhaCred As Long
     Dim estavaProtegidaOrigem As Boolean
     Dim estavaProtegidaDestino As Boolean
+    Dim estavaProtegidaCred As Boolean
     Dim senhaOrigem As String
     Dim senhaDestino As String
+    Dim senhaCred As String
     Dim cnpj As String
     Dim razao As String
     Dim copiou As Boolean
+    Dim credPreparado As Boolean
 
     Set wsOrigem = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     Set wsDestino = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
+    Set wsCred = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
     linhaOrigem = TV2_LinhaPorIdAba(SHEET_EMPRESAS, PrimeiraLinhaDadosEmpresas(), COL_EMP_ID, empId)
     If linhaOrigem = 0 Then
         res.mensagem = "Empresa não encontrada em EMPRESAS: " & empId
@@ -1675,6 +1683,8 @@ Public Function TV2_InativarEmpresaCadastro(ByVal empId As String) As TResult
     On Error GoTo Erro
     If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
     If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
+    If Not Util_PrepararAbaParaEscrita(wsCred, estavaProtegidaCred, senhaCred) Then GoTo erroPreparacao
+    credPreparado = True
 
     linhaDestino = TV2_NextDataRow(SHEET_EMPRESAS_INATIVAS)
     TV2_CopiarLinhaValores wsOrigem, linhaOrigem, wsDestino, linhaDestino, COL_EMP_DT_ULT_REATIV
@@ -1686,6 +1696,15 @@ Public Function TV2_InativarEmpresaCadastro(ByVal empId As String) As TResult
     If Not Util_ExcluirLinhaSegura(wsOrigem, linhaOrigem) Then
         Err.Raise 1004, "TV2_InativarEmpresaCadastro", "Falha ao remover empresa da aba ativa."
     End If
+
+    ultimaLinhaCred = UltimaLinhaAba(SHEET_CREDENCIADOS)
+    For linhaCred = LINHA_DADOS To ultimaLinhaCred
+        If IdsIguais(wsCred.Cells(linhaCred, COL_CRED_EMP_ID).Value, empId) Then
+            wsCred.Cells(linhaCred, COL_CRED_ATIV_ID).Value = "X"
+        End If
+    Next linhaCred
+    Util_RestaurarProtecaoAba wsCred, estavaProtegidaCred, senhaCred
+    credPreparado = False
 
     Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
     Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
@@ -1708,6 +1727,7 @@ erroPreparacao:
 Erro:
     On Error Resume Next
     If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
+    If credPreparado Then Util_RestaurarProtecaoAba wsCred, estavaProtegidaCred, senhaCred
     Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
     Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
     On Error GoTo 0
@@ -1757,6 +1777,11 @@ Public Function TV2_ReativarEmpresaCadastro(ByVal empId As String) As TResult
     copiou = True
 
     res = ReativarLinhaEmpresa(linhaDestino, "Teste_V2_Engine")
+    If Not res.sucesso Then
+        Err.Raise 1004, "TV2_ReativarEmpresaCadastro", res.mensagem
+    End If
+
+    res = RestaurarCredenciamentosEmpresa(empId, "Teste_V2_Engine")
     If Not res.sucesso Then
         Err.Raise 1004, "TV2_ReativarEmpresaCadastro", res.mensagem
     End If
@@ -1869,19 +1894,10 @@ End Function
 Public Function TV2_ReativarEntidadeCadastro(ByVal entId As String) As TResult
     Dim res As TResult
     Dim wsOrigem As Worksheet
-    Dim wsDestino As Worksheet
     Dim linhaOrigem As Long
-    Dim linhaDestino As Long
-    Dim linhaDuplicada As Long
-    Dim estavaProtegidaOrigem As Boolean
-    Dim estavaProtegidaDestino As Boolean
-    Dim senhaOrigem As String
-    Dim senhaDestino As String
     Dim cnpj As String
-    Dim copiou As Boolean
 
     Set wsOrigem = ThisWorkbook.Sheets(SHEET_ENTIDADE_INATIVOS)
-    Set wsDestino = ThisWorkbook.Sheets(SHEET_ENTIDADE)
     linhaOrigem = TV2_LinhaPorIdAba(SHEET_ENTIDADE_INATIVOS, LINHA_DADOS, COL_ENT_ID, entId)
     If linhaOrigem = 0 Then
         res.mensagem = "Entidade não encontrada em ENTIDADE_INATIVOS: " & entId
@@ -1890,53 +1906,7 @@ Public Function TV2_ReativarEntidadeCadastro(ByVal entId As String) As TResult
     End If
 
     cnpj = CStr(wsOrigem.Cells(linhaOrigem, COL_ENT_CNPJ).Value)
-    linhaDuplicada = Util_LinhaDuplicadaIdOuDocumento(wsDestino, LINHA_DADOS, COL_ENT_ID, entId, COL_ENT_CNPJ, cnpj)
-    If linhaDuplicada > 0 Then
-        res.mensagem = "Entidade já existe em ENTIDADE: " & entId
-        TV2_ReativarEntidadeCadastro = res
-        Exit Function
-    End If
-
-    On Error GoTo Erro
-    If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
-    If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
-
-    linhaDestino = TV2_NextDataRow(SHEET_ENTIDADE)
-    TV2_CopiarLinhaValores wsOrigem, linhaOrigem, wsDestino, linhaDestino, COL_ENT_DT_CAD
-    copiou = True
-
-    If Not Util_ExcluirLinhaSegura(wsOrigem, linhaOrigem) Then
-        Err.Raise 1004, "TV2_ReativarEntidadeCadastro", "Falha ao remover entidade da aba inativa."
-    End If
-
-    Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
-    Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
-    copiou = False
-
-    ClassificaEntidade
-    RegistrarEvento EVT_REATIVACAO, ENT_ENTIDADE, entId, _
-                    "ABA=ENTIDADE_INATIVOS", _
-                    "ABA=ENTIDADE; ORIGEM=Teste_V2_Engine", _
-                    "Teste_V2_Engine"
-
-    res.sucesso = True
-    res.mensagem = "Entidade reativada com sucesso: " & entId
-    TV2_ReativarEntidadeCadastro = res
-    Exit Function
-
-erroPreparacao:
-    Err.Raise 1004, "TV2_ReativarEntidadeCadastro", "Não foi possível preparar as abas de entidade."
-
-Erro:
-    On Error Resume Next
-    If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
-    Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
-    Util_RestaurarProtecaoAba wsOrigem, estavaProtegidaOrigem, senhaOrigem
-    On Error GoTo 0
-    res.sucesso = False
-    res.mensagem = "Erro ao reativar entidade: " & Err.Description
-    res.CodigoErro = Err.Number
-    TV2_ReativarEntidadeCadastro = res
+    TV2_ReativarEntidadeCadastro = ReativarEntidadePorChave(entId, cnpj, "Teste_V2_Engine")
 End Function
 
 Private Function TV2_Pad3(ByVal valor As Variant) As String
@@ -2325,8 +2295,9 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "CS_20", "AUTO", "Validar filtro de empresa inativa no cadastro", "Executar a suíte canônica e conferir a linha CS_20", "A inativa; B escolhida; posição de A preservada", "Linhas CS_20 no resultado", "Isola o efeito do status global INATIVA", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_21", "AUTO", "Validar completude mínima do AUDIT_LOG por família", "Executar a suíte canônica e conferir a linha CS_21", "Famílias críticas presentes no rastro operacional do cenário", "Linhas CS_21 no resultado e AUDIT_TESTES", "Dá cobertura auditável mínima às famílias críticas de evento", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_22", "AUTO", "Validar associação preservada em emissões múltiplas", "Executar a suíte canônica e conferir a linha CS_22", "ATIV_ID e SERV_ID corretos em todas as emissões", "Linhas CS_22 no resultado", "Fecha a proteção contra regressão de associação atividade/serviço", "AUTOMATIZADO"
-    TV2_AddRoteiro ws, nr, "CS_23", "AUTO", "Validar ida e volta de empresa entre ativo e inativo", "Executar a suíte canônica e conferir a linha CS_23", "A sai da seleção enquanto inativa e volta a ser escolhida após reativação, sem duplicidade cadastral", "Linhas CS_23 no resultado", "Fecha ida e volta de empresa com preservação da fila lógica", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_23", "AUTO", "Validar ida e volta de empresa entre ativo e inativo", "Executar a suíte canônica e conferir a linha CS_23", "A sai da seleção enquanto inativa e volta a ser escolhida após reativação, sem duplicidade cadastral e com 3 credenciamentos ativos no item", "Linhas CS_23 no resultado", "Fecha ida e volta de empresa com preservação da fila lógica", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_24", "AUTO", "Validar ida e volta de entidade entre ativo e inativo", "Executar a suíte canônica e conferir a linha CS_24", "Emissão falha com entidade inativa e volta a funcionar após reativação, sem duplicidade cadastral", "Linhas CS_24 no resultado", "Fecha ida e volta de entidade com rastreabilidade explícita", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_25", "AUTO", "Bloquear restauracao silenciosa de credenciamento sem atividade", "Executar a suíte canônica e conferir a linha CS_25", "Servico falha quando ATIV_ID esta vazio/X e COD_ATIV_SERV nao permite derivar a atividade", "Linha CS_25 no resultado", "Garante que novo recredenciamento seja acao explicita e auditada", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "STR_001", "AUTO", "Validar repeticao deterministica do rodizio", "Executar Stress deterministico e acompanhar somente se houver falha", "Fila com IDs 001,002,003 sem duplicidade, 3 credenciamentos no item e ordem integra apos cada iteracao", "Linhas STR_001 no resultado", "Captura degradacao estrutural em lote", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "ASS_001", "ASSISTIDO", "Acompanhar visualmente o smoke assistido", "Executar a opcao 2 da central V2 e observar a tela durante toda a execucao", "Menu principal fechado; status bar evoluindo; aba de resultado assumindo o foco ao final", "Fechamento do menu, transicao para planilha e feedback visual", "Prova que o operador consegue assistir ao smoke sem interferencia do formulario", "ASSISTIDO"
     TV2_AddRoteiro ws, nr, "ASS_002", "ASSISTIDO", "Acompanhar visualmente o stress assistido", "Executar a opcao 4 da central V2 e acompanhar apenas o giro da fila e a abertura do resultado ao final", "Sem erro fatal; resultados STR_001 visiveis; menu principal fechado durante toda a bateria", "Status bar, aba RESULTADO_QA_V2 e ausencia do formulario do menu", "Permite homologacao assistida do lote deterministico", "ASSISTIDO"
