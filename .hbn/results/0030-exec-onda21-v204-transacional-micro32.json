@@ -1,0 +1,42 @@
+{
+  "execution_id": "0030-exec-onda21-v204-transacional-micro32",
+  "data": "2026-05-05",
+  "readback_id": "0030-onda21-v204-transacional-micro32",
+  "action": "Implementar MICRO32 da Onda 21 V204: GravarStatusEmpresa com TResult e persistencia verificada em suspensao/reativacao.",
+  "status": "ENTREGUE_IMPORT",
+  "changes": {
+    "microdelta": "MICRO32",
+    "build": "f7aa84f+ONDA21.MD21.1-status-empresa-result",
+    "implemented": [
+      "Repo_Empresa.GravarStatusEmpresa agora retorna TResult",
+      "GravarStatusEmpresa valida linha, preparo da aba, restore de protecao e persistencia dos campos gravados",
+      "Svc_Rodizio.Suspender falha explicitamente se a gravacao de status nao persistir",
+      "Svc_Rodizio.ReativarLinhaEmpresa falha explicitamente se GravarStatusEmpresa falhar",
+      "Svc_Rodizio.AvancarFila nao declara sucesso quando Suspender falha apos recusa punivel"
+    ],
+    "validation_local": [
+      "vba_import sincronizado por publicar_vba_import_v2.sh --check",
+      "manifesto MICRO32 gerado"
+    ]
+  },
+  "operator_next_steps": [
+    "ImportarPacoteV3_Delta \"MICRO32\", \"f7aa84f+ONDA21.MD21.1-status-empresa-result\"",
+    "Compilar VBAProject",
+    "CT_ValidarRelease_QuintetoMinimo"
+  ],
+  "expected_gate": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+  "files_changed": [
+    "src/vba/Repo_Empresa.bas",
+    "src/vba/Svc_Rodizio.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO32.txt",
+    "auditoria/03_ondas/onda_21_v204_transacional/30_TECNICO_MICRO32_STATUS_EMPRESA.md",
+    "auditoria/03_ondas/onda_21_v204_transacional/31_PROCEDIMENTO_IMPORT_MICRO32.md",
+    ".hbn/readbacks/0030-onda21-v204-transacional-micro32.json",
+    ".hbn/results/0030-exec-onda21-v204-transacional-micro32.json"
+  ],
+  "next": [
+    "Apos Quinteto verde, iniciar MD-21.2/21.3: AvaliarOS propaga falha de Suspender/AvancarFila",
+    "Depois, MD-21.4 ContarStrikes* com resultado explicito"
+  ]
+}

@@ -1,0 +1,36 @@
+{
+  "readback_id": "0030-onda21-v204-transacional-micro32",
+  "data": "2026-05-05",
+  "agente": "Codex CLI",
+  "bastao": "Frente 1 Credenciamento",
+  "status": "confirmed",
+  "origem_hearback": "Operador confirmou Quinteto verde da MICRO31 e autorizou seguir com as ondas de implementacao.",
+  "escopo": {
+    "versao": "V12.0.0204-dev",
+    "onda": 21,
+    "microdelta": "MICRO32",
+    "tema": "Integridade transacional: GravarStatusEmpresa estruturado e persistencia verificada",
+    "build": "f7aa84f+ONDA21.MD21.1-status-empresa-result"
+  },
+  "entradas_lidas": [
+    ".hbn/relay/INDEX.md",
+    "auditoria/02_planos/29_ROADMAP_IMPLEMENTACAO_V204_2026_05_05.md",
+    "auditoria/03_ondas/onda_20_v204_roadmaps_preparatorios/02_ROADMAP_ONDA_21_TRANSACIONAL.md",
+    "src/vba/Repo_Empresa.bas",
+    "src/vba/Svc_Rodizio.bas",
+    "src/vba/Svc_Avaliacao.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas"
+  ],
+  "fora_de_escopo": [
+    "Rollback completo de PRE_OS/CAD_OS",
+    "ContarStrikes* com resultado estruturado",
+    "Sexteto e baterias adversariais da Onda 23",
+    "Alteracoes em usehbn/* nao relacionadas"
+  ],
+  "gate_planejado": [
+    "Importar MICRO32",
+    "Compilar VBAProject",
+    "Rodar CT_ValidarRelease_QuintetoMinimo"
+  ]
+}

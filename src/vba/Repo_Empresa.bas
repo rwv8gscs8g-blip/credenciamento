@@ -61,21 +61,38 @@ fim:
 End Function
 
 ' Grava STATUS_GLOBAL e campos relacionados na aba EMPRESAS.
-Public Sub GravarStatusEmpresa( _
+Public Function GravarStatusEmpresa( _
     ByVal linhaEmp As Long, _
     ByVal NovoStatus As String, _
     ByVal dtFimSusp As Date, _
     ByVal qtdRecusas As Long, _
     Optional ByVal dtUltReativ As Variant _
-)
+) As TResult
+    Dim res As TResult
     Dim ws As Worksheet
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
+    Dim abaPreparada As Boolean
+    Dim erroNumero As Long
+    Dim erroMensagem As String
 
-    On Error GoTo fim
+    On Error GoTo Erro
 
     Set ws = ThisWorkbook.Sheets(SHEET_EMPRESAS)
-    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then GoTo fim
+    If linhaEmp < PrimeiraLinhaDadosEmpresas() Or linhaEmp > UltimaLinhaAba(SHEET_EMPRESAS) Then
+        res.sucesso = False
+        res.mensagem = "Linha invalida para gravar status de empresa: " & CStr(linhaEmp)
+        GravarStatusEmpresa = res
+        Exit Function
+    End If
+
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar EMPRESAS para gravar status."
+        GravarStatusEmpresa = res
+        Exit Function
+    End If
+    abaPreparada = True
 
     ws.Cells(linhaEmp, COL_EMP_STATUS_GLOBAL).Value = NovoStatus
 
@@ -95,9 +112,66 @@ Public Sub GravarStatusEmpresa( _
 
     ws.Cells(linhaEmp, COL_EMP_DT_ULT_ALT).Value = Now
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    abaPreparada = False
 
-fim:
-End Sub
+    If Trim$(CStr(ws.Cells(linhaEmp, COL_EMP_STATUS_GLOBAL).Value)) <> NovoStatus Then
+        res.sucesso = False
+        res.mensagem = "STATUS_GLOBAL nao confirmou persistencia: esperado=" & NovoStatus & _
+                       "; obtido=" & CStr(ws.Cells(linhaEmp, COL_EMP_STATUS_GLOBAL).Value)
+        GravarStatusEmpresa = res
+        Exit Function
+    End If
+
+    If dtFimSusp > CDate(0) Then
+        If Not IsDate(ws.Cells(linhaEmp, COL_EMP_DT_FIM_SUSP).Value) Then
+            res.sucesso = False
+            res.mensagem = "DT_FIM_SUSP nao confirmou persistencia para EMPRESAS linha " & CStr(linhaEmp)
+            GravarStatusEmpresa = res
+            Exit Function
+        End If
+    Else
+        If Trim$(CStr(ws.Cells(linhaEmp, COL_EMP_DT_FIM_SUSP).Value)) <> "" Then
+            res.sucesso = False
+            res.mensagem = "DT_FIM_SUSP deveria ficar vazia para EMPRESAS linha " & CStr(linhaEmp)
+            GravarStatusEmpresa = res
+            Exit Function
+        End If
+    End If
+
+    If qtdRecusas >= 0 Then
+        If CLng(Val("0" & Trim$(CStr(ws.Cells(linhaEmp, COL_EMP_QTD_RECUSAS).Value)))) <> qtdRecusas Then
+            res.sucesso = False
+            res.mensagem = "QTD_RECUSAS_GLOBAL nao confirmou persistencia para EMPRESAS linha " & CStr(linhaEmp)
+            GravarStatusEmpresa = res
+            Exit Function
+        End If
+    End If
+
+    If IsDate(dtUltReativ) Then
+        If Not IsDate(ws.Cells(linhaEmp, COL_EMP_DT_ULT_REATIV).Value) Then
+            res.sucesso = False
+            res.mensagem = "DT_ULT_REATIV nao confirmou persistencia para EMPRESAS linha " & CStr(linhaEmp)
+            GravarStatusEmpresa = res
+            Exit Function
+        End If
+    End If
+
+    res.sucesso = True
+    res.mensagem = "Status de empresa gravado na linha " & CStr(linhaEmp) & "."
+    GravarStatusEmpresa = res
+    Exit Function
+
+Erro:
+    erroNumero = Err.Number
+    erroMensagem = Err.Description
+    On Error Resume Next
+    If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    res.sucesso = False
+    res.mensagem = "Erro em GravarStatusEmpresa: " & erroMensagem
+    res.CodigoErro = erroNumero
+    GravarStatusEmpresa = res
+End Function
 
 ' Busca empresa por CNPJ. Retorna linha (0 = nao encontrada).
 Public Function BuscarPorCNPJ( _

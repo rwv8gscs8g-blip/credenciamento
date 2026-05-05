@@ -3,6 +3,30 @@
 Este projeto adota o espírito do Keep a Changelog. As mudanças aqui registradas
 tratam apenas da linha pública oficial.
 
+## [v12.0.0204-dev] — em desenvolvimento
+
+### Adicionado
+
+- **Onda 20 / MICRO31** — P0 UI: reativacao de entidade via servico,
+  preservacao/restauracao de credenciamentos na reativacao de empresa e
+  guards de reentrada em forms mutadores.
+
+### Corrigido
+
+- **Onda 21 / MICRO32** — `Repo_Empresa.GravarStatusEmpresa` passa a
+  retornar `TResult` e validar persistencia. `Svc_Rodizio.Suspender` e
+  `ReativarLinhaEmpresa` deixam de declarar sucesso quando a gravacao em
+  `EMPRESAS` falha ou nao confirma o estado esperado.
+- `Svc_Rodizio.AvancarFila` deixa de mascarar falha de `Suspender` apos
+  recusa punivel.
+
+### Validação
+
+- MICRO31 aprovado pelo operador em `VR_20260505_155650`:
+  `V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
+- MICRO32 entregue para importacao como
+  `f7aa84f+ONDA21.MD21.1-status-empresa-result`.
+
 ## [v12.0.0203-rc4] — 2026-05-04
 
 > **Release Candidate para testes manuais formais.** Esta versão corrige

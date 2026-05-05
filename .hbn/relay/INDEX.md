@@ -2,10 +2,10 @@
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1
 proprietario-bastao: Codex CLI (sessao codex-cli-bloco-b-onda18-2026-05-04) — BASTAO RECEBIDO do Opus 4.7 em 2026-05-04T01:34:31-0300; proprietario unico de implementacao da Frente 1 ate devolucao formal via doc 60.
-ciclo-ativo: V12.0.0204-dev Onda 20 P0 UI sob Codex CLI. Roadmaps V204 Onda 20-25 aprovados pelo operador em 2026-05-05; MICRO31 entregue para importacao com reativacao de entidade via servico, preservacao/restauracao de credenciamentos e guards de reentrada.
+ciclo-ativo: V12.0.0204-dev Onda 21 transacional sob Codex CLI. Roadmaps V204 Onda 20-25 aprovados pelo operador em 2026-05-05; MICRO31 aprovado no Quinteto pelo operador em 2026-05-05; MICRO32 entregue para importacao com GravarStatusEmpresa estruturado e persistencia verificada em suspensao/reativacao.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Operador importar MICRO31, compilar e rodar CT_ValidarRelease_QuintetoMinimo. Esperado: V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0. Se verde, iniciar Onda 21 transacional.
-ultima-atualizacao: 2026-05-05T11:07:38-0300 (MICRO31 Onda 20 V204 P0 UI entregue por Codex)
+proxima-acao: Operador importar MICRO32, compilar e rodar CT_ValidarRelease_QuintetoMinimo. Esperado: V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0. Se verde, iniciar MD-21.2/21.3 em AvaliarOS.
+ultima-atualizacao: 2026-05-05T16:20:00-0300 (MICRO32 Onda 21 V204 transacional entregue por Codex)
 ---
 
 > ⚠️ **REGRA INVIOLAVEL (M11 destilada 2026-05-03)**: A IA le `src/vba/`

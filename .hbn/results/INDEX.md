@@ -42,3 +42,4 @@ ultima-atualizacao: 2026-05-05
 | 0027 | Onda 19 publicacao V203 rc4, treinamento e auditoria V204 | APROVADO_OPERADOR | `0027-onda19-publicacao-v203-treinamento-auditoria-v204.json` | 2026-05-04 |
 | 0028 | Roadmaps V204 pos-auditorias cruzadas 64/65 | APROVADO_OPERADOR | `0028-onda20-roadmaps-v204-pos-auditorias.json` | 2026-05-05 |
 | 0029 | Onda 20 V204 P0 UI MICRO31 entregue para importacao | ENTREGUE_IMPORT | `0029-onda20-v204-p0-ui-micro31.json` | 2026-05-05 |
+| 0030 | Onda 21 V204 MICRO32 status empresa estruturado | ENTREGUE_IMPORT | `0030-onda21-v204-transacional-micro32.json` | 2026-05-05 |

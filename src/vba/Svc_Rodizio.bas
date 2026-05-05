@@ -236,6 +236,19 @@ Public Function AvancarFila( _
             If novaRecusaGlobal >= cfg.MAX_RECUSAS Then
                 resSusp = Suspender(EMP_ID)
                 ' Suspensão registra sua própria auditoria
+                If Not resSusp.sucesso Then
+                    RegistrarEvento _
+                        EVT_TRANSACAO, ENT_EMP, EMP_ID, _
+                        "QTD_RECUSAS_GLOBAL=" & CStr(novaRecusaGlobal), _
+                        "FALHA_SUSPENSAO_APOS_RECUSA=" & resSusp.mensagem & _
+                        "; ATIV=" & ATIV_ID, _
+                        "Svc_Rodizio"
+                    res.sucesso = False
+                    res.mensagem = "Falha ao suspender empresa apos recusa: " & resSusp.mensagem
+                    res.CodigoErro = resSusp.CodigoErro
+                    AvancarFila = res
+                    Exit Function
+                End If
             End If
 
             ' Auditoria do avanço com punição (dentro do If Sucesso)
@@ -287,6 +300,9 @@ Public Function Suspender( _
     Dim dtFimSusp As Date
     Dim base As String
     Dim baseTexto As String
+    Dim resGravacao As TResult
+    Dim empDepois As TEmpresa
+    Dim linhaEmpDepois As Long
 
     On Error GoTo Erro
 
@@ -322,7 +338,22 @@ Public Function Suspender( _
     End If
 
     ' Gravar status de suspensão
-    GravarStatusEmpresa linhaEmp, STATUS_EMP_SUSPENSA, dtFimSusp, -1
+    resGravacao = GravarStatusEmpresa(linhaEmp, STATUS_EMP_SUSPENSA, dtFimSusp, -1)
+    If Not resGravacao.sucesso Then
+        res.sucesso = False
+        res.mensagem = "Falha ao gravar suspensao: " & resGravacao.mensagem
+        res.CodigoErro = resGravacao.CodigoErro
+        Suspender = res
+        Exit Function
+    End If
+
+    empDepois = LerEmpresa(EMP_ID, linhaEmpDepois)
+    If linhaEmpDepois = 0 Or empDepois.STATUS_GLOBAL <> STATUS_EMP_SUSPENSA Or empDepois.DT_FIM_SUSP <= CDate(0) Then
+        res.sucesso = False
+        res.mensagem = "Suspensao nao confirmou persistencia para EMP_ID=" & EMP_ID
+        Suspender = res
+        Exit Function
+    End If
 
     ' Auditoria
     RegistrarEvento _
@@ -389,6 +420,7 @@ Public Function ReativarLinhaEmpresa( _
     Dim qtdRecusasAnterior As Long
     Dim dtReativ As Date
     Dim dtGravada As Variant
+    Dim resGravacao As TResult
 
     On Error GoTo Erro
 
@@ -418,7 +450,14 @@ Public Function ReativarLinhaEmpresa( _
 
     ' Reativacao centralizada tambem para fluxos UI que movem a linha
     ' de EMPRESAS_INATIVAS para EMPRESAS antes de chamar o servico.
-    GravarStatusEmpresa linhaEmp, STATUS_EMP_ATIVA, CDate(0), 0, dtReativ
+    resGravacao = GravarStatusEmpresa(linhaEmp, STATUS_EMP_ATIVA, CDate(0), 0, dtReativ)
+    If Not resGravacao.sucesso Then
+        res.sucesso = False
+        res.mensagem = "Falha ao gravar reativacao: " & resGravacao.mensagem
+        res.CodigoErro = resGravacao.CodigoErro
+        ReativarLinhaEmpresa = res
+        Exit Function
+    End If
 
     If Trim$(CStr(ws.Cells(linhaEmp, COL_EMP_STATUS_GLOBAL).Value)) <> STATUS_EMP_ATIVA Then
         Err.Raise 1004, "ReativarLinhaEmpresa", "STATUS_GLOBAL nao foi gravado como ATIVA."
