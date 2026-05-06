@@ -271,6 +271,274 @@ Public Function TemOSAbertaNaAtividade( _
 fim:
 End Function
 
+Public Function RepoOS_DiagnosticarReferenciasCADOS( _
+    ByRef qtdOrfaEmp As Long, _
+    ByRef qtdOrfaAtiv As Long, _
+    ByRef qtdResiduosSemChave As Long, _
+    ByRef detalhes As String _
+) As TResult
+    Dim res As TResult
+    Dim ws As Worksheet
+    Dim setEmp As Object
+    Dim setAtiv As Object
+    Dim ultima As Long
+    Dim linha As Long
+    Dim osId As String
+    Dim empKey As String
+    Dim ativKey As String
+
+    On Error GoTo Erro
+
+    qtdOrfaEmp = 0
+    qtdOrfaAtiv = 0
+    qtdResiduosSemChave = 0
+    detalhes = ""
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
+    Set setEmp = CreateObject("Scripting.Dictionary")
+    Set setAtiv = CreateObject("Scripting.Dictionary")
+
+    RepoOS_CarregarIdsValidos setEmp, SHEET_EMPRESAS, COL_EMP_ID, PrimeiraLinhaDadosEmpresas()
+    RepoOS_CarregarIdsValidos setEmp, SHEET_EMPRESAS_INATIVAS, COL_EMP_ID, LINHA_DADOS
+    RepoOS_CarregarIdsValidos setAtiv, SHEET_ATIVIDADES, COL_ATIV_ID, LINHA_DADOS
+
+    ultima = RepoOS_UltimaLinhaVarredura(ws, COL_OS_JUSTIF_DIV)
+    For linha = LINHA_DADOS To ultima
+        If RepoOS_LinhaSemChaveComDados(ws, linha, COL_OS_JUSTIF_DIV) Then
+            qtdResiduosSemChave = qtdResiduosSemChave + 1
+            RepoOS_AnexarDetalhe detalhes, "RESIDUO linha=" & CStr(linha)
+        Else
+            osId = Trim$(CStr(ws.Cells(linha, COL_OS_ID).Value))
+            If osId <> "" Then
+                empKey = RepoOS_NormalizarChave(ws.Cells(linha, COL_OS_EMP_ID).Value)
+                If empKey = "" Or Not setEmp.Exists(empKey) Then
+                    qtdOrfaEmp = qtdOrfaEmp + 1
+                    RepoOS_AnexarDetalhe detalhes, "ORFA_EMP linha=" & CStr(linha) & ";EMP_ID=" & CStr(ws.Cells(linha, COL_OS_EMP_ID).Value)
+                End If
+
+                ativKey = RepoOS_NormalizarChave(ws.Cells(linha, COL_OS_ATIV_ID).Value)
+                If ativKey = "" Or Not setAtiv.Exists(ativKey) Then
+                    qtdOrfaAtiv = qtdOrfaAtiv + 1
+                    RepoOS_AnexarDetalhe detalhes, "ORFA_ATIV linha=" & CStr(linha) & ";ATIV_ID=" & CStr(ws.Cells(linha, COL_OS_ATIV_ID).Value)
+                End If
+            End If
+        End If
+    Next linha
+
+    res.sucesso = True
+    res.mensagem = "Diagnostico CAD_OS concluido: ORFA_EMP=" & CStr(qtdOrfaEmp) & _
+                   "; ORFA_ATIV=" & CStr(qtdOrfaAtiv) & _
+                   "; RESIDUOS_SEM_CHAVE=" & CStr(qtdResiduosSemChave)
+    RepoOS_DiagnosticarReferenciasCADOS = res
+    Exit Function
+
+Erro:
+    res.sucesso = False
+    res.mensagem = "Erro ao diagnosticar referencias CAD_OS: " & Err.Description
+    res.CodigoErro = Err.Number
+    RepoOS_DiagnosticarReferenciasCADOS = res
+End Function
+
+Public Function RepoOS_LimparResiduosCADOSSemChave( _
+    ByRef qtdLimpas As Long, _
+    ByRef relatorio As String _
+) As TResult
+    Dim res As TResult
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim linha As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim abaPreparada As Boolean
+
+    On Error GoTo Erro
+
+    qtdLimpas = 0
+    relatorio = ""
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
+
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar CAD_OS para limpeza controlada."
+        RepoOS_LimparResiduosCADOSSemChave = res
+        Exit Function
+    End If
+    abaPreparada = True
+
+    ultima = RepoOS_UltimaLinhaVarredura(ws, COL_OS_JUSTIF_DIV)
+    For linha = ultima To LINHA_DADOS Step -1
+        If RepoOS_LinhaSemChaveComDados(ws, linha, COL_OS_JUSTIF_DIV) Then
+            ws.Range(ws.Cells(linha, 1), ws.Cells(linha, COL_OS_JUSTIF_DIV)).ClearContents
+            qtdLimpas = qtdLimpas + 1
+            RepoOS_AnexarDetalhe relatorio, "LIMPA linha=" & CStr(linha)
+        End If
+    Next linha
+
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    abaPreparada = False
+
+    If qtdLimpas > 0 Then
+        RegistrarEvento EVT_TRANSACAO, ENT_OS, "CAD_OS", _
+            "RESIDUOS_SEM_CHAVE=" & CStr(qtdLimpas), _
+            "LIMPEZA_REF_ORFA_CONTROLADA=OK", _
+            "Repo_OS.LimparResiduosCADOSSemChave"
+    End If
+
+    res.sucesso = True
+    res.mensagem = "Limpeza controlada CAD_OS concluida: RESIDUOS_LIMPOS=" & CStr(qtdLimpas)
+    RepoOS_LimparResiduosCADOSSemChave = res
+    Exit Function
+
+Erro:
+    On Error Resume Next
+    If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    res.sucesso = False
+    res.mensagem = "Erro ao limpar residuos CAD_OS: " & Err.Description
+    res.CodigoErro = Err.Number
+    RepoOS_LimparResiduosCADOSSemChave = res
+End Function
+
+Public Function RepoOS_MigrarRefOrfaLegado() As String
+    Dim resAntes As TResult
+    Dim resLimpar As TResult
+    Dim resDepois As TResult
+    Dim qtdOrfaEmpAntes As Long
+    Dim qtdOrfaAtivAntes As Long
+    Dim qtdResidAntes As Long
+    Dim qtdOrfaEmpDepois As Long
+    Dim qtdOrfaAtivDepois As Long
+    Dim qtdResidDepois As Long
+    Dim qtdLimpas As Long
+    Dim detalhesAntes As String
+    Dim detalhesDepois As String
+    Dim relatorio As String
+
+    On Error GoTo Erro
+
+    resAntes = RepoOS_DiagnosticarReferenciasCADOS(qtdOrfaEmpAntes, qtdOrfaAtivAntes, qtdResidAntes, detalhesAntes)
+    If Not resAntes.sucesso Then
+        RepoOS_MigrarRefOrfaLegado = "ERRO_DIAG_ANTES: " & resAntes.mensagem
+        Exit Function
+    End If
+
+    resLimpar = RepoOS_LimparResiduosCADOSSemChave(qtdLimpas, relatorio)
+    If Not resLimpar.sucesso Then
+        RepoOS_MigrarRefOrfaLegado = "ERRO_LIMPEZA: " & resLimpar.mensagem
+        Exit Function
+    End If
+
+    resDepois = RepoOS_DiagnosticarReferenciasCADOS(qtdOrfaEmpDepois, qtdOrfaAtivDepois, qtdResidDepois, detalhesDepois)
+    If Not resDepois.sucesso Then
+        RepoOS_MigrarRefOrfaLegado = "ERRO_DIAG_DEPOIS: " & resDepois.mensagem
+        Exit Function
+    End If
+
+    RepoOS_MigrarRefOrfaLegado = _
+        "ANTES: ORFA_EMP=" & CStr(qtdOrfaEmpAntes) & _
+        "; ORFA_ATIV=" & CStr(qtdOrfaAtivAntes) & _
+        "; RESIDUOS=" & CStr(qtdResidAntes) & _
+        " | LIMPOS=" & CStr(qtdLimpas) & _
+        " | DEPOIS: ORFA_EMP=" & CStr(qtdOrfaEmpDepois) & _
+        "; ORFA_ATIV=" & CStr(qtdOrfaAtivDepois) & _
+        "; RESIDUOS=" & CStr(qtdResidDepois) & _
+        " | DETALHES=" & detalhesDepois
+    Exit Function
+
+Erro:
+    RepoOS_MigrarRefOrfaLegado = "ERRO_FATAL: " & Err.Description
+End Function
+
+Private Sub RepoOS_CarregarIdsValidos( _
+    ByVal dict As Object, _
+    ByVal nomeAba As String, _
+    ByVal colunaId As Long, _
+    ByVal primeiraLinha As Long _
+)
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim linha As Long
+    Dim chave As String
+
+    On Error GoTo fim
+
+    Set ws = ThisWorkbook.Sheets(nomeAba)
+    ultima = UltimaLinhaAba(nomeAba)
+    For linha = primeiraLinha To ultima
+        chave = RepoOS_NormalizarChave(ws.Cells(linha, colunaId).Value)
+        If chave <> "" Then
+            If Not dict.Exists(chave) Then dict.Add chave, True
+        End If
+    Next linha
+
+fim:
+End Sub
+
+Private Function RepoOS_NormalizarChave(ByVal valor As Variant) As String
+    Dim s As String
+
+    On Error GoTo fim
+
+    If IsError(valor) Then GoTo fim
+    s = Trim$(CStr(valor))
+    If s = "" Then GoTo fim
+
+    If Not (s Like "*[!0-9]*") Then
+        RepoOS_NormalizarChave = Format$(CLng(Val(s)), "000")
+    Else
+        RepoOS_NormalizarChave = UCase$(s)
+    End If
+    Exit Function
+
+fim:
+    RepoOS_NormalizarChave = ""
+End Function
+
+Private Function RepoOS_UltimaLinhaVarredura(ByVal ws As Worksheet, ByVal colunaMax As Long) As Long
+    Dim col As Long
+    Dim ultima As Long
+    Dim maior As Long
+
+    maior = LINHA_DADOS - 1
+    For col = 1 To colunaMax
+        ultima = ws.Cells(ws.Rows.count, col).End(xlUp).row
+        If ultima > maior Then maior = ultima
+    Next col
+
+    If maior < LINHA_DADOS Then
+        RepoOS_UltimaLinhaVarredura = LINHA_DADOS - 1
+    Else
+        RepoOS_UltimaLinhaVarredura = maior
+    End If
+End Function
+
+Private Function RepoOS_LinhaSemChaveComDados( _
+    ByVal ws As Worksheet, _
+    ByVal linha As Long, _
+    ByVal colunaMax As Long _
+) As Boolean
+    Dim col As Long
+
+    If Trim$(CStr(ws.Cells(linha, COL_OS_ID).Value)) <> "" Then Exit Function
+
+    For col = 1 To colunaMax
+        If Trim$(CStr(ws.Cells(linha, col).Value)) <> "" Then
+            RepoOS_LinhaSemChaveComDados = True
+            Exit Function
+        End If
+    Next col
+End Function
+
+Private Sub RepoOS_AnexarDetalhe(ByRef detalhes As String, ByVal novoDetalhe As String)
+    If Len(detalhes) > 360 Then Exit Sub
+
+    If detalhes = "" Then
+        detalhes = novoDetalhe
+    Else
+        detalhes = detalhes & "; " & novoDetalhe
+    End If
+End Sub
+
 ' IdsIguais removida - usar Util_Planilha.IdsIguais (V12-CLEAN).
 
 

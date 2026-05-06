@@ -75,6 +75,24 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
     Dim auditBackfillDepois As Long
     Dim empBackfill As TEmpresa
     Dim linhaBackfill As Long
+    Dim resRefAntes As TResult
+    Dim resRefLimpar As TResult
+    Dim resRefDepois As TResult
+    Dim qtdRefOrfaEmpAntes As Long
+    Dim qtdRefOrfaAtivAntes As Long
+    Dim qtdRefResidAntes As Long
+    Dim qtdRefOrfaEmpDepois As Long
+    Dim qtdRefOrfaAtivDepois As Long
+    Dim qtdRefResidDepois As Long
+    Dim qtdRefLimpas As Long
+    Dim detalhesRefAntes As String
+    Dim detalhesRefDepois As String
+    Dim relatorioRef As String
+    Dim wsCadOsMig As Worksheet
+    Dim linhaCadOsMig As Long
+    Dim cadOsMigProtegida As Boolean
+    Dim cadOsMigSenha As String
+    Dim cadOsMigPreparada As Boolean
 
     On Error GoTo falha
 
@@ -420,6 +438,53 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
                   "Fecha a lacuna de migracao do campo DT_ULT_REATIV em bases abertas antes da Onda 18", _
                   okAtm
 
+    TV2_PrepararCenarioTriploCanonico
+    Set wsCadOsMig = ThisWorkbook.Sheets(SHEET_CAD_OS)
+    If Not Util_PrepararAbaParaEscrita(wsCadOsMig, cadOsMigProtegida, cadOsMigSenha) Then
+        Err.Raise 1004, "TV2_RunSmoke.MIG_006", "Nao foi possivel preparar CAD_OS para cenario MIG_006."
+    End If
+    cadOsMigPreparada = True
+    linhaCadOsMig = LINHA_DADOS
+    If UltimaLinhaAba(SHEET_CAD_OS) >= LINHA_DADOS Then linhaCadOsMig = UltimaLinhaAba(SHEET_CAD_OS) + 1
+    wsCadOsMig.Cells(linhaCadOsMig, COL_OS_ATIV_ID).Value = "999"
+    wsCadOsMig.Cells(linhaCadOsMig, COL_OS_PREOS_ID).Value = "TV2_MIG_006"
+    wsCadOsMig.Cells(linhaCadOsMig, COL_OS_STATUS).Value = "CONCLUIDA"
+    wsCadOsMig.Cells(linhaCadOsMig, COL_OS_JUSTIF_DIV).Value = "MIG_006_RESIDUO_SEM_CHAVE"
+    Util_RestaurarProtecaoAba wsCadOsMig, cadOsMigProtegida, cadOsMigSenha
+    cadOsMigPreparada = False
+
+    resRefAntes = RepoOS_DiagnosticarReferenciasCADOS(qtdRefOrfaEmpAntes, qtdRefOrfaAtivAntes, qtdRefResidAntes, detalhesRefAntes)
+    resRefLimpar = RepoOS_LimparResiduosCADOSSemChave(qtdRefLimpas, relatorioRef)
+    resRefDepois = RepoOS_DiagnosticarReferenciasCADOS(qtdRefOrfaEmpDepois, qtdRefOrfaAtivDepois, qtdRefResidDepois, detalhesRefDepois)
+    obtidoAtm = "DIAG_ANTES=" & CStr(resRefAntes.sucesso)
+    obtidoAtm = obtidoAtm & "; ORFA_EMP_ANTES=" & CStr(qtdRefOrfaEmpAntes)
+    obtidoAtm = obtidoAtm & "; ORFA_ATIV_ANTES=" & CStr(qtdRefOrfaAtivAntes)
+    obtidoAtm = obtidoAtm & "; RESID_ANTES=" & CStr(qtdRefResidAntes)
+    obtidoAtm = obtidoAtm & "; DETALHES_ANTES=" & detalhesRefAntes
+    obtidoAtm = obtidoAtm & "; LIMPEZA=" & CStr(resRefLimpar.sucesso)
+    obtidoAtm = obtidoAtm & "; LIMPAS=" & CStr(qtdRefLimpas)
+    obtidoAtm = obtidoAtm & "; RELATORIO=" & relatorioRef
+    obtidoAtm = obtidoAtm & "; DIAG_DEPOIS=" & CStr(resRefDepois.sucesso)
+    obtidoAtm = obtidoAtm & "; ORFA_EMP_DEPOIS=" & CStr(qtdRefOrfaEmpDepois)
+    obtidoAtm = obtidoAtm & "; ORFA_ATIV_DEPOIS=" & CStr(qtdRefOrfaAtivDepois)
+    obtidoAtm = obtidoAtm & "; RESID_DEPOIS=" & CStr(qtdRefResidDepois)
+    okAtm = resRefAntes.sucesso
+    okAtm = okAtm And qtdRefOrfaEmpAntes = 0
+    okAtm = okAtm And qtdRefOrfaAtivAntes = 0
+    okAtm = okAtm And qtdRefResidAntes = 1
+    okAtm = okAtm And resRefLimpar.sucesso
+    okAtm = okAtm And qtdRefLimpas = 1
+    okAtm = okAtm And resRefDepois.sucesso
+    okAtm = okAtm And qtdRefOrfaEmpDepois = 0
+    okAtm = okAtm And qtdRefOrfaAtivDepois = 0
+    okAtm = okAtm And qtdRefResidDepois = 0
+    TV2_LogAssert "SMOKE", "MIG_006", "AUTO", _
+                  "Limpar residuos sem chave em CAD_OS sem mascarar orfas reais", _
+                  "Linha sem OS_ID e com sobra em colunas finais e detectada como residuo, limpa explicitamente e deixa diagnostico zerado", _
+                  obtidoAtm, _
+                  "Fecha INT-CAD-OS-REF-ORFA sem apagar OS real com referencia invalida", _
+                  okAtm
+
     ' MD-17.1.c (Onda 17 Test-First) - Smoke read-only de UI (5 verificacoes x 4 forms).
     ' Bloco roda APOS asserts do TV2_RunSmoke; logs vao para mesma execucao SMOKE.
     Call TV2_RunUiSmokeReadOnly(silencioso)
@@ -430,6 +495,7 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
 falha:
     On Error Resume Next
     TV2_DesprotegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
+    If cadOsMigPreparada Then Util_RestaurarProtecaoAba wsCadOsMig, cadOsMigProtegida, cadOsMigSenha
     If Transacao_EstaAtiva() Then txRollbackCleanup = Transacao_Rollback()
     On Error GoTo 0
     TV2_LogAssert "SMOKE", "FATAL", "AUTO", _
@@ -3671,103 +3737,53 @@ End Sub
 Private Sub TV2_DetectarRefOrfaCAD_OS()
     On Error GoTo falha
 
-    Dim wsCadOs As Worksheet
-    Dim wsEmp As Worksheet
-    Dim wsEmpInat As Worksheet
-    Dim wsAtiv As Worksheet
-    Dim setEmps As Object
-    Dim setAtivs As Object
-    Dim ult As Long
-    Dim i As Long
-    Dim chaveAtual As String
+    Dim resDiag As TResult
     Dim qtdOrfaEmp As Long
     Dim qtdOrfaAtiv As Long
-    Dim primeiraOrfaEmp As String
-    Dim primeiraOrfaAtiv As String
-    Dim qtdLinhas As Long
+    Dim qtdResiduosSemChave As Long
+    Dim detalhes As String
     Dim obtido As String
 
-    Set setEmps = CreateObject("Scripting.Dictionary")
-    Set setAtivs = CreateObject("Scripting.Dictionary")
-
-    ' Conjunto de EMP_IDs validos = EMPRESAS UNIAO EMPRESAS_INATIVAS
-    Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
-    ult = UltimaLinhaAba(SHEET_EMPRESAS)
-    For i = LINHA_DADOS To ult
-        chaveAtual = Trim$(CStr(wsEmp.Cells(i, COL_EMP_ID).Value))
-        If chaveAtual <> "" Then
-            If Not setEmps.Exists(chaveAtual) Then setEmps.Add chaveAtual, True
-        End If
-    Next i
-
-    On Error Resume Next
-    Set wsEmpInat = ThisWorkbook.Sheets(SHEET_EMPRESAS_INATIVAS)
-    On Error GoTo falha
-    If Not wsEmpInat Is Nothing Then
-        ult = UltimaLinhaAba(SHEET_EMPRESAS_INATIVAS)
-        For i = LINHA_DADOS To ult
-            chaveAtual = Trim$(CStr(wsEmpInat.Cells(i, COL_EMP_ID).Value))
-            If chaveAtual <> "" Then
-                If Not setEmps.Exists(chaveAtual) Then setEmps.Add chaveAtual, True
-            End If
-        Next i
-    End If
-
-    ' Conjunto de ATIV_IDs validos = ATIVIDADES (todas)
-    Set wsAtiv = ThisWorkbook.Sheets(SHEET_ATIVIDADES)
-    ult = UltimaLinhaAba(SHEET_ATIVIDADES)
-    For i = LINHA_DADOS To ult
-        chaveAtual = Trim$(CStr(wsAtiv.Cells(i, COL_ATIV_ID).Value))
-        If chaveAtual <> "" Then
-            If Not setAtivs.Exists(chaveAtual) Then setAtivs.Add chaveAtual, True
-        End If
-    Next i
-
-    ' Varrer CAD_OS e contar referencias orfas
-    Set wsCadOs = ThisWorkbook.Sheets(SHEET_CAD_OS)
-    ult = UltimaLinhaAba(SHEET_CAD_OS)
-    For i = LINHA_DADOS To ult
-        qtdLinhas = qtdLinhas + 1
-
-        chaveAtual = Trim$(CStr(wsCadOs.Cells(i, COL_OS_EMP_ID).Value))
-        If chaveAtual <> "" Then
-            If Not setEmps.Exists(chaveAtual) Then
-                qtdOrfaEmp = qtdOrfaEmp + 1
-                If primeiraOrfaEmp = "" Then
-                    primeiraOrfaEmp = "linha=" & CStr(i) & ";EMP_ID=" & chaveAtual
-                End If
-            End If
-        End If
-
-        chaveAtual = Trim$(CStr(wsCadOs.Cells(i, COL_OS_ATIV_ID).Value))
-        If chaveAtual <> "" Then
-            If Not setAtivs.Exists(chaveAtual) Then
-                qtdOrfaAtiv = qtdOrfaAtiv + 1
-                If primeiraOrfaAtiv = "" Then
-                    primeiraOrfaAtiv = "linha=" & CStr(i) & ";ATIV_ID=" & chaveAtual
-                End If
-            End If
-        End If
-    Next i
-
-    obtido = "QTD_LINHAS_CAD_OS=" & CStr(qtdLinhas) & _
+    resDiag = RepoOS_DiagnosticarReferenciasCADOS(qtdOrfaEmp, qtdOrfaAtiv, qtdResiduosSemChave, detalhes)
+    obtido = "DIAG_OK=" & CStr(resDiag.sucesso) & _
              "; QTD_ORFA_EMP=" & CStr(qtdOrfaEmp) & _
              "; QTD_ORFA_ATIV=" & CStr(qtdOrfaAtiv) & _
-             "; 1A_ORFA_EMP=" & primeiraOrfaEmp & _
-             "; 1A_ORFA_ATIV=" & primeiraOrfaAtiv
+             "; QTD_RESIDUOS_SEM_CHAVE=" & CStr(qtdResiduosSemChave) & _
+             "; DETALHES=" & detalhes & _
+             "; MSG=" & resDiag.mensagem
 
-    If qtdOrfaEmp = 0 And qtdOrfaAtiv = 0 Then
+    If Not resDiag.sucesso Then
+        TV2_LogAssert "INTEGRIDADE_BASE", "CS_INT_04", "AUTO", _
+                      "Executar diagnostico de ref orfa em CAD_OS sem erro fatal", _
+                      "Diagnostico RepoOS_DiagnosticarReferenciasCADOS com sucesso", _
+                      obtido, _
+                      "Toda falha fatal precisa ficar rastreavel", False
+    ElseIf qtdOrfaEmp = 0 And qtdOrfaAtiv = 0 And qtdResiduosSemChave = 0 Then
         TV2_LogAssert "INTEGRIDADE_BASE", "CS_INT_04", "AUTO", _
                       "Detectar referencias orfas em CAD_OS (EMP_ID ou ATIV_ID inexistente)", _
-                      "Zero orfas (todas as referencias batem)", _
+                      "Zero orfas e zero residuos sem chave", _
                       obtido, _
                       "Cada OS aponta para empresa e atividade existentes - protege rastreabilidade", _
                       True
+        RegistrarBugResolvido _
+            "INT-CAD-OS-REF-ORFA", _
+            "Referencias orfas em CAD_OS (EMP_ID ou ATIV_ID nao existe em EMPRESAS+INATIVAS / ATIVIDADES)", _
+            DateSerial(2026, 5, 3), _
+            "TV2_RunIntegridadeBase / TV2_DetectarRefOrfaCAD_OS", _
+            "ALTA", _
+            "TV2_RunIntegridadeBase", _
+            "CS_INT_04", _
+            CDate(Date), _
+            "Codex CLI / Onda 22 MD-22.2 / Quinteto MICRO38", _
+            GetBuildImportado(), _
+            "RepoOS_DiagnosticarReferenciasCADOS separa orfas reais de residuos sem chave; RepoOS_MigrarRefOrfaLegado limpa apenas residuos sem OS_ID; MIG_006 cobre o contrato.", _
+            "auditoria/03_ondas/onda_22_v204_dados_legados/03_TECNICO_MICRO38_REF_ORFA_CAD_OS.md"
+        TV2_RemoverBugConhecido "INT-CAD-OS-REF-ORFA"
     Else
         TV2_LogManual "INTEGRIDADE_BASE", "CS_INT_04", _
                       "Referencias orfas em CAD_OS - bug de integridade referencial", _
-                      "Zero orfas", _
-                      "Bug de integridade - investigar limpeza de cadastro / orfaos historicos", _
+                      "Zero orfas e zero residuos sem chave", _
+                      "Executar RepoOS_MigrarRefOrfaLegado; se restarem ORFA_EMP/ORFA_ATIV, investigar OS reais", _
                       obtido & " - ver RPT_BUGS_CONHECIDOS"
         Call RegistrarBugConhecido( _
             "INT-CAD-OS-REF-ORFA", _
@@ -3778,8 +3794,8 @@ Private Sub TV2_DetectarRefOrfaCAD_OS()
             "TV2_RunIntegridadeBase", _
             "CS_INT_04", _
             "ABERTO", _
-            "investigar limpeza de cadastro em onda futura", _
-            "auditoria/00_status/<a-criar-quando-investigar>")
+            "Onda 22 MD-22.2: executar RepoOS_MigrarRefOrfaLegado; analisar orfas reais remanescentes", _
+            "auditoria/03_ondas/onda_22_v204_dados_legados/03_TECNICO_MICRO38_REF_ORFA_CAD_OS.md")
     End If
     Exit Sub
 

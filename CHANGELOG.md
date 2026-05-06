@@ -12,6 +12,9 @@ tratam apenas da linha pública oficial.
   guards de reentrada em forms mutadores.
 - **Onda 22 / MICRO37** — backfill auditavel de `DT_ULT_REATIV` a
   partir do `AUDIT_LOG`, com deteccao read-only e aplicacao explicita.
+- **Onda 22 / MICRO38** — diagnostico e migracao controlada de residuos
+  sem chave em `CAD_OS`, com comando operacional
+  `RepoOS_MigrarRefOrfaLegado`.
 
 ### Corrigido
 
@@ -42,6 +45,13 @@ tratam apenas da linha pública oficial.
   `ATM_002` para cobrir a lacuna R-48.
 - `Auto_Open` passa a sinalizar pendencias de backfill de
   `DT_ULT_REATIV` em `StatusBar`, sem aplicar mutacao automatica.
+- **Onda 22 / MICRO38** — `INT-CAD-OS-REF-ORFA` deixa de misturar
+  residuos legados sem `OS_ID` com orfas reais: residuos podem ser
+  limpos de forma auditavel, enquanto OS reais com `EMP_ID`/`ATIV_ID`
+  invalidos continuam reportadas.
+- `TV2_ClearSheet` passa a limpar sobras nas primeiras 50 colunas,
+  evitando que dados residuais em colunas finais reaparecam como drift
+  estrutural em `CAD_OS`.
 
 ### Validação
 
@@ -77,6 +87,12 @@ tratam apenas da linha pública oficial.
   `f7aa84f+ONDA22.MD22.1-backfill-dt-ult-reativ`.
   Aprovado pelo operador em `VR_20260506_120157`:
   `V1=171/0+V2_Smoke=30/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
+- MICRO38 entregue para importacao como
+  `f7aa84f+ONDA22.MD22.2-ref-orfa-cad-os`. Aprovado pelo operador em
+  `VR_20260506_163217`; migracao controlada limpou 82 residuos sem
+  chave em `CAD_OS` e deixou `ORFA_EMP=0`, `ORFA_ATIV=0`,
+  `RESIDUOS=0`.
+  Gate: `V1=171/0+V2_Smoke=31/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
 - Regra permanente documentada em HBN: funcionalidade nova exige teste
   correspondente no mesmo microdelta.
 - Regra permanente documentada em HBN: higiene documental recorrente

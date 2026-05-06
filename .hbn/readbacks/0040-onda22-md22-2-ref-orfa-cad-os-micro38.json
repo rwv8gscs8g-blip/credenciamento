@@ -1,0 +1,33 @@
+{
+  "readback_id": "0040-onda22-md22-2-ref-orfa-cad-os-micro38",
+  "data": "2026-05-06",
+  "agent_id": "codex-cli",
+  "origem_hearback": "Relay HBN apos MICRO37 aprovado: iniciar Onda 22 MD-22.2 para fechar INT-CAD-OS-REF-ORFA com relatorio/migracao controlada, mantendo teste correspondente no microdelta.",
+  "contexto": {
+    "versao": "V12.0.0204-dev",
+    "base_confirmada": "MICRO37 aprovado em VR_20260506_120157",
+    "onda": "Onda 22 - Dados legados, backfill e integridade",
+    "microdelta": "MICRO38",
+    "build_alvo": "f7aa84f+ONDA22.MD22.2-ref-orfa-cad-os"
+  },
+  "decisoes_confirmadas": [
+    "Fechar INT-CAD-OS-REF-ORFA por diagnostico/migracao controlada, nao por limpeza ampla silenciosa",
+    "Separar residuos sem OS_ID de orfas reais com OS_ID preenchido",
+    "Criar teste automatizado correspondente no mesmo microdelta conforme regra 0010",
+    "Aplicar higiene documental antes de entregar o pacote conforme regra 0011"
+  ],
+  "acao": [
+    "Adicionar diagnostico de referencias CAD_OS em Repo_OS",
+    "Adicionar limpeza explicita apenas de residuos sem chave",
+    "Adicionar comando operacional RepoOS_MigrarRefOrfaLegado",
+    "Adicionar cenario MIG_006 ao TV2_RunSmoke",
+    "Atualizar IntegridadeBase para resolver INT-CAD-OS-REF-ORFA quando zerado",
+    "Atualizar catalogo/roteiro V2, App_Release, manifesto e procedimento de importacao"
+  ],
+  "gate_local": [
+    "CRLF preservado nos arquivos VBA tocados",
+    "shasum src/vba igual ao espelho local-ai/vba_import para os 4 modulos",
+    "manifesto V3 MICRO38 criado",
+    "JSON HBN valido"
+  ]
+}

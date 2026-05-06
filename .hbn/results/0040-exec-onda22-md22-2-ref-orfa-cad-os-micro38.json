@@ -1,0 +1,56 @@
+{
+  "execution_id": "0040-exec-onda22-md22-2-ref-orfa-cad-os-micro38",
+  "agent_id": "codex-cli",
+  "readback_id": "0040-onda22-md22-2-ref-orfa-cad-os-micro38",
+  "action": "Implementar MICRO38 Onda 22 MD-22.2 com diagnostico/migracao controlada de referencias CAD_OS e teste MIG_006.",
+  "status": "APROVADO_OPERADOR",
+  "outcome": "APROVADO_OPERADOR",
+  "human_status": "confirmed",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "V12.0.0204-dev",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO38",
+    "build": "f7aa84f+ONDA22.MD22.2-ref-orfa-cad-os"
+  },
+    "validation": {
+        "local_static_checks": [
+            "publicar_vba_import_v2.py check: OK - vba_import 100% sincronizado",
+            "shasum src/vba == local-ai/vba_import para Repo_OS, Teste_V2_Roteiros, Teste_V2_Engine e App_Release",
+            "manifest_MICRO38_created",
+            "CRLF_preserved_for_changed_vba_and_manifest",
+            "json_readback_result_valid"
+    ],
+    "operator_gate_required": [
+      "ImportarPacoteV3_Delta \"MICRO38\", \"f7aa84f+ONDA22.MD22.2-ref-orfa-cad-os\"",
+      "VBE > Depurar > Compilar VBAProject",
+      "?RepoOS_MigrarRefOrfaLegado()",
+      "CT_ValidarRelease_QuintetoMinimo"
+    ],
+    "expected_quinteto_syntax": "V1=171/0+V2_Smoke=31/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+    "operator_validation": {
+      "status": "aprovado",
+      "validacao_id": "VR_20260506_163217",
+      "build_confirmado": "f7aa84f+ONDA22.MD22.2-ref-orfa-cad-os",
+      "importador": "M=4 | F=0 | err=0 | skip=0",
+      "migracao_ref_orfa": "ANTES: ORFA_EMP=0; ORFA_ATIV=0; RESIDUOS=82 | LIMPOS=82 | DEPOIS: ORFA_EMP=0; ORFA_ATIV=0; RESIDUOS=0",
+      "quinteto": "V1=171/0+V2_Smoke=31/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+      "evidencia_csv": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuinteto_V12_0_0203_VR_20260506_163217.csv"
+    }
+  },
+  "files_changed": [
+    "src/vba/Repo_OS.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO38.txt",
+    "local-ai/vba_import/001-modulo/AAM-Repo_OS.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "auditoria/03_ondas/onda_22_v204_dados_legados/03_TECNICO_MICRO38_REF_ORFA_CAD_OS.md",
+    "auditoria/03_ondas/onda_22_v204_dados_legados/04_PROCEDIMENTO_IMPORT_MICRO38.md"
+  ],
+  "created_at": "2026-05-06T12:45:00-0300"
+}

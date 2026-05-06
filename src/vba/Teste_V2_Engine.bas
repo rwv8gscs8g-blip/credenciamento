@@ -641,6 +641,7 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "MIG_003", "MIGRACAO", "RAPIDO", "AUTO", "Avaliacao", "Divergencia sem motivo textual deve falhar", "Regra de justificativa/observacao migrada da interface para o servico", "Validar rejeicao de divergencia sem justificativa e sem observacao", "Servico rejeita divergencia sem motivo", "Fecha lacuna de regra de negocio", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "MIG_004", "MIGRACAO", "RAPIDO", "AUTO", "Avaliacao", "Observacao textual pode sustentar a divergencia", "Compatibilidade com a bateria oficial em divergencia com observacao preenchida", "Validar conclusao da OS quando ha observacao mesmo sem campo dedicado", "Servico conclui a OS e registra a divergencia", "Preserva legado sem abrir silencio semantico", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "MIG_005", "MIGRACAO", "RAPIDO", "AUTO", "Empresa", "Backfill auditavel de DT_ULT_REATIV", "Empresa reativada antes da coluna DT_ULT_REATIV existir, com evento preservado no AUDIT_LOG", "Validar deteccao e aplicacao explicita do backfill por AUDIT_LOG", "DT_ULT_REATIV preenchida; deteccao posterior zera pendencias; auditoria registra BACKFILL_DT_ULT_REATIV", "Impede retorno silencioso ao modo legado em bases migradas", "AUTOMATIZADO_0204", "Executado no smoke"
+    TV2_AddCatalogo ws, nr, "MIG_006", "MIGRACAO", "RAPIDO", "AUTO", "OS", "Limpeza controlada de residuos sem chave em CAD_OS", "Linha legada sem OS_ID mas com sobra em colunas finais de CAD_OS", "Validar diagnostico que separa residuo sem chave de orfa real e limpa somente o residuo", "Residuo detectado e limpo; orfas reais permanecem reportaveis", "Fecha INT-CAD-OS-REF-ORFA sem apagar OS real", "AUTOMATIZADO_0204", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "ATM_001", "ATOMICIDADE", "RAPIDO", "AUTO", "Rodizio", "Falha na segunda escrita reverte a primeira", "EMPRESAS protegida com senha desconhecida durante o fluxo punido de avancar fila", "Validar rollback de fila e recusas quando a atualizacao cruzada falha", "Avanco punido falha, fila volta ao estado anterior e recusas permanecem zeradas", "Evita estado parcial entre CREDENCIADOS e EMPRESAS", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "ATM_002", "ATOMICIDADE", "RAPIDO", "AUTO", "Transacao", "Transacao aninhada rejeitada", "Transacao externa aberta e nova tentativa de Transacao_Iniciar", "Validar que a transacao interna falha sem sobrescrever a externa", "Erro explicito; TX externa preservada; auditoria registra TRANSACAO_ANINHADA", "Fecha a lacuna R-48 sem stack transacional", "AUTOMATIZADO_0204", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "FLT_001", "FILTROS", "RAPIDO", "AUTO", "Interface", "Normalizacao deterministica de termo", "Texto com acento, caixa mista e espacos duplicados", "Validar contrato comum dos filtros antes de plugar nos formularios", "SERVICO ACAO", "Impede busca dependente de acento ou digitacao exata", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
@@ -875,7 +876,9 @@ Private Sub TV2_ClearSheet(ByVal nomeAba As String)
     Dim ultimaLinhaUsedRange As Long
     Dim ultimaColunaCabecalho As Long
     Dim ultimaColunaUsedRange As Long
+    Dim ultimaLinhaVarredura As Long
     Dim colunaChave As Long
+    Dim col As Long
 
     Set ws = ThisWorkbook.Sheets(nomeAba)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
@@ -898,9 +901,13 @@ Private Sub TV2_ClearSheet(ByVal nomeAba As String)
     ultimaLinhaUsedRange = ws.UsedRange.row + ws.UsedRange.Rows.count - 1
     ultimaColunaCabecalho = ws.Cells(1, ws.Columns.count).End(xlToLeft).Column
     ultimaColunaUsedRange = ws.UsedRange.Column + ws.UsedRange.Columns.count - 1
+    For col = 1 To 50
+        ultimaLinhaVarredura = Application.WorksheetFunction.Max( _
+            ultimaLinhaVarredura, ws.Cells(ws.Rows.count, col).End(xlUp).row)
+    Next col
 
-    ultimaLinha = Application.WorksheetFunction.Max(ultimaLinhaColunaA, ultimaLinhaColunaChave, ultimaLinhaUsedRange)
-    ultimaColuna = Application.WorksheetFunction.Max(ultimaColunaCabecalho, ultimaColunaUsedRange)
+    ultimaLinha = Application.WorksheetFunction.Max(ultimaLinhaColunaA, ultimaLinhaColunaChave, ultimaLinhaUsedRange, ultimaLinhaVarredura)
+    ultimaColuna = Application.WorksheetFunction.Max(ultimaColunaCabecalho, ultimaColunaUsedRange, 50)
 
     If ultimaColuna < 1 Then ultimaColuna = 1
     If ultimaLinha >= primeiraLinha Then
@@ -2309,6 +2316,7 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "MIG_003", "AUTO", "Validar que divergencia sem motivo falha", "Apenas conferir o resultado automatizado do cenario", "Servico falha e mantem a OS em execucao", "Linha do cenario MIG_003", "Fecha a lacuna de regra de negocio na avaliacao", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "MIG_004", "AUTO", "Validar compatibilidade da observacao como motivo", "Apenas conferir o resultado automatizado do cenario", "Servico conclui a OS mesmo sem campo dedicado quando ha observacao textual", "Linha do cenario MIG_004", "Evita regressao na bateria oficial e mantem rastreabilidade", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "MIG_005", "AUTO", "Validar backfill auditavel de DT_ULT_REATIV", "Apenas conferir o resultado automatizado do cenario", "Backfill preenche DT_ULT_REATIV a partir do AUDIT_LOG e deixa auditoria BACKFILL_DT_ULT_REATIV", "Linha do cenario MIG_005", "Evita que base migrada volte ao modo legado sem diagnostico", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "MIG_006", "AUTO", "Validar limpeza controlada de residuos CAD_OS", "Apenas conferir o resultado automatizado do cenario", "Residuo sem OS_ID e limpo sem mascarar orfa real", "Linha do cenario MIG_006", "Fecha INT-CAD-OS-REF-ORFA com migracao rastreavel", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "ATM_001", "AUTO", "Validar rollback do avancar punido", "Apenas conferir o resultado automatizado do cenario", "Falha controlada sem alterar fila nem recusas, com rastro de auditoria", "Linha do cenario ATM_001", "Prova atomicidade minima no fluxo de recusa", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "ATM_002", "AUTO", "Validar rejeicao de transacao aninhada", "Apenas conferir o resultado automatizado do cenario", "Erro explicito, transacao externa preservada e auditoria TRANSACAO_ANINHADA registrada", "Linha do cenario ATM_002", "Fecha a lacuna R-48 de atomicidade", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "FLT_001", "AUTO", "Validar normalizacao deterministica do termo de busca", "Executar a opcao 13 da Central V2 e conferir a linha FLT_001", "SERVICO ACAO", "Linha do cenario FLT_001", "Define o contrato comum antes de plugar nos formularios", "AUTOMATIZADO"
