@@ -2,10 +2,10 @@
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1
 proprietario-bastao: Codex CLI (sessao codex-cli-bloco-b-onda18-2026-05-04) — BASTAO RECEBIDO do Opus 4.7 em 2026-05-04T01:34:31-0300; proprietario unico de implementacao da Frente 1 ate devolucao formal via doc 60.
-ciclo-ativo: V12.0.0204-dev pos-Onda 21 sob Codex CLI. Roadmap V204 Onda 20-25 aprovado e Onda 26 documental adicionada por decisao do operador; MICRO31-MICRO36 informadas como aprovadas no Quinteto pelo operador; regras permanentes 0010 e 0011 vigentes.
+ciclo-ativo: V12.0.0204-dev Onda 22 sob Codex CLI. Roadmap V204 Onda 20-25 aprovado e Onda 26 documental adicionada por decisao do operador; MICRO31-MICRO37 aprovadas no Quinteto pelo operador; regras permanentes 0010 e 0011 vigentes.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Executar higiene documental recorrente antes da Onda 22; em seguida iniciar Onda 22 Dados Legados, mantendo regra 0010: cada funcionalidade nova precisa trazer teste correspondente.
-ultima-atualizacao: 2026-05-06T10:20:00-0300 (roadmap aprovado ate Onda 25; Onda 26 documental e regra 0011 de higiene recorrente adicionadas por Codex)
+proxima-acao: Iniciar Onda 22 MD-22.2 para fechar INT-CAD-OS-REF-ORFA com relatorio/migracao controlada, mantendo teste correspondente no microdelta.
+ultima-atualizacao: 2026-05-06T12:20:00-0300 (MICRO37 aprovado no Quinteto VR_20260506_120157; avancar para MD-22.2)
 ---
 
 > ⚠️ **REGRA INVIOLAVEL (M11 destilada 2026-05-03)**: A IA le `src/vba/`

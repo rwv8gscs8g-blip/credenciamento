@@ -1,0 +1,54 @@
+{
+  "execution_id": "0039-exec-onda22-md22-1-backfill-dt-ult-reativ-micro37",
+  "agent_id": "codex-cli",
+  "readback_id": "0039-onda22-md22-1-backfill-dt-ult-reativ-micro37",
+  "action": "Implementar MICRO37 Onda 22 MD-22.1 com backfill auditavel de DT_ULT_REATIV e teste MIG_005.",
+  "status": "APROVADO_OPERADOR",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "V12.0.0204-dev",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO37",
+    "build": "f7aa84f+ONDA22.MD22.1-backfill-dt-ult-reativ"
+  },
+  "validation": {
+    "local_static_checks": [
+      "src_vba_to_local_ai_shasum_match_5_pairs",
+      "manifest_MICRO37_created",
+      "CRLF_preserved_for_changed_vba_and_manifest",
+      "json_readback_result_valid"
+    ],
+    "operator_gate_completed": [
+      "ImportarPacoteV3_Delta \"MICRO37\", \"f7aa84f+ONDA22.MD22.1-backfill-dt-ult-reativ\"",
+      "VBE > Depurar > Compilar VBAProject",
+      "CT_ValidarRelease_QuintetoMinimo"
+    ],
+    "expected_quinteto_syntax": "V1=171/0+V2_Smoke=30/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+    "operator_validation": {
+      "data_informada": "2026-05-06",
+      "validacao_id": "VR_20260506_120157",
+      "build_confirmado": "f7aa84f+ONDA22.MD22.1-backfill-dt-ult-reativ",
+      "resultado": "APROVADO",
+      "sintaxe": "V1=171/0+V2_Smoke=30/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+    }
+  },
+  "files_changed": [
+    "src/vba/Repo_Empresa.bas",
+    "src/vba/Auto_Open.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO37.txt",
+    "local-ai/vba_import/001-modulo/AAO-Repo_Empresa.bas",
+    "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "auditoria/03_ondas/onda_22_v204_dados_legados/01_TECNICO_MICRO37_BACKFILL_DT_ULT_REATIV.md",
+    "auditoria/03_ondas/onda_22_v204_dados_legados/02_PROCEDIMENTO_IMPORT_MICRO37.md"
+  ],
+  "created_at": "2026-05-06T10:55:00-0300"
+}

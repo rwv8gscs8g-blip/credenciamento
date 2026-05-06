@@ -1,0 +1,34 @@
+{
+  "readback_id": "0039-onda22-md22-1-backfill-dt-ult-reativ-micro37",
+  "data": "2026-05-06",
+  "agent_id": "codex-cli",
+  "origem_hearback": "Operador aprovou roadmap ate Onda 25 e autorizou seguir com Onda 22; regra 0010 exige teste para funcionalidade nova e regra 0011 exige higiene documental antes de passar fase.",
+  "contexto": {
+    "versao": "V12.0.0204-dev",
+    "base_confirmada": "MICRO36 aprovado em VR_20260506_092007",
+    "onda": "Onda 22 - Dados legados, backfill e integridade",
+    "microdelta": "MICRO37",
+    "build_alvo": "f7aa84f+ONDA22.MD22.1-backfill-dt-ult-reativ"
+  },
+  "decisoes_confirmadas": [
+    "Backfill de DT_ULT_REATIV deve ser explicito e auditavel",
+    "Auto_Open pode detectar e sinalizar pendencia, mas nao aplicar mutacao automatica",
+    "Funcionalidade nova precisa entrar com teste automatizado correspondente",
+    "Higiene documental recorrente deve ser aplicada antes de entregar o microdelta"
+  ],
+  "acao": [
+    "Adicionar rotina read-only de resumo de backfill em Repo_Empresa",
+    "Adicionar rotina explicita de aplicacao de backfill por AUDIT_LOG em Repo_Empresa",
+    "Adicionar hint passivo no Auto_Open",
+    "Adicionar cenario MIG_005 ao TV2_RunSmoke",
+    "Atualizar catalogo/roteiro V2 e App_Release",
+    "Gerar manifesto V3 MICRO37 e procedimento de importacao"
+  ],
+  "gate_local": [
+    "CRLF preservado nos arquivos VBA tocados",
+    "shasum src/vba igual ao espelho local-ai/vba_import para os 5 modulos",
+    "manifesto V3 criado",
+    "JSON HBN valido"
+  ]
+}
+

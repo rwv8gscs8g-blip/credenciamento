@@ -51,3 +51,4 @@ ultima-atualizacao: 2026-05-06
 | 0036 | Onda 21 V204 MICRO35-fix3 pacote cumulativo Svc_OS | APROVADO_OPERADOR | `0036-onda21-v204-emitir-os-micro35-fix3.json` | 2026-05-05 |
 | 0037 | Onda 21 V204 MICRO36 transacao aninhada | APROVADO_OPERADOR | `0037-onda21-v204-transacao-aninhada-micro36.json` | 2026-05-06 |
 | 0038 | Onda 22 preflight higiene documental e Onda 26 | APROVADO_OPERADOR | `0038-onda22-preflight-higiene-documental.json` | 2026-05-06 |
+| 0039 | Onda 22 V204 MICRO37 backfill DT_ULT_REATIV | APROVADO_OPERADOR | `0039-onda22-md22-1-backfill-dt-ult-reativ-micro37.json` | 2026-05-06 |

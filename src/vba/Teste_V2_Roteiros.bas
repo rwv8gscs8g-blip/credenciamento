@@ -62,6 +62,19 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
     Dim txStillActive As Boolean
     Dim txIdPreservado As Boolean
     Dim txRollbackCleanup As Boolean
+    Dim resBackfillResumoAntes As TResult
+    Dim resBackfillResumoDepois As TResult
+    Dim resBackfillAplicar As TResult
+    Dim qtdBackfillAntes As Long
+    Dim qtdBackfillDepois As Long
+    Dim qtdBackfillAtualizadas As Long
+    Dim detalhesBackfillAntes As String
+    Dim detalhesBackfillDepois As String
+    Dim relatorioBackfill As String
+    Dim auditBackfillAntes As Long
+    Dim auditBackfillDepois As Long
+    Dim empBackfill As TEmpresa
+    Dim linhaBackfill As Long
 
     On Error GoTo falha
 
@@ -367,6 +380,44 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
                   "Segunda Transacao_Iniciar falha explicitamente, preserva TX externa e deixa rastro de auditoria", _
                   obtidoAtm, _
                   "Fecha a lacuna R-48 de transacao aninhada sem introduzir stack transacional", _
+                  okAtm
+
+    TV2_PrepararCenarioTriploCanonico
+    auditBackfillAntes = TV2_AuditCount("Rollback/Transacao", "BACKFILL_DT_ULT_REATIV")
+    RegistrarEvento EVT_REATIVACAO, ENT_EMP, "001", _
+        "STATUS=SUSPENSA_GLOBAL; TESTE=MIG_005", _
+        "STATUS=ATIVA; TESTE=MIG_005", _
+        "TV2_MIG_005"
+    resBackfillResumoAntes = RepoEmpresa_DtUltReativBackfillResumo(qtdBackfillAntes, detalhesBackfillAntes)
+    resBackfillAplicar = RepoEmpresa_BackfillDtUltReativPorAuditLog(qtdBackfillAtualizadas, relatorioBackfill)
+    resBackfillResumoDepois = RepoEmpresa_DtUltReativBackfillResumo(qtdBackfillDepois, detalhesBackfillDepois)
+    empBackfill = LerEmpresa("001", linhaBackfill)
+    auditBackfillDepois = TV2_AuditCount("Rollback/Transacao", "BACKFILL_DT_ULT_REATIV")
+    obtidoAtm = "RESUMO_ANTES=" & CStr(resBackfillResumoAntes.sucesso)
+    obtidoAtm = obtidoAtm & "; QTD_ANTES=" & CStr(qtdBackfillAntes)
+    obtidoAtm = obtidoAtm & "; DETALHES_ANTES=" & detalhesBackfillAntes
+    obtidoAtm = obtidoAtm & "; APLICAR=" & CStr(resBackfillAplicar.sucesso)
+    obtidoAtm = obtidoAtm & "; QTD_ATUALIZADAS=" & CStr(qtdBackfillAtualizadas)
+    obtidoAtm = obtidoAtm & "; RELATORIO=" & relatorioBackfill
+    obtidoAtm = obtidoAtm & "; RESUMO_DEPOIS=" & CStr(resBackfillResumoDepois.sucesso)
+    obtidoAtm = obtidoAtm & "; QTD_DEPOIS=" & CStr(qtdBackfillDepois)
+    obtidoAtm = obtidoAtm & "; LINHA_EMP=" & CStr(linhaBackfill)
+    obtidoAtm = obtidoAtm & "; DT_ULT_REATIV=" & IIf(empBackfill.DT_ULT_REATIV > CDate(0), Format$(empBackfill.DT_ULT_REATIV, "yyyy-mm-dd hh:nn:ss"), "(vazia)")
+    obtidoAtm = obtidoAtm & "; AUDIT_BACKFILL=" & CStr(auditBackfillDepois - auditBackfillAntes)
+    okAtm = resBackfillResumoAntes.sucesso
+    okAtm = okAtm And qtdBackfillAntes = 1
+    okAtm = okAtm And resBackfillAplicar.sucesso
+    okAtm = okAtm And qtdBackfillAtualizadas = 1
+    okAtm = okAtm And resBackfillResumoDepois.sucesso
+    okAtm = okAtm And qtdBackfillDepois = 0
+    okAtm = okAtm And linhaBackfill >= LINHA_DADOS
+    okAtm = okAtm And empBackfill.DT_ULT_REATIV > CDate(0)
+    okAtm = okAtm And (auditBackfillDepois - auditBackfillAntes) >= 1
+    TV2_LogAssert "SMOKE", "MIG_005", "AUTO", _
+                  "Aplicar backfill auditavel de DT_ULT_REATIV", _
+                  "Empresa com reativacao legada em AUDIT_LOG ganha DT_ULT_REATIV sem voltar ao modo legado", _
+                  obtidoAtm, _
+                  "Fecha a lacuna de migracao do campo DT_ULT_REATIV em bases abertas antes da Onda 18", _
                   okAtm
 
     ' MD-17.1.c (Onda 17 Test-First) - Smoke read-only de UI (5 verificacoes x 4 forms).

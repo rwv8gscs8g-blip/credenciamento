@@ -15,6 +15,7 @@ Private Sub InicializarSistema()
     Call ProtegerAbasCriticas
     qtdCnae = CargaInicialCNAE_SeNecessario(False)
     On Error GoTo 0
+    AutoOpen_VerificarBackfillDtUltReativ
 
     ' Mostrar o menu principal
     For Each frm In VBA.UserForms
@@ -26,6 +27,21 @@ Private Sub InicializarSistema()
 
     Set frm = VBA.UserForms.Add("Menu_Principal")
     frm.Show
+End Sub
+
+Private Sub AutoOpen_VerificarBackfillDtUltReativ()
+    Dim res As TResult
+    Dim qtdPendentes As Long
+    Dim detalhes As String
+
+    On Error GoTo fim
+    res = RepoEmpresa_DtUltReativBackfillResumo(qtdPendentes, detalhes)
+    If res.sucesso And qtdPendentes > 0 Then
+        Application.StatusBar = "Credenciamento: " & CStr(qtdPendentes) & _
+            " empresa(s) com DT_ULT_REATIV pendente de backfill assistido."
+    End If
+
+fim:
 End Sub
 
 Public Sub Auto_Open()

@@ -10,6 +10,8 @@ tratam apenas da linha pública oficial.
 - **Onda 20 / MICRO31** — P0 UI: reativacao de entidade via servico,
   preservacao/restauracao de credenciamentos na reativacao de empresa e
   guards de reentrada em forms mutadores.
+- **Onda 22 / MICRO37** — backfill auditavel de `DT_ULT_REATIV` a
+  partir do `AUDIT_LOG`, com deteccao read-only e aplicacao explicita.
 
 ### Corrigido
 
@@ -38,6 +40,8 @@ tratam apenas da linha pública oficial.
 - **Onda 21 / MICRO36** — `Svc_Transacao.Transacao_Iniciar` rejeita
   transacao aninhada sem sobrescrever a transacao externa; Smoke ganha
   `ATM_002` para cobrir a lacuna R-48.
+- `Auto_Open` passa a sinalizar pendencias de backfill de
+  `DT_ULT_REATIV` em `StatusBar`, sem aplicar mutacao automatica.
 
 ### Validação
 
@@ -69,6 +73,10 @@ tratam apenas da linha pública oficial.
   `f7aa84f+ONDA21.MD21.6-transacao-aninhamento`.
 - MICRO36 aprovado pelo operador em `VR_20260506_092007`:
   `V1=171/0+V2_Smoke=29/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
+- MICRO37 entregue para importacao como
+  `f7aa84f+ONDA22.MD22.1-backfill-dt-ult-reativ`.
+  Aprovado pelo operador em `VR_20260506_120157`:
+  `V1=171/0+V2_Smoke=30/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
 - Regra permanente documentada em HBN: funcionalidade nova exige teste
   correspondente no mesmo microdelta.
 - Regra permanente documentada em HBN: higiene documental recorrente

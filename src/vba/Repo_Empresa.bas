@@ -347,4 +347,165 @@ Erro:
     Atualizar = res
 End Function
 
+' Detecta empresas com DT_ULT_REATIV vazia/invalida que podem ser
+' reconstruidas a partir do ultimo EVT_REATIVACAO no AUDIT_LOG.
+Public Function RepoEmpresa_DtUltReativBackfillResumo( _
+    ByRef qtdPendentes As Long, _
+    ByRef detalhes As String _
+) As TResult
+    Dim res As TResult
+    Dim wsEmp As Worksheet
+    Dim iRow As Long
+    Dim empId As String
+    Dim dtAudit As Date
+
+    On Error GoTo Erro
+
+    qtdPendentes = 0
+    detalhes = ""
+    Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+
+    For iRow = PrimeiraLinhaDadosEmpresas() To UltimaLinhaAba(SHEET_EMPRESAS)
+        empId = Trim$(CStr(wsEmp.Cells(iRow, COL_EMP_ID).Value))
+        If empId <> "" Then
+            If RepoEmpresa_DtUltReativPrecisaBackfill(wsEmp.Cells(iRow, COL_EMP_DT_ULT_REATIV).Value) Then
+                dtAudit = RepoEmpresa_UltimaReativacaoAudit(empId)
+                If dtAudit > CDate(0) Then
+                    qtdPendentes = qtdPendentes + 1
+                    RepoEmpresa_AppendRelatorio detalhes, _
+                        "EMP_ID=" & empId & "; DT_AUDIT=" & Format$(dtAudit, "yyyy-mm-dd hh:nn:ss")
+                End If
+            End If
+        End If
+    Next iRow
+
+    res.sucesso = True
+    res.mensagem = "Backfill DT_ULT_REATIV pendente: " & CStr(qtdPendentes)
+    RepoEmpresa_DtUltReativBackfillResumo = res
+    Exit Function
+
+Erro:
+    res.sucesso = False
+    res.mensagem = "Erro ao detectar backfill DT_ULT_REATIV: " & Err.Description
+    res.CodigoErro = Err.Number
+    RepoEmpresa_DtUltReativBackfillResumo = res
+End Function
+
+' Aplica backfill explicito de DT_ULT_REATIV a partir do AUDIT_LOG.
+' Nao e chamado automaticamente na abertura do workbook.
+Public Function RepoEmpresa_BackfillDtUltReativPorAuditLog( _
+    ByRef qtdAtualizadas As Long, _
+    ByRef relatorio As String _
+) As TResult
+    Dim res As TResult
+    Dim wsEmp As Worksheet
+    Dim iRow As Long
+    Dim empId As String
+    Dim dtAudit As Date
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim abaPreparada As Boolean
+    Dim erroNumero As Long
+    Dim erroMensagem As String
+
+    On Error GoTo Erro
+
+    qtdAtualizadas = 0
+    relatorio = ""
+    Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+
+    If Not Util_PrepararAbaParaEscrita(wsEmp, estavaProtegida, senhaProtecao) Then
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar EMPRESAS para backfill DT_ULT_REATIV."
+        RepoEmpresa_BackfillDtUltReativPorAuditLog = res
+        Exit Function
+    End If
+    abaPreparada = True
+
+    For iRow = PrimeiraLinhaDadosEmpresas() To UltimaLinhaAba(SHEET_EMPRESAS)
+        empId = Trim$(CStr(wsEmp.Cells(iRow, COL_EMP_ID).Value))
+        If empId <> "" Then
+            If RepoEmpresa_DtUltReativPrecisaBackfill(wsEmp.Cells(iRow, COL_EMP_DT_ULT_REATIV).Value) Then
+                dtAudit = RepoEmpresa_UltimaReativacaoAudit(empId)
+                If dtAudit > CDate(0) Then
+                    wsEmp.Cells(iRow, COL_EMP_DT_ULT_REATIV).Value = dtAudit
+                    wsEmp.Cells(iRow, COL_EMP_DT_ULT_ALT).Value = Now
+                    If Not IsDate(wsEmp.Cells(iRow, COL_EMP_DT_ULT_REATIV).Value) Then
+                        Err.Raise 1004, "RepoEmpresa_BackfillDtUltReativPorAuditLog", _
+                                  "DT_ULT_REATIV nao confirmou persistencia para EMP_ID=" & empId
+                    End If
+
+                    qtdAtualizadas = qtdAtualizadas + 1
+                    RepoEmpresa_AppendRelatorio relatorio, _
+                        "EMP_ID=" & empId & "; DT_ULT_REATIV=" & Format$(dtAudit, "yyyy-mm-dd hh:nn:ss")
+                    RegistrarEvento EVT_TRANSACAO, ENT_EMP, empId, _
+                        "DT_ULT_REATIV=(vazia/invalida)", _
+                        "BACKFILL_DT_ULT_REATIV=" & Format$(dtAudit, "yyyy-mm-dd hh:nn:ss"), _
+                        "Repo_Empresa.BackfillDtUltReativ"
+                End If
+            End If
+        End If
+    Next iRow
+
+    Util_RestaurarProtecaoAba wsEmp, estavaProtegida, senhaProtecao
+    abaPreparada = False
+
+    res.sucesso = True
+    res.mensagem = "Backfill DT_ULT_REATIV aplicado: " & CStr(qtdAtualizadas)
+    RepoEmpresa_BackfillDtUltReativPorAuditLog = res
+    Exit Function
+
+Erro:
+    erroNumero = Err.Number
+    erroMensagem = Err.Description
+    On Error Resume Next
+    If abaPreparada Then Util_RestaurarProtecaoAba wsEmp, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    res.sucesso = False
+    res.mensagem = "Erro ao aplicar backfill DT_ULT_REATIV: " & erroMensagem
+    res.CodigoErro = erroNumero
+    RepoEmpresa_BackfillDtUltReativPorAuditLog = res
+End Function
+
+Private Function RepoEmpresa_DtUltReativPrecisaBackfill(ByVal valor As Variant) As Boolean
+    If IsError(valor) Then
+        RepoEmpresa_DtUltReativPrecisaBackfill = True
+    ElseIf Trim$(CStr(valor)) = "" Then
+        RepoEmpresa_DtUltReativPrecisaBackfill = True
+    ElseIf Not IsDate(valor) Then
+        RepoEmpresa_DtUltReativPrecisaBackfill = True
+    ElseIf CDate(valor) <= CDate(0) Then
+        RepoEmpresa_DtUltReativPrecisaBackfill = True
+    End If
+End Function
+
+Private Function RepoEmpresa_UltimaReativacaoAudit(ByVal empId As String) As Date
+    Dim wsAudit As Worksheet
+    Dim linha As Long
+    Dim dtEvento As Date
+    Dim entidade As String
+
+    Set wsAudit = ThisWorkbook.Sheets(SHEET_AUDIT)
+    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_AUDIT)
+        If CLng(Val(wsAudit.Cells(linha, COL_AUDIT_TIPO).Value)) = CLng(EVT_REATIVACAO) Then
+            entidade = UCase$(Trim$(CStr(wsAudit.Cells(linha, COL_AUDIT_ENTIDADE).Value)))
+            If entidade = "EMPRESA" Then
+                If IdsIguais(wsAudit.Cells(linha, COL_AUDIT_ID_AFETADO).Value, empId) Then
+                    If IsDate(wsAudit.Cells(linha, COL_AUDIT_DT).Value) Then
+                        dtEvento = CDate(wsAudit.Cells(linha, COL_AUDIT_DT).Value)
+                        If dtEvento > RepoEmpresa_UltimaReativacaoAudit Then
+                            RepoEmpresa_UltimaReativacaoAudit = dtEvento
+                        End If
+                    End If
+                End If
+            End If
+        End If
+    Next linha
+End Function
+
+Private Sub RepoEmpresa_AppendRelatorio(ByRef relatorio As String, ByVal item As String)
+    If Len(relatorio) > 0 Then relatorio = relatorio & " | "
+    relatorio = relatorio & item
+End Sub
+
 
