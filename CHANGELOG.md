@@ -63,6 +63,10 @@ tratam apenas da linha pública oficial.
   `V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
 - MICRO36 entregue para importacao como
   `f7aa84f+ONDA21.MD21.6-transacao-aninhamento`.
+- MICRO36 aprovado pelo operador em `VR_20260506_092007`:
+  `V1=171/0+V2_Smoke=29/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
+- Regra permanente documentada em HBN: funcionalidade nova exige teste
+  correspondente no mesmo microdelta.
 
 ## [v12.0.0203-rc4] — 2026-05-04
 

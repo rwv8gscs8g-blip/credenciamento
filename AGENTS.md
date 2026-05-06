@@ -28,11 +28,12 @@ Leia, em ordem:
 2. [`.hbn/knowledge/0001-regras-v203-inegociaveis.md`](.hbn/knowledge/0001-regras-v203-inegociaveis.md) — as 10 regras
 3. [`.hbn/knowledge/0002-regra-ouro-vba-import.md`](.hbn/knowledge/0002-regra-ouro-vba-import.md) — como espelhar codigo (REVALIDADA em Onda 10)
 4. [`.hbn/knowledge/0003-glasswing-style-preventive-security.md`](.hbn/knowledge/0003-glasswing-style-preventive-security.md) — camada de seguranca preventiva
-5. [`auditoria/00_status/27_ROADMAP_REINCORPORACAO_INCREMENTAL_V203.md`](auditoria/00_status/27_ROADMAP_REINCORPORACAO_INCREMENTAL_V203.md) — roadmap V203
-6. [`auditoria/00_status/32_ERRO_E_CORRECAO_PASTA_CANONICA.md`](auditoria/00_status/32_ERRO_E_CORRECAO_PASTA_CANONICA.md) — vitrine de transparencia (2026-05-02)
-7. [`auditoria/00_status/33_HANDOFF_NOVA_SESSAO_OPUS.md`](auditoria/00_status/33_HANDOFF_NOVA_SESSAO_OPUS.md) — prompt de retomada para nova sessao
-8. [`auditoria/03_ondas/onda_10_reincorporacao_onda01/70_FECHAMENTO_ONDA_10.md`](auditoria/03_ondas/onda_10_reincorporacao_onda01/70_FECHAMENTO_ONDA_10.md) — resumo executivo Onda 10
-9. [`usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`](usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md) — licoes L1-L15 + M1-M6 (base de conhecimento "fagocitose" sobre VBA)
+5. [`.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md`](.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md) — regra permanente: funcionalidade nova exige teste correspondente
+6. [`auditoria/00_status/27_ROADMAP_REINCORPORACAO_INCREMENTAL_V203.md`](auditoria/00_status/27_ROADMAP_REINCORPORACAO_INCREMENTAL_V203.md) — roadmap V203
+7. [`auditoria/00_status/32_ERRO_E_CORRECAO_PASTA_CANONICA.md`](auditoria/00_status/32_ERRO_E_CORRECAO_PASTA_CANONICA.md) — vitrine de transparencia (2026-05-02)
+8. [`auditoria/00_status/33_HANDOFF_NOVA_SESSAO_OPUS.md`](auditoria/00_status/33_HANDOFF_NOVA_SESSAO_OPUS.md) — prompt de retomada para nova sessao
+9. [`auditoria/03_ondas/onda_10_reincorporacao_onda01/70_FECHAMENTO_ONDA_10.md`](auditoria/03_ondas/onda_10_reincorporacao_onda01/70_FECHAMENTO_ONDA_10.md) — resumo executivo Onda 10
+10. [`usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`](usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md) — licoes L1-L15 + M1-M6 (base de conhecimento "fagocitose" sobre VBA)
 
 ## Working pattern
 
@@ -77,6 +78,13 @@ importacao manual no Excel VBA Editor (VBE) seguindo
 
 A IA nunca executa esses testes diretamente — ela entrega o pacote
 pronto para o operador rodar no workbook.
+
+Regra permanente: toda funcionalidade nova, regra de negocio nova,
+fluxo novo de UI ou comportamento novo de servico deve ser entregue com
+teste correspondente no mesmo microdelta. Preferir teste automatizado
+em V1/V2; quando nao for tecnicamente automatizavel, registrar teste
+assistido/manual auditavel em catalogo, roteiro e procedimento de gate.
+Detalhe canonico: [`.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md`](.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md).
 
 ## Convencoes de codigo
 

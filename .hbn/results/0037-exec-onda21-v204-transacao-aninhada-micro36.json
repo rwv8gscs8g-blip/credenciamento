@@ -3,7 +3,7 @@
   "data": "2026-05-06",
   "readback_id": "0037-onda21-v204-transacao-aninhada-micro36",
   "action": "Gerar MICRO36 para impedir sobrescrita de transacao ativa em Svc_Transacao.",
-  "status": "ENTREGUE_IMPORT",
+  "status": "APROVADO_OPERADOR",
   "changes": {
     "microdelta": "MICRO36",
     "build": "f7aa84f+ONDA21.MD21.6-transacao-aninhamento",
@@ -23,5 +23,12 @@
     "Compilar VBAProject",
     "CT_ValidarRelease_QuintetoMinimo"
   ],
-  "expected_gate": "V1=171/0+V2_Smoke=29/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+  "expected_gate": "V1=171/0+V2_Smoke=29/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+  "operator_validation": {
+    "data_informada": "2026-05-06",
+    "validacao_id": "VR_20260506_092007",
+    "build_confirmado": "f7aa84f+ONDA21.MD21.6-transacao-aninhamento",
+    "resultado": "APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=29/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+  }
 }
