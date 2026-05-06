@@ -35,6 +35,9 @@ tratam apenas da linha pública oficial.
 - **Onda 21 / MICRO35-fix3** — torna o pacote de compilacao cumulativo,
   reimportando `Svc_OS` junto dos wrappers para cobrir workbook reaberto
   sem salvar o `MICRO35-fix1`.
+- **Onda 21 / MICRO36** — `Svc_Transacao.Transacao_Iniciar` rejeita
+  transacao aninhada sem sobrescrever a transacao externa; Smoke ganha
+  `ATM_002` para cobrir a lacuna R-48.
 
 ### Validação
 
@@ -56,6 +59,10 @@ tratam apenas da linha pública oficial.
   `f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix2`.
 - MICRO35-fix3 entregue para importacao como
   `f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix3`.
+- MICRO35-fix3 aprovado pelo operador em `VR_20260505_213722`:
+  `V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
+- MICRO36 entregue para importacao como
+  `f7aa84f+ONDA21.MD21.6-transacao-aninhamento`.
 
 ## [v12.0.0203-rc4] — 2026-05-04
 

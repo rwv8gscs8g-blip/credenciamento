@@ -1,0 +1,27 @@
+{
+  "execution_id": "0037-exec-onda21-v204-transacao-aninhada-micro36",
+  "data": "2026-05-06",
+  "readback_id": "0037-onda21-v204-transacao-aninhada-micro36",
+  "action": "Gerar MICRO36 para impedir sobrescrita de transacao ativa em Svc_Transacao.",
+  "status": "ENTREGUE_IMPORT",
+  "changes": {
+    "microdelta": "MICRO36",
+    "build": "f7aa84f+ONDA21.MD21.6-transacao-aninhamento",
+    "implemented": [
+      "Transacao_Iniciar calcula o novo id sem alterar estado global",
+      "Se ja houver transacao ativa, registra EVT_TRANSACAO com MOTIVO=TRANSACAO_ANINHADA e levanta erro explicito",
+      "TV2_RunSmoke adiciona ATM_002 para validar erro, preservacao do id externo, limpeza via rollback e auditoria",
+      "Catalogo e roteiro V2 passam a listar ATM_002"
+    ],
+    "validation_local": [
+      "vba_import sincronizado por publicar_vba_import_v2.sh --check",
+      "CRLF preservado nos arquivos do microdelta"
+    ]
+  },
+  "operator_next_steps": [
+    "ImportarPacoteV3_Delta \"MICRO36\", \"f7aa84f+ONDA21.MD21.6-transacao-aninhamento\"",
+    "Compilar VBAProject",
+    "CT_ValidarRelease_QuintetoMinimo"
+  ],
+  "expected_gate": "V1=171/0+V2_Smoke=29/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+}

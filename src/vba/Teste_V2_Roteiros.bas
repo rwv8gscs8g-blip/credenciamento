@@ -52,6 +52,16 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
     Dim qtdItemDepois As Long
     Dim obtidoAtm As String
     Dim okAtm As Boolean
+    Dim auditNestedAntes As Long
+    Dim auditNestedDepois As Long
+    Dim txOuterId As String
+    Dim txInnerId As String
+    Dim txErrNum As Long
+    Dim txErrMsg As String
+    Dim txNestedRejected As Boolean
+    Dim txStillActive As Boolean
+    Dim txIdPreservado As Boolean
+    Dim txRollbackCleanup As Boolean
 
     On Error GoTo falha
 
@@ -320,6 +330,45 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
                   "Prova atomicidade ampliada entre CREDENCIADOS e EMPRESAS no fluxo punido", _
                   okAtm
 
+    If Transacao_EstaAtiva() Then txRollbackCleanup = Transacao_Rollback()
+    txOuterId = "TV2_ATM_002_OUTER"
+    txInnerId = "TV2_ATM_002_INNER"
+    auditNestedAntes = TV2_AuditCount("Rollback/Transacao", "TRANSACAO_ANINHADA")
+    Transacao_Iniciar txOuterId
+    txErrNum = 0
+    txErrMsg = ""
+    On Error Resume Next
+    Transacao_Iniciar txInnerId
+    txErrNum = Err.Number
+    txErrMsg = Err.Description
+    Err.Clear
+    On Error GoTo falha
+    txNestedRejected = (txErrNum <> 0)
+    txStillActive = Transacao_EstaAtiva()
+    txIdPreservado = (Transacao_IdAtual() = txOuterId)
+    txRollbackCleanup = Transacao_Rollback()
+    auditNestedDepois = TV2_AuditCount("Rollback/Transacao", "TRANSACAO_ANINHADA")
+    obtidoAtm = "ERRO_ANINHADO=" & CStr(txErrNum)
+    obtidoAtm = obtidoAtm & "; MSG=" & txErrMsg
+    obtidoAtm = obtidoAtm & "; ATIVA_APOS_ERRO=" & CStr(txStillActive)
+    obtidoAtm = obtidoAtm & "; TX_ID_PRESERVADO=" & CStr(txIdPreservado)
+    obtidoAtm = obtidoAtm & "; ROLLBACK_CLEANUP=" & CStr(txRollbackCleanup)
+    obtidoAtm = obtidoAtm & "; ATIVA_FINAL=" & CStr(Transacao_EstaAtiva())
+    obtidoAtm = obtidoAtm & "; AUDIT_ANINHADA=" & CStr(auditNestedDepois - auditNestedAntes)
+    okAtm = txNestedRejected
+    okAtm = okAtm And txStillActive
+    okAtm = okAtm And txIdPreservado
+    okAtm = okAtm And txRollbackCleanup
+    okAtm = okAtm And Not Transacao_EstaAtiva()
+    okAtm = okAtm And (auditNestedDepois - auditNestedAntes) >= 1
+    okAtm = okAtm And InStr(1, txErrMsg, "Transacao ja ativa", vbTextCompare) > 0
+    TV2_LogAssert "SMOKE", "ATM_002", "AUTO", _
+                  "Rejeitar transacao aninhada sem sobrescrever a externa", _
+                  "Segunda Transacao_Iniciar falha explicitamente, preserva TX externa e deixa rastro de auditoria", _
+                  obtidoAtm, _
+                  "Fecha a lacuna R-48 de transacao aninhada sem introduzir stack transacional", _
+                  okAtm
+
     ' MD-17.1.c (Onda 17 Test-First) - Smoke read-only de UI (5 verificacoes x 4 forms).
     ' Bloco roda APOS asserts do TV2_RunSmoke; logs vao para mesma execucao SMOKE.
     Call TV2_RunUiSmokeReadOnly(silencioso)
@@ -330,6 +379,7 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
 falha:
     On Error Resume Next
     TV2_DesprotegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
+    If Transacao_EstaAtiva() Then txRollbackCleanup = Transacao_Rollback()
     On Error GoTo 0
     TV2_LogAssert "SMOKE", "FATAL", "AUTO", _
                   "Executar suite sem erro fatal", _

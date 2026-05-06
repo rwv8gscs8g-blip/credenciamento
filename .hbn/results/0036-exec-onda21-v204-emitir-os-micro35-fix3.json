@@ -3,7 +3,7 @@
   "data": "2026-05-05",
   "readback_id": "0036-onda21-v204-emitir-os-micro35-fix3",
   "action": "Gerar MICRO35-fix3 cumulativo para corrigir workbook reaberto sem Svc_OS do fix1.",
-  "status": "ENTREGUE_IMPORT",
+  "status": "APROVADO_OPERADOR",
   "changes": {
     "microdelta": "MICRO35-fix3",
     "build": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix3",
@@ -22,5 +22,11 @@
     "Compilar VBAProject",
     "CT_ValidarRelease_QuintetoMinimo"
   ],
-  "expected_gate": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+    "expected_gate": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+  "operator_validation": {
+    "data_informada": "2026-05-06",
+    "validacao_id": "VR_20260505_213722",
+    "build_confirmado": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix3",
+    "resultado": "APROVADO"
+  }
 }

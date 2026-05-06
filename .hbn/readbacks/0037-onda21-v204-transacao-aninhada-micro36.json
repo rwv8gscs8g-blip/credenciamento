@@ -1,0 +1,27 @@
+{
+  "readback_id": "0037-onda21-v204-transacao-aninhada-micro36",
+  "data": "2026-05-06",
+  "agente": "Codex CLI",
+  "bastao": "Frente 1 Credenciamento",
+  "status": "confirmed",
+  "origem_hearback": "Operador informou Quinteto minimo aprovado no MICRO35-fix3 e confirmou build f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix3.",
+  "escopo": {
+    "versao": "V12.0.0204-dev",
+    "onda": 21,
+    "microdelta": "MICRO36",
+    "tema": "Svc_Transacao rejeita transacao aninhada",
+    "build": "f7aa84f+ONDA21.MD21.6-transacao-aninhamento"
+  },
+  "decisao": [
+    "Fechar lacuna R-48 apontada nas auditorias: transacao aninhada nao pode sobrescrever gTransacaoWrites",
+    "Preservar API Public Sub Transacao_Iniciar para compatibilidade",
+    "Falha explicita via Err.Raise quando ja houver transacao ativa",
+    "Registrar evento EVT_TRANSACAO com MOTIVO=TRANSACAO_ANINHADA",
+    "Adicionar ATM_002 ao TV2_RunSmoke"
+  ],
+  "gate_planejado": [
+    "Importar MICRO36",
+    "Compilar VBAProject",
+    "Rodar CT_ValidarRelease_QuintetoMinimo"
+  ]
+}
