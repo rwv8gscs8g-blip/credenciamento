@@ -3,7 +3,7 @@
   "data": "2026-05-05",
   "readback_id": "0034-onda21-v204-emitir-os-micro35-fix1",
   "action": "Gerar MICRO35-fix1 para corrigir falha de compilacao em Repo_OS.Inserir.",
-  "status": "ENTREGUE_IMPORT",
+  "status": "SUPERSEDED_BY_0036",
   "changes": {
     "microdelta": "MICRO35-fix1",
     "build": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback-fix1",

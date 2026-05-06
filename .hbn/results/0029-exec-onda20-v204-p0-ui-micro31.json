@@ -3,6 +3,7 @@
   "agent_id": "codex-cli",
   "readback_id": "0029-onda20-v204-p0-ui-micro31",
   "action": "Implementar Onda 20 V204 P0 UI e entregar manifesto MICRO31 para importacao no workbook.",
+  "status": "APROVADO_OPERADOR",
   "outcome": "executed",
   "human_status": "confirmed",
   "intent_risk_profile": "high",
@@ -25,7 +26,14 @@
       "VBE > Depurar > Compilar VBAProject",
       "CT_ValidarRelease_QuintetoMinimo"
     ],
-    "expected_quinteto_syntax": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+    "expected_quinteto_syntax": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+    "operator_validation": {
+      "data_informada": "2026-05-05",
+      "validacao_id": "VR_20260505_155650",
+      "build_confirmado": "f7aa84f+ONDA20.MD20-p0-ui-reativacao",
+      "resultado": "APROVADO",
+      "sintaxe": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+    }
   },
   "files_changed": [
     "src/vba/Svc_Entidade.bas",

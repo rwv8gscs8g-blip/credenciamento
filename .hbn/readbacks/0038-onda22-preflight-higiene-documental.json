@@ -1,0 +1,30 @@
+{
+  "readback_id": "0038-onda22-preflight-higiene-documental",
+  "data": "2026-05-06",
+  "agent_id": "codex-cli",
+  "origem_hearback": "Operador aprovou roadmap ate Onda 25, solicitou regra recorrente de higiene documental antes de passar fases e Onda 26 para documentacao/RAG/Obsidian.",
+  "contexto": {
+    "versao": "V12.0.0204-dev",
+    "base_confirmada": "MICRO36 aprovado em VR_20260506_092007",
+    "proxima_onda_codigo": "Onda 22 - Dados Legados, backfill e integridade",
+    "nova_onda_pos_release": "Onda 26 - documentacao, RAG/Obsidian e higiene recorrente"
+  },
+  "decisoes_confirmadas": [
+    "Roadmap V204 aprovado ate Onda 25",
+    "Onda 26 criada para planejamento pos-Onda25",
+    "Higiene documental recorrente vira gate antes de passar microdelta, onda, release ou bastao",
+    "Cada funcionalidade nova continua exigindo teste correspondente"
+  ],
+  "acao": [
+    "Documentar regra 0011 em .hbn/knowledge",
+    "Atualizar AGENTS, relay e roadmaps V204",
+    "Atualizar ERPs defasados MICRO31-MICRO34 com validacoes verdes",
+    "Marcar MICRO35, MICRO35-fix1 e MICRO35-fix2 como substituidos pelo MICRO35-fix3 aprovado",
+    "Preparar base documental para iniciar Onda 22"
+  ],
+  "gate_local": [
+    "JSONs HBN validos",
+    "git diff limitado a governanca/documentacao",
+    "sem alteracao em src/vba nem local-ai/vba_import"
+  ]
+}

@@ -1,6 +1,6 @@
 ---
 titulo: Results HBN — ERPs vinculados a readbacks
-ultima-atualizacao: 2026-05-05
+ultima-atualizacao: 2026-05-06
 ---
 
 # Results HBN — Credenciamento
@@ -41,12 +41,13 @@ ultima-atualizacao: 2026-05-05
 | 0026 | MICRO30-fix1 ClassificaEmpresa coluna U / R1 final rc4 | APROVADO_OPERADOR | `0026-onda18-micro30-fix1-classifica-empresa-u.json` | 2026-05-04 |
 | 0027 | Onda 19 publicacao V203 rc4, treinamento e auditoria V204 | APROVADO_OPERADOR | `0027-onda19-publicacao-v203-treinamento-auditoria-v204.json` | 2026-05-04 |
 | 0028 | Roadmaps V204 pos-auditorias cruzadas 64/65 | APROVADO_OPERADOR | `0028-onda20-roadmaps-v204-pos-auditorias.json` | 2026-05-05 |
-| 0029 | Onda 20 V204 P0 UI MICRO31 entregue para importacao | ENTREGUE_IMPORT | `0029-onda20-v204-p0-ui-micro31.json` | 2026-05-05 |
-| 0030 | Onda 21 V204 MICRO32 status empresa estruturado | ENTREGUE_IMPORT | `0030-onda21-v204-transacional-micro32.json` | 2026-05-05 |
-| 0031 | Onda 21 V204 MICRO33 AvaliarOS propaga falhas | ENTREGUE_IMPORT | `0031-onda21-v204-avaliaros-micro33.json` | 2026-05-05 |
-| 0032 | Onda 21 V204 MICRO34 ContarStrikes resultado explicito | ENTREGUE_IMPORT | `0032-onda21-v204-contarstrikes-micro34.json` | 2026-05-05 |
-| 0033 | Onda 21 V204 MICRO35 EmitirOS rollback local | ENTREGUE_IMPORT | `0033-onda21-v204-emitir-os-micro35.json` | 2026-05-05 |
-| 0034 | Onda 21 V204 MICRO35-fix1 compilacao Repo_OS | ENTREGUE_IMPORT | `0034-onda21-v204-emitir-os-micro35-fix1.json` | 2026-05-05 |
-| 0035 | Onda 21 V204 MICRO35-fix2 RepoOS_BuscarPorId | ENTREGUE_IMPORT | `0035-onda21-v204-emitir-os-micro35-fix2.json` | 2026-05-05 |
+| 0029 | Onda 20 V204 P0 UI MICRO31 | APROVADO_OPERADOR | `0029-onda20-v204-p0-ui-micro31.json` | 2026-05-05 |
+| 0030 | Onda 21 V204 MICRO32 status empresa estruturado | APROVADO_OPERADOR | `0030-onda21-v204-transacional-micro32.json` | 2026-05-05 |
+| 0031 | Onda 21 V204 MICRO33 AvaliarOS propaga falhas | APROVADO_OPERADOR | `0031-onda21-v204-avaliaros-micro33.json` | 2026-05-05 |
+| 0032 | Onda 21 V204 MICRO34 ContarStrikes resultado explicito | APROVADO_OPERADOR | `0032-onda21-v204-contarstrikes-micro34.json` | 2026-05-05 |
+| 0033 | Onda 21 V204 MICRO35 EmitirOS rollback local | SUPERSEDED_BY_0036 | `0033-onda21-v204-emitir-os-micro35.json` | 2026-05-05 |
+| 0034 | Onda 21 V204 MICRO35-fix1 compilacao Repo_OS | SUPERSEDED_BY_0036 | `0034-onda21-v204-emitir-os-micro35-fix1.json` | 2026-05-05 |
+| 0035 | Onda 21 V204 MICRO35-fix2 RepoOS_BuscarPorId | SUPERSEDED_BY_0036 | `0035-onda21-v204-emitir-os-micro35-fix2.json` | 2026-05-05 |
 | 0036 | Onda 21 V204 MICRO35-fix3 pacote cumulativo Svc_OS | APROVADO_OPERADOR | `0036-onda21-v204-emitir-os-micro35-fix3.json` | 2026-05-05 |
 | 0037 | Onda 21 V204 MICRO36 transacao aninhada | APROVADO_OPERADOR | `0037-onda21-v204-transacao-aninhada-micro36.json` | 2026-05-06 |
+| 0038 | Onda 22 preflight higiene documental e Onda 26 | APROVADO_OPERADOR | `0038-onda22-preflight-higiene-documental.json` | 2026-05-06 |

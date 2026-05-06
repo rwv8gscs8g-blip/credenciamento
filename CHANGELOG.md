@@ -45,8 +45,12 @@ tratam apenas da linha pública oficial.
   `V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
 - MICRO32 entregue para importacao como
   `f7aa84f+ONDA21.MD21.1-status-empresa-result`.
+- MICRO32 aprovado pelo operador em `VR_20260505_174431`:
+  `V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
 - MICRO33 entregue para importacao como
   `f7aa84f+ONDA21.MD21.2-3-avaliar-os-falhas`.
+- MICRO33 aprovado pelo operador em `VR_20260505_180817`:
+  `V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
 - MICRO34 entregue para importacao como
   `f7aa84f+ONDA21.MD21.4-contar-strikes-result`.
 - MICRO34 aprovado pelo operador em `VR_20260505_185750`:
@@ -67,6 +71,10 @@ tratam apenas da linha pública oficial.
   `V1=171/0+V2_Smoke=29/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
 - Regra permanente documentada em HBN: funcionalidade nova exige teste
   correspondente no mesmo microdelta.
+- Regra permanente documentada em HBN: higiene documental recorrente
+  antes de passar de microdelta, onda, release ou bastao.
+- Roadmap V204 expandido com Onda 26 pos-release para documentacao,
+  RAG/Obsidian e rotina recorrente de faxina documental.
 
 ## [v12.0.0203-rc4] — 2026-05-04
 

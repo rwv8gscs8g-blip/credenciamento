@@ -3,7 +3,7 @@
   "data": "2026-05-05",
   "readback_id": "0033-onda21-v204-emitir-os-micro35",
   "action": "Implementar MICRO35 da Onda 21 V204: EmitirOS com ordem segura e rollback local.",
-  "status": "ENTREGUE_IMPORT",
+  "status": "SUPERSEDED_BY_0036",
   "changes": {
     "microdelta": "MICRO35",
     "build": "f7aa84f+ONDA21.MD21.5-emitir-os-rollback",

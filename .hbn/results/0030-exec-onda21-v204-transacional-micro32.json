@@ -3,7 +3,7 @@
   "data": "2026-05-05",
   "readback_id": "0030-onda21-v204-transacional-micro32",
   "action": "Implementar MICRO32 da Onda 21 V204: GravarStatusEmpresa com TResult e persistencia verificada em suspensao/reativacao.",
-  "status": "ENTREGUE_IMPORT",
+  "status": "APROVADO_OPERADOR",
   "changes": {
     "microdelta": "MICRO32",
     "build": "f7aa84f+ONDA21.MD21.1-status-empresa-result",
@@ -25,6 +25,13 @@
     "CT_ValidarRelease_QuintetoMinimo"
   ],
   "expected_gate": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+  "operator_validation": {
+    "data_informada": "2026-05-05",
+    "validacao_id": "VR_20260505_174431",
+    "build_confirmado": "f7aa84f+ONDA21.MD21.1-status-empresa-result",
+    "resultado": "APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+  },
   "files_changed": [
     "src/vba/Repo_Empresa.bas",
     "src/vba/Svc_Rodizio.bas",

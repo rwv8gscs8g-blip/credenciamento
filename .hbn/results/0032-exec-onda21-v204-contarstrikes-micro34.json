@@ -3,7 +3,7 @@
   "data": "2026-05-05",
   "readback_id": "0032-onda21-v204-contarstrikes-micro34",
   "action": "Implementar MICRO34 da Onda 21 V204: ContarStrikes com resultado explicito.",
-  "status": "ENTREGUE_IMPORT",
+  "status": "APROVADO_OPERADOR",
   "changes": {
     "microdelta": "MICRO34",
     "build": "f7aa84f+ONDA21.MD21.4-contar-strikes-result",
@@ -25,6 +25,13 @@
     "CT_ValidarRelease_QuintetoMinimo"
   ],
   "expected_gate": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+  "operator_validation": {
+    "data_informada": "2026-05-05",
+    "validacao_id": "VR_20260505_185750",
+    "build_confirmado": "f7aa84f+ONDA21.MD21.4-contar-strikes-result",
+    "resultado": "APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+  },
   "files_changed": [
     "src/vba/Repo_Avaliacao.bas",
     "src/vba/Svc_Avaliacao.bas",

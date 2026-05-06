@@ -1,0 +1,27 @@
+{
+  "execution_id": "0038-exec-onda22-preflight-higiene-documental",
+  "data": "2026-05-06",
+  "readback_id": "0038-onda22-preflight-higiene-documental",
+  "action": "Registrar higiene documental recorrente, criar Onda 26 documental e alinhar ERPs pre-Onda22.",
+  "status": "APROVADO_OPERADOR",
+  "changes": {
+    "implemented": [
+      "Criada regra HBN 0011 para higiene documental recorrente antes de passar fase",
+      "AGENTS.md passa a listar a regra 0011 na entrada obrigatoria",
+      "Roadmap V204 inclui gate de higiene documental e Onda 26 pos-release",
+      "Roadmap de fechamento Onda 24/25 passa a explicitar parada para planejar Onda 26",
+      "ERPs MICRO31-MICRO34 atualizados para APROVADO_OPERADOR com validacoes verdes",
+      "ERPs MICRO35, MICRO35-fix1 e MICRO35-fix2 marcados como SUPERSEDED_BY_0036",
+      "CHANGELOG registra aprovacoes faltantes e regra documental"
+    ],
+    "validation_local": [
+      "JSONs HBN validados por python3 -m json.tool",
+      "Sem alteracao em src/vba",
+      "Sem alteracao em local-ai/vba_import"
+    ]
+  },
+  "next": [
+    "Iniciar Onda 22 MD-22.1",
+    "Manter higiene documental antes de cada passagem de fase"
+  ]
+}

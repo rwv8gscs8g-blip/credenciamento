@@ -8,7 +8,7 @@ versao-sistema: V12.0.0204
 data: 2026-05-05
 ---
 
-# Ondas 24 e 25 V204 - Seguranca preventiva e fechamento
+# Ondas 24, 25 e 26 V204 - Seguranca, Fechamento e Documentacao
 
 ## 1. Onda 24 - Seguranca e usabilidade
 
@@ -36,3 +36,13 @@ data: 2026-05-05
 3. Sexteto verde.
 4. Auditoria cruzada final aprovada.
 5. Operador autoriza producao.
+
+## 4. Onda 26 - Pos-release documental
+
+Depois da Onda 25, parar a esteira de codigo e planejar a Onda 26 para:
+
+1. lapidar documentacao publica e interna;
+2. criar estrategia recorrente de higiene documental para IAs;
+3. revisar Obsidian/RAG, `llms.txt`, indices e mapas de testes;
+4. remover duplicidades documentais ou declarar fonte de verdade;
+5. preparar auditoria documental cruzada.

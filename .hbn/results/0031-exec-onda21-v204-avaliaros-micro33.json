@@ -3,7 +3,7 @@
   "data": "2026-05-05",
   "readback_id": "0031-onda21-v204-avaliaros-micro33",
   "action": "Implementar MICRO33 da Onda 21 V204: AvaliarOS propaga falhas de Suspender e AvancarFila.",
-  "status": "ENTREGUE_IMPORT",
+  "status": "APROVADO_OPERADOR",
   "changes": {
     "microdelta": "MICRO33",
     "build": "f7aa84f+ONDA21.MD21.2-3-avaliar-os-falhas",
@@ -25,6 +25,13 @@
     "CT_ValidarRelease_QuintetoMinimo"
   ],
   "expected_gate": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0",
+  "operator_validation": {
+    "data_informada": "2026-05-05",
+    "validacao_id": "VR_20260505_180817",
+    "build_confirmado": "f7aa84f+ONDA21.MD21.2-3-avaliar-os-falhas",
+    "resultado": "APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=28/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0"
+  },
   "files_changed": [
     "src/vba/Svc_Avaliacao.bas",
     "src/vba/App_Release.bas",

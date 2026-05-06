@@ -29,11 +29,12 @@ Leia, em ordem:
 3. [`.hbn/knowledge/0002-regra-ouro-vba-import.md`](.hbn/knowledge/0002-regra-ouro-vba-import.md) — como espelhar codigo (REVALIDADA em Onda 10)
 4. [`.hbn/knowledge/0003-glasswing-style-preventive-security.md`](.hbn/knowledge/0003-glasswing-style-preventive-security.md) — camada de seguranca preventiva
 5. [`.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md`](.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md) — regra permanente: funcionalidade nova exige teste correspondente
-6. [`auditoria/00_status/27_ROADMAP_REINCORPORACAO_INCREMENTAL_V203.md`](auditoria/00_status/27_ROADMAP_REINCORPORACAO_INCREMENTAL_V203.md) — roadmap V203
-7. [`auditoria/00_status/32_ERRO_E_CORRECAO_PASTA_CANONICA.md`](auditoria/00_status/32_ERRO_E_CORRECAO_PASTA_CANONICA.md) — vitrine de transparencia (2026-05-02)
-8. [`auditoria/00_status/33_HANDOFF_NOVA_SESSAO_OPUS.md`](auditoria/00_status/33_HANDOFF_NOVA_SESSAO_OPUS.md) — prompt de retomada para nova sessao
-9. [`auditoria/03_ondas/onda_10_reincorporacao_onda01/70_FECHAMENTO_ONDA_10.md`](auditoria/03_ondas/onda_10_reincorporacao_onda01/70_FECHAMENTO_ONDA_10.md) — resumo executivo Onda 10
-10. [`usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`](usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md) — licoes L1-L15 + M1-M6 (base de conhecimento "fagocitose" sobre VBA)
+6. [`.hbn/knowledge/0011-higiene-documental-recorrente.md`](.hbn/knowledge/0011-higiene-documental-recorrente.md) — regra permanente: higiene documental antes de passar de fase
+7. [`auditoria/00_status/27_ROADMAP_REINCORPORACAO_INCREMENTAL_V203.md`](auditoria/00_status/27_ROADMAP_REINCORPORACAO_INCREMENTAL_V203.md) — roadmap V203
+8. [`auditoria/00_status/32_ERRO_E_CORRECAO_PASTA_CANONICA.md`](auditoria/00_status/32_ERRO_E_CORRECAO_PASTA_CANONICA.md) — vitrine de transparencia (2026-05-02)
+9. [`auditoria/00_status/33_HANDOFF_NOVA_SESSAO_OPUS.md`](auditoria/00_status/33_HANDOFF_NOVA_SESSAO_OPUS.md) — prompt de retomada para nova sessao
+10. [`auditoria/03_ondas/onda_10_reincorporacao_onda01/70_FECHAMENTO_ONDA_10.md`](auditoria/03_ondas/onda_10_reincorporacao_onda01/70_FECHAMENTO_ONDA_10.md) — resumo executivo Onda 10
+11. [`usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`](usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md) — licoes L1-L15 + M1-M6 (base de conhecimento "fagocitose" sobre VBA)
 
 ## Working pattern
 
@@ -85,6 +86,11 @@ teste correspondente no mesmo microdelta. Preferir teste automatizado
 em V1/V2; quando nao for tecnicamente automatizavel, registrar teste
 assistido/manual auditavel em catalogo, roteiro e procedimento de gate.
 Detalhe canonico: [`.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md`](.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md).
+
+Antes de passar de microdelta, onda, release ou bastao, aplicar higiene
+documental recorrente: relay, readback/ERP, CHANGELOG, evidencias,
+roadmap e proxima acao precisam refletir o estado real. Detalhe
+canonico: [`.hbn/knowledge/0011-higiene-documental-recorrente.md`](.hbn/knowledge/0011-higiene-documental-recorrente.md).
 
 ## Convencoes de codigo
 

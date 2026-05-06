@@ -37,6 +37,7 @@ para cobrir UI adversarial, transacoes, datas e dados legados.
 | 23 | Baterias adversariais e matriz combinatoria | testes + docs | sim |
 | 24 | Seguranca preventiva e usabilidade operacional | codigo + docs | sim |
 | 25 | Fechamento V204 e auditoria cruzada final | release | sim |
+| 26 | Lapidacao documental, RAG/Obsidian e faxina recorrente | docs + metodologia | pos-release |
 
 ## 4. Roadmap detalhado
 
@@ -106,8 +107,26 @@ para cobrir UI adversarial, transacoes, datas e dados legados.
 5. Quinteto verde ate a Onda 22.
 6. Sexteto verde a partir da Onda 23.
 7. Auditoria cruzada sem P0/P1 antes da Onda 25 final.
+8. Higiene documental recorrente antes de passar de fase:
+   relay atualizado, ERP/readback coerentes, CHANGELOG com validacao,
+   evidencias referenciadas, roadmap sem status defasado e proxima acao
+   clara para humano e IA.
 
-## 6. Aprovacao solicitada
+## 6. Onda 26 - lapidacao documental e estrategia RAG
+
+A Onda 26 nao bloqueia a promocao tecnica da V204 quando a Onda 25 for
+aprovada, mas deve iniciar logo depois da release para transformar a
+documentacao em vitrine recorrente de auditabilidade.
+
+| MD | Entrega | Criterio |
+|---|---|---|
+| MD-26.1 | Checklist canonico de higiene documental por fase | Toda IA sabe o que validar antes de passar bastao ou onda |
+| MD-26.2 | Estrategia Obsidian/RAG para mapas, evidencias e status | Pontos de entrada claros para humanos e IAs |
+| MD-26.3 | Faxina de duplicidades, docs obsoletos e indices | `llms.txt`, `docs/INDEX.md`, `.hbn/knowledge` e `obsidian-vault` coerentes |
+| MD-26.4 | Protocolo recorrente de revisao documental por IA | Checklist reutilizavel a cada microdelta/onda/release |
+| MD-26.5 | Auditoria documental cruzada | Outra IA valida navegabilidade, clareza e rastreabilidade |
+
+## 7. Aprovacao solicitada
 
 Para iniciar desenvolvimento, aprovar:
 
