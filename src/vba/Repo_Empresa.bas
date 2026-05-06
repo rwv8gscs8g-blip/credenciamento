@@ -347,6 +347,48 @@ Erro:
     Atualizar = res
 End Function
 
+' Detecta apenas valores nao vazios e invalidos em DT_ULT_REATIV.
+' Campo vazio continua sendo modo legado/backfill, nao erro estrutural.
+Public Function RepoEmpresa_DtUltReativInvalidasResumo( _
+    ByRef qtdInvalidas As Long, _
+    ByRef detalhes As String _
+) As TResult
+    Dim res As TResult
+    Dim wsEmp As Worksheet
+    Dim iRow As Long
+    Dim empId As String
+    Dim valor As Variant
+
+    On Error GoTo Erro
+
+    qtdInvalidas = 0
+    detalhes = ""
+    Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+
+    For iRow = PrimeiraLinhaDadosEmpresas() To UltimaLinhaAba(SHEET_EMPRESAS)
+        empId = Trim$(CStr(wsEmp.Cells(iRow, COL_EMP_ID).Value))
+        If empId <> "" Then
+            valor = wsEmp.Cells(iRow, COL_EMP_DT_ULT_REATIV).Value
+            If RepoEmpresa_DtUltReativValorInvalido(valor) Then
+                qtdInvalidas = qtdInvalidas + 1
+                RepoEmpresa_AppendRelatorio detalhes, _
+                    "EMP_ID=" & empId & "; VALOR=" & RepoEmpresa_DtUltReativValorParaRelatorio(valor)
+            End If
+        End If
+    Next iRow
+
+    res.sucesso = True
+    res.mensagem = "DT_ULT_REATIV invalidas: " & CStr(qtdInvalidas)
+    RepoEmpresa_DtUltReativInvalidasResumo = res
+    Exit Function
+
+Erro:
+    res.sucesso = False
+    res.mensagem = "Erro ao detectar DT_ULT_REATIV invalidas: " & Err.Description
+    res.CodigoErro = Err.Number
+    RepoEmpresa_DtUltReativInvalidasResumo = res
+End Function
+
 ' Detecta empresas com DT_ULT_REATIV vazia/invalida que podem ser
 ' reconstruidas a partir do ultimo EVT_REATIVACAO no AUDIT_LOG.
 Public Function RepoEmpresa_DtUltReativBackfillResumo( _
@@ -476,6 +518,34 @@ Private Function RepoEmpresa_DtUltReativPrecisaBackfill(ByVal valor As Variant) 
         RepoEmpresa_DtUltReativPrecisaBackfill = True
     ElseIf CDate(valor) <= CDate(0) Then
         RepoEmpresa_DtUltReativPrecisaBackfill = True
+    End If
+End Function
+
+Private Function RepoEmpresa_DtUltReativValorInvalido(ByVal valor As Variant) As Boolean
+    If IsError(valor) Then
+        RepoEmpresa_DtUltReativValorInvalido = True
+    ElseIf IsNull(valor) Then
+        RepoEmpresa_DtUltReativValorInvalido = False
+    ElseIf Trim$(CStr(valor)) = "" Then
+        RepoEmpresa_DtUltReativValorInvalido = False
+    ElseIf Not IsDate(valor) Then
+        RepoEmpresa_DtUltReativValorInvalido = True
+    ElseIf CDate(valor) <= CDate(0) Then
+        RepoEmpresa_DtUltReativValorInvalido = True
+    End If
+End Function
+
+Private Function RepoEmpresa_DtUltReativValorParaRelatorio(ByVal valor As Variant) As String
+    If IsError(valor) Then
+        RepoEmpresa_DtUltReativValorParaRelatorio = "#ERRO"
+    ElseIf IsNull(valor) Then
+        RepoEmpresa_DtUltReativValorParaRelatorio = "(null)"
+    ElseIf Trim$(CStr(valor)) = "" Then
+        RepoEmpresa_DtUltReativValorParaRelatorio = "(vazia)"
+    ElseIf IsDate(valor) Then
+        RepoEmpresa_DtUltReativValorParaRelatorio = Format$(CDate(valor), "yyyy-mm-dd hh:nn:ss")
+    Else
+        RepoEmpresa_DtUltReativValorParaRelatorio = Left$(Trim$(CStr(valor)), 80)
     End If
 End Function
 

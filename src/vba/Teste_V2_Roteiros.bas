@@ -93,6 +93,15 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
     Dim cadOsMigProtegida As Boolean
     Dim cadOsMigSenha As String
     Dim cadOsMigPreparada As Boolean
+    Dim resDtInvalid As TResult
+    Dim qtdDtInvalid As Long
+    Dim wsEmpDtInvalid As Worksheet
+    Dim linhaEmpDtInvalid As Long
+    Dim valorDtOriginal As Variant
+    Dim empDtInvalidProtegida As Boolean
+    Dim empDtInvalidSenha As String
+    Dim empDtInvalidPreparada As Boolean
+    Dim empDtInvalidMutada As Boolean
 
     On Error GoTo falha
 
@@ -485,6 +494,44 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
                   "Fecha INT-CAD-OS-REF-ORFA sem apagar OS real com referencia invalida", _
                   okAtm
 
+    TV2_PrepararCenarioTriploCanonico
+    Set wsEmpDtInvalid = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+    linhaEmpDtInvalid = BuscarLinha(SHEET_EMPRESAS, COL_EMP_ID, "001")
+    If linhaEmpDtInvalid < PrimeiraLinhaDadosEmpresas() Then
+        Err.Raise 1004, "TV2_RunSmoke.MIG_007", "Empresa 001 nao localizada para cenario MIG_007."
+    End If
+    If Not Util_PrepararAbaParaEscrita(wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha) Then
+        Err.Raise 1004, "TV2_RunSmoke.MIG_007", "Nao foi possivel preparar EMPRESAS para cenario MIG_007."
+    End If
+    empDtInvalidPreparada = True
+    valorDtOriginal = wsEmpDtInvalid.Cells(linhaEmpDtInvalid, COL_EMP_DT_ULT_REATIV).Value
+    wsEmpDtInvalid.Cells(linhaEmpDtInvalid, COL_EMP_DT_ULT_REATIV).Value = "DATA_INVALIDA_MIG_007"
+    Util_RestaurarProtecaoAba wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha
+    empDtInvalidPreparada = False
+    empDtInvalidMutada = True
+
+    resDtInvalid = ContarStrikesParaPunicaoResultado("001", GetNotaMinimaAvaliacao(), qtdDtInvalid)
+
+    If Not Util_PrepararAbaParaEscrita(wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha) Then
+        Err.Raise 1004, "TV2_RunSmoke.MIG_007", "Nao foi possivel restaurar EMPRESAS apos cenario MIG_007."
+    End If
+    empDtInvalidPreparada = True
+    wsEmpDtInvalid.Cells(linhaEmpDtInvalid, COL_EMP_DT_ULT_REATIV).Value = valorDtOriginal
+    Util_RestaurarProtecaoAba wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha
+    empDtInvalidPreparada = False
+    empDtInvalidMutada = False
+
+    obtidoAtm = "SUCESSO=" & CStr(resDtInvalid.sucesso)
+    obtidoAtm = obtidoAtm & "; MSG=" & resDtInvalid.mensagem
+    obtidoAtm = obtidoAtm & "; QTD=" & CStr(qtdDtInvalid)
+    TV2_LogAssert "SMOKE", "MIG_007", "AUTO", _
+                  "Bloquear punicao quando DT_ULT_REATIV esta invalida", _
+                  "Contador de strikes retorna falha explicita e nao calcula punicao em modo legado", _
+                  obtidoAtm, _
+                  "Impede re-suspensao baseada em janela corrompida apos migracao ou edicao manual", _
+                  (Not resDtInvalid.sucesso And qtdDtInvalid = 0 And _
+                   InStr(1, resDtInvalid.mensagem, "DT_ULT_REATIV invalida", vbTextCompare) > 0)
+
     ' MD-17.1.c (Onda 17 Test-First) - Smoke read-only de UI (5 verificacoes x 4 forms).
     ' Bloco roda APOS asserts do TV2_RunSmoke; logs vao para mesma execucao SMOKE.
     Call TV2_RunUiSmokeReadOnly(silencioso)
@@ -496,6 +543,13 @@ falha:
     On Error Resume Next
     TV2_DesprotegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
     If cadOsMigPreparada Then Util_RestaurarProtecaoAba wsCadOsMig, cadOsMigProtegida, cadOsMigSenha
+    If empDtInvalidMutada And Not empDtInvalidPreparada Then
+        empDtInvalidPreparada = Util_PrepararAbaParaEscrita(wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha)
+    End If
+    If empDtInvalidPreparada Then
+        wsEmpDtInvalid.Cells(linhaEmpDtInvalid, COL_EMP_DT_ULT_REATIV).Value = valorDtOriginal
+        Util_RestaurarProtecaoAba wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha
+    End If
     If Transacao_EstaAtiva() Then txRollbackCleanup = Transacao_Rollback()
     On Error GoTo 0
     TV2_LogAssert "SMOKE", "FATAL", "AUTO", _
@@ -3083,17 +3137,18 @@ End Sub
 ' TV2_RunIntegridadeBase: suite PURE READ que varre EMPRESAS,
 ' EMPRESAS_INATIVAS, ENTIDADE, ENTIDADE_INATIVOS, ATIVIDADES e
 ' CAD_OS procurando por inconsistencias estruturais entre abas.
-' Cobertura inicial (4 cenarios CS_INT_01..04):
+' Cobertura atual (5 cenarios CS_INT_01..05):
 '   CS_INT_01 - entidade com mesmo ENT_ID em ENTIDADE e ENTIDADE_INATIVOS
 '   CS_INT_02 - empresa com mesmo EMP_ID em EMPRESAS e EMPRESAS_INATIVAS
 '   CS_INT_03 - CNPJ duplicado em EMPRESAS (ATIVAS)
 '   CS_INT_04 - referencia orfa em CAD_OS (EMP_ID ou ATIV_ID nao existe)
+'   CS_INT_05 - DT_ULT_REATIV nao vazia e invalida em EMPRESAS
 '
 ' Idempotencia: PURE READ em abas operacionais. Unico efeito colateral
 ' permitido: criar/atualizar abas RPT_BUGS_CONHECIDOS / RPT_BUGS_RESOLVIDOS
 ' (upsert por BUG_ID e remocao de bug resolvido da fila aberta).
 ' Execucoes consecutivas produzem mesmo numero de linhas em
-' RESULTADO_QA_V2 (delta=4). Em base pre-MD-18.3, a primeira run move
+' RESULTADO_QA_V2 (delta=5). Em base pre-MD-18.3, a primeira run move
 ' DT-17 para RPT_BUGS_RESOLVIDOS; depois disso, RPT_BUGS_* fica delta=0.
 '
 ' Nao integra ainda no Quarteto. Sera incluida no Quinteto Minimo
@@ -3148,6 +3203,9 @@ Public Sub TV2_RunIntegridadeBase(Optional ByVal visual As Boolean = False, Opti
 
     ' CS_INT_04 - referencia orfa em CAD_OS (EMP_ID ou ATIV_ID inexistente)
     TV2_DetectarRefOrfaCAD_OS
+
+    ' CS_INT_05 - DT_ULT_REATIV nao vazia e invalida
+    TV2_DetectarDtUltReativInvalida
 
     TV2_FinalizarExecucao "INTEGRIDADE_BASE", silencioso
     Exit Sub
@@ -3479,7 +3537,7 @@ fim:
 End Sub
 
 ' ------------------------------------------------------------
-' Detectores Private (CS_INT_01..04). Cada detector e PURE READ.
+' Detectores Private (CS_INT_01..05). Cada detector e PURE READ.
 ' Padrao: VERDE via TV2_LogAssert se zero ocorrencias; AMARELO via
 ' TV2_LogManual + RegistrarBugConhecido se houver ocorrencias.
 ' AMARELO nao bloqueia gate (gTV2Manual+=1; gTV2Fail inalterado).
@@ -3802,6 +3860,62 @@ Private Sub TV2_DetectarRefOrfaCAD_OS()
 falha:
     TV2_LogAssert "INTEGRIDADE_BASE", "CS_INT_04", "AUTO", _
                   "Executar deteccao de ref orfa em CAD_OS sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(Err.Number) & ": " & Err.Description, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+End Sub
+
+Private Sub TV2_DetectarDtUltReativInvalida()
+    On Error GoTo falha
+
+    Dim resDiag As TResult
+    Dim qtdInvalidas As Long
+    Dim detalhes As String
+    Dim obtido As String
+
+    resDiag = RepoEmpresa_DtUltReativInvalidasResumo(qtdInvalidas, detalhes)
+    obtido = "DIAG_OK=" & CStr(resDiag.sucesso) & _
+             "; QTD_INVALIDAS=" & CStr(qtdInvalidas) & _
+             "; DETALHES=" & detalhes & _
+             "; MSG=" & resDiag.mensagem
+
+    If Not resDiag.sucesso Then
+        TV2_LogAssert "INTEGRIDADE_BASE", "CS_INT_05", "AUTO", _
+                      "Executar diagnostico de DT_ULT_REATIV invalida sem erro fatal", _
+                      "Diagnostico RepoEmpresa_DtUltReativInvalidasResumo com sucesso", _
+                      obtido, _
+                      "Toda falha fatal precisa ficar rastreavel", False
+    ElseIf qtdInvalidas = 0 Then
+        TV2_LogAssert "INTEGRIDADE_BASE", "CS_INT_05", "AUTO", _
+                      "Detectar DT_ULT_REATIV nao vazia e invalida em EMPRESAS", _
+                      "Zero valores invalidos", _
+                      obtido, _
+                      "Evita que janela de strikes corrompida caia em modo legado silencioso", _
+                      True
+        TV2_RemoverBugConhecido "INT-DT-ULT-REATIV-INVALIDA"
+    Else
+        TV2_LogManual "INTEGRIDADE_BASE", "CS_INT_05", _
+                      "DT_ULT_REATIV invalida em EMPRESAS - risco de punicao por janela corrompida", _
+                      "Zero valores invalidos", _
+                      "Corrigir campo manualmente ou aplicar backfill quando houver EVT_REATIVACAO no AUDIT_LOG", _
+                      obtido & " - ver RPT_BUGS_CONHECIDOS"
+        Call RegistrarBugConhecido( _
+            "INT-DT-ULT-REATIV-INVALIDA", _
+            "DT_ULT_REATIV invalida em EMPRESAS - janela de strikes nao confiavel", _
+            CDate(Date), _
+            "TV2_RunIntegridadeBase / TV2_DetectarDtUltReativInvalida", _
+            "ALTA", _
+            "TV2_RunIntegridadeBase", _
+            "CS_INT_05", _
+            "ABERTO", _
+            "Onda 22 MD-22.3: corrigir valor invalido ou aplicar backfill por AUDIT_LOG", _
+            "auditoria/03_ondas/onda_22_v204_dados_legados/05_TECNICO_MICRO39_DT_ULT_REATIV_INVALIDA.md")
+    End If
+    Exit Sub
+
+falha:
+    TV2_LogAssert "INTEGRIDADE_BASE", "CS_INT_05", "AUTO", _
+                  "Executar deteccao de DT_ULT_REATIV invalida sem erro fatal", _
                   "Nenhum erro fatal", _
                   "Erro " & CStr(Err.Number) & ": " & Err.Description, _
                   "Toda falha fatal precisa ficar rastreavel", False

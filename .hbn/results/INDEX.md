@@ -53,3 +53,4 @@ ultima-atualizacao: 2026-05-06
 | 0038 | Onda 22 preflight higiene documental e Onda 26 | APROVADO_OPERADOR | `0038-onda22-preflight-higiene-documental.json` | 2026-05-06 |
 | 0039 | Onda 22 V204 MICRO37 backfill DT_ULT_REATIV | APROVADO_OPERADOR | `0039-onda22-md22-1-backfill-dt-ult-reativ-micro37.json` | 2026-05-06 |
 | 0040 | Onda 22 V204 MICRO38 ref orfa CAD_OS | APROVADO_OPERADOR | `0040-onda22-md22-2-ref-orfa-cad-os-micro38.json` | 2026-05-06 |
+| 0041 | Onda 22 V204 MICRO39 DT_ULT_REATIV invalida | PENDENTE_OPERADOR | `0041-onda22-md22-3-dt-ult-reativ-invalida-micro39.json` | 2026-05-06 |

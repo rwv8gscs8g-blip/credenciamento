@@ -1,0 +1,34 @@
+{
+  "readback_id": "0041-onda22-md22-3-dt-ult-reativ-invalida-micro39",
+  "data": "2026-05-06",
+  "agent_id": "codex-cli",
+  "origem_hearback": "Operador aprovou MICRO38 com Quinteto verde e autorizou seguir para a proxima onda/microdelta da Onda 22.",
+  "contexto": {
+    "versao": "V12.0.0204-dev",
+    "base_confirmada": "MICRO38 aprovado em VR_20260506_163217 apos migracao RepoOS_MigrarRefOrfaLegado limpar 82 residuos",
+    "onda": "Onda 22 - Dados legados, backfill e integridade",
+    "microdelta": "MICRO39",
+    "md": "MD-22.3",
+    "build_alvo": "f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida"
+  },
+  "decisoes_confirmadas": [
+    "DT_ULT_REATIV vazia permanece modo legado/backfill e nao deve falhar por si so",
+    "DT_ULT_REATIV nao vazia e invalida deve bloquear punicao por strikes",
+    "IntegridadeBase deve reportar DT_ULT_REATIV invalida como bug conhecido quando existir",
+    "Funcionalidade nova exige teste automatizado no mesmo microdelta",
+    "Higiene documental antes de entregar o pacote continua obrigatoria"
+  ],
+  "acao": [
+    "Adicionar diagnostico read-only de DT_ULT_REATIV invalida em Repo_Empresa",
+    "Fazer ContarStrikesParaPunicaoResultado falhar explicitamente quando a data de corte estiver corrompida",
+    "Adicionar cenario MIG_007 ao TV2_RunSmoke",
+    "Adicionar detector CS_INT_05 ao TV2_RunIntegridadeBase",
+    "Atualizar catalogo/roteiro V2, App_Release, manifesto e procedimento de importacao"
+  ],
+  "gate_local": [
+    "CRLF preservado nos arquivos VBA tocados",
+    "shasum src/vba igual ao espelho local-ai/vba_import para os 5 modulos",
+    "manifesto V3 MICRO39 criado",
+    "JSON HBN valido"
+  ]
+}

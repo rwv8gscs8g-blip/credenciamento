@@ -234,6 +234,7 @@ Public Function ContarStrikesParaPunicaoResultado( _
     Dim dtCorte As Date
     Dim usarJanela As Boolean
     Dim dtFech As Variant
+    Dim rawDtReativ As Variant
 
     On Error GoTo falha
 
@@ -252,8 +253,34 @@ Public Function ContarStrikesParaPunicaoResultado( _
         ContarStrikesParaPunicaoResultado = res
         Exit Function
     End If
-    dtCorte = emp.DT_ULT_REATIV
-    usarJanela = (dtCorte > CDate(0))
+
+    rawDtReativ = ThisWorkbook.Sheets(SHEET_EMPRESAS).Cells(linhaEmp, COL_EMP_DT_ULT_REATIV).Value
+    If IsError(rawDtReativ) Then
+        res.sucesso = False
+        res.mensagem = "DT_ULT_REATIV invalida para EMP_ID=" & EMP_ID & "; valor=#ERRO; punicao por strikes bloqueada."
+        ContarStrikesParaPunicaoResultado = res
+        Exit Function
+    ElseIf IsNull(rawDtReativ) Then
+        dtCorte = CDate(0)
+        usarJanela = False
+    ElseIf Trim$(CStr(rawDtReativ)) = "" Then
+        dtCorte = CDate(0)
+        usarJanela = False
+    ElseIf Not IsDate(rawDtReativ) Then
+        res.sucesso = False
+        res.mensagem = "DT_ULT_REATIV invalida para EMP_ID=" & EMP_ID & "; valor=" & Left$(Trim$(CStr(rawDtReativ)), 80) & "; punicao por strikes bloqueada."
+        ContarStrikesParaPunicaoResultado = res
+        Exit Function
+    Else
+        dtCorte = CDate(rawDtReativ)
+        If dtCorte <= CDate(0) Then
+            res.sucesso = False
+            res.mensagem = "DT_ULT_REATIV invalida para EMP_ID=" & EMP_ID & "; valor=" & CStr(rawDtReativ) & "; punicao por strikes bloqueada."
+            ContarStrikesParaPunicaoResultado = res
+            Exit Function
+        End If
+        usarJanela = True
+    End If
 
     Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
     ultima = UltimaLinhaAba(SHEET_CAD_OS)

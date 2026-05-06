@@ -1,0 +1,49 @@
+{
+  "execution_id": "0041-exec-onda22-md22-3-dt-ult-reativ-invalida-micro39",
+  "agent_id": "codex-cli",
+  "readback_id": "0041-onda22-md22-3-dt-ult-reativ-invalida-micro39",
+  "action": "Implementar MICRO39 Onda 22 MD-22.3 com bloqueio de DT_ULT_REATIV invalida e testes MIG_007/CS_INT_05.",
+  "status": "PENDENTE_OPERADOR",
+  "outcome": "executed",
+  "human_status": "pending",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "V12.0.0204-dev",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO39",
+    "build": "f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida"
+  },
+  "validation": {
+    "local_static_checks": [
+      "OK: publicar_vba_import_v2.py check - vba_import 100% sincronizado com src/vba",
+      "OK: shasum src/vba == local-ai/vba_import para Repo_Empresa, Repo_Avaliacao, Teste_V2_Roteiros, Teste_V2_Engine e App_Release",
+      "manifest_MICRO39_created",
+      "OK: CRLF_preserved_for_changed_vba_and_manifest",
+      "OK: json_readback_result_valid"
+    ],
+    "operator_gate_required": [
+      "ImportarPacoteV3_Delta \"MICRO39\", \"f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida\"",
+      "VBE > Depurar > Compilar VBAProject",
+      "?GetBuildImportado",
+      "CT_ValidarRelease_QuintetoMinimo"
+    ],
+    "expected_quinteto_syntax": "V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0"
+  },
+  "files_changed": [
+    "src/vba/Repo_Empresa.bas",
+    "src/vba/Repo_Avaliacao.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO39.txt",
+    "local-ai/vba_import/001-modulo/AAO-Repo_Empresa.bas",
+    "local-ai/vba_import/001-modulo/AAN-Repo_Avaliacao.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "auditoria/03_ondas/onda_22_v204_dados_legados/05_TECNICO_MICRO39_DT_ULT_REATIV_INVALIDA.md",
+    "auditoria/03_ondas/onda_22_v204_dados_legados/06_PROCEDIMENTO_IMPORT_MICRO39.md"
+  ],
+  "created_at": "2026-05-06T20:30:00-0300"
+}

@@ -15,6 +15,8 @@ tratam apenas da linha pública oficial.
 - **Onda 22 / MICRO38** — diagnostico e migracao controlada de residuos
   sem chave em `CAD_OS`, com comando operacional
   `RepoOS_MigrarRefOrfaLegado`.
+- **Onda 22 / MICRO39** — diagnostico read-only de `DT_ULT_REATIV`
+  nao vazia e invalida em `EMPRESAS`, com cobertura `CS_INT_05`.
 
 ### Corrigido
 
@@ -52,6 +54,9 @@ tratam apenas da linha pública oficial.
 - `TV2_ClearSheet` passa a limpar sobras nas primeiras 50 colunas,
   evitando que dados residuais em colunas finais reaparecam como drift
   estrutural em `CAD_OS`.
+- **Onda 22 / MICRO39** — `ContarStrikesParaPunicaoResultado` passa a
+  bloquear punicao quando `DT_ULT_REATIV` esta corrompida, evitando
+  retorno silencioso ao modo legado.
 
 ### Validação
 
@@ -93,6 +98,9 @@ tratam apenas da linha pública oficial.
   chave em `CAD_OS` e deixou `ORFA_EMP=0`, `ORFA_ATIV=0`,
   `RESIDUOS=0`.
   Gate: `V1=171/0+V2_Smoke=31/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
+- MICRO39 entregue para importacao como
+  `f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida`.
+  Gate esperado: `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0`.
 - Regra permanente documentada em HBN: funcionalidade nova exige teste
   correspondente no mesmo microdelta.
 - Regra permanente documentada em HBN: higiene documental recorrente
