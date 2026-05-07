@@ -3,9 +3,9 @@
   "agent_id": "codex-cli",
   "readback_id": "0042-onda22-md22-3-dt-ult-reativ-invalida-micro39-fix1",
   "action": "Implementar MICRO39-fix1 para remover mutacao direta invalida do MIG_007 e preservar erro fatal original no Smoke.",
-  "status": "PENDENTE_OPERADOR",
+  "status": "APROVADO_OPERADOR",
   "outcome": "executed",
-  "human_status": "pending",
+  "human_status": "approved",
   "intent_risk_profile": "medium",
   "environment": {
     "repo": "/Users/macbookpro/Projetos/Credenciamento",
@@ -28,7 +28,14 @@
       "?GetBuildImportado",
       "CT_ValidarRelease_QuintetoMinimo"
     ],
-    "expected_quinteto_syntax": "V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0"
+    "expected_quinteto_syntax": "V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0",
+    "operator_result": {
+      "validacao_id": "VR_20260506_232006",
+      "build": "f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida-fix1",
+      "resultado": "APROVADO",
+      "sintaxe": "V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0",
+      "evidencia_csv": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuinteto_V12_0_0203_VR_20260506_232006.csv"
+    }
   },
   "files_changed": [
     "src/vba/Repo_Avaliacao.bas",
@@ -41,5 +48,6 @@
     "auditoria/03_ondas/onda_22_v204_dados_legados/07_TECNICO_MICRO39_FIX1_SMOKE_MIG007.md",
     "auditoria/03_ondas/onda_22_v204_dados_legados/08_PROCEDIMENTO_IMPORT_MICRO39_FIX1.md"
   ],
-  "created_at": "2026-05-06T23:10:00-0300"
+  "created_at": "2026-05-06T23:10:00-0300",
+  "approved_at": "2026-05-07T00:11:00-0300"
 }

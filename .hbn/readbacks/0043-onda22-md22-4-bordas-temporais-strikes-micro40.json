@@ -1,0 +1,32 @@
+{
+  "readback_id": "0043-onda22-md22-4-bordas-temporais-strikes-micro40",
+  "data": "2026-05-07",
+  "agent_id": "codex-cli",
+  "origem_hearback": "Operador importou MICRO39-fix1, compilou e aprovou o Quinteto VR_20260506_232006.",
+  "contexto": {
+    "versao": "V12.0.0204-dev",
+    "base_confirmada": "f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida-fix1 aprovado",
+    "onda": "Onda 22 - Dados legados, backfill e integridade",
+    "microdelta": "MICRO40",
+    "md": "MD-22.4",
+    "build_alvo": "f7aa84f+ONDA22.MD22.4-bordas-temporais-strikes"
+  },
+  "decisoes": [
+    "Nao alterar logica de producao ja vigente para DT_FECHAMENTO > DT_ULT_REATIV",
+    "Adicionar cobertura automatizada para bordas anterior, igual, posterior e corte futuro",
+    "Usar fixture isolada e limpeza local de CAD_OS para evitar residuo transacional",
+    "Atualizar catalogo e roteiro porque a regra 0010 exige teste para comportamento novo"
+  ],
+  "acao": [
+    "Adicionar quatro asserts E2E em TV2_RunRodizioStrikesEndToEnd",
+    "Adicionar helpers privados de teste para inserir e limpar OS fechada sintetica",
+    "Atualizar catalogo e roteiro V2 com os quatro cenarios",
+    "Atualizar App_Release, manifesto, docs, CHANGELOG, relay e ERP"
+  ],
+  "gate_esperado": [
+    "Importador V3 M=3 F=0 err=0 skip=0",
+    "Compile manual limpo",
+    "Quinteto aprovado",
+    "Sintaxe esperada: V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0"
+  ]
+}

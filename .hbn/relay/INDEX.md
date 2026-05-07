@@ -2,10 +2,10 @@
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1
 proprietario-bastao: Codex CLI (sessao codex-cli-bloco-b-onda18-2026-05-04) — BASTAO RECEBIDO do Opus 4.7 em 2026-05-04T01:34:31-0300; proprietario unico de implementacao da Frente 1 ate devolucao formal via doc 60.
-ciclo-ativo: V12.0.0204-dev Onda 22 sob Codex CLI. Roadmap V204 Onda 20-25 aprovado e Onda 26 documental adicionada por decisao do operador; MICRO31-MICRO38 aprovadas no Quinteto pelo operador; MICRO39 reprovado no Smoke e MICRO39-fix1 entregue para importacao; regras permanentes 0010 e 0011 vigentes.
+ciclo-ativo: V12.0.0204-dev Onda 22 sob Codex CLI. Roadmap V204 Onda 20-25 aprovado e Onda 26 documental adicionada por decisao do operador; MICRO31-MICRO38 aprovadas no Quinteto pelo operador; MICRO39 reprovado no Smoke; MICRO39-fix1 aprovado no Quinteto VR_20260506_232006; MICRO40 preparado para importacao; regras permanentes 0010 e 0011 vigentes.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Operador importar MICRO39-fix1, compilar e rodar Quinteto; se verde, registrar VR e avancar para Onda 22 MD-22.4 bordas temporais.
-ultima-atualizacao: 2026-05-06T23:10:00-0300 (MICRO39-fix1 entregue apos falha do Smoke MIG_007)
+proxima-acao: Operador importar MICRO40, compilar, confirmar build e rodar Quinteto; se verde, registrar VR e avancar para Onda 23.
+ultima-atualizacao: 2026-05-07T00:25:00-0300 (MICRO40 MD-22.4 preparado; aguardando gate operador)
 ---
 
 > ⚠️ **REGRA INVIOLAVEL (M11 destilada 2026-05-03)**: A IA le `src/vba/`

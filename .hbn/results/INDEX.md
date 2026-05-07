@@ -1,6 +1,6 @@
 ---
 titulo: Results HBN — ERPs vinculados a readbacks
-ultima-atualizacao: 2026-05-06
+ultima-atualizacao: 2026-05-07
 ---
 
 # Results HBN — Credenciamento
@@ -54,4 +54,5 @@ ultima-atualizacao: 2026-05-06
 | 0039 | Onda 22 V204 MICRO37 backfill DT_ULT_REATIV | APROVADO_OPERADOR | `0039-onda22-md22-1-backfill-dt-ult-reativ-micro37.json` | 2026-05-06 |
 | 0040 | Onda 22 V204 MICRO38 ref orfa CAD_OS | APROVADO_OPERADOR | `0040-onda22-md22-2-ref-orfa-cad-os-micro38.json` | 2026-05-06 |
 | 0041 | Onda 22 V204 MICRO39 DT_ULT_REATIV invalida | REPROVADO_OPERADOR | `0041-onda22-md22-3-dt-ult-reativ-invalida-micro39.json` | 2026-05-06 |
-| 0042 | Onda 22 V204 MICRO39-fix1 Smoke MIG_007 | PENDENTE_OPERADOR | `0042-onda22-md22-3-dt-ult-reativ-invalida-micro39-fix1.json` | 2026-05-06 |
+| 0042 | Onda 22 V204 MICRO39-fix1 Smoke MIG_007 | APROVADO_OPERADOR | `0042-onda22-md22-3-dt-ult-reativ-invalida-micro39-fix1.json` | 2026-05-07 |
+| 0043 | Onda 22 V204 MICRO40 bordas temporais strikes | PENDENTE_OPERADOR | `0043-onda22-md22-4-bordas-temporais-strikes-micro40.json` | 2026-05-07 |

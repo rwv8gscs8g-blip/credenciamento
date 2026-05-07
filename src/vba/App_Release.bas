@@ -219,12 +219,15 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0202|DESENVOLVIMENTO|V12.0
 ' e invalida bloqueia contagem punitiva de strikes; Smoke cobre MIG_007
 ' e IntegridadeBase cobre CS_INT_05.
 ' MICRO39-fix1 evita mutacao direta de EMPRESAS no MIG_007 e preserva erro fatal.
-Public Const APP_BUILD_IMPORTADO As String = "f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida-fix1"
+' V12.0.0204 ONDA 22 MD-22.4 (2026-05-07) - E2E_Strikes cobre bordas
+' temporais da janela punitiva pos-reativacao: fechamento anterior, igual,
+' posterior e DT_ULT_REATIV futura.
+Public Const APP_BUILD_IMPORTADO As String = "f7aa84f+ONDA22.MD22.4-bordas-temporais-strikes"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0203-governanca-testes"
-Public Const APP_BUILD_GERADO_EM As String = "2026-05-06 23:10"
+Public Const APP_BUILD_GERADO_EM As String = "2026-05-07 00:25"
 Public Const APP_RELEASE_TAG As String = "v12.0.0204-dev"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0204"
-Public Const APP_RELEASE_TEST_KEY As String = "quinteto-v204-onda22-md22-3-fix1-2026-05-06"
+Public Const APP_RELEASE_TEST_KEY As String = "quinteto-v204-onda22-md22-4-2026-05-07"
 Public Const APP_GITHUB_REPO_URL As String = "https://github.com/rwv8gscs8g-blip/credenciamento"
 Public Const APP_GITHUB_RELEASE_NOTES_URL As String = APP_GITHUB_REPO_URL & "/tree/main/obsidian-vault/releases"
 

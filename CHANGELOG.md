@@ -17,6 +17,9 @@ tratam apenas da linha pública oficial.
   `RepoOS_MigrarRefOrfaLegado`.
 - **Onda 22 / MICRO39** — diagnostico read-only de `DT_ULT_REATIV`
   nao vazia e invalida em `EMPRESAS`, com cobertura `CS_INT_05`.
+- **Onda 22 / MICRO40** — quatro cenarios E2E para bordas temporais da
+  janela punitiva de strikes apos reativacao: anterior, igual,
+  posterior e corte futuro.
 
 ### Corrigido
 
@@ -107,7 +110,11 @@ tratam apenas da linha pública oficial.
   `V2_SMOKE` antes do assert `MIG_007`.
 - MICRO39-fix1 entregue para importacao como
   `f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida-fix1`.
-  Gate esperado: `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0`.
+  Aprovado pelo operador em `VR_20260506_232006`:
+  `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0`.
+- MICRO40 entregue para importacao como
+  `f7aa84f+ONDA22.MD22.4-bordas-temporais-strikes`.
+  Gate esperado: `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0`.
 - Regra permanente documentada em HBN: funcionalidade nova exige teste
   correspondente no mesmo microdelta.
 - Regra permanente documentada em HBN: higiene documental recorrente

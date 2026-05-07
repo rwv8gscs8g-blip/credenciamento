@@ -2678,6 +2678,83 @@ Public Sub TV2_RunRodizioStrikesEndToEnd(Optional ByVal visual As Boolean = Fals
     TV2_RestaurarConfigBaseline 1, 0
     TV2_LimparNamespace "SLEG"
 
+    ' --- CS_REATIV_BORDA_TEMPORAL (Onda 22 MD-22.4) --------------------
+    ' A janela punitiva e estritamente posterior a DT_ULT_REATIV:
+    ' COL_OS_DT_FECHAMENTO > DT_ULT_REATIV. As bordas abaixo protegem
+    ' contra regressao para >= ou contra anistia indevida de strikes novos.
+    Dim entsBT() As String, empsBT() As String, ativsBT() As String
+    Dim corteBT As Date
+    Dim notaCorteBT As Double
+    Dim qtdBT As Long
+    Dim resBT As TResult
+    Dim obtidoBT As String
+
+    TV2_LimparNamespace "SBTM"
+    TV2_E2E_LimparCadOsPrefixo "SBTM_"
+    TV2_FixtureFactory "SBTM", 1, 1, 1, entsBT, empsBT, ativsBT
+    TV2_RestaurarConfigBaseline 3, 90
+
+    corteBT = DateSerial(2026, 1, 15)
+    notaCorteBT = 5
+
+    TV2_E2E_InserirOSFechadaTeste "SBTM_ANTERIOR", empsBT(1), entsBT(1), ativsBT(1), corteBT - 1, 4
+    qtdBT = 0
+    resBT = ContarStrikesParaPunicaoResultado(empsBT(1), notaCorteBT, qtdBT, corteBT)
+    obtidoBT = "SUCESSO=" & CStr(resBT.sucesso) & "; QTD=" & CStr(qtdBT) & _
+               "; CORTE=" & Format$(corteBT, "yyyy-mm-dd") & _
+               "; FECHAMENTO=" & Format$(corteBT - 1, "yyyy-mm-dd") & _
+               "; MSG=" & resBT.mensagem
+    TV2_LogAssert "STRIKES_E2E", "CS_REATIV_BORDA_ANTERIOR", "AUTO", _
+                  "OS fechada antes da DT_ULT_REATIV nao conta para punicao", _
+                  "STRIKES_PUNICAO=0", _
+                  obtidoBT, _
+                  "Protege a exclusao de historico anterior a reativacao", _
+                  resBT.sucesso And qtdBT = 0
+
+    TV2_E2E_InserirOSFechadaTeste "SBTM_IGUAL", empsBT(1), entsBT(1), ativsBT(1), corteBT, 4
+    qtdBT = 0
+    resBT = ContarStrikesParaPunicaoResultado(empsBT(1), notaCorteBT, qtdBT, corteBT)
+    obtidoBT = "SUCESSO=" & CStr(resBT.sucesso) & "; QTD=" & CStr(qtdBT) & _
+               "; CORTE=" & Format$(corteBT, "yyyy-mm-dd") & _
+               "; FECHAMENTO_IGUAL=" & Format$(corteBT, "yyyy-mm-dd") & _
+               "; MSG=" & resBT.mensagem
+    TV2_LogAssert "STRIKES_E2E", "CS_REATIV_BORDA_IGUAL", "AUTO", _
+                  "OS fechada exatamente na DT_ULT_REATIV nao conta para punicao", _
+                  "STRIKES_PUNICAO=0", _
+                  obtidoBT, _
+                  "Formaliza que a regra e estritamente maior, nao maior-ou-igual", _
+                  resBT.sucesso And qtdBT = 0
+
+    TV2_E2E_InserirOSFechadaTeste "SBTM_POSTERIOR", empsBT(1), entsBT(1), ativsBT(1), corteBT + 1, 4
+    qtdBT = 0
+    resBT = ContarStrikesParaPunicaoResultado(empsBT(1), notaCorteBT, qtdBT, corteBT)
+    obtidoBT = "SUCESSO=" & CStr(resBT.sucesso) & "; QTD=" & CStr(qtdBT) & _
+               "; CORTE=" & Format$(corteBT, "yyyy-mm-dd") & _
+               "; FECHAMENTO_POSTERIOR=" & Format$(corteBT + 1, "yyyy-mm-dd") & _
+               "; MSG=" & resBT.mensagem
+    TV2_LogAssert "STRIKES_E2E", "CS_REATIV_BORDA_POSTERIOR", "AUTO", _
+                  "OS fechada apos a DT_ULT_REATIV conta para punicao", _
+                  "STRIKES_PUNICAO=1", _
+                  obtidoBT, _
+                  "Garante que strikes novos continuam punitivos apos reativacao", _
+                  resBT.sucesso And qtdBT = 1
+
+    qtdBT = 0
+    resBT = ContarStrikesParaPunicaoResultado(empsBT(1), notaCorteBT, qtdBT, corteBT + 30)
+    obtidoBT = "SUCESSO=" & CStr(resBT.sucesso) & "; QTD=" & CStr(qtdBT) & _
+               "; CORTE_FUTURO=" & Format$(corteBT + 30, "yyyy-mm-dd") & _
+               "; MSG=" & resBT.mensagem
+    TV2_LogAssert "STRIKES_E2E", "CS_REATIV_BORDA_FUTURA", "AUTO", _
+                  "DT_ULT_REATIV futura nao pune OS fechada antes desse corte", _
+                  "STRIKES_PUNICAO=0", _
+                  obtidoBT, _
+                  "Cobre bases com data futura acidental sem cair em historico antigo", _
+                  resBT.sucesso And qtdBT = 0
+
+    TV2_RestaurarConfigBaseline 1, 0
+    TV2_E2E_LimparCadOsPrefixo "SBTM_"
+    TV2_LimparNamespace "SBTM"
+
     ' --- CS_E2E_5EMPS (Onda 17 MD-17.1.b) ------------------------------
     ' Tema: Rodizio com 5 EMPs, MAX_STRIKES=2, 3 voltas com EMP1 sempre
     ' nota baixa -> suspende DURANTE a volta 2 (no meio do ciclo).
@@ -2752,6 +2829,107 @@ falha:
     ' Onda 17 MD-17.1.a: helper unificado em Engine.
     TV2_RestaurarConfigBaseline 1, 0
     TV2_FinalizarExecucao "STRIKES_E2E", silencioso
+End Sub
+
+Private Sub TV2_E2E_InserirOSFechadaTeste( _
+    ByVal osId As String, _
+    ByVal empId As String, _
+    ByVal entId As String, _
+    ByVal ativId As String, _
+    ByVal dtFechamento As Date, _
+    ByVal media As Double _
+)
+    Dim ws As Worksheet
+    Dim linha As Long
+    Dim colNota As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim errNum As Long
+    Dim errMsg As String
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        Err.Raise 1004, "TV2_E2E_InserirOSFechadaTeste", "Nao foi possivel preparar CAD_OS."
+    End If
+
+    linha = TV2_NextDataRow(SHEET_CAD_OS)
+    ws.Cells(linha, COL_OS_ID).Value = osId
+    ws.Cells(linha, COL_OS_ENT_ID).Value = entId
+    ws.Cells(linha, COL_OS_COD_SERV).Value = "001"
+    ws.Cells(linha, COL_OS_EMP_ID).Value = empId
+    ws.Cells(linha, COL_OS_EMPENHO).Value = "TV2"
+    ws.Cells(linha, COL_OS_DT_EMISSAO).Value = dtFechamento - 1
+    ws.Cells(linha, COL_OS_DT_PREV_FIM).Value = dtFechamento
+    ws.Cells(linha, COL_OS_DT_FECHAMENTO).Value = dtFechamento
+    ws.Cells(linha, COL_OS_QT_EST).Value = 1
+    ws.Cells(linha, COL_OS_VL_TOTAL).Value = 100
+    ws.Cells(linha, COL_OS_QT_EXEC).Value = 1
+    ws.Cells(linha, COL_OS_VL_EXEC).Value = 100
+    For colNota = COL_OS_NOTA_01 To COL_OS_NOTA_10
+        ws.Cells(linha, colNota).Value = media
+    Next colNota
+    ws.Cells(linha, COL_OS_MEDIA).Value = media
+    ws.Cells(linha, COL_OS_OBSERVACOES).Value = "TV2_BORDA_TEMPORAL"
+    ws.Cells(linha, COL_OS_ATIV_ID).Value = ativId
+    ws.Cells(linha, COL_OS_PREOS_ID).Value = osId & "_PRE"
+    ws.Cells(linha, COL_OS_STATUS).Value = "CONCLUIDA"
+    ws.Cells(linha, COL_OS_VL_UNIT).Value = 100
+    ws.Cells(linha, COL_OS_JUSTIF_DIV).Value = "TV2_BORDA_TEMPORAL"
+
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    Exit Sub
+
+falha:
+    errNum = Err.Number
+    errMsg = Err.Description
+    On Error Resume Next
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    Err.Raise IIf(errNum <> 0, errNum, 1004), "TV2_E2E_InserirOSFechadaTeste", errMsg
+End Sub
+
+Private Sub TV2_E2E_LimparCadOsPrefixo(ByVal prefixo As String)
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim linha As Long
+    Dim osId As String
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim errNum As Long
+    Dim errMsg As String
+
+    On Error GoTo falha
+
+    If Len(Trim$(prefixo)) = 0 Then Exit Sub
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
+    ultima = ws.Cells(ws.Rows.count, COL_OS_ID).End(xlUp).row
+    If ultima < LINHA_DADOS Then Exit Sub
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        Err.Raise 1004, "TV2_E2E_LimparCadOsPrefixo", "Nao foi possivel preparar CAD_OS."
+    End If
+
+    For linha = ultima To LINHA_DADOS Step -1
+        osId = Trim$(CStr(ws.Cells(linha, COL_OS_ID).Value))
+        If Len(osId) >= Len(prefixo) Then
+            If StrComp(Left$(osId, Len(prefixo)), prefixo, vbTextCompare) = 0 Then
+                ws.Rows(linha).ClearContents
+            End If
+        End If
+    Next linha
+
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    Exit Sub
+
+falha:
+    errNum = Err.Number
+    errMsg = Err.Description
+    On Error Resume Next
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    Err.Raise IIf(errNum <> 0, errNum, 1004), "TV2_E2E_LimparCadOsPrefixo", errMsg
 End Sub
 
 
