@@ -57,6 +57,9 @@ tratam apenas da linha pública oficial.
 - **Onda 22 / MICRO39** — `ContarStrikesParaPunicaoResultado` passa a
   bloquear punicao quando `DT_ULT_REATIV` esta corrompida, evitando
   retorno silencioso ao modo legado.
+- **Onda 22 / MICRO39-fix1** — `MIG_007` deixa de escrever data invalida
+  diretamente em `EMPRESAS` e passa a validar o contador com override
+  deterministico; o handler fatal do Smoke preserva o erro original.
 
 ### Validação
 
@@ -100,6 +103,10 @@ tratam apenas da linha pública oficial.
   Gate: `V1=171/0+V2_Smoke=31/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=3/0`.
 - MICRO39 entregue para importacao como
   `f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida`.
+  Reprovado pelo operador em `VR_20260506_222237` por fatal no
+  `V2_SMOKE` antes do assert `MIG_007`.
+- MICRO39-fix1 entregue para importacao como
+  `f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida-fix1`.
   Gate esperado: `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0`.
 - Regra permanente documentada em HBN: funcionalidade nova exige teste
   correspondente no mesmo microdelta.

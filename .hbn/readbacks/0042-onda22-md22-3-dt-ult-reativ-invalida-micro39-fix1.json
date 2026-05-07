@@ -1,0 +1,39 @@
+{
+  "readback_id": "0042-onda22-md22-3-dt-ult-reativ-invalida-micro39-fix1",
+  "data": "2026-05-06",
+  "agent_id": "codex-cli",
+  "origem_hearback": "Operador importou MICRO39, compilou e reportou Quinteto reprovado em V2_SMOKE com falha fatal antes do MIG_007.",
+  "contexto": {
+    "versao": "V12.0.0204-dev",
+    "base_confirmada": "MICRO39 importado e compilado, mas reprovado em VR_20260506_222237",
+    "onda": "Onda 22 - Dados legados, backfill e integridade",
+    "microdelta": "MICRO39-fix1",
+    "md": "MD-22.3",
+    "build_alvo": "f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida-fix1"
+  },
+  "falha_observada": {
+    "validacao_id": "VR_20260506_222237",
+    "suite": "V2_SMOKE",
+    "sintaxe": "V1=171/0+V2_Smoke=17/1+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0",
+    "csv": "TesteV2_SMOKE_Falhas_TV2_20260506_222947.csv",
+    "diagnostico": "MIG_007 mutava EMPRESAS com texto invalido em DT_ULT_REATIV para provocar a regra; em workbook real essa escrita pode falhar antes do assert. O handler fatal tambem perdia Err.Number/Err.Description e registrava Erro 0."
+  },
+  "decisoes": [
+    "Nao depender de mutacao direta invalida em EMPRESAS para o Smoke",
+    "Manter a regra de negocio: valor nao vazio e nao data bloqueia punicao por strikes",
+    "Testar o contador com override deterministico de DT_ULT_REATIV invalida",
+    "Preservar erro fatal original no handler do TV2_RunSmoke"
+  ],
+  "acao": [
+    "Adicionar parametro opcional em ContarStrikesParaPunicaoResultado para injetar DT_ULT_REATIV em teste sem tocar a planilha",
+    "Extrair validacao de DT_ULT_REATIV para RepoAvaliacao_ValidarDtUltReativParaPunicao",
+    "Ajustar MIG_007 para chamar o contador com override invalido",
+    "Atualizar App_Release, manifesto e docs"
+  ],
+  "gate_local": [
+    "CRLF preservado nos arquivos VBA tocados",
+    "shasum src/vba igual ao espelho local-ai/vba_import para Repo_Avaliacao, Teste_V2_Roteiros e App_Release",
+    "manifesto V3 MICRO39-fix1 criado",
+    "JSON HBN valido"
+  ]
+}

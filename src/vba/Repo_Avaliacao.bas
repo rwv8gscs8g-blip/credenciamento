@@ -219,7 +219,8 @@ End Function
 Public Function ContarStrikesParaPunicaoResultado( _
     ByVal EMP_ID As String, _
     ByVal notaCorte As Double, _
-    ByRef qtdOut As Long _
+    ByRef qtdOut As Long, _
+    Optional ByVal dtUltReativOverride As Variant _
 ) As TResult
     Dim res As TResult
     Dim ws As Worksheet
@@ -254,32 +255,16 @@ Public Function ContarStrikesParaPunicaoResultado( _
         Exit Function
     End If
 
-    rawDtReativ = ThisWorkbook.Sheets(SHEET_EMPRESAS).Cells(linhaEmp, COL_EMP_DT_ULT_REATIV).Value
-    If IsError(rawDtReativ) Then
-        res.sucesso = False
-        res.mensagem = "DT_ULT_REATIV invalida para EMP_ID=" & EMP_ID & "; valor=#ERRO; punicao por strikes bloqueada."
-        ContarStrikesParaPunicaoResultado = res
-        Exit Function
-    ElseIf IsNull(rawDtReativ) Then
-        dtCorte = CDate(0)
-        usarJanela = False
-    ElseIf Trim$(CStr(rawDtReativ)) = "" Then
-        dtCorte = CDate(0)
-        usarJanela = False
-    ElseIf Not IsDate(rawDtReativ) Then
-        res.sucesso = False
-        res.mensagem = "DT_ULT_REATIV invalida para EMP_ID=" & EMP_ID & "; valor=" & Left$(Trim$(CStr(rawDtReativ)), 80) & "; punicao por strikes bloqueada."
-        ContarStrikesParaPunicaoResultado = res
-        Exit Function
+    If IsMissing(dtUltReativOverride) Then
+        rawDtReativ = ThisWorkbook.Sheets(SHEET_EMPRESAS).Cells(linhaEmp, COL_EMP_DT_ULT_REATIV).Value
     Else
-        dtCorte = CDate(rawDtReativ)
-        If dtCorte <= CDate(0) Then
-            res.sucesso = False
-            res.mensagem = "DT_ULT_REATIV invalida para EMP_ID=" & EMP_ID & "; valor=" & CStr(rawDtReativ) & "; punicao por strikes bloqueada."
-            ContarStrikesParaPunicaoResultado = res
-            Exit Function
-        End If
-        usarJanela = True
+        rawDtReativ = dtUltReativOverride
+    End If
+
+    res = RepoAvaliacao_ValidarDtUltReativParaPunicao(EMP_ID, rawDtReativ, usarJanela, dtCorte)
+    If Not res.sucesso Then
+        ContarStrikesParaPunicaoResultado = res
+        Exit Function
     End If
 
     Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
@@ -324,6 +309,62 @@ falha:
     res.mensagem = "Erro em ContarStrikesParaPunicaoResultado: " & Err.Description
     res.CodigoErro = Err.Number
     ContarStrikesParaPunicaoResultado = res
+End Function
+
+Public Function RepoAvaliacao_ValidarDtUltReativParaPunicao( _
+    ByVal EMP_ID As String, _
+    ByVal rawDtReativ As Variant, _
+    ByRef usarJanelaOut As Boolean, _
+    ByRef dtCorteOut As Date _
+) As TResult
+    Dim res As TResult
+
+    On Error GoTo falha
+
+    usarJanelaOut = False
+    dtCorteOut = CDate(0)
+
+    If IsError(rawDtReativ) Then
+        res.sucesso = False
+        res.mensagem = "DT_ULT_REATIV invalida para EMP_ID=" & EMP_ID & "; valor=#ERRO; punicao por strikes bloqueada."
+        RepoAvaliacao_ValidarDtUltReativParaPunicao = res
+        Exit Function
+    ElseIf IsNull(rawDtReativ) Then
+        res.sucesso = True
+        res.mensagem = "DT_ULT_REATIV vazia; modo legado permitido."
+        RepoAvaliacao_ValidarDtUltReativParaPunicao = res
+        Exit Function
+    ElseIf Trim$(CStr(rawDtReativ)) = "" Then
+        res.sucesso = True
+        res.mensagem = "DT_ULT_REATIV vazia; modo legado permitido."
+        RepoAvaliacao_ValidarDtUltReativParaPunicao = res
+        Exit Function
+    ElseIf Not IsDate(rawDtReativ) Then
+        res.sucesso = False
+        res.mensagem = "DT_ULT_REATIV invalida para EMP_ID=" & EMP_ID & "; valor=" & Left$(Trim$(CStr(rawDtReativ)), 80) & "; punicao por strikes bloqueada."
+        RepoAvaliacao_ValidarDtUltReativParaPunicao = res
+        Exit Function
+    End If
+
+    dtCorteOut = CDate(rawDtReativ)
+    If dtCorteOut <= CDate(0) Then
+        res.sucesso = False
+        res.mensagem = "DT_ULT_REATIV invalida para EMP_ID=" & EMP_ID & "; valor=" & CStr(rawDtReativ) & "; punicao por strikes bloqueada."
+        RepoAvaliacao_ValidarDtUltReativParaPunicao = res
+        Exit Function
+    End If
+
+    usarJanelaOut = True
+    res.sucesso = True
+    res.mensagem = "DT_ULT_REATIV valida para janela punitiva."
+    RepoAvaliacao_ValidarDtUltReativParaPunicao = res
+    Exit Function
+
+falha:
+    res.sucesso = False
+    res.mensagem = "Erro ao validar DT_ULT_REATIV para punicao: " & Err.Description
+    res.CodigoErro = Err.Number
+    RepoAvaliacao_ValidarDtUltReativParaPunicao = res
 End Function
 
 

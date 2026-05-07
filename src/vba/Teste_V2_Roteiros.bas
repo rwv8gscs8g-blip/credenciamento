@@ -95,13 +95,10 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
     Dim cadOsMigPreparada As Boolean
     Dim resDtInvalid As TResult
     Dim qtdDtInvalid As Long
-    Dim wsEmpDtInvalid As Worksheet
-    Dim linhaEmpDtInvalid As Long
-    Dim valorDtOriginal As Variant
-    Dim empDtInvalidProtegida As Boolean
-    Dim empDtInvalidSenha As String
-    Dim empDtInvalidPreparada As Boolean
-    Dim empDtInvalidMutada As Boolean
+    Dim dtCorteDtInvalid As Date
+    Dim usarJanelaDtInvalid As Boolean
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
 
     On Error GoTo falha
 
@@ -495,35 +492,17 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
                   okAtm
 
     TV2_PrepararCenarioTriploCanonico
-    Set wsEmpDtInvalid = ThisWorkbook.Sheets(SHEET_EMPRESAS)
-    linhaEmpDtInvalid = BuscarLinha(SHEET_EMPRESAS, COL_EMP_ID, "001")
-    If linhaEmpDtInvalid < PrimeiraLinhaDadosEmpresas() Then
-        Err.Raise 1004, "TV2_RunSmoke.MIG_007", "Empresa 001 nao localizada para cenario MIG_007."
-    End If
-    If Not Util_PrepararAbaParaEscrita(wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha) Then
-        Err.Raise 1004, "TV2_RunSmoke.MIG_007", "Nao foi possivel preparar EMPRESAS para cenario MIG_007."
-    End If
-    empDtInvalidPreparada = True
-    valorDtOriginal = wsEmpDtInvalid.Cells(linhaEmpDtInvalid, COL_EMP_DT_ULT_REATIV).Value
-    wsEmpDtInvalid.Cells(linhaEmpDtInvalid, COL_EMP_DT_ULT_REATIV).Value = "DATA_INVALIDA_MIG_007"
-    Util_RestaurarProtecaoAba wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha
-    empDtInvalidPreparada = False
-    empDtInvalidMutada = True
-
-    resDtInvalid = ContarStrikesParaPunicaoResultado("001", GetNotaMinimaAvaliacao(), qtdDtInvalid)
-
-    If Not Util_PrepararAbaParaEscrita(wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha) Then
-        Err.Raise 1004, "TV2_RunSmoke.MIG_007", "Nao foi possivel restaurar EMPRESAS apos cenario MIG_007."
-    End If
-    empDtInvalidPreparada = True
-    wsEmpDtInvalid.Cells(linhaEmpDtInvalid, COL_EMP_DT_ULT_REATIV).Value = valorDtOriginal
-    Util_RestaurarProtecaoAba wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha
-    empDtInvalidPreparada = False
-    empDtInvalidMutada = False
+    qtdDtInvalid = 0
+    usarJanelaDtInvalid = False
+    dtCorteDtInvalid = CDate(0)
+    resDtInvalid = ContarStrikesParaPunicaoResultado( _
+        "001", GetNotaMinimaAvaliacao(), qtdDtInvalid, "DATA_INVALIDA_MIG_007")
 
     obtidoAtm = "SUCESSO=" & CStr(resDtInvalid.sucesso)
     obtidoAtm = obtidoAtm & "; MSG=" & resDtInvalid.mensagem
     obtidoAtm = obtidoAtm & "; QTD=" & CStr(qtdDtInvalid)
+    obtidoAtm = obtidoAtm & "; USAR_JANELA=" & CStr(usarJanelaDtInvalid)
+    obtidoAtm = obtidoAtm & "; DT_CORTE=" & Format$(dtCorteDtInvalid, "yyyy-mm-dd")
     TV2_LogAssert "SMOKE", "MIG_007", "AUTO", _
                   "Bloquear punicao quando DT_ULT_REATIV esta invalida", _
                   "Contador de strikes retorna falha explicita e nao calcula punicao em modo legado", _
@@ -540,22 +519,17 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
     Exit Sub
 
 falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
     On Error Resume Next
     TV2_DesprotegerAbaTeste SHEET_EMPRESAS, senhaFalhaAba
     If cadOsMigPreparada Then Util_RestaurarProtecaoAba wsCadOsMig, cadOsMigProtegida, cadOsMigSenha
-    If empDtInvalidMutada And Not empDtInvalidPreparada Then
-        empDtInvalidPreparada = Util_PrepararAbaParaEscrita(wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha)
-    End If
-    If empDtInvalidPreparada Then
-        wsEmpDtInvalid.Cells(linhaEmpDtInvalid, COL_EMP_DT_ULT_REATIV).Value = valorDtOriginal
-        Util_RestaurarProtecaoAba wsEmpDtInvalid, empDtInvalidProtegida, empDtInvalidSenha
-    End If
     If Transacao_EstaAtiva() Then txRollbackCleanup = Transacao_Rollback()
     On Error GoTo 0
     TV2_LogAssert "SMOKE", "FATAL", "AUTO", _
                   "Executar suite sem erro fatal", _
                   "Nenhum erro fatal", _
-                  "Erro " & CStr(Err.Number) & ": " & Err.Description, _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
                   "Toda falha fatal precisa ficar rastreavel", False
     TV2_FinalizarExecucao "SMOKE", silencioso
 End Sub

@@ -67,7 +67,7 @@ para cobrir UI adversarial, transacoes, datas e dados legados.
 |---|---|---|---|
 | MD-22.1 | Backfill auditavel de `DT_ULT_REATIV` por `AUDIT_LOG` — MICRO37 entregue para importacao | `Repo_Empresa.bas`, `Auto_Open.bas`, testes | `MIG_005`; Quinteto esperado com `V2_Smoke=30/0` |
 | MD-22.2 | Fechar `INT-CAD-OS-REF-ORFA` com relatorio/migracao — MICRO38 aprovado | `Repo_OS.bas`, `Teste_V2_Roteiros.bas`, `Teste_V2_Engine.bas` | `MIG_006`; `VR_20260506_163217`; limpeza controlada 82 residuos; Quinteto verde |
-| MD-22.3 | Tratamento de `DT_ULT_REATIV` invalida — MICRO39 entregue para importacao | `Repo_Empresa.bas`, `Repo_Avaliacao.bas`, testes | `MIG_007`; `CS_INT_05`; Quinteto esperado com `V2_Smoke=32/0` e `IntegridadeBase=4/0` |
+| MD-22.3 | Tratamento de `DT_ULT_REATIV` invalida — MICRO39 reprovado no Smoke; MICRO39-fix1 entregue | `Repo_Empresa.bas`, `Repo_Avaliacao.bas`, testes | `MIG_007`; `CS_INT_05`; Quinteto esperado com `V2_Smoke=32/0` e `IntegridadeBase=4/0` |
 | MD-22.4 | Bordas temporais: igual, anterior, posterior, futura | testes | E2E Strikes |
 
 ### Onda 23 - Baterias adversariais e cobertura combinatoria

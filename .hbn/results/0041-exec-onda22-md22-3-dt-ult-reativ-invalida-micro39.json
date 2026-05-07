@@ -3,9 +3,9 @@
   "agent_id": "codex-cli",
   "readback_id": "0041-onda22-md22-3-dt-ult-reativ-invalida-micro39",
   "action": "Implementar MICRO39 Onda 22 MD-22.3 com bloqueio de DT_ULT_REATIV invalida e testes MIG_007/CS_INT_05.",
-  "status": "PENDENTE_OPERADOR",
-  "outcome": "executed",
-  "human_status": "pending",
+  "status": "REPROVADO_OPERADOR",
+  "outcome": "executed_with_operator_failure",
+  "human_status": "failed",
   "intent_risk_profile": "medium",
   "environment": {
     "repo": "/Users/macbookpro/Projetos/Credenciamento",
@@ -29,6 +29,14 @@
       "CT_ValidarRelease_QuintetoMinimo"
     ],
     "expected_quinteto_syntax": "V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0"
+  },
+  "operator_result": {
+    "validacao_id": "VR_20260506_222237",
+    "build": "f7aa84f+ONDA22.MD22.3-dt-ult-reativ-invalida",
+    "resultado": "REPROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=17/1+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0",
+    "falha": "V2_SMOKE fatal antes de MIG_007 registrar assert; CSV TesteV2_SMOKE_Falhas_TV2_20260506_222947.csv com Erro 0 por perda de Err no handler",
+    "superseded_by": "0042-exec-onda22-md22-3-dt-ult-reativ-invalida-micro39-fix1"
   },
   "files_changed": [
     "src/vba/Repo_Empresa.bas",
