@@ -5,12 +5,13 @@
   "executed_at": "2026-05-11T16:41:14-03:00",
   "track": "safe_track",
   "agent_id": "Codex CLI",
-  "status": "APROVADO_PUBLICACAO_PRE_GIT",
+  "status": "APROVADO_PUBLICADO_GITHUB",
   "delta": {
     "id": "MICRO54",
     "tema": "Publicacao oficial V12.0.0204",
     "build_base_validado": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
     "tag_publica": "v12.0.0204",
+    "github_release_url": "https://github.com/rwv8gscs8g-blip/credenciamento/releases/tag/v12.0.0204",
     "arquivos_principais": [
       "src/vba/App_Release.bas",
       "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
@@ -47,5 +48,5 @@
     "D-STRICT-G1-G2-G5",
     "D-MICRO50-CSV-FILENAME"
   ],
-  "proxima_acao": "Preparar commit, tag v12.0.0204 e publicacao GitHub; depois abrir auditoria cruzada V12.0.0205."
+  "proxima_acao": "Abrir auditoria cruzada Opus/Antigravity para V12.0.0205."
 }

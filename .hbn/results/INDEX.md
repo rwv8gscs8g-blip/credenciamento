@@ -74,4 +74,4 @@ ultima-atualizacao: 2026-05-11
 | 0060 | Onda 25 V204 MICRO53 Limpar Base CAD_SERV | ENTREGUE_PENDENTE_GATE_OPERADOR | `0060-exec-onda25-md25-5-correcao-limpar-cad-serv-micro53.json` | 2026-05-11 |
 | 0061 | Onda 25 V204 MICRO53-fix1 compile Preencher | ENTREGUE_PENDENTE_GATE_OPERADOR | `0061-exec-onda25-md25-5-correcao-limpar-cad-serv-micro53-fix1.json` | 2026-05-11 |
 | 0062 | Onda 25 V204 MICRO53-fix2 baseline CAD_SERV V2 | APROVADO_OPERADOR_FINAL | `0062-exec-onda25-md25-5-correcao-limpar-cad-serv-micro53-fix2.json` | 2026-05-11 |
-| 0063 | Onda 25 V204 MICRO54 publicacao oficial | APROVADO_PUBLICACAO_PRE_GIT | `0063-exec-onda25-md25-6-publicacao-v204-micro54.json` | 2026-05-11 |
+| 0063 | Onda 25 V204 MICRO54 publicacao oficial | APROVADO_PUBLICADO_GITHUB | `0063-exec-onda25-md25-6-publicacao-v204-micro54.json` | 2026-05-11 |
