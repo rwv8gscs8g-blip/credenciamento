@@ -67,6 +67,12 @@ tratam apenas da linha pública oficial.
 - **Onda 25 / MICRO54** — fechamento de publicacao V204: release note
   publica, status oficial, matriz de testes, relay/results e vitrine
   documental alinhados ao gate final `VR_20260511_154433`.
+- **Onda 25 / MICRO55** — `App_Release` final alinhado a V12.0.0204
+  VALIDADO/OFICIAL, com proxima release alvo V12.0.0205 e evidencia adicional
+  `VR_20260511_175849`.
+- **Onda 25 / MICRO56** — vitrine humana V204: guia de liberacao de macros no
+  Windows, how-to do Sexteto, roteiro manual V204, matriz de cobertura de
+  regras V204 e arquivamento semantico dos documentos V203/rc4.
 
 ### Corrigido
 
@@ -248,6 +254,10 @@ tratam apenas da linha pública oficial.
 - MICRO55 aprovado pelo operador em 2026-05-11 com Importador V3
   `M=1/F=0/err=0/skip=0`, compile limpo, tela `Sobre` alinhada e
   Sexteto extra `VR_20260511_175849` APROVADO.
+- MICRO56 executado como delta documental sem alteracao de VBA, fechando
+  bloqueio P1 dos guias humanos: testador externo agora encontra liberacao
+  de macros, gate Sexteto V204, roteiro manual V204 e matriz de cobertura
+  V204 como trilha publica canonica.
 - Regra permanente documentada em HBN: funcionalidade nova exige teste
   correspondente no mesmo microdelta.
 - Regra permanente documentada em HBN: higiene documental recorrente

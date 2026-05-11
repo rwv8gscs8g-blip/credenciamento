@@ -1,17 +1,40 @@
-# Índice da Bateria de Testes
+---
+titulo: Indice da Bateria de Testes
+diataxis: reference
+hbn-track: safe_track
+hbn-status: active
+audiencia: ambos
+versao-sistema: V12.0.0204
+data: 2026-05-11
+---
+
+# Indice da Bateria de Testes
 
 Esta área consolida a leitura humana e institucional da bateria de testes.
+
+## Trilha canonica V12.0.0204
+
+- [../../how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md](../../how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md)
+- [../../how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md](../../how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md)
+- [04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md](04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md)
+- [06_MATRIZ_RASTREABILIDADE_TESTES_V204.md](06_MATRIZ_RASTREABILIDADE_TESTES_V204.md)
+- [07_ROTEIRO_TESTE_MANUAL_V204.md](07_ROTEIRO_TESTE_MANUAL_V204.md)
 
 ## Documentos-base
 
 - [00_MODELO_DOCUMENTAL_DOS_TESTES.md](00_MODELO_DOCUMENTAL_DOS_TESTES.md)
 - [01_EVIDENCIAS_E_RELATORIOS_DE_TESTE.md](01_EVIDENCIAS_E_RELATORIOS_DE_TESTE.md)
-- [02_MAPA_TESTES_V203_QUINTETO.md](02_MAPA_TESTES_V203_QUINTETO.md)
 - [03_CATALOGO_CENARIOS_V2_V203.md](03_CATALOGO_CENARIOS_V2_V203.md)
+- [../../auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md](../../auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md)
+
+## Historico V203
+
+- [02_MAPA_TESTES_V203_QUINTETO.md](02_MAPA_TESTES_V203_QUINTETO.md)
 - [04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md](04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md)
 - [05_ROTEIRO_TESTE_MANUAL_V203_RC4.md](05_ROTEIRO_TESTE_MANUAL_V203_RC4.md)
-- [06_MATRIZ_RASTREABILIDADE_TESTES_V204.md](06_MATRIZ_RASTREABILIDADE_TESTES_V204.md)
-- [../../auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md](../../auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md)
+
+Esses documentos preservam a trilha rc4/Quinteto, mas nao sao o roteiro de
+teste vigente da V12.0.0204.
 
 ## Escopo atual
 

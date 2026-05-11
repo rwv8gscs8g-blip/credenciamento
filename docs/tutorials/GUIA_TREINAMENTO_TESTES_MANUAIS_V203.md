@@ -2,13 +2,17 @@
 titulo: Guia de Treinamento de Testes Manuais V203
 diataxis: tutorial
 hbn-track: fast_track
-hbn-status: active
+hbn-status: archived
 audiencia: humano
 versao-sistema: V12.0.0203
 data: 2026-05-04
 ---
 
 # Guia de Treinamento de Testes Manuais V203
+
+> Documento historico de treinamento da V203/rc4. Para teste humano da
+> V12.0.0204, use
+> [../reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md](../reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md).
 
 Este guia treina o operador humano a validar a `V12.0.0203-rc4` em
 homologacao. A rc4 esta liberada para testes manuais formais, nao para

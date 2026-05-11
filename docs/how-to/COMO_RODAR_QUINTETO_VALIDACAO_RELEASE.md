@@ -2,13 +2,16 @@
 titulo: Como Rodar o Quinteto de Validacao Release
 diataxis: how-to
 hbn-track: fast_track
-hbn-status: active
+hbn-status: archived
 audiencia: humano
 versao-sistema: V12.0.0203
 data: 2026-05-04
 ---
 
 # Como Rodar o Quinteto de Validacao Release
+
+> Documento historico da V12.0.0203/rc4. Para validar a V12.0.0204, use
+> [Como Rodar o Sexteto de Validacao da Release](COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md).
 
 Use este procedimento quando precisar validar formalmente a release no
 workbook de homologacao.

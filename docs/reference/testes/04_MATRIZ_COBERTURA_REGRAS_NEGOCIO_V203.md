@@ -2,13 +2,16 @@
 titulo: Matriz de Cobertura Regras de Negocio V203
 diataxis: reference
 hbn-track: fast_track
-hbn-status: active
+hbn-status: archived
 audiencia: ambos
 versao-sistema: V12.0.0203
 data: 2026-05-04
 ---
 
 # Matriz de Cobertura Regras de Negocio V203
+
+> Documento historico. A matriz vigente da V12.0.0204 e
+> [04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md](04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md).
 
 Esta matriz mostra a cobertura funcional consolidada para a `V12.0.0203`.
 Ela deve ser expandida na `V12.0.0204` com analise combinatoria formal.

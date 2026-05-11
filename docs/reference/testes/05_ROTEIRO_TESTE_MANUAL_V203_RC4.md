@@ -2,13 +2,16 @@
 titulo: Roteiro de Teste Manual V203 rc4
 diataxis: reference
 hbn-track: fast_track
-hbn-status: active
+hbn-status: archived
 audiencia: humano
 versao-sistema: V12.0.0203
 data: 2026-05-04
 ---
 
 # Roteiro de Teste Manual V203 rc4
+
+> Documento historico da rc4. O roteiro vigente para teste humano externo da
+> V12.0.0204 e [07_ROTEIRO_TESTE_MANUAL_V204.md](07_ROTEIRO_TESTE_MANUAL_V204.md).
 
 Este roteiro orienta o ciclo manual depois do Quinteto verde. Ele existe
 para descobrir problemas de uso real antes da abertura da V204.

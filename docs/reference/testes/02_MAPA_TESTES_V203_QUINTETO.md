@@ -2,13 +2,17 @@
 titulo: Mapa de Testes V203 Quinteto
 diataxis: reference
 hbn-track: fast_track
-hbn-status: active
+hbn-status: archived
 audiencia: ambos
 versao-sistema: V12.0.0203
 data: 2026-05-04
 ---
 
 # Mapa de Testes V203 Quinteto
+
+> Documento historico da V12.0.0203/rc4. O contrato vigente da V12.0.0204 esta
+> em [06_MATRIZ_RASTREABILIDADE_TESTES_V204.md](06_MATRIZ_RASTREABILIDADE_TESTES_V204.md)
+> e no [Roteiro de Teste Manual V204](07_ROTEIRO_TESTE_MANUAL_V204.md).
 
 Este documento define o contrato humano do Quinteto de validacao da
 `V12.0.0203`.

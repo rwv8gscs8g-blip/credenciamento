@@ -1,3 +1,13 @@
+---
+titulo: Status Oficial das Versoes
+diataxis: status
+hbn-track: safe_track
+hbn-status: active
+audiencia: ambos
+versao-sistema: V12.0.0204
+data: 2026-05-11
+---
+
 # Status Oficial das Versoes
 
 Este arquivo e a fonte canonica para o status de publicacao das versoes. As release notes individuais continuam existindo como historico tecnico, mas a classificacao oficial passa a ser feita aqui.
@@ -6,7 +16,7 @@ Este arquivo e a fonte canonica para o status de publicacao das versoes. As rele
 
 | Versao | Status | Compila | Testes | Observacao |
 |--------|--------|---------|--------|------------|
-| V12.0.0204 | VALIDADA | Sim | `VR_20260511_154433` aprovado | Linha oficial vigente; build final validado `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`; Smoke `34/0/4`; validação manual final aprovada pelo operador |
+| V12.0.0204 | VALIDADA | Sim | `VR_20260511_154433` e `VR_20260511_175849` aprovados | Linha oficial vigente; build final validado `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`; Smoke `34/0/4`; validacao manual final aprovada pelo operador; vitrine humana V204 atualizada |
 
 ## Linha em estabilizacao, ainda nao oficial
 

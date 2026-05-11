@@ -5,7 +5,7 @@
 > prestadores de pequenos reparos em Excel/VBA.
 
 [![Release](https://img.shields.io/badge/release-V12.0.0204-blue)](obsidian-vault/releases/V12.0.0204.md)
-[![Gate](https://img.shields.io/badge/gate-VR_20260511_154433-brightgreen)](auditoria/evidencias/V12.0.0204/ValidacaoReleaseSexteto_V12_0_0203_VR_20260511_154433.csv)
+[![Gate](https://img.shields.io/badge/gate-VR_20260511_175849-brightgreen)](auditoria/evidencias/V12.0.0204/ValidacaoReleaseSexteto_V12_0_0203_VR_20260511_175849.csv)
 [![Status](https://img.shields.io/badge/status-VALIDADO-brightgreen)](obsidian-vault/releases/STATUS-OFICIAL.md)
 [![Licença](https://img.shields.io/badge/licenca-TPGL%20v1.1-6f42c1)](LICENSE)
 [![Auditoria](https://img.shields.io/badge/auditoria-publica-0a7f5a)](auditoria/00_status/00_SUMARIO_EXECUTIVO.md)
@@ -89,6 +89,10 @@ operacional controlada da documentação institucional auditável.
 
 - [docs/INDEX.md](docs/INDEX.md) — indice publico Diataxis-aware
 - [obsidian-vault/releases/V12.0.0204.md](obsidian-vault/releases/V12.0.0204.md) — release note publica da versao oficial vigente
+- [docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md](docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md) — liberar macros no Windows antes do teste
+- [docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md](docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — reproduzir o gate automatizado da V204
+- [docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md](docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — roteiro humano de homologacao da V204
+- [docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md](docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md) — cobertura das regras de negocio da V204
 - [docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md](docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md) — matriz de rastreabilidade da V204
 - [auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md](auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md) — fechamento de publicacao V204
 - [docs/explanation/ARQUITETURA.md](docs/explanation/ARQUITETURA.md)
@@ -137,6 +141,7 @@ Build final validado no workbook: `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`
 - compilacao limpa validada por operador humano
 - teste manual final validado por operador humano
 - Smoke V2 `TV2_20260511_131824` com `OK=34 | FALHA=0 | MANUAL=4`
-- gate consolidado `VR_20260511_154433` aprovado com sintaxe `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`
+- gate consolidado `VR_20260511_154433` aprovado para publicacao e gate adicional `VR_20260511_175849` aprovado apos App_Release final, ambos com sintaxe `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`
 - evidencias publicas arquivadas em `auditoria/evidencias/V12.0.0204/`
+- pacote humano de teste V204 atualizado com liberacao de macros, Sexteto e roteiro manual
 - V12.0.0205 abrira a proxima etapa com auditoria cruzada, melhoria de nomenclatura da taxonomia de testes e lista mestra de evolucoes

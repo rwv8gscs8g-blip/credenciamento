@@ -1,12 +1,13 @@
 ---
 titulo: Dashboard - Credenciamento
 ultima-atualizacao: 2026-05-11
-autor-ultima-alteracao: Codex CLI na Onda 25 / MICRO54
+autor-ultima-alteracao: Codex CLI na Onda 25 / MICRO56
 tags: [vivo, dashboard, hbn-active]
 versao-sistema: V12.0.0204
 linha-alvo: V12.0.0205
 build-importado-no-workbook: f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2
 hbn-track: fast_track
+hbn-status: active
 diataxis: status
 audiencia: ambos
 ---
@@ -35,11 +36,11 @@ audiencia: ambos
 
 **Onda 25 — Publicacao V12.0.0204**
 
-- Status: FECHAMENTO MICRO54 / publicacao
+- Status: MICRO56 documental concluido; vitrine humana V204 atualizada
 - Track HBN: safe_track
 - Hearback: aprovado pelo operador em 2026-05-11
-- Doc tecnica: `auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md`
-- Evidencia final: `VR_20260511_154433`
+- Doc tecnica: `auditoria/03_ondas/onda_25_v204_release_candidate/11_TECNICO_MICRO56_VITRINE_HUMANA_V204.md`
+- Evidencia final: `VR_20260511_154433`; evidencia adicional pos-App_Release `VR_20260511_175849`
 - Proxima linha: V12.0.0205 com auditoria cruzada Opus/Antigravity e lista mestra de evolucoes
 
 ## Roadmap apos Onda 6
@@ -60,10 +61,11 @@ audiencia: ambos
 5. [`.hbn/knowledge/0003-glasswing-style-preventive-security.md`](../.hbn/knowledge/0003-glasswing-style-preventive-security.md) — 5 vetores Glasswing
 
 ### Para humanos (Diataxis)
-1. `docs/tutorials/` — aprender (passo-a-passo)
-2. `docs/how-to/` — cookbook (importar pacote, rodar testes, gerar evidencia)
-3. `docs/reference/` — consulta (regras, API VBA, governanca)
-4. `docs/explanation/` — entender (arquitetura, decisoes, racional)
+1. [`docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md`](../docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md) — liberar macros no Windows
+2. [`docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md`](../docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — rodar o gate V204
+3. [`docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md`](../docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — homologacao humana
+4. [`docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md`](../docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md) — cobertura de regras
+5. `docs/explanation/` — entender (arquitetura, decisoes, racional)
 
 ### Para LLMs (RAG)
 1. [`llms.txt`](../llms.txt) — mapa curado
@@ -79,7 +81,7 @@ audiencia: ambos
 
 ## Checkpoint de testes
 
-Ultima execucao do gate consolidado: `VR_20260511_154433` (em
+Ultima execucao do gate consolidado: `VR_20260511_175849` (em
 `auditoria/evidencias/V12.0.0204/`).
 
 | Suite | Resultado | Build |

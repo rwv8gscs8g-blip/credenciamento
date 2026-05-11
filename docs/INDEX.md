@@ -3,6 +3,7 @@ titulo: Indice publico de documentacao
 ultima-atualizacao: 2026-05-11
 diataxis: reference
 hbn-track: fast_track
+hbn-status: active
 audiencia: ambos
 versao-sistema: V12.0.0204
 ---
@@ -27,18 +28,22 @@ documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 ## docs/how-to/ — cookbook (problema concreto)
 
 - [`how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md`](how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md) — acesso a materiais operacionais controlados
-- [`how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md) — procedimento historico do Quinteto/Sexteto de validacao
+- [`how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md`](how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md) — liberar macros e desbloquear arquivo `.xlsm` baixado no Windows
+- [`how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — procedimento canonico V204 para o gate de validacao
+- [`how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md) — historico V203/rc4, nao usar como gate V204
 
 ## docs/reference/ — consulta (regras, API, governanca)
 
 - [`reference/COMPLIANCE_CMMI_ISO.md`](reference/COMPLIANCE_CMMI_ISO.md) — mapeamento CMMI/ISO
 - [`reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`](reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md) — governanca de release
 - [`reference/testes/INDEX.md`](reference/testes/INDEX.md) — indice de testes
-- [`reference/testes/02_MAPA_TESTES_V203_QUINTETO.md`](reference/testes/02_MAPA_TESTES_V203_QUINTETO.md) — mapa humano do Quinteto V203
+- [`reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md`](reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md) — matriz humana de cobertura das regras de negocio V204
 - [`reference/testes/03_CATALOGO_CENARIOS_V2_V203.md`](reference/testes/03_CATALOGO_CENARIOS_V2_V203.md) — catalogo dos cenarios V2
-- [`reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md`](reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md) — matriz de cobertura por regra
-- [`reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md`](reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md) — roteiro manual da rc4
 - [`reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md`](reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md) — matriz final de rastreabilidade da V204
+- [`reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md`](reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — roteiro humano de homologacao da V204
+- [`reference/testes/02_MAPA_TESTES_V203_QUINTETO.md`](reference/testes/02_MAPA_TESTES_V203_QUINTETO.md) — historico V203/Quinteto
+- [`reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md`](reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md) — historico V203
+- [`reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md`](reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md) — historico rc4
 - [`reference/licenca/README.md`](reference/licenca/README.md) — modelo de licenca
 - [`reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md`](reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md) — template CLA institucional
 

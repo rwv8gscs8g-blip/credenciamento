@@ -12,7 +12,8 @@ data: 2026-05-11
 
 ## Decisao
 
-V12.0.0204 pode ser promovida como release oficial publica.
+V12.0.0204 esta promovida como release oficial publica. A vitrine humana foi
+atualizada em MICRO56 para permitir teste externo reprodutivel.
 
 ## Ancora validada
 
@@ -23,6 +24,7 @@ V12.0.0204 pode ser promovida como release oficial publica.
 | Smoke final | `TV2_20260511_131824` — OK=34, FALHA=0, MANUAL=4 |
 | Testes manuais finais | OK, informado pelo operador |
 | Gate final | `VR_20260511_154433` — APROVADO |
+| Gate adicional pos-App_Release | `VR_20260511_175849` — APROVADO |
 | Sintaxe final | `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0` |
 
 ## Escopo absorvido
@@ -34,6 +36,9 @@ V12.0.0204 pode ser promovida como release oficial publica.
 - MICRO53-fix2: correcao do contrato de Limpar Base para limpar `CAD_SERV`
   preservando `ATIVIDADES` e recriando baseline canonica no Smoke.
 - MICRO54: publicacao documental e promocao de metadados para V12.0.0204.
+- MICRO55: `App_Release` final alinhado a V12.0.0204 VALIDADO/OFICIAL.
+- MICRO56: pacote humano de teste externo, com liberacao de macros Windows,
+  how-to do Sexteto, roteiro manual V204 e matriz de cobertura de regras V204.
 
 ## Debitos aceitos para V12.0.0205
 
@@ -50,6 +55,8 @@ Publico:
 
 - README, CHANGELOG, release note V12.0.0204, STATUS-OFICIAL, matriz de testes
   e CSVs de evidencia V12.0.0204.
+- guias humanos V204: liberar macros no Windows, rodar Sexteto e roteiro manual
+  de homologacao.
 
 Interno/auditavel:
 
@@ -58,5 +65,5 @@ Interno/auditavel:
 
 ## Proxima acao
 
-Gerar tag `v12.0.0204`, publicar no GitHub e iniciar a preparacao da auditoria
+Publicar a vitrine MICRO56 no GitHub/main e iniciar a preparacao da auditoria
 cruzada Opus/Antigravity para a V12.0.0205.

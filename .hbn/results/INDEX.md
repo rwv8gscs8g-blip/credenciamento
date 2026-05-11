@@ -76,3 +76,4 @@ ultima-atualizacao: 2026-05-11
 | 0062 | Onda 25 V204 MICRO53-fix2 baseline CAD_SERV V2 | APROVADO_OPERADOR_FINAL | `0062-exec-onda25-md25-5-correcao-limpar-cad-serv-micro53-fix2.json` | 2026-05-11 |
 | 0063 | Onda 25 V204 MICRO54 publicacao oficial | APROVADO_PUBLICADO_GITHUB | `0063-exec-onda25-md25-6-publicacao-v204-micro54.json` | 2026-05-11 |
 | 0064 | Onda 25 V204 MICRO55 App_Release final | APROVADO_OPERADOR_FINAL | `0064-exec-onda25-md25-6-app-release-micro55.json` | 2026-05-11 |
+| 0065 | Onda 25 V204 MICRO56 vitrine humana | EXECUTADO_DOCUMENTAL | `0065-exec-onda25-md25-7-vitrine-humana-v204-micro56.json` | 2026-05-11 |

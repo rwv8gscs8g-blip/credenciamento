@@ -1,4 +1,18 @@
+---
+titulo: Como importar pacote VBA - Importador V2
+diataxis: how-to
+hbn-track: safe_track
+hbn-status: archived
+audiencia: ia
+versao-sistema: V12.0.0203
+data: 2026-05-11
+---
+
 # Como importar pacote VBA - Importador V2
+
+> Documento historico do Importador V2. A linha V12.0.0204 usa Importador V3
+> em canal operacional controlado. Este arquivo permanece apenas para
+> rastreabilidade e nao deve orientar testador humano externo.
 
 > Diataxis: How-to (passo a passo orientado a tarefa).
 > Para visao conceitual, ver [`docs/explanation/IMPORTADOR_V2.md`](../explanation/IMPORTADOR_V2.md).

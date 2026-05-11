@@ -1,0 +1,57 @@
+{
+  "readback_id": "0065-onda25-md25-7-vitrine-humana-v204-micro56",
+  "agent_id": "Codex CLI",
+  "created_at": "2026-05-11T18:52:06-0300",
+  "track": "safe_track",
+  "human_status": "confirmed",
+  "hearback_source": "operador aprovou avanco: \"sim aprovado, avance\"",
+  "objective": "Corrigir a vitrine publica humana da V12.0.0204 para que o testador externo rode macros, gate e roteiro manual coerentes com a release validada.",
+  "scope": {
+    "release": "V12.0.0204",
+    "microdelta": "MICRO56",
+    "type": "documental",
+    "build_reference": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
+    "canonical_gate": "VR_20260511_175849",
+    "canonical_syntax": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "planned_changes": [
+    "Criar guia publico para liberar macros no Windows, incluindo Mark of the Web, banner do Excel e VBOM apenas quando necessario para importacao.",
+    "Criar how-to canonico V204 para CT_ValidarRelease_SextetoMinimo com baseline final 171/34/24/76/4/27.",
+    "Criar roteiro manual V204 cobrindo Limpar Base com CNAE preservado e CAD_SERV zerado, cadastro de servico, rodizio, OS, avaliacao, strikes e reativacao.",
+    "Criar matriz de cobertura de regras de negocio V204 com os debitos V203 fechados pela Onda 23 e pela MICRO53-fix2.",
+    "Marcar documentos V203/Quinteto/rc4 como historicos e atualizar docs/INDEX.md, docs/reference/testes/INDEX.md, README.md, llms.txt e release note V204.",
+    "Mover CSV de falha intermediaria do Smoke para pasta de evidencias intermediarias com nota explicativa.",
+    "Arquivar o DOCX V202 solto na raiz para a area historica de testes.",
+    "Registrar ERP e atualizar relay/results/CHANGELOG."
+  ],
+  "out_of_scope": [
+    "Alterar VBA de producao.",
+    "Criar novo pacote V3.",
+    "Mover tag v12.0.0204.",
+    "Tocar .hbn/knowledge/ ou Credenciamento/usehbn/."
+  ],
+  "risk_assessment": [
+    {
+      "id": "R1",
+      "risk": "Documento historico ainda ser encontrado por busca e confundido com guia vigente.",
+      "mitigation": "Marcar hbn-status como archived, inserir aviso no topo e retirar da trilha principal dos indices."
+    },
+    {
+      "id": "R2",
+      "risk": "Vitrine publica ficar incoerente com a evidencia final mais recente.",
+      "mitigation": "Usar VR_20260511_175849 como evidencia adicional pos-MICRO55 e manter VR_20260511_154433 como gate final de publicacao."
+    },
+    {
+      "id": "R3",
+      "risk": "Mover artefatos historicos sem deixar rastro.",
+      "mitigation": "Registrar destino em README de intermediarios, CHANGELOG e ERP."
+    }
+  ],
+  "acceptance_criteria": [
+    "README aponta para guias humanos V204 vigentes.",
+    "docs/INDEX.md e docs/reference/testes/INDEX.md separam canonicamente V204 de historico V203.",
+    "Busca por Quinteto/rc4 nos indices principais aparece apenas em secao historica.",
+    "Arquivos JSON HBN validam com jq.",
+    "G7 e G8 permanecem OK."
+  ]
+}

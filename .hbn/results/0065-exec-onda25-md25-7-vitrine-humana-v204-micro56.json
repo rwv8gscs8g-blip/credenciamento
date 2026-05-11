@@ -1,0 +1,75 @@
+{
+  "execution_id": "0065-exec-onda25-md25-7-vitrine-humana-v204-micro56",
+  "agent_id": "Codex CLI",
+  "readback_id": "0065-onda25-md25-7-vitrine-humana-v204-micro56",
+  "action": "MICRO56 documental: vitrine humana V204",
+  "outcome": "EXECUTADO_DOCUMENTAL",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "created_at": "2026-05-11T18:59:31-0300",
+  "environment": {
+    "cwd": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0203-governanca-testes",
+    "release": "V12.0.0204",
+    "build_reference": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2"
+  },
+  "changes": {
+    "new_docs": [
+      "docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md",
+      "docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md",
+      "docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md",
+      "docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md",
+      "auditoria/03_ondas/onda_25_v204_release_candidate/11_TECNICO_MICRO56_VITRINE_HUMANA_V204.md"
+    ],
+    "updated_docs": [
+      "README.md",
+      "docs/INDEX.md",
+      "docs/reference/testes/INDEX.md",
+      "docs/how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md",
+      "docs/how-to/COMO_IMPORTAR_PACOTE_VBA.md",
+      "docs/tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md",
+      "docs/reference/testes/02_MAPA_TESTES_V203_QUINTETO.md",
+      "docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md",
+      "docs/reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md",
+      "obsidian-vault/releases/V12.0.0204.md",
+      "llms.txt",
+      "CHANGELOG.md"
+    ],
+    "moved_artifacts": [
+      {
+        "from": "TesteV2_SMOKE_Falhas_TV2_20260511_125944.csv",
+        "to": "auditoria/evidencias/V12.0.0204/intermediarios/TesteV2_SMOKE_Falhas_TV2_20260511_125944.csv",
+        "reason": "falha intermediaria MICRO53 resolvida antes do gate final"
+      },
+      {
+        "from": "Guia_de_Testes_V12_0202_Ondas_1-4.docx",
+        "to": "auditoria/03_ondas/onda_19_publicacao_v203_v204/historico/Guia_de_Testes_V12_0202_Ondas_1-4.docx",
+        "reason": "material V202 historico removido da raiz publica"
+      }
+    ]
+  },
+  "verification": {
+    "jq_readback": "OK",
+    "root_docx": "none",
+    "root_smoke_failure_csv": "none",
+    "glasswing": {
+      "G7": "OK",
+      "G8": "OK"
+    },
+    "vba_changed": false,
+    "package_v3_created": false
+  },
+  "canonical_v204_test_path": [
+    "docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md",
+    "docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md",
+    "docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md",
+    "docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md",
+    "docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md"
+  ],
+  "debts_deferred": [
+    "D-V205-TEST-TAXONOMY: renomear publicamente Sexteto para nomenclatura profissional de engenharia de testes",
+    "D-V205-CSV-FILENAME: corrigir prefixo historico V12_0_0203 no nome do CSV",
+    "D-V205-IMPORTADOR-DOC: criar guia publico V3 somente se o canal operacional for aberto a contribuidores externos"
+  ],
+  "decision": "Vitrine humana V204 pronta para publicacao externa; documentos V203 preservados apenas como historico."
+}
