@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "execution_id": "0064-exec-onda25-md25-6-app-release-micro55",
+  "readback_id": "0064-onda25-md25-6-app-release-micro55",
+  "executed_at": "2026-05-11T17:47:00-03:00",
+  "track": "safe_track",
+  "agent_id": "Codex CLI",
+  "status": "ENTREGUE_PENDENTE_GATE_OPERADOR",
+  "delta": {
+    "id": "MICRO55",
+    "tema": "App_Release final V204",
+    "build_base_validado": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
+    "arquivos": [
+      {
+        "src": "src/vba/App_Release.bas",
+        "mirror": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "sha1_after": "4189960fdc628fbd3578623e8b5b220bc4c59a24"
+      }
+    ]
+  },
+  "mudancas": [
+    "APP_RELEASE_ALVO = V12.0.0205",
+    "APP_RELEASE_BUILD_KEY = V12.0.0204|OFICIAL|V12.0.0205",
+    "APP_BUILD_GERADO_EM = 2026-05-11 17:47"
+  ],
+  "asserts_locais": {
+    "publicar_vba_import_v2_apply": "OK - AAX-App_Release.bas sincronizado; demais 52 arquivos em sync",
+    "glasswing_g7_g8": "OK",
+    "json": "OK"
+  },
+  "gate_operador": {
+    "importador_v3": "esperado M=1 F=0 err=0 skip=0",
+    "compile_vbe": "precisa passar limpo",
+    "get_build_importado": "esperado f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
+    "sobre": "esperado V12.0.0204 / VALIDADO / OFICIAL / alvo V12.0.0205"
+  },
+  "justificativa_sem_novo_sexteto": "Delta exclusivo de metadado de release; nao altera regra de negocio, fluxo de UI operacional, servico, repositorio ou teste. Evidencia funcional final permanece VR_20260511_154433.",
+  "manifesto": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO55.txt",
+  "procedimento": "auditoria/03_ondas/onda_25_v204_release_candidate/11_PROCEDIMENTO_IMPORT_MICRO55_APP_RELEASE.md",
+  "proxima_acao": "Operador importar MICRO55, compilar e conferir tela Sobre."
+}

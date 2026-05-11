@@ -241,6 +241,10 @@ tratam apenas da linha pública oficial.
 - MICRO54 fecha publicacao sem nova funcionalidade: status oficial,
   release note publica, matriz de testes, HBN e vitrine documental
   passam a apontar para `v12.0.0204`.
+- MICRO55 entregue como micro release de metadado: `App_Release` passa
+  a exibir V12.0.0204 / VALIDADO / OFICIAL, preserva o build validado
+  `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` e aponta a proxima
+  release alvo para V12.0.0205.
 - Regra permanente documentada em HBN: funcionalidade nova exige teste
   correspondente no mesmo microdelta.
 - Regra permanente documentada em HBN: higiene documental recorrente

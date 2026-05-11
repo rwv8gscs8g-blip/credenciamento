@@ -7,8 +7,8 @@ Option Explicit
 Public Const APP_RELEASE_ATUAL As String = "V12.0.0204"
 Public Const APP_RELEASE_STATUS As String = "VALIDADO"
 Public Const APP_RELEASE_CANAL As String = "OFICIAL"
-Public Const APP_RELEASE_ALVO As String = "V12.0.0204"
-Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0204|OFICIAL|V12.0.0204"
+Public Const APP_RELEASE_ALVO As String = "V12.0.0205"
+Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0204|OFICIAL|V12.0.0205"
 ' V12.0.0203 ONDA 5 - carimbo manual do build (sem rodar publicar_vba_import.sh).
 ' V12.0.0203 ONDA 10 - bump auto via IV3_BumpBuildLabel / ImportarPacoteV3_Delta.
 ' V12.0.0203 ONDA 11 - rc1 bump: TAG=v12.0.0203-rc1, STATUS=RELEASE_CANDIDATE,
@@ -253,7 +253,7 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0204|OFICIAL|V12.0.0204"
 ' de forma deterministica apos reset, cobrindo o novo contrato do Limpar_Base.
 Public Const APP_BUILD_IMPORTADO As String = "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0203-governanca-testes"
-Public Const APP_BUILD_GERADO_EM As String = "2026-05-11 13:10"
+Public Const APP_BUILD_GERADO_EM As String = "2026-05-11 17:47"
 Public Const APP_RELEASE_TAG As String = "v12.0.0204"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0204"
 Public Const APP_RELEASE_TEST_KEY As String = "sexteto-v204-final-2026-05-11"
