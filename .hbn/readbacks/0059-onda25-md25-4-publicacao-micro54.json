@@ -1,0 +1,44 @@
+{
+  "readback_id": "0059-onda25-md25-4-publicacao-micro54",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-10T00:56:30-0300",
+  "mode": "safe_track",
+  "repo": "/Users/macbookpro/Projetos/Credenciamento",
+  "base": "MICRO52 auditoria cruzada final sem P0/P1",
+  "target": "MICRO54 publicacao V12.0.0204",
+  "human_input": "Antigravity APROVAR_PARA_MICRO54; Opus APROVAR_COM_RESSALVAS_P2; P0/P1 nenhum.",
+  "intent": "Executar MICRO54 ampliado como fechamento documental/publicacao: resolver P2 pre-tag, preparar release notes, rollback plan e checklist de tag/push/release.",
+  "decision": {
+    "micro53": "nao abrir agora; nao ha P0/P1",
+    "micro54": "executar ampliado com P2 documentais antes de tag",
+    "vba": "nao alterar src/vba nem local-ai/vba_import por padrao"
+  },
+  "planned_changes": [
+    "Atualizar docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md para baseline rc1 171/33/24/76/4/27.",
+    "Criar release notes publicas V12.0.0204.",
+    "Criar plano de rollback apontando para V12-204-Micro48 e para o gate rc1 VR_20260510_000428.",
+    "Registrar evidencia operacional de RPT_BUGS_CONHECIDOS sem P0/P1; se nao houver export disponivel, deixar checklist explicito para o operador anexar antes da tag.",
+    "Atualizar status 67, relay, results e CHANGELOG.",
+    "Preparar procedimento de tag/push/release para execucao somente apos aceite humano."
+  ],
+  "accepted_debts_deferred": [
+    "D-MICRO50-CSV-FILENAME -> Onda 26/V205",
+    "D-V205-MD24-4 -> V205",
+    "D-STRICT-G1-G2-G5 -> Onda 26/V205",
+    "P3-01 regra GetBuildImportado pos-import -> Onda 26"
+  ],
+  "expected_validation": {
+    "local": [
+      "python3 -m json.tool nos HBN novos/alterados",
+      "python3 local-ai/scripts/publicar_vba_import_v2.py check",
+      "bash local-ai/scripts/glasswing-checks.sh G7"
+    ],
+    "operator_before_tag": [
+      "Confirmar/fornecer evidencia RPT_BUGS_CONHECIDOS sem P0/P1",
+      "Aprovar release notes e rollback plan",
+      "Confirmar ancora workbook V12-204-rc1 ou nome final equivalente"
+    ],
+    "git": "Tag/push/release somente apos aceite humano explicito."
+  },
+  "next_step": "Executar MICRO54 documental e parar antes de comandos git de publicacao."
+}

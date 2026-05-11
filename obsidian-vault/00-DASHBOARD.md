@@ -1,11 +1,11 @@
 ---
 titulo: Dashboard - Credenciamento
-ultima-atualizacao: 2026-04-28
-autor-ultima-alteracao: Claude Opus 4.7 (Cowork) na Onda 6
+ultima-atualizacao: 2026-05-11
+autor-ultima-alteracao: Codex CLI na Onda 25 / MICRO54
 tags: [vivo, dashboard, hbn-active]
-versao-sistema: V12.0.0202
-linha-alvo: V12.0.0203
-build-importado-no-workbook: f7aa84f+ONDA05-em-homologacao
+versao-sistema: V12.0.0204
+linha-alvo: V12.0.0205
+build-importado-no-workbook: f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2
 hbn-track: fast_track
 diataxis: status
 audiencia: ambos
@@ -22,35 +22,33 @@ audiencia: ambos
 
 | Campo | Valor |
 |---|---|
-| Versao oficial vigente | **V12.0.0202** (validada) |
-| Linha em estabilizacao | V12.0.0203 |
-| Build importado no workbook | `f7aa84f+ONDA05-em-homologacao` |
-| Tag git de salvaguarda | `pre-onda-06-2026-04-28` |
+| Versao oficial vigente | **V12.0.0204** (validada) |
+| Linha em estabilizacao | V12.0.0205 (a abrir) |
+| Build importado no workbook | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
+| Tag git de publicacao | `v12.0.0204` |
 | Branch ativa | `codex/v12-0-0203-governanca-testes` |
-| Bastao de implementacao | Claude Opus 4.7 (Cowork) — ate V12.0.0203 estavel no GitHub |
+| Bastao de implementacao | Codex CLI — Frente 1 Credenciamento |
 | Ambiente | Windows 10+, Excel 2019/2021/365 |
 | Planilha homologacao | `PlanilhaCredenciamento-Homologacao.xlsm` |
 
 ## Onda em curso
 
-**Onda 6 — Consolidacao documental + cleanup + integracao HBN/Diataxis/llms.txt/AGENTS.md/Glasswing**
+**Onda 25 — Publicacao V12.0.0204**
 
-- Status: EM EXECUCAO (em fechamento)
+- Status: FECHAMENTO MICRO54 / publicacao
 - Track HBN: safe_track
-- Hearback: confirmed
-- Doc tecnica: `auditoria/03_ondas/onda_06_consolidacao_documental/41_TECNICO.md`
-- Readback: `.hbn/readbacks/0001-onda06.json`
-- Sem alteracao de codigo VBA (doc-only)
+- Hearback: aprovado pelo operador em 2026-05-11
+- Doc tecnica: `auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md`
+- Evidencia final: `VR_20260511_154433`
+- Proxima linha: V12.0.0205 com auditoria cruzada Opus/Antigravity e lista mestra de evolucoes
 
 ## Roadmap apos Onda 6
 
 | Onda | Tema | Status |
 |---|---|---|
-| 5 (residual) | homologacao do form deterministico + Limpa_Base robusta | EM HOMOLOGACAO |
-| 7 | familia IDM_* + RDZ_* (idempotencia + rodizio em loop) | proxima apos 6 |
-| 8 | heuristica zero em todos os 13 forms | depois da 7 |
-| 9 | reescrita Importador_VBA + auditoria Mod_Types | depois da 8 |
-| FECHAMENTO | tag v12.0.0203, push GitHub, release publica | depois da 9 |
+| V12.0.0204 | release oficial | VALIDADA |
+| V12.0.0205 | auditoria cruzada + lista mestra de evolucoes | PROXIMA |
+| V12.0.0205 | renomear taxonomia publica de testes | PLANEJADO |
 
 ## Documentos canonicos (pos-Onda 6)
 
@@ -73,7 +71,7 @@ audiencia: ambos
 
 ### Vitrine institucional
 1. [`releases/STATUS-OFICIAL.md`](releases/STATUS-OFICIAL.md) — status oficial das versoes
-2. [`releases/V12.0.0202.md`](releases/V12.0.0202.md) — release validada atual
+2. [`releases/V12.0.0204.md`](releases/V12.0.0204.md) — release validada atual
 3. [`metodologia/00-MAPA-DOCUMENTAL.md`](metodologia/00-MAPA-DOCUMENTAL.md) — mapa documental do projeto
 4. [`metodologia/01-COMO-A-IA-LE-ESTE-REPO.md`](metodologia/01-COMO-A-IA-LE-ESTE-REPO.md) — guia para o RAG
 5. [`metodologia/02-INTEGRACAO-USEHBN.md`](metodologia/02-INTEGRACAO-USEHBN.md) — integracao com o usehbn
@@ -81,18 +79,17 @@ audiencia: ambos
 
 ## Checkpoint de testes
 
-Ultima execucao do trio minimo: `VR_20260426_111549` (em
-`auditoria/04_evidencias/V12.0.0203/`).
+Ultima execucao do gate consolidado: `VR_20260511_154433` (em
+`auditoria/evidencias/V12.0.0204/`).
 
 | Suite | Resultado | Build |
 |---|---|---|
-| V1 rapida | OK=171, FALHA=0 | 88107f1 (anterior a Ondas 1-5) |
-| V2 Smoke | OK=14, FALHA=0 | 88107f1 |
-| V2 Canonica | OK=20, FALHA=0 | 88107f1 |
-
-> **Nota:** o trio minimo precisa ser re-executado contra
-> `f7aa84f+ONDA05-em-homologacao` para ratificar Ondas 1-5. Esse e o
-> primeiro gate da Onda 7.
+| V1 rapida | OK=171, FALHA=0 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
+| V2 Smoke | OK=34, FALHA=0, MANUAL=4 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
+| V2 Canonica | OK=24, FALHA=0 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
+| E2E Strikes | OK=76, FALHA=0 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
+| IntegridadeBase | OK=4, FALHA=0, MANUAL=1 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
+| Onda23Adv | OK=27, FALHA=0 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
 
 ## Governanca publica
 

@@ -1,0 +1,38 @@
+{
+  "readback_id": "0048-onda23-md23-5-sexteto-gate-micro45",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-09T03:05:00-0300",
+  "track": "safe_track",
+  "status": "confirmed_by_roadmap",
+  "source_prompt": "Operador confirmou MICRO43 aprovado, Boundary_Dates OK e solicitou avancar conforme planejado.",
+  "scope": {
+    "onda": 23,
+    "microdelta": "MICRO45",
+    "tema": "MD-23.5 gate Sexteto minimo",
+    "tipo": "codigo_vba_e_documentacao",
+    "build": "f7aa84f+ONDA23.MD23.5-sexteto-gate"
+  },
+  "canon_lido": [
+    ".hbn/relay/INDEX.md",
+    ".hbn/knowledge/0001-regras-v203-inegociaveis.md",
+    ".hbn/knowledge/0002-regra-ouro-vba-import.md",
+    ".hbn/knowledge/0010-funcionalidade-nova-exige-teste.md",
+    ".hbn/knowledge/0011-higiene-documental-recorrente.md",
+    "auditoria/02_planos/29_ROADMAP_IMPLEMENTACAO_V204_2026_05_05.md",
+    "docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md"
+  ],
+  "decisao": {
+    "micro43_status": "registrar aprovacao operador como base do Sexteto",
+    "micro45_entrega": "implementar CT_ValidarRelease_SextetoMinimo como Quinteto + bloco adversarial Onda 23",
+    "quinteto_preservado": true,
+    "funcionalidade_nova_com_teste": "UI_ADV_011_SEXTETO_GATE_EXPOSTO valida que o Sexteto esta exposto e rastreavel"
+  },
+  "criterios_de_pronto": [
+    "CT_ValidarRelease_SextetoMinimo e wrapper VR_ValidarReleaseSextetoMinimo criados",
+    "Central_Testes_V2 expoe Sexteto como opcao oficial [1]",
+    "ADVERSARIAL_UI passa para 11 asserts incluindo o proprio gate",
+    "manifesto V3 MICRO45 criado",
+    "local-ai/vba_import sincronizado com src/vba",
+    "documentacao e HBN atualizados"
+  ]
+}

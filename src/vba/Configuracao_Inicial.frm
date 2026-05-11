@@ -72,6 +72,7 @@ On Error GoTo erro_carregamento:
     Dim notaCorteVal As Double
     Dim maxStrikesVal As Long
     Dim diasSuspensaoVal As Long
+    Dim msgValidacao As String
 
     Set wsCfg = ThisWorkbook.Sheets(SHEET_CONFIG)
     If Not Util_PrepararAbaParaEscrita(wsCfg, estavaProtegida, senhaProtecao) Then
@@ -99,6 +100,17 @@ On Error GoTo erro_carregamento:
 
     If prazoTxt = "" Then prazoTxt = "5"
 
+    ' V12.0.0204 Onda 24 MD-24.2: valor invalido na regra de strikes
+    ' bloqueia a gravacao completa e deixa rastro em AUDIT_LOG.
+    If Not Config_ValidarRegraStrikes(notaCorteTxt, maxStrikesTxt, diasSuspensaoTxt, msgValidacao) Then
+        If Not Config_RegistrarFalhaValidacao("Configuracao_Inicial.B_Parametros_Click", msgValidacao) Then
+            msgValidacao = msgValidacao & vbCrLf & "Atencao: nao foi possivel registrar a falha no AUDIT_LOG."
+        End If
+        Call Util_RestaurarProtecaoAba(wsCfg, estavaProtegida, senhaProtecao)
+        MsgBox msgValidacao, vbExclamation, "Configuracoes iniciais"
+        Exit Sub
+    End If
+
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_GESTOR).Value = gestorTxt
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_LOGO).Value = logoTxt
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MUNICIPIO).Value = municipioTxt
@@ -109,19 +121,19 @@ On Error GoTo erro_carregamento:
     ' Validacao defensiva: se o usuario apagar os campos, mantem o
     ' valor atual em CONFIG (sem zerar nem suspender o sistema).
     If notaCorteTxt <> "" Then
-        notaCorteVal = CDbl(Val(notaCorteTxt))
+        notaCorteVal = CDbl(notaCorteTxt)
         If notaCorteVal > 0 And notaCorteVal <= 10 Then
             wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = notaCorteVal
         End If
     End If
     If maxStrikesTxt <> "" Then
-        maxStrikesVal = CLng(Val(maxStrikesTxt))
+        maxStrikesVal = CLng(CDbl(maxStrikesTxt))
         If maxStrikesVal >= 1 And maxStrikesVal <= 50 Then
             wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = maxStrikesVal
         End If
     End If
     If diasSuspensaoTxt <> "" Then
-        diasSuspensaoVal = CLng(Val(diasSuspensaoTxt))
+        diasSuspensaoVal = CLng(CDbl(diasSuspensaoTxt))
         If diasSuspensaoVal >= 0 And diasSuspensaoVal <= 3650 Then
             wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = diasSuspensaoVal
         End If

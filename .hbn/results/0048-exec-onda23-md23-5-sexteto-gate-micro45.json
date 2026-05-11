@@ -1,0 +1,64 @@
+{
+  "execution_id": "0048-exec-onda23-md23-5-sexteto-gate-micro45",
+  "agent_id": "codex-cli",
+  "readback_id": "0048-onda23-md23-5-sexteto-gate-micro45",
+  "action": "Implementar MICRO45 / MD-23.5 com gate Sexteto minimo para V204-dev.",
+  "status": "APROVADO_OPERADOR",
+  "outcome": "executed",
+  "human_status": "approved",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "V12.0.0204-dev",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO45",
+    "build": "f7aa84f+ONDA23.MD23.5-sexteto-gate"
+  },
+  "validation": {
+    "local_static_checks": [
+      "OK: json_readback_result_valid",
+      "OK: manifesto_micro45_criado",
+      "OK: src_vba_para_local_ai_sync_check_53_arquivos",
+      "OK: funcionalidade_nova_tem_teste_UI_ADV_011"
+    ],
+    "operator_gate": [
+      "OK: importado",
+      "OK: compilado",
+      "OK: TV2_RunAdversarial_UI False = 11/0/0",
+      "OK: CT_ValidarRelease_SextetoMinimo = APROVADO"
+    ],
+    "operator_evidence": {
+      "adversarial_ui_execucao": "TV2_20260509_025210",
+      "adversarial_ui_resultado": "OK=11 | FALHA=0 | MANUAL=0",
+      "sexteto_validacao_id": "VR_20260509_025323",
+      "sexteto_resultado": "APROVADO",
+      "sexteto_syntax": "V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0+Onda23Adv=26/0",
+      "csv_resumo": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseSexteto_V12_0_0203_VR_20260509_025323.csv"
+    },
+    "residual_note": "CSV do Sexteto ainda usa caminho/nome V12.0.0203; alinhar evidencia para V12.0.0204 no fechamento Onda 25."
+  },
+  "files_changed": [
+    ".hbn/readbacks/0048-onda23-md23-5-sexteto-gate-micro45.json",
+    ".hbn/results/0048-exec-onda23-md23-5-sexteto-gate-micro45.json",
+    ".hbn/results/INDEX.md",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/02_planos/29_ROADMAP_IMPLEMENTACAO_V204_2026_05_05.md",
+    "auditoria/03_ondas/onda_23_v204_baterias_adversariais/08_TECNICO_MICRO45_SEXTETO_GATE.md",
+    "auditoria/03_ondas/onda_23_v204_baterias_adversariais/09_PROCEDIMENTO_IMPORT_MICRO45.md",
+    "docs/reference/testes/INDEX.md",
+    "docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO45.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABE-Central_Testes_V2.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas",
+    "src/vba/App_Release.bas",
+    "src/vba/Central_Testes_V2.bas",
+    "src/vba/Teste_Validacao_Release.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas"
+  ],
+  "created_at": "2026-05-09T03:18:00-0300"
+}

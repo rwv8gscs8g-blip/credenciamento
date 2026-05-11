@@ -1,0 +1,51 @@
+{
+  "readback_id": "0057-onda25-md25-2-higiene-final-micro51",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-10T00:34:00-0300",
+  "mode": "safe_track",
+  "repo": "/Users/macbookpro/Projetos/Credenciamento",
+  "base": "MICRO50 / f7aa84f+v12.0.0204-rc1",
+  "target": "V12.0.0204 finalization track",
+  "microdelta": "MICRO51",
+  "intent": "Executar higiene documental final e preparar auditoria/publicacao da V204 a partir do rc1 verde, sem alterar o VBA importado por padrao.",
+  "operator_gate_received": {
+    "build": "f7aa84f+v12.0.0204-rc1",
+    "importador_v3": "mode=Estabilizado, dryRun=False, M=2, F=0, err=0, skip=0",
+    "sexteto": "VR_20260510_000428 APROVADO",
+    "syntax": "V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0",
+    "csv": "auditoria/evidencias/V12.0.0204/ValidacaoReleaseSexteto_V12_0_0203_VR_20260510_000428.csv"
+  },
+  "planned_changes": [
+    "Atualizar documentos de status da V204 para refletir MICRO50 rc1 aprovado.",
+    "Preparar checklist de publicacao final: auditoria cruzada, manifestos, release notes e tag futura.",
+    "Registrar como debito tecnico o filename do CSV ainda conter V12_0_0203 apesar de estar na pasta V12.0.0204.",
+    "Registrar como debitos ja conhecidos o MD-24.4 deferido para V205 e o strict residual G1/G2/G5.",
+    "Nao alterar src/vba nem local-ai/vba_import neste microdelta, salvo hearback explicito para corrigir o filename do CSV no gerador de evidencias."
+  ],
+  "default_decision": {
+    "csv_filename": "deferir para Onda 26/V205 ou MICRO51-docs, sem novo import V3",
+    "reason": "A correcao do filename exigiria alterar Teste_Validacao_Release.bas, novo pacote V3 e novo gate; o rc1 ja tem Sexteto verde e evidencia existente."
+  },
+  "expected_validation": {
+    "local": [
+      "python3 -m json.tool nos ERPs/readbacks novos",
+      "python3 local-ai/scripts/publicar_vba_import_v2.py check",
+      "bash local-ai/scripts/glasswing-checks.sh G7"
+    ],
+    "strict": "Executar e registrar que G7/G8 seguem OK; G1/G2/G5 residuais permanecem como debito aceito.",
+    "operator": "Sem novo Excel gate se MICRO51 permanecer documental."
+  },
+  "risks": [
+    {
+      "id": "R1",
+      "risk": "Reabrir VBA depois do Sexteto verde para corrigir detalhe nominal de CSV pode criar novo ciclo de import/compile/gate sem ganho funcional.",
+      "mitigation": "Default: registrar debito e nao tocar no VBA em MICRO51."
+    },
+    {
+      "id": "R2",
+      "risk": "Publicar V204 com docs desalinhados entre rc1, MICRO49 rollback e V205 debt.",
+      "mitigation": "MICRO51 concentra higiene documental antes de auditoria/publicacao."
+    }
+  ],
+  "next_step": "PARAR e aguardar Hearback humano antes de executar MICRO51."
+}

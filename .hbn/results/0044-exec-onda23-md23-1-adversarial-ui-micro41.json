@@ -1,0 +1,59 @@
+{
+  "execution_id": "0044-exec-onda23-md23-1-adversarial-ui-micro41",
+  "agent_id": "codex-cli",
+  "readback_id": "0044-onda23-md23-1-adversarial-ui-micro41",
+  "action": "Implementar MICRO41 com suite adversarial read-only de UI e exposicao na Central V2.",
+  "status": "APROVADO_OPERADOR",
+  "outcome": "executed",
+  "human_status": "approved",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "V12.0.0204-dev",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO41",
+    "build": "f7aa84f+ONDA23.MD23.1-adversarial-ui"
+  },
+  "validation": {
+    "local_static_checks": [
+      "OK: publicar_vba_import_v2.py check - vba_import 100% sincronizado com src/vba",
+      "OK: shasum src/vba == local-ai/vba_import para Teste_V2_Roteiros, Teste_V2_Engine, Central_Testes_V2 e App_Release",
+      "manifest_MICRO41_created",
+      "OK: CRLF_preserved_for_changed_vba_and_manifest",
+      "OK: json_readback_result_valid"
+    ],
+    "operator_gate_required": [
+      "ImportarPacoteV3_Delta \"MICRO41\", \"f7aa84f+ONDA23.MD23.1-adversarial-ui\"",
+      "VBE > Depurar > Compilar VBAProject",
+      "?GetBuildImportado",
+      "TV2_RunAdversarial_UI False",
+      "CT_ValidarRelease_QuintetoMinimo"
+    ],
+    "expected_adversarial_ui_syntax": "ADVERSARIAL_UI=10/0/0",
+    "expected_quinteto_syntax": "V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0",
+    "operator_result": {
+      "adversarial_ui_execucao": "TV2_20260507_022218",
+      "adversarial_ui_resultado": "OK=10 | FALHA=0 | MANUAL=0",
+      "validacao_id": "VR_20260507_022355",
+      "build": "f7aa84f+ONDA23.MD23.1-adversarial-ui",
+      "resultado": "APROVADO",
+      "sintaxe": "V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0",
+      "evidencia_csv": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuinteto_V12_0_0203_VR_20260507_022355.csv"
+    }
+  },
+  "files_changed": [
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Central_Testes_V2.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO41.txt",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABE-Central_Testes_V2.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "auditoria/03_ondas/onda_23_v204_baterias_adversariais/01_TECNICO_MICRO41_ADVERSARIAL_UI.md",
+    "auditoria/03_ondas/onda_23_v204_baterias_adversariais/02_PROCEDIMENTO_IMPORT_MICRO41.md"
+  ],
+  "created_at": "2026-05-07T01:52:00-0300",
+  "approved_at": "2026-05-07T02:41:00-0300"
+}

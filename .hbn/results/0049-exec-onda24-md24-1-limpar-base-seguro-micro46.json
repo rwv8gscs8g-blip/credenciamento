@@ -1,0 +1,58 @@
+{
+  "execution_id": "0049-exec-onda24-md24-1-limpar-base-seguro-micro46",
+  "agent_id": "codex-cli",
+  "readback_id": "0049-onda24-md24-1-limpar-base-seguro-micro46",
+  "action": "Implementar MICRO46 / MD-24.1 com hardening do fluxo Limpar_Base.",
+  "status": "APROVADO_OPERADOR",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "V12.0.0204-dev",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO46",
+    "build": "f7aa84f+ONDA24.MD24.1-limpar-base-seguro"
+  },
+  "validation": {
+    "local_static_checks": [
+      "OK: manifesto_micro46_criado",
+      "OK: src_vba_para_local_ai_sync_check_53_arquivos",
+      "OK: shasum_pareado_6_arquivos_importaveis",
+      "OK: token_sensivel_literal_nao_encontrado_em_src_ou_espelho",
+      "OK: funcionalidade_nova_tem_teste_UI_ADV_012"
+    ],
+    "operator_gate_approved": [
+      "OK: importou",
+      "OK: compilou",
+      "OK: TV2_RunAdversarial_UI False = TV2_20260509_141117 | 12/0/0",
+      "OK: CT_ValidarRelease_SextetoMinimo = VR_20260509_141235 | APROVADO"
+    ],
+    "approved_syntax": "V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "files_changed": [
+    ".hbn/readbacks/0049-onda24-md24-1-limpar-base-seguro-micro46.json",
+    ".hbn/results/0049-exec-onda24-md24-1-limpar-base-seguro-micro46.json",
+    ".hbn/results/INDEX.md",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/03_ondas/onda_24_v204_hardening_operacional/01_TECNICO_MICRO46_LIMPAR_BASE_SEGURO.md",
+    "auditoria/03_ondas/onda_24_v204_hardening_operacional/02_PROCEDIMENTO_IMPORT_MICRO46.md",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO46.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas",
+    "local-ai/vba_import/001-modulo/ABJ-Mod_Limpeza_Base.bas",
+    "local-ai/vba_import/002-formularios/AAJ-Limpar_Base.frm",
+    "local-ai/vba_import/002-formularios/AAJ-Limpar_Base.code-only.txt",
+    "src/vba/App_Release.bas",
+    "src/vba/Limpar_Base.frm",
+    "src/vba/Mod_Limpeza_Base.bas",
+    "src/vba/Teste_Validacao_Release.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas"
+  ],
+  "created_at": "2026-05-09T13:25:00-0300",
+  "approved_at": "2026-05-09T14:57:27-0300"
+}

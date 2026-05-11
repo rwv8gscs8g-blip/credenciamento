@@ -97,6 +97,17 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
     Dim qtdDtInvalid As Long
     Dim dtCorteDtInvalid As Date
     Dim usarJanelaDtInvalid As Boolean
+    Dim msgCfgInvalida As String
+    Dim cfgValida As Boolean
+    Dim cfgAuditOk As Boolean
+    Dim auditCfgAntes As Long
+    Dim auditCfgDepois As Long
+    Dim qtdAtivMig9Antes As Long
+    Dim qtdAtivMig9Depois As Long
+    Dim qtdServMig9Antes As Long
+    Dim qtdServMig9Depois As Long
+    Dim relatorioMig9 As String
+    Dim resetMig9Ok As Boolean
     Dim erroFatalNumero As Long
     Dim erroFatalDescricao As String
 
@@ -511,6 +522,53 @@ Public Sub TV2_RunSmoke(Optional ByVal visual As Boolean = False, Optional ByVal
                   (Not resDtInvalid.sucesso And qtdDtInvalid = 0 And _
                    InStr(1, resDtInvalid.mensagem, "DT_ULT_REATIV invalida", vbTextCompare) > 0)
 
+    msgCfgInvalida = ""
+    cfgAuditOk = False
+    auditCfgAntes = TV2_AuditCount("Validacao Rejeitada", "CONFIG_INVALIDA")
+    cfgValida = Config_ValidarRegraStrikes("0", "abc", "-1", msgCfgInvalida)
+    If Not cfgValida Then
+        cfgAuditOk = Config_RegistrarFalhaValidacao("TV2_RunSmoke.MIG_008", msgCfgInvalida)
+    End If
+    auditCfgDepois = TV2_AuditCount("Validacao Rejeitada", "CONFIG_INVALIDA")
+    obtidoAtm = "VALIDA=" & CStr(cfgValida)
+    obtidoAtm = obtidoAtm & "; MSG=" & msgCfgInvalida
+    obtidoAtm = obtidoAtm & "; AUDIT_OK=" & CStr(cfgAuditOk)
+    obtidoAtm = obtidoAtm & "; AUDIT_CONFIG=" & CStr(auditCfgDepois - auditCfgAntes)
+    TV2_LogAssert "SMOKE", "MIG_008", "AUTO", _
+                  "Rejeitar configuracao de strikes invalida com mensagem e auditoria", _
+                  "Validacao falha antes de gravar CONFIG, mensagem cita os campos invalidos e AUDIT_LOG recebe CONFIG_INVALIDA", _
+                  obtidoAtm, _
+                  "Impede que valores invalidos sejam ignorados silenciosamente no formulario de configuracao", _
+                  (Not cfgValida And cfgAuditOk And _
+                   (auditCfgDepois - auditCfgAntes) >= 1 And _
+                   InStr(1, msgCfgInvalida, "TxtNotaCorte", vbTextCompare) > 0 And _
+                   InStr(1, msgCfgInvalida, "TxtMaxStrikes", vbTextCompare) > 0 And _
+                   InStr(1, msgCfgInvalida, "TxtDiasSuspensao", vbTextCompare) > 0)
+
+    TV2_PrepararCenarioTriploCanonico
+    qtdAtivMig9Antes = TV2_CountRows(SHEET_ATIVIDADES)
+    qtdServMig9Antes = TV2_CountRows(SHEET_CAD_SERV)
+    relatorioMig9 = ""
+    resetMig9Ok = LimpaBaseTotalReset(relatorioMig9)
+    qtdAtivMig9Depois = TV2_CountRows(SHEET_ATIVIDADES)
+    qtdServMig9Depois = TV2_CountRows(SHEET_CAD_SERV)
+    obtidoAtm = "RESET_OK=" & CStr(resetMig9Ok)
+    obtidoAtm = obtidoAtm & "; ATIV_ANTES=" & CStr(qtdAtivMig9Antes)
+    obtidoAtm = obtidoAtm & "; ATIV_DEPOIS=" & CStr(qtdAtivMig9Depois)
+    obtidoAtm = obtidoAtm & "; SERV_ANTES=" & CStr(qtdServMig9Antes)
+    obtidoAtm = obtidoAtm & "; SERV_DEPOIS=" & CStr(qtdServMig9Depois)
+    obtidoAtm = obtidoAtm & "; RELATORIO_CAD_SERV=" & CStr(InStr(1, relatorioMig9, "CAD_SERV: apagadas", vbTextCompare) > 0)
+    TV2_LogAssert "SMOKE", "MIG_009", "AUTO", _
+                  "Limpar Base deve preservar CNAE e zerar CAD_SERV", _
+                  "ATIVIDADES permanece com linhas validas, CAD_SERV fica sem linhas de dados e relatorio nao lista CAD_SERV como preservado", _
+                  obtidoAtm, _
+                  "Permite reutilizar a planilha em outro municipio sem herdar servicos locais antigos", _
+                  (resetMig9Ok And _
+                   qtdAtivMig9Antes > 0 And qtdAtivMig9Depois = qtdAtivMig9Antes And _
+                   qtdServMig9Antes > 0 And qtdServMig9Depois = 0 And _
+                   InStr(1, relatorioMig9, "CAD_SERV: apagadas", vbTextCompare) > 0 And _
+                   InStr(1, relatorioMig9, "  - CAD_SERV", vbTextCompare) = 0)
+
     ' MD-17.1.c (Onda 17 Test-First) - Smoke read-only de UI (5 verificacoes x 4 forms).
     ' Bloco roda APOS asserts do TV2_RunSmoke; logs vao para mesma execucao SMOKE.
     Call TV2_RunUiSmokeReadOnly(silencioso)
@@ -662,6 +720,438 @@ Public Sub TV2_RunUiSmokeReadOnly(Optional ByVal silencioso As Boolean = False)
     Next i
 
     TV2_UI_VerificarGuardReentrada repoRoot
+End Sub
+
+Public Sub TV2_RunAdversarial_UI(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const SUITE As String = "ADVERSARIAL_UI"
+    Dim repoRoot As String
+    Dim faltantes As String
+    Dim manuais As String
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao SUITE, visual, 12
+    repoRoot = TV2_UI_RepoRoot()
+
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Reativa_Empresa.frm", "mReativacaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Reativa_Entidade.frm", "mReativacaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Altera_Empresa.frm", "mAlteracaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Altera_Empresa.frm", "mInativacaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Altera_Entidade.frm", "mAlteracaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Altera_Entidade.frm", "mInativacaoEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Limpar_Base.frm", "mLimpezaEmAndamento", manuais)
+    faltantes = faltantes & TV2_UI_CheckGuardArquivo(repoRoot, "Menu_Principal.frm", "mEncerraOSEmProcessamento", manuais)
+    TV2_LogAssert SUITE, "UI_ADV_001_REENTRADA_MUTADORES", "AUTO", _
+                  "Verificar guards de reentrada nos forms mutadores", _
+                  "Flags declaradas, testadas, ligadas e desligadas", _
+                  IIf(faltantes = "" And manuais = "", "OK", "FALTANTES=" & faltantes & "; MANUAIS=" & manuais), _
+                  "Duplo clique ou chamada repetida nao pode duplicar mutacao", _
+                  (faltantes = "" And manuais = "")
+
+    TV2_UIAdv_LogFileTokens SUITE, "UI_ADV_002_REATIVA_EMPRESA_INTEGRIDADE", repoRoot, "Reativa_Empresa.frm", _
+                             "UI_EmpresaInativosTemConflito|Util_LinhaDuplicadaIdOuDocumento|Tem certeza que deseja REATIVAR esta Empresa?|ReativarLinhaEmpresa|RestaurarCredenciamentosEmpresa|mReativacaoEmAndamento = False", _
+                             "Reativacao de empresa exige saneamento, confirmacao e servico", _
+                             "Conflito, duplicidade ativa, confirmacao, reativacao, credenciamentos e reset de guard presentes", _
+                             "Bloqueia duplicidade ativa/inativa e preserva credenciamentos sem bypass silencioso"
+
+    TV2_UIAdv_LogFileTokens SUITE, "UI_ADV_003_REATIVA_ENTIDADE_SERVICO", repoRoot, "Reativa_Entidade.frm", _
+                             "Tem certeza que deseja REATIVAR esta Entidade?|mReativacaoEmAndamento = True|ReativarEntidadePorChave|mReativacaoEmAndamento = False", _
+                             "Reativacao de entidade passa pelo servico e confirma acao destrutiva", _
+                             "Confirmacao, guard e ReativarEntidadePorChave presentes", _
+                             "Evita reativacao direta por UI sem trilha de servico"
+
+    TV2_UIAdv_LogFileTokens SUITE, "UI_ADV_004_ALTERA_EMPRESA_CONFIRMA_IDS", repoRoot, "Altera_Empresa.frm", _
+                             "Deseja realmente continuar?|IdsIguais|mAlteracaoEmAndamento = True|mAlteracaoEmAndamento = False|Tem certeza que deseja Inativar esta Empresa?|mInativacaoEmAndamento = True|mInativacaoEmAndamento = False", _
+                             "Alteracao e inativacao de empresa usam confirmacao, IdsIguais e guard", _
+                             "Confirmacoes, comparacao robusta de IDs e flags de reentrada presentes", _
+                             "Protege edicao/inativacao contra ID texto-numero e duplo clique"
+
+    TV2_UIAdv_LogFileTokens SUITE, "UI_ADV_005_ALTERA_ENTIDADE_CONFIRMA_IDS", repoRoot, "Altera_Entidade.frm", _
+                             "Deseja realmente continuar?|IdsIguais|mAlteracaoEmAndamento = True|mAlteracaoEmAndamento = False|Tem certeza que deseja Inativar esta Entidade?|mInativacaoEmAndamento = True|mInativacaoEmAndamento = False", _
+                             "Alteracao e inativacao de entidade usam confirmacao, IdsIguais e guard", _
+                             "Confirmacoes, comparacao robusta de IDs e flags de reentrada presentes", _
+                             "Protege edicao/inativacao de entidade contra ID texto-numero e duplo clique"
+
+    TV2_UIAdv_LogFileTokens SUITE, "UI_ADV_006_AVALIAR_OS_GUARDS", repoRoot, "Menu_Principal.frm", _
+                             "mEncerraOSEmProcessamento|Confirma a avalia|TryParseDataBR|Justificativa obrigat|AvaliarOS(|Resume limpar", _
+                             "Avaliacao de OS valida entrada, confirma e restaura guard no cleanup", _
+                             "Guard, confirmacao, parse de datas, justificativa obrigatoria, servico e cleanup presentes", _
+                             "Evita avaliacao duplicada ou divergencia sem justificativa"
+
+    TV2_UIAdv_LogFileTokens SUITE, "UI_ADV_007_PREOS_OS_DESTRUTIVOS", repoRoot, "Menu_Principal.frm", _
+                             "ErrorBoundary.BeginWrite(""REJEITAR_PREOS"")|Confirmar rejei|ErrorBoundary.BeginWrite(""EXPIRAR_PREOS"")|Confirmar expira|ErrorBoundary.BeginWrite(""CANCELAR_OS"")|Confirmar cancelamento", _
+                             "Acoes destrutivas de Pre-OS/OS exigem ErrorBoundary e confirmacao", _
+                             "BeginWrite e confirmacao presentes para rejeitar, expirar e cancelar", _
+                             "Evita mutacao destrutiva sem fronteira transacional e hearback do operador"
+
+    TV2_UIAdv_LogFileTokens SUITE, "UI_ADV_008_LIMPAR_BASE_FORM_GUARD", repoRoot, "Limpar_Base.frm", _
+                             "MLB_SenhaLimpezaValida|PasswordChar|mLimpezaEmAndamento|Limpa_Base|MLB_RegistrarTentativaLimpeza|Erro ao limpar base", _
+                             "Form Limpar_Base exige senha, guard de reentrada e erro contextual", _
+                             "Senha, guard, chamada ao servico e mensagem de erro presentes", _
+                             "Reduz risco de limpeza duplicada ou falha muda na UI"
+
+    TV2_UIAdv_LogFileTokens SUITE, "UI_ADV_009_LIMPAR_BASE_CONFIRMACAO", repoRoot, "Preencher.bas", _
+                             "Sub Limpa_Base()|Tem certeza que deseja ZERAR a Base Operacional?|LimpaBaseTotalReset|Util_SalvarWorkbookSeguro", _
+                             "Limpeza total pede confirmacao e delega ao reset auditavel", _
+                             "Confirmacao destrutiva, reset centralizado e salvamento seguro presentes", _
+                             "Protege a acao mais destrutiva do workbook contra disparo acidental"
+
+    TV2_UIAdv_LogFileTokens SUITE, "UI_ADV_010_CENTRAL_V2_EXPOE_SUITE", repoRoot, "Central_Testes_V2.bas", _
+                             "TV2_RunAdversarial_UI|CT2_ExecutarAdversarialUI|V2 Adversarial UI", _
+                             "Central V2 expoe a suite adversarial para humano", _
+                             "Wrapper e texto de menu presentes", _
+                             "Garante que a nova suite nao fique escondida apenas na janela imediata"
+
+    TV2_UIAdv_LogFileTokens SUITE, "UI_ADV_011_SEXTETO_GATE_EXPOSTO", repoRoot, "Teste_Validacao_Release.bas", _
+                             "CT_ValidarRelease_SextetoMinimo|VR_ValidarReleaseSextetoMinimo|VR_SintaxeSexteto|Validacao Release Sexteto", _
+                             "Gate Sexteto possui entrada publica, alias e sintaxe auditavel", _
+                             "Sub oficial, wrapper, sintaxe e mensagem final presentes", _
+                             "Toda funcionalidade nova precisa de teste correspondente no mesmo microdelta"
+
+    TV2_UIAdv_LogFileNaoContemTokens SUITE, "UI_ADV_012_LIMPAR_BASE_SEM_SENHA_CLARA", repoRoot, "Limpar_Base.frm", _
+                                  Chr$(115) & Chr$(101) & Chr$(98) & Chr$(114) & Chr$(97) & Chr$(101) & CStr(2024), _
+                                  "Limpar_Base nao pode carregar senha clara no form", _
+                                  "Senha clara ausente do codigo do form", _
+                                  "Evita regressao de credencial hardcoded no ponto de entrada destrutivo"
+
+    TV2_FinalizarExecucao SUITE, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert SUITE, "FATAL", "AUTO", _
+                  "Executar suite adversarial UI sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao SUITE, silencioso
+End Sub
+
+Public Sub TV2_RunTransaction_Interrupt(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const SUITE As String = "TRANSACAO_INTERRUPT"
+    Const TX_ROW As Long = 1
+    Const TX_COL As Long = 60
+    Dim wsTx As Worksheet
+    Dim txOriginal As Variant
+    Dim txRollbackOk As Boolean
+    Dim txRollbackOk2 As Boolean
+    Dim txCommitAntes As Long
+    Dim txCommitDepois As Long
+    Dim txRollbackAntes As Long
+    Dim txRollbackDepois As Long
+    Dim txNestedAntes As Long
+    Dim txNestedDepois As Long
+    Dim txId As String
+    Dim txOuterId As String
+    Dim txInnerId As String
+    Dim txErrNum As Long
+    Dim txErrMsg As String
+    Dim txNestedRejected As Boolean
+    Dim txStillActive As Boolean
+    Dim txIdPreservado As Boolean
+    Dim obtido As String
+    Dim ok As Boolean
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao SUITE, visual, 6
+    Set wsTx = ThisWorkbook.Sheets(TV2_SHEET_RESULTADO)
+    txOriginal = wsTx.Cells(TX_ROW, TX_COL).Value
+    If Transacao_EstaAtiva() Then txRollbackOk = Transacao_Rollback()
+
+    txId = "TV2_TX_INT_001"
+    txCommitAntes = TV2_AuditCount("Rollback/Transacao", "STATUS=COMMIT")
+    Transacao_Iniciar txId
+    Transacao_Commit
+    txCommitDepois = TV2_AuditCount("Rollback/Transacao", "STATUS=COMMIT")
+    obtido = "ATIVA_FINAL=" & CStr(Transacao_EstaAtiva())
+    obtido = obtido & "; TX_ID_FINAL=" & Transacao_IdAtual()
+    obtido = obtido & "; AUDIT_COMMIT=" & CStr(txCommitDepois - txCommitAntes)
+    ok = Not Transacao_EstaAtiva()
+    ok = ok And Transacao_IdAtual() = ""
+    ok = ok And (txCommitDepois - txCommitAntes) >= 1
+    TV2_LogAssert SUITE, "TX_INT_001_COMMIT_LIMPA_ESTADO", "AUTO", _
+                  "Commit encerra transacao e limpa estado global", _
+                  "Transacao inativa, id vazio e auditoria COMMIT registrada", _
+                  obtido, _
+                  "Evita vazamento de estado global apos commit", ok
+
+    txId = "TV2_TX_INT_002"
+    Transacao_Iniciar txId
+    txRollbackOk = Transacao_Rollback()
+    obtido = "ROLLBACK=" & CStr(txRollbackOk)
+    obtido = obtido & "; ATIVA_FINAL=" & CStr(Transacao_EstaAtiva())
+    obtido = obtido & "; TX_ID_FINAL=" & Transacao_IdAtual()
+    ok = txRollbackOk
+    ok = ok And Not Transacao_EstaAtiva()
+    ok = ok And Transacao_IdAtual() = ""
+    TV2_LogAssert SUITE, "TX_INT_002_ROLLBACK_SEM_WRITE_LIMPA_ESTADO", "AUTO", _
+                  "Rollback sem writes deve ser idempotente", _
+                  "Rollback retorna verdadeiro, encerra transacao e limpa id", _
+                  obtido, _
+                  "Garante cleanup mesmo quando a operacao aborta antes da primeira escrita", ok
+
+    txId = "TV2_TX_INT_003"
+    txOriginal = wsTx.Cells(TX_ROW, TX_COL).Value
+    txRollbackAntes = TV2_AuditCount("Rollback/Transacao", "STATUS=ROLLBACK")
+    Transacao_Iniciar txId
+    Transacao_RegistrarWrite TV2_SHEET_RESULTADO, TX_ROW, TX_COL, txOriginal
+    wsTx.Cells(TX_ROW, TX_COL).Value = "MICRO42_TX_TMP"
+    txRollbackOk = Transacao_Rollback()
+    txRollbackDepois = TV2_AuditCount("Rollback/Transacao", "STATUS=ROLLBACK")
+    obtido = "ROLLBACK=" & CStr(txRollbackOk)
+    obtido = obtido & "; VALOR_RESTAURADO=" & CStr(CStr(wsTx.Cells(TX_ROW, TX_COL).Value) = CStr(txOriginal))
+    obtido = obtido & "; ATIVA_FINAL=" & CStr(Transacao_EstaAtiva())
+    obtido = obtido & "; AUDIT_ROLLBACK=" & CStr(txRollbackDepois - txRollbackAntes)
+    ok = txRollbackOk
+    ok = ok And CStr(wsTx.Cells(TX_ROW, TX_COL).Value) = CStr(txOriginal)
+    ok = ok And Not Transacao_EstaAtiva()
+    ok = ok And (txRollbackDepois - txRollbackAntes) >= 1
+    TV2_LogAssert SUITE, "TX_INT_003_ROLLBACK_RESTAURA_VALOR", "AUTO", _
+                  "Rollback restaura write registrado em ordem reversa", _
+                  "Valor sentinela volta ao original, estado limpa e auditoria ROLLBACK aparece", _
+                  obtido, _
+                  "Prova a restauracao basica sem tocar dados operacionais", ok
+
+    txOuterId = "TV2_TX_INT_004_OUTER"
+    txInnerId = "TV2_TX_INT_004_INNER"
+    txNestedAntes = TV2_AuditCount("Rollback/Transacao", "TRANSACAO_ANINHADA")
+    Transacao_Iniciar txOuterId
+    txErrNum = 0
+    txErrMsg = ""
+    On Error Resume Next
+    Transacao_Iniciar txInnerId
+    txErrNum = Err.Number
+    txErrMsg = Err.Description
+    Err.Clear
+    On Error GoTo falha
+    txNestedRejected = (txErrNum <> 0)
+    txStillActive = Transacao_EstaAtiva()
+    txIdPreservado = (Transacao_IdAtual() = txOuterId)
+    txRollbackOk = Transacao_Rollback()
+    txNestedDepois = TV2_AuditCount("Rollback/Transacao", "TRANSACAO_ANINHADA")
+    obtido = "ERRO_ANINHADO=" & CStr(txErrNum)
+    obtido = obtido & "; MSG=" & txErrMsg
+    obtido = obtido & "; ATIVA_APOS_ERRO=" & CStr(txStillActive)
+    obtido = obtido & "; TX_ID_PRESERVADO=" & CStr(txIdPreservado)
+    obtido = obtido & "; ROLLBACK_CLEANUP=" & CStr(txRollbackOk)
+    obtido = obtido & "; AUDIT_ANINHADA=" & CStr(txNestedDepois - txNestedAntes)
+    ok = txNestedRejected
+    ok = ok And txStillActive
+    ok = ok And txIdPreservado
+    ok = ok And txRollbackOk
+    ok = ok And Not Transacao_EstaAtiva()
+    ok = ok And (txNestedDepois - txNestedAntes) >= 1
+    TV2_LogAssert SUITE, "TX_INT_004_ANINHADA_PRESERVA_EXTERNA", "AUTO", _
+                  "Transacao aninhada falha sem sobrescrever a externa", _
+                  "Erro explicito, id externo preservado, cleanup OK e auditoria ANINHADA", _
+                  obtido, _
+                  "Impede corrupcao de contexto quando uma rotina tenta reabrir transacao", ok
+
+    txId = "TV2_TX_INT_005"
+    Transacao_Iniciar txId
+    txRollbackOk = Transacao_Rollback()
+    Transacao_Commit
+    obtido = "ROLLBACK=" & CStr(txRollbackOk)
+    obtido = obtido & "; ATIVA_FINAL=" & CStr(Transacao_EstaAtiva())
+    obtido = obtido & "; TX_ID_FINAL=" & Transacao_IdAtual()
+    ok = txRollbackOk
+    ok = ok And Not Transacao_EstaAtiva()
+    ok = ok And Transacao_IdAtual() = ""
+    TV2_LogAssert SUITE, "TX_INT_005_COMMIT_APOS_ROLLBACK_NAO_REABRE", "AUTO", _
+                  "Commit apos rollback nao reabre transacao", _
+                  "Estado permanece inativo e id vazio", _
+                  obtido, _
+                  "Fecha ordem de chamada defensiva em cleanup duplicado", ok
+
+    txId = "TV2_TX_INT_006"
+    Transacao_Iniciar txId
+    txRollbackOk = Transacao_Rollback()
+    txRollbackOk2 = Transacao_Rollback()
+    obtido = "ROLLBACK_1=" & CStr(txRollbackOk)
+    obtido = obtido & "; ROLLBACK_2=" & CStr(txRollbackOk2)
+    obtido = obtido & "; ATIVA_FINAL=" & CStr(Transacao_EstaAtiva())
+    obtido = obtido & "; TX_ID_FINAL=" & Transacao_IdAtual()
+    ok = txRollbackOk
+    ok = ok And txRollbackOk2
+    ok = ok And Not Transacao_EstaAtiva()
+    ok = ok And Transacao_IdAtual() = ""
+    TV2_LogAssert SUITE, "TX_INT_006_ROLLBACK_DUPLO_IDEMPOTENTE", "AUTO", _
+                  "Rollback duplo nao deixa estado sujo", _
+                  "Duas chamadas retornam verdadeiro e estado final fica limpo", _
+                  obtido, _
+                  "Permite handlers defensivos sem criar falha secundaria", ok
+
+    TV2_FinalizarExecucao SUITE, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    On Error Resume Next
+    If Transacao_EstaAtiva() Then txRollbackOk = Transacao_Rollback()
+    If Not wsTx Is Nothing Then wsTx.Cells(TX_ROW, TX_COL).Value = txOriginal
+    On Error GoTo 0
+    TV2_LogAssert SUITE, "FATAL", "AUTO", _
+                  "Executar suite de interrupcao transacional sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao SUITE, silencioso
+End Sub
+
+Public Sub TV2_RunBoundary_Dates(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const SUITE As String = "BOUNDARY_DATES"
+    Dim res As TResult
+    Dim dtPrev As Date
+    Dim numEmpenho As String
+    Dim defaultData As String
+    Dim houveMudanca As Boolean
+    Dim resumoMudancas As String
+    Dim obtido As String
+    Dim ok As Boolean
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao SUITE, visual, 9
+
+    dtPrev = CDate(0)
+    numEmpenho = ""
+    res = MontarParametrosEmissaoOS("PREOS-BND-001", "", "", dtPrev, numEmpenho)
+    obtido = "SUCESSO=" & CStr(res.sucesso) & "; DT_PREV=" & Format$(dtPrev, "yyyy-mm-dd") & "; NUM_EMPENHO=" & numEmpenho
+    ok = res.sucesso
+    ok = ok And dtPrev >= Date
+    ok = ok And Trim$(numEmpenho) <> ""
+    TV2_LogAssert SUITE, "DATE_BND_001_OS_DATA_VAZIA_DEFAULT", "AUTO", _
+                  "Data prevista vazia usa prazo padrao e empenho default", _
+                  "Sucesso, DT_PREV >= hoje e NUM_EMPENHO preenchido", _
+                  obtido, _
+                  "Protege o fluxo de emissao quando operador deixa data/empenho em branco", ok
+
+    dtPrev = CDate(0)
+    numEmpenho = ""
+    res = MontarParametrosEmissaoOS("PREOS-BND-002", Format$(Date, "DD/MM/YYYY"), "EMP-BND-002", dtPrev, numEmpenho)
+    obtido = "SUCESSO=" & CStr(res.sucesso) & "; DT_PREV=" & Format$(dtPrev, "yyyy-mm-dd") & "; MSG=" & res.mensagem
+    ok = res.sucesso
+    ok = ok And DateValue(dtPrev) = Date
+    ok = ok And numEmpenho = "EMP-BND-002"
+    TV2_LogAssert SUITE, "DATE_BND_002_OS_HOJE_PERMITIDO", "AUTO", _
+                  "Data prevista igual a hoje e aceita", _
+                  "Sucesso e DT_PREV igual a hoje", _
+                  obtido, _
+                  "Formaliza que a guarda bloqueia apenas datas anteriores a hoje", ok
+
+    dtPrev = CDate(0)
+    numEmpenho = ""
+    res = MontarParametrosEmissaoOS("PREOS-BND-003", Format$(Date - 1, "DD/MM/YYYY"), "EMP-BND-003", dtPrev, numEmpenho)
+    obtido = "SUCESSO=" & CStr(res.sucesso) & "; MSG=" & res.mensagem
+    ok = Not res.sucesso
+    ok = ok And InStr(1, res.mensagem, "anterior", vbTextCompare) > 0
+    TV2_LogAssert SUITE, "DATE_BND_003_OS_ONTEM_REJEITADO", "AUTO", _
+                  "Data prevista anterior a hoje e rejeitada", _
+                  "Falha explicita com mensagem de data anterior", _
+                  obtido, _
+                  "Impede emissao de OS com prazo retroativo", ok
+
+    dtPrev = CDate(0)
+    numEmpenho = ""
+    res = MontarParametrosEmissaoOS("PREOS-BND-004", "31/02/2026", "EMP-BND-004", dtPrev, numEmpenho)
+    obtido = "SUCESSO=" & CStr(res.sucesso) & "; MSG=" & res.mensagem
+    ok = Not res.sucesso
+    ok = ok And InStr(1, res.mensagem, "invalida", vbTextCompare) > 0
+    TV2_LogAssert SUITE, "DATE_BND_004_OS_31_FEV_REJEITADO", "AUTO", _
+                  "Data inexistente 31/02 e rejeitada", _
+                  "Falha explicita por formato/data invalida", _
+                  obtido, _
+                  "Protege parser contra normalizacao silenciosa do VBA DateSerial", ok
+
+    dtPrev = CDate(0)
+    numEmpenho = ""
+    res = MontarParametrosEmissaoOS("PREOS-BND-005", "29/02/2028", "EMP-BND-005", dtPrev, numEmpenho)
+    obtido = "SUCESSO=" & CStr(res.sucesso) & "; DT_PREV=" & Format$(dtPrev, "yyyy-mm-dd") & "; MSG=" & res.mensagem
+    ok = res.sucesso
+    ok = ok And Day(dtPrev) = 29 And Month(dtPrev) = 2 And Year(dtPrev) = 2028
+    TV2_LogAssert SUITE, "DATE_BND_005_OS_BISSEXTO_VALIDO", "AUTO", _
+                  "29/02 em ano bissexto e aceito", _
+                  "Sucesso com DT_PREV=2028-02-29", _
+                  obtido, _
+                  "Evita regressao que rejeite datas validas de fevereiro em ano bissexto", ok
+
+    dtPrev = CDate(0)
+    numEmpenho = ""
+    res = MontarParametrosEmissaoOS("PREOS-BND-006", "29/02/2027", "EMP-BND-006", dtPrev, numEmpenho)
+    obtido = "SUCESSO=" & CStr(res.sucesso) & "; MSG=" & res.mensagem
+    ok = Not res.sucesso
+    ok = ok And InStr(1, res.mensagem, "invalida", vbTextCompare) > 0
+    TV2_LogAssert SUITE, "DATE_BND_006_OS_BISSEXTO_INVALIDO", "AUTO", _
+                  "29/02 em ano nao bissexto e rejeitado", _
+                  "Falha explicita por data invalida", _
+                  obtido, _
+                  "Protege contra rollover silencioso para marco", ok
+
+    dtPrev = CDate(0)
+    numEmpenho = ""
+    res = MontarParametrosEmissaoOS("PREOS-BND-007", "31/12/30", "EMP-BND-007", dtPrev, numEmpenho)
+    obtido = "SUCESSO=" & CStr(res.sucesso) & "; DT_PREV=" & Format$(dtPrev, "yyyy-mm-dd") & "; MSG=" & res.mensagem
+    ok = res.sucesso
+    ok = ok And Day(dtPrev) = 31 And Month(dtPrev) = 12 And Year(dtPrev) = 2030
+    TV2_LogAssert SUITE, "DATE_BND_007_OS_ANO_CURTO_2030", "AUTO", _
+                  "Ano curto 30 e normalizado para 2030", _
+                  "Sucesso com DT_PREV=2030-12-31", _
+                  obtido, _
+                  "Documenta contrato atual de compatibilidade para anos com dois digitos", ok
+
+    defaultData = "07/05/2026"
+    houveMudanca = False
+    resumoMudancas = ""
+    res = DescreverMudancasAvaliacao("EMP-BND-008", defaultData, 1, CCur(100), _
+                                     "EMP-BND-008", DateSerial(2026, 5, 7), 1, CCur(100), _
+                                     houveMudanca, resumoMudancas)
+    obtido = "SUCESSO=" & CStr(res.sucesso) & "; HOUVE_MUDANCA=" & CStr(houveMudanca) & "; RESUMO=" & resumoMudancas
+    ok = res.sucesso
+    ok = ok And Not houveMudanca
+    ok = ok And Trim$(resumoMudancas) = ""
+    TV2_LogAssert SUITE, "DATE_BND_008_AVAL_DATA_EQUIVALENTE_SEM_MUDANCA", "AUTO", _
+                  "Data de avaliacao equivalente nao gera mudanca", _
+                  "Sem mudanca quando default textual e valor Date representam o mesmo dia", _
+                  obtido, _
+                  "Evita confirmacao falsa quando o operador nao alterou a data", ok
+
+    defaultData = "07/05/2026"
+    houveMudanca = False
+    resumoMudancas = ""
+    res = DescreverMudancasAvaliacao("EMP-BND-009", defaultData, 1, CCur(100), _
+                                     "EMP-BND-009", DateSerial(2026, 5, 8), 1, CCur(100), _
+                                     houveMudanca, resumoMudancas)
+    obtido = "SUCESSO=" & CStr(res.sucesso) & "; HOUVE_MUDANCA=" & CStr(houveMudanca) & "; RESUMO=" & resumoMudancas
+    ok = res.sucesso
+    ok = ok And houveMudanca
+    ok = ok And InStr(1, resumoMudancas, "Data de fechamento", vbTextCompare) > 0
+    TV2_LogAssert SUITE, "DATE_BND_009_AVAL_DATA_DIFERENTE_COM_MUDANCA", "AUTO", _
+                  "Data de avaliacao diferente gera mudanca rastreavel", _
+                  "Mudanca detectada e resumo cita Data de fechamento", _
+                  obtido, _
+                  "Garante que alteracao real de data continue visivel antes da avaliacao", ok
+
+    TV2_FinalizarExecucao SUITE, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert SUITE, "FATAL", "AUTO", _
+                  "Executar suite de bordas de data sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao SUITE, silencioso
 End Sub
 
 ' --- Helpers Private TV2_UI_* (MD-17.1.c) ---
@@ -968,6 +1458,100 @@ Private Function TV2_UI_CheckGuardArquivo( _
 
     TV2_UI_CheckGuardArquivo = falta
 End Function
+
+Private Sub TV2_UIAdv_LogFileTokens( _
+    ByVal suite As String, _
+    ByVal cenarioId As String, _
+    ByVal repoRoot As String, _
+    ByVal arquivo As String, _
+    ByVal tokensPipe As String, _
+    ByVal objetivo As String, _
+    ByVal esperado As String, _
+    ByVal significado As String _
+)
+    Dim path As String
+    Dim codigo As String
+    Dim tokens() As String
+    Dim i As Long
+    Dim token As String
+    Dim faltantes As String
+    Dim ok As Boolean
+
+    path = repoRoot & "\src\vba\" & arquivo
+    If Dir(path) = "" Then
+        TV2_LogAssert suite, cenarioId, "AUTO", _
+                      objetivo, _
+                      esperado, _
+                      "Arquivo ausente: " & path, _
+                      significado, False
+        Exit Sub
+    End If
+
+    codigo = TV2_UI_LerArquivoTexto(path)
+    tokens = Split(tokensPipe, "|")
+    For i = LBound(tokens) To UBound(tokens)
+        token = Trim$(tokens(i))
+        If token <> "" Then
+            If InStr(1, codigo, token, vbTextCompare) = 0 Then
+                faltantes = faltantes & token & ";"
+            End If
+        End If
+    Next i
+
+    ok = (faltantes = "")
+    TV2_LogAssert suite, cenarioId, "AUTO", _
+                  objetivo, _
+                  esperado, _
+                  IIf(ok, "OK", "FALTANTES=" & faltantes), _
+                  significado, ok
+End Sub
+
+Private Sub TV2_UIAdv_LogFileNaoContemTokens( _
+    ByVal suite As String, _
+    ByVal cenarioId As String, _
+    ByVal repoRoot As String, _
+    ByVal arquivo As String, _
+    ByVal tokensPipe As String, _
+    ByVal objetivo As String, _
+    ByVal esperado As String, _
+    ByVal significado As String _
+)
+    Dim path As String
+    Dim codigo As String
+    Dim tokens() As String
+    Dim i As Long
+    Dim token As String
+    Dim presentes As String
+    Dim ok As Boolean
+
+    path = repoRoot & "\src\vba\" & arquivo
+    If Dir(path) = "" Then
+        TV2_LogAssert suite, cenarioId, "AUTO", _
+                      objetivo, _
+                      esperado, _
+                      "Arquivo ausente: " & path, _
+                      significado, False
+        Exit Sub
+    End If
+
+    codigo = TV2_UI_LerArquivoTexto(path)
+    tokens = Split(tokensPipe, "|")
+    For i = LBound(tokens) To UBound(tokens)
+        token = Trim$(tokens(i))
+        If token <> "" Then
+            If InStr(1, codigo, token, vbTextCompare) > 0 Then
+                presentes = presentes & token & ";"
+            End If
+        End If
+    Next i
+
+    ok = (presentes = "")
+    TV2_LogAssert suite, cenarioId, "AUTO", _
+                  objetivo, _
+                  esperado, _
+                  IIf(ok, "OK", "PRESENTES=" & presentes), _
+                  significado, ok
+End Sub
 
 Private Function TV2_UI_LerArquivoTexto(ByVal path As String) As String
     Dim fnum As Integer
@@ -2568,6 +3152,9 @@ Public Sub TV2_RunRodizioStrikesEndToEnd(Optional ByVal visual As Boolean = Fals
     Dim voltaR2S As Long
     Dim empR2S As TEmpresa
     Dim linhaEmpR2S As Long
+    Dim auditDualR2S_antes As Long
+    Dim auditDualR2S_depois As Long
+    Dim auditDualR2S_detalhe As Long
 
     TV2_LimparNamespace "SR2S"
     TV2_FixtureFactory "SR2S", 1, 3, 1, entsR2S, empsR2S, ativsR2S
@@ -2587,6 +3174,7 @@ Public Sub TV2_RunRodizioStrikesEndToEnd(Optional ByVal visual As Boolean = Fals
 
     ' Fase 3: uma nova volta com fechamento apos reativacao. EMP1 recebe
     ' uma nota baixa nova, mas nao pode re-suspender com o historico antigo.
+    auditDualR2S_antes = TV2_AuditCount("Avaliacao Registrada", "EMP_ID=" & empsR2S(1) & "; DUAL_COUNTER=SIM")
     TV2_FF_RodadaCompleta ativsR2S(1), entsR2S(1), 3, empsR2S, notasR2S, Date + 1
 
     notaMinR2S = GetNotaMinimaAvaliacao()
@@ -2594,12 +3182,20 @@ Public Sub TV2_RunRodizioStrikesEndToEnd(Optional ByVal visual As Boolean = Fals
     strikesR2S_punicao = ContarStrikesParaPunicao(empsR2S(1), notaMinR2S)
     statusR2S_pos_reativ = TV2_StatusEmpresa(empsR2S(1))
     empR2S = LerEmpresa(empsR2S(1), linhaEmpR2S)
+    auditDualR2S_depois = TV2_AuditCount("Avaliacao Registrada", "EMP_ID=" & empsR2S(1) & "; DUAL_COUNTER=SIM")
+    auditDualR2S_detalhe = TV2_AuditCount( _
+        "Avaliacao Registrada", _
+        "EMP_ID=" & empsR2S(1) & "; DUAL_COUNTER=SIM; STRIKES_TOTAL=" & CStr(strikesR2S_total) & _
+        "; STRIKES_PUNICAO=" & CStr(strikesR2S_punicao))
 
     observadoR2S = "EMP1=" & empsR2S(1) & _
                    "; STRIKES_TOTAL_HISTORICO=" & CStr(strikesR2S_total) & _
                    "; STRIKES_PARA_PUNICAO=" & CStr(strikesR2S_punicao) & _
                    "; STATUS_POS_REATIV_E_1NOTA=" & statusR2S_pos_reativ & _
-                   "; DT_ULT_REATIV=" & IIf(empR2S.DT_ULT_REATIV > CDate(0), Format$(empR2S.DT_ULT_REATIV, "DD/MM/YYYY HH:NN:SS"), "(vazia)")
+                   "; DT_ULT_REATIV=" & IIf(empR2S.DT_ULT_REATIV > CDate(0), Format$(empR2S.DT_ULT_REATIV, "DD/MM/YYYY HH:NN:SS"), "(vazia)") & _
+                   "; AUDIT_DUAL_ANTES=" & CStr(auditDualR2S_antes) & _
+                   "; AUDIT_DUAL_DEPOIS=" & CStr(auditDualR2S_depois) & _
+                   "; AUDIT_DUAL_DETALHE=" & CStr(auditDualR2S_detalhe)
 
     TV2_LogAssert "STRIKES_E2E", "CS_REATIV_DT_ULT_REATIV_GRAVADA", "AUTO", _
                   "Reativacao automatica grava DT_ULT_REATIV em EMPRESAS", _
@@ -2620,6 +3216,14 @@ Public Sub TV2_RunRodizioStrikesEndToEnd(Optional ByVal visual As Boolean = Fals
                   "STRIKES_TOTAL>=4; STRIKES_PUNICAO=1", _
                   observadoR2S, _
                   "Valida explicitamente o corte por COL_OS_DT_FECHAMENTO > DT_ULT_REATIV", _
+                  strikesR2S_total >= 4 And strikesR2S_punicao = 1
+
+    TV2_LogAssert "STRIKES_E2E", "CS_REATIV_AUDIT_DUAL_COUNTER", "AUTO", _
+                  "Avaliacao com nota baixa registra contador total e punitivo no AUDIT_LOG", _
+                  "DUAL_COUNTER=SIM; STRIKES_TOTAL>=4; STRIKES_PUNICAO=1", _
+                  observadoR2S, _
+                  "Operador consegue distinguir historico bruto de janela punitiva apos reativacao", _
+                  auditDualR2S_depois > auditDualR2S_antes And auditDualR2S_detalhe > 0 And _
                   strikesR2S_total >= 4 And strikesR2S_punicao = 1
 
     TV2_LogAssert "STRIKES_E2E", "CS_E2E_REATIV2STRIKES", "AUTO", _

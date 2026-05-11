@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "execution_id": "0063-exec-onda25-md25-6-publicacao-v204-micro54",
+  "readback_id": "0063-onda25-md25-6-publicacao-v204-micro54",
+  "executed_at": "2026-05-11T16:41:14-03:00",
+  "track": "safe_track",
+  "agent_id": "Codex CLI",
+  "status": "APROVADO_PUBLICACAO_PRE_GIT",
+  "delta": {
+    "id": "MICRO54",
+    "tema": "Publicacao oficial V12.0.0204",
+    "build_base_validado": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
+    "tag_publica": "v12.0.0204",
+    "arquivos_principais": [
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "README.md",
+      "CHANGELOG.md",
+      "docs/INDEX.md",
+      "docs/reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md",
+      "docs/reference/testes/INDEX.md",
+      "docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md",
+      "llms.txt",
+      "obsidian-vault/00-DASHBOARD.md",
+      "obsidian-vault/releases/STATUS-OFICIAL.md",
+      "obsidian-vault/releases/V12.0.0204.md",
+      "auditoria/00_status/69_STATUS_V204_PUBLICACAO_2026_05_11.md",
+      "auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md"
+    ]
+  },
+  "validacao_operador": {
+    "compile_vbe": "OK",
+    "get_build_importado": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
+    "smoke": "TV2_20260511_131824 OK=34 FALHA=0 MANUAL=4",
+    "manual_final": "OK",
+    "gate_final": "VR_20260511_154433 APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "asserts_locais": {
+    "publicar_vba_import_v2_apply": "OK - AAX-App_Release.bas sincronizado; demais 52 arquivos em sync",
+    "glasswing_g7_g8": "OK",
+    "crlf": "OK - arquivos editados normalizados para CRLF quando aplicavel"
+  },
+  "debitos_v205": [
+    "D-V205-TAXONOMIA-TESTES",
+    "D-V205-MD24-4",
+    "D-STRICT-G1-G2-G5",
+    "D-MICRO50-CSV-FILENAME"
+  ],
+  "proxima_acao": "Preparar commit, tag v12.0.0204 e publicacao GitHub; depois abrir auditoria cruzada V12.0.0205."
+}

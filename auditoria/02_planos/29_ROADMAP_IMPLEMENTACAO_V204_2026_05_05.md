@@ -68,35 +68,36 @@ para cobrir UI adversarial, transacoes, datas e dados legados.
 | MD-22.1 | Backfill auditavel de `DT_ULT_REATIV` por `AUDIT_LOG` — MICRO37 entregue para importacao | `Repo_Empresa.bas`, `Auto_Open.bas`, testes | `MIG_005`; Quinteto esperado com `V2_Smoke=30/0` |
 | MD-22.2 | Fechar `INT-CAD-OS-REF-ORFA` com relatorio/migracao — MICRO38 aprovado | `Repo_OS.bas`, `Teste_V2_Roteiros.bas`, `Teste_V2_Engine.bas` | `MIG_006`; `VR_20260506_163217`; limpeza controlada 82 residuos; Quinteto verde |
 | MD-22.3 | Tratamento de `DT_ULT_REATIV` invalida — MICRO39-fix1 aprovado | `Repo_Empresa.bas`, `Repo_Avaliacao.bas`, testes | `MIG_007`; `CS_INT_05`; `VR_20260506_232006`; Quinteto `V2_Smoke=32/0` e `IntegridadeBase=4/0` |
-| MD-22.4 | Bordas temporais: igual, anterior, posterior, futura — MICRO40 entregue para importacao | `Teste_V2_Roteiros.bas`, `Teste_V2_Engine.bas` | `CS_REATIV_BORDA_*`; Quinteto esperado com `E2E_Strikes=75/0` |
+| MD-22.4 | Bordas temporais: igual, anterior, posterior, futura — MICRO40 aprovado | `Teste_V2_Roteiros.bas`, `Teste_V2_Engine.bas` | `CS_REATIV_BORDA_*`; `VR_20260507_010423`; Quinteto `E2E_Strikes=75/0` |
 
 ### Onda 23 - Baterias adversariais e cobertura combinatoria
 
 | MD | Entrega | Arquivos provaveis | Gate |
 |---|---|---|---|
-| MD-23.1 | `TV2_RunAdversarial_UI` | `Teste_V2_Engine.bas`, `Teste_V2_Roteiros.bas` | nova suite verde |
-| MD-23.2 | `TV2_RunTransaction_Interrupt` | testes + flags controladas | nova suite verde |
-| MD-23.3 | `TV2_RunBoundary_Dates` | testes | nova suite verde |
-| MD-23.4 | Matriz `regra -> cenario -> assert -> evidencia` | `docs/reference/testes/*` | doc review |
-| MD-23.5 | Novo gate `Sexteto` | `Teste_Validacao_Release.bas` | Sexteto verde |
+| MD-23.1 | `TV2_RunAdversarial_UI` — MICRO41 aprovado | `Teste_V2_Engine.bas`, `Teste_V2_Roteiros.bas`, `Central_Testes_V2.bas` | `TV2_20260507_022218`: `ADVERSARIAL_UI=10/0/0`; `VR_20260507_022355`: Quinteto verde |
+| MD-23.2 | `TV2_RunTransaction_Interrupt` — MICRO42 aprovado | `Teste_V2_Engine.bas`, `Teste_V2_Roteiros.bas`, `Central_Testes_V2.bas` | `TV2_20260507_042944`: `TRANSACAO_INTERRUPT=6/0/0`; `VR_20260507_043052`: Quinteto verde |
+| MD-23.3 | `TV2_RunBoundary_Dates` — MICRO43 aprovado | `Teste_V2_Engine.bas`, `Teste_V2_Roteiros.bas`, `Central_Testes_V2.bas` | `BOUNDARY_DATES=9/0/0` em `TV2_20260509_020108`; Quinteto `VR_20260507_083959` |
+| MD-23.4 | Matriz `regra -> cenario -> assert -> evidencia` — MICRO44 entregue | `docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md` | doc review |
+| MD-23.5 | Novo gate `Sexteto` — MICRO45 aprovado | `Teste_Validacao_Release.bas`, `Central_Testes_V2.bas`, testes V2 | `TV2_20260509_025210`: `ADVERSARIAL_UI=11/0/0`; `VR_20260509_025323`: Sexteto `Onda23Adv=26/0` |
 
 ### Onda 24 - Seguranca preventiva e usabilidade
 
 | MD | Entrega | Arquivos provaveis | Gate |
 |---|---|---|---|
-| MD-24.1 | Remover/mitigar senha hardcoded de `Limpar_Base` | `Limpar_Base.frm`, `Mod_Limpeza_Base.bas`, docs | teste assistido |
-| MD-24.2 | Config invalidada gera mensagem e evento | `Configuracao_Inicial.frm`, `Audit_Log.bas` | V2 Smoke |
-| MD-24.3 | Evento dual-counter em avaliacao | `Svc_Avaliacao.bas` | E2E Strikes |
-| MD-24.4 | `SelecionarEmpresa` documenta side-effects ou renomeia wrapper | `Svc_Rodizio.bas`, docs | regressao |
+| MD-24.1 | Remover/mitigar senha hardcoded de `Limpar_Base` — MICRO46 aprovado | `Limpar_Base.frm`, `Mod_Limpeza_Base.bas`, docs | `ADVERSARIAL_UI=12/0/0`; Sexteto `VR_20260509_141235` |
+| MD-24.2 | Config invalidada gera mensagem e evento — MICRO47 aprovado | `Configuracao_Inicial.frm`, `Audit_Log.bas` | Smoke `TV2_20260509_150814`; Sexteto `VR_20260509_163840` |
+| MD-24.3 | Evento dual-counter em avaliacao — MICRO48 aprovado | `Svc_Avaliacao.bas` | E2E `TV2_20260509_172616`; Sexteto `VR_20260509_173629`; `E2E_Strikes=76/0` |
+| MD-24.4 | `SelecionarEmpresa` documenta side-effects — MICRO49/fix1/fix2 reprovados e rollback ratificado | `Svc_Rodizio.bas`, docs | deferido para V205; nao bloqueia V204 rc1 |
 
 ### Onda 25 - Fechamento V204
 
 | MD | Entrega | Arquivos provaveis | Gate |
 |---|---|---|---|
-| MD-25.1 | Bump V204 release candidate | `App_Release.bas`, `CHANGELOG.md`, docs | Sexteto |
-| MD-25.2 | Auditoria cruzada final Opus + Antigravity | prompts + docs | sem P0/P1 |
-| MD-25.3 | Tag/push GitHub e release notes | git + docs | aprovacao operador |
-| MD-25.4 | HBN devolucao de bastao | doc 60/relay/results | fechamento formal |
+| MD-25.1 | Bump V204 release candidate — MICRO50 aprovado | `App_Release.bas`, `CHANGELOG.md`, docs | Sexteto `VR_20260510_000428` |
+| MD-25.2 | Higiene documental final — MICRO51 | relay/results/roadmap/status/changelog | documental; sem novo gate Excel |
+| MD-25.3 | Auditoria cruzada final Opus + Antigravity — MICRO52 aprovado | prompts + docs | sem P0/P1; P2 documentais para MICRO54 |
+| MD-25.4 | Correcoes finais, se houver — MICRO53 | conforme achados | nao aberto: nenhum P0/P1 |
+| MD-25.5 | Tag/push GitHub, release notes e devolucao de bastao — MICRO54 ampliado | docs + git | resolver P2 pre-tag e pedir aprovacao operador |
 
 ## 5. Gates obrigatorios por onda
 

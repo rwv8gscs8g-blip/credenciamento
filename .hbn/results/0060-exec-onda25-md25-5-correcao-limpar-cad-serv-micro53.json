@@ -1,0 +1,63 @@
+{
+  "schema_version": "1.0",
+  "readback_id": "0060-onda25-md25-5-correcao-limpar-cad-serv-micro53",
+  "executed_at": "2026-05-11T12:41:02-03:00",
+  "track": "safe_track",
+  "status": "ENTREGUE_PENDENTE_GATE_OPERADOR",
+  "delta": {
+    "id": "MICRO53",
+    "tema": "P1 pre-publicacao: Limpar Base zera CAD_SERV e Cadastro_Servico evita stale form/filtro",
+    "build_alvo": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix",
+    "arquivos": [
+      {
+        "src": "src/vba/App_Release.bas",
+        "mirror": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "sha1_after": "b340aa30efe2317a14a6abee0a249440b39bf795"
+      },
+      {
+        "src": "src/vba/Menu_Principal.frm",
+        "mirror": "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+        "sha1_after": "54647ec8e800740f463b0a62d54ddd21f85ca45d"
+      },
+      {
+        "src": "src/vba/Mod_Limpeza_Base.bas",
+        "mirror": "local-ai/vba_import/001-modulo/ABJ-Mod_Limpeza_Base.bas",
+        "sha1_after": "aee2992860a4a036916e3c108d8eaa78b164d4ae"
+      },
+      {
+        "src": "src/vba/Preencher.bas",
+        "mirror": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "sha1_after": "c599355a0bd842e608d2f1a4ccf80668067d6cfb"
+      },
+      {
+        "src": "src/vba/Teste_V2_Engine.bas",
+        "mirror": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "sha1_after": "89011f936f4b4577964417b67a05a3149ceeb03a"
+      },
+      {
+        "src": "src/vba/Teste_V2_Roteiros.bas",
+        "mirror": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "sha1_after": "5b51c423f51105a94a00becdfa5ea62007c85d80"
+      }
+    ]
+  },
+  "funcionalidade_nova_exige_teste": {
+    "aplicavel": true,
+    "teste_adicionado": "MIG_009 em TV2_RunSmoke",
+    "assert": "LimpaBaseTotalReset preserva ATIVIDADES e CONFIG, zera CAD_SERV e remove CAD_SERV da lista preservada do relatorio"
+  },
+  "asserts_locais": {
+    "publicar_vba_import_v2_check": "OK - 53 arquivos sincronizados; G8 OK; G7 OK",
+    "glasswing_g7_g8": "OK",
+    "compile_vbe": "PENDENTE_OPERADOR",
+    "get_build_importado": "PENDENTE_OPERADOR",
+    "smoke": "PENDENTE_OPERADOR - esperado OK=34 FALHA=0 MANUAL=4",
+    "cadastro_servico_manual": "PENDENTE_OPERADOR - abrir sem erro 'O objeto e obrigatorio'",
+    "limpar_base_manual": "PENDENTE_OPERADOR - CAD_SERV zerado, ATIVIDADES/CONFIG preservadas",
+    "sexteto": "PENDENTE_OPERADOR - esperado V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "manifesto": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO53.txt",
+  "procedimento": "auditoria/03_ondas/onda_25_v204_release_candidate/09_PROCEDIMENTO_IMPORT_MICRO53.md",
+  "tecnico": "auditoria/03_ondas/onda_25_v204_release_candidate/08_TECNICO_MICRO53_LIMPAR_CAD_SERV.md",
+  "proxima_acao": "Operador importar MICRO53, compilar, rodar Smoke, validar manualmente Limpar Base/Cadastro de Servico e rodar Sexteto antes de retomar MICRO54."
+}

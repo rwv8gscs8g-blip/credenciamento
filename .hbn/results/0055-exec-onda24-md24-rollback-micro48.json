@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0",
+  "execution_id": "0055-exec-onda24-md24-rollback-micro48",
+  "agent_id": "codex-cli",
+  "readback_id": "0010-onda24-rollback-micro49-para-micro48",
+  "executed_at": "2026-05-09T23:39:55-0300",
+  "action": "Rollback formal de MICRO49/MICRO49-fix1/MICRO49-fix2 para MICRO48 / MD-24.3.",
+  "status": "APROVADO_OPERADOR_ROLLBACK_MICRO48",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "medium",
+  "decisao_arquiteto_useHBN": "Ratifica via prompt 01 do Opus chat-novo: P10 seguranca e nao-regressao acima de velocidade; P6 reversibilidade; P3 testar antes de refatorar.",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base_reprovada": "MICRO49-fix2 / f7aa84f+ONDA24.MD24.4-selecionar-com-efeitos-fix2",
+    "target": "MICRO48 / MD-24.3",
+    "build": "f7aa84f+ONDA24.MD24.3-avaliacao-dual-counter"
+  },
+  "delta": [
+    {
+      "file": "src/vba/Svc_Rodizio.bas",
+      "before_sha1": "db6ddf07f7c9aec1d6fe9ee12b6e15a6e7388910",
+      "after_sha1": "eeb53f36599f993c171155253af68add72bf93b6",
+      "change": "Removido comentario MD-24.4 de efeitos explicitos; contrato volta ao texto MICRO48."
+    },
+    {
+      "file": "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+      "before_sha1": "db6ddf07f7c9aec1d6fe9ee12b6e15a6e7388910",
+      "after_sha1": "eeb53f36599f993c171155253af68add72bf93b6",
+      "change": "Espelho alinhado ao src/vba/Svc_Rodizio.bas."
+    },
+    {
+      "file": "src/vba/App_Release.bas",
+      "before_sha1": "7c13523dc4482432fff89ead182b3bf8b71036c9",
+      "after_sha1": "ed8805d9cf027c74f29ad72d59e1ff4ca582d3ef",
+      "change": "Build restaurado para MICRO48 / MD-24.3."
+    },
+    {
+      "file": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "before_sha1": "eb81f08680f249086a54e5c97677a5fe964aca66",
+      "after_sha1": "ed8805d9cf027c74f29ad72d59e1ff4ca582d3ef",
+      "change": "Espelho alinhado ao src/vba/App_Release.bas e G7 fechado."
+    },
+    {
+      "file": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ROLLBACK-MICRO49-PARA-MICRO48.txt",
+      "before_sha1": null,
+      "after_sha1": "f2e82d70e13fcb90e81f4d748e83a3750ad2afd8",
+      "change": "Manifesto operacional do rollback criado."
+    },
+    {
+      "file": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseSexteto_V12_0_0203_VR_20260509_231321.csv",
+      "before_sha1": null,
+      "after_sha1": "0756120082c89c8340b8803a347814eae43faf3e",
+      "change": "Evidencia CSV do Sexteto pos-rollback copiada da ancora V12-204-Micro48."
+    }
+  ],
+  "files_verified_no_micro49_residue": [
+    {
+      "file_pair": "src/vba/Teste_V2_Engine.bas | local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "sha1": "e1a6500b5a39539a871012c85c222b75a0502596",
+      "check": "Sem SMK_008, TV2_DtUltimaIndicacaoCred, SelecionarEmpresaComEfeitos ou build MD-24.4."
+    },
+    {
+      "file_pair": "src/vba/Teste_V2_Roteiros.bas | local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "sha1": "86c512814b3a4788caaf7b54875ee1c911cf3e8f",
+      "check": "Sem SMK_008, TV2_DtUltimaIndicacaoCred, SelecionarEmpresaComEfeitos ou build MD-24.4."
+    }
+  ],
+  "asserts": {
+    "local_static_checks": [
+      "OK: rg SMK_008/TV2_DtUltimaIndicacaoCred/SelecionarEmpresaComEfeitos/ONDA24.MD24.4 nos 4 modulos alvo retornou zero ocorrencias",
+      "OK: CRLF preservado em Svc_Rodizio.bas e App_Release.bas em src e espelho",
+      "OK: shasum src_vba == local_ai_vba_import para Svc_Rodizio, App_Release, Teste_V2_Engine e Teste_V2_Roteiros",
+      "OK: glasswing-checks.sh G7 retornou OK",
+      "OBS: glasswing-checks.sh --strict executado; G7 e G8 OK; falha residual por G1 historico Importador_V3_Bootstrap.bas e warnings antigos G2/G5, fora do rollback"
+    ],
+    "operator_gate_confirmed": [
+      "OK: rollback efetuado pelo operador a partir de V12-204-Micro48",
+      "OK: todos os modulos e formularios exportados em V12-204-Micro48 para conferencia",
+      "OK: compilacao VBAProject limpa, rapida e sem fechamento do Excel",
+      "OK: GetBuildImportado exibido no Sobre como f7aa84f+ONDA24.MD24.3-avaliacao-dual-counter",
+      "OK: TV2_RunSmoke False = TV2_20260509_231013; OK=33 FALHA=0 MANUAL=4",
+      "OK: CT_ValidarRelease_SextetoMinimo = VR_20260509_231321 APROVADO"
+    ],
+    "expected_syntax": "V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "operator_evidence": {
+    "reported_at": "2026-05-09T23:35:00-0300",
+    "workbook_root": "PlanilhaCredenciamento-Homologacao-V3.xlsm",
+    "anchor_folder": "V12-204-Micro48",
+    "smoke": "TV2_20260509_231013",
+    "release_gate": "VR_20260509_231321",
+    "csv": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseSexteto_V12_0_0203_VR_20260509_231321.csv",
+    "result": "APROVADO"
+  },
+  "next_action": "Retomar esteira V12.0.0204 a partir de MICRO48 como base segura; proximo microdelta elegivel e MICRO50, sem reabrir MD-24.4."
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": "1.0",
+  "readback_id": "0063-onda25-md25-6-publicacao-v204-micro54",
+  "created_at": "2026-05-11T16:41:14-03:00",
+  "track": "safe_track",
+  "agent_id": "Codex CLI",
+  "human_status": "confirmed",
+  "objetivo": "Fechar MICRO54 como publicacao oficial da V12.0.0204 apos aprovacao humana do build final.",
+  "base_validada": {
+    "build": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
+    "compile_vbe": "OK - informado pelo operador",
+    "smoke": "TV2_20260511_131824 OK=34 FALHA=0 MANUAL=4",
+    "manual_final": "OK - informado pelo operador",
+    "gate_final": "VR_20260511_154433 APROVADO",
+    "sintaxe": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "diff_planejado": [
+    "Promover App_Release para V12.0.0204 VALIDADO/OFICIAL e tag v12.0.0204.",
+    "Atualizar README, docs/INDEX, llms.txt, dashboard e STATUS-OFICIAL para a release vigente.",
+    "Atualizar matriz de rastreabilidade V204 para a baseline final 171/34/24/76/4/27.",
+    "Criar release note publica obsidian-vault/releases/V12.0.0204.md.",
+    "Registrar status 69, fechamento tecnico MICRO54 e ERP 0063.",
+    "Manter debitos aceitos para V12.0.0205, incluindo renomeacao profissional da taxonomia de testes."
+  ],
+  "fora_de_escopo": [
+    "Nao alterar logica funcional VBA alem do metadado de release.",
+    "Nao reabrir MICRO49/MD-24.4.",
+    "Nao renomear Sexteto na V204; a mudanca de nomenclatura fica para V12.0.0205."
+  ],
+  "asserts_pos_execucao": [
+    "local-ai/scripts/publicar_vba_import_v2.sh --apply deve sincronizar App_Release no espelho.",
+    "glasswing-checks.sh G7 G8 deve retornar OK.",
+    "Documentos publicos devem apontar para V12.0.0204 e VR_20260511_154433."
+  ],
+  "hearback": "Aprovado pelo operador no chat: 'Ok. Aprovado. Pode implementar.'"
+}

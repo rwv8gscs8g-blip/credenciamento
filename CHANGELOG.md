@@ -3,7 +3,12 @@
 Este projeto adota o espírito do Keep a Changelog. As mudanças aqui registradas
 tratam apenas da linha pública oficial.
 
-## [v12.0.0204-dev] — em desenvolvimento
+## [v12.0.0204] — 2026-05-11
+
+> Release oficial V204. Build final validado:
+> `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`. Gate final aprovado em
+> `VR_20260511_154433`, com Smoke `TV2_20260511_131824` retornando
+> `OK=34 | FALHA=0 | MANUAL=4` e testes manuais finais aprovados pelo operador.
 
 ### Adicionado
 
@@ -20,6 +25,48 @@ tratam apenas da linha pública oficial.
 - **Onda 22 / MICRO40** — quatro cenarios E2E para bordas temporais da
   janela punitiva de strikes apos reativacao: anterior, igual,
   posterior e corte futuro.
+- **Onda 23 / MICRO41** — suite `TV2_RunAdversarial_UI` read-only com
+  10 asserts `UI_ADV_*` para guards, confirmacoes, acoes destrutivas e
+  exposicao na Central V2.
+- **Onda 23 / MICRO42** — suite `TV2_RunTransaction_Interrupt` com
+  6 asserts `TX_INT_*` para commit, rollback, aninhamento e cleanup
+  idempotente de `Svc_Transacao`.
+- **Onda 23 / MICRO43** — suite `TV2_RunBoundary_Dates` com
+  9 asserts `DATE_BND_*` para parser de data de OS e normalizacao de
+  data na avaliacao.
+- **Onda 23 / MICRO44** — matriz documental V204
+  `regra -> cenario -> assert -> evidencia`, preparando o Sexteto como
+  gate de release com bloco adversarial da Onda 23.
+- **Onda 23 / MICRO45** — gate `CT_ValidarRelease_SextetoMinimo`,
+  agregando Quinteto + bloco adversarial Onda 23
+  (`ADVERSARIAL_UI`, `TRANSACAO_INTERRUPT`, `BOUNDARY_DATES`) como gate
+  oficial V204-dev; a Central V2 passa a expor o Sexteto como opcao [1].
+- **Onda 24 / MICRO46** — hardening de `Limpar_Base`: campo de senha
+  mascarado, validacao centralizada sem token sensivel literal no form,
+  auditoria de tentativa negada/autorizada e novo assert
+  `UI_ADV_012_LIMPAR_BASE_SEM_SENHA_CLARA`; tambem remove literal
+  sensivel remanescente no preparo da planilha de validacao release.
+- **Onda 24 / MICRO47** — `Configuracao_Inicial` passa a rejeitar
+  valores invalidos da regra de strikes antes de gravar `CONFIG`, com
+  mensagem clara, auditoria `CONFIG_INVALIDA` e novo assert `MIG_008`
+  no `TV2_RunSmoke`.
+- **Onda 24 / MICRO48** — `Svc_Avaliacao.AvaliarOS` passa a registrar
+  no `AUDIT_LOG` a dupla contagem de nota baixa: `STRIKES_TOTAL` bruto
+  e `STRIKES_PUNICAO` na janela pos-reativacao, com novo assert
+  `CS_REATIV_AUDIT_DUAL_COUNTER` em E2E Strikes.
+- **Onda 25 / MICRO50** — bump para `v12.0.0204-rc1`, preservando a base
+  segura MICRO48 e corrigindo o alvo de evidencia do gate para
+  `auditoria/evidencias/V12.0.0204`.
+- **Onda 25 / MICRO51** — higiene documental final do rc1: status,
+  roadmap, relay/results, checklist de publicacao e debitos aceitos sem
+  novo pacote V3.
+- **Onda 25 / MICRO52** — pacote de auditoria cruzada final Opus +
+  Antigravity, com criterio de saida sem P0/P1 antes de tag/release.
+- **Onda 25 / MICRO53** — Smoke ganha `MIG_009`, cobrindo o contrato
+  de Limpar Base: `ATIVIDADES` preservada e `CAD_SERV` zerado.
+- **Onda 25 / MICRO54** — fechamento de publicacao V204: release note
+  publica, status oficial, matriz de testes, relay/results e vitrine
+  documental alinhados ao gate final `VR_20260511_154433`.
 
 ### Corrigido
 
@@ -63,6 +110,12 @@ tratam apenas da linha pública oficial.
 - **Onda 22 / MICRO39-fix1** — `MIG_007` deixa de escrever data invalida
   diretamente em `EMPRESAS` e passa a validar o contador com override
   deterministico; o handler fatal do Smoke preserva o erro original.
+- **Onda 25 / MICRO53** — `LimpaBaseTotalReset` passa a limpar
+  `CAD_SERV` com cabecalho canonico e remove `CAD_SERV` da lista
+  "PRESERVADO"; o refresh do Cadastro de Servico descarta instancia
+  oculta/stale e protege leitura do filtro apos modal.
+- **Onda 25 / MICRO53-fix2** — baseline V2 recria servicos canonicos
+  apos Limpar Base zerar `CAD_SERV`, restaurando Smoke `34/0/4`.
 
 ### Validação
 
@@ -114,13 +167,101 @@ tratam apenas da linha pública oficial.
   `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=71/0+IntegridadeBase=4/0`.
 - MICRO40 entregue para importacao como
   `f7aa84f+ONDA22.MD22.4-bordas-temporais-strikes`.
-  Gate esperado: `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0`.
+  Aprovado pelo operador em `VR_20260507_010423`:
+  `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0`.
+- MICRO41 entregue para importacao como
+  `f7aa84f+ONDA23.MD23.1-adversarial-ui`.
+  Aprovado pelo operador com suite nova `TV2_20260507_022218`
+  (`ADVERSARIAL_UI=10/0/0`) e Quinteto `VR_20260507_022355`:
+  `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0`.
+- MICRO42 entregue para importacao como
+  `f7aa84f+ONDA23.MD23.2-transacao-interrupt`.
+  Aprovado pelo operador com suite nova `TV2_20260507_042944`
+  (`TRANSACAO_INTERRUPT=6/0/0`) e Quinteto `VR_20260507_043052`:
+  `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0`.
+- MICRO43 entregue para importacao como
+  `f7aa84f+ONDA23.MD23.3-boundary-dates`.
+  Aprovado pelo operador com suite nova `TV2_20260509_020108`
+  (`BOUNDARY_DATES=9/0/0`) e Quinteto `VR_20260507_083959`:
+  `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0`.
+- MICRO44 entregue como delta documental, sem importacao V3:
+  `docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md`.
+- MICRO45 entregue para importacao como
+  `f7aa84f+ONDA23.MD23.5-sexteto-gate`. Aprovado pelo operador com
+  `ADVERSARIAL_UI=11/0/0` em `TV2_20260509_025210` e Sexteto
+  `VR_20260509_025323`:
+  `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0+Onda23Adv=26/0`.
+- MICRO46 entregue para importacao como
+  `f7aa84f+ONDA24.MD24.1-limpar-base-seguro`. Aprovado pelo operador
+  com `ADVERSARIAL_UI=12/0/0` em `TV2_20260509_141117` e Sexteto
+  `VR_20260509_141235`:
+  `V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+- MICRO47 entregue para importacao como
+  `f7aa84f+ONDA24.MD24.2-config-invalida-audit`. Gate esperado:
+  `TV2_RunSmoke False = 33/0/4` e Sexteto
+  `V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+- MICRO47 aprovado pelo operador em `TV2_20260509_150814` e Sexteto
+  `VR_20260509_163840`:
+  `V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+- MICRO48 entregue para importacao como
+  `f7aa84f+ONDA24.MD24.3-avaliacao-dual-counter`. Gate esperado:
+  `TV2_RunRodizioStrikesEndToEnd False = 76/0/0` e Sexteto
+  `V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+- MICRO49, MICRO49-fix1 e MICRO49-fix2 reprovados por compile crash ou
+  build stale apos recovery. Rollback formal para MICRO48 aprovado em
+  `VR_20260509_231321`; MD-24.4 fica deferido para V205.
+- MICRO50 entregue para importacao como `f7aa84f+v12.0.0204-rc1`.
+  Aprovado pelo operador em `VR_20260510_000428`: Sexteto
+  `V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`
+  com CSV em `auditoria/evidencias/V12.0.0204`.
+- MICRO51 executado como delta documental sem alteracao de VBA; proximo
+  gate recomendado e auditoria cruzada final MICRO52, sem P0/P1.
+- MICRO52 entregue como pacote documental read-only para auditoria
+  externa. Antigravity retornou `APROVAR_PARA_MICRO54`; Opus retornou
+  `APROVAR_COM_RESSALVAS_P2`; nenhum P0/P1 identificado. MICRO54 sera
+  ampliado para fechar P2 documentais antes de tag/release.
+- MICRO53 entregue para importacao como
+  `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix`. Gate esperado:
+  `TV2_RunSmoke False = 34/0/4`, teste manual confirmando `CAD_SERV`
+  zerado e Cadastro de Servico abrindo sem erro, e Sexteto
+  `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+- MICRO53-fix1 entregue para importacao como
+  `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix1`, corrigindo erro de
+  sintaxe em `Preencher.CorrigirMojibakeBasico` com uso de `ChrW$()`
+  no lugar de literais mojibake ambiguas.
+- MICRO53-fix2 entregue para importacao como
+  `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`, corrigindo FATAL do
+  Smoke `SERV_A/B/C=0` ao recriar `CAD_SERV` canonico na baseline V2
+  apos o novo contrato de limpeza de servicos. Aprovado pelo operador
+  em importacao `M=2/F=0/err=0/skip=0`, compile limpo, build esperado e
+  Smoke `TV2_20260511_131824` com `OK=34/FALHA=0/MANUAL=4`.
+- Validacao manual final aprovada pelo operador em 2026-05-11.
+- Gate final `VR_20260511_154433` aprovado:
+  `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+- MICRO54 fecha publicacao sem nova funcionalidade: status oficial,
+  release note publica, matriz de testes, HBN e vitrine documental
+  passam a apontar para `v12.0.0204`.
 - Regra permanente documentada em HBN: funcionalidade nova exige teste
   correspondente no mesmo microdelta.
 - Regra permanente documentada em HBN: higiene documental recorrente
   antes de passar de microdelta, onda, release ou bastao.
 - Roadmap V204 expandido com Onda 26 pos-release para documentacao,
   RAG/Obsidian e rotina recorrente de faxina documental.
+
+### Debitos Tecnicos Deferidos
+
+- **V205 / MD-24.4 deferido** — documentar side-effects de
+  `Svc_Rodizio.SelecionarEmpresa` em microdelta novo, partindo de base
+  limpa, sem reaproveitar MICRO49.
+- **Onda 26 / V205** — tratar falhas residuais do
+  `glasswing-checks.sh --strict` que nao sao G7/G8: G1 historico do
+  `Importador_V3_Bootstrap.bas` e warnings antigos G2/G5.
+- **Onda 26 / V205** — alinhar o filename do CSV de Sexteto V204: o
+  arquivo do rc1 foi gravado na pasta correta `auditoria/evidencias/V12.0.0204`,
+  mas ainda saiu com prefixo historico `ValidacaoReleaseSexteto_V12_0_0203`.
+- **V205 / taxonomia de testes** — renomear "Sexteto" para nomenclatura
+  profissional de engenharia de software, com proposta a ser definida na
+  auditoria cruzada Opus/Antigravity da V12.0.0205.
 
 ## [v12.0.0203-rc4] — 2026-05-04
 

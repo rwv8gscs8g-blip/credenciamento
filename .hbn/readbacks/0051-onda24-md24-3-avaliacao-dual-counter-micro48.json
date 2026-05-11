@@ -1,0 +1,40 @@
+{
+  "readback_id": "0051-onda24-md24-3-avaliacao-dual-counter-micro48",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-09T17:02:00-0300",
+  "track": "safe_track",
+  "status": "confirmed_by_roadmap",
+  "source_prompt": "Operador confirmou MICRO47 aprovado e autorizou seguir o roadmap ate MICRO54.",
+  "scope": {
+    "onda": 24,
+    "microdelta": "MICRO48",
+    "tema": "MD-24.3 Avaliacao com dual-counter bruto/punitivo",
+    "tipo": "codigo_vba_e_documentacao",
+    "build": "f7aa84f+ONDA24.MD24.3-avaliacao-dual-counter"
+  },
+  "canon_lido": [
+    ".hbn/relay/INDEX.md",
+    ".hbn/knowledge/0001-regras-v203-inegociaveis.md",
+    ".hbn/knowledge/0002-regra-ouro-vba-import.md",
+    ".hbn/knowledge/0010-funcionalidade-nova-exige-teste.md",
+    ".hbn/knowledge/0011-higiene-documental-recorrente.md",
+    "src/vba/Svc_Avaliacao.bas",
+    "src/vba/Repo_Avaliacao.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/App_Release.bas"
+  ],
+  "decisao": {
+    "micro47_status": "TV2_RunSmoke False TV2_20260509_150814 33/0/4 e Sexteto VR_20260509_163840 aprovados pelo operador",
+    "micro48_entrega": "auditar em AvaliarOS contador total bruto e contador punitivo da janela pos-reativacao",
+    "funcionalidade_nova_com_teste": "CS_REATIV_AUDIT_DUAL_COUNTER valida a dupla contagem no E2E Strikes"
+  },
+  "criterios_de_pronto": [
+    "Svc_Avaliacao registra STRIKES_TOTAL e STRIKES_PUNICAO no AUDIT_LOG",
+    "Falha de contagem total retorna TResult explicito sem mascarar avaliacao ja salva",
+    "E2E Strikes sobe para 76 asserts com CS_REATIV_AUDIT_DUAL_COUNTER",
+    "manifesto V3 MICRO48 criado",
+    "local-ai/vba_import sincronizado com src/vba",
+    "documentacao e HBN atualizados"
+  ]
+}

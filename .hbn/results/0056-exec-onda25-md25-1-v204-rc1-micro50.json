@@ -1,0 +1,88 @@
+{
+  "schema_version": "1.0",
+  "execution_id": "0056-exec-onda25-md25-1-v204-rc1-micro50",
+  "agent_id": "codex-cli",
+  "readback_id": "0056-onda25-md25-1-v204-rc1-micro50",
+  "executed_at": "2026-05-10T00:27:39-0300",
+  "action": "Preparar e validar MICRO50 como release candidate V12.0.0204-rc1 a partir da base segura MICRO48.",
+  "status": "APROVADO_OPERADOR_RC1",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "MICRO48 / f7aa84f+ONDA24.MD24.3-avaliacao-dual-counter",
+    "target": "V12.0.0204-rc1",
+    "build": "f7aa84f+v12.0.0204-rc1"
+  },
+  "delta": [
+    {
+      "file": "src/vba/App_Release.bas",
+      "after_sha256": "746687c7ac66300d8ce7284d495828c496ec3360a5dffb5a15ca2fe50b67a3ba",
+      "change": "Build, tag e test key atualizados para v12.0.0204-rc1 mantendo MICRO48 como base limpa."
+    },
+    {
+      "file": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "after_sha256": "746687c7ac66300d8ce7284d495828c496ec3360a5dffb5a15ca2fe50b67a3ba",
+      "change": "Espelho importavel atualizado para MICRO50."
+    },
+    {
+      "file": "src/vba/Teste_Validacao_Release.bas",
+      "after_sha256": "44608e56011c5d267081d366c276d3b8d476b3933d412afc9875e806584da1f9",
+      "change": "Diretorio de evidencia do gate alterado para auditoria/evidencias/V12.0.0204."
+    },
+    {
+      "file": "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas",
+      "after_sha256": "44608e56011c5d267081d366c276d3b8d476b3933d412afc9875e806584da1f9",
+      "change": "Espelho importavel alinhado ao src/vba/Teste_Validacao_Release.bas."
+    },
+    {
+      "file": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO50.txt",
+      "after_sha256": "2438d6402987eec22e7f543a72370f83cf8537c662d295bd7a3fce5b47eb4545",
+      "change": "Manifesto V3 criado para ImportarPacoteV3_Delta \"MICRO50\", \"f7aa84f+v12.0.0204-rc1\"."
+    },
+    {
+      "file": "auditoria/03_ondas/onda_25_v204_release_candidate/02_PROCEDIMENTO_IMPORT_MICRO50.md",
+      "after_sha256": "65ddcbe71571e57f392352bace8ca0d6e465ed935e79687be81308c162b174f5",
+      "change": "Procedimento operacional de importacao e gate MICRO50 criado."
+    }
+  ],
+  "asserts": {
+    "local_static_checks": [
+      "OK: publicar_vba_import_v2.py check retornou G7 OK, G8 OK e 53 arquivos em sincronia.",
+      "OK: glasswing-checks.sh G7 retornou OK.",
+      "OK: arquivos VBA alterados preservados com CRLF.",
+      "OBS: glasswing-checks.sh --strict executado; G7 e G8 OK, mas strict permanece falhando por G1 historico em Importador_V3_Bootstrap.bas e warnings antigos G2/G5 ja classificados como debito."
+    ],
+    "operator_gate_confirmed": [
+      "OK: Importador V3 concluiu MICRO50 com mode=Estabilizado, dryRun=False, M=2, F=0, err=0, skip=0.",
+      "OK: build exibido no gate como f7aa84f+v12.0.0204-rc1.",
+      "OK: Sexteto minimo concluido pelo operador em VR_20260510_000428 com resultado APROVADO.",
+      "OK: TV2_RunSmoke no Sexteto retornou TV2_20260510_001017 com OK=33, FALHA=0, MANUAL=4.",
+      "OK: Sintaxe final do Sexteto: V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0."
+    ]
+  },
+  "operator_evidence": {
+    "reported_at": "2026-05-10T00:23:00-0300",
+    "validation_id": "VR_20260510_000428",
+    "release_gate": "CT_ValidarRelease_SextetoMinimo",
+    "csv": "auditoria/evidencias/V12.0.0204/ValidacaoReleaseSexteto_V12_0_0203_VR_20260510_000428.csv",
+    "csv_sha256": "8973920fd3d5439605714ae4f8952e7694dce883ac9be3ae8f916d691d7d2ba7",
+    "result": "APROVADO"
+  },
+  "debts": [
+    {
+      "id": "D-MICRO50-CSV-FILENAME",
+      "severity": "P2",
+      "description": "O CSV foi gravado na pasta correta V12.0.0204, mas o filename ainda usa o prefixo historico ValidacaoReleaseSexteto_V12_0_0203.",
+      "disposition": "Nao bloqueia o rc1; corrigir em MICRO51 ou Onda 26 como higiene documental/consistencia de evidencia."
+    },
+    {
+      "id": "D-V205-MD24-4",
+      "severity": "P2",
+      "description": "MD-24.4 SelecionarEmpresa com efeitos permanece deferido para V205 apos rollback MICRO49.",
+      "disposition": "Nao reabrir na V204 sem novo readback/hearback."
+    }
+  ],
+  "next_action": "Preparar MICRO51 de higiene documental e auditoria final: corrigir nomenclatura de evidencia se aprovado, atualizar docs/roadmap e preparar auditoria cruzada final antes de publicacao."
+}

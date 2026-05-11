@@ -2600,30 +2600,30 @@ End Function
 Private Function CorrigirMojibakeBasico(ByVal s As String) As String
     Dim t As String
     t = s
-    t = Replace(t, "Ã¡", "á")
-    t = Replace(t, "Ã¢", "â")
-    t = Replace(t, "Ã£", "ã")
-    t = Replace(t, "Ã€", "À")
-    t = Replace(t, "Ã", "Á")
-    t = Replace(t, "Ã‚", "Â")
-    t = Replace(t, "Ãƒ", "Ã")
-    t = Replace(t, "Ã§", "ç")
-    t = Replace(t, "Ã‡", "Ç")
-    t = Replace(t, "Ã©", "é")
-    t = Replace(t, "Ã¨", "è")
-    t = Replace(t, "Ãª", "ê")
-    t = Replace(t, "Ã‰", "É")
-    t = Replace(t, "ÃŠ", "Ê")
-    t = Replace(t, "Ã­", "í")
-    t = Replace(t, "Ã", "Í")
-    t = Replace(t, "Ã³", "ó")
-    t = Replace(t, "Ã´", "ô")
-    t = Replace(t, "Ãµ", "õ")
-    t = Replace(t, "Ã"", "Ó")
-    t = Replace(t, "Ã"", "Ô")
-    t = Replace(t, "Ã•", "Õ")
-    t = Replace(t, "Ãº", "ú")
-    t = Replace(t, "Ãš", "Ú")
+    t = Replace(t, ChrW$(195) & ChrW$(161), ChrW$(225))
+    t = Replace(t, ChrW$(195) & ChrW$(162), ChrW$(226))
+    t = Replace(t, ChrW$(195) & ChrW$(163), ChrW$(227))
+    t = Replace(t, ChrW$(195) & ChrW$(8364), ChrW$(192))
+    t = Replace(t, ChrW$(195) & ChrW$(129), ChrW$(193))
+    t = Replace(t, ChrW$(195) & ChrW$(8218), ChrW$(194))
+    t = Replace(t, ChrW$(195) & ChrW$(402), ChrW$(195))
+    t = Replace(t, ChrW$(195) & ChrW$(167), ChrW$(231))
+    t = Replace(t, ChrW$(195) & ChrW$(8225), ChrW$(199))
+    t = Replace(t, ChrW$(195) & ChrW$(169), ChrW$(233))
+    t = Replace(t, ChrW$(195) & ChrW$(168), ChrW$(232))
+    t = Replace(t, ChrW$(195) & ChrW$(170), ChrW$(234))
+    t = Replace(t, ChrW$(195) & ChrW$(8240), ChrW$(201))
+    t = Replace(t, ChrW$(195) & ChrW$(352), ChrW$(202))
+    t = Replace(t, ChrW$(195) & ChrW$(173), ChrW$(237))
+    t = Replace(t, ChrW$(195) & ChrW$(141), ChrW$(205))
+    t = Replace(t, ChrW$(195) & ChrW$(179), ChrW$(243))
+    t = Replace(t, ChrW$(195) & ChrW$(180), ChrW$(244))
+    t = Replace(t, ChrW$(195) & ChrW$(181), ChrW$(245))
+    t = Replace(t, ChrW$(195) & ChrW$(8220), ChrW$(211))
+    t = Replace(t, ChrW$(195) & ChrW$(8221), ChrW$(212))
+    t = Replace(t, ChrW$(195) & ChrW$(8226), ChrW$(213))
+    t = Replace(t, ChrW$(195) & ChrW$(186), ChrW$(250))
+    t = Replace(t, ChrW$(195) & ChrW$(353), ChrW$(218))
     CorrigirMojibakeBasico = t
 End Function
 
@@ -3460,16 +3460,16 @@ End Sub
 ' que detecta cabecalho corrompido, usa MAX(End(xlUp)) em 50 colunas e
 ' tambem zera AUDIT_LOG / RELATORIO. Mantem a mesma assinatura para nao
 ' quebrar quem chama (Limpar_Base.frm > CommandButton1_Click; tambem o
-' fallback Configuracao_Inicial.AbrirLimparBaseSeguro). PRESERVA: ATIVIDADES,
-' CAD_SERV, CONFIG.
+' fallback Configuracao_Inicial.AbrirLimparBaseSeguro). PRESERVA: ATIVIDADES
+' (CNAE) e CONFIG; limpa CAD_SERV para troca de municipio.
 Sub Limpa_Base()
     Dim relatorio As String
     Dim msgSave As String
 
     If MsgBox("Tem certeza que deseja ZERAR a Base Operacional?" & vbCrLf & _
               "(EMPRESAS, EMPRESAS_INATIVAS, ENTIDADE, ENTIDADE_INATIVOS," & vbCrLf & _
-              " CREDENCIADOS, PRE_OS, CAD_OS, AUDIT_LOG, RELATORIO)" & vbCrLf & _
-              "As abas ATIVIDADES (CNAE), CAD_SERV e CONFIG serao PRESERVADAS." & vbCrLf & vbCrLf & _
+              " CREDENCIADOS, CAD_SERV, PRE_OS, CAD_OS, AUDIT_LOG, RELATORIO)" & vbCrLf & _
+              "As abas ATIVIDADES (CNAE) e CONFIG serao PRESERVADAS." & vbCrLf & vbCrLf & _
               "Quando o cabecalho de uma aba estiver corrompido," & vbCrLf & _
               "a rotina detecta e reescreve o cabecalho canonico.", _
               vbQuestion + vbYesNo, "Limpar a Base de Dados") <> vbYes Then

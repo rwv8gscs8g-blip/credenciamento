@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.0",
+  "execution_id": "0058-exec-onda25-md25-3-auditoria-cruzada-final-micro52",
+  "agent_id": "codex-cli",
+  "readback_id": "0058-onda25-md25-3-auditoria-cruzada-final-micro52",
+  "executed_at": "2026-05-10T00:44:56-0300",
+  "action": "Entregar pacote de auditoria cruzada final Opus + Antigravity para V12.0.0204-rc1.",
+  "status": "APROVADO_AUDITORIA_SEM_P0P1_COM_P2",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "build": "f7aa84f+v12.0.0204-rc1",
+    "gate": "VR_20260510_000428 APROVADO",
+    "next_decision": "MICRO54 ampliado; MICRO53 nao sera aberto agora"
+  },
+  "delta": [
+    {
+      "file": ".hbn/readbacks/0058-onda25-md25-3-auditoria-cruzada-final-micro52.json",
+      "after_sha256": "a6e60f22734631e0033db622dc50c84ce9402d69136c83415c5cb829e12ccc2b",
+      "change": "Readback MICRO52 registrado com hearback humano e escopo de auditoria."
+    },
+    {
+      "file": "auditoria/03_ondas/onda_25_v204_release_candidate/04_TECNICO_MICRO52_AUDITORIA_CRUZADA_FINAL.md",
+      "after_sha256": "37550f95ee4c2955b943c3a8cac4ce625066d8c389e7748f51338e73e7f3bdf1",
+      "change": "Documento tecnico MICRO52 com procedimento, evidencias e criterio de saida."
+    },
+    {
+      "file": "auditoria/03_ondas/onda_25_v204_release_candidate/05_PROMPT_OPUS_AUDITORIA_FINAL_MICRO52.md",
+      "after_sha256": "108f6488eaf816e87399993c67e430f7e2900e7a3d96781a0241310a17ff1b0a",
+      "change": "Prompt Opus para auditoria arquitetural/governanca/nao-regressao."
+    },
+    {
+      "file": "auditoria/03_ondas/onda_25_v204_release_candidate/06_PROMPT_ANTIGRAVITY_AUDITORIA_FINAL_MICRO52.md",
+      "after_sha256": "d7735a6f60c62302854650d258e9dc19382db4aa1c2f1235ab22b3db67047686",
+      "change": "Prompt Antigravity para auditoria adversarial/QA/release-blockers."
+    },
+    {
+      "file": "CHANGELOG.md",
+      "after_sha256": "ea3121b0d6527f133afb6ebb9d06983e66fc85b92a4a005b77800c6df4702374",
+      "change": "Changelog registra MICRO52 como pacote de auditoria entregue e pendente de retorno."
+    }
+  ],
+  "asserts": {
+    "no_vba_change": "MICRO52 nao altera src/vba nem local-ai/vba_import.",
+    "audit_scope": "Opus e Antigravity recebem a mesma fotografia: MICRO50 rc1, MICRO51 documental, VR_20260510_000428 e debitos aceitos.",
+    "external_results": [
+      "Antigravity: APROVAR_PARA_MICRO54; P0/P1 nenhum; P2 ja conhecidos.",
+      "Opus: APROVAR_COM_RESSALVAS_P2; P0/P1 nenhum; recomenda MICRO54 ampliado para P2 documentais pre-tag."
+    ],
+    "release_not_approved_yet": "MICRO52 aprova avancar para MICRO54; tag/release ainda dependem do fechamento MICRO54 e aceite humano."
+  },
+  "next_action": "Executar MICRO54 ampliado: matriz rc1, release notes, rollback plan, evidencia RPT_BUGS sem P0/P1 e procedimento de tag/push/release."
+}

@@ -15,14 +15,20 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private mLimpezaEmAndamento As Boolean
 
+Private Sub UserForm_Initialize()
+On Error Resume Next
+  Cod_Senha.PasswordChar = "*"
+On Error GoTo 0
+End Sub
+
 Private Sub CommandButton1_Click()
 On Error GoTo erro_limpeza
 
-  If Cod_Senha <> "sebrae2024" Then
+  If Not MLB_SenhaLimpezaValida(CStr(Cod_Senha.Value)) Then
+    Call MLB_RegistrarTentativaLimpeza(False, "senha invalida")
     MsgBox "A senha est" & ChrW$(225) & " incorreta!"
     Cod_Senha = ""
     Cod_Senha.SetFocus
-    Me.Hide
     Exit Sub
   Else
     If mLimpezaEmAndamento Then
@@ -32,6 +38,7 @@ On Error GoTo erro_limpeza
     mLimpezaEmAndamento = True
     Me.Hide
     Call Limpa_Base
+    Call MLB_RegistrarTentativaLimpeza(True, "limpeza solicitada via form")
   End If
   mLimpezaEmAndamento = False
   Cod_Senha = ""

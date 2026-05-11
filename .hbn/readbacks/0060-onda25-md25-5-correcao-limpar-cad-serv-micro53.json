@@ -1,0 +1,65 @@
+{
+  "readback_id": "0060-onda25-md25-5-correcao-limpar-cad-serv-micro53",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-11T12:35:00-0300",
+  "mode": "safe_track",
+  "repo": "/Users/macbookpro/Projetos/Credenciamento",
+  "base": "MICRO52/MICRO54-pretag interrompido por achado manual",
+  "target": "MICRO53 corretivo antes da publicacao V12.0.0204",
+  "human_report": {
+    "compile": "compilou",
+    "automated_tests": "testes passaram",
+    "manual_blocker_1": "Cadastro de Servico falha ao abrir com mensagem 'Erro ao abrir cadastro de servico: O objeto e obrigatorio'",
+    "manual_blocker_2": "Limpar Base preserva CAD_SERV, mas a regra operacional correta e preservar CNAE/ATIVIDADES e limpar CAD_SERV para uso em outro municipio"
+  },
+  "classification": {
+    "severity": "P1 pre-publicacao",
+    "reason": "Fluxo manual essencial de configuracao municipal/cadastro de servicos esta incoerente e a limpeza deixa lixo operacional em CAD_SERV.",
+    "micro54": "bloqueado ate MICRO53 ser validado"
+  },
+  "rca_preliminar": [
+    "Mod_Limpeza_Base.LimpaBaseTotalReset preserva explicitamente CAD_SERV e mostra CAD_SERV como 'PRESERVADO (nao tocado)'.",
+    "Preencher.Limpa_Base reforca a mesma mensagem: ATIVIDADES, CAD_SERV e CONFIG preservadas.",
+    "A regra antiga foi codificada como baseline estrutural, mas a regra de produto agora confirmada pelo operador e diferente: ATIVIDADES/CNAE fica, CAD_SERV deve zerar.",
+    "O erro do Cadastro_Servico ocorre no fluxo de abertura do form a partir de Menu_Principal.Cad_Servico_Click e deve ser endurecido junto com a limpeza para operar corretamente com CAD_SERV vazio e sem instancias stale."
+  ],
+  "planned_changes": [
+    "src/vba/Mod_Limpeza_Base.bas: limpar CAD_SERV com cabecalho canonico e remover CAD_SERV da lista preservada.",
+    "src/vba/Preencher.bas: atualizar mensagens/contrato de Limpa_Base para preservar ATIVIDADES/CNAE e CONFIG, limpando CAD_SERV.",
+    "src/vba/Menu_Principal.frm: endurecer abertura de Cadastro_Servico descartando instancias antigas visiveis ou ocultas antes de UserForms.Add.",
+    "src/vba/Cadastro_Servico.frm: endurecer inicializacao para permitir cadastro com CAD_SERV vazio e falhar com mensagem rastreavel se algum controle essencial nao existir.",
+    "src/vba/Teste_V2_Engine.bas e/ou src/vba/Teste_V2_Roteiros.bas: adicionar teste automatizado novo para LimpaBaseTotalReset limpar CAD_SERV e preservar ATIVIDADES/CNAE.",
+    "src/vba/App_Release.bas: bump de build MICRO53 corretivo.",
+    "local-ai/vba_import: espelhar a partir de src/vba e criar manifesto V3 MICRO53.",
+    "auditoria/03_ondas/onda_25_v204_release_candidate: criar tecnico/procedimento MICRO53."
+  ],
+  "expected_test_update": {
+    "new_assert": "MIG_009_LIMPAR_BASE_LIMPA_CAD_SERV_PRESERVA_CNAE",
+    "expected_smoke_after_import": "TV2_RunSmoke False deve subir de 33/0/4 para 34/0/4 se apenas este assert entrar no Smoke.",
+    "expected_sexteto_after_import": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0, salvo ajuste justificado durante implementacao."
+  },
+  "manual_gate_after_fix": [
+    "Importar MICRO53.",
+    "Compilar VBE limpo, sem fechamento do Excel.",
+    "Confirmar GetBuildImportado no build MICRO53.",
+    "Rodar TV2_RunSmoke False e Sexteto.",
+    "Executar Limpar Base: relatorio deve listar CAD_SERV como limpo, nao preservado.",
+    "Confirmar ATIVIDADES/CNAE preservada.",
+    "Abrir Cadastro de Servico sem erro 'O objeto e obrigatorio'.",
+    "Cadastrar servico novo em uma atividade existente e confirmar linha nova em CAD_SERV.",
+    "Repetir Limpar Base e confirmar idempotencia: CAD_SERV volta a zero e o form continua abrindo."
+  ],
+  "risks": [
+    {
+      "id": "R1",
+      "risk": "Suites antigas podem assumir CAD_SERV preservado apos Limpa_Base.",
+      "mitigation": "Separar regra operacional de limpeza total de helpers de teste que recriam baseline canonica quando necessario."
+    },
+    {
+      "id": "R2",
+      "risk": "Cadastro_Servico pode depender de controle .frx/dinamico nao presente em algum workbook.",
+      "mitigation": "Validar controles essenciais no initialize e endurecer descarte de instancias antigas antes de abrir."
+    }
+  ],
+  "next_step": "PARAR e aguardar hearback humano antes de editar VBA."
+}

@@ -4,8 +4,8 @@
 > gestão municipal de credenciamento, rodízio, Pre-OS, OS e avaliação de
 > prestadores de pequenos reparos em Excel/VBA.
 
-[![Release](https://img.shields.io/badge/release-V12.0.0202-blue)](obsidian-vault/releases/V12.0.0202.md)
-[![Linha V203](https://img.shields.io/badge/V12.0.0203-rc4%20teste%20manual-yellow)](auditoria/03_ondas/onda_18_reativ_strikes/70_FECHAMENTO_ONDA_18.md)
+[![Release](https://img.shields.io/badge/release-V12.0.0204-blue)](obsidian-vault/releases/V12.0.0204.md)
+[![Gate](https://img.shields.io/badge/gate-VR_20260511_154433-brightgreen)](auditoria/evidencias/V12.0.0204/ValidacaoReleaseSexteto_V12_0_0203_VR_20260511_154433.csv)
 [![Status](https://img.shields.io/badge/status-VALIDADO-brightgreen)](obsidian-vault/releases/STATUS-OFICIAL.md)
 [![Licença](https://img.shields.io/badge/licenca-TPGL%20v1.1-6f42c1)](LICENSE)
 [![Auditoria](https://img.shields.io/badge/auditoria-publica-0a7f5a)](auditoria/00_status/00_SUMARIO_EXECUTIVO.md)
@@ -88,9 +88,9 @@ operacional controlada da documentação institucional auditável.
 ### Para humanos
 
 - [docs/INDEX.md](docs/INDEX.md) — indice publico Diataxis-aware
-- [docs/tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md](docs/tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md) — treinamento para testes manuais da V203 rc4
-- [docs/how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md](docs/how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md) — como rodar o Quinteto de validacao
-- [docs/reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md](docs/reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md) — roteiro manual da rc4
+- [obsidian-vault/releases/V12.0.0204.md](obsidian-vault/releases/V12.0.0204.md) — release note publica da versao oficial vigente
+- [docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md](docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md) — matriz de rastreabilidade da V204
+- [auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md](auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md) — fechamento de publicacao V204
 - [docs/explanation/ARQUITETURA.md](docs/explanation/ARQUITETURA.md)
 - [docs/reference/COMPLIANCE_CMMI_ISO.md](docs/reference/COMPLIANCE_CMMI_ISO.md)
 - [docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
@@ -130,15 +130,13 @@ Este projeto e o primeiro [case study](https://github.com/...) production-scale 
 
 ## Status atual
 
-Linha oficial: `V12.0.0202`
+Linha oficial: `V12.0.0204`
 
-Linha em testes manuais formais: `V12.0.0203-rc4`
+Build final validado no workbook: `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`
 
-- compilação limpa validada por operador humano
-- bateria oficial recente sem falhas bloqueantes
-- evidência pública da bateria oficial já publicada nesta linha
-- evidência fresca da V2 validada por operador humano e publicada em `auditoria/evidencias/V12.0.0202/`
-- linha pública oficial já promovida no `main`, com fechamento institucional residual voltado à nova auditoria externa
-- governança documental e de release agora endurecida por checagens automáticas de coerência
-- V203 rc4 verde no Quinteto `VR_20260504_171048`, autorizada para teste manual e nao para producao
-- V204 prevista como linha de estabilizacao final de debitos tecnicos e producao
+- compilacao limpa validada por operador humano
+- teste manual final validado por operador humano
+- Smoke V2 `TV2_20260511_131824` com `OK=34 | FALHA=0 | MANUAL=4`
+- gate consolidado `VR_20260511_154433` aprovado com sintaxe `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`
+- evidencias publicas arquivadas em `auditoria/evidencias/V12.0.0204/`
+- V12.0.0205 abrira a proxima etapa com auditoria cruzada, melhoria de nomenclatura da taxonomia de testes e lista mestra de evolucoes

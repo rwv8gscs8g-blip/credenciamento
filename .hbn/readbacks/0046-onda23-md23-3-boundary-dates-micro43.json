@@ -1,0 +1,33 @@
+{
+  "readback_id": "0046-onda23-md23-3-boundary-dates-micro43",
+  "data": "2026-05-07",
+  "agent_id": "codex-cli",
+  "origem_hearback": "Operador importou MICRO42, compilou, aprovou TV2_RunTransaction_Interrupt e aprovou o Quinteto VR_20260507_043052.",
+  "contexto": {
+    "versao": "V12.0.0204-dev",
+    "base_confirmada": "f7aa84f+ONDA23.MD23.2-transacao-interrupt aprovado",
+    "onda": "Onda 23 - Baterias adversariais e cobertura combinatoria",
+    "microdelta": "MICRO43",
+    "md": "MD-23.3",
+    "build_alvo": "f7aa84f+ONDA23.MD23.3-boundary-dates"
+  },
+  "decisoes": [
+    "Criar suite autonoma de bordas de data sem alterar regras de negocio de producao",
+    "Cobrir APIs publicas ja existentes: MontarParametrosEmissaoOS e DescreverMudancasAvaliacao",
+    "Validar data vazia, hoje, passado, datas inexistentes, ano bissexto, ano curto e normalizacao de data de avaliacao",
+    "Expor a suite na Central V2 e catalogo/roteiro para operador humano"
+  ],
+  "acao": [
+    "Adicionar TV2_RunBoundary_Dates com 9 asserts DATE_BND_*",
+    "Adicionar CT2_ExecutarBoundaryDates e opcao [12] na Central V2",
+    "Atualizar catalogo e roteiro V2 com os 9 cenarios",
+    "Atualizar App_Release, manifesto, docs, CHANGELOG, relay e ERP"
+  ],
+  "gate_esperado": [
+    "Importador V3 M=4 F=0 err=0 skip=0",
+    "Compile manual limpo",
+    "TV2_RunBoundary_Dates False aprovado com BOUNDARY_DATES=9/0/0",
+    "Quinteto aprovado",
+    "Sintaxe esperada: V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0"
+  ]
+}

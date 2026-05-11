@@ -1,0 +1,34 @@
+{
+  "readback_id": "0054-onda24-md24-4-selecionar-com-efeitos-micro49-fix2",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-09T20:48:00-0300",
+  "mode": "safe_track",
+  "repo": "/Users/macbookpro/Projetos/Credenciamento",
+  "base": "V12.0.0204-dev",
+  "target": "V12.0.0204-dev",
+  "microdelta": "MICRO49-fix2",
+  "build": "f7aa84f+ONDA24.MD24.4-selecionar-com-efeitos-fix2",
+  "trigger": "Operador reportou que MICRO49-fix1 importou e atualizou o build, mas VBE > Compilar continuou fechando o Excel e TV2_RunSmoke False retornou 33/0/4.",
+  "intent": "Estabilizar MD-24.4 removendo o SMK_008 experimental e seu helper, mantendo SelecionarEmpresa apenas com documentacao de side-effects no codigo.",
+  "constraints": [
+    "src/vba e fonte de verdade",
+    "local-ai/vba_import e espelho",
+    "CRLF preservado",
+    "sem codigo VBA solto no chat",
+    "sem nova funcionalidade sem teste; este fix nao cria funcionalidade, apenas estabiliza documentacao de contrato"
+  ],
+  "planned_changes": [
+    "Teste_V2_Roteiros.bas remove SMK_008 do Smoke e volta a contagem esperada para 33",
+    "Teste_V2_Engine.bas remove helper TV2_DtUltimaIndicacaoCred e entradas SMK_008 dos mapas",
+    "Svc_Rodizio.bas permanece com comentario explicito de efeitos colaterais do contrato legado",
+    "App_Release.bas recebe build fix2",
+    "Manifesto V3 MICRO49-fix2 entrega pacote cumulativo de estabilizacao"
+  ],
+  "expected_validation": {
+    "import": "Importador V3 M=4 F=0 err=0 skip=0",
+    "compile": "VBE > Depurar > Compilar VBAProject passa limpo e nao fecha Excel",
+    "build": "GetBuildImportado = f7aa84f+ONDA24.MD24.4-selecionar-com-efeitos-fix2",
+    "smoke": "TV2_RunSmoke False = 33/0/4",
+    "sexteto": "V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "schema_version": "1.0",
+  "execution_id": "0057-exec-onda25-md25-2-higiene-final-micro51",
+  "agent_id": "codex-cli",
+  "readback_id": "0057-onda25-md25-2-higiene-final-micro51",
+  "executed_at": "2026-05-10T00:35:44-0300",
+  "action": "Executar higiene documental final da V204 rc1 e preparar auditoria/publicacao sem novo pacote V3.",
+  "status": "EXECUTADO_DOCUMENTAL",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "MICRO50 / f7aa84f+v12.0.0204-rc1",
+    "target": "MICRO52 auditoria cruzada final",
+    "operator_gate": "VR_20260510_000428 APROVADO"
+  },
+  "delta": [
+    {
+      "file": "auditoria/03_ondas/onda_25_v204_release_candidate/03_TECNICO_MICRO51_HIGIENE_FINAL.md",
+      "after_sha256": "fff7e458d8679f719db2a1a2f8a57f4eafe1f57e5b35fb0e1879bf055b4caaf6",
+      "change": "Documento tecnico MICRO51 criado com evidencia consolidada, debitos aceitos e checklist de auditoria/publicacao."
+    },
+    {
+      "file": "auditoria/00_status/67_STATUS_V204_POS_SEXTETO_ROADMAP_PRODUCAO_2026_05_09.md",
+      "after_sha256": "cb89cf69afc0a00133cbe203c397532ac8231436e9473db7d21fe67dbfdc91e3",
+      "change": "Status atualizado de V204-dev pos-Sexteto para V204 rc1 pos-MICRO50/MICRO51."
+    },
+    {
+      "file": "auditoria/02_planos/29_ROADMAP_IMPLEMENTACAO_V204_2026_05_05.md",
+      "after_sha256": "495f2b1e00ea65ddf062fdc30f8b3277afa061d3083ab06fb480a102ee4cc448",
+      "change": "Roadmap Onda 24/25 atualizado com rollback MICRO49, MICRO50 aprovado e MICRO51 documental."
+    },
+    {
+      "file": "CHANGELOG.md",
+      "after_sha256": "068dcfdad83e739c75deb5fc705f2eecf728a9baa461abcf036e5b3b8ac9a755",
+      "change": "Changelog registra MICRO51 e move filename historico do CSV para debito Onda 26/V205."
+    }
+  ],
+  "asserts": {
+    "no_vba_change": "MICRO51 nao altera src/vba nem local-ai/vba_import; sem novo pacote V3 e sem novo gate Excel.",
+    "evidence": "MICRO50 permanece ancorado em VR_20260510_000428 APROVADO.",
+    "debts_registered": [
+      "D-MICRO50-CSV-FILENAME: filename do CSV ainda contem V12_0_0203, mas pasta V12.0.0204 esta correta.",
+      "D-V205-MD24-4: SelecionarEmpresa side-effects deferido para V205.",
+      "D-STRICT-G1-G2-G5: strict residual conhecido, com G7/G8 OK."
+    ]
+  },
+  "next_action": "MICRO52: auditoria cruzada final Opus + Antigravity com criterio de saida sem P0/P1; se houver achado P0/P1, abrir MICRO53 corretivo."
+}

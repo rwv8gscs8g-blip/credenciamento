@@ -2,10 +2,10 @@
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1
 proprietario-bastao: Codex CLI (sessao codex-cli-bloco-b-onda18-2026-05-04) — BASTAO RECEBIDO do Opus 4.7 em 2026-05-04T01:34:31-0300; proprietario unico de implementacao da Frente 1 ate devolucao formal via doc 60.
-ciclo-ativo: V12.0.0204-dev Onda 22 sob Codex CLI. Roadmap V204 Onda 20-25 aprovado e Onda 26 documental adicionada por decisao do operador; MICRO31-MICRO38 aprovadas no Quinteto pelo operador; MICRO39 reprovado no Smoke; MICRO39-fix1 aprovado no Quinteto VR_20260506_232006; MICRO40 preparado para importacao; regras permanentes 0010 e 0011 vigentes.
+ciclo-ativo: V12.0.0204 Onda 25 sob Codex CLI. Roadmap V204 Onda 20-25 aprovado e Onda 26 documental adicionada por decisao do operador; MICRO49/MD-24.4 revertido formalmente para MICRO48; MICRO50 rc1, MICRO51 higiene e MICRO52 auditoria cruzada passaram sem P0/P1; MICRO53-fix2 aprovado pelo operador em import M=2/F=0/err=0/skip=0, compile limpo, build f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2, Smoke TV2_20260511_131824 OK=34/FALHA=0/MANUAL=4, testes manuais finais OK e gate final VR_20260511_154433 APROVADO; MICRO54 executado para publicacao documental/metadados V12.0.0204; proximas acoes: commit, tag v12.0.0204, push GitHub e abertura da auditoria cruzada V12.0.0205.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Operador importar MICRO40, compilar, confirmar build e rodar Quinteto; se verde, registrar VR e avancar para Onda 23.
-ultima-atualizacao: 2026-05-07T00:25:00-0300 (MICRO40 MD-22.4 preparado; aguardando gate operador)
+proxima-acao: Preparar commit, tag v12.0.0204 e push GitHub; em seguida abrir auditoria cruzada Opus/Antigravity para V12.0.0205.
+ultima-atualizacao: 2026-05-11T16:41:14-0300 (MICRO54 publicacao V12.0.0204 executada; gate final VR_20260511_154433 aprovado)
 ---
 
 > ⚠️ **REGRA INVIOLAVEL (M11 destilada 2026-05-03)**: A IA le `src/vba/`
@@ -314,6 +314,25 @@ Esta sessao usa os marcadores visiveis do adapter HBN:
 | Doc | [`usehbn/methodology/RADAR-PHAGOCYTOSIS-PIPELINE.md`](../../usehbn/methodology/RADAR-PHAGOCYTOSIS-PIPELINE.md) — seção "Permeabilidade" |
 | Cobertura | 5 vias de entrada, regras de baixo atrito, anti-ruído, reentrada de archived, filtro de impacto |
 | Origem | pedido Maurício 2026-05-02 (lógica de permeabilidade para novas tecnologias) |
+
+### Sessão 2026-05-06 — análise das 5 tecnologias + reorientação arquitetural radical
+
+| Campo | Valor |
+|---|---|
+| ID | A5-EVOLUÇÃO — análise das 5 tecnologias do radar (4 de 5 concluídas) |
+| Decisões fechadas | **TODAS AS 5**: Tree-sitter APROVADA; Typer ARQUIVADA; uv ARQUIVADA; Consent Capsules APROVADA (migração imediata); **OpenTelemetry APROVADA (fagocitose progressiva)** |
+| **Correção fundamental** | **useHBN é MULTI-BRAÇO; fagocitose é apenas UM dos 6 módulos. Doc canônico: `USEHBN-MODULES-ARCHITECTURE.md`** |
+| **Documento de aprovação consolidado** | **`auditoria/00_status/44_CORRECAO_USEHBN_E_CONSOLIDACAO.md` — 7 blocos de decisão pendentes para Maurício** |
+| **Auditoria Cruzada IAs (Módulo 6)** | **declarada em `CROSS-IA-AUDIT-PROTOCOL.md`** |
+| **Proposta site** | **`usehbn/site/PROPOSTA-MELHORIA-USEHBN-ORG.md`** |
+| Decisão arquitetural maior | **Rust como linguagem-base do useHBN** (Árvore Estável); **Consent Capsules como primeira migração estruturada Python → Rust** |
+| Princípios operacionais formalizados | Minimalismo de Cadeia (P11 candidato); Substrato Sólido (P12 candidato); AI-Language-Abstraction (P13 candidato) |
+| Modelo arquitetural novo | **3 Árvores — Estável (Rust), Desenvolvimento (transição), Exploração (qualquer linguagem)** |
+| Markers V2 novos propostos (7) | 🟦 MINIMALIST, 🟪 SUBSTRATO, 🟧 AI-ABSTRACTION, 🌱 EXPLORATION SEED, 🔧 DEV BRANCH, 🪨 STABLE TRUNK, 🟫 TREE TRANSITION |
+| Documentos canônicos novos (8) | `MINIMALISM-PRINCIPLE.md`, `SUBSTRATO-SOLIDO-PRINCIPLE.md`, `AI-LANGUAGE-ABSTRACTION-PRINCIPLE.md`, `THREE-TREES-ARCHITECTURE.md`, `LANGUAGE-PLATFORM-COMPARISON.md`, `42_ROADMAP_CONSENT_CAPSULES_RUST.md`, `43_PLANO_DOCUMENTACAO_V2_USEHBN.md` + ficha `rust.md` |
+| Status | ⏳ apenas análise OpenTelemetry pendente antes do prompt unificado ao Codex e início efetivo R-A |
+| Sucessor | `auditoria/00_status/42_PROMPT_UNIFICADO_CODEX.md` (renomear para evitar conflito com 42 atual) ou novo número — a ser criado após decisão #5 |
+| V2 useHBN | em planejamento; F1 esboço pronto em `43_PLANO_DOCUMENTACAO_V2_USEHBN.md`; F2 inicia após análise OTel |
 
 ## Sistema de revisão semanal (ativado nesta sessão)
 

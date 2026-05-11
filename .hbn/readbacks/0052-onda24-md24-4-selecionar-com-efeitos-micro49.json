@@ -1,0 +1,39 @@
+{
+  "readback_id": "0052-onda24-md24-4-selecionar-com-efeitos-micro49",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-09T18:09:00-0300",
+  "track": "safe_track",
+  "status": "confirmed_by_roadmap",
+  "source_prompt": "Operador confirmou MICRO48 aprovado e autorizou seguir o roadmap ate MICRO54.",
+  "scope": {
+    "onda": 24,
+    "microdelta": "MICRO49",
+    "tema": "MD-24.4 SelecionarEmpresa com efeitos explicitos",
+    "tipo": "codigo_vba_e_documentacao",
+    "build": "f7aa84f+ONDA24.MD24.4-selecionar-com-efeitos"
+  },
+  "canon_lido": [
+    ".hbn/relay/INDEX.md",
+    ".hbn/knowledge/0001-regras-v203-inegociaveis.md",
+    ".hbn/knowledge/0002-regra-ouro-vba-import.md",
+    ".hbn/knowledge/0010-funcionalidade-nova-exige-teste.md",
+    ".hbn/knowledge/0011-higiene-documental-recorrente.md",
+    "src/vba/Svc_Rodizio.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/App_Release.bas"
+  ],
+  "decisao": {
+    "micro48_status": "TV2_RunRodizioStrikesEndToEnd False TV2_20260509_172616 76/0/0 e Sexteto VR_20260509_173629 aprovados pelo operador",
+    "micro49_entrega": "manter SelecionarEmpresa como alias legado e expor SelecionarEmpresaComEfeitos para deixar mutacoes controladas explicitas",
+    "funcionalidade_nova_com_teste": "SMK_008 valida wrapper explicito, alias legado, DT_ULTIMA_IND e fila preservada"
+  },
+  "criterios_de_pronto": [
+    "SelecionarEmpresa continua compilando como API legada",
+    "SelecionarEmpresaComEfeitos expõe o contrato de side-effects controlados",
+    "TV2_RunSmoke sobe para 34 asserts com SMK_008",
+    "manifesto V3 MICRO49 criado",
+    "local-ai/vba_import sincronizado com src/vba",
+    "documentacao e HBN atualizados"
+  ]
+}

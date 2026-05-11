@@ -1,0 +1,41 @@
+{
+  "readback_id": "0050-onda24-md24-2-config-invalida-micro47",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-09T14:57:27-0300",
+  "track": "safe_track",
+  "status": "confirmed_by_roadmap",
+  "source_prompt": "Operador aprovou implementacao ate o MICRO54 e confirmou MICRO46 verde.",
+  "scope": {
+    "onda": 24,
+    "microdelta": "MICRO47",
+    "tema": "MD-24.2 Configuracao invalida auditavel",
+    "tipo": "codigo_vba_e_documentacao",
+    "build": "f7aa84f+ONDA24.MD24.2-config-invalida-audit"
+  },
+  "canon_lido": [
+    ".hbn/relay/INDEX.md",
+    ".hbn/knowledge/0001-regras-v203-inegociaveis.md",
+    ".hbn/knowledge/0002-regra-ouro-vba-import.md",
+    ".hbn/knowledge/0010-funcionalidade-nova-exige-teste.md",
+    ".hbn/knowledge/0011-higiene-documental-recorrente.md",
+    "auditoria/00_status/67_STATUS_V204_POS_SEXTETO_ROADMAP_PRODUCAO_2026_05_09.md",
+    "src/vba/Configuracao_Inicial.frm",
+    "src/vba/Util_Config.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/App_Release.bas"
+  ],
+  "decisao": {
+    "micro46_status": "ADVERSARIAL_UI TV2_20260509_141117 12/0/0 e Sexteto VR_20260509_141235 aprovados pelo operador",
+    "micro47_entrega": "validar regra de strikes no form de configuracao antes de gravar e auditar rejeicao",
+    "funcionalidade_nova_com_teste": "MIG_008 valida rejeicao, mensagem e AUDIT_LOG CONFIG_INVALIDA"
+  },
+  "criterios_de_pronto": [
+    "Configuracao_Inicial bloqueia gravacao de regra de strikes invalida",
+    "Util_Config expoe helper de validacao e helper de auditoria",
+    "Smoke sobe para 33 asserts com MIG_008",
+    "manifesto V3 MICRO47 criado",
+    "local-ai/vba_import sincronizado com src/vba",
+    "documentacao e HBN atualizados"
+  ]
+}

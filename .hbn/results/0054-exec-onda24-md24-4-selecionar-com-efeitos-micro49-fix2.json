@@ -1,0 +1,55 @@
+{
+  "execution_id": "0054-exec-onda24-md24-4-selecionar-com-efeitos-micro49-fix2",
+  "agent_id": "codex-cli",
+  "readback_id": "0054-onda24-md24-4-selecionar-com-efeitos-micro49-fix2",
+  "action": "Implementar MICRO49-fix2 para remover o SMK_008 experimental e estabilizar MD-24.4 como documentacao de contrato em Svc_Rodizio.",
+  "status": "REPROVADO_OPERADOR_BUILD_STALE_COMPILE_CRASH",
+  "outcome": "rejected",
+  "human_status": "rejected_compile_crash_build_stale_workbook_recovered_to_micro48_md24_3",
+  "intent_risk_profile": "low",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "V12.0.0204-dev",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO49-fix2",
+    "build": "f7aa84f+ONDA24.MD24.4-selecionar-com-efeitos-fix2"
+  },
+  "validation": {
+    "local_static_checks": [
+      "OK: src_vba_para_local_ai_sync_check_53_arquivos",
+      "OK: shasum_pareado_4_arquivos_importaveis",
+      "OK: CRLF_preservado_4_pares_importaveis",
+      "OK: SMK_008 e TV2_DtUltimaIndicacaoCred removidos de Teste_V2_Roteiros/Teste_V2_Engine em src e espelho",
+      "OK: fix sem funcionalidade nova; regressao coberta por Smoke existente, E2E Strikes e Sexteto"
+    ],
+    "operator_gate_result": [
+      "FALHA: importador reportou OK, mas VBE > Depurar > Compilar VBAProject fechou o Excel",
+      "FALHA: apos recovery/reabertura, GetBuildImportado retornou f7aa84f+ONDA24.MD24.3-avaliacao-dual-counter, nao o build fix2",
+      "OK: TV2_RunSmoke False retornou 33/0/4 sem CSV, consistente com o ultimo ponto verde MICRO48/MD24.3",
+      "DECISAO: pausar Onda 24 antes de MICRO50 e abrir nova sessao para RCA estrutural do compile crash/build stale"
+    ],
+    "expected_syntax": "V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "files_changed": [
+    ".hbn/readbacks/0054-onda24-md24-4-selecionar-com-efeitos-micro49-fix2.json",
+    ".hbn/results/0053-exec-onda24-md24-4-selecionar-com-efeitos-micro49-fix1.json",
+    ".hbn/results/0054-exec-onda24-md24-4-selecionar-com-efeitos-micro49-fix2.json",
+    ".hbn/results/INDEX.md",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/02_planos/29_ROADMAP_IMPLEMENTACAO_V204_2026_05_05.md",
+    "auditoria/03_ondas/onda_24_v204_hardening_operacional/09_TECNICO_MICRO49_FIX1_SELECIONAR_COM_EFEITOS.md",
+    "auditoria/03_ondas/onda_24_v204_hardening_operacional/10_PROCEDIMENTO_IMPORT_MICRO49_FIX1.md",
+    "auditoria/03_ondas/onda_24_v204_hardening_operacional/11_TECNICO_MICRO49_FIX2_SELECIONAR_COM_EFEITOS.md",
+    "auditoria/03_ondas/onda_24_v204_hardening_operacional/12_PROCEDIMENTO_IMPORT_MICRO49_FIX2.md",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO49-fix2.txt",
+    "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "src/vba/App_Release.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas"
+  ],
+  "created_at": "2026-05-09T20:48:00-0300"
+}

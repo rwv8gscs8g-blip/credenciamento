@@ -643,12 +643,42 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "MIG_005", "MIGRACAO", "RAPIDO", "AUTO", "Empresa", "Backfill auditavel de DT_ULT_REATIV", "Empresa reativada antes da coluna DT_ULT_REATIV existir, com evento preservado no AUDIT_LOG", "Validar deteccao e aplicacao explicita do backfill por AUDIT_LOG", "DT_ULT_REATIV preenchida; deteccao posterior zera pendencias; auditoria registra BACKFILL_DT_ULT_REATIV", "Impede retorno silencioso ao modo legado em bases migradas", "AUTOMATIZADO_0204", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "MIG_006", "MIGRACAO", "RAPIDO", "AUTO", "OS", "Limpeza controlada de residuos sem chave em CAD_OS", "Linha legada sem OS_ID mas com sobra em colunas finais de CAD_OS", "Validar diagnostico que separa residuo sem chave de orfa real e limpa somente o residuo", "Residuo detectado e limpo; orfas reais permanecem reportaveis", "Fecha INT-CAD-OS-REF-ORFA sem apagar OS real", "AUTOMATIZADO_0204", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "MIG_007", "MIGRACAO", "RAPIDO", "AUTO", "Empresa", "Bloqueio de DT_ULT_REATIV invalida", "Empresa com DT_ULT_REATIV nao vazia e nao conversivel para data", "Validar que contador de strikes falha explicitamente e nao usa modo legado", "Falha explicita; qtd de strikes permanece zero; mensagem cita DT_ULT_REATIV invalida", "Impede punicao baseada em janela corrompida", "AUTOMATIZADO_0204", "Executado no smoke"
+    TV2_AddCatalogo ws, nr, "MIG_008", "MIGRACAO", "RAPIDO", "AUTO", "Config", "Configuracao invalida gera mensagem e evento", "Campos da regra de strikes com valores fora da faixa ou nao numericos", "Validar rejeicao antes de gravar CONFIG e auditoria CONFIG_INVALIDA", "Mensagem cita campos invalidos; AUDIT_LOG recebe Validacao Rejeitada", "Evita que parametro invalido seja ignorado silenciosamente", "AUTOMATIZADO_0204", "Executado no smoke"
+    TV2_AddCatalogo ws, nr, "MIG_009", "MIGRACAO", "RAPIDO", "AUTO", "Limpeza", "Limpar Base zera CAD_SERV e preserva CNAE", "Base canonica com ATIVIDADES e CAD_SERV preenchidos", "Validar reset para troca de municipio sem herdar servicos antigos", "ATIVIDADES preservada; CAD_SERV sem linhas de dados; relatorio nao lista CAD_SERV como preservado", "Fecha idempotencia operacional do reset pre-publicacao", "AUTOMATIZADO_0204", "Executado no smoke"
+    TV2_AddCatalogo ws, nr, "UI_ADV_001_REENTRADA_MUTADORES", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Guards de reentrada nos forms mutadores", "src/vba disponivel para leitura read-only", "Validar flags contra duplo clique em reativacao, alteracao, limpeza e avaliacao", "Todas as flags declaradas, testadas, ligadas e desligadas", "Evita duplicidade por reentrada humana", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "UI_ADV_002_REATIVA_EMPRESA_INTEGRIDADE", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Reativar empresa com saneamento", "Form Reativa_Empresa no pacote fonte", "Validar conflito, duplicidade ativa, confirmacao, servicos e reset de guard", "Tokens estruturais presentes no form", "Bloqueia duplicidade ativa/inativa e bypass silencioso", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "UI_ADV_003_REATIVA_ENTIDADE_SERVICO", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Reativar entidade via servico", "Form Reativa_Entidade no pacote fonte", "Validar confirmacao, guard e chamada ao servico", "Tokens estruturais presentes no form", "Evita reativacao direta sem rastro de servico", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "UI_ADV_004_ALTERA_EMPRESA_CONFIRMA_IDS", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Alterar/inativar empresa com IDs robustos", "Form Altera_Empresa no pacote fonte", "Validar confirmacoes, IdsIguais e guards", "Tokens estruturais presentes no form", "Protege edicao contra ID texto-numero e duplo clique", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "UI_ADV_005_ALTERA_ENTIDADE_CONFIRMA_IDS", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Alterar/inativar entidade com IDs robustos", "Form Altera_Entidade no pacote fonte", "Validar confirmacoes, IdsIguais e guards", "Tokens estruturais presentes no form", "Protege edicao contra ID texto-numero e duplo clique", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "UI_ADV_006_AVALIAR_OS_GUARDS", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Avaliar OS com guard e validacao", "Menu_Principal no pacote fonte", "Validar guard, confirmacao, parse de datas, justificativa e cleanup", "Tokens estruturais presentes no form", "Evita avaliacao duplicada ou sem justificativa", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "UI_ADV_007_PREOS_OS_DESTRUTIVOS", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Acoes destrutivas Pre-OS/OS com fronteira", "Menu_Principal no pacote fonte", "Validar BeginWrite e confirmacao para rejeitar, expirar e cancelar", "Tokens estruturais presentes no form", "Evita mutacao destrutiva sem fronteira e confirmacao", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "UI_ADV_008_LIMPAR_BASE_FORM_GUARD", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Limpar base com senha e guard", "Limpar_Base no pacote fonte", "Validar senha, guard, chamada e erro contextual", "Tokens estruturais presentes no form", "Reduz risco de limpeza duplicada ou falha muda", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "UI_ADV_009_LIMPAR_BASE_CONFIRMACAO", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Limpeza total com confirmacao", "Preencher no pacote fonte", "Validar confirmacao destrutiva, reset centralizado e salvamento seguro", "Tokens estruturais presentes no modulo", "Protege a acao mais destrutiva do workbook", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "UI_ADV_010_CENTRAL_V2_EXPOE_SUITE", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Central V2 expoe Adversarial UI", "Central_Testes_V2 no pacote fonte", "Validar wrapper e texto de menu da nova suite", "Tokens estruturais presentes no modulo", "Garante que a suite nao fique escondida no VBE", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "UI_ADV_011_SEXTETO_GATE_EXPOSTO", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Gate Sexteto exposto", "Teste_Validacao_Release no pacote fonte", "Validar entrada publica, alias e sintaxe auditavel", "Tokens estruturais presentes no modulo", "Garante que o gate oficial esteja testado", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "UI_ADV_012_LIMPAR_BASE_SEM_SENHA_CLARA", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Limpar base sem senha clara", "Limpar_Base no pacote fonte", "Validar ausencia de senha clara no form", "Token sensivel ausente do codigo do form", "Evita regressao de credencial hardcoded no ponto destrutivo", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
+    TV2_AddCatalogo ws, nr, "CS_REATIV_AUDIT_DUAL_COUNTER", "E2E_STRIKES", "COMPLETO", "AUTO", "Avaliacao", "Auditoria expoe contador total e punitivo", "Avaliacao baixa apos reativacao com historico anterior preservado", "Validar AUDIT_LOG com DUAL_COUNTER, STRIKES_TOTAL e STRIKES_PUNICAO", "AUDIT_LOG contem STRIKES_TOTAL>=4 e STRIKES_PUNICAO=1", "Da ao operador dupla informacao sem ambiguar punicao", "AUTOMATIZADO_0204", "Executado em E2E Strikes"
     TV2_AddCatalogo ws, nr, "CS_REATIV_BORDA_ANTERIOR", "E2E_STRIKES", "COMPLETO", "AUTO", "Avaliacao", "Janela punitiva exclui fechamento anterior", "Empresa com DT_ULT_REATIV valida e OS concluida antes do corte", "Validar borda temporal anterior da janela de strikes", "STRIKES_PUNICAO=0", "Formaliza que historico anterior nao re-suspende apos reativacao", "AUTOMATIZADO_0204", "Executado em E2E Strikes"
     TV2_AddCatalogo ws, nr, "CS_REATIV_BORDA_IGUAL", "E2E_STRIKES", "COMPLETO", "AUTO", "Avaliacao", "Janela punitiva exclui fechamento igual ao corte", "Empresa com DT_ULT_REATIV valida e OS concluida exatamente no corte", "Validar que a regra usa maior que e nao maior-ou-igual", "STRIKES_PUNICAO=0", "Protege contra regressao de operador relacional", "AUTOMATIZADO_0204", "Executado em E2E Strikes"
     TV2_AddCatalogo ws, nr, "CS_REATIV_BORDA_POSTERIOR", "E2E_STRIKES", "COMPLETO", "AUTO", "Avaliacao", "Janela punitiva inclui fechamento posterior", "Empresa com DT_ULT_REATIV valida e OS concluida apos o corte", "Validar que strike novo continua punitivo", "STRIKES_PUNICAO=1", "Impede anistia indevida de avaliacoes posteriores a reativacao", "AUTOMATIZADO_0204", "Executado em E2E Strikes"
     TV2_AddCatalogo ws, nr, "CS_REATIV_BORDA_FUTURA", "E2E_STRIKES", "COMPLETO", "AUTO", "Avaliacao", "DT_ULT_REATIV futura nao cai no historico antigo", "Empresa com corte futuro e OS fechadas antes dele", "Validar comportamento seguro para data futura acidental", "STRIKES_PUNICAO=0", "Evita punicao por historico antigo quando o corte esta adiante das OS", "AUTOMATIZADO_0204", "Executado em E2E Strikes"
     TV2_AddCatalogo ws, nr, "ATM_001", "ATOMICIDADE", "RAPIDO", "AUTO", "Rodizio", "Falha na segunda escrita reverte a primeira", "EMPRESAS protegida com senha desconhecida durante o fluxo punido de avancar fila", "Validar rollback de fila e recusas quando a atualizacao cruzada falha", "Avanco punido falha, fila volta ao estado anterior e recusas permanecem zeradas", "Evita estado parcial entre CREDENCIADOS e EMPRESAS", "AUTOMATIZADO_ATUAL", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "ATM_002", "ATOMICIDADE", "RAPIDO", "AUTO", "Transacao", "Transacao aninhada rejeitada", "Transacao externa aberta e nova tentativa de Transacao_Iniciar", "Validar que a transacao interna falha sem sobrescrever a externa", "Erro explicito; TX externa preservada; auditoria registra TRANSACAO_ANINHADA", "Fecha a lacuna R-48 sem stack transacional", "AUTOMATIZADO_0204", "Executado no smoke"
+    TV2_AddCatalogo ws, nr, "TX_INT_001_COMMIT_LIMPA_ESTADO", "TRANSACAO_INTERRUPT", "RAPIDO", "AUTO", "Transacao", "Commit limpa estado global", "Transacao aberta sem writes pendentes", "Validar que commit encerra transacao e zera id", "Transacao inativa, id vazio e auditoria COMMIT registrada", "Evita vazamento de estado global apos commit", "AUTOMATIZADO_0204", "Executado na suite Transacao Interrupt"
+    TV2_AddCatalogo ws, nr, "TX_INT_002_ROLLBACK_SEM_WRITE_LIMPA_ESTADO", "TRANSACAO_INTERRUPT", "RAPIDO", "AUTO", "Transacao", "Rollback sem writes limpa estado", "Transacao aberta e abortada antes da primeira escrita", "Validar rollback idempotente sem writes", "Rollback verdadeiro, transacao inativa e id vazio", "Garante cleanup quando falha ocorre antes de mutar dados", "AUTOMATIZADO_0204", "Executado na suite Transacao Interrupt"
+    TV2_AddCatalogo ws, nr, "TX_INT_003_ROLLBACK_RESTAURA_VALOR", "TRANSACAO_INTERRUPT", "RAPIDO", "AUTO", "Transacao", "Rollback restaura valor sentinela", "Write registrado em celula tecnica de RESULTADO_QA_V2", "Validar restauracao de write registrado sem tocar dado operacional", "Valor original restaurado, estado limpo e auditoria ROLLBACK", "Prova rollback basico de write unitario", "AUTOMATIZADO_0204", "Executado na suite Transacao Interrupt"
+    TV2_AddCatalogo ws, nr, "TX_INT_004_ANINHADA_PRESERVA_EXTERNA", "TRANSACAO_INTERRUPT", "RAPIDO", "AUTO", "Transacao", "Transacao aninhada preserva externa", "Transacao externa aberta e tentativa interna em seguida", "Validar rejeicao explicita de aninhamento", "Erro, id externo preservado, cleanup OK e auditoria ANINHADA", "Impede corrupcao de contexto por reentrada transacional", "AUTOMATIZADO_0204", "Executado na suite Transacao Interrupt"
+    TV2_AddCatalogo ws, nr, "TX_INT_005_COMMIT_APOS_ROLLBACK_NAO_REABRE", "TRANSACAO_INTERRUPT", "RAPIDO", "AUTO", "Transacao", "Commit apos rollback nao reabre", "Handler chama rollback e depois commit defensivo", "Validar ordem de cleanup duplicada", "Estado permanece inativo e id vazio", "Evita falha secundaria em cleanup defensivo", "AUTOMATIZADO_0204", "Executado na suite Transacao Interrupt"
+    TV2_AddCatalogo ws, nr, "TX_INT_006_ROLLBACK_DUPLO_IDEMPOTENTE", "TRANSACAO_INTERRUPT", "RAPIDO", "AUTO", "Transacao", "Rollback duplo idempotente", "Dois handlers tentam rollback da mesma transacao", "Validar que rollback repetido nao deixa estado sujo", "Duas chamadas verdadeiras, transacao inativa e id vazio", "Protege rotinas Public contra cleanup duplicado", "AUTOMATIZADO_0204", "Executado na suite Transacao Interrupt"
+    TV2_AddCatalogo ws, nr, "DATE_BND_001_OS_DATA_VAZIA_DEFAULT", "BOUNDARY_DATES", "RAPIDO", "AUTO", "OS", "Data vazia usa default", "MontarParametrosEmissaoOS sem data nem empenho", "Validar default seguro para data prevista e empenho", "Sucesso, DT_PREV >= hoje e empenho preenchido", "Evita falha por campo opcional vazio", "AUTOMATIZADO_0204", "Executado na suite Boundary Dates"
+    TV2_AddCatalogo ws, nr, "DATE_BND_002_OS_HOJE_PERMITIDO", "BOUNDARY_DATES", "RAPIDO", "AUTO", "OS", "Data de hoje permitida", "Data prevista igual a hoje", "Validar fronteira inferior inclusiva", "Sucesso e DT_PREV igual a hoje", "Documenta que apenas passado e bloqueado", "AUTOMATIZADO_0204", "Executado na suite Boundary Dates"
+    TV2_AddCatalogo ws, nr, "DATE_BND_003_OS_ONTEM_REJEITADO", "BOUNDARY_DATES", "RAPIDO", "AUTO", "OS", "Data passada rejeitada", "Data prevista igual a ontem", "Validar bloqueio retroativo", "Falha explicita com mensagem de data anterior", "Impede OS com prazo incoerente", "AUTOMATIZADO_0204", "Executado na suite Boundary Dates"
+    TV2_AddCatalogo ws, nr, "DATE_BND_004_OS_31_FEV_REJEITADO", "BOUNDARY_DATES", "RAPIDO", "AUTO", "OS", "31/02 rejeitado", "Texto de data inexistente", "Validar parser contra rollover silencioso", "Falha explicita por data invalida", "Protege contra normalizacao permissiva do VBA", "AUTOMATIZADO_0204", "Executado na suite Boundary Dates"
+    TV2_AddCatalogo ws, nr, "DATE_BND_005_OS_BISSEXTO_VALIDO", "BOUNDARY_DATES", "RAPIDO", "AUTO", "OS", "29/02 bissexto aceito", "Texto 29/02/2028", "Validar ano bissexto valido", "Sucesso com DT_PREV=2028-02-29", "Evita rejeicao indevida de data valida", "AUTOMATIZADO_0204", "Executado na suite Boundary Dates"
+    TV2_AddCatalogo ws, nr, "DATE_BND_006_OS_BISSEXTO_INVALIDO", "BOUNDARY_DATES", "RAPIDO", "AUTO", "OS", "29/02 nao bissexto rejeitado", "Texto 29/02/2027", "Validar ano nao bissexto invalido", "Falha explicita por data invalida", "Evita rollover para marco", "AUTOMATIZADO_0204", "Executado na suite Boundary Dates"
+    TV2_AddCatalogo ws, nr, "DATE_BND_007_OS_ANO_CURTO_2030", "BOUNDARY_DATES", "RAPIDO", "AUTO", "OS", "Ano curto vira 2030", "Texto 31/12/30", "Validar contrato de ano com dois digitos", "Sucesso com DT_PREV=2030-12-31", "Documenta compatibilidade atual", "AUTOMATIZADO_0204", "Executado na suite Boundary Dates"
+    TV2_AddCatalogo ws, nr, "DATE_BND_008_AVAL_DATA_EQUIVALENTE_SEM_MUDANCA", "BOUNDARY_DATES", "RAPIDO", "AUTO", "Avaliacao", "Data equivalente sem mudanca", "Default textual e valor Date do mesmo dia", "Validar normalizacao antes de comparar mudancas", "Nao ha mudanca nem resumo", "Evita confirmacao falsa em avaliacao", "AUTOMATIZADO_0204", "Executado na suite Boundary Dates"
+    TV2_AddCatalogo ws, nr, "DATE_BND_009_AVAL_DATA_DIFERENTE_COM_MUDANCA", "BOUNDARY_DATES", "RAPIDO", "AUTO", "Avaliacao", "Data diferente gera mudanca", "Default textual e valor Date de outro dia", "Validar resumo de alteracao de data", "Mudanca detectada e resumo cita Data de fechamento", "Mantem alteracao de data visivel ao operador", "AUTOMATIZADO_0204", "Executado na suite Boundary Dates"
     TV2_AddCatalogo ws, nr, "FLT_001", "FILTROS", "RAPIDO", "AUTO", "Interface", "Normalizacao deterministica de termo", "Texto com acento, caixa mista e espacos duplicados", "Validar contrato comum dos filtros antes de plugar nos formularios", "SERVICO ACAO", "Impede busca dependente de acento ou digitacao exata", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
     TV2_AddCatalogo ws, nr, "FLT_002", "FILTROS", "RAPIDO", "AUTO", "Interface", "Filtro vazio preserva linhas", "Matriz de quatro registros com termo vazio", "Validar que campo de busca vazio nao oculta dados", "4 linhas preservadas", "Evita falsa tela vazia quando o usuario limpa o filtro", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
     TV2_AddCatalogo ws, nr, "FLT_003", "FILTROS", "RAPIDO", "AUTO", "Interface", "Busca textual sem acento", "Nome Joao gravado com acento e busca digitada sem acento", "Validar matching textual normalizado", "Apenas ID 001", "Garante busca previsivel para nomes e servicos", "AUTOMATIZADO_ATUAL", "Executado na suite Filtros"
@@ -699,9 +729,7 @@ Public Sub TV2_PrepararBaselineCanonica()
     TV2_SetConfigCanonica
     CargaInicialCNAE_SeNecessario False
     TV2_MapearAtividadesCanonicas
-    TV2_GarantirServicoCanonico gTV2AtivCanonA, gTV2AtivDescA, 100@
-    TV2_GarantirServicoCanonico gTV2AtivCanonB, gTV2AtivDescB, 200@
-    TV2_GarantirServicoCanonico gTV2AtivCanonC, gTV2AtivDescC, 300@
+    TV2_RecriarServicosCanonicos
     SincronizarDescricoesCadServComAtividades True
 End Sub
 
@@ -770,6 +798,7 @@ Private Sub TV2_ResetBaseOperacional()
         SHEET_ENTIDADE, _
         SHEET_ENTIDADE_INATIVOS, _
         SHEET_CREDENCIADOS, _
+        SHEET_CAD_SERV, _
         SHEET_PREOS, _
         SHEET_CAD_OS, _
         SHEET_AUDIT, _
@@ -781,6 +810,7 @@ Private Sub TV2_ResetBaseOperacional()
         SHEET_EMPRESAS, _
         SHEET_ENTIDADE, _
         SHEET_CREDENCIADOS, _
+        SHEET_CAD_SERV, _
         SHEET_PREOS, _
         SHEET_CAD_OS)
         If TV2_CountRows(CStr(nomeOperacional)) <> 0 Then
@@ -1015,46 +1045,37 @@ Private Sub TV2_MapearAtividadesCanonicas()
     End If
 End Sub
 
-Private Sub TV2_GarantirServicoCanonico(ByVal ativId As String, ByVal descricaoAtiv As String, ByVal valorPadrao As Currency)
+Private Sub TV2_RecriarServicosCanonicos()
     Dim ws As Worksheet
-    Dim linha As Long
-    Dim ultima As Long
-    Dim linhaEncontrada As Long
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
     Set ws = ThisWorkbook.Sheets(SHEET_CAD_SERV)
-    ultima = UltimaLinhaAba(SHEET_CAD_SERV)
 
-    For linha = LINHA_DADOS To ultima
-        If IdsIguais(ws.Cells(linha, COL_SERV_ATIV_ID).Value, ativId) And _
-           IdsIguais(ws.Cells(linha, COL_SERV_ID).Value, "001") Then
-            linhaEncontrada = linha
-            Exit For
-        End If
-    Next linha
-
-    If linhaEncontrada = 0 Then
-        If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
-            Err.Raise 1004, "TV2_GarantirServicoCanonico", "Nao foi possivel preparar CAD_SERV."
-        End If
-
-        linhaEncontrada = TV2_NextDataRow(SHEET_CAD_SERV)
-        ws.Cells(linhaEncontrada, COL_SERV_ID).Value = "001"
-        ws.Cells(linhaEncontrada, COL_SERV_ATIV_ID).Value = ativId
-        ws.Cells(linhaEncontrada, COL_SERV_ATIV_DESC).Value = descricaoAtiv
-        ws.Cells(linhaEncontrada, COL_SERV_DESCRICAO).Value = descricaoAtiv
-        ws.Cells(linhaEncontrada, COL_SERV_VALOR_UNIT).Value = valorPadrao
-        ws.Cells(linhaEncontrada, COL_SERV_DT_CAD).Value = Now
-
-        Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
-    Else
-        If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then Exit Sub
-        ws.Cells(linhaEncontrada, COL_SERV_ATIV_DESC).Value = descricaoAtiv
-        ws.Cells(linhaEncontrada, COL_SERV_DESCRICAO).Value = descricaoAtiv
-        ws.Cells(linhaEncontrada, COL_SERV_VALOR_UNIT).Value = valorPadrao
-        Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        Err.Raise 1004, "TV2_RecriarServicosCanonicos", "Nao foi possivel preparar CAD_SERV."
     End If
+
+    ws.Range(ws.Cells(LINHA_DADOS, 1), ws.Cells(Application.WorksheetFunction.Max(UltimaLinhaAba(SHEET_CAD_SERV), LINHA_DADOS), 50)).ClearContents
+    TV2_EscreverServicoCanonico ws, LINHA_DADOS, gTV2AtivCanonA, gTV2AtivDescA, 100@
+    TV2_EscreverServicoCanonico ws, LINHA_DADOS + 1, gTV2AtivCanonB, gTV2AtivDescB, 200@
+    TV2_EscreverServicoCanonico ws, LINHA_DADOS + 2, gTV2AtivCanonC, gTV2AtivDescC, 300@
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+
+    If Abs(CDbl(TV2_ValorUnitServico(gTV2AtivCanonA, "001")) - 100#) > 0.001 Or _
+       Abs(CDbl(TV2_ValorUnitServico(gTV2AtivCanonB, "001")) - 200#) > 0.001 Or _
+       Abs(CDbl(TV2_ValorUnitServico(gTV2AtivCanonC, "001")) - 300#) > 0.001 Then
+        Err.Raise 1004, "TV2_RecriarServicosCanonicos", "CAD_SERV canonico nao persistiu apos recriacao."
+    End If
+End Sub
+
+Private Sub TV2_EscreverServicoCanonico(ByVal ws As Worksheet, ByVal linha As Long, ByVal ativId As String, ByVal descricaoAtiv As String, ByVal valorPadrao As Currency)
+    ws.Cells(linha, COL_SERV_ID).Value = "001"
+    ws.Cells(linha, COL_SERV_ATIV_ID).Value = ativId
+    ws.Cells(linha, COL_SERV_ATIV_DESC).Value = descricaoAtiv
+    ws.Cells(linha, COL_SERV_DESCRICAO).Value = descricaoAtiv
+    ws.Cells(linha, COL_SERV_VALOR_UNIT).Value = valorPadrao
+    ws.Cells(linha, COL_SERV_DT_CAD).Value = Now
 End Sub
 
 Public Sub TV2_CadastrarEntidadeCanonica(ByVal entId As String, ByVal nome As String)
@@ -2323,12 +2344,42 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "MIG_005", "AUTO", "Validar backfill auditavel de DT_ULT_REATIV", "Apenas conferir o resultado automatizado do cenario", "Backfill preenche DT_ULT_REATIV a partir do AUDIT_LOG e deixa auditoria BACKFILL_DT_ULT_REATIV", "Linha do cenario MIG_005", "Evita que base migrada volte ao modo legado sem diagnostico", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "MIG_006", "AUTO", "Validar limpeza controlada de residuos CAD_OS", "Apenas conferir o resultado automatizado do cenario", "Residuo sem OS_ID e limpo sem mascarar orfa real", "Linha do cenario MIG_006", "Fecha INT-CAD-OS-REF-ORFA com migracao rastreavel", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "MIG_007", "AUTO", "Validar bloqueio de DT_ULT_REATIV invalida", "Apenas conferir o resultado automatizado do cenario", "Contador de strikes falha explicitamente sem cair no modo legado", "Linha do cenario MIG_007", "Evita punicao com janela de reativacao corrompida", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "MIG_008", "AUTO", "Validar configuracao invalida de strikes", "Apenas conferir o resultado automatizado do cenario", "Mensagem clara e auditoria CONFIG_INVALIDA antes de gravar CONFIG", "Linha do cenario MIG_008", "Evita parametros invalidos ignorados silenciosamente", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "MIG_009", "AUTO", "Validar Limpar Base com CAD_SERV zerado e CNAE preservado", "Apenas conferir o resultado automatizado do cenario", "ATIVIDADES preservada; CAD_SERV zerado; relatorio sem CAD_SERV em preservados", "Linha do cenario MIG_009", "Permite idempotencia real ao preparar workbook para outro municipio", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_001_REENTRADA_MUTADORES", "AUTO", "Validar guards de reentrada nos forms mutadores", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Flags declaradas, testadas, ligadas e desligadas", "Linha UI_ADV_001 no resultado", "Impede duplo clique criando mutacao duplicada", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_002_REATIVA_EMPRESA_INTEGRIDADE", "AUTO", "Validar saneamento na reativacao de empresa", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Conflito, duplicidade ativa, confirmacao, servicos e reset de guard presentes", "Linha UI_ADV_002 no resultado", "Bloqueia duplicidade ativa/inativa e bypass silencioso", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_003_REATIVA_ENTIDADE_SERVICO", "AUTO", "Validar reativacao de entidade via servico", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Confirmacao, guard e ReativarEntidadePorChave presentes", "Linha UI_ADV_003 no resultado", "Evita reativacao direta sem trilha de servico", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_004_ALTERA_EMPRESA_CONFIRMA_IDS", "AUTO", "Validar alteracao/inativacao de empresa", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Confirmacoes, IdsIguais e guards presentes", "Linha UI_ADV_004 no resultado", "Protege edicao contra ID texto-numero e duplo clique", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_005_ALTERA_ENTIDADE_CONFIRMA_IDS", "AUTO", "Validar alteracao/inativacao de entidade", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Confirmacoes, IdsIguais e guards presentes", "Linha UI_ADV_005 no resultado", "Protege edicao de entidade contra ID texto-numero e duplo clique", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_006_AVALIAR_OS_GUARDS", "AUTO", "Validar defesa da avaliacao de OS", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Guard, confirmacao, parse de datas, justificativa e cleanup presentes", "Linha UI_ADV_006 no resultado", "Evita avaliacao duplicada ou sem justificativa", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_007_PREOS_OS_DESTRUTIVOS", "AUTO", "Validar confirmacao em acoes destrutivas", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "BeginWrite e confirmacao presentes para rejeitar, expirar e cancelar", "Linha UI_ADV_007 no resultado", "Evita mutacao destrutiva sem fronteira e confirmacao", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_008_LIMPAR_BASE_FORM_GUARD", "AUTO", "Validar form Limpar_Base", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Senha, guard, chamada e erro contextual presentes", "Linha UI_ADV_008 no resultado", "Reduz risco de limpeza duplicada ou falha muda", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_009_LIMPAR_BASE_CONFIRMACAO", "AUTO", "Validar confirmacao da limpeza total", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Confirmacao destrutiva, reset centralizado e salvamento seguro presentes", "Linha UI_ADV_009 no resultado", "Protege a acao mais destrutiva do workbook", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_010_CENTRAL_V2_EXPOE_SUITE", "AUTO", "Validar exposicao da suite na Central V2", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Wrapper e texto de menu presentes", "Linha UI_ADV_010 no resultado", "Garante que a suite nova esteja acessivel ao humano", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_011_SEXTETO_GATE_EXPOSTO", "AUTO", "Validar gate Sexteto", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Sub oficial, wrapper, sintaxe e mensagem final presentes", "Linha UI_ADV_011 no resultado", "Garante que o gate novo esteja testado e auditavel", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "UI_ADV_012_LIMPAR_BASE_SEM_SENHA_CLARA", "AUTO", "Validar ausencia de senha clara no form", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Token sensivel ausente do codigo do form", "Linha UI_ADV_012 no resultado", "Evita regressao de senha hardcoded em acao destrutiva", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "CS_REATIV_AUDIT_DUAL_COUNTER", "AUTO", "Validar dupla contagem no AUDIT_LOG", "Executar E2E Strikes e conferir a linha automatizada", "DUAL_COUNTER=SIM com STRIKES_TOTAL e STRIKES_PUNICAO", "Linha CS_REATIV_AUDIT_DUAL_COUNTER", "Torna visivel ao operador o contador bruto e o punitivo", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_REATIV_BORDA_ANTERIOR", "AUTO", "Validar fechamento anterior ao corte de reativacao", "Executar E2E Strikes e conferir a linha automatizada", "STRIKES_PUNICAO=0", "Linha CS_REATIV_BORDA_ANTERIOR", "Prova que historico anterior fica fora da janela punitiva", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_REATIV_BORDA_IGUAL", "AUTO", "Validar fechamento igual ao corte de reativacao", "Executar E2E Strikes e conferir a linha automatizada", "STRIKES_PUNICAO=0", "Linha CS_REATIV_BORDA_IGUAL", "Formaliza a regra estrita DT_FECHAMENTO > DT_ULT_REATIV", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_REATIV_BORDA_POSTERIOR", "AUTO", "Validar fechamento posterior ao corte de reativacao", "Executar E2E Strikes e conferir a linha automatizada", "STRIKES_PUNICAO=1", "Linha CS_REATIV_BORDA_POSTERIOR", "Garante que strikes novos continuam punitivos", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "CS_REATIV_BORDA_FUTURA", "AUTO", "Validar DT_ULT_REATIV futura", "Executar E2E Strikes e conferir a linha automatizada", "STRIKES_PUNICAO=0", "Linha CS_REATIV_BORDA_FUTURA", "Evita retorno ao historico antigo quando o corte futuro nao alcanca nenhuma OS", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "ATM_001", "AUTO", "Validar rollback do avancar punido", "Apenas conferir o resultado automatizado do cenario", "Falha controlada sem alterar fila nem recusas, com rastro de auditoria", "Linha do cenario ATM_001", "Prova atomicidade minima no fluxo de recusa", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "ATM_002", "AUTO", "Validar rejeicao de transacao aninhada", "Apenas conferir o resultado automatizado do cenario", "Erro explicito, transacao externa preservada e auditoria TRANSACAO_ANINHADA registrada", "Linha do cenario ATM_002", "Fecha a lacuna R-48 de atomicidade", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "TX_INT_001_COMMIT_LIMPA_ESTADO", "AUTO", "Validar commit limpando estado", "Executar TV2_RunTransaction_Interrupt False e conferir a linha automatizada", "Transacao inativa, id vazio e auditoria COMMIT", "Linha TX_INT_001 no resultado", "Evita vazamento de estado global apos commit", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "TX_INT_002_ROLLBACK_SEM_WRITE_LIMPA_ESTADO", "AUTO", "Validar rollback sem writes", "Executar TV2_RunTransaction_Interrupt False e conferir a linha automatizada", "Rollback verdadeiro, transacao inativa e id vazio", "Linha TX_INT_002 no resultado", "Garante cleanup antes da primeira escrita", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "TX_INT_003_ROLLBACK_RESTAURA_VALOR", "AUTO", "Validar rollback restaurando valor", "Executar TV2_RunTransaction_Interrupt False e conferir a linha automatizada", "Valor original restaurado e auditoria ROLLBACK", "Linha TX_INT_003 no resultado", "Prova rollback unitario sem tocar dado operacional", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "TX_INT_004_ANINHADA_PRESERVA_EXTERNA", "AUTO", "Validar transacao aninhada", "Executar TV2_RunTransaction_Interrupt False e conferir a linha automatizada", "Erro explicito, id externo preservado e auditoria ANINHADA", "Linha TX_INT_004 no resultado", "Impede corrupcao por reentrada transacional", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "TX_INT_005_COMMIT_APOS_ROLLBACK_NAO_REABRE", "AUTO", "Validar commit apos rollback", "Executar TV2_RunTransaction_Interrupt False e conferir a linha automatizada", "Estado permanece inativo e id vazio", "Linha TX_INT_005 no resultado", "Fecha cleanup defensivo em ordem duplicada", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "TX_INT_006_ROLLBACK_DUPLO_IDEMPOTENTE", "AUTO", "Validar rollback duplo", "Executar TV2_RunTransaction_Interrupt False e conferir a linha automatizada", "Duas chamadas verdadeiras, transacao inativa e id vazio", "Linha TX_INT_006 no resultado", "Protege handlers Public contra cleanup repetido", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "DATE_BND_001_OS_DATA_VAZIA_DEFAULT", "AUTO", "Validar data vazia no preparo de OS", "Executar TV2_RunBoundary_Dates False e conferir a linha automatizada", "Sucesso, DT_PREV >= hoje e empenho preenchido", "Linha DATE_BND_001 no resultado", "Fecha campo opcional vazio sem erro falso", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "DATE_BND_002_OS_HOJE_PERMITIDO", "AUTO", "Validar data de hoje", "Executar TV2_RunBoundary_Dates False e conferir a linha automatizada", "Sucesso e DT_PREV igual a hoje", "Linha DATE_BND_002 no resultado", "Documenta a fronteira inferior inclusiva", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "DATE_BND_003_OS_ONTEM_REJEITADO", "AUTO", "Validar data passada", "Executar TV2_RunBoundary_Dates False e conferir a linha automatizada", "Falha explicita com mensagem de data anterior", "Linha DATE_BND_003 no resultado", "Impede prazo retroativo em OS", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "DATE_BND_004_OS_31_FEV_REJEITADO", "AUTO", "Validar data inexistente", "Executar TV2_RunBoundary_Dates False e conferir a linha automatizada", "Falha explicita por data invalida", "Linha DATE_BND_004 no resultado", "Bloqueia rollover silencioso do parser", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "DATE_BND_005_OS_BISSEXTO_VALIDO", "AUTO", "Validar 29/02 bissexto", "Executar TV2_RunBoundary_Dates False e conferir a linha automatizada", "Sucesso com DT_PREV=2028-02-29", "Linha DATE_BND_005 no resultado", "Preserva data valida rara", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "DATE_BND_006_OS_BISSEXTO_INVALIDO", "AUTO", "Validar 29/02 nao bissexto", "Executar TV2_RunBoundary_Dates False e conferir a linha automatizada", "Falha explicita por data invalida", "Linha DATE_BND_006 no resultado", "Evita rollover para marco", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "DATE_BND_007_OS_ANO_CURTO_2030", "AUTO", "Validar ano curto", "Executar TV2_RunBoundary_Dates False e conferir a linha automatizada", "Sucesso com DT_PREV=2030-12-31", "Linha DATE_BND_007 no resultado", "Documenta contrato de ano com dois digitos", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "DATE_BND_008_AVAL_DATA_EQUIVALENTE_SEM_MUDANCA", "AUTO", "Validar data equivalente na avaliacao", "Executar TV2_RunBoundary_Dates False e conferir a linha automatizada", "Sem mudanca quando texto e Date sao o mesmo dia", "Linha DATE_BND_008 no resultado", "Evita confirmacao falsa", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "DATE_BND_009_AVAL_DATA_DIFERENTE_COM_MUDANCA", "AUTO", "Validar data alterada na avaliacao", "Executar TV2_RunBoundary_Dates False e conferir a linha automatizada", "Mudanca detectada e resumo cita Data de fechamento", "Linha DATE_BND_009 no resultado", "Mantem alteracao real rastreavel", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "FLT_001", "AUTO", "Validar normalizacao deterministica do termo de busca", "Executar a opcao 13 da Central V2 e conferir a linha FLT_001", "SERVICO ACAO", "Linha do cenario FLT_001", "Define o contrato comum antes de plugar nos formularios", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "FLT_002", "AUTO", "Validar filtro vazio preservando registros", "Executar a opcao 13 da Central V2 e conferir a linha FLT_002", "4 linhas preservadas", "Linha do cenario FLT_002", "Evita tela vazia quando o campo de busca esta limpo", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "FLT_003", "AUTO", "Validar busca sem acento em texto acentuado", "Executar a opcao 13 da Central V2 e conferir a linha FLT_003", "Apenas ID 001", "Linha do cenario FLT_003", "Garante busca previsivel por nome ou servico", "AUTOMATIZADO"

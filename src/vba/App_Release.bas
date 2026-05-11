@@ -4,17 +4,17 @@ Option Explicit
 ' Metadata centralizada da release atual.
 ' O Menu_Principal apenas consome estas funcoes.
 
-Public Const APP_RELEASE_ATUAL As String = "V12.0.0202"
-Public Const APP_RELEASE_STATUS As String = "RELEASE_CANDIDATE"
-Public Const APP_RELEASE_CANAL As String = "DESENVOLVIMENTO"
+Public Const APP_RELEASE_ATUAL As String = "V12.0.0204"
+Public Const APP_RELEASE_STATUS As String = "VALIDADO"
+Public Const APP_RELEASE_CANAL As String = "OFICIAL"
 Public Const APP_RELEASE_ALVO As String = "V12.0.0204"
-Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0202|DESENVOLVIMENTO|V12.0.0204"
+Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0204|OFICIAL|V12.0.0204"
 ' V12.0.0203 ONDA 5 - carimbo manual do build (sem rodar publicar_vba_import.sh).
 ' V12.0.0203 ONDA 10 - bump auto via IV3_BumpBuildLabel / ImportarPacoteV3_Delta.
 ' V12.0.0203 ONDA 11 - rc1 bump: TAG=v12.0.0203-rc1, STATUS=RELEASE_CANDIDATE,
 ' EVIDENCE_DIR=auditoria/evidencias/V12.0.0203, TEST_KEY=quarteto-2026-05-02
 ' (Quarteto = V1+V2_Smoke+V2_Canonica+E2E_Strikes vira gate oficial; Q7 do
-' operador 2026-05-02). APP_RELEASE_ATUAL fica V12.0.0202 ate FECH final.
+' operador 2026-05-02). APP_RELEASE_ATUAL foi promovido para V12.0.0204 no FECH final.
 ' Identificador semantico: <commit-base>+ONDA<NN>-em-homologacao quando a arvore
 ' tem mudancas nao commitadas; trocar para <commit-base>+ONDA<NN>-homologado
 ' apos commitar a onda. AppRelease_BuildImportadoRotulo trata os dois sufixos.
@@ -222,12 +222,41 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0202|DESENVOLVIMENTO|V12.0
 ' V12.0.0204 ONDA 22 MD-22.4 (2026-05-07) - E2E_Strikes cobre bordas
 ' temporais da janela punitiva pos-reativacao: fechamento anterior, igual,
 ' posterior e DT_ULT_REATIV futura.
-Public Const APP_BUILD_IMPORTADO As String = "f7aa84f+ONDA22.MD22.4-bordas-temporais-strikes"
+' V12.0.0204 ONDA 23 MD-23.1 (2026-05-07) - adiciona suite
+' TV2_RunAdversarial_UI read-only para validar guards, confirmacoes,
+' fronteiras destrutivas e exposicao da Central V2 sem tocar dados.
+' V12.0.0204 ONDA 23 MD-23.2 (2026-05-07) - adiciona suite
+' TV2_RunTransaction_Interrupt para cobrir interrupcoes, cleanup duplicado
+' e idempotencia da transacao minima.
+' V12.0.0204 ONDA 23 MD-23.3 (2026-05-07) - adiciona suite
+' TV2_RunBoundary_Dates para cobrir parser de datas e normalizacao de
+' data em avaliacao sem tocar dados operacionais.
+' V12.0.0204 ONDA 23 MD-23.5 (2026-05-09) - adiciona gate Sexteto:
+' Quinteto + bloco adversarial Onda 23 (UI + transacao + datas).
+' V12.0.0204 ONDA 24 MD-24.1 (2026-05-09) - Limpar_Base seguro:
+' senha clara sai do form; validacao centralizada em Mod_Limpeza_Base;
+' Adversarial UI ganha cenario anti-regressao.
+' V12.0.0204 ONDA 24 MD-24.2 (2026-05-09) - Configuracao invalida
+' deixa de ser ignorada silenciosamente: form bloqueia gravacao, mostra
+' mensagem clara e registra Validacao Rejeitada/CONFIG_INVALIDA.
+' V12.0.0204 ONDA 24 MD-24.3 (2026-05-09) - Avaliacao com nota baixa
+' registra dual-counter auditavel: STRIKES_TOTAL bruto + STRIKES_PUNICAO
+' na janela pos-reativacao.
+' V12.0.0204 ONDA 25 MD-25.1 (2026-05-09) - rc1: congela base
+' MICRO48, alinha evidencia V204 e defere MD-24.4 para V205.
+' V12.0.0204 ONDA 25 MD-25.5 (2026-05-11) - MICRO53: Limpar_Base
+' zera CAD_SERV preservando ATIVIDADES/CONFIG; Cadastro_Servico evita
+' filtro/form stale no refresh pos-modal. Smoke ganha MIG_009.
+' MICRO53-fix1: CorrigirMojibakeBasico troca literais mojibake por ChrW$
+' para eliminar erro de sintaxe no compile manual do Preencher.bas.
+' MICRO53-fix2: TV2_PrepararBaselineCanonica recria CAD_SERV canonico
+' de forma deterministica apos reset, cobrindo o novo contrato do Limpar_Base.
+Public Const APP_BUILD_IMPORTADO As String = "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0203-governanca-testes"
-Public Const APP_BUILD_GERADO_EM As String = "2026-05-07 00:25"
-Public Const APP_RELEASE_TAG As String = "v12.0.0204-dev"
+Public Const APP_BUILD_GERADO_EM As String = "2026-05-11 13:10"
+Public Const APP_RELEASE_TAG As String = "v12.0.0204"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0204"
-Public Const APP_RELEASE_TEST_KEY As String = "quinteto-v204-onda22-md22-4-2026-05-07"
+Public Const APP_RELEASE_TEST_KEY As String = "sexteto-v204-final-2026-05-11"
 Public Const APP_GITHUB_REPO_URL As String = "https://github.com/rwv8gscs8g-blip/credenciamento"
 Public Const APP_GITHUB_RELEASE_NOTES_URL As String = APP_GITHUB_REPO_URL & "/tree/main/obsidian-vault/releases"
 

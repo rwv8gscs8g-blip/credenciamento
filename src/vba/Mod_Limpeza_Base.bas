@@ -32,7 +32,6 @@ Option Explicit
 '
 ' O que PRESERVA (nao toca):
 '   - ATIVIDADES (CNAE)
-'   - CAD_SERV
 '   - CONFIG
 '
 ' Idempotencia: pode rodar N vezes seguidas, sempre deixa as
@@ -43,6 +42,30 @@ Option Explicit
 ' os arrays equivalentes em local-ai/vba_import/Limpa_Base_Total.bas
 ' (ate o dia que a descartavel for removida).
 ' ============================================================
+
+Public Function MLB_SenhaLimpezaValida(ByVal senhaInformada As String) As Boolean
+    MLB_SenhaLimpezaValida = (StrComp(MLB_NormalizarSenhaLimpeza(senhaInformada), _
+                                      MLB_SenhaLimpezaEsperada(), vbBinaryCompare) = 0)
+End Function
+
+Public Sub MLB_RegistrarTentativaLimpeza(ByVal autorizada As Boolean, ByVal detalhe As String)
+    On Error Resume Next
+    Call RegistrarEvento( _
+        EVT_TRANSACAO, ENT_ATIV, "LIMPAR_BASE", _
+        "OPERACAO=LIMPAR_BASE; ORIGEM=Limpar_Base.frm", _
+        "AUTORIZADA=" & CStr(autorizada) & "; DETALHE=" & detalhe, _
+        Application.UserName)
+    On Error GoTo 0
+End Sub
+
+Private Function MLB_NormalizarSenhaLimpeza(ByVal valor As String) As String
+    MLB_NormalizarSenhaLimpeza = Trim$(CStr(valor))
+End Function
+
+Private Function MLB_SenhaLimpezaEsperada() As String
+    MLB_SenhaLimpezaEsperada = Chr$(115) & Chr$(101) & Chr$(98) & Chr$(114) & _
+                               Chr$(97) & Chr$(101) & CStr(2024)
+End Function
 
 Public Function LimpaBaseTotalReset(Optional ByRef relatorioOut As String) As Boolean
     Dim relatorio As String
@@ -56,6 +79,7 @@ Public Function LimpaBaseTotalReset(Optional ByRef relatorioOut As String) As Bo
     relatorio = relatorio & MLB_LimparAba("ENTIDADE", MLB_CabecalhoEntidade()) & vbCrLf
     relatorio = relatorio & MLB_LimparAba("ENTIDADE_INATIVOS", MLB_CabecalhoEntidade()) & vbCrLf
     relatorio = relatorio & MLB_LimparAba("CREDENCIADOS", MLB_CabecalhoCredenciados()) & vbCrLf
+    relatorio = relatorio & MLB_LimparAba("CAD_SERV", MLB_CabecalhoCadServ()) & vbCrLf
     relatorio = relatorio & MLB_LimparAba("PRE_OS", MLB_CabecalhoPreOS()) & vbCrLf
     relatorio = relatorio & MLB_LimparAba("CAD_OS", MLB_CabecalhoCadOS()) & vbCrLf
     relatorio = relatorio & MLB_LimparAba("AUDIT_LOG", MLB_CabecalhoAudit()) & vbCrLf
@@ -63,7 +87,6 @@ Public Function LimpaBaseTotalReset(Optional ByRef relatorioOut As String) As Bo
 
     relatorio = relatorio & vbCrLf & "PRESERVADO (nao tocado):" & vbCrLf
     relatorio = relatorio & "  - ATIVIDADES (CNAE)" & vbCrLf
-    relatorio = relatorio & "  - CAD_SERV" & vbCrLf
     relatorio = relatorio & "  - CONFIG" & vbCrLf
 
     MLB_GravarRelatorio relatorio
@@ -232,6 +255,12 @@ Private Function MLB_CabecalhoCredenciados() As Variant
         "CRED_ID", "COD_ATIV_SERV", "EMP_ID", "CNPJ", "RAZAO_SOCIAL", _
         "POSICAO", "ULT_OS", "DT_ULT_OS", "INATIVO_FLAG", "ATIV_ID", _
         "RECUSAS", "EXPIRACOES", "STATUS", "DT_ULT_INDICACAO", "DT_CREDENCIAMENTO")
+End Function
+
+Private Function MLB_CabecalhoCadServ() As Variant
+    MLB_CabecalhoCadServ = Array( _
+        "SERV_ID", "ATIV_ID", "ATIV_DESC", "DESCRICAO", "VALOR_UNIT", _
+        "RESERVA1", "RESERVA2", "RESERVA3", "DT_CAD")
 End Function
 
 Private Function MLB_CabecalhoPreOS() As Variant

@@ -4,10 +4,12 @@ Option Explicit
 ' Orquestrador minimo de homologacao da release:
 ' Trio Minimo  : V1 rapida + V2 Smoke + V2 Canonica.
 ' Quarteto Min.: V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes (Onda 11 MD-3 / DT-1).
+' Quinteto Min.: Quarteto + V2 IntegridadeBase.
+' Sexteto Min. : Quinteto + bloco adversarial Onda 23.
 ' Cada gate escreve evidencia copiavel para IA/humano em VALIDACAO_RELEASE.
 
 Private Const VR_SHEET As String = "VALIDACAO_RELEASE"
-Private Const VR_RELEASE_ALVO As String = "V12.0.0203"
+Private Const VR_RELEASE_ALVO As String = "V12.0.0204"
 Private Const VR_STATUS_OK As String = "OK"
 Private Const VR_STATUS_FAIL As String = "FALHA"
 
@@ -186,7 +188,7 @@ Private Function VR_PrepararSheet(ByVal validacaoId As String) As Worksheet
 
     Set ws = VR_EnsureSheet()
     On Error Resume Next
-    If ws.ProtectContents Then ws.Unprotect Password:="sebrae2024"
+    Call Util_DesprotegerAbaComTentativas(ws)
     ws.Cells.UnMerge
     ws.Cells.Clear
     On Error GoTo 0
@@ -949,6 +951,309 @@ Private Sub VR_FormatarSheetQuinteto(ByVal ws As Worksheet, ByVal statusGeral As
     ws.Columns(12).ColumnWidth = 42
     ws.Range(ws.Cells(6, 1), ws.Cells(11, 12)).AutoFilter
     ws.Range(ws.Cells(1, 1), ws.Cells(15, 12)).Borders.LineStyle = xlContinuous
+    ws.Cells.WrapText = True
+    On Error GoTo 0
+End Sub
+
+'======================================================================
+' Sexteto Minimo (Onda 23 MD-23.5)
+'   Etapas (linhas em VALIDACAO_RELEASE):
+'     7  V1_RAPIDA
+'     8  V2_SMOKE
+'     9  V2_CANONICO
+'     10 V2_E2E_STRIKES
+'     11 V2_INTEGRIDADE_BASE
+'     12 V2_ONDA23_ADV
+'     14 RESULTADO_GERAL
+'     15 BLOCO_COPIAVEL_PARA_IA (label)
+'     16 bloco merge
+'   A sexta etapa agrega as suites adversariais aprovadas na Onda 23:
+'     ADVERSARIAL_UI + TRANSACAO_INTERRUPT + BOUNDARY_DATES.
+'   Quinteto permanece intocado para compatibilidade operacional.
+'======================================================================
+Public Sub CT_ValidarRelease_SextetoMinimo()
+    Dim ws As Worksheet
+    Dim validacaoId As String
+    Dim statusGeral As String
+    Dim csvResumo As String
+    Dim msgFinal As String
+    Dim estiloMsg As Long
+
+    On Error GoTo falha
+
+    validacaoId = "VR_" & Format$(Now, "yyyymmdd_hhnnss")
+    Set ws = VR_PrepararSheet(validacaoId)
+    ws.Cells(1, 1).Value = "VALIDACAO RELEASE - SEXTETO MINIMO"
+
+    Application.StatusBar = "Validacao Sexteto: V1 rapida"
+    BA_SetModoExecucaoVisual False
+    RunBateriaOficial True
+    VR_RegistrarEtapaV1 ws, validacaoId, 7
+
+    Application.StatusBar = "Validacao Sexteto: V2 Smoke"
+    TV2_RunSmoke False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 8, "V2_SMOKE", TV2_ExecucaoAtualId()
+
+    Application.StatusBar = "Validacao Sexteto: V2 Canonica"
+    TV2_RunCanonicoFundacao False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 9, "V2_CANONICO", TV2_ExecucaoAtualId()
+
+    Application.StatusBar = "Validacao Sexteto: E2E Strikes"
+    TV2_RunRodizioStrikesEndToEnd False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 10, "V2_E2E_STRIKES", TV2_ExecucaoAtualId()
+
+    Application.StatusBar = "Validacao Sexteto: IntegridadeBase"
+    TV2_RunIntegridadeBase False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 11, "V2_INTEGRIDADE_BASE", TV2_ExecucaoAtualId()
+
+    Application.StatusBar = "Validacao Sexteto: Onda 23 adversarial"
+    VR_RegistrarEtapaOnda23 ws, validacaoId, 12
+
+    statusGeral = VR_StatusGeralSexteto(ws)
+    csvResumo = VR_ExportarResumoCSVSexteto(ws, validacaoId, statusGeral)
+    VR_EscreverResumoIASexteto ws, validacaoId, statusGeral, csvResumo
+    VR_FormatarSheetSexteto ws, statusGeral
+
+    Application.StatusBar = False
+    ws.Activate
+    ws.Range("A1").Select
+
+    Dim csvStatusMsgS6 As String
+    If Len(csvResumo) > 0 And Dir(csvResumo) <> "" Then
+        csvStatusMsgS6 = "CSV resumo (gerado):" & vbCrLf & csvResumo
+    ElseIf Len(csvResumo) > 0 Then
+        csvStatusMsgS6 = "CSV resumo NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
+                         "(verificar permissoes ou erro de I/O - caminho retornado pelo exporter mas Dir() vazio)"
+    Else
+        csvStatusMsgS6 = "CSV resumo: nao exportado (caminho vazio)"
+    End If
+
+    msgFinal = "Validacao Sexteto concluida." & vbCrLf & _
+               "ID: " & validacaoId & vbCrLf & _
+               "Resultado: " & statusGeral & vbCrLf & vbCrLf & _
+               "Sintaxe: " & VR_SintaxeSexteto(ws) & vbCrLf & vbCrLf & _
+               csvStatusMsgS6
+    If statusGeral = "APROVADO" Then
+        estiloMsg = vbInformation
+    Else
+        estiloMsg = vbExclamation
+    End If
+    MsgBox msgFinal, estiloMsg, "Validacao Release Sexteto"
+    Exit Sub
+
+falha:
+    Application.StatusBar = False
+    MsgBox "Erro na validacao Sexteto: " & Err.Description & vbCrLf & _
+           "Codigo: " & CStr(Err.Number) & vbCrLf & _
+           "Origem: " & Err.Source, _
+           vbCritical, "Validacao Release Sexteto"
+End Sub
+
+Public Sub VR_ValidarReleaseSextetoMinimo()
+    CT_ValidarRelease_SextetoMinimo
+End Sub
+
+Private Sub VR_RegistrarEtapaOnda23(ByVal ws As Worksheet, ByVal validacaoId As String, ByVal linha As Long)
+    Dim okTotal As Long
+    Dim falhaTotal As Long
+    Dim manualTotal As Long
+    Dim execIds As String
+    Dim csvFalhas As String
+    Dim primeiraFalha As String
+    Dim acao As String
+
+    TV2_RunAdversarial_UI False, True
+    VR_AgregarUltimaV2 "ADVERSARIAL_UI", okTotal, falhaTotal, manualTotal, execIds, csvFalhas, primeiraFalha
+
+    TV2_RunTransaction_Interrupt False, True
+    VR_AgregarUltimaV2 "TRANSACAO_INTERRUPT", okTotal, falhaTotal, manualTotal, execIds, csvFalhas, primeiraFalha
+
+    TV2_RunBoundary_Dates False, True
+    VR_AgregarUltimaV2 "BOUNDARY_DATES", okTotal, falhaTotal, manualTotal, execIds, csvFalhas, primeiraFalha
+
+    If falhaTotal > 0 Then
+        If csvFalhas = "" Then csvFalhas = "NAO_EXPORTADO"
+        acao = "Corrigir a primeira falha do bloco adversarial e reexecutar o Sexteto."
+    Else
+        csvFalhas = "NAO_EXPORTADO"
+        primeiraFalha = ""
+        acao = "Sem acao corretiva."
+    End If
+
+    VR_EscreverLinha ws, linha, validacaoId, "V2_ONDA23_ADV", execIds, okTotal, falhaTotal, manualTotal, csvFalhas, primeiraFalha, acao
+End Sub
+
+Private Sub VR_AgregarUltimaV2( _
+    ByVal suiteNome As String, _
+    ByRef okTotal As Long, _
+    ByRef falhaTotal As Long, _
+    ByRef manualTotal As Long, _
+    ByRef execIds As String, _
+    ByRef csvFalhas As String, _
+    ByRef primeiraFalha As String)
+
+    Dim execId As String
+    Dim falhaSuite As Long
+    Dim csvAtual As String
+    Dim primeiraAtual As String
+
+    execId = TV2_ExecucaoAtualId()
+    falhaSuite = TV2_UltimoFail()
+
+    okTotal = okTotal + TV2_UltimoOk()
+    falhaTotal = falhaTotal + falhaSuite
+    manualTotal = manualTotal + TV2_UltimoManual()
+
+    If execIds <> "" Then execIds = execIds & "|"
+    execIds = execIds & suiteNome & ":" & execId
+
+    If falhaSuite > 0 Then
+        csvAtual = VR_CsvFalhasV2(execId)
+        If csvAtual = "" Then csvAtual = TV2_ExportarFalhasCSV(execId)
+        If csvAtual <> "" Then
+            If csvFalhas <> "" Then csvFalhas = csvFalhas & " | "
+            csvFalhas = csvFalhas & suiteNome & ":" & csvAtual
+        End If
+
+        If primeiraFalha = "" Then
+            primeiraAtual = VR_PrimeiraFalhaV2(execId)
+            If primeiraAtual <> "" Then
+                primeiraFalha = suiteNome & " -> " & primeiraAtual
+            End If
+        End If
+    End If
+End Sub
+
+Private Function VR_StatusGeralSexteto(ByVal ws As Worksheet) As String
+    Dim r As Long
+    For r = 7 To 12
+        If UCase$(Trim$(CStr(ws.Cells(r, 9).Value))) <> VR_STATUS_OK Then
+            VR_StatusGeralSexteto = "REPROVADO"
+            Exit Function
+        End If
+    Next r
+    VR_StatusGeralSexteto = "APROVADO"
+End Function
+
+Private Function VR_SintaxeSexteto(ByVal ws As Worksheet) As String
+    Dim s As String
+    s = "V1=" & CStr(ws.Cells(7, 6).Value) & "/" & CStr(ws.Cells(7, 7).Value)
+    s = s & "+V2_Smoke=" & CStr(ws.Cells(8, 6).Value) & "/" & CStr(ws.Cells(8, 7).Value)
+    s = s & "+V2_Canonica=" & CStr(ws.Cells(9, 6).Value) & "/" & CStr(ws.Cells(9, 7).Value)
+    s = s & "+E2E_Strikes=" & CStr(ws.Cells(10, 6).Value) & "/" & CStr(ws.Cells(10, 7).Value)
+    s = s & "+IntegridadeBase=" & CStr(ws.Cells(11, 6).Value) & "/" & CStr(ws.Cells(11, 7).Value)
+    s = s & "+Onda23Adv=" & CStr(ws.Cells(12, 6).Value) & "/" & CStr(ws.Cells(12, 7).Value)
+    VR_SintaxeSexteto = s
+End Function
+
+Private Sub VR_EscreverResumoIASexteto(ByVal ws As Worksheet, ByVal validacaoId As String, ByVal statusGeral As String, ByVal csvResumo As String)
+    Dim bloco As String
+
+    bloco = "VALIDACAO_RELEASE=" & validacaoId & vbLf
+    bloco = bloco & "BUILD=" & VR_BuildImportado() & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 7) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 8) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 9) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 10) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 11) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 12) & vbLf
+    bloco = bloco & "RESULTADO=" & statusGeral & vbLf
+    bloco = bloco & "SINTAXE=" & VR_SintaxeSexteto(ws) & vbLf
+    bloco = bloco & "CSV_RESUMO=" & csvResumo
+
+    ws.Cells(15, 1).Value = "BLOCO_COPIAVEL_PARA_IA"
+    ws.Cells(16, 1).Value = bloco
+    ws.Range(ws.Cells(16, 1), ws.Cells(16, 12)).Merge
+    ws.Cells(16, 1).WrapText = True
+    ws.Rows(16).RowHeight = 165
+End Sub
+
+Private Function VR_ExportarResumoCSVSexteto(ByVal ws As Worksheet, ByVal validacaoId As String, ByVal statusGeral As String) As String
+    Dim pasta As String
+    Dim caminho As String
+    Dim fNum As Integer
+    Dim r As Long
+
+    On Error GoTo falha
+
+    pasta = VR_PastaSaida()
+    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseSexteto_V12_0_0203_" & validacaoId & ".csv"
+
+    fNum = FreeFile
+    Open caminho For Output As #fNum
+    Print #fNum, "VALIDACAO_ID;BUILD;DATA_HORA;ETAPA;EXECUCAO_ID;OK;FALHA;MANUAL;STATUS;CSV_FALHAS;PRIMEIRA_FALHA;ACAO_IA"
+
+    For r = 7 To 12
+        Print #fNum, VR_CsvLinha(ws, r)
+    Next r
+
+    Print #fNum, VR_CsvCell(validacaoId) & ";" & VR_CsvCell(VR_BuildImportado()) & ";" & _
+        VR_CsvCell(Format$(Now, "dd/mm/yyyy hh:nn:ss")) & ";GERAL;;;;;" & _
+        VR_CsvCell(statusGeral) & ";;;" & _
+        VR_CsvCell("Sexteto V1+V2_Smoke+V2_Canonica+E2E_Strikes+IntegridadeBase+Onda23Adv; usar como evidencia textual.")
+
+    Close #fNum
+    VR_ExportarResumoCSVSexteto = caminho
+    Exit Function
+
+falha:
+    On Error Resume Next
+    If fNum <> 0 Then Close #fNum
+    VR_ExportarResumoCSVSexteto = ""
+End Function
+
+Private Sub VR_FormatarSheetSexteto(ByVal ws As Worksheet, ByVal statusGeral As String)
+    Dim r As Long
+
+    On Error Resume Next
+
+    With ws.Range(ws.Cells(1, 1), ws.Cells(1, 12))
+        .Merge
+        .Font.Bold = True
+        .Font.Size = 14
+        .HorizontalAlignment = xlCenter
+        .Interior.Color = RGB(0, 51, 102)
+        .Font.Color = RGB(255, 255, 255)
+    End With
+
+    With ws.Range(ws.Cells(6, 1), ws.Cells(6, 12))
+        .Font.Bold = True
+        .Interior.Color = RGB(0, 51, 102)
+        .Font.Color = RGB(255, 255, 255)
+        .HorizontalAlignment = xlCenter
+    End With
+
+    For r = 7 To 12
+        If UCase$(Trim$(CStr(ws.Cells(r, 9).Value))) = VR_STATUS_OK Then
+            ws.Cells(r, 9).Interior.Color = RGB(198, 239, 206)
+        Else
+            ws.Range(ws.Cells(r, 1), ws.Cells(r, 12)).Interior.Color = RGB(255, 199, 206)
+        End If
+    Next r
+
+    ws.Cells(14, 1).Value = "RESULTADO_GERAL"
+    ws.Cells(14, 2).Value = statusGeral
+    ws.Cells(14, 2).Font.Bold = True
+    If statusGeral = "APROVADO" Then
+        ws.Cells(14, 2).Interior.Color = RGB(198, 239, 206)
+    Else
+        ws.Cells(14, 2).Interior.Color = RGB(255, 199, 206)
+    End If
+
+    ws.Columns(1).ColumnWidth = 23
+    ws.Columns(2).ColumnWidth = 18
+    ws.Columns(3).ColumnWidth = 19
+    ws.Columns(4).ColumnWidth = 19
+    ws.Columns(5).ColumnWidth = 54
+    ws.Columns(6).ColumnWidth = 8
+    ws.Columns(7).ColumnWidth = 8
+    ws.Columns(8).ColumnWidth = 8
+    ws.Columns(9).ColumnWidth = 12
+    ws.Columns(10).ColumnWidth = 42
+    ws.Columns(11).ColumnWidth = 70
+    ws.Columns(12).ColumnWidth = 42
+    ws.Range(ws.Cells(6, 1), ws.Cells(12, 12)).AutoFilter
+    ws.Range(ws.Cells(1, 1), ws.Cells(16, 12)).Borders.LineStyle = xlContinuous
     ws.Cells.WrapText = True
     On Error GoTo 0
 End Sub

@@ -1,0 +1,44 @@
+{
+  "readback_id": "0049-onda24-md24-1-limpar-base-seguro-micro46",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-09T13:25:00-0300",
+  "track": "safe_track",
+  "status": "confirmed_by_roadmap",
+  "source_prompt": "Operador aprovou implementacao ate o MICRO54 e finalizacao documental da Onda 26.",
+  "scope": {
+    "onda": 24,
+    "microdelta": "MICRO46",
+    "tema": "MD-24.1 Limpar_Base seguro",
+    "tipo": "codigo_vba_e_documentacao",
+    "build": "f7aa84f+ONDA24.MD24.1-limpar-base-seguro"
+  },
+  "canon_lido": [
+    ".hbn/relay/INDEX.md",
+    ".hbn/knowledge/0001-regras-v203-inegociaveis.md",
+    ".hbn/knowledge/0002-regra-ouro-vba-import.md",
+    ".hbn/knowledge/0010-funcionalidade-nova-exige-teste.md",
+    ".hbn/knowledge/0011-higiene-documental-recorrente.md",
+    "auditoria/00_status/67_STATUS_V204_POS_SEXTETO_ROADMAP_PRODUCAO_2026_05_09.md",
+    "src/vba/Limpar_Base.frm",
+    "src/vba/Mod_Limpeza_Base.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_Validacao_Release.bas",
+    "src/vba/App_Release.bas"
+  ],
+  "decisao": {
+    "micro45_status": "Sexteto aprovado pelo operador e usado como base de entrada",
+    "micro46_entrega": "endurecer Limpar_Base sem alterar fluxo humano principal",
+    "funcionalidade_nova_com_teste": "UI_ADV_012_LIMPAR_BASE_SEM_SENHA_CLARA valida ausencia de token sensivel literal no form"
+  },
+  "criterios_de_pronto": [
+    "Limpar_Base delega validacao de senha para Mod_Limpeza_Base",
+    "Campo de senha do form usa mascara visual",
+    "Tentativas negadas e autorizadas de limpeza geram trilha auditavel",
+    "Teste_Validacao_Release remove literal sensivel remanescente",
+    "ADVERSARIAL_UI passa para 12 asserts",
+    "manifesto V3 MICRO46 criado",
+    "local-ai/vba_import sincronizado com src/vba",
+    "documentacao e HBN atualizados"
+  ]
+}

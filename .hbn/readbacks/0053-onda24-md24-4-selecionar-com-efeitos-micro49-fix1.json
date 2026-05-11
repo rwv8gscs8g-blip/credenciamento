@@ -1,0 +1,33 @@
+{
+  "readback_id": "0053-onda24-md24-4-selecionar-com-efeitos-micro49-fix1",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-09T19:52:00-0300",
+  "mode": "safe_track",
+  "repo": "/Users/macbookpro/Projetos/Credenciamento",
+  "base": "V12.0.0204-dev",
+  "target": "V12.0.0204-dev",
+  "microdelta": "MICRO49-fix1",
+  "build": "f7aa84f+ONDA24.MD24.4-selecionar-com-efeitos-fix1",
+  "trigger": "Operador reportou que MICRO49 importou, mas VBE > Compilar fechou o Excel; reabertura validou build anterior com Smoke 33/0/4 e Sexteto verde.",
+  "intent": "Remover risco de novo wrapper publico retornando UDT e manter apenas SelecionarEmpresa como contrato publico com efeitos explicitamente documentados e testados.",
+  "constraints": [
+    "src/vba e fonte de verdade",
+    "local-ai/vba_import e espelho",
+    "CRLF preservado",
+    "sem codigo VBA solto no chat",
+    "funcionalidade nova ou contrato novo deve ter teste associado"
+  ],
+  "planned_changes": [
+    "Svc_Rodizio.bas remove SelecionarEmpresaComEfeitos e mantem SelecionarEmpresa com comentario de efeitos explicitos",
+    "Teste_V2_Roteiros.bas ajusta SMK_008 para chamar SelecionarEmpresa sem wrapper novo",
+    "Teste_V2_Engine.bas ajusta catalogo/roteiro SMK_008",
+    "App_Release.bas recebe build fix1",
+    "Manifesto V3 MICRO49-fix1 entregue"
+  ],
+  "expected_validation": {
+    "import": "Importador V3 M=4 F=0 err=0 skip=0",
+    "compile": "VBE > Depurar > Compilar VBAProject passa limpo e nao fecha Excel",
+    "smoke": "TV2_RunSmoke False = 34/0/4",
+    "sexteto": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "1.0",
+  "readback_id": "0060-onda25-md25-5-correcao-limpar-cad-serv-micro53",
+  "executed_at": "2026-05-11T12:54:29-03:00",
+  "track": "safe_track",
+  "status": "ENTREGUE_PENDENTE_GATE_OPERADOR",
+  "delta": {
+    "id": "MICRO53-fix1",
+    "tema": "Fix de compile em Preencher.CorrigirMojibakeBasico apos MICRO53",
+    "build_alvo": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix1",
+    "arquivos": [
+      {
+        "src": "src/vba/App_Release.bas",
+        "mirror": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "sha1_after": "2068b9d850e58fda7d38950638c937f7ec4a4c9f"
+      },
+      {
+        "src": "src/vba/Preencher.bas",
+        "mirror": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "sha1_after": "422f559cb5c3e16da9c60ecf186b5b8c3885a7ff"
+      }
+    ]
+  },
+  "rca": {
+    "causa_provavel": "Literais mojibake em CorrigirMojibakeBasico continham aspas ASCII internas, gerando erro de sintaxe no parser do VBE.",
+    "por_que_apareceu_agora": "MICRO53 reimportou Preencher.bas para alterar a mensagem de Limpar Base, reintroduzindo no workbook uma rotina latente que nao compilava.",
+    "correcao": "Substituir as literais mojibake por pares ChrW$(), removendo ambiguidade de encoding."
+  },
+  "asserts_locais": {
+    "publicar_vba_import_v2_check": "OK - 53 arquivos sincronizados; G8 OK; G7 OK",
+    "glasswing_g7_g8": "OK",
+    "compile_vbe": "PENDENTE_OPERADOR",
+    "get_build_importado": "PENDENTE_OPERADOR",
+    "smoke": "PENDENTE_OPERADOR - esperado OK=34 FALHA=0 MANUAL=4",
+    "sexteto": "PENDENTE_OPERADOR - esperado V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "manifesto": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO53-fix1.txt",
+  "proxima_acao": "Operador importar MICRO53-fix1, compilar, validar GetBuildImportado, rodar Smoke 34/0/4, teste manual Limpar Base/Cadastro de Servico e Sexteto."
+}

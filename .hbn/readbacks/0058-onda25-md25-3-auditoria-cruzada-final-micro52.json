@@ -1,0 +1,44 @@
+{
+  "readback_id": "0058-onda25-md25-3-auditoria-cruzada-final-micro52",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-10T00:42:00-0300",
+  "mode": "safe_track",
+  "repo": "/Users/macbookpro/Projetos/Credenciamento",
+  "base": "MICRO51 documental / f7aa84f+v12.0.0204-rc1",
+  "target": "MICRO52 auditoria cruzada final",
+  "human_hearback": "Aprovado pode seguir",
+  "intent": "Preparar pacote de auditoria cruzada final Opus + Antigravity para V12.0.0204-rc1, com criterio de saida sem P0/P1.",
+  "constraints": [
+    "Nao alterar src/vba nem local-ai/vba_import neste microdelta.",
+    "Auditorias externas devem operar em modo read-only.",
+    "Achado P0/P1 bloqueia MICRO54 e abre MICRO53 corretivo.",
+    "Achado P2 pode seguir como debito documentado com aceite humano.",
+    "D-MICRO50-CSV-FILENAME, D-V205-MD24-4 e D-STRICT-G1-G2-G5 ja estao registrados como debitos aceitos."
+  ],
+  "planned_changes": [
+    "Criar documento tecnico MICRO52 com escopo, evidencias e procedimento.",
+    "Criar prompt Opus para auditoria arquitetural/governanca/nao-regressao.",
+    "Criar prompt Antigravity para auditoria adversarial/QA/release-blockers.",
+    "Atualizar CHANGELOG, relay e results para refletir pacote entregue.",
+    "Rodar validacoes locais G7/G8 e JSON."
+  ],
+  "scope": {
+    "build": "f7aa84f+v12.0.0204-rc1",
+    "gate": "VR_20260510_000428 APROVADO",
+    "syntax": "V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0",
+    "evidence_csv": "auditoria/evidencias/V12.0.0204/ValidacaoReleaseSexteto_V12_0_0203_VR_20260510_000428.csv"
+  },
+  "expected_validation": {
+    "local": [
+      "python3 -m json.tool nos arquivos HBN novos",
+      "python3 local-ai/scripts/publicar_vba_import_v2.py check",
+      "bash local-ai/scripts/glasswing-checks.sh G7"
+    ],
+    "external": [
+      "Opus devolve parecer com classificacao P0/P1/P2/P3",
+      "Antigravity devolve parecer com classificacao P0/P1/P2/P3",
+      "Operador cola resultados para decidir MICRO53 ou MICRO54"
+    ]
+  },
+  "next_step": "Executar criacao do pacote MICRO52 e aguardar resultados externos das auditorias."
+}

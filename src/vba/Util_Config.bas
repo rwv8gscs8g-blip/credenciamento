@@ -184,6 +184,102 @@ falha:
     GetStatusBarVerbosity = 2
 End Function
 
+Public Function Config_ValidarRegraStrikes( _
+    ByVal notaCorteTxt As String, _
+    ByVal maxStrikesTxt As String, _
+    ByVal diasSuspensaoTxt As String, _
+    ByRef mensagem As String _
+) As Boolean
+    Dim erros As String
+    Dim valorNota As Double
+    Dim valorInteiro As Long
+
+    mensagem = ""
+    notaCorteTxt = Trim$(notaCorteTxt)
+    maxStrikesTxt = Trim$(maxStrikesTxt)
+    diasSuspensaoTxt = Trim$(diasSuspensaoTxt)
+
+    If notaCorteTxt <> "" Then
+        If Not Config_TentarNumero(notaCorteTxt, valorNota) Then
+            Config_AddErro erros, "TxtNotaCorte deve ser numero maior que 0 e ate 10."
+        ElseIf valorNota <= 0# Or valorNota > 10# Then
+            Config_AddErro erros, "TxtNotaCorte deve ficar maior que 0 e ate 10."
+        End If
+    End If
+
+    If maxStrikesTxt <> "" Then
+        If Not Config_TentarInteiro(maxStrikesTxt, valorInteiro) Then
+            Config_AddErro erros, "TxtMaxStrikes deve ser numero inteiro entre 1 e 50."
+        ElseIf valorInteiro < 1 Or valorInteiro > 50 Then
+            Config_AddErro erros, "TxtMaxStrikes deve ficar entre 1 e 50."
+        End If
+    End If
+
+    If diasSuspensaoTxt <> "" Then
+        If Not Config_TentarInteiro(diasSuspensaoTxt, valorInteiro) Then
+            Config_AddErro erros, "TxtDiasSuspensao deve ser numero inteiro entre 0 e 3650."
+        ElseIf valorInteiro < 0 Or valorInteiro > 3650 Then
+            Config_AddErro erros, "TxtDiasSuspensao deve ficar entre 0 e 3650."
+        End If
+    End If
+
+    If erros = "" Then
+        Config_ValidarRegraStrikes = True
+    Else
+        mensagem = "Configuracao invalida: " & erros
+        Config_ValidarRegraStrikes = False
+    End If
+End Function
+
+Public Function Config_RegistrarFalhaValidacao(ByVal origem As String, ByVal mensagem As String) As Boolean
+    On Error GoTo falha
+
+    RegistrarEvento EVT_VALIDACAO_REJEITADA, ENT_ATIV, "CONFIG", _
+        origem, _
+        "CONFIG_INVALIDA | " & mensagem, _
+        Application.UserName
+
+    Config_RegistrarFalhaValidacao = True
+    Exit Function
+
+falha:
+    Config_RegistrarFalhaValidacao = False
+End Function
+
+Private Function Config_TentarNumero(ByVal texto As String, ByRef valor As Double) As Boolean
+    On Error GoTo falha
+
+    texto = Trim$(texto)
+    If texto = "" Then Exit Function
+    If Not IsNumeric(texto) Then Exit Function
+
+    valor = CDbl(texto)
+    Config_TentarNumero = True
+    Exit Function
+
+falha:
+    Config_TentarNumero = False
+End Function
+
+Private Function Config_TentarInteiro(ByVal texto As String, ByRef valor As Long) As Boolean
+    Dim valorDouble As Double
+
+    If Not Config_TentarNumero(texto, valorDouble) Then Exit Function
+    If valorDouble <> Fix(valorDouble) Then Exit Function
+    If valorDouble < -2147483648# Or valorDouble > 2147483647# Then Exit Function
+
+    valor = CLng(valorDouble)
+    Config_TentarInteiro = True
+End Function
+
+Private Sub Config_AddErro(ByRef erros As String, ByVal detalhe As String)
+    If erros = "" Then
+        erros = detalhe
+    Else
+        erros = erros & " " & detalhe
+    End If
+End Sub
+
 Public Function GetGestorNome() As String
     Dim cfg As TConfig
     cfg = GetConfig()

@@ -35,31 +35,41 @@ Public Sub CT2_AbrirCentral()
     ' entra como [1] OFICIAL (V1+V2_Smoke+V2_Canonica+E2E_Strikes+IntegridadeBase).
     ' Quarteto vira [2] (gate intermediario rapido), Trio vira [3] legado.
     ' Renumeracao geral +1 nas opcoes 4-17 (era 3-16). Default InputBox = "1".
+    ' V12.0.0204 ONDA 23 MD-23.1 (2026-05-07) - adiciona [10] V2 Adversarial
+    ' UI. MD-23.2 adiciona [11] V2 Transacao Interrupt. MD-23.3 adiciona
+    ' [12] V2 Boundary Dates; Visualizacao passa para [13-18] e Utilitarios
+    ' para [19-20].
+    ' V12.0.0204 ONDA 23 MD-23.5 (2026-05-09) - Sexteto vira [1]
+    ' OFICIAL; Quinteto/Quarteto/Trio descem para [2]/[3]/[4].
     prompt = "=== CENTRAL DE TESTES V2 ===" & vbCrLf
     prompt = prompt & "Build: " & buildLabel & vbCrLf
-    prompt = prompt & "Gate oficial vigente: [1] Quinteto Minimo" & vbCrLf & vbCrLf
+    prompt = prompt & "Gate oficial vigente: [1] Sexteto Minimo" & vbCrLf & vbCrLf
     prompt = prompt & ">> GATES DE RELEASE (rodar antes de homologar)" & vbCrLf
-    prompt = prompt & "[1] Quinteto Minimo  (V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes + V2 IntegridadeBase)  *** OFICIAL ***" & vbCrLf
-    prompt = prompt & "[2] Quarteto Minimo  (V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes)  -- gate intermediario rapido" & vbCrLf
-    prompt = prompt & "[3] Trio Minimo      (V1 + V2 Smoke + V2 Canonica)  -- legado" & vbCrLf & vbCrLf
+    prompt = prompt & "[1] Sexteto Minimo   (Quinteto + bloco adversarial Onda 23)  *** OFICIAL ***" & vbCrLf
+    prompt = prompt & "[2] Quinteto Minimo  (V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes + V2 IntegridadeBase)  -- compatibilidade" & vbCrLf
+    prompt = prompt & "[3] Quarteto Minimo  (V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes)  -- gate intermediario rapido" & vbCrLf
+    prompt = prompt & "[4] Trio Minimo      (V1 + V2 Smoke + V2 Canonica)  -- legado" & vbCrLf & vbCrLf
     prompt = prompt & ">> BATERIA V1 (executavel direto)" & vbCrLf
-    prompt = prompt & "[4] V1 - Bateria Oficial completa (~5 min)" & vbCrLf & vbCrLf
+    prompt = prompt & "[5] V1 - Bateria Oficial completa (~5 min)" & vbCrLf & vbCrLf
     prompt = prompt & ">> BATERIA V2 (suites parciais)" & vbCrLf
-    prompt = prompt & "[5] V2 Smoke rapido            (~30 s)" & vbCrLf
-    prompt = prompt & "[6] V2 Suite Canonica           (~3 min)" & vbCrLf
-    prompt = prompt & "[7] V2 Stress deterministico    (~3 min)" & vbCrLf
-    prompt = prompt & "[8] V2 Filtros deterministicos  (~1 min)" & vbCrLf
-    prompt = prompt & "[9] V2 E2E Strikes              (~2 min)" & vbCrLf & vbCrLf
+    prompt = prompt & "[6] V2 Smoke rapido            (~30 s)" & vbCrLf
+    prompt = prompt & "[7] V2 Suite Canonica           (~3 min)" & vbCrLf
+    prompt = prompt & "[8] V2 Stress deterministico    (~3 min)" & vbCrLf
+    prompt = prompt & "[9] V2 Filtros deterministicos  (~1 min)" & vbCrLf
+    prompt = prompt & "[10] V2 E2E Strikes             (~2 min)" & vbCrLf & vbCrLf
+    prompt = prompt & "[11] V2 Adversarial UI          (~30 s)" & vbCrLf
+    prompt = prompt & "[12] V2 Transacao Interrupt     (~30 s)" & vbCrLf
+    prompt = prompt & "[13] V2 Boundary Dates          (~30 s)" & vbCrLf & vbCrLf
     prompt = prompt & ">> VISUALIZACAO (abrir aba)" & vbCrLf
-    prompt = prompt & "[10] RESULTADO_QA_V2" & vbCrLf
-    prompt = prompt & "[11] CATALOGO_CENARIOS_V2" & vbCrLf
-    prompt = prompt & "[12] HISTORICO_QA_V2" & vbCrLf
-    prompt = prompt & "[13] TESTE_TRILHA" & vbCrLf
-    prompt = prompt & "[14] AUDIT_TESTES" & vbCrLf
-    prompt = prompt & "[15] EVOLUCAO_TESTES (regressao + media movel)" & vbCrLf & vbCrLf
+    prompt = prompt & "[14] RESULTADO_QA_V2" & vbCrLf
+    prompt = prompt & "[15] CATALOGO_CENARIOS_V2" & vbCrLf
+    prompt = prompt & "[16] HISTORICO_QA_V2" & vbCrLf
+    prompt = prompt & "[17] TESTE_TRILHA" & vbCrLf
+    prompt = prompt & "[18] AUDIT_TESTES" & vbCrLf
+    prompt = prompt & "[19] EVOLUCAO_TESTES (regressao + media movel)" & vbCrLf & vbCrLf
     prompt = prompt & ">> UTILITARIOS" & vbCrLf
-    prompt = prompt & "[16] Roteiro Assistido V2 (navegacao guiada)" & vbCrLf
-    prompt = prompt & "[17] Limpar testes antigos" & vbCrLf & vbCrLf
+    prompt = prompt & "[20] Roteiro Assistido V2 (navegacao guiada)" & vbCrLf
+    prompt = prompt & "[21] Limpar testes antigos" & vbCrLf & vbCrLf
     prompt = prompt & "Digite o numero:"
 
     op = Trim$(InputBox(prompt, "Central de Testes V2", "1"))
@@ -68,38 +78,46 @@ Public Sub CT2_AbrirCentral()
 
     Select Case op
         Case "1"
-            CT_ValidarRelease_QuintetoMinimo
+            CT_ValidarRelease_SextetoMinimo
         Case "2"
-            CT_ValidarRelease_QuartetoMinimo
+            CT_ValidarRelease_QuintetoMinimo
         Case "3"
-            CT_ValidarRelease_TrioMinimo
+            CT_ValidarRelease_QuartetoMinimo
         Case "4"
-            CT2_ExecutarBateriaV1
+            CT_ValidarRelease_TrioMinimo
         Case "5"
-            CT2_ExecutarSmokeRapido
+            CT2_ExecutarBateriaV1
         Case "6"
-            CT2_ExecutarCanonicoFundacao
+            CT2_ExecutarSmokeRapido
         Case "7"
-            CT2_ExecutarStress
+            CT2_ExecutarCanonicoFundacao
         Case "8"
-            CT2_ExecutarFiltrosDeterministicos
+            CT2_ExecutarStress
         Case "9"
-            CT2_ExecutarStrikes
+            CT2_ExecutarFiltrosDeterministicos
         Case "10"
-            TV2_AbrirResultado
+            CT2_ExecutarStrikes
         Case "11"
-            TV2_AbrirCatalogo
+            CT2_ExecutarAdversarialUI
         Case "12"
-            TV2_AbrirHistorico
+            CT2_ExecutarTransactionInterrupt
         Case "13"
-            TV2_AbrirTrilha
+            CT2_ExecutarBoundaryDates
         Case "14"
-            TV2_AbrirAuditTestes
+            TV2_AbrirResultado
         Case "15"
-            Util_Evolucao_AbrirEMostrar
+            TV2_AbrirCatalogo
         Case "16"
-            TV2_AbrirRoteiroAssistido
+            TV2_AbrirHistorico
         Case "17"
+            TV2_AbrirTrilha
+        Case "18"
+            TV2_AbrirAuditTestes
+        Case "19"
+            Util_Evolucao_AbrirEMostrar
+        Case "20"
+            TV2_AbrirRoteiroAssistido
+        Case "21"
             CT2_ExecutarLimparTestes
         Case Else
             MsgBox "Opcao invalida.", vbInformation, "Central V2"
@@ -148,6 +166,21 @@ End Sub
 Public Sub CT2_ExecutarStrikes()
     TV2_PrepararNavegacaoHumana
     TV2_RunRodizioStrikesEndToEnd False
+End Sub
+
+Public Sub CT2_ExecutarAdversarialUI()
+    TV2_PrepararNavegacaoHumana
+    TV2_RunAdversarial_UI False
+End Sub
+
+Public Sub CT2_ExecutarTransactionInterrupt()
+    TV2_PrepararNavegacaoHumana
+    TV2_RunTransaction_Interrupt False
+End Sub
+
+Public Sub CT2_ExecutarBoundaryDates()
+    TV2_PrepararNavegacaoHumana
+    TV2_RunBoundary_Dates False
 End Sub
 
 ' V12.0.0203 ONDA 17 MD-17.1.e (2026-05-03) - novas Subs Public para

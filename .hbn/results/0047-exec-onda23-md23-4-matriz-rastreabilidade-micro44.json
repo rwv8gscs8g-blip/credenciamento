@@ -1,0 +1,40 @@
+{
+  "execution_id": "0047-exec-onda23-md23-4-matriz-rastreabilidade-micro44",
+  "agent_id": "codex-cli",
+  "readback_id": "0047-onda23-md23-4-matriz-rastreabilidade-micro44",
+  "action": "Criar MICRO44 documental com matriz regra-cenario-assert-evidencia para a bateria V204.",
+  "status": "ENTREGUE_DOC_REVIEW",
+  "outcome": "executed",
+  "human_status": "pending_doc_review",
+  "intent_risk_profile": "low",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "V12.0.0204-dev",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO44",
+    "build": "sem-bump-doc-only"
+  },
+  "validation": {
+    "local_static_checks": [
+      "OK: json_readback_result_valid",
+      "OK: doc-only-no-vba-import-needed",
+      "OK: matriz referencia inclui V1, Smoke, Canonica, E2E_Strikes, IntegridadeBase, ADVERSARIAL_UI, TRANSACAO_INTERRUPT e BOUNDARY_DATES"
+    ],
+    "operator_gate_required": [
+      "Revisao documental do arquivo docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md"
+    ],
+    "next_code_gate": "MICRO45 / MD-23.5 Sexteto"
+  },
+  "files_changed": [
+    ".hbn/readbacks/0047-onda23-md23-4-matriz-rastreabilidade-micro44.json",
+    ".hbn/results/0047-exec-onda23-md23-4-matriz-rastreabilidade-micro44.json",
+    ".hbn/results/INDEX.md",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/02_planos/29_ROADMAP_IMPLEMENTACAO_V204_2026_05_05.md",
+    "docs/reference/testes/INDEX.md",
+    "docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md",
+    "auditoria/03_ondas/onda_23_v204_baterias_adversariais/07_TECNICO_MICRO44_MATRIZ_RASTREABILIDADE.md"
+  ],
+  "created_at": "2026-05-09T02:28:00-0300"
+}

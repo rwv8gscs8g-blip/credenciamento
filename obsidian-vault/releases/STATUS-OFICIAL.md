@@ -6,18 +6,20 @@ Este arquivo e a fonte canonica para o status de publicacao das versoes. As rele
 
 | Versao | Status | Compila | Testes | Observacao |
 |--------|--------|---------|--------|------------|
-| V12.0.0202 | VALIDADA | Sim | Bateria oficial verde + V2 validada | Base técnica estabilizada; evidência pública da bateria oficial publicada; V2 smoke, stress e assistido validados por operador humano |
+| V12.0.0204 | VALIDADA | Sim | `VR_20260511_154433` aprovado | Linha oficial vigente; build final validado `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`; Smoke `34/0/4`; validação manual final aprovada pelo operador |
 
 ## Linha em estabilizacao, ainda nao oficial
 
 | Versao alvo | Status | Build ancora | Compila | Testes | Observacao |
 |-------------|--------|--------------|---------|--------|------------|
-| V12.0.0203 | DESENVOLVIMENTO | 20e400b-dirty | Sim | V1 rápida verde + V2 Smoke verde + V2 Canônica verde + validador consolidado aprovado | Linha em microevolucao; candidato verde ainda nao final porque o build esta dirty; nao promover como oficial antes de build limpo, manifesto final, changelog de release, tag e decisao humana de fechamento |
+| V12.0.0205 | PLANEJAMENTO | pendente | pendente | pendente | Proxima linha: auditoria cruzada Opus/Antigravity, lista mestra de evolucoes e renomeacao profissional da taxonomia de testes |
 
 ## Marcos validados
 
 | Versao | Status | Observacao |
 |--------|--------|------------|
+| V12.0.0202 | SUPERADA | Substituida pela V12.0.0204, mantendo valor historico como primeira linha publica validada da fase HBN |
+| V12.0.0203 | SUPERADA | Release candidate e trilha de estabilizacao absorvidas pela V12.0.0204; nao foi promovida como release oficial isolada |
 | V12.0.0190 | VALIDADA | Marco de estabilizacao da baseline deterministica da V2 |
 | V12.0.0191 | VALIDADA | Marco da migracao das guardas criticas UI -> servico |
 | V12.0.0180 | VALIDADA | Base estavel aprovada para a retomada da linha V12 |

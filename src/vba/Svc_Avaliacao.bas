@@ -379,6 +379,12 @@ Public Function AvaliarOS( _
         Dim strikesAtuais As Long
         Dim diasSusp As Long
         Dim resStrikes As TResult
+        Dim resStrikesTotal As TResult
+        Dim strikesTotal As Long
+        Dim strikesTotalAntes As Long
+        Dim strikesPunicaoAntes As Long
+        Dim auditAntes As String
+        Dim auditDepois As String
 
         maxStrikes = GetMaxStrikes()
         resStrikes = ContarStrikesParaPunicaoResultado(os.EMP_ID, notaMin, strikesAtuais)
@@ -396,14 +402,44 @@ Public Function AvaliarOS( _
             AvaliarOS = res
             Exit Function
         End If
+        resStrikesTotal = ContarStrikesPorEmpresaResultado(os.EMP_ID, notaMin, strikesTotal)
+        If Not resStrikesTotal.sucesso Then
+            RegistrarEvento _
+                EVT_AVALIACAO, ENT_OS, OS_ID, _
+                "MEDIA=" & FormatarMediaAvaliacao(media) & "; EMP_ID=" & os.EMP_ID, _
+                "FALHA_CONTAR_STRIKES_TOTAL=" & resStrikesTotal.mensagem & _
+                "; OS_JA_AVALIADA=SIM", _
+                "Svc_Avaliacao"
+            res.sucesso = False
+            res.mensagem = "Avaliacao salva, mas falha ao contar strikes totais: " & resStrikesTotal.mensagem
+            res.CodigoErro = resStrikesTotal.CodigoErro
+            res.IdGerado = OS_ID
+            AvaliarOS = res
+            Exit Function
+        End If
+
+        strikesTotalAntes = strikesTotal - 1
+        If strikesTotalAntes < 0 Then strikesTotalAntes = 0
+        strikesPunicaoAntes = strikesAtuais - 1
+        If strikesPunicaoAntes < 0 Then strikesPunicaoAntes = 0
+
+        auditAntes = "STRIKES=" & CStr(strikesPunicaoAntes) & "/" & CStr(maxStrikes) & _
+                     "; STRIKES_TOTAL=" & CStr(strikesTotalAntes) & _
+                     "; STRIKES_PUNICAO=" & CStr(strikesPunicaoAntes)
+        auditDepois = "STRIKES=" & CStr(strikesAtuais) & "/" & CStr(maxStrikes) & _
+                      "; EMP_ID=" & os.EMP_ID & _
+                      "; DUAL_COUNTER=SIM" & _
+                      "; STRIKES_TOTAL=" & CStr(strikesTotal) & _
+                      "; STRIKES_PUNICAO=" & CStr(strikesAtuais) & _
+                      "; STRIKES_PUNICAO_LIMITE=" & CStr(maxStrikes) & _
+                      "; NOTA_MIN=" & Format$(notaMin, "0.00") & _
+                      "; MEDIA=" & FormatarMediaAvaliacao(media)
 
         ' Auditoria do strike (mesmo quando ainda nao suspende).
         RegistrarEvento _
             EVT_AVALIACAO, ENT_EMP, os.EMP_ID, _
-            "STRIKES=" & CStr(strikesAtuais - 1) & "/" & CStr(maxStrikes), _
-            "STRIKES=" & CStr(strikesAtuais) & "/" & CStr(maxStrikes) & _
-            "; NOTA_MIN=" & Format$(notaMin, "0.00") & _
-            "; MEDIA=" & FormatarMediaAvaliacao(media), _
+            auditAntes, _
+            auditDepois, _
             "Svc_Avaliacao"
 
         If strikesAtuais >= maxStrikes Then

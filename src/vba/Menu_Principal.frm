@@ -307,11 +307,7 @@ On Error GoTo erro_carregamento:
         B_Relatorios.BackStyle = fmBackStyleTransparent
 
         PAGINAS.Value = 6
-        If mTxtFiltroCadServ Is Nothing Then
-            Call PreencherManutencaoValor
-        Else
-            Call PreencherManutencaoValor(mTxtFiltroCadServ.Text)
-        End If
+        Call UI_AtualizarManutencaoValorSeguro
 
 Exit Sub
 erro_carregamento:
@@ -340,10 +336,25 @@ Private Sub UI_DescartarFormVisivel(ByVal nomeFormulario As String)
     On Error Resume Next
     For Each frm In VBA.UserForms
         If typeName(frm) = nomeFormulario Then
-            If frm.Visible Then Unload frm
+            Unload frm
         End If
     Next frm
     On Error GoTo 0
+End Sub
+
+Private Sub UI_AtualizarManutencaoValorSeguro()
+    Dim filtro As String
+
+    On Error Resume Next
+    If Not mTxtFiltroCadServ Is Nothing Then filtro = CStr(mTxtFiltroCadServ.Text)
+    If Err.Number <> 0 Then
+        Err.Clear
+        filtro = ""
+        Set mTxtFiltroCadServ = Nothing
+    End If
+    On Error GoTo 0
+
+    Call PreencherManutencaoValor(filtro)
 End Sub
 
 Private Sub B_ReativaEntidade_Click()
@@ -568,11 +579,7 @@ On Error GoTo erro_carregamento:
     Set frmServico = VBA.UserForms.Add("Cadastro_Servico")
     frmServico.Show vbModal
 
-    If mTxtFiltroCadServ Is Nothing Then
-        Call PreencherManutencaoValor
-    Else
-        Call PreencherManutencaoValor(mTxtFiltroCadServ.Text)
-    End If
+    Call UI_AtualizarManutencaoValorSeguro
     Exit Sub
 erro_carregamento:
     MsgBox "Erro ao abrir cadastro de servi" & ChrW(231) & "o: " & Err.Description, _

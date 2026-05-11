@@ -115,7 +115,7 @@ Ele precisa:
 
 ## Fonte primária da descrição da release
 
-A nota de release em [obsidian-vault/releases/V12.0.0202.md](../obsidian-vault/releases/V12.0.0202.md) deve:
+A nota de release em [obsidian-vault/releases/V12.0.0204.md](../obsidian-vault/releases/V12.0.0204.md) deve:
 
 - existir para a versão declarada em `App_Release`
 - repetir a versão no cabeçalho
@@ -132,9 +132,9 @@ Esse arquivo não substitui a release note detalhada, mas garante leitura rápid
 
 O diretório público de evidências da release deve existir e ser declarado em `APP_RELEASE_EVIDENCE_DIR`.
 
-Para a linha atual, ele é:
+Para a linha atual, ele e:
 
-- [auditoria/evidencias/V12.0.0202/](../auditoria/evidencias/V12.0.0202/)
+- [auditoria/evidencias/V12.0.0204/](../auditoria/evidencias/V12.0.0204/)
 
 Esse diretório deve conter, no mínimo:
 
@@ -147,10 +147,10 @@ Esse diretório deve conter, no mínimo:
 
 A release oficial deve ter uma tag git correspondente.
 
-Exemplo:
+Exemplo vigente:
 
-- versão no código: `V12.0.0202`
-- tag pública: `v12.0.0202`
+- versão no código: `V12.0.0204`
+- tag pública: `v12.0.0204`
 
 ## Automação de governança
 

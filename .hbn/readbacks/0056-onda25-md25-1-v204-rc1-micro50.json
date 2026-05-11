@@ -1,0 +1,36 @@
+{
+  "readback_id": "0056-onda25-md25-1-v204-rc1-micro50",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-09T23:50:00-0300",
+  "mode": "safe_track",
+  "repo": "/Users/macbookpro/Projetos/Credenciamento",
+  "base": "MICRO48 / f7aa84f+ONDA24.MD24.3-avaliacao-dual-counter",
+  "target": "V12.0.0204-rc1",
+  "microdelta": "MICRO50",
+  "build": "f7aa84f+v12.0.0204-rc1",
+  "trigger": "Operador confirmou ponto seguro MICRO48 e tentou importar MICRO50; Importador V3 reportou manifesto ausente.",
+  "intent": "Preparar pacote MICRO50 para transformar a base segura MICRO48 em release candidate V12.0.0204-rc1, sem reabrir MD-24.4.",
+  "constraints": [
+    "src/vba e fonte de verdade",
+    "local-ai/vba_import e espelho",
+    "CRLF preservado",
+    "sem codigo VBA solto no chat",
+    "funcionalidade nova exige teste; este microdelta e release bump/documentacao, sem nova regra de negocio",
+    "MD-24.4 fica deferido para V205"
+  ],
+  "planned_changes": [
+    "App_Release.bas recebe build f7aa84f+v12.0.0204-rc1, tag v12.0.0204-rc1 e test key rc1",
+    "Teste_Validacao_Release.bas passa VR_RELEASE_ALVO para V12.0.0204 para exportar evidencias no diretorio correto",
+    "CHANGELOG.md registra rc1, rollback MICRO49 e debito V205 de MD-24.4",
+    "Manifesto V3 MICRO50 e procedimento de importacao sao criados",
+    "G7 deve permanecer OK antes de entregar"
+  ],
+  "expected_validation": {
+    "pre_import_build": "GetBuildImportado = f7aa84f+ONDA24.MD24.3-avaliacao-dual-counter",
+    "import": "Importador V3 M=2 F=0 err=0 skip=0",
+    "compile": "VBE > Depurar > Compilar VBAProject passa limpo",
+    "build": "GetBuildImportado = f7aa84f+v12.0.0204-rc1",
+    "sexteto": "V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0",
+    "evidence_dir": "auditoria/evidencias/V12.0.0204"
+  }
+}

@@ -1,0 +1,62 @@
+{
+  "execution_id": "0046-exec-onda23-md23-3-boundary-dates-micro43",
+  "agent_id": "codex-cli",
+  "readback_id": "0046-onda23-md23-3-boundary-dates-micro43",
+  "action": "Implementar MICRO43 com suite de bordas de data e exposicao na Central V2.",
+  "status": "APROVADO_OPERADOR",
+  "outcome": "executed",
+  "human_status": "approved",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "V12.0.0204-dev",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO43",
+    "build": "f7aa84f+ONDA23.MD23.3-boundary-dates"
+  },
+  "validation": {
+    "local_static_checks": [
+      "OK: publicar_vba_import_v2.py check - vba_import 100% sincronizado",
+      "OK: shasum src/vba == local-ai/vba_import para Teste_V2_Roteiros, Teste_V2_Engine, Central_Testes_V2 e App_Release",
+      "OK: manifest_MICRO43_created",
+      "OK: CRLF_preserved_for_changed_vba_and_manifest",
+      "OK: json_readback_result_valid"
+    ],
+    "operator_gate_required": [
+      "ImportarPacoteV3_Delta \"MICRO43\", \"f7aa84f+ONDA23.MD23.3-boundary-dates\"",
+      "VBE > Depurar > Compilar VBAProject",
+      "?GetBuildImportado",
+      "TV2_RunBoundary_Dates False",
+      "CT_ValidarRelease_QuintetoMinimo"
+    ],
+    "expected_boundary_dates_syntax": "BOUNDARY_DATES=9/0/0",
+    "expected_quinteto_syntax": "V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0",
+    "operator_result": {
+      "importado": true,
+      "compilado": true,
+      "boundary_dates_execucao": "TV2_20260509_020108",
+      "boundary_dates_resultado": "OK=9 | FALHA=0 | MANUAL=0",
+      "run_boundary_dates_false": "aprovado",
+      "validacao_id": "VR_20260507_083959",
+      "build": "f7aa84f+ONDA23.MD23.3-boundary-dates",
+      "resultado": "APROVADO",
+      "sintaxe": "V1=171/0+V2_Smoke=32/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0",
+      "evidencia_csv": "auditoria/evidencias/V12.0.0203/ValidacaoReleaseQuinteto_V12_0_0203_VR_20260507_083959.csv"
+    }
+  },
+  "files_changed": [
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Central_Testes_V2.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO43.txt",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABE-Central_Testes_V2.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "auditoria/03_ondas/onda_23_v204_baterias_adversariais/05_TECNICO_MICRO43_BOUNDARY_DATES.md",
+    "auditoria/03_ondas/onda_23_v204_baterias_adversariais/06_PROCEDIMENTO_IMPORT_MICRO43.md"
+  ],
+  "created_at": "2026-05-07T05:24:00-0300",
+  "approved_at": "2026-05-09T02:01:00-0300"
+}

@@ -1,10 +1,10 @@
 ---
 titulo: Indice publico de documentacao
-ultima-atualizacao: 2026-04-28
+ultima-atualizacao: 2026-05-11
 diataxis: reference
 hbn-track: fast_track
 audiencia: ambos
-versao-sistema: V12.0.0203
+versao-sistema: V12.0.0204
 ---
 
 # Indice Publico (Diataxis-aware)
@@ -21,12 +21,13 @@ documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 
 ## docs/tutorials/ — aprender (passo-a-passo)
 
-- [`tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md`](tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md) — treinamento humano para testes manuais da V203 rc4
+- [`../obsidian-vault/releases/V12.0.0204.md`](../obsidian-vault/releases/V12.0.0204.md) — release note publica da versao oficial vigente
+- [`tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md`](tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md) — treinamento humano preservado como material historico da V203
 
 ## docs/how-to/ — cookbook (problema concreto)
 
 - [`how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md`](how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md) — acesso a materiais operacionais controlados
-- [`how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md) — procedimento para rodar o Quinteto de validacao
+- [`how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md) — procedimento historico do Quinteto/Sexteto de validacao
 
 ## docs/reference/ — consulta (regras, API, governanca)
 
@@ -37,6 +38,7 @@ documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 - [`reference/testes/03_CATALOGO_CENARIOS_V2_V203.md`](reference/testes/03_CATALOGO_CENARIOS_V2_V203.md) — catalogo dos cenarios V2
 - [`reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md`](reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md) — matriz de cobertura por regra
 - [`reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md`](reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md) — roteiro manual da rc4
+- [`reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md`](reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md) — matriz final de rastreabilidade da V204
 - [`reference/licenca/README.md`](reference/licenca/README.md) — modelo de licenca
 - [`reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md`](reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md) — template CLA institucional
 
@@ -51,7 +53,8 @@ documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 - [`auditoria/01_regras_e_governanca/`](../auditoria/01_regras_e_governanca/) — regras canonicas (00 inegociaveis, 03, 04, 14, 16, 17, 18, 19, 21, 23)
 - [`auditoria/02_planos/`](../auditoria/02_planos/) — planos (15, 20, 25, 27)
 - [`auditoria/02_planos/28_PLANO_V204_ESTABILIZACAO_FINAL_DEBITOS_TESTES.md`](../auditoria/02_planos/28_PLANO_V204_ESTABILIZACAO_FINAL_DEBITOS_TESTES.md) — abertura planejada da V204
-- [`auditoria/03_ondas/`](../auditoria/03_ondas/) — documentacao tecnica de cada onda (28-41)
+- [`auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md`](../auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md) — fechamento de publicacao V204
+- [`auditoria/03_ondas/`](../auditoria/03_ondas/) — documentacao tecnica de cada onda
 - [`auditoria/04_evidencias/`](../auditoria/04_evidencias/) — CSVs e manifestos hashados
 - [`auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md`](../auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md) — auditoria honesta + plano (raiz)
 
@@ -66,6 +69,7 @@ documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 
 - [`obsidian-vault/00-DASHBOARD.md`](../obsidian-vault/00-DASHBOARD.md)
 - [`obsidian-vault/releases/STATUS-OFICIAL.md`](../obsidian-vault/releases/STATUS-OFICIAL.md)
+- [`obsidian-vault/releases/V12.0.0204.md`](../obsidian-vault/releases/V12.0.0204.md)
 - [`obsidian-vault/releases/V12.0.0202.md`](../obsidian-vault/releases/V12.0.0202.md)
 - [`obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md`](../obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md)
 - [`obsidian-vault/metodologia/01-COMO-A-IA-LE-ESTE-REPO.md`](../obsidian-vault/metodologia/01-COMO-A-IA-LE-ESTE-REPO.md)

@@ -1,0 +1,38 @@
+{
+  "readback_id": "0047-onda23-md23-4-matriz-rastreabilidade-micro44",
+  "agent_id": "codex-cli",
+  "created_at": "2026-05-09T02:18:00-0300",
+  "track": "safe_track",
+  "status": "confirmed_by_roadmap",
+  "source_prompt": "Operador confirmou MICRO43 aprovado e solicitou avancar conforme planejado.",
+  "scope": {
+    "onda": 23,
+    "microdelta": "MICRO44",
+    "tema": "MD-23.4 matriz regra-cenario-assert-evidencia",
+    "tipo": "documental",
+    "codigo_vba": "nao altera"
+  },
+  "canon_lido": [
+    ".hbn/relay/INDEX.md",
+    ".hbn/knowledge/0001-regras-v203-inegociaveis.md",
+    ".hbn/knowledge/0002-regra-ouro-vba-import.md",
+    ".hbn/knowledge/0010-funcionalidade-nova-exige-teste.md",
+    ".hbn/knowledge/0011-higiene-documental-recorrente.md",
+    "auditoria/02_planos/29_ROADMAP_IMPLEMENTACAO_V204_2026_05_05.md",
+    "docs/reference/testes/INDEX.md"
+  ],
+  "decisao": {
+    "micro43_status": "registrar aprovacao operador antes de abrir MICRO44",
+    "micro44_entrega": "criar matriz documental de rastreabilidade para suportar o gate Sexteto",
+    "sem_importacao": true,
+    "proximo_microdelta_planejado": "MICRO45 / MD-23.5 Sexteto"
+  },
+  "criterios_de_pronto": [
+    "MICRO43 marcado como APROVADO_OPERADOR na trilha HBN",
+    "matriz V204 criada em docs/reference/testes",
+    "indice de testes atualizado",
+    "documento tecnico de onda criado",
+    "roadmap, changelog e relay atualizados",
+    "json valido e higiene documental aplicada"
+  ]
+}

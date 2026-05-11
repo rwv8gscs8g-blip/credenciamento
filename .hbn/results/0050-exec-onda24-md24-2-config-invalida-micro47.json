@@ -1,0 +1,55 @@
+{
+  "execution_id": "0050-exec-onda24-md24-2-config-invalida-micro47",
+  "agent_id": "codex-cli",
+  "readback_id": "0050-onda24-md24-2-config-invalida-micro47",
+  "action": "Implementar MICRO47 / MD-24.2 com validacao e auditoria de configuracao invalida.",
+  "status": "APROVADO_OPERADOR",
+  "outcome": "executed",
+  "human_status": "approved_by_operator",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "repo": "/Users/macbookpro/Projetos/Credenciamento",
+    "base": "V12.0.0204-dev",
+    "target": "V12.0.0204-dev",
+    "microdelta": "MICRO47",
+    "build": "f7aa84f+ONDA24.MD24.2-config-invalida-audit"
+  },
+  "validation": {
+    "local_static_checks": [
+      "OK: manifesto_micro47_criado",
+      "OK: src_vba_para_local_ai_sync_check_53_arquivos",
+      "OK: shasum_pareado_5_arquivos_importaveis",
+      "OK: funcionalidade_nova_tem_teste_MIG_008"
+    ],
+    "operator_gate": [
+      "OK: importou",
+      "OK: compilou VBAProject",
+      "OK: TV2_RunSmoke False = TV2_20260509_150814 | 33/0/4",
+      "OK: CT_ValidarRelease_SextetoMinimo = VR_20260509_163840 | APROVADO"
+    ],
+    "approved_syntax": "V1=171/0+V2_Smoke=33/0+V2_Canonica=24/0+E2E_Strikes=75/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "files_changed": [
+    ".hbn/readbacks/0050-onda24-md24-2-config-invalida-micro47.json",
+    ".hbn/results/0050-exec-onda24-md24-2-config-invalida-micro47.json",
+    ".hbn/results/INDEX.md",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/03_ondas/onda_24_v204_hardening_operacional/03_TECNICO_MICRO47_CONFIG_INVALIDA_AUDIT.md",
+    "auditoria/03_ondas/onda_24_v204_hardening_operacional/04_PROCEDIMENTO_IMPORT_MICRO47.md",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO47.txt",
+    "local-ai/vba_import/001-modulo/AAD-Util_Config.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+    "src/vba/App_Release.bas",
+    "src/vba/Configuracao_Inicial.frm",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Util_Config.bas"
+  ],
+  "created_at": "2026-05-09T14:57:27-0300",
+  "approved_at": "2026-05-09T16:38:40-0300"
+}

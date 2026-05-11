@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "readback_id": "0060-onda25-md25-5-correcao-limpar-cad-serv-micro53",
+  "executed_at": "2026-05-11T13:09:32-03:00",
+  "track": "safe_track",
+  "status": "APROVADO_OPERADOR_FINAL",
+  "delta": {
+    "id": "MICRO53-fix2",
+    "tema": "Fix de Smoke FATAL apos CAD_SERV passar a ser limpo",
+    "build_alvo": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
+    "arquivos": [
+      {
+        "src": "src/vba/App_Release.bas",
+        "mirror": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "sha1_after": "be179536d78a3741e92d24ee4b7ad1151ae99d44"
+      },
+      {
+        "src": "src/vba/Teste_V2_Engine.bas",
+        "mirror": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "sha1_after": "f5e5726e46b6b75adc2b051f0cea449052690f10"
+      }
+    ]
+  },
+  "rca": {
+    "causa_provavel": "Com CAD_SERV agora zerado pelo contrato correto do Limpar Base, o preparo da baseline V2 precisava recriar explicitamente os servicos canonicos antes da validacao estrutural.",
+    "evidencia": "CSV TesteV2_SMOKE_Falhas_TV2_20260511_125944.csv: FATAL com SERV_A=0,00 | SERV_B=0,00 | SERV_C=0,00.",
+    "correcao": "TV2_PrepararBaselineCanonica passa a chamar TV2_RecriarServicosCanonicos, que limpa CAD_SERV e escreve os servicos A/B/C com valores 100/200/300, validando persistencia."
+  },
+  "asserts_locais": {
+    "publicar_vba_import_v2_check": "OK - 53 arquivos sincronizados; G8 OK; G7 OK",
+    "glasswing_g7_g8": "OK",
+    "compile_vbe": "OK - informado pelo operador em 2026-05-11",
+    "get_build_importado": "OK - f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
+    "smoke": "OK - TV2_20260511_131824 retornou OK=34 FALHA=0 MANUAL=4",
+    "manual_final": "OK - operador reportou testes manuais de validacao aprovados em 2026-05-11",
+    "sexteto": "OK - VR_20260511_154433 APROVADO; V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "manifesto": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO53-fix2.txt",
+  "proxima_acao": "Retomar MICRO54 documental/publicacao V12.0.0204."
+}
