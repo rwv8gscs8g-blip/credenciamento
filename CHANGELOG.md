@@ -245,6 +245,9 @@ tratam apenas da linha pública oficial.
   a exibir V12.0.0204 / VALIDADO / OFICIAL, preserva o build validado
   `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` e aponta a proxima
   release alvo para V12.0.0205.
+- MICRO55 aprovado pelo operador em 2026-05-11 com Importador V3
+  `M=1/F=0/err=0/skip=0`, compile limpo, tela `Sobre` alinhada e
+  Sexteto extra `VR_20260511_175849` APROVADO.
 - Regra permanente documentada em HBN: funcionalidade nova exige teste
   correspondente no mesmo microdelta.
 - Regra permanente documentada em HBN: higiene documental recorrente

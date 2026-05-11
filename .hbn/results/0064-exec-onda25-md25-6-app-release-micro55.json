@@ -5,7 +5,7 @@
   "executed_at": "2026-05-11T17:47:00-03:00",
   "track": "safe_track",
   "agent_id": "Codex CLI",
-  "status": "ENTREGUE_PENDENTE_GATE_OPERADOR",
+  "status": "APROVADO_OPERADOR_FINAL",
   "delta": {
     "id": "MICRO55",
     "tema": "App_Release final V204",
@@ -14,14 +14,14 @@
       {
         "src": "src/vba/App_Release.bas",
         "mirror": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
-        "sha1_after": "4189960fdc628fbd3578623e8b5b220bc4c59a24"
+        "sha1_after": "f0a53f1b09b55e40edd61bdfc985a6e3cb95f0c4"
       }
     ]
   },
   "mudancas": [
     "APP_RELEASE_ALVO = V12.0.0205",
     "APP_RELEASE_BUILD_KEY = V12.0.0204|OFICIAL|V12.0.0205",
-    "APP_BUILD_GERADO_EM = 2026-05-11 17:47"
+    "APP_BUILD_GERADO_EM = 2026-05-11 17:54"
   ],
   "asserts_locais": {
     "publicar_vba_import_v2_apply": "OK - AAX-App_Release.bas sincronizado; demais 52 arquivos em sync",
@@ -29,13 +29,15 @@
     "json": "OK"
   },
   "gate_operador": {
-    "importador_v3": "esperado M=1 F=0 err=0 skip=0",
-    "compile_vbe": "precisa passar limpo",
-    "get_build_importado": "esperado f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
-    "sobre": "esperado V12.0.0204 / VALIDADO / OFICIAL / alvo V12.0.0205"
+    "importador_v3": "OK - M=1 F=0 err=0 skip=0",
+    "compile_vbe": "OK - informado pelo operador em 2026-05-11",
+    "get_build_importado": "OK - f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
+    "sobre": "OK - V12.0.0204 / VALIDADO / OFICIAL / alvo V12.0.0205",
+    "sexteto_extra": "OK - VR_20260511_175849 APROVADO; V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
   },
   "justificativa_sem_novo_sexteto": "Delta exclusivo de metadado de release; nao altera regra de negocio, fluxo de UI operacional, servico, repositorio ou teste. Evidencia funcional final permanece VR_20260511_154433.",
   "manifesto": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO55.txt",
   "procedimento": "auditoria/03_ondas/onda_25_v204_release_candidate/11_PROCEDIMENTO_IMPORT_MICRO55_APP_RELEASE.md",
-  "proxima_acao": "Operador importar MICRO55, compilar e conferir tela Sobre."
+  "evidencia_extra": "auditoria/evidencias/V12.0.0204/ValidacaoReleaseSexteto_V12_0_0203_VR_20260511_175849.csv",
+  "proxima_acao": "Executar higiene documental humana da vitrine V204: guia de macros Windows, how-to Sexteto e roteiro manual V204."
 }
