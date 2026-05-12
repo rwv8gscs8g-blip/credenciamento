@@ -3,8 +3,8 @@ titulo: Modelo de acesso controlado — por que existe e como funciona
 diataxis: explanation
 audiencia: humano institucional (gestor publico, integrador, auditor externo, contribuidor potencial)
 hbn-track: fast_track
-versao-sistema: V12.0.0203
-data: 2026-04-29
+versao-sistema: V12.0.0204
+data: 2026-05-12
 ---
 
 # Modelo de acesso controlado — por que existe e como funciona
@@ -25,7 +25,7 @@ A resposta envolve **tres realidades distintas** que parecem contraditorias mas 
    ate prescreve restricao operacional, com auto-conversao para Apache
    2.0 em 4 anos.
 
-## A solucao: duas categorias
+## A solução: duas categorias
 
 ### Categoria publica
 

@@ -17,6 +17,9 @@ destino: revisão e aprovação antes da conversão em código V2
 > `Teste_V2_Roteiros` sobre o motor `Teste_V2_Engine`, contra os serviços
 > `Svc_Rodizio`, `Svc_PreOS`, `Svc_OS` e `Svc_Avaliacao` já validados na
 > baseline V12.0.0202.
+>
+> Na V12.0.0204, este documento é histórico. A matriz vigente fica em
+> [`docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md`](../reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md).
 
 ## 1. Leitura do cenário
 

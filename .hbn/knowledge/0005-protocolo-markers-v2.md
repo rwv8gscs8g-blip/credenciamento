@@ -161,3 +161,122 @@ Marcadores aplicaveis listados naquele readback.
 
 - v1.0 — 2026-05-02 — primeira canonizacao V2 a partir da cadeia
   Antigravity → Codex → Opus 4.7. Registro inicial.
+
+## 2026-05-09 weekly addendum
+
+Origem: sessao Cowork Opus 4.7 entre 2026-05-02 e 2026-05-06 produziu
+3 principios operacionais (Minimalismo, Substrato Solido,
+AI-Language-Abstraction), modelo das 3 Arvores (Estavel /
+Desenvolvimento / Exploracao) e protocolo de Auditoria Cruzada entre
+IAs. Cada um desses pede vocabulario semantico proprio. Este addendum
+canoniza 11 marcadores adicionais distribuidos em 3 grupos.
+
+Nenhuma secao anterior deste protocolo e modificada. V2 base (10
+marcadores ✅ 🟡 ❌ 🟠 🔴 🔵 ⚪ 🟢 🟤 🟣) permanece valida e em uso. O
+delta card de 7 linhas continua canonico. O hook de revisao semanal
+continua valendo.
+
+### Grupo A — Principios operacionais (3 marcadores)
+
+| Marker | Uso | Prioridade |
+|---|---|---|
+| `🟦 HBN MINIMALIST GATE` | Decisao de adicao de dependencia/ferramenta passou pelo filtro do Principio Minimalismo de Cadeia. Aplicar em fichas de tecnologia em transicao para `candidate` e em commits que adicionam crate/lib. | Alta |
+| `🟪 HBN SUBSTRATO GATE` | Artefato pertence a Arvore Estavel (Rust no substrato comum) ou cumpre criterios de promocao para ela. Aplicar em release notes da Arvore Estavel e em capsulas que migram entre arvores. | Alta |
+| `🟧 HBN AI-ABSTRACTION GATE` | Decisao de linguagem/ferramenta foi tomada considerando IA como cliente prioritario, nao apenas humano. Aplicar em escolhas que arquivam tecnologias historicamente "ergonomicas" (Typer, uv) por nao serem mais necessarias na nova ordem. | Media |
+
+Origem: principios formalizados em `usehbn/methodology/MINIMALISM-PRINCIPLE.md`,
+`SUBSTRATO-SOLIDO-PRINCIPLE.md`, `AI-LANGUAGE-ABSTRACTION-PRINCIPLE.md`.
+
+### Grupo B — Modelo das 3 Arvores (5 marcadores)
+
+| Marker | Uso | Prioridade |
+|---|---|---|
+| `🌱 HBN EXPLORATION SEED` | Tecnologia/ideia em Arvore de Exploracao. POC isolado, sem promessa de incorporacao. | Alta |
+| `🔧 HBN DEV BRANCH` | Artefato em Arvore de Desenvolvimento. Em transicao de linguagem ou refatoracao ativa. | Alta |
+| `🪨 HBN STABLE TRUNK` | Artefato em Arvore Estavel. Compilado, assinado, em uso real. Mudanca exige capsula de consentimento. | **CRITICA** |
+| `🟫 HBN TREE TRANSITION` | Artefato cruzando fronteira entre arvores (Exploracao → Desenvolvimento ou Desenvolvimento → Estavel). Evento auditavel. | Alta |
+| `🌳 HBN MODULE BOUNDARY` | Indica fronteira entre modulos do useHBN (Fagocitose, Capsulas, Coordenacao inter-IA, Seguranca, Markers, Auditoria Cruzada, Radar). Aplicar em cross-links e em decisoes que tocam mais de um modulo. | Media |
+
+Origem: modelo formalizado em `usehbn/methodology/THREE-TREES-ARCHITECTURE.md`
+e `usehbn/methodology/USEHBN-MODULES-ARCHITECTURE.md`.
+
+### Grupo C — Auditoria Cruzada entre IAs (3 marcadores)
+
+| Marker | Uso | Prioridade |
+|---|---|---|
+| `🔄 HBN CROSS-AUDIT IN PROGRESS` | Decisao arquitetural foi submetida a auditoria cruzada entre IAs (Opus + Codex + Antigravity + Gemini ou subset). Resultado pendente. | Alta |
+| `✅ HBN CROSS-AUDIT APPROVED` | Auditoria cruzada chegou a consenso. Decisao pode prosseguir. **Disambiguacao:** o emoji `✅` ja e usado para `HBN ACTIVE` (V1). Diferenciar pelo label completo. | Alta |
+| `🟡 HBN CROSS-AUDIT ITERATION` | Auditoria cruzada detectou divergencia que pede mais uma rodada. **Disambiguacao:** o emoji `🟡` ja e usado para `HBN NEEDS HUMAN DECISION` (V1). Diferenciar pelo label completo. | Alta |
+
+Origem: protocolo formalizado em
+`usehbn/methodology/CROSS-IA-AUDIT-PROTOCOL.md`.
+
+### Reuso de emoji (✅ e 🟡)
+
+V1 ja usa `✅` para `HBN ACTIVE` e `🟡` para `HBN NEEDS HUMAN DECISION`.
+Os marcadores Grupo C reusam esses emojis com labels distintos
+(`CROSS-AUDIT APPROVED`, `CROSS-AUDIT ITERATION`). A regra de
+desambiguacao e: **sempre escrever o label completo**. Em delta cards
+e readbacks, o campo de marcador carrega o label canonico, nao o
+emoji solto.
+
+Alternativa rejeitada: introduzir emojis novos para Grupo C. Foi
+descartada porque (a) a familia ✅/🟡 ja carrega a semantica certa de
+"aprovado" e "precisa atencao" e (b) o protocolo prefere reuso
+contextual a explosao de simbolos.
+
+### Aplicacao retroativa
+
+A sessao Cowork 2026-05-06 ja usou alguns destes marcadores
+informalmente (notavel: 🌱 🪨 🟫 em RADAR.md). Esta canonizacao
+formaliza o uso. Documentos publicos do useHBN em
+`usehbn/methodology/` e `usehbn/modules/` referenciam esta tabela
+como fonte canonica.
+
+### Total apos addendum
+
+10 (V2 base) + 11 (Grupos A+B+C) = **21 marcadores HBN canonicos**.
+Modulo MARCADORES (`usehbn/modules/MARCADORES.md`) consolida
+mapeamento marcador → modulo de origem em tabela unica.
+
+## 2026-05-09 weekly addendum (correcao Grupo C)
+
+supersedes: linhas 207-209 do addendum anterior (Grupo C — Auditoria
+Cruzada) e a secao "Reuso de emoji (✅ e 🟡)" subsequente.
+
+Origem: auditoria cruzada Antigravity sobre os 6 modulos publicos
+recem-formalizados (relatorio em
+`usehbn/audits/RELATORIO-ANTIGRAVITY-MODULOS-2026-05-09.md`) sinalizou
+risco de confusao cognitiva pelo reuso dos emojis `✅` e `🟡` nos
+marcadores Grupo C. Argumento aceito: leitura rapida decodifica icone
+antes do label, e o ganho de minimalismo simbolico do reuso e
+desproporcional ao risco operacional.
+
+A correcao e aplicada antes que os tres marcadores entrem em uso
+operacional efetivo (ainda na mesma sessao em que foram propostos).
+
+### Tabela revisada — Grupo C — Auditoria Cruzada
+
+| Marker (canonico) | Marker (anterior, descontinuado) | Uso | Prioridade |
+|---|---|---|---|
+| `🔍 HBN CROSS-AUDIT IN PROGRESS` | `🔄 HBN CROSS-AUDIT IN PROGRESS` | Decisao arquitetural foi submetida a auditoria cruzada entre IAs. Resultado pendente. | Alta |
+| `🤝 HBN CROSS-AUDIT APPROVED` | `✅ HBN CROSS-AUDIT APPROVED` | Auditoria cruzada chegou a consenso. Decisao pode prosseguir. | Alta |
+| `⚖️ HBN CROSS-AUDIT ITERATION` | `🟡 HBN CROSS-AUDIT ITERATION` | Auditoria cruzada detectou divergencia que pede mais uma rodada. | Alta |
+
+A familia inteira foi unificada (3 emojis univocamente relacionados a
+auditoria) em vez de manter `🔄` apenas na entrada do fluxo, para
+coerencia visual: lupa investiga, aperto de mao consente, balanca pesa
+divergencia.
+
+### Secao "Reuso de emoji (✅ e 🟡)" descontinuada
+
+A secao "Reuso de emoji (✅ e 🟡)" do addendum anterior nao se aplica
+mais — a familia de auditoria cruzada agora usa simbolos univocos. A
+desambiguacao por label completo continua valendo como regra geral
+para outros possiveis casos futuros, mas nao ha mais reuso ativo entre
+V1/V2 base e Grupo C.
+
+### Total apos correcao
+
+Permanece **21 marcadores HBN canonicos** (a contagem nao muda; apenas
+3 deles trocaram de simbolo).

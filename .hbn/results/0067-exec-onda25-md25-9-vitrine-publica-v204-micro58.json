@@ -1,0 +1,82 @@
+{
+  "schema_version": "1.0",
+  "execution_id": "0067-exec-onda25-md25-9-vitrine-publica-v204-micro58",
+  "agent_id": "Codex CLI",
+  "readback_id": "hearback-chat-2026-05-12-micro58-aprovada",
+  "action": "MICRO58 documental: racionalizacao da vitrine publica V204 para testador humano externo",
+  "outcome": "EXECUTADO_DOCUMENTAL",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "created_at": "2026-05-12T13:12:54-0300",
+  "versao_sistema": "V12.0.0204",
+  "build_referencia": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2",
+  "gate_referencia": {
+    "validacao_publicacao": "VR_20260511_154433",
+    "validacao_final_pos_app_release": "VR_20260511_175849",
+    "sintaxe": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "escopo": [
+    "Atualizar README e docs/INDEX para deixar docs/ como entrada publica principal e doc/ como dados estruturais CNAE.",
+    "Criar documento canonico publico de regras de negocio V204.",
+    "Atualizar guia humano V204 em Markdown e gerar documento Word distribuivel ao testador externo.",
+    "Atualizar roteiro manual e matriz de cobertura regra -> teste -> evidencia.",
+    "Criar indice de evidencias V12.0.0204 e copias canonicas dos CSVs oficiais com prefixo V12_0_0204.",
+    "Promover explicacoes vigentes para V204 e arquivar material historico V2/V203.",
+    "Atualizar AGENTS.md, relay, changelog, status oficial e dashboard institucional para V204."
+  ],
+  "arquivos_principais": [
+    {
+      "path": "README.md",
+      "sha256": "a301fb7de2797fefabdfb661905477d6323bb7e8d2cf7fc798e3d0da3307266f"
+    },
+    {
+      "path": "docs/tutorials/GUIA_TESTES_HUMANOS_V204.md",
+      "sha256": "ccb2bd285744d2f95ec05184157f0d1689e436f63b967022fe1793b92609d62c"
+    },
+    {
+      "path": "docs/tutorials/GUIA_TESTES_HUMANOS_V204.docx",
+      "sha256": "459431941c6bb799c99f9bb09f2962777a847c41469ba90235052fa2ce789d58"
+    },
+    {
+      "path": "docs/reference/regras/REGRAS_DE_NEGOCIO_V204.md",
+      "sha256": "2f163fb83dcfe348959cb91a4bec669ac81879c26a56d53d65c72bfcb1ab17a1"
+    },
+    {
+      "path": "auditoria/evidencias/V12.0.0204/INDEX.md",
+      "sha256": "8baf41967ffe4c67a4503d2092ad0ede79ead614bd729bf87516c8f414fecbca"
+    },
+    {
+      "path": "AGENTS.md",
+      "sha256": "ba006a049b3281de4dfe400d5b84498a23643ee72be3bc601340866d5012becc"
+    }
+  ],
+  "evidencias_csv_canonicas": [
+    {
+      "original": "auditoria/evidencias/V12.0.0204/ValidacaoReleaseSexteto_V12_0_0203_VR_20260511_154433.csv",
+      "copia_v204": "auditoria/evidencias/V12.0.0204/ValidacaoReleaseSexteto_V12_0_0204_VR_20260511_154433.csv",
+      "sha256": "1a10f065aa354ec60b5af0096ce2717bcfa02d3913ec78665d02bba5a62abf31"
+    },
+    {
+      "original": "auditoria/evidencias/V12.0.0204/ValidacaoReleaseSexteto_V12_0_0203_VR_20260511_175849.csv",
+      "copia_v204": "auditoria/evidencias/V12.0.0204/ValidacaoReleaseSexteto_V12_0_0204_VR_20260511_175849.csv",
+      "sha256": "184a167b6ecc1585ce2a59670501dd898285681ad6daad2ae55d1a58e04f300f"
+    }
+  ],
+  "asserts": {
+    "codigo_vba_alterado": false,
+    "local_ai_vba_import_alterado": false,
+    "docx_gerado": true,
+    "docx_renderizado_para_qa_visual": true,
+    "macros_janela_imediata_no_caminho_humano_v204": false,
+    "status_publico_v204_padronizado": "VALIDADO",
+    "regras_de_negocio_v204_canonicas": true,
+    "indice_evidencias_v204": true
+  },
+  "debitos_v205_mantidos": [
+    "Renomear taxonomia publica Sexteto para nomes profissionais de teste.",
+    "Melhorar mensageria e ordem da Central de Testes para humano externo.",
+    "Lapidar checks strict G1/G2/G5 sem bloquear G7/G8.",
+    "Avaliar GitHub Pages ou site estatico para vitrine documental."
+  ],
+  "decisao": "Vitrine V204 pronta para revisao humana final e publicacao documental, sem novo gate VBA por ausencia de alteracao funcional."
+}

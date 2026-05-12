@@ -15,7 +15,9 @@ data: 2026-05-11
 > rastreabilidade e nao deve orientar testador humano externo.
 
 > Diataxis: How-to (passo a passo orientado a tarefa).
-> Para visao conceitual, ver [`docs/explanation/IMPORTADOR_V2.md`](../explanation/IMPORTADOR_V2.md).
+> Para visão conceitual histórica, ver
+> [`docs/explanation/_historico/IMPORTADOR_V2.md`](../explanation/_historico/IMPORTADOR_V2.md).
+> Para a linha atual, ver [`docs/explanation/IMPORTADOR_V3.md`](../explanation/IMPORTADOR_V3.md).
 > Para especificacao, ver [`docs/reference/MANIFESTO_FORMAT.md`](../reference/MANIFESTO_FORMAT.md).
 
 ## Pre-requisitos
@@ -172,8 +174,10 @@ investigacao.
 
 ## Apoio cruzado
 
-- [`docs/explanation/IMPORTADOR_V2.md`](../explanation/IMPORTADOR_V2.md)
-  — visao conceitual.
+- [`docs/explanation/_historico/IMPORTADOR_V2.md`](../explanation/_historico/IMPORTADOR_V2.md)
+  — visão conceitual histórica.
+- [`docs/explanation/IMPORTADOR_V3.md`](../explanation/IMPORTADOR_V3.md)
+  — visão conceitual vigente na V12.0.0204.
 - [`docs/reference/MANIFESTO_FORMAT.md`](../reference/MANIFESTO_FORMAT.md)
   — especificacao do contrato.
 - [`docs/explanation/MODELO_DE_ACESSO_CONTROLADO.md`](../explanation/MODELO_DE_ACESSO_CONTROLADO.md)

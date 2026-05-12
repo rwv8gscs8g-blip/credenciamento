@@ -29,7 +29,7 @@ Tabela consolidada das fichas individuais após a esteira E1.1. A coluna "Conver
 | task-queues | Task queues | computacao-distribuida | archived | 3/10 sim (7 parcial, 0 não) | 2026-05-02 (arquivada por decisão Maurício + Opus) | [ficha](./_per-technology/task-queues.md) |
 | abstract-syntax-trees-ast | Abstract Syntax Trees (AST) | conhecimento-estruturado | in-radar | 9/10 sim (1 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/abstract-syntax-trees-ast.md) |
 | characterization-tests | Characterization tests | conhecimento-estruturado | phagocytosed | 10/10 sim (0 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/characterization-tests.md) |
-| consent-capsules | Consent capsules | conhecimento-estruturado | under-analysis | 10/10 sim (0 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/consent-capsules.md) |
+| consent-capsules | Consent capsules | conhecimento-estruturado | candidate | 10/10 sim (0 parcial, 0 não) | 2026-05-06 (APROVADA por Maurício — primeira migração Python → Rust; tecnologia de assinatura/compatibilidade/redução de erros) | [ficha](./_per-technology/consent-capsules.md) |
 | json-ld | JSON-LD | conhecimento-estruturado | archived | 8/10 sim (2 parcial, 0 não) | 2026-05-02 (arquivada por decisão Maurício + Opus) | [ficha](./_per-technology/json-ld.md) |
 | jsonl-event-ledger | JSONL event ledger | conhecimento-estruturado | under-analysis | 9/10 sim (1 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/jsonl-event-ledger.md) |
 | knowledge-graphs | Knowledge graphs | conhecimento-estruturado | archived | 8/10 sim (2 parcial, 0 não) | 2026-05-02 (arquivada por decisão Maurício + Opus) | [ficha](./_per-technology/knowledge-graphs.md) |
@@ -39,7 +39,7 @@ Tabela consolidada das fichas individuais após a esteira E1.1. A coluna "Conver
 | obsidian | Obsidian | conhecimento-estruturado | archived | 8/10 sim (2 parcial, 0 não) | 2026-05-02 (arquivada por decisão Maurício + Opus) | [ficha](./_per-technology/obsidian.md) |
 | ontologies | Ontologies | conhecimento-estruturado | archived | 8/10 sim (2 parcial, 0 não) | 2026-05-02 (arquivada por decisão Maurício + Opus) | [ficha](./_per-technology/ontologies.md) |
 | sqlite | SQLite | conhecimento-estruturado | under-analysis | 8/10 sim (2 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/sqlite.md) |
-| tree-sitter | Tree-sitter | conhecimento-estruturado | in-radar | 9/10 sim (1 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/tree-sitter.md) |
+| tree-sitter | Tree-sitter | conhecimento-estruturado | candidate | 9/10 sim (1 parcial, 0 não) | 2026-05-09 (promovida a candidate após APROVAÇÃO favorável Maurício 2026-05-06; status-estudo CONCLUIDO) | [ficha](./_per-technology/tree-sitter.md) |
 | versioned-documentation | Versioned documentation | conhecimento-estruturado | phagocytosed | 10/10 sim (0 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/versioned-documentation.md) |
 | clipper | Clipper | legado | in-radar | 5/10 sim (5 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/clipper.md) |
 | cobol | COBOL | legado | in-radar | 5/10 sim (5 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/cobol.md) |
@@ -60,7 +60,7 @@ Tabela consolidada das fichas individuais após a esteira E1.1. A coluna "Conver
 | langfuse | Langfuse | observabilidade | in-radar | 6/10 sim (4 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/langfuse.md) |
 | langsmith | LangSmith | observabilidade | in-radar | 4/10 sim (5 parcial, 1 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/langsmith.md) |
 | mlflow | MLflow | observabilidade | in-radar | 4/10 sim (6 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/mlflow.md) |
-| opentelemetry | OpenTelemetry | observabilidade | in-radar | 7/10 sim (3 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/opentelemetry.md) |
+| opentelemetry | OpenTelemetry | observabilidade | candidate | 7/10 sim (3 parcial, 0 não) | 2026-05-06 (APROVADA por Maurício — em processo de fagocitose progressiva; Rust own implementation prevista) | [ficha](./_per-technology/opentelemetry.md) |
 | agents-md | agents.md | outros | phagocytosed | 9/10 sim (1 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/agents-md.md) |
 | diataxis | Diataxis | outros | phagocytosed | 8/10 sim (2 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/diataxis.md) |
 | github-actions | GitHub Actions | outros | under-analysis | 5/10 sim (5 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/github-actions.md) |
@@ -68,8 +68,10 @@ Tabela consolidada das fichas individuais após a esteira E1.1. A coluna "Conver
 | hbn | HBN | outros | phagocytosed | 10/10 sim (0 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/hbn.md) |
 | llms-txt | llms.txt | outros | phagocytosed | 8/10 sim (2 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/llms-txt.md) |
 | signed-commits-and-sigstore | Signed commits and Sigstore | outros | under-analysis | 8/10 sim (2 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/signed-commits-and-sigstore.md) |
-| typer | Typer | outros | under-analysis | 5/10 sim (5 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/typer.md) |
-| uv | uv | outros | under-analysis | 6/10 sim (4 parcial, 0 não) | 2026-05-02 (E1.1 — Codex análise individual) | [ficha](./_per-technology/uv.md) |
+| typer | Typer | outros | archived | 5/10 sim (5 parcial, 0 não) | 2026-05-06 (arquivada por Maurício — filosofia minimalista de dependências) | [ficha](./_per-technology/typer.md) |
+| uv | uv | outros | archived | 6/10 sim (4 parcial, 0 não) | 2026-05-06 (arquivada por Maurício — argumento pró-Rust virou decisão de trocar linguagem-base) | [ficha](./_per-technology/uv.md) |
+
+| rust | Rust | stack-fundacional | phagocytosed | 13/13 sim (0 parcial, 0 não) | 2026-05-06 (declarada como linguagem-base da Árvore Estável) | [ficha](./_per-technology/rust.md) |
 
 ## Subtotais por estado
 

@@ -1,6 +1,6 @@
 ---
 titulo: Results HBN — ERPs vinculados a readbacks
-ultima-atualizacao: 2026-05-11
+ultima-atualizacao: 2026-05-12
 ---
 
 # Results HBN — Credenciamento
@@ -78,3 +78,5 @@ ultima-atualizacao: 2026-05-11
 | 0064 | Onda 25 V204 MICRO55 App_Release final | APROVADO_OPERADOR_FINAL | `0064-exec-onda25-md25-6-app-release-micro55.json` | 2026-05-11 |
 | 0065 | Onda 25 V204 MICRO56 vitrine humana | EXECUTADO_DOCUMENTAL | `0065-exec-onda25-md25-7-vitrine-humana-v204-micro56.json` | 2026-05-11 |
 | 0066 | Onda 25 V204 MICRO57 guia humano por interface | EXECUTADO_DOCUMENTAL | `0066-exec-onda25-md25-8-guia-humano-interface-v204-micro57.json` | 2026-05-12 |
+| 0067 | Onda 25 V204 MICRO58 vitrine publica externa | EXECUTADO_DOCUMENTAL | `0067-exec-onda25-md25-9-vitrine-publica-v204-micro58.json` | 2026-05-12 |
+| 0068 | Onda 25 V204 MICRO59 protocolo homologacao e handoff V205 | EXECUTADO_DOCUMENTAL | `0068-exec-onda25-md25-10-protocolo-homologacao-v204-e-handoff-v205.json` | 2026-05-12 |

@@ -1,7 +1,7 @@
 ---
 titulo: Dashboard - Credenciamento
-ultima-atualizacao: 2026-05-11
-autor-ultima-alteracao: Codex CLI na Onda 25 / MICRO57
+ultima-atualizacao: 2026-05-12
+autor-ultima-alteracao: Codex CLI na Onda 25 / MICRO58
 tags: [vivo, dashboard, hbn-active]
 versao-sistema: V12.0.0204
 linha-alvo: V12.0.0205
@@ -23,7 +23,7 @@ audiencia: ambos
 
 | Campo | Valor |
 |---|---|
-| Versao oficial vigente | **V12.0.0204** (validada) |
+| Versão oficial vigente | **V12.0.0204** (VALIDADO) |
 | Linha em estabilizacao | V12.0.0205 (a abrir) |
 | Build importado no workbook | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
 | Tag git de publicacao | `v12.0.0204` |
@@ -34,21 +34,21 @@ audiencia: ambos
 
 ## Onda em curso
 
-**Onda 25 — Publicacao V12.0.0204**
+**Onda 25 — Publicação V12.0.0204**
 
-- Status: MICRO57 documental em fechamento; vitrine humana orientada por interface
+- Status: MICRO58 documental em fechamento; vitrine pública V204 racionalizada para testador humano externo
 - Track HBN: safe_track
 - Hearback: aprovado pelo operador em 2026-05-11
-- Doc tecnica: `auditoria/03_ondas/onda_25_v204_release_candidate/12_TECNICO_MICRO57_GUIA_HUMANO_INTERFACE_V204.md`
-- Evidencia final: `VR_20260511_154433`; evidencia adicional pos-App_Release `VR_20260511_175849`
-- Proxima linha: V12.0.0205 com auditoria cruzada Opus/Antigravity e lista mestra de evolucoes
+- Doc técnica: `docs/tutorials/GUIA_TESTES_HUMANOS_V204.md` + `docs/tutorials/GUIA_TESTES_HUMANOS_V204.docx`
+- Evidência final: `VR_20260511_154433`; evidência adicional pós-App_Release `VR_20260511_175849`
+- Próxima linha: V12.0.0205 com auditoria cruzada Opus/Antigravity e lista mestra de evoluções
 
 ## Roadmap apos Onda 6
 
 | Onda | Tema | Status |
 |---|---|---|
-| V12.0.0204 | release oficial | VALIDADA |
-| V12.0.0205 | auditoria cruzada + lista mestra de evolucoes | PROXIMA |
+| V12.0.0204 | release oficial | VALIDADO |
+| V12.0.0205 | auditoria cruzada + lista mestra de evoluções | PRÓXIMA |
 | V12.0.0205 | renomear taxonomia publica de testes | PLANEJADO |
 
 ## Documentos canonicos (pos-Onda 6)

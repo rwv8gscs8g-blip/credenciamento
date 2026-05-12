@@ -1,44 +1,44 @@
 ---
-titulo: Matriz publico vs CLA-controlado — referencia definitiva
+titulo: Matriz público vs CLA-controlado — referência definitiva
 diataxis: reference
 audiencia: ambos (humano + IA)
 hbn-track: fast_track
-versao-sistema: V12.0.0203
-data: 2026-04-29
+versao-sistema: V12.0.0204
+data: 2026-05-12
 ---
 
-# Matriz publico vs CLA-controlado — referencia definitiva
+# Matriz público vs CLA-controlado — referência definitiva
 
-Esta tabela define **definitivamente** o que e publico (auditavel
-sem CLA) e o que e controlado por CLA (entregue via release zip apos
-aceite rastreavel).
+Esta tabela define **definitivamente** o que é público (auditável sem CLA) e o
+que é controlado por CLA (entregue via release zip após aceite rastreável).
 
-## Categoria 1 — Codigo do produto (PUBLICO)
+## Categoria 1 — Código do produto (PÚBLICO)
 
 | Item | Localizacao | Justificativa |
 |---|---|---|
 | Modulos VBA | `src/vba/*.bas` | parte do produto que roda no `.xlsm` |
 | Formularios VBA | `src/vba/*.frm` + `src/vba/*.frx` | parte do produto que roda no `.xlsm` |
-| Importador V2 (modulo VBA) | `src/vba/Importador_V2.bas` | codigo do produto, dentro do workbook |
+| Importador V3 (módulo VBA) | `src/vba/Importador_V3.bas` | código do produto, dentro do workbook |
+| Importador V2 (módulo VBA histórico) | `src/vba/Importador_V2.bas` | preservado para rastreabilidade histórica |
 
-## Categoria 2 — Documentacao tecnica (PUBLICO)
-
-| Item | Localizacao | Justificativa |
-|---|---|---|
-| Auditoria por tipo | `auditoria/00_status/`, `auditoria/01_regras_e_governanca/`, `auditoria/02_planos/`, `auditoria/03_ondas/`, `auditoria/04_evidencias/` | auditabilidade publica integral |
-| Diataxis | `docs/tutorials/`, `docs/how-to/`, `docs/reference/`, `docs/explanation/` | navegacao para humanos |
-| Coordenacao HBN | `.hbn/relay/`, `.hbn/knowledge/`, `.hbn/readbacks/`, `.hbn/results/`, `.hbn/reports/` | governanca inter-IA publica |
-| Vitrine institucional | `obsidian-vault/00-DASHBOARD.md`, `obsidian-vault/releases/`, `obsidian-vault/metodologia/` | apresentacao publica |
-
-## Categoria 3 — Governanca e licencas (PUBLICO)
+## Categoria 2 — Documentação técnica (PÚBLICO)
 
 | Item | Localizacao | Justificativa |
 |---|---|---|
-| Licenca | `LICENSE` (TPGL v1.1) | obrigatoriedade legal |
+| Auditoria por tipo | `auditoria/00_status/`, `auditoria/01_regras_e_governanca/`, `auditoria/02_planos/`, `auditoria/03_ondas/`, `auditoria/evidencias/` | auditabilidade pública integral |
+| Diataxis | `docs/tutorials/`, `docs/how-to/`, `docs/reference/`, `docs/explanation/` | navegação para humanos |
+| Coordenação HBN | `.hbn/relay/`, `.hbn/knowledge/`, `.hbn/readbacks/`, `.hbn/results/`, `.hbn/reports/` | governança inter-IA pública |
+| Vitrine institucional | `obsidian-vault/00-DASHBOARD.md`, `obsidian-vault/releases/`, `obsidian-vault/metodologia/` | apresentação pública |
+
+## Categoria 3 — Governança e licenças (PÚBLICO)
+
+| Item | Localizacao | Justificativa |
+|---|---|---|
+| Licença | `LICENSE` (TPGL v1.1) | obrigatoriedade legal |
 | CLA | `CLA.md` | contribuidor le antes de assinar |
 | Codigo de conduta | `CODE_OF_CONDUCT.md` | aplicavel a todos |
 | Contribuicao | `CONTRIBUTING.md` | fluxo publico |
-| Seguranca | `SECURITY.md` | politica publica |
+| Segurança | `SECURITY.md` | política pública |
 | Changelog | `CHANGELOG.md` | rastreabilidade publica |
 | README | `README.md` | porta de entrada |
 
@@ -48,17 +48,17 @@ aceite rastreavel).
 |---|---|---|
 | Entrada para IAs | `AGENTS.md` | padrao agents.md publico |
 | Mapa curado LLM | `llms.txt` | padrao llmstxt.org publico |
-| Mapa exaustivo LLM | `llms-full.txt` | indexacao publica |
-| Instrucoes Claude | `CLAUDE.md` | aponta para `AGENTS.md` |
+| Mapa exaustivo LLM | `llms-full.txt` | indexação pública |
+| Instruções Claude | `CLAUDE.md` | aponta para `AGENTS.md` |
 
 ## Categoria 5 — Manifestos e contratos de formato (PUBLICO)
 
 | Item | Localizacao | Justificativa |
 |---|---|---|
-| Especificacao do manifesto | `docs/reference/MANIFESTO_FORMAT.md` | contrato publico — implementacao e privada |
-| Especificacao do importador | `docs/reference/IMPORTADOR_V2.md` (a criar 9.5) | contrato publico |
-| Matriz CMMI/ISO | `docs/reference/COMPLIANCE_CMMI_ISO.md` | aderencia auditavel |
-| Governanca de release | `docs/reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md` | processo publico |
+| Especificação do manifesto | `docs/reference/MANIFESTO_FORMAT.md` | contrato público histórico |
+| Explicação do importador vigente | `docs/explanation/IMPORTADOR_V3.md` | visão pública do processo atual |
+| Matriz CMMI/ISO | `docs/reference/COMPLIANCE_CMMI_ISO.md` | aderência auditável |
+| Governança de release | `docs/reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md` | processo público |
 
 ## Categoria 6 — CLA-CONTROLADO (entregue via release zip)
 

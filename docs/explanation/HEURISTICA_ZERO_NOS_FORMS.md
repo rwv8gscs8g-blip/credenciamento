@@ -1,10 +1,21 @@
-# Heuristica zero nos forms (Onda 8)
+---
+titulo: Heurística zero nos forms
+diataxis: explanation
+hbn-track: safe_track
+hbn-status: active
+audiencia: ambos
+versao-sistema: V12.0.0204
+data: 2026-05-12
+---
+
+# Heurística zero nos forms (Onda 8)
 
 > Diataxis: Explanation. Para passos operacionais, ver
 > [`docs/how-to/COMO_IMPORTAR_PACOTE_VBA.md`](../how-to/COMO_IMPORTAR_PACOTE_VBA.md).
 > Regra V203 origem: `auditoria/01_regras_e_governanca/00_REGRAS_V203_INEGOCIAVEIS.md`.
+> Permanece aplicável na V12.0.0204 como diretriz de segurança preventiva.
 
-## O que e "heuristica" no contexto de form VBA
+## O que é "heurística" no contexto de form VBA
 
 Um form VBA (`.frm`) descreve dois corpos diferentes:
 

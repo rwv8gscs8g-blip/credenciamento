@@ -8,56 +8,56 @@ versao-sistema: V12.0.0204
 data: 2026-05-11
 ---
 
-# Status Oficial das Versoes
+# Status Oficial das Versões
 
-Este arquivo e a fonte canonica para o status de publicacao das versoes. As release notes individuais continuam existindo como historico tecnico, mas a classificacao oficial passa a ser feita aqui.
+Este arquivo é a fonte canônica para o status de publicação das versões. As release notes individuais continuam existindo como histórico técnico, mas a classificação oficial passa a ser feita aqui.
 
 ## Linha oficial atual
 
-| Versao | Status | Compila | Testes | Observacao |
+| Versão | Status | Compila | Testes | Observação |
 |--------|--------|---------|--------|------------|
-| V12.0.0204 | VALIDADA | Sim | `VR_20260511_154433` e `VR_20260511_175849` aprovados | Linha oficial vigente; build final validado `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`; Smoke `34/0/4`; validacao manual final aprovada pelo operador; vitrine humana V204 atualizada |
+| V12.0.0204 | VALIDADO | Sim | `VR_20260511_154433` e `VR_20260511_175849` aprovados | Linha oficial vigente; build final validado `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`; Smoke `34/0/4`; validação manual final aprovada pelo operador; vitrine humana V204 atualizada |
 
 ## Linha em estabilizacao, ainda nao oficial
 
-| Versao alvo | Status | Build ancora | Compila | Testes | Observacao |
+| Versão alvo | Status | Build âncora | Compila | Testes | Observação |
 |-------------|--------|--------------|---------|--------|------------|
-| V12.0.0205 | PLANEJAMENTO | pendente | pendente | pendente | Proxima linha: auditoria cruzada Opus/Antigravity, lista mestra de evolucoes e renomeacao profissional da taxonomia de testes |
+| V12.0.0205 | PLANEJAMENTO | pendente | pendente | pendente | Próxima linha: auditoria cruzada Opus/Antigravity, lista mestra de evoluções e renomeação profissional da taxonomia de testes |
 
 ## Marcos validados
 
-| Versao | Status | Observacao |
+| Versão | Status | Observação |
 |--------|--------|------------|
-| V12.0.0202 | SUPERADA | Substituida pela V12.0.0204, mantendo valor historico como primeira linha publica validada da fase HBN |
-| V12.0.0203 | SUPERADA | Release candidate e trilha de estabilizacao absorvidas pela V12.0.0204; nao foi promovida como release oficial isolada |
-| V12.0.0190 | VALIDADA | Marco de estabilizacao da baseline deterministica da V2 |
-| V12.0.0191 | VALIDADA | Marco da migracao das guardas criticas UI -> servico |
-| V12.0.0180 | VALIDADA | Base estavel aprovada para a retomada da linha V12 |
+| V12.0.0202 | SUPERADA | Substituída pela V12.0.0204, mantendo valor histórico como primeira linha pública validada da fase HBN |
+| V12.0.0203 | SUPERADA | Release candidate e trilha de estabilização absorvidas pela V12.0.0204; não foi promovida como release oficial isolada |
+| V12.0.0190 | VALIDADA | Marco de estabilização da baseline determinística da V2 |
+| V12.0.0191 | VALIDADA | Marco da migração das guardas críticas UI -> serviço |
+| V12.0.0180 | VALIDADA | Base estável aprovada para a retomada da linha V12 |
 
 ## Superadas por consolidacao
 
-| Versoes | Status | Observacao |
+| Versões | Status | Observação |
 |---------|--------|------------|
-| V12.0.0182 a V12.0.0189 | SUPERADAS | Iteracoes preparatorias da V2; valor historico preservado |
+| V12.0.0182 a V12.0.0189 | SUPERADAS | Iterações preparatórias da V2; valor histórico preservado |
 | V12.0.0192 | SUPERADA | Higiene de inativos incorporada na linha estabilizada posterior |
-| V12.0.0194 a V12.0.0201 | SUPERADAS | Hotfixes intermediarios absorvidos pela V12.0.0202 |
+| V12.0.0194 a V12.0.0201 | SUPERADAS | Hotfixes intermediários absorvidos pela V12.0.0202 |
 
 ## Revertidas ou rejeitadas
 
-| Versao | Status | Observacao |
+| Versão | Status | Observação |
 |--------|--------|------------|
-| V12.0.0193 | REVERTIDA | Recorte CNAE/CAD_SERV revertido por regressao operacional |
-| V12.0.0142 | REVERTIDA | Estrategia de reset CNAE descartada no historico |
+| V12.0.0193 | REVERTIDA | Recorte CNAE/CAD_SERV revertido por regressão operacional |
+| V12.0.0142 | REVERTIDA | Estratégia de reset CNAE descartada no histórico |
 
 ## Historico interno nao candidato a publicacao direta
 
 | Faixa | Status | Observacao |
 |-------|--------|------------|
-| V12.0.0062 a V12.0.0179 | HISTORICO_INTERNO | Material util para rastreabilidade, mas fora da linha oficial que sera publicada |
+| V12.0.0062 a V12.0.0179 | HISTORICO_INTERNO | Material útil para rastreabilidade, mas fora da linha oficial que será publicada |
 
 ## Regra de uso
 
 - Nenhuma release deve permanecer sem status oficial.
-- Se a versao deixou de ser candidata a auditoria isolada, ela deve ser marcada como `SUPERADA`.
-- Se a versao regrediu ou foi abandonada, ela deve ser marcada como `REVERTIDA`.
-- A linha publica do projeto deve sempre apontar para a versao mais nova `VALIDADA`.
+- Se a versão deixou de ser candidata a auditoria isolada, ela deve ser marcada como `SUPERADA`.
+- Se a versão regrediu ou foi abandonada, ela deve ser marcada como `REVERTIDA`.
+- A linha pública do projeto deve sempre apontar para a versão mais nova `VALIDADO`.

@@ -76,6 +76,14 @@ tratam apenas da linha pública oficial.
 - **Onda 25 / MICRO57** — guia humano V204 reorientado para validacao pela
   interface do Excel: botao Sobre, botao Central de Testes, Central V2 opcao
   `[1] Sexteto Minimo`, roteiro manual e checklist sem VBE/Janela Imediata.
+- **Onda 25 / MICRO58** — vitrine pública V204 racionalizada para testador
+  humano externo: regras de negócio V204 canônicas, guia humano em Markdown e
+  Word, índice de evidências, acentuação PT-BR, separação `docs/` vs `doc/`,
+  atualização do `AGENTS.md`, promoção do Importador V3 e arquivamento
+  explícito do material histórico V2/V203.
+- **Onda 25 / MICRO59** — incorporação do protocolo Word aprovado de
+  homologação humana V12.0.0204, com 82 páginas renderizadas para QA visual,
+  e preparação do handoff V205 para Codex 5.5.
 
 ### Corrigido
 

@@ -1,5 +1,5 @@
 ---
-titulo: Indice publico de documentacao
+titulo: Índice Público de Documentação
 ultima-atualizacao: 2026-05-12
 diataxis: reference
 hbn-track: fast_track
@@ -8,85 +8,90 @@ audiencia: ambos
 versao-sistema: V12.0.0204
 ---
 
-# Indice Publico (Diataxis-aware)
+# Índice Público (Diataxis-aware)
 
-Este indice usa o framework [Diataxis](https://diataxis.fr/). Cada
-documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
+Este índice usa o framework [Diataxis](https://diataxis.fr/). Cada documento
+fica em um dos quatro quadrantes, conforme sua audiência primária.
 
 ## Comece por aqui
 
-- [`README.md`](../README.md) — posicionamento publico humano
-- [`AGENTS.md`](../AGENTS.md) — entrada canonica para IAs
+- [`README.md`](../README.md) — posicionamento público humano
+- [`AGENTS.md`](../AGENTS.md) — entrada canônica para IAs
 - [`llms.txt`](../llms.txt) — mapa curado para LLMs
 - [`obsidian-vault/00-DASHBOARD.md`](../obsidian-vault/00-DASHBOARD.md) — dashboard executivo
 
-## docs/tutorials/ — aprender (passo-a-passo)
+## docs/tutorials/ — aprender passo a passo
 
-- [`../obsidian-vault/releases/V12.0.0204.md`](../obsidian-vault/releases/V12.0.0204.md) — release note publica da versao oficial vigente
+- [`../obsidian-vault/releases/V12.0.0204.md`](../obsidian-vault/releases/V12.0.0204.md) — release note pública da versão oficial vigente
+- [`tutorials/PROTOCOLO_HOMOLOGACAO_HUMANA_V12_0_0204.docx`](tutorials/PROTOCOLO_HOMOLOGACAO_HUMANA_V12_0_0204.docx) — protocolo completo aprovado para homologação humana externa da V204
 - [`tutorials/GUIA_TESTES_HUMANOS_V204.md`](tutorials/GUIA_TESTES_HUMANOS_V204.md) — guia principal para testador humano validar a V204 pela interface do Excel
-- [`tutorials/INDEX.md`](tutorials/INDEX.md) — indice de tutoriais vigentes e historicos
+- [`tutorials/GUIA_TESTES_HUMANOS_V204.docx`](tutorials/GUIA_TESTES_HUMANOS_V204.docx) — versão Word do guia para envio com a planilha
+- [`tutorials/INDEX.md`](tutorials/INDEX.md) — índice de tutoriais vigentes e históricos
 
-## docs/how-to/ — cookbook (problema concreto)
+## docs/how-to/ — cookbook para problemas concretos
 
 - [`how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md`](how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md) — acesso a materiais operacionais controlados
 - [`how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md`](how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md) — liberar macros e desbloquear arquivo `.xlsm` baixado no Windows
-- [`how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — procedimento canonico V204 pela Central de Testes
-- [`how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md) — historico V203/rc4, nao usar como gate V204
+- [`how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — procedimento canônico V204 pela Central de Testes
+- [`how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md) — histórico V203/rc4, não usar como gate V204
 
-## docs/reference/ — consulta (regras, API, governanca)
+## docs/reference/ — consulta sobre regras, testes e governança
 
+- [`reference/regras/REGRAS_DE_NEGOCIO_V204.md`](reference/regras/REGRAS_DE_NEGOCIO_V204.md) — regras de negócio canônicas da V204
 - [`reference/COMPLIANCE_CMMI_ISO.md`](reference/COMPLIANCE_CMMI_ISO.md) — mapeamento CMMI/ISO
-- [`reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`](reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md) — governanca de release
-- [`reference/testes/INDEX.md`](reference/testes/INDEX.md) — indice de testes
-- [`reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md`](reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md) — matriz humana de cobertura das regras de negocio V204
-- [`reference/testes/03_CATALOGO_CENARIOS_V2_V203.md`](reference/testes/03_CATALOGO_CENARIOS_V2_V203.md) — catalogo dos cenarios V2
+- [`reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md`](reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md) — governança de release
+- [`reference/testes/INDEX.md`](reference/testes/INDEX.md) — índice de testes
+- [`reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md`](reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md) — matriz humana de cobertura das regras de negócio V204
 - [`reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md`](reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md) — matriz final de rastreabilidade da V204
-- [`reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md`](reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — roteiro humano de homologacao da V204
-- [`reference/licenca/README.md`](reference/licenca/README.md) — modelo de licenca
+- [`reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md`](reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — roteiro humano de homologação da V204
+- [`reference/licenca/README.md`](reference/licenca/README.md) — modelo de licença
 - [`reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md`](reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md) — template CLA institucional
 
-## Historico de testes (nao usar para validar V204)
+## Histórico de testes
 
-- [`tutorials/historico/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md`](tutorials/historico/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md) — treinamento V203/rc4 arquivado
-- [`reference/testes/02_MAPA_TESTES_V203_QUINTETO.md`](reference/testes/02_MAPA_TESTES_V203_QUINTETO.md) — mapa V203/Quinteto arquivado
-- [`reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md`](reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md) — matriz V203 arquivada
-- [`reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md`](reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md) — roteiro rc4 arquivado
+Estes documentos preservam a trilha V203/rc4 e não devem ser usados para
+validar a V12.0.0204.
 
-## docs/explanation/ — entender (arquitetura, decisoes)
+- [`tutorials/historico/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md`](tutorials/historico/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md)
+- [`reference/testes/02_MAPA_TESTES_V203_QUINTETO.md`](reference/testes/02_MAPA_TESTES_V203_QUINTETO.md)
+- [`reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md`](reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md)
+- [`reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md`](reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md)
 
-- [`explanation/ARQUITETURA.md`](explanation/ARQUITETURA.md) — arquitetura do sistema
-- [`explanation/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md`](explanation/PROPOSTA_TESTES_V2_CENARIO_CANONICO.md) — racional dos cenarios V2
+## docs/explanation/ — entender arquitetura e decisões
 
-## auditoria/ — historia + evidencias publicas
+- [`explanation/ARQUITETURA.md`](explanation/ARQUITETURA.md) — arquitetura vigente da V204
+- [`explanation/MODELO_DE_ACESSO_CONTROLADO.md`](explanation/MODELO_DE_ACESSO_CONTROLADO.md) — por que parte do ferramental é controlada
+- [`explanation/HEURISTICA_ZERO_NOS_FORMS.md`](explanation/HEURISTICA_ZERO_NOS_FORMS.md) — regra histórica ainda aplicável aos formulários
+- [`explanation/IMPORTADOR_V3.md`](explanation/IMPORTADOR_V3.md) — visão conceitual vigente do Importador V3
+- [`explanation/_historico/IMPORTADOR_V2.md`](explanation/_historico/IMPORTADOR_V2.md) — histórico V203
 
-- [`auditoria/00_status/`](../auditoria/00_status/) — snapshots de estado (00, 22, 24, 26)
-- [`auditoria/01_regras_e_governanca/`](../auditoria/01_regras_e_governanca/) — regras canonicas (00 inegociaveis, 03, 04, 14, 16, 17, 18, 19, 21, 23)
-- [`auditoria/02_planos/`](../auditoria/02_planos/) — planos (15, 20, 25, 27)
-- [`auditoria/02_planos/28_PLANO_V204_ESTABILIZACAO_FINAL_DEBITOS_TESTES.md`](../auditoria/02_planos/28_PLANO_V204_ESTABILIZACAO_FINAL_DEBITOS_TESTES.md) — abertura planejada da V204
-- [`auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md`](../auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md) — fechamento de publicacao V204
-- [`auditoria/03_ondas/`](../auditoria/03_ondas/) — documentacao tecnica de cada onda
-- [`auditoria/04_evidencias/`](../auditoria/04_evidencias/) — CSVs e manifestos hashados
-- [`auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md`](../auditoria/40_TRANSICAO_RACIONALIZACAO_E_PROMPT_RETOMADA.md) — auditoria honesta + plano (raiz)
+## auditoria/ — história e evidências públicas
 
-## .hbn/ — coordenacao inter-IA (HBN-native)
+- [`auditoria/00_status/`](../auditoria/00_status/) — snapshots de estado
+- [`auditoria/01_regras_e_governanca/`](../auditoria/01_regras_e_governanca/) — regras históricas e auditorias de governança
+- [`auditoria/02_planos/`](../auditoria/02_planos/) — planos
+- [`auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md`](../auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md) — fechamento de publicação V204
+- [`auditoria/03_ondas/`](../auditoria/03_ondas/) — documentação técnica de cada onda
+- [`auditoria/evidencias/V12.0.0204/INDEX.md`](../auditoria/evidencias/V12.0.0204/INDEX.md) — índice das evidências da V204
+- [`auditoria/evidencias/`](../auditoria/evidencias/) — pasta canônica de evidências por release
+- [`auditoria/04_evidencias/`](../auditoria/04_evidencias/) — pasta histórica preservada por compatibilidade documental
 
-- [`.hbn/relay/INDEX.md`](../.hbn/relay/INDEX.md) — bastao + ciclo ativo
-- [`.hbn/knowledge/INDEX.md`](../.hbn/knowledge/INDEX.md) — decisoes reutilizaveis
+## .hbn/ — coordenação inter-IA
+
+- [`.hbn/relay/INDEX.md`](../.hbn/relay/INDEX.md) — bastão + ciclo ativo
+- [`.hbn/knowledge/INDEX.md`](../.hbn/knowledge/INDEX.md) — decisões reutilizáveis
 - [`.hbn/readbacks/`](../.hbn/readbacks/) — snapshots safe_track
 - [`.hbn/results/`](../.hbn/results/) — ERPs
 
-## Releases e status (vitrine institucional)
+## Releases e status
 
 - [`obsidian-vault/00-DASHBOARD.md`](../obsidian-vault/00-DASHBOARD.md)
 - [`obsidian-vault/releases/STATUS-OFICIAL.md`](../obsidian-vault/releases/STATUS-OFICIAL.md)
 - [`obsidian-vault/releases/V12.0.0204.md`](../obsidian-vault/releases/V12.0.0204.md)
 - [`obsidian-vault/releases/V12.0.0202.md`](../obsidian-vault/releases/V12.0.0202.md)
 - [`obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md`](../obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md)
-- [`obsidian-vault/metodologia/01-COMO-A-IA-LE-ESTE-REPO.md`](../obsidian-vault/metodologia/01-COMO-A-IA-LE-ESTE-REPO.md)
-- [`obsidian-vault/metodologia/02-INTEGRACAO-USEHBN.md`](../obsidian-vault/metodologia/02-INTEGRACAO-USEHBN.md)
-- [`obsidian-vault/metodologia/03-PROTOCOLO-GLASSWING.md`](../obsidian-vault/metodologia/03-PROTOCOLO-GLASSWING.md)
 
-## Arquivos canonicos da raiz
+## Arquivos canônicos da raiz
 
 - [`README.md`](../README.md)
 - [`LICENSE`](../LICENSE)
@@ -99,10 +104,11 @@ documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 - [`llms.txt`](../llms.txt)
 - [`llms-full.txt`](../llms-full.txt)
 
-## Codigo
+## Código e dados
 
 - [`src/vba/`](../src/vba/) — fonte de verdade VBA
-- O pacote operacional de importacao VBA fica fora da superficie publica
-  principal e deve ser obtido por canal controlado, conforme
-  [`how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md`](how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md).
-- [`doc/`](../doc/) — dados estruturais de referencia
+- [`doc/`](../doc/) — dados CNAE estruturais usados pela planilha; não é a pasta de documentação pública
+
+O pacote operacional de importação VBA fica fora da superfície pública
+principal e deve ser obtido por canal controlado, conforme
+[`how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md`](how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md).

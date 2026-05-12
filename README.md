@@ -1,7 +1,7 @@
 # Sistema de Credenciamento e Rodízio de Pequenos Reparos
 
 > Repositório público source-available, auditável e orientado a evidência para
-> gestão municipal de credenciamento, rodízio, Pre-OS, OS e avaliação de
+> gestão municipal de credenciamento, rodízio, Pré-OS, OS e avaliação de
 > prestadores de pequenos reparos em Excel/VBA.
 
 [![Release](https://img.shields.io/badge/release-V12.0.0204-blue)](obsidian-vault/releases/V12.0.0204.md)
@@ -40,8 +40,8 @@ de cada release para Apache 2.0 na respectiva Data de Conversão.
 - credenciamento de empresas por atividade
 - gestão de entidades demandantes
 - seleção automática por rodízio equitativo
-- emissão de Pre-OS com aceite, recusa e expiração
-- conversão de Pre-OS em OS
+- emissão de Pré-OS com aceite, recusa e expiração
+- conversão de Pré-OS em OS
 - avaliação com nota mínima, justificativa de divergência e suspensão automática
 - relatórios e trilha de auditoria operacional
 - bateria oficial e camada V2 de testes
@@ -49,10 +49,10 @@ de cada release para Apache 2.0 na respectiva Data de Conversão.
 ## O que este repositório publica
 
 - [src/vba](src/vba) — código VBA fonte
-- [auditoria](auditoria) — auditorias e matriz de testes
+- [auditoria](auditoria) — auditorias, evidências e matriz de testes
 - [docs/INDEX.md](docs/INDEX.md) — índice documental público
 - [obsidian-vault/releases/STATUS-OFICIAL.md](obsidian-vault/releases/STATUS-OFICIAL.md) — status oficial das versões
-- [doc](doc) — dados estruturais de referência
+- [doc](doc) — dados CNAE estruturais usados pela planilha; não é a pasta de documentação
 
 O repositório **não** expõe como narrativa principal workflows internos,
 sincronização local, upload, importação pessoal ou automações privadas.
@@ -66,14 +66,14 @@ dependência pública de um instalador ou compilador específico deste repositó
 Integradores podem:
 
 1. baixar o código em [src/vba](src/vba)
-2. revisar as regras em [auditoria/01_regras_e_governanca/03_AUDITORIA_REGRAS_DE_NEGOCIO.md](auditoria/01_regras_e_governanca/03_AUDITORIA_REGRAS_DE_NEGOCIO.md)
-3. revisar a matriz de testes em [auditoria/01_regras_e_governanca/04_MATRIZ_MESTRE_DE_TESTES.md](auditoria/01_regras_e_governanca/04_MATRIZ_MESTRE_DE_TESTES.md)
+2. revisar as regras em [docs/reference/regras/REGRAS_DE_NEGOCIO_V204.md](docs/reference/regras/REGRAS_DE_NEGOCIO_V204.md)
+3. revisar a matriz de testes em [docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md](docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md)
 4. compilar/incorporar o VBA no processo que julgarem adequado
 
 ## Materiais operacionais complementares
 
 O guia detalhado de importação do código-fonte e o vídeo tutorial operacional
-não fazem parte da superfície pública deste repositório.
+não fazem parte da superfície pública principal deste repositório.
 
 Esses materiais são fornecidos em canal controlado aos:
 
@@ -87,15 +87,19 @@ operacional controlada da documentação institucional auditável.
 
 ### Para humanos
 
-- [docs/INDEX.md](docs/INDEX.md) — indice publico Diataxis-aware
-- [obsidian-vault/releases/V12.0.0204.md](obsidian-vault/releases/V12.0.0204.md) — release note publica da versao oficial vigente
+- [docs/INDEX.md](docs/INDEX.md) — índice público Diataxis-aware
+- [obsidian-vault/releases/V12.0.0204.md](obsidian-vault/releases/V12.0.0204.md) — release note pública da versão oficial vigente
+- [docs/tutorials/PROTOCOLO_HOMOLOGACAO_HUMANA_V12_0_0204.docx](docs/tutorials/PROTOCOLO_HOMOLOGACAO_HUMANA_V12_0_0204.docx) — protocolo completo aprovado para homologação humana externa da V204
 - [docs/tutorials/GUIA_TESTES_HUMANOS_V204.md](docs/tutorials/GUIA_TESTES_HUMANOS_V204.md) — guia principal para testador humano validar pela interface do Excel
+- [docs/tutorials/GUIA_TESTES_HUMANOS_V204.docx](docs/tutorials/GUIA_TESTES_HUMANOS_V204.docx) — guia Word para encaminhar com a planilha ao testador humano
 - [docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md](docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md) — liberar macros no Windows antes do teste
 - [docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md](docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — reproduzir o gate automatizado da V204 pela Central de Testes
-- [docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md](docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — roteiro humano de homologacao da V204
-- [docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md](docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md) — cobertura das regras de negocio da V204
+- [docs/reference/regras/REGRAS_DE_NEGOCIO_V204.md](docs/reference/regras/REGRAS_DE_NEGOCIO_V204.md) — regras de negócio que a release não pode violar
+- [docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md](docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — roteiro humano de homologação da V204
+- [docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md](docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md) — cobertura das regras de negócio da V204
 - [docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md](docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md) — matriz de rastreabilidade da V204
-- [auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md](auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md) — fechamento de publicacao V204
+- [auditoria/evidencias/V12.0.0204/INDEX.md](auditoria/evidencias/V12.0.0204/INDEX.md) — índice das evidências públicas V204
+- [auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md](auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md) — fechamento de publicação V204
 - [docs/explanation/ARQUITETURA.md](docs/explanation/ARQUITETURA.md)
 - [docs/reference/COMPLIANCE_CMMI_ISO.md](docs/reference/COMPLIANCE_CMMI_ISO.md)
 - [docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
@@ -107,26 +111,26 @@ operacional controlada da documentação institucional auditável.
 
 ### Para IAs
 
-- [AGENTS.md](AGENTS.md) — entrada canonica (padrao [agents.md](https://agents.md/))
-- [llms.txt](llms.txt) — mapa curado para LLMs (padrao [llmstxt.org](https://llmstxt.org/))
-- [llms-full.txt](llms-full.txt) — indice exaustivo
-- [.hbn/relay/INDEX.md](.hbn/relay/INDEX.md) — bastao + ciclo ativo (HBN)
-- [.hbn/knowledge/0001-regras-v203-inegociaveis.md](.hbn/knowledge/0001-regras-v203-inegociaveis.md) — 10 regras V203
+- [AGENTS.md](AGENTS.md) — entrada canônica (padrão [agents.md](https://agents.md/))
+- [llms.txt](llms.txt) — mapa curado para LLMs (padrão [llmstxt.org](https://llmstxt.org/))
+- [llms-full.txt](llms-full.txt) — índice exaustivo
+- [.hbn/relay/INDEX.md](.hbn/relay/INDEX.md) — bastão + ciclo ativo (HBN)
+- [.hbn/knowledge/0001-regras-v203-inegociaveis.md](.hbn/knowledge/0001-regras-v203-inegociaveis.md) — regras operacionais históricas ainda aplicáveis até consolidação V205
 
 ## Metodologia
 
-Este projeto adotou em 28/04/2026 a metodologia hibrida composta por:
+Este projeto adotou em 28/04/2026 a metodologia híbrida composta por:
 
 | Protocolo | Papel |
 |---|---|
-| [HBN](https://usehbn.org) | core de coordenacao inter-IA (relay, readback, hearback, truth barrier) |
-| [Diataxis](https://diataxis.fr/) | docs/ para humanos (4 quadrantes) |
-| [llms.txt](https://llmstxt.org/) | docs/ para LLMs (mapa curado) |
+| [HBN](https://usehbn.org) | core de coordenação inter-IA (relay, readback, hearback, truth barrier) |
+| [Diataxis](https://diataxis.fr/) | `docs/` para humanos |
+| [llms.txt](https://llmstxt.org/) | docs para LLMs |
 | [agents.md](https://agents.md/) | contrato unificado de agentes |
-| Glasswing-style preventive | seguranca preventiva (5 vetores domain-specific) |
+| Glasswing-style preventive | segurança preventiva domain-specific |
 
 Detalhes em [obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md](obsidian-vault/metodologia/00-MAPA-DOCUMENTAL.md).
-Este projeto e o primeiro [case study](https://github.com/...) production-scale do `usehbn`.
+Este projeto é o primeiro case study production-scale do `usehbn`.
 
 ## Créditos
 
@@ -139,10 +143,10 @@ Linha oficial: `V12.0.0204`
 
 Build final validado no workbook: `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`
 
-- compilacao limpa validada por operador humano
+- compilação limpa validada por operador humano
 - teste manual final validado por operador humano
 - Smoke V2 `TV2_20260511_131824` com `OK=34 | FALHA=0 | MANUAL=4`
-- gate consolidado `VR_20260511_154433` aprovado para publicacao e gate adicional `VR_20260511_175849` aprovado apos App_Release final, ambos com sintaxe `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`
-- evidencias publicas arquivadas em `auditoria/evidencias/V12.0.0204/`
-- pacote humano de teste V204 atualizado para uso por interface: liberar macros, botao Central de Testes, Sexteto e roteiro manual
-- V12.0.0205 abrira a proxima etapa com auditoria cruzada, melhoria de nomenclatura da taxonomia de testes e lista mestra de evolucoes
+- gate consolidado `VR_20260511_154433` aprovado para publicação e gate adicional `VR_20260511_175849` aprovado após App_Release final, ambos com sintaxe `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`
+- evidências públicas arquivadas em `auditoria/evidencias/V12.0.0204/`
+- pacote humano de teste V204 atualizado para uso por interface: liberar macros, botão Central de Testes, Sexteto e roteiro manual
+- V12.0.0205 abrirá a próxima etapa com auditoria cruzada, melhoria de nomenclatura da taxonomia de testes e lista mestra de evoluções

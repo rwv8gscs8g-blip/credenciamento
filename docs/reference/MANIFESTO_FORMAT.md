@@ -1,8 +1,18 @@
-# Especificacao do MANIFESTO V2
+---
+titulo: Especificação histórica do Manifesto V2
+diataxis: reference
+hbn-track: safe_track
+hbn-status: archived
+audiencia: ia
+versao-sistema: V12.0.0203
+data: 2026-05-12
+---
 
-> Diataxis: Reference (especificacao formal).
-> Para visao conceitual, ver [`docs/explanation/IMPORTADOR_V2.md`](../explanation/IMPORTADOR_V2.md).
-> Para passo a passo, ver [`docs/how-to/COMO_IMPORTAR_PACOTE_VBA.md`](../how-to/COMO_IMPORTAR_PACOTE_VBA.md).
+# Especificação histórica do Manifesto V2
+
+> Documento preservado para rastreabilidade do Importador V2. A linha
+> V12.0.0204 usa Importador V3 em canal operacional controlado. Para a linha
+> atual, ver [`docs/explanation/IMPORTADOR_V3.md`](../explanation/IMPORTADOR_V3.md).
 
 ## Localizacao
 
