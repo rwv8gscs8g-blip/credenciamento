@@ -1,0 +1,59 @@
+{
+  "execution_id": "0066-exec-onda25-md25-8-guia-humano-interface-v204-micro57",
+  "agent_id": "Codex CLI",
+  "readback_id": "0066-onda25-md25-8-guia-humano-interface-v204-micro57",
+  "action": "MICRO57 documental: guia humano V204 por interface",
+  "outcome": "EXECUTADO_DOCUMENTAL",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "created_at": "2026-05-12T11:31:35-0300",
+  "environment": {
+    "cwd": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0203-governanca-testes",
+    "release": "V12.0.0204",
+    "build_reference": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2"
+  },
+  "changes": {
+    "new_docs": [
+      "docs/tutorials/GUIA_TESTES_HUMANOS_V204.md",
+      "docs/tutorials/INDEX.md",
+      "auditoria/03_ondas/onda_25_v204_release_candidate/12_TECNICO_MICRO57_GUIA_HUMANO_INTERFACE_V204.md"
+    ],
+    "moved_docs": [
+      {
+        "from": "docs/tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md",
+        "to": "docs/tutorials/historico/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md",
+        "reason": "material V203/rc4 nao deve aparecer como guia vigente da V204"
+      }
+    ],
+    "updated_docs": [
+      "README.md",
+      "docs/INDEX.md",
+      "docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md",
+      "docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md",
+      "docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md",
+      "docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md",
+      "docs/reference/testes/INDEX.md",
+      "obsidian-vault/releases/V12.0.0204.md",
+      "obsidian-vault/00-DASHBOARD.md",
+      "llms.txt",
+      "CHANGELOG.md",
+      "auditoria/00_status/69_STATUS_V204_PUBLICACAO_2026_05_11.md"
+    ]
+  },
+  "verification": {
+    "vba_changed": false,
+    "package_v3_created": false,
+    "json_valid": "OK",
+    "glasswing": {
+      "G7": "OK",
+      "G8": "OK"
+    },
+    "human_path": "Excel interface only: Sobre -> Central de Testes -> Central V2 -> [1] Sexteto Minimo"
+  },
+  "debts_deferred": [
+    "D-V205-CENTRAL-TESTES-UX: reordenar e simplificar a Central de Testes para testador humano",
+    "D-V205-TEST-TAXONOMY: renomear Sexteto/Quinteto/Quarteto para nomenclatura profissional"
+  ],
+  "decision": "Vitrine publica V204 passa a orientar teste humano externo pela interface do Excel, sem VBE ou Janela Imediata."
+}

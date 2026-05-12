@@ -11,33 +11,36 @@ data: 2026-05-11
 # Como Rodar o Sexteto de Validacao da Release
 
 Este e o procedimento canonico da V12.0.0204 para reproduzir o gate automatizado
-da release em uma maquina Windows com Excel Desktop.
+da release em uma maquina Windows com Excel Desktop, usando apenas a interface
+da planilha.
 
 ## Pre-requisitos
 
 1. A planilha `.xlsm` esta salva localmente.
 2. As macros foram liberadas conforme
    [Como Liberar Macros no Windows](COMO_LIBERAR_MACROS_NO_WINDOWS.md).
-3. O VBA compila limpo em **VBE > Depurar > Compilar VBAProject**.
-4. A janela **Imediato** retorna o build esperado:
+3. A tela inicial do sistema abre normalmente.
+4. O botao **Sobre** confirma V12.0.0204, status VALIDADO e build final
+   homologado.
 
-```vb
-?GetBuildImportado
-```
+## Caminho pela interface
 
-Retorno esperado:
+1. Na tela inicial, clique em **Central de Testes**.
+2. Se aparecer a mensagem **Modo Treinamento**, clique em **Sim**.
+3. Se aparecer a janela **Central de Testes V12 / Transicao**, escolha:
 
 ```text
-f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2
+[2] Central de Testes V2
 ```
 
-## Macro oficial
+4. Na janela **Central de Testes V2**, escolha:
 
-Na janela **Imediato** do VBE, execute:
-
-```vb
-CT_ValidarRelease_SextetoMinimo
+```text
+[1] Sexteto Minimo
 ```
+
+5. Aguarde a execucao terminar.
+6. Ao final, confira a mensagem de conclusao e a aba `VALIDACAO_RELEASE`.
 
 O Excel deve preencher a aba `VALIDACAO_RELEASE`, exibir uma mensagem de
 conclusao e gerar um CSV de resumo em:
@@ -56,6 +59,15 @@ V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Ond
 
 O resultado geral deve ser `APROVADO`.
 
+## Observacao sobre a tela intermediaria
+
+Na V12.0.0204, a primeira janela da Central ainda pode exibir **Quarteto
+Direto** como gate historico. Para validar a release final, use a Central V2 e
+rode **[1] Sexteto Minimo**.
+
+Esse ajuste de mensageria e ordem da Central de Testes esta registrado como
+debito da V12.0.0205.
+
 ## Evidencias oficiais da V204
 
 | Evidencia | Papel |
@@ -69,8 +81,8 @@ Ambas estao em `auditoria/evidencias/V12.0.0204/`.
 
 | Situacao | Decisao |
 |---|---|
-| Compilacao falha | Reprovar e nao salvar o workbook |
-| Build diferente do esperado | Reprovar e registrar o valor retornado |
+| Planilha nao abre ou macros ficam bloqueadas | Reprovar e registrar a mensagem |
+| Botao **Sobre** mostra versao/build diferente | Reprovar e registrar o valor exibido |
 | Qualquer suite com falha maior que zero | Reprovar e anexar CSV de falhas |
 | `MANUAL` diferente do esperado sem justificativa | Registrar como anomalia P2 |
 | Sintaxe igual ao esperado e resultado `APROVADO` | Gate automatizado aprovado |

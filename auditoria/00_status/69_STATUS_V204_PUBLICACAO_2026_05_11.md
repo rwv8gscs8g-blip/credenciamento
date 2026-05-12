@@ -39,12 +39,15 @@ atualizada em MICRO56 para permitir teste externo reprodutivel.
 - MICRO55: `App_Release` final alinhado a V12.0.0204 VALIDADO/OFICIAL.
 - MICRO56: pacote humano de teste externo, com liberacao de macros Windows,
   how-to do Sexteto, roteiro manual V204 e matriz de cobertura de regras V204.
+- MICRO57: guia humano V204 reorientado para uso pela interface do Excel,
+  removendo VBE/Janela Imediata do caminho principal de teste publico.
 
 ## Debitos aceitos para V12.0.0205
 
 | ID | Debito | Destino |
 |---|---|---|
 | D-V205-TAXONOMIA-TESTES | Renomear "Sexteto" para nomenclatura profissional de teste de software | Auditoria cruzada V205 |
+| D-V205-CENTRAL-TESTES-UX | Reordenar e simplificar a Central de Testes para validacao humana por interface | Auditoria cruzada V205 |
 | D-V205-MD24-4 | Retomar documentacao dos side-effects de `SelecionarEmpresa` sem reaproveitar MICRO49 | Microdelta limpo V205 |
 | D-STRICT-G1-G2-G5 | Lapidar falhas historicas nao criticas do `glasswing-checks.sh --strict` | Onda 26 / V205 |
 | D-MICRO50-CSV-FILENAME | Prefixo historico `V12_0_0203` no CSV dentro da pasta correta V12.0.0204 | Higiene documental V205 |
@@ -57,6 +60,8 @@ Publico:
   e CSVs de evidencia V12.0.0204.
 - guias humanos V204: liberar macros no Windows, rodar Sexteto e roteiro manual
   de homologacao.
+- guia principal de teste humano por interface:
+  `docs/tutorials/GUIA_TESTES_HUMANOS_V204.md`.
 
 Interno/auditavel:
 
@@ -65,5 +70,6 @@ Interno/auditavel:
 
 ## Proxima acao
 
-Publicar a vitrine MICRO56 no GitHub/main e iniciar a preparacao da auditoria
-cruzada Opus/Antigravity para a V12.0.0205.
+Publicar a vitrine MICRO57 no GitHub/main e iniciar a preparacao da auditoria
+cruzada Opus/Antigravity para a V12.0.0205, incluindo melhoria da Central de
+Testes e padronizacao dos nomes das baterias.

@@ -1,6 +1,6 @@
 ---
 titulo: Indice publico de documentacao
-ultima-atualizacao: 2026-05-11
+ultima-atualizacao: 2026-05-12
 diataxis: reference
 hbn-track: fast_track
 hbn-status: active
@@ -23,13 +23,14 @@ documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 ## docs/tutorials/ — aprender (passo-a-passo)
 
 - [`../obsidian-vault/releases/V12.0.0204.md`](../obsidian-vault/releases/V12.0.0204.md) — release note publica da versao oficial vigente
-- [`tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md`](tutorials/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md) — treinamento humano preservado como material historico da V203
+- [`tutorials/GUIA_TESTES_HUMANOS_V204.md`](tutorials/GUIA_TESTES_HUMANOS_V204.md) — guia principal para testador humano validar a V204 pela interface do Excel
+- [`tutorials/INDEX.md`](tutorials/INDEX.md) — indice de tutoriais vigentes e historicos
 
 ## docs/how-to/ — cookbook (problema concreto)
 
 - [`how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md`](how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md) — acesso a materiais operacionais controlados
 - [`how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md`](how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md) — liberar macros e desbloquear arquivo `.xlsm` baixado no Windows
-- [`how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — procedimento canonico V204 para o gate de validacao
+- [`how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — procedimento canonico V204 pela Central de Testes
 - [`how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md`](how-to/COMO_RODAR_QUINTETO_VALIDACAO_RELEASE.md) — historico V203/rc4, nao usar como gate V204
 
 ## docs/reference/ — consulta (regras, API, governanca)
@@ -41,11 +42,15 @@ documento fica em UM dos 4 quadrantes, conforme sua audiencia primaria.
 - [`reference/testes/03_CATALOGO_CENARIOS_V2_V203.md`](reference/testes/03_CATALOGO_CENARIOS_V2_V203.md) — catalogo dos cenarios V2
 - [`reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md`](reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md) — matriz final de rastreabilidade da V204
 - [`reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md`](reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — roteiro humano de homologacao da V204
-- [`reference/testes/02_MAPA_TESTES_V203_QUINTETO.md`](reference/testes/02_MAPA_TESTES_V203_QUINTETO.md) — historico V203/Quinteto
-- [`reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md`](reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md) — historico V203
-- [`reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md`](reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md) — historico rc4
 - [`reference/licenca/README.md`](reference/licenca/README.md) — modelo de licenca
 - [`reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md`](reference/legal/CLA_INSTITUCIONAL_TEMPLATE.md) — template CLA institucional
+
+## Historico de testes (nao usar para validar V204)
+
+- [`tutorials/historico/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md`](tutorials/historico/GUIA_TREINAMENTO_TESTES_MANUAIS_V203.md) — treinamento V203/rc4 arquivado
+- [`reference/testes/02_MAPA_TESTES_V203_QUINTETO.md`](reference/testes/02_MAPA_TESTES_V203_QUINTETO.md) — mapa V203/Quinteto arquivado
+- [`reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md`](reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V203.md) — matriz V203 arquivada
+- [`reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md`](reference/testes/05_ROTEIRO_TESTE_MANUAL_V203_RC4.md) — roteiro rc4 arquivado
 
 ## docs/explanation/ — entender (arquitetura, decisoes)
 

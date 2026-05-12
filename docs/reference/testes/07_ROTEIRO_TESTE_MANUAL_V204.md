@@ -22,7 +22,7 @@ de rastreabilidade da V204.
 | Maquina / Windows / Excel |  |
 | Data e hora |  |
 | Arquivo testado |  |
-| Build retornado por `?GetBuildImportado` |  |
+| Build exibido no botao **Sobre** |  |
 | `VALIDACAO_ID` do Sexteto |  |
 | Resultado do Sexteto |  |
 
@@ -31,15 +31,20 @@ de rastreabilidade da V204.
 1. Liberar macros conforme
    [Como Liberar Macros no Windows](../../how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md).
 2. Abrir a planilha no Excel Desktop.
-3. Compilar em **VBE > Depurar > Compilar VBAProject**.
-4. Confirmar `?GetBuildImportado`:
+3. Clicar em **Sobre** e confirmar:
 
 ```text
+Release oficial: V12.0.0204
+Status oficial: VALIDADO
 f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2
 ```
 
-5. Rodar `CT_ValidarRelease_SextetoMinimo`.
-6. Confirmar resultado esperado:
+4. Clicar em **Central de Testes**.
+5. Confirmar **Modo Treinamento** com **Sim**, se a mensagem aparecer.
+6. Na tela intermediaria, escolher **[2] Central de Testes V2**, se essa tela
+   aparecer.
+7. Na Central V2, escolher **[1] Sexteto Minimo**.
+8. Confirmar resultado esperado:
 
 ```text
 V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0
@@ -89,7 +94,7 @@ Para cada anomalia, registre:
 4. resultado obtido;
 5. print da tela;
 6. mensagem VBA, se houver;
-7. build retornado por `?GetBuildImportado`;
+7. build exibido no botao **Sobre**;
 8. se o problema se repete apos fechar e reabrir a planilha.
 
 ## Criterios de severidade

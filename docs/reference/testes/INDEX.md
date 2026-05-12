@@ -14,6 +14,7 @@ Esta área consolida a leitura humana e institucional da bateria de testes.
 
 ## Trilha canonica V12.0.0204
 
+- [../../tutorials/GUIA_TESTES_HUMANOS_V204.md](../../tutorials/GUIA_TESTES_HUMANOS_V204.md)
 - [../../how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md](../../how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md)
 - [../../how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md](../../how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md)
 - [04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md](04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md)
@@ -50,6 +51,8 @@ teste vigente da V12.0.0204.
 - Debito V205 aceito: renomear a taxonomia publica de "Sexteto" para
   nomenclatura profissional de engenharia de software, sem alterar o contrato
   historico da V204.
+- Debito V205 aceito: simplificar a Central de Testes para que a validacao
+  completa de release seja a primeira opcao clara para humanos.
 - Proposta canônica aprovada: [../PROPOSTA_TESTES_V2_CENARIO_CANONICO.md](../PROPOSTA_TESTES_V2_CENARIO_CANONICO.md)
 - Auditoria estratégica vigente: [../../auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md](../../auditoria/21_AUDITORIA_UNIFICADA_TESTES_V12_0203.md)
 

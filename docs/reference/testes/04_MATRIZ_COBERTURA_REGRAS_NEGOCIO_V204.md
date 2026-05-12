@@ -62,6 +62,7 @@ Evidencia adicional apos App_Release final: `VR_20260511_175849`.
 | Debito | Destino |
 |---|---|
 | Renomear publicamente a taxonomia "Sexteto" para nomenclatura profissional de testes | V12.0.0205 |
+| Reordenar e simplificar a Central de Testes para testador humano | V12.0.0205 |
 | Corrigir prefixo historico `V12_0_0203` no nome do CSV de validacao | V12.0.0205 |
 | Reavaliar MD-24.4 `SelecionarEmpresa` sem reaproveitar artefatos MICRO49 | V12.0.0205 |
 | Lapidar G1/G2/G5 residuais do `glasswing-checks.sh --strict` | V12.0.0205 |

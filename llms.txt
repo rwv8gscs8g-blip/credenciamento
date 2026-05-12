@@ -34,10 +34,11 @@
 ## Documentacao tecnica (Diataxis)
 
 - [docs/tutorials/](docs/tutorials/): aprender — passo a passo para novos integradores
+- [docs/tutorials/GUIA_TESTES_HUMANOS_V204.md](docs/tutorials/GUIA_TESTES_HUMANOS_V204.md): guia publico para testador humano validar a V204 pela interface do Excel
 - [obsidian-vault/releases/V12.0.0204.md](obsidian-vault/releases/V12.0.0204.md): release note publica vigente
 - [docs/how-to/](docs/how-to/): cookbook — problemas concretos (importar pacote, rodar testes, gerar evidencia)
 - [docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md](docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md): liberar macros no Windows para teste humano
-- [docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md](docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md): gate automatizado canonico da V204
+- [docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md](docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md): gate automatizado canonico da V204 via Central de Testes
 - [docs/reference/](docs/reference/): consulta — regras de codigo, API VBA, governanca
 - [docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md](docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md): cobertura humana das regras da V204
 - [docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md](docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md): matriz final da V204

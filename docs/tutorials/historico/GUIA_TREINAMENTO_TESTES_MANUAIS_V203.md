@@ -12,7 +12,7 @@ data: 2026-05-04
 
 > Documento historico de treinamento da V203/rc4. Para teste humano da
 > V12.0.0204, use
-> [../reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md](../reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md).
+> [../GUIA_TESTES_HUMANOS_V204.md](../GUIA_TESTES_HUMANOS_V204.md).
 
 Este guia treina o operador humano a validar a `V12.0.0203-rc4` em
 homologacao. A rc4 esta liberada para testes manuais formais, nao para

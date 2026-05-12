@@ -1,0 +1,37 @@
+{
+  "readback_id": "0066-onda25-md25-8-guia-humano-interface-v204-micro57",
+  "agent_id": "Codex CLI",
+  "created_at": "2026-05-12T11:20:04-0300",
+  "track": "safe_track",
+  "human_status": "confirmed",
+  "hearback_source": "operador aprovou: \"Aprovada a correcao documeental Micro57... Pode executar.\"",
+  "objective": "Corrigir a documentacao publica da V12.0.0204 para orientar testador humano externo a validar pela interface do Excel, sem VBE, Janela Imediata ou macros manuais.",
+  "scope": {
+    "release": "V12.0.0204",
+    "microdelta": "MICRO57",
+    "type": "documental",
+    "code_changes": false,
+    "build_reference": "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2"
+  },
+  "planned_changes": [
+    "Criar guia publico GUIA_TESTES_HUMANOS_V204.md orientado por botoes da planilha.",
+    "Reescrever o how-to do Sexteto para usar Central de Testes, nao Janela Imediata.",
+    "Ajustar roteiro manual V204 para confirmar build via botao Sobre e gate via interface.",
+    "Remover tutorial V203 do caminho principal e arquiva-lo em docs/tutorials/historico/.",
+    "Atualizar README, docs/INDEX, docs/tutorials/INDEX, llms.txt e release note V204.",
+    "Registrar debito V205 de mensageria/nomenclatura da Central de Testes."
+  ],
+  "out_of_scope": [
+    "Alterar VBA.",
+    "Criar pacote V3.",
+    "Reabrir gate de release.",
+    "Mover tag V12.0.0204."
+  ],
+  "acceptance_criteria": [
+    "Trilha publica principal nao aponta tutorial V203 como guia vigente.",
+    "Fluxo humano principal nao exige VBE nem Janela Imediata.",
+    "Documentacao explica Central de Testes e opcao [1] Sexteto Minimo na Central V2.",
+    "Debito V205 da Central de Testes fica registrado.",
+    "G7/G8 permanecem OK."
+  ]
+}

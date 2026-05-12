@@ -73,6 +73,9 @@ tratam apenas da linha pública oficial.
 - **Onda 25 / MICRO56** — vitrine humana V204: guia de liberacao de macros no
   Windows, how-to do Sexteto, roteiro manual V204, matriz de cobertura de
   regras V204 e arquivamento semantico dos documentos V203/rc4.
+- **Onda 25 / MICRO57** — guia humano V204 reorientado para validacao pela
+  interface do Excel: botao Sobre, botao Central de Testes, Central V2 opcao
+  `[1] Sexteto Minimo`, roteiro manual e checklist sem VBE/Janela Imediata.
 
 ### Corrigido
 
@@ -258,6 +261,9 @@ tratam apenas da linha pública oficial.
   bloqueio P1 dos guias humanos: testador externo agora encontra liberacao
   de macros, gate Sexteto V204, roteiro manual V204 e matriz de cobertura
   V204 como trilha publica canonica.
+- MICRO57 executado como delta documental sem alteracao de VBA, corrigindo a
+  trilha publica para o perfil real do testador externo: abrir Excel, liberar
+  macros, clicar em **Central de Testes** e rodar a bateria pela interface.
 - Regra permanente documentada em HBN: funcionalidade nova exige teste
   correspondente no mesmo microdelta.
 - Regra permanente documentada em HBN: higiene documental recorrente

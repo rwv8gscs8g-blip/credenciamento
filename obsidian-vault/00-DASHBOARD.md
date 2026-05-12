@@ -1,7 +1,7 @@
 ---
 titulo: Dashboard - Credenciamento
 ultima-atualizacao: 2026-05-11
-autor-ultima-alteracao: Codex CLI na Onda 25 / MICRO56
+autor-ultima-alteracao: Codex CLI na Onda 25 / MICRO57
 tags: [vivo, dashboard, hbn-active]
 versao-sistema: V12.0.0204
 linha-alvo: V12.0.0205
@@ -36,10 +36,10 @@ audiencia: ambos
 
 **Onda 25 — Publicacao V12.0.0204**
 
-- Status: MICRO56 documental concluido; vitrine humana V204 atualizada
+- Status: MICRO57 documental em fechamento; vitrine humana orientada por interface
 - Track HBN: safe_track
 - Hearback: aprovado pelo operador em 2026-05-11
-- Doc tecnica: `auditoria/03_ondas/onda_25_v204_release_candidate/11_TECNICO_MICRO56_VITRINE_HUMANA_V204.md`
+- Doc tecnica: `auditoria/03_ondas/onda_25_v204_release_candidate/12_TECNICO_MICRO57_GUIA_HUMANO_INTERFACE_V204.md`
 - Evidencia final: `VR_20260511_154433`; evidencia adicional pos-App_Release `VR_20260511_175849`
 - Proxima linha: V12.0.0205 com auditoria cruzada Opus/Antigravity e lista mestra de evolucoes
 
@@ -61,11 +61,11 @@ audiencia: ambos
 5. [`.hbn/knowledge/0003-glasswing-style-preventive-security.md`](../.hbn/knowledge/0003-glasswing-style-preventive-security.md) — 5 vetores Glasswing
 
 ### Para humanos (Diataxis)
-1. [`docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md`](../docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md) — liberar macros no Windows
-2. [`docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md`](../docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — rodar o gate V204
-3. [`docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md`](../docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — homologacao humana
-4. [`docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md`](../docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md) — cobertura de regras
-5. `docs/explanation/` — entender (arquitetura, decisoes, racional)
+1. [`docs/tutorials/GUIA_TESTES_HUMANOS_V204.md`](../docs/tutorials/GUIA_TESTES_HUMANOS_V204.md) — guia principal por interface
+2. [`docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md`](../docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md) — liberar macros no Windows
+3. [`docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md`](../docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — rodar o gate V204 pela Central de Testes
+4. [`docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md`](../docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — homologacao humana
+5. [`docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md`](../docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md) — cobertura de regras
 
 ### Para LLMs (RAG)
 1. [`llms.txt`](../llms.txt) — mapa curado

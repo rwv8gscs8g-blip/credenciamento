@@ -89,8 +89,9 @@ operacional controlada da documentação institucional auditável.
 
 - [docs/INDEX.md](docs/INDEX.md) — indice publico Diataxis-aware
 - [obsidian-vault/releases/V12.0.0204.md](obsidian-vault/releases/V12.0.0204.md) — release note publica da versao oficial vigente
+- [docs/tutorials/GUIA_TESTES_HUMANOS_V204.md](docs/tutorials/GUIA_TESTES_HUMANOS_V204.md) — guia principal para testador humano validar pela interface do Excel
 - [docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md](docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md) — liberar macros no Windows antes do teste
-- [docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md](docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — reproduzir o gate automatizado da V204
+- [docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md](docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — reproduzir o gate automatizado da V204 pela Central de Testes
 - [docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md](docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — roteiro humano de homologacao da V204
 - [docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md](docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md) — cobertura das regras de negocio da V204
 - [docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md](docs/reference/testes/06_MATRIZ_RASTREABILIDADE_TESTES_V204.md) — matriz de rastreabilidade da V204
@@ -143,5 +144,5 @@ Build final validado no workbook: `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`
 - Smoke V2 `TV2_20260511_131824` com `OK=34 | FALHA=0 | MANUAL=4`
 - gate consolidado `VR_20260511_154433` aprovado para publicacao e gate adicional `VR_20260511_175849` aprovado apos App_Release final, ambos com sintaxe `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`
 - evidencias publicas arquivadas em `auditoria/evidencias/V12.0.0204/`
-- pacote humano de teste V204 atualizado com liberacao de macros, Sexteto e roteiro manual
+- pacote humano de teste V204 atualizado para uso por interface: liberar macros, botao Central de Testes, Sexteto e roteiro manual
 - V12.0.0205 abrira a proxima etapa com auditoria cruzada, melhoria de nomenclatura da taxonomia de testes e lista mestra de evolucoes

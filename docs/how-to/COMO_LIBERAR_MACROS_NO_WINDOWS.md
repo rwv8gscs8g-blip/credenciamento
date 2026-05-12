@@ -63,18 +63,17 @@ Habilite apenas se voce for reimportar modulos VBA pelo Importador V3:
 5. Marque **Confiar no acesso ao modelo de objeto do projeto VBA**.
 6. Confirme e reabra a planilha.
 
-## Confirmacao rapida
+## Confirmacao rapida pela interface
 
-No VBA Editor, abra a janela **Imediato** e rode:
-
-```vb
-?GetBuildImportado
-```
-
-O retorno esperado para a V12.0.0204 validada e:
+Depois que a planilha abrir, clique em **Sobre**. A janela deve mostrar:
 
 ```text
+Release oficial: V12.0.0204
+Status oficial: VALIDADO
 f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2
 ```
 
-Se esse valor nao aparecer, interrompa o teste e registre a divergencia.
+Se a versao, o status ou o build forem diferentes, interrompa o teste e
+registre a divergencia.
+
+O testador humano nao precisa abrir o Editor VBA nem a Janela Imediata.
