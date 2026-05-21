@@ -13,10 +13,10 @@
 |---|---|
 | Nome | Sistema de Credenciamento e Rodízio de Pequenos Reparos |
 | Linguagem principal | VBA (Excel `.xlsm`) |
-| Versão oficial vigente | V12.0.0204 |
-| Próxima linha planejada | V12.0.0205 |
-| Build importado no workbook validado | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
-| Branch ativa | `codex/v12-0-0203-governanca-testes` |
+| Versão oficial vigente | V12.0.0205 |
+| Próxima linha planejada | V12.0.0206 |
+| Build importado no workbook validado | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
+| Branch ativa | `codex/v12-0-0205-estabilizacao-docs` |
 | Licença | TPGL v1.1 (auto-conversão para Apache 2.0 em 4 anos) |
 | Protocolo de governança | [HBN — Human Brain Net](https://usehbn.org) |
 
@@ -30,10 +30,10 @@ Leia, em ordem:
 4. [`.hbn/knowledge/0003-glasswing-style-preventive-security.md`](.hbn/knowledge/0003-glasswing-style-preventive-security.md) — camada de segurança preventiva
 5. [`.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md`](.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md) — regra permanente: funcionalidade nova exige teste correspondente
 6. [`.hbn/knowledge/0011-higiene-documental-recorrente.md`](.hbn/knowledge/0011-higiene-documental-recorrente.md) — regra permanente: higiene documental antes de passar de fase
-7. [`docs/reference/regras/REGRAS_DE_NEGOCIO_V204.md`](docs/reference/regras/REGRAS_DE_NEGOCIO_V204.md) — regras de negócio públicas V204
-8. [`docs/tutorials/GUIA_TESTES_HUMANOS_V204.md`](docs/tutorials/GUIA_TESTES_HUMANOS_V204.md) — guia humano por interface
-9. [`auditoria/evidencias/V12.0.0204/INDEX.md`](auditoria/evidencias/V12.0.0204/INDEX.md) — evidências públicas V204
-10. [`auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md`](auditoria/03_ondas/onda_25_v204_release_candidate/10_FECHAMENTO_MICRO54_PUBLICACAO_V204.md) — fechamento de publicação V204
+7. [`obsidian-vault/releases/V12.0.0205.md`](obsidian-vault/releases/V12.0.0205.md) — release oficial vigente
+8. [`docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md`](docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md) — regras de negócio públicas V205
+9. [`docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md`](docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md) — guia humano por interface
+10. [`auditoria/evidencias/V12.0.0205/INDEX.md`](auditoria/evidencias/V12.0.0205/INDEX.md) — evidências públicas V205
 11. [`usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`](usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md) — lições históricas sobre VBA
 
 ## Working pattern
@@ -50,10 +50,10 @@ Cada onda:
 
 ## Quem tem o bastao agora
 
-Veja `.hbn/relay/INDEX.md`. Em 2026-05-12, o bastão operacional da Frente 1
-está com **Codex CLI** para fechamento documental V12.0.0204 e preparação da
-V12.0.0205. IAs sem bastão operam em modo **auditoria** ou proposta escrita,
-salvo autorização explícita do operador.
+Veja `.hbn/relay/INDEX.md`. Em 2026-05-21, o bastão operacional da Frente 1
+está com **Codex** para congelamento da V12.0.0205 e auditoria final cruzada
+antes da abertura da V12.0.0206. IAs sem bastão operam em modo **auditoria** ou
+proposta escrita, salvo autorização explícita do operador.
 
 ## Build steps
 
@@ -75,7 +75,7 @@ importacao manual no Excel VBA Editor (VBE) seguindo
 | V1 rapida | `Teste_Bateria_Oficial.bas` | macro `BO_RodarBateriaOficial` | ~2 min |
 | V2 Smoke | `Teste_V2_Engine.bas` | macro `TV2_RunSmoke` | ~30 s |
 | V2 Canonica | `Teste_V2_Engine.bas` | macro `TV2_RunCanonica` | ~10 min |
-| Validador consolidado V204 | `Teste_Validacao_Release.bas` | botão **Central de Testes** > Central V2 > **Sexteto Mínimo** | ~12 min |
+| Gate RVS V205 | `Teste_Validacao_Release.bas` | botão **Central de Testes** > **Gate de Validação de Release (RVS)** | ~12 min |
 
 A IA nunca executa esses testes diretamente — ela entrega o pacote
 pronto para o operador rodar no workbook.
@@ -114,7 +114,7 @@ diataxis: tutorial | how-to | reference | explanation | status | onda
 hbn-track: fast_track | safe_track
 hbn-status: active | archived | knowledge
 audiencia: humano | ia | ambos
-versao-sistema: V12.0.0204
+versao-sistema: V12.0.0205
 data: AAAA-MM-DD
 ---
 ```

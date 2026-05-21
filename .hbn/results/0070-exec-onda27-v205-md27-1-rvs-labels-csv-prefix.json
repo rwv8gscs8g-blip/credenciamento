@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "execution_id": "0070-exec-onda27-v205-md27-1-rvs-labels-csv-prefix",
+  "agent_id": "Codex",
+  "readback_id": "hearback-aprovado-2026-05-21-continuar-v205",
+  "action": "Onda 27 V205: aplicar nomenclatura RVS/SRC/BRL nos labels da Central de Testes e corrigir prefixos/pasta de CSVs de validação para V12.0.0205",
+  "outcome": "EXECUTADO_CODIGO_VBA_TEXTUAL_EVIDENCIA",
+  "human_status": "approved",
+  "intent_risk_profile": "low",
+  "created_at": "2026-05-21T00:00:00-0300",
+  "versao_sistema": "V12.0.0205",
+  "branch": "codex/v12-0-0205-estabilizacao-docs",
+  "base_referencia": "e43352f",
+  "arquivos_vba_alterados": [
+    "src/vba/Central_Testes.bas",
+    "src/vba/Central_Testes_V2.bas",
+    "src/vba/Teste_Validacao_Release.bas",
+    "src/vba/Teste_V2_Roteiros.bas"
+  ],
+  "alteracoes": [
+    "Central principal passa a expor Gate RVS como opcao 1.",
+    "Central V2 passa a exibir Gate de Validacao de Release (RVS), Suite de Regressao Consolidada (SRC) e Bateria Rapida Legada (BRL).",
+    "Simbolos VBA historicos permanecem preservados.",
+    "Assert adversarial UI_ADV_011 passa a verificar o texto RVS novo sem renomear simbolos historicos.",
+    "VR_RELEASE_ALVO passa para V12.0.0205 no modulo de validacao.",
+    "CSVs novos passam a ser gerados em auditoria/evidencias/V12.0.0205/csv/ com prefixos V205."
+  ],
+  "asserts": {
+    "codigo_vba_alterado": true,
+    "simbolos_vba_renomeados": false,
+    "regras_negocio_alteradas": false,
+    "pdf_vba_implementado": false,
+    "crlf_preservado": true,
+    "verify_release_consistency_bash_n": "OK",
+    "verify_release_consistency_v204": "OK",
+    "diff_check_sem_docs": "OK",
+    "regex_strings_obsoletas_criticas": "OK",
+    "compile_vbe": "NAO_EXECUTADO_NESTE_AMBIENTE",
+    "rvs_excel": "NAO_EXECUTADO_NESTE_AMBIENTE",
+    "local_ai_vba_import_alterado": false,
+    "observacao_espelho": "local-ai/vba_import esta ignorado e ausente nesta worktree limpa; src/vba permanece fonte canonica."
+  },
+  "proximos_passos": [
+    "Operador importar/compilar os modulos VBA no Excel ou confirmar o canal de importacao.",
+    "Rodar Gate RVS e confirmar a sintaxe funcional V204.",
+    "Atualizar App_Release/STATUS/CHANGELOG somente no fechamento da V205."
+  ],
+  "decisao": "Onda 27 MD-27.1 executada com alteracoes textuais/UX/evidencia; aguardando compile VBE e RVS humano."
+}

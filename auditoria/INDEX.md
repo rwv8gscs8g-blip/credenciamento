@@ -1,10 +1,10 @@
 ---
 titulo: Indice das Auditorias (pos-Onda 6)
-ultima-atualizacao: 2026-04-28
+ultima-atualizacao: 2026-05-21
 diataxis: reference
 hbn-track: fast_track
 audiencia: ambos
-versao-sistema: V12.0.0203
+versao-sistema: V12.0.0205
 ---
 
 # Indice das Auditorias
@@ -19,6 +19,13 @@ versao-sistema: V12.0.0203
 
 ## 00_status/ — snapshots de estado
 
+- [00_status/73_AUDITORIA_ESCOPO_V205_OPUS.md](00_status/73_AUDITORIA_ESCOPO_V205_OPUS.md) — auditoria de escopo SP1 V205
+- [00_status/74_AUDITORIA_CRUZADA_V205_ANTIGRAVITY_GEMINI.md](00_status/74_AUDITORIA_CRUZADA_V205_ANTIGRAVITY_GEMINI.md) — auditoria cruzada SP2 V205
+- [00_status/75_AUDITORIA_UX_DOCS_JORNADA_V205_GEMINI.md](00_status/75_AUDITORIA_UX_DOCS_JORNADA_V205_GEMINI.md) — auditoria UX/docs/jornada SP3 V205
+- [00_status/76_READBACK_ABERTURA_V205_CODEX.md](00_status/76_READBACK_ABERTURA_V205_CODEX.md) — readback de abertura Codex V205
+- [00_status/77_PROMPT_AUDITORIA_POSITIVA_V205_CLAUDE_OPUS.md](00_status/77_PROMPT_AUDITORIA_POSITIVA_V205_CLAUDE_OPUS.md) — prompt AF1 para auditoria positiva final Claude Opus
+- [00_status/78_PROMPT_AUDITORIA_DOCS_GITHUB_V205_GEMINI.md](00_status/78_PROMPT_AUDITORIA_DOCS_GITHUB_V205_GEMINI.md) — prompt AF2 para auditoria adversarial docs/GitHub Gemini
+- [00_status/79_PROMPT_CONSOLIDACAO_FINAL_V205_CODEX.md](00_status/79_PROMPT_CONSOLIDACAO_FINAL_V205_CODEX.md) — prompt AF3 para consolidação final Codex
 - [00_status/00_SUMARIO_EXECUTIVO.md](00_status/00_SUMARIO_EXECUTIVO.md) — status executivo da linha oficial
 - [00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md](00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md) — checkpoint da V12.0.0203
 - [00_status/24_FECHAMENTO_V12_0203.md](00_status/24_FECHAMENTO_V12_0203.md) — fechamento candidato
@@ -39,6 +46,7 @@ versao-sistema: V12.0.0203
 
 ## 02_planos/ — planos de execucao
 
+- [02_planos/30_ROADMAP_V205_PRODUCAO.md](02_planos/30_ROADMAP_V205_PRODUCAO.md) — roadmap V205 de estabilização para produção
 - [02_planos/15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md](02_planos/15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md)
 - [02_planos/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md](02_planos/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md)
 - [02_planos/25_PLANO_HARDENING_POS_0203.md](02_planos/25_PLANO_HARDENING_POS_0203.md)
@@ -57,6 +65,8 @@ versao-sistema: V12.0.0203
 
 ## 04_evidencias/ — CSVs e manifestos hashados
 
+- [evidencias/V12.0.0205/INDEX.md](evidencias/V12.0.0205/INDEX.md) — índice canônico de evidências V205
+- [evidencias/V12.0.0205/MANIFEST.md](evidencias/V12.0.0205/MANIFEST.md) — manifesto de evidências V205
 - [04_evidencias/V12.0.0202/MANIFEST.md](04_evidencias/V12.0.0202/MANIFEST.md) — manifesto hashado da release V12.0.0202
 - [04_evidencias/V12.0.0202/V2_VALIDACAO_HUMANA_2026-04-20.md](04_evidencias/V12.0.0202/V2_VALIDACAO_HUMANA_2026-04-20.md)
 - [04_evidencias/V12.0.0203/MANIFEST.md](04_evidencias/V12.0.0203/MANIFEST.md) — manifesto candidato

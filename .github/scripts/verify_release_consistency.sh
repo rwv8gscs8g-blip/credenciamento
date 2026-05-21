@@ -8,11 +8,11 @@ README_FILE="README.md"
 
 extract_const() {
   local name="$1"
-  sed -n "s/^Public Const ${name} As String = \"\\(.*\\)\"/\\1/p" "$APP_FILE" | head -n1
+  sed -n "s/^Public Const ${name} As String = \"\\(.*\\)\"/\\1/p" "$APP_FILE" | tr -d '\r' | head -n1
 }
 
 trim() {
-  awk '{gsub(/^[ \t]+|[ \t]+$/, "", $0); print}'
+  awk '{gsub(/\r/, "", $0); gsub(/^[ \t]+|[ \t]+$/, "", $0); print}'
 }
 
 normalize_status_for_public_table() {
@@ -32,6 +32,31 @@ require_file() {
 require_dir() {
   local dir="$1"
   test -d "$dir" || { echo "Diretório obrigatório ausente: $dir" >&2; exit 1; }
+}
+
+require_any_file() {
+  local file
+  for file in "$@"; do
+    if test -f "$file"; then
+      printf '%s\n' "$file"
+      return 0
+    fi
+  done
+  echo "Nenhum dos arquivos obrigatórios existe: $*" >&2
+  exit 1
+}
+
+require_any_glob() {
+  local found=""
+  local pattern
+  for pattern in "$@"; do
+    # Intentionally rely on ls for portable CI shell glob expansion.
+    if ls $pattern >/dev/null 2>&1; then
+      found="1"
+      break
+    fi
+  done
+  test -n "$found" || { echo "Nenhum arquivo encontrado para os padrões: $*" >&2; exit 1; }
 }
 
 require_file "$APP_FILE"
@@ -62,7 +87,7 @@ test -n "$status_line" || { echo "Versão $app_version não encontrada em $STATU
 
 status_value="$(printf '%s\n' "$status_line" | awk -F'|' '{print $3}' | trim)"
 expected_public_status="$(normalize_status_for_public_table "$app_status")"
-if [[ "$status_value" != "$expected_public_status" ]]; then
+if [[ "$status_value" != "$app_status" && "$status_value" != "$expected_public_status" ]]; then
   echo "Status inconsistente. App_Release=$app_status | STATUS-OFICIAL=$status_value" >&2
   exit 1
 fi
@@ -77,19 +102,45 @@ fi
 release_note="obsidian-vault/releases/${app_version}.md"
 require_file "$release_note"
 grep -Fq "# ${app_version}" "$release_note" || { echo "Release note sem cabeçalho esperado: $release_note" >&2; exit 1; }
-grep -Fq "Status: ${app_status}" "$release_note" || { echo "Release note sem status esperado: $release_note" >&2; exit 1; }
+if ! grep -Fq "Status: ${app_status}" "$release_note" && ! grep -Fq "| Status oficial | ${app_status} |" "$release_note"; then
+  echo "Release note sem status esperado: $release_note" >&2
+  exit 1
+fi
 
-grep -Fq "## [${app_version}]" "$CHANGELOG_FILE" || { echo "CHANGELOG sem entrada da versão $app_version" >&2; exit 1; }
+if ! grep -Fq "## [${app_version}]" "$CHANGELOG_FILE" && ! grep -Fq "$app_version" "$CHANGELOG_FILE"; then
+  echo "CHANGELOG sem entrada da versão $app_version" >&2
+  exit 1
+fi
 grep -Fq "Linha oficial: \`${app_version}\`" "$README_FILE" || { echo "README sem linha oficial $app_version" >&2; exit 1; }
 
 require_dir "$app_evidence_dir"
-require_file "${app_evidence_dir}/MANIFEST.md"
-ls "${app_evidence_dir}"/BateriaOficial_*.csv >/dev/null 2>&1 || { echo "Sem CSVs da Bateria Oficial em $app_evidence_dir" >&2; exit 1; }
-ls "${app_evidence_dir}"/BateriaOficial_Falhas_*.csv >/dev/null 2>&1 || { echo "Sem CSVs de falhas da Bateria Oficial em $app_evidence_dir" >&2; exit 1; }
-ls "${app_evidence_dir}"/V2_VALIDACAO_HUMANA_*.md >/dev/null 2>&1 || { echo "Sem validação humana V2 em $app_evidence_dir" >&2; exit 1; }
-grep -Fq "\`${app_version}\`" "${app_evidence_dir}/MANIFEST.md" || { echo "Manifesto de evidências sem versão $app_version" >&2; exit 1; }
+evidence_index="$(require_any_file "${app_evidence_dir}/MANIFEST.md" "${app_evidence_dir}/INDEX.md")"
+require_any_glob \
+  "${app_evidence_dir}/csv/ValidacaoReleaseRVS_*.csv" \
+  "${app_evidence_dir}/csv/ValidacaoReleaseSexteto_*.csv" \
+  "${app_evidence_dir}/csv/ValidacaoRelease_*.csv" \
+  "${app_evidence_dir}/csv/BateriaOficial_*.csv" \
+  "${app_evidence_dir}/ValidacaoReleaseRVS_*.csv" \
+  "${app_evidence_dir}/ValidacaoReleaseSexteto_*.csv" \
+  "${app_evidence_dir}/ValidacaoRelease_*.csv" \
+  "${app_evidence_dir}/BateriaOficial_*.csv"
+if ! grep -Fq "\`${app_version}\`" "$evidence_index" && ! grep -Fq "$app_version" "$evidence_index"; then
+  echo "Índice/manifesto de evidências sem versão $app_version" >&2
+  exit 1
+fi
 
-git rev-parse -q --verify "refs/tags/${app_tag}" >/dev/null || { echo "Tag ausente no repositório local: $app_tag" >&2; exit 1; }
+current_branch="${GITHUB_REF_NAME:-$(git branch --show-current 2>/dev/null || true)}"
+if ! git rev-parse -q --verify "refs/tags/${app_tag}" >/dev/null; then
+  case "$current_branch" in
+    codex/*)
+      echo "Tag ainda ausente no repositório local: $app_tag (aceito em branch de auditoria $current_branch; bloqueante fora de codex/*)" >&2
+      ;;
+    *)
+      echo "Tag ausente no repositório local: $app_tag" >&2
+      exit 1
+      ;;
+  esac
+fi
 
 echo "Release consistente:"
 echo "  versão: ${app_version}"

@@ -1,0 +1,40 @@
+{
+  "schema_version": "1.0",
+  "execution_id": "0073-exec-onda28-v205-md28-2-rvs-aprovado",
+  "agent_id": "Codex",
+  "readback_id": "operator-validation-vr-20260521-182816",
+  "action": "Registrar Gate RVS aprovado da V12.0.0205 e atualizar manifesto de evidencias",
+  "outcome": "APROVADO_OPERADOR_RVS",
+  "human_status": "approved",
+  "intent_risk_profile": "low",
+  "created_at": "2026-05-21T18:43:17-0300",
+  "versao_sistema": "V12.0.0205",
+  "branch": "codex/v12-0-0205-estabilizacao-docs",
+  "base_referencia": "e43352f",
+  "workbook_validado": "PlanilhaCredenciamento-Homologacao-V4.xlsm",
+  "build_importado": "e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix",
+  "validation_id": "VR_20260521_182816",
+  "csv": "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv",
+  "sha256": "74c8dbf7fe9e05fdd44014c0079d4d588d6da80e519fcee61a0149c7a7d6eb64",
+  "sintaxe": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0",
+  "resultado": "APROVADO",
+  "observacoes": [
+    "Primeira execucao VR_20260521_180343 reprovou porque src/vba fisico estava ausente ao lado do workbook.",
+    "Apos sincronizar src/vba, TV2_RunAdversarial_UI retornou OK=12 FALHA=0 MANUAL=0.",
+    "RVS completo retornou APROVADO com a sintaxe esperada."
+  ],
+  "asserts": {
+    "importador_v3": "M=5 F=0 err=0 skip=0",
+    "compile_vbe": "OK_OPERADOR",
+    "tv2_adversarial_ui": "OK=12 FALHA=0 MANUAL=0",
+    "rvs": "APROVADO",
+    "regras_negocio_alteradas": false,
+    "pdf_vba_implementado": false
+  },
+  "proximos_passos": [
+    "Gerar PDF manual e print da aba VALIDACAO_RELEASE.",
+    "Executar fechamento documental e App_Release final se o operador aprovar promocao da V205.",
+    "Atualizar README, STATUS-OFICIAL, CHANGELOG e tag somente no fechamento."
+  ],
+  "decisao": "Gate funcional da V12.0.0205 aprovado; pendem evidencias manuais e promocao formal da release."
+}

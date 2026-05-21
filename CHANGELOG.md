@@ -3,6 +3,65 @@
 Este projeto adota o espírito do Keep a Changelog. As mudanças aqui registradas
 tratam apenas da linha pública oficial.
 
+## [v12.0.0205] — 2026-05-21
+
+> Release oficial V205. Build validado:
+> `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix`. Gate RVS aprovado em
+> `VR_20260521_182816` com assinatura funcional idêntica à V204:
+> `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+
+### Adicionado
+
+- **Onda 26 / MD26.1** — saneamento do script
+  `.github/scripts/verify_release_consistency.sh` para aceitar a estrutura real
+  de evidências V204/V205, `INDEX.md`/`MANIFEST.md` e os novos prefixos RVS.
+- **Onda 26 / MD26.1** — arquivamento da auditoria de escopo V205 e auditorias
+  cruzadas SP1/SP2/SP3 em `auditoria/00_status/`.
+- **Onda 26 / MD26.1** — roadmap de produção
+  `auditoria/02_planos/30_ROADMAP_V205_PRODUCAO.md`.
+- **Onda 26 / MD26.1** — documentação pública V205:
+  crosswalk RVS/SRC/BRL, especificação de PDF para V206, regras de negócio
+  consolidadas RN-01 a RN-17, matriz de cobertura, jornada humana, dossiê de
+  release e how-to do Gate RVS.
+- **Onda 27 / MD27.1** — Central de Testes com nomenclatura profissional:
+  **Gate de Validação de Release (RVS)**, **Suíte de Regressão Consolidada
+  (SRC)** e **Bateria Rápida Legada (BRL)**.
+- **Onda 28 / MD28.2** — evidência final V205 em
+  `auditoria/evidencias/V12.0.0205/`, com CSV aprovado e manifesto de hash.
+- **Onda 29 / MD29.1** — promoção da vitrine pública para V12.0.0205 como linha
+  VALIDADO/OFICIAL e preparação da auditoria final positiva entre IAs.
+
+### Corrigido
+
+- Prefixos de CSV de release passam a usar `ValidacaoReleaseRVS_V12_0_0205_`
+  na V205, eliminando ambiguidade visual com a série V12.0.0203/V12.0.0204.
+- `App_Release.bas` passa a apontar a linha oficial para V12.0.0205 e a próxima
+  linha planejada para V12.0.0206.
+- `README.md`, `AGENTS.md`, `llms.txt`, índices `docs/` e status oficial passam
+  a direcionar leitores humanos e IAs para os artefatos V205.
+
+### Validação
+
+- Import V3 do delta V205 aprovado pelo operador:
+  `M=5 | F=0 | err=0 | skip=0`.
+- Compilação VBE manual aprovada pelo operador em 21/05/2026.
+- `TV2_RunAdversarial_UI` aprovado em `TV2_20260521_182645`:
+  `OK=12 | FALHA=0 | MANUAL=0`.
+- Gate RVS aprovado em `VR_20260521_182816`:
+  `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+- CSV final:
+  `auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv`.
+- SHA-256 do CSV final:
+  `74c8dbf7fe9e05fdd44014c0079d4d588d6da80e519fcee61a0149c7a7d6eb64`.
+
+### Próximas Linhas
+
+- **V12.0.0206** — estabilização incremental pós-produção: ajustes de testes
+  manuais, PDF automático, pequenos débitos técnicos e melhorias prorrogadas.
+- **V12.0.0207** — code review profundo, performance, componentização e
+  preparação arquitetural para evolução SaaS, salvo decisão posterior de
+  roadmap.
+
 ## [v12.0.0204] — 2026-05-11
 
 > Release oficial V204. Build final validado:

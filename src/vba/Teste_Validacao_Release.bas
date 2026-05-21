@@ -9,7 +9,7 @@ Option Explicit
 ' Cada gate escreve evidencia copiavel para IA/humano em VALIDACAO_RELEASE.
 
 Private Const VR_SHEET As String = "VALIDACAO_RELEASE"
-Private Const VR_RELEASE_ALVO As String = "V12.0.0204"
+Private Const VR_RELEASE_ALVO As String = "V12.0.0205"
 Private Const VR_STATUS_OK As String = "OK"
 Private Const VR_STATUS_FAIL As String = "FALHA"
 
@@ -434,7 +434,7 @@ Private Function VR_ExportarResumoCSV(ByVal ws As Worksheet, ByVal validacaoId A
     On Error GoTo falha
 
     pasta = VR_PastaSaida()
-    caminho = pasta & Application.PathSeparator & "ValidacaoRelease_V12_0_0203_" & validacaoId & ".csv"
+    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseTrio_V12_0_0205_" & validacaoId & ".csv"
 
     fNum = FreeFile
     Open caminho For Output As #fNum
@@ -502,6 +502,8 @@ Private Function VR_PastaSaida() As String
     pasta = pasta & sep & "evidencias"
     VR_MkDirIfMissing pasta
     pasta = pasta & sep & VR_RELEASE_ALVO
+    VR_MkDirIfMissing pasta
+    pasta = pasta & sep & "csv"
     VR_MkDirIfMissing pasta
 
     VR_PastaSaida = pasta
@@ -643,7 +645,7 @@ Private Function VR_ExportarResumoCSVQuarteto(ByVal ws As Worksheet, ByVal valid
     On Error GoTo falha
 
     pasta = VR_PastaSaida()
-    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseQuarteto_V12_0_0203_" & validacaoId & ".csv"
+    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseBRL_V12_0_0205_" & validacaoId & ".csv"
 
     fNum = FreeFile
     Open caminho For Output As #fNum
@@ -656,7 +658,7 @@ Private Function VR_ExportarResumoCSVQuarteto(ByVal ws As Worksheet, ByVal valid
     Print #fNum, VR_CsvCell(validacaoId) & ";" & VR_CsvCell(VR_BuildImportado()) & ";" & _
         VR_CsvCell(Format$(Now, "dd/mm/yyyy hh:nn:ss")) & ";GERAL;;;;;" & _
         VR_CsvCell(statusGeral) & ";;;" & _
-        VR_CsvCell("Quarteto V1+V2_Smoke+V2_Canonica+E2E_Strikes; usar como evidencia textual.")
+        VR_CsvCell("BRL V1+V2_Smoke+V2_Canonica+E2E_Strikes; usar como evidencia textual.")
 
     Close #fNum
     VR_ExportarResumoCSVQuarteto = caminho
@@ -874,7 +876,7 @@ Private Function VR_ExportarResumoCSVQuinteto(ByVal ws As Worksheet, ByVal valid
     On Error GoTo falha
 
     pasta = VR_PastaSaida()
-    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseQuinteto_V12_0_0203_" & validacaoId & ".csv"
+    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseSRC_V12_0_0205_" & validacaoId & ".csv"
 
     fNum = FreeFile
     Open caminho For Output As #fNum
@@ -887,7 +889,7 @@ Private Function VR_ExportarResumoCSVQuinteto(ByVal ws As Worksheet, ByVal valid
     Print #fNum, VR_CsvCell(validacaoId) & ";" & VR_CsvCell(VR_BuildImportado()) & ";" & _
         VR_CsvCell(Format$(Now, "dd/mm/yyyy hh:nn:ss")) & ";GERAL;;;;;" & _
         VR_CsvCell(statusGeral) & ";;;" & _
-        VR_CsvCell("Quinteto V1+V2_Smoke+V2_Canonica+E2E_Strikes+IntegridadeBase; usar como evidencia textual.")
+        VR_CsvCell("SRC V1+V2_Smoke+V2_Canonica+E2E_Strikes+IntegridadeBase; usar como evidencia textual.")
 
     Close #fNum
     VR_ExportarResumoCSVQuinteto = caminho
@@ -983,30 +985,30 @@ Public Sub CT_ValidarRelease_SextetoMinimo()
 
     validacaoId = "VR_" & Format$(Now, "yyyymmdd_hhnnss")
     Set ws = VR_PrepararSheet(validacaoId)
-    ws.Cells(1, 1).Value = "VALIDACAO RELEASE - SEXTETO MINIMO"
+    ws.Cells(1, 1).Value = "VALIDACAO RELEASE - GATE RVS"
 
-    Application.StatusBar = "Validacao Sexteto: V1 rapida"
+    Application.StatusBar = "Validacao RVS: V1 rapida"
     BA_SetModoExecucaoVisual False
     RunBateriaOficial True
     VR_RegistrarEtapaV1 ws, validacaoId, 7
 
-    Application.StatusBar = "Validacao Sexteto: V2 Smoke"
+    Application.StatusBar = "Validacao RVS: V2 Smoke"
     TV2_RunSmoke False, True
     VR_RegistrarEtapaV2 ws, validacaoId, 8, "V2_SMOKE", TV2_ExecucaoAtualId()
 
-    Application.StatusBar = "Validacao Sexteto: V2 Canonica"
+    Application.StatusBar = "Validacao RVS: V2 Canonica"
     TV2_RunCanonicoFundacao False, True
     VR_RegistrarEtapaV2 ws, validacaoId, 9, "V2_CANONICO", TV2_ExecucaoAtualId()
 
-    Application.StatusBar = "Validacao Sexteto: E2E Strikes"
+    Application.StatusBar = "Validacao RVS: E2E Strikes"
     TV2_RunRodizioStrikesEndToEnd False, True
     VR_RegistrarEtapaV2 ws, validacaoId, 10, "V2_E2E_STRIKES", TV2_ExecucaoAtualId()
 
-    Application.StatusBar = "Validacao Sexteto: IntegridadeBase"
+    Application.StatusBar = "Validacao RVS: IntegridadeBase"
     TV2_RunIntegridadeBase False, True
     VR_RegistrarEtapaV2 ws, validacaoId, 11, "V2_INTEGRIDADE_BASE", TV2_ExecucaoAtualId()
 
-    Application.StatusBar = "Validacao Sexteto: Onda 23 adversarial"
+    Application.StatusBar = "Validacao RVS: Onda 23 adversarial"
     VR_RegistrarEtapaOnda23 ws, validacaoId, 12
 
     statusGeral = VR_StatusGeralSexteto(ws)
@@ -1028,7 +1030,7 @@ Public Sub CT_ValidarRelease_SextetoMinimo()
         csvStatusMsgS6 = "CSV resumo: nao exportado (caminho vazio)"
     End If
 
-    msgFinal = "Validacao Sexteto concluida." & vbCrLf & _
+    msgFinal = "Gate RVS concluido." & vbCrLf & _
                "ID: " & validacaoId & vbCrLf & _
                "Resultado: " & statusGeral & vbCrLf & vbCrLf & _
                "Sintaxe: " & VR_SintaxeSexteto(ws) & vbCrLf & vbCrLf & _
@@ -1038,15 +1040,15 @@ Public Sub CT_ValidarRelease_SextetoMinimo()
     Else
         estiloMsg = vbExclamation
     End If
-    MsgBox msgFinal, estiloMsg, "Validacao Release Sexteto"
+    MsgBox msgFinal, estiloMsg, "Gate de Validacao de Release (RVS)"
     Exit Sub
 
 falha:
     Application.StatusBar = False
-    MsgBox "Erro na validacao Sexteto: " & Err.Description & vbCrLf & _
+    MsgBox "Erro no Gate RVS: " & Err.Description & vbCrLf & _
            "Codigo: " & CStr(Err.Number) & vbCrLf & _
            "Origem: " & Err.Source, _
-           vbCritical, "Validacao Release Sexteto"
+           vbCritical, "Gate de Validacao de Release (RVS)"
 End Sub
 
 Public Sub VR_ValidarReleaseSextetoMinimo()
@@ -1073,7 +1075,7 @@ Private Sub VR_RegistrarEtapaOnda23(ByVal ws As Worksheet, ByVal validacaoId As 
 
     If falhaTotal > 0 Then
         If csvFalhas = "" Then csvFalhas = "NAO_EXPORTADO"
-        acao = "Corrigir a primeira falha do bloco adversarial e reexecutar o Sexteto."
+        acao = "Corrigir a primeira falha do bloco adversarial e reexecutar o RVS."
     Else
         csvFalhas = "NAO_EXPORTADO"
         primeiraFalha = ""
@@ -1177,7 +1179,7 @@ Private Function VR_ExportarResumoCSVSexteto(ByVal ws As Worksheet, ByVal valida
     On Error GoTo falha
 
     pasta = VR_PastaSaida()
-    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseSexteto_V12_0_0203_" & validacaoId & ".csv"
+    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseRVS_V12_0_0205_" & validacaoId & ".csv"
 
     fNum = FreeFile
     Open caminho For Output As #fNum
@@ -1190,7 +1192,7 @@ Private Function VR_ExportarResumoCSVSexteto(ByVal ws As Worksheet, ByVal valida
     Print #fNum, VR_CsvCell(validacaoId) & ";" & VR_CsvCell(VR_BuildImportado()) & ";" & _
         VR_CsvCell(Format$(Now, "dd/mm/yyyy hh:nn:ss")) & ";GERAL;;;;;" & _
         VR_CsvCell(statusGeral) & ";;;" & _
-        VR_CsvCell("Sexteto V1+V2_Smoke+V2_Canonica+E2E_Strikes+IntegridadeBase+Onda23Adv; usar como evidencia textual.")
+        VR_CsvCell("RVS V1+V2_Smoke+V2_Canonica+E2E_Strikes+IntegridadeBase+Onda23Adv; usar como evidencia textual.")
 
     Close #fNum
     VR_ExportarResumoCSVSexteto = caminho

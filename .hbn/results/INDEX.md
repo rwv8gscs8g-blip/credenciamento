@@ -1,6 +1,6 @@
 ---
 titulo: Results HBN — ERPs vinculados a readbacks
-ultima-atualizacao: 2026-05-12
+ultima-atualizacao: 2026-05-21
 ---
 
 # Results HBN — Credenciamento
@@ -80,3 +80,9 @@ ultima-atualizacao: 2026-05-12
 | 0066 | Onda 25 V204 MICRO57 guia humano por interface | EXECUTADO_DOCUMENTAL | `0066-exec-onda25-md25-8-guia-humano-interface-v204-micro57.json` | 2026-05-12 |
 | 0067 | Onda 25 V204 MICRO58 vitrine publica externa | EXECUTADO_DOCUMENTAL | `0067-exec-onda25-md25-9-vitrine-publica-v204-micro58.json` | 2026-05-12 |
 | 0068 | Onda 25 V204 MICRO59 protocolo homologacao e handoff V205 | EXECUTADO_DOCUMENTAL | `0068-exec-onda25-md25-10-protocolo-homologacao-v204-e-handoff-v205.json` | 2026-05-12 |
+| 0069 | Onda 26 V205 MD-26.1 governanca tooling abertura | EXECUTADO_DOCUMENTAL_TOOLING | `0069-exec-onda26-v205-md26-1-governanca-tooling-abertura.json` | 2026-05-21 |
+| 0070 | Onda 27 V205 MD-27.1 labels RVS e prefixos CSV | EXECUTADO_CODIGO_VBA_TEXTUAL_EVIDENCIA | `0070-exec-onda27-v205-md27-1-rvs-labels-csv-prefix.json` | 2026-05-21 |
+| 0071 | Onda 28 V205 MD-28.0 indices e relay | EXECUTADO_DOCUMENTAL | `0071-exec-onda28-v205-md28-0-indices-relay.json` | 2026-05-21 |
+| 0072 | Onda 28 V205 MD-28.1 regras e matriz | EXECUTADO_DOCUMENTAL | `0072-exec-onda28-v205-md28-1-regras-matriz.json` | 2026-05-21 |
+| 0073 | Onda 28 V205 MD-28.2 RVS aprovado | APROVADO_OPERADOR_RVS | `0073-exec-onda28-v205-md28-2-rvs-aprovado.json` | 2026-05-21 |
+| 0074 | Onda 29 V205 MD-29.1 promoção e auditoria final | EXECUTADO_DOCUMENTAL_GOVERNANCA | `0074-exec-onda29-v205-md29-1-promocao-auditoria-final.json` | 2026-05-21 |

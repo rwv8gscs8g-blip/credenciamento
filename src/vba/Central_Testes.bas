@@ -42,20 +42,22 @@ Public Sub CT_AbrirCentral()
     If Trim$(build) = "" Then build = "BUILD_NAO_INFORMADO"
 
     op = Trim$(InputBox( _
-        "=== CENTRAL DE TESTES V12 / TRANSICAO ===" & vbCrLf & _
+        "=== CENTRAL DE TESTES V12.0.0205 ===" & vbCrLf & _
         "Build: " & build & vbCrLf & _
-        "Gate oficial de release: [3] Quarteto Minimo" & vbCrLf & vbCrLf & _
-        ">> GATES DE RELEASE" & vbCrLf & _
-        "[3] Quarteto Direto: V1 + V2_Smoke + V2_Canonica + E2E_Strikes (~12 min)  *** OFICIAL rc1+ ***" & vbCrLf & vbCrLf & _
+        "Gate oficial de release: [1] Gate de Validacao de Release (RVS)" & vbCrLf & vbCrLf & _
+        ">> GATE DE RELEASE" & vbCrLf & _
+        "[1] Gate RVS: validacao completa de release (antigo Sexteto Minimo)" & vbCrLf & vbCrLf & _
         ">> ENTRY POINTS" & vbCrLf & _
-        "[1] Bateria Oficial V1 (legado, rapida ~5 min / assistida ~8 min)" & vbCrLf & _
-        "[2] Central de Testes V2 (suites detalhadas + utilitarios)" & vbCrLf & vbCrLf & _
-        "Digite o numero:", "Central de Testes V12", "3"))
+        "[2] Central de Testes V2 (suites detalhadas + utilitarios)" & vbCrLf & _
+        "[3] Bateria Oficial V1 (legado, rapida ~5 min / assistida ~8 min)" & vbCrLf & _
+        "[4] Bateria Rapida Legada (BRL; antigo Quarteto Direto)" & vbCrLf & vbCrLf & _
+        "Digite o numero:", "Central de Testes V12", "1"))
     If op = "" Then Exit Sub
     Select Case op
-        Case "1": Call CT_IniciarBateria
+        Case "1": Call CT_ValidarRelease_SextetoMinimo
         Case "2": Call CT2_AbrirCentral
-        Case "3": Call CT_ValidarRelease_QuartetoMinimo
+        Case "3": Call CT_IniciarBateria
+        Case "4": Call CT_ValidarRelease_QuartetoMinimo
         Case Else: MsgBox "Opção inválida.", vbInformation, "Central V12"
     End Select
     Exit Sub

@@ -132,13 +132,15 @@ Responsabilidade:
 
 ## Estado atual
 
-A `V12.0.0204` é a linha pública vigente para:
+A `V12.0.0205` é a linha pública vigente para:
 
 - compilação limpa validada por operador humano;
-- build `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`;
-- gate `VR_20260511_175849` aprovado após App_Release final;
-- guia humano por interface;
-- regras de negócio e matriz de cobertura publicadas.
+- build `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix`;
+- Gate RVS `VR_20260521_182816` aprovado;
+- jornada humana por interface;
+- regras de negócio V205, matriz de cobertura, dossiê e evidências publicadas.
 
-A próxima linha planejada é `V12.0.0205`, com foco em melhoria de nomenclatura
-dos testes, simplificação da Central de Testes e novas evoluções funcionais.
+A próxima linha planejada é `V12.0.0206`, com foco em estabilização incremental,
+ajustes de testes manuais, PDF automático robusto e pequenos débitos técnicos.
+A linha `V12.0.0207` fica recomendada para code review profundo, performance,
+componentização e preparação SaaS.

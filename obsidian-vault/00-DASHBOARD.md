@@ -1,11 +1,11 @@
 ---
 titulo: Dashboard - Credenciamento
-ultima-atualizacao: 2026-05-12
-autor-ultima-alteracao: Codex CLI na Onda 25 / MICRO58
+ultima-atualizacao: 2026-05-21
+autor-ultima-alteracao: Codex na Onda 29 / fechamento V205
 tags: [vivo, dashboard, hbn-active]
-versao-sistema: V12.0.0204
-linha-alvo: V12.0.0205
-build-importado-no-workbook: f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2
+versao-sistema: V12.0.0205
+linha-alvo: V12.0.0206
+build-importado-no-workbook: e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix
 hbn-track: fast_track
 hbn-status: active
 diataxis: status
@@ -14,103 +14,91 @@ audiencia: ambos
 
 # Dashboard — Credenciamento
 
-> Atualizado a cada onda fechada. Cadencia obrigatoria conforme Onda 6.
-> Fonte unica de status. Discrepancias entre este arquivo e
-> `auditoria/00_status/22_*` sao resolvidas a favor do mais recente
-> (campo `ultima-atualizacao`).
+> Fonte executiva de status. Discrepâncias entre este arquivo, o relay HBN e o
+> status oficial devem ser resolvidas a favor do documento mais recente em
+> `obsidian-vault/releases/STATUS-OFICIAL.md`.
 
 ## Status atual
 
 | Campo | Valor |
 |---|---|
-| Versão oficial vigente | **V12.0.0204** (VALIDADO) |
-| Linha em estabilizacao | V12.0.0205 (a abrir) |
-| Build importado no workbook | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
-| Tag git de publicacao | `v12.0.0204` |
-| Branch ativa | `codex/v12-0-0203-governanca-testes` |
-| Bastao de implementacao | Codex CLI — Frente 1 Credenciamento |
+| Versão oficial vigente | **V12.0.0205** (VALIDADO/OFICIAL) |
+| Próxima linha | V12.0.0206 |
+| Build importado no workbook | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
+| Tag git de publicação | `v12.0.0205` |
+| Branch ativa | `codex/v12-0-0205-estabilizacao-docs` |
+| Bastão de implementação | Codex — Frente 1 Credenciamento |
 | Ambiente | Windows 10+, Excel 2019/2021/365 |
-| Planilha homologacao | `PlanilhaCredenciamento-Homologacao.xlsm` |
+| Planilha homologação | `PlanilhaCredenciamento-Homologacao-V4.xlsm` |
 
 ## Onda em curso
 
-**Onda 25 — Publicação V12.0.0204**
+**Onda 29 — Fechamento V12.0.0205**
 
-- Status: MICRO58 documental em fechamento; vitrine pública V204 racionalizada para testador humano externo
-- Track HBN: safe_track
-- Hearback: aprovado pelo operador em 2026-05-11
-- Doc técnica: `docs/tutorials/GUIA_TESTES_HUMANOS_V204.md` + `docs/tutorials/GUIA_TESTES_HUMANOS_V204.docx`
-- Evidência final: `VR_20260511_154433`; evidência adicional pós-App_Release `VR_20260511_175849`
-- Próxima linha: V12.0.0205 com auditoria cruzada Opus/Antigravity e lista mestra de evoluções
+- Status: gate funcional aprovado; auditoria cruzada final e congelamento
+  GitHub em preparação.
+- Track HBN: safe_track.
+- Evidência final: `VR_20260521_182816`.
+- Assinatura: `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+- Documentação principal: release note, regras V205, matriz V205, jornada
+  humana, dossiê de release e evidências V205.
 
-## Roadmap apos Onda 6
+## Roadmap
 
-| Onda | Tema | Status |
+| Linha | Tema | Status |
 |---|---|---|
-| V12.0.0204 | release oficial | VALIDADO |
-| V12.0.0205 | auditoria cruzada + lista mestra de evoluções | PRÓXIMA |
-| V12.0.0205 | renomear taxonomia publica de testes | PLANEJADO |
+| V12.0.0205 | release oficial de estabilização para produção | VALIDADO |
+| V12.0.0206 | estabilização incremental, ajustes manuais, PDF automático e pequenos débitos técnicos | PLANEJADA |
+| V12.0.0207 | code review profundo, performance, componentização e preparação SaaS | PLANEJADA |
 
-## Documentos canonicos (pos-Onda 6)
+## Documentos canônicos
 
 ### Para IAs
-1. [`AGENTS.md`](../AGENTS.md) — entrada canonica
-2. [`.hbn/relay/INDEX.md`](../.hbn/relay/INDEX.md) — bastao + ciclo ativo
-3. [`.hbn/knowledge/0001-regras-v203-inegociaveis.md`](../.hbn/knowledge/0001-regras-v203-inegociaveis.md) — 10 regras
-4. [`.hbn/knowledge/0002-regra-ouro-vba-import.md`](../.hbn/knowledge/0002-regra-ouro-vba-import.md) — Regra de Ouro
-5. [`.hbn/knowledge/0003-glasswing-style-preventive-security.md`](../.hbn/knowledge/0003-glasswing-style-preventive-security.md) — 5 vetores Glasswing
 
-### Para humanos (Diataxis)
-1. [`docs/tutorials/GUIA_TESTES_HUMANOS_V204.md`](../docs/tutorials/GUIA_TESTES_HUMANOS_V204.md) — guia principal por interface
-2. [`docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md`](../docs/how-to/COMO_LIBERAR_MACROS_NO_WINDOWS.md) — liberar macros no Windows
-3. [`docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md`](../docs/how-to/COMO_RODAR_SEXTETO_VALIDACAO_RELEASE.md) — rodar o gate V204 pela Central de Testes
-4. [`docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md`](../docs/reference/testes/07_ROTEIRO_TESTE_MANUAL_V204.md) — homologacao humana
-5. [`docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md`](../docs/reference/testes/04_MATRIZ_COBERTURA_REGRAS_NEGOCIO_V204.md) — cobertura de regras
+1. [`AGENTS.md`](../AGENTS.md) — entrada canônica.
+2. [`.hbn/relay/INDEX.md`](../.hbn/relay/INDEX.md) — bastão e ciclo ativo.
+3. [`llms.txt`](../llms.txt) — mapa curado para RAG.
+4. [`.hbn/knowledge/0001-regras-v203-inegociaveis.md`](../.hbn/knowledge/0001-regras-v203-inegociaveis.md) — regras operacionais históricas.
+5. [`.hbn/knowledge/0002-regra-ouro-vba-import.md`](../.hbn/knowledge/0002-regra-ouro-vba-import.md) — Regra de Ouro do VBA import.
 
-### Para LLMs (RAG)
-1. [`llms.txt`](../llms.txt) — mapa curado
-2. [`llms-full.txt`](../llms-full.txt) — indice exaustivo
+### Para humanos
 
-### Vitrine institucional
-1. [`releases/STATUS-OFICIAL.md`](releases/STATUS-OFICIAL.md) — status oficial das versoes
-2. [`releases/V12.0.0204.md`](releases/V12.0.0204.md) — release validada atual
-3. [`metodologia/00-MAPA-DOCUMENTAL.md`](metodologia/00-MAPA-DOCUMENTAL.md) — mapa documental do projeto
-4. [`metodologia/01-COMO-A-IA-LE-ESTE-REPO.md`](metodologia/01-COMO-A-IA-LE-ESTE-REPO.md) — guia para o RAG
-5. [`metodologia/02-INTEGRACAO-USEHBN.md`](metodologia/02-INTEGRACAO-USEHBN.md) — integracao com o usehbn
-6. [`metodologia/03-PROTOCOLO-GLASSWING.md`](metodologia/03-PROTOCOLO-GLASSWING.md) — camada Glasswing aplicada
+1. [`releases/V12.0.0205.md`](releases/V12.0.0205.md) — release oficial vigente.
+2. [`../docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md`](../docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md) — jornada humana por interface.
+3. [`../docs/how-to/COMO_RODAR_GATE_RELEASE_V205.md`](../docs/how-to/COMO_RODAR_GATE_RELEASE_V205.md) — executar o Gate RVS.
+4. [`../docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md`](../docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md) — regras de negócio.
+5. [`../docs/reference/testes/09_MATRIZ_COBERTURA_TESTES_V205.md`](../docs/reference/testes/09_MATRIZ_COBERTURA_TESTES_V205.md) — cobertura de testes.
+6. [`../docs/tutorials/DOSSIE_RELEASE_V12_0_0205.md`](../docs/tutorials/DOSSIE_RELEASE_V12_0_0205.md) — dossiê fonte.
+
+### Evidências
+
+1. [`../auditoria/evidencias/V12.0.0205/INDEX.md`](../auditoria/evidencias/V12.0.0205/INDEX.md) — índice de evidências.
+2. [`../auditoria/evidencias/V12.0.0205/MANIFEST.md`](../auditoria/evidencias/V12.0.0205/MANIFEST.md) — manifesto de evidências.
+3. [`../auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv`](../auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv) — CSV final do Gate RVS.
 
 ## Checkpoint de testes
 
-Ultima execucao do gate consolidado: `VR_20260511_175849` (em
-`auditoria/evidencias/V12.0.0204/`).
-
 | Suite | Resultado | Build |
 |---|---|---|
-| V1 rapida | OK=171, FALHA=0 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
-| V2 Smoke | OK=34, FALHA=0, MANUAL=4 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
-| V2 Canonica | OK=24, FALHA=0 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
-| E2E Strikes | OK=76, FALHA=0 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
-| IntegridadeBase | OK=4, FALHA=0, MANUAL=1 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
-| Onda23Adv | OK=27, FALHA=0 | `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2` |
+| V1 rápida | OK=171, FALHA=0 | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
+| V2 Smoke | OK=34, FALHA=0, MANUAL=4 | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
+| V2 Canônica | OK=24, FALHA=0 | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
+| E2E Strikes | OK=76, FALHA=0 | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
+| IntegridadeBase | OK=4, FALHA=0, MANUAL=1 | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
+| Onda23Adv | OK=27, FALHA=0 | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
 
-## Governanca publica
+## Governança pública
 
-- Licenca: TPGL v1.1 (auto-conversao para Apache 2.0 em 4 anos)
-- CLA: obrigatorio para contribuidores externos
-- Politica de seguranca: `SECURITY.md`
+- Licença: TPGL v1.1, com auto-conversão para Apache 2.0 em 4 anos.
+- CLA: obrigatório para contribuidores externos.
+- Política de segurança: `SECURITY.md`.
 - Camada preventiva: Glasswing G1-G5 documentada em
-  `.hbn/knowledge/0003-glasswing-style-preventive-security.md`
-- Protocolo de governanca AI: HBN
-  ([usehbn.org](https://usehbn.org)) — Credenciamento e o primeiro
-  case study production-scale do HBN.
+  `.hbn/knowledge/0003-glasswing-style-preventive-security.md`.
+- Protocolo de governança AI: HBN
+  ([usehbn.org](https://usehbn.org)) — Credenciamento é o primeiro case study
+  production-scale do HBN.
 
-## Cadencia de update deste dashboard
+## Cadência
 
-Update obrigatorio a cada onda fechada. Quem fecha a onda atualiza:
-
-1. Campo `ultima-atualizacao` (frontmatter)
-2. Secao "Status atual" (build novo se houver)
-3. Secao "Onda em curso" (proxima onda)
-4. Tabela "Roadmap apos Onda N"
-
-Ausencia de update bloqueia a abertura da proxima onda.
+Este dashboard deve ser atualizado em todo fechamento de onda, release ou
+mudança de linha oficial.

@@ -40,6 +40,13 @@
 - [auditoria/00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md](auditoria/00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md)
 - [auditoria/00_status/24_FECHAMENTO_V12_0203.md](auditoria/00_status/24_FECHAMENTO_V12_0203.md)
 - [auditoria/00_status/26_DIAGNOSTICO_LOOPING_CODEX_E_PROMPT_RETOMADA.md](auditoria/00_status/26_DIAGNOSTICO_LOOPING_CODEX_E_PROMPT_RETOMADA.md)
+- [auditoria/00_status/73_AUDITORIA_ESCOPO_V205_OPUS.md](auditoria/00_status/73_AUDITORIA_ESCOPO_V205_OPUS.md): auditoria de escopo V205
+- [auditoria/00_status/74_AUDITORIA_CRUZADA_V205_ANTIGRAVITY_GEMINI.md](auditoria/00_status/74_AUDITORIA_CRUZADA_V205_ANTIGRAVITY_GEMINI.md): auditoria cruzada V205
+- [auditoria/00_status/75_AUDITORIA_UX_DOCS_JORNADA_V205_GEMINI.md](auditoria/00_status/75_AUDITORIA_UX_DOCS_JORNADA_V205_GEMINI.md): auditoria UX/docs/jornada V205
+- [auditoria/00_status/76_READBACK_ABERTURA_V205_CODEX.md](auditoria/00_status/76_READBACK_ABERTURA_V205_CODEX.md): readback de abertura V205
+- [auditoria/00_status/77_PROMPT_AUDITORIA_POSITIVA_V205_CLAUDE_OPUS.md](auditoria/00_status/77_PROMPT_AUDITORIA_POSITIVA_V205_CLAUDE_OPUS.md): prompt auditoria positiva final Claude
+- [auditoria/00_status/78_PROMPT_AUDITORIA_DOCS_GITHUB_V205_GEMINI.md](auditoria/00_status/78_PROMPT_AUDITORIA_DOCS_GITHUB_V205_GEMINI.md): prompt auditoria docs/GitHub Gemini
+- [auditoria/00_status/79_PROMPT_CONSOLIDACAO_FINAL_V205_CODEX.md](auditoria/00_status/79_PROMPT_CONSOLIDACAO_FINAL_V205_CODEX.md): prompt consolidacao final Codex
 
 ### Regras e governanca (auditoria/01_regras_e_governanca/)
 
@@ -60,6 +67,7 @@
 - [auditoria/02_planos/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md](auditoria/02_planos/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md)
 - [auditoria/02_planos/25_PLANO_HARDENING_POS_0203.md](auditoria/02_planos/25_PLANO_HARDENING_POS_0203.md)
 - [auditoria/02_planos/27_PLANO_ESTEIRA_OPUS_RELEASE_V203.md](auditoria/02_planos/27_PLANO_ESTEIRA_OPUS_RELEASE_V203.md)
+- [auditoria/02_planos/30_ROADMAP_V205_PRODUCAO.md](auditoria/02_planos/30_ROADMAP_V205_PRODUCAO.md): roadmap V205 e linhas V206/V207
 
 ### Ondas (auditoria/03_ondas/)
 
@@ -78,6 +86,8 @@
 
 ### Evidencias (auditoria/04_evidencias/)
 
+- [auditoria/evidencias/V12.0.0205/INDEX.md](auditoria/evidencias/V12.0.0205/INDEX.md): indice de evidencias V205
+- [auditoria/evidencias/V12.0.0205/MANIFEST.md](auditoria/evidencias/V12.0.0205/MANIFEST.md): manifesto de evidencias V205
 - [auditoria/04_evidencias/V12.0.0202/MANIFEST.md](auditoria/04_evidencias/V12.0.0202/MANIFEST.md)
 - [auditoria/04_evidencias/V12.0.0202/V2_VALIDACAO_HUMANA_2026-04-20.md](auditoria/04_evidencias/V12.0.0202/V2_VALIDACAO_HUMANA_2026-04-20.md)
 - [auditoria/04_evidencias/V12.0.0203/MANIFEST.md](auditoria/04_evidencias/V12.0.0203/MANIFEST.md)
@@ -90,6 +100,10 @@
 - [docs/reference/COMPLIANCE_CMMI_ISO.md](docs/reference/COMPLIANCE_CMMI_ISO.md)
 - [docs/reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md](docs/reference/GOVERNANCA_DE_RELEASE_E_EVIDENCIA.md)
 - [docs/reference/testes/INDEX.md](docs/reference/testes/INDEX.md)
+- [docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md](docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md): regras de negocio V205
+- [docs/reference/testes/NOMENCLATURA_BATERIAS_V205.md](docs/reference/testes/NOMENCLATURA_BATERIAS_V205.md): crosswalk RVS/SRC/BRL
+- [docs/reference/testes/09_MATRIZ_COBERTURA_TESTES_V205.md](docs/reference/testes/09_MATRIZ_COBERTURA_TESTES_V205.md): matriz de cobertura V205
+- [docs/reference/testes/ESPEC_PDF_AUTOMATICO_V205.md](docs/reference/testes/ESPEC_PDF_AUTOMATICO_V205.md): fallback manual V205 e PDF V206
 - [docs/reference/testes/00_MODELO_DOCUMENTAL_DOS_TESTES.md](docs/reference/testes/00_MODELO_DOCUMENTAL_DOS_TESTES.md)
 - [docs/reference/testes/01_EVIDENCIAS_E_RELATORIOS_DE_TESTE.md](docs/reference/testes/01_EVIDENCIAS_E_RELATORIOS_DE_TESTE.md)
 - [docs/reference/licenca/README.md](docs/reference/licenca/README.md)
@@ -98,6 +112,8 @@
 ### How-to
 
 - [docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md](docs/how-to/GUIA_DE_ACESSO_A_MATERIAIS_OPERACIONAIS.md)
+- [docs/how-to/COMO_RODAR_GATE_RELEASE_V205.md](docs/how-to/COMO_RODAR_GATE_RELEASE_V205.md): rodar o Gate RVS V205
+- [docs/how-to/COMO_GERAR_DOSSIE_V205.md](docs/how-to/COMO_GERAR_DOSSIE_V205.md): gerar dossie derivado V205
 
 ### Explanation
 
@@ -106,7 +122,8 @@
 
 ### Tutorials
 
-(em construcao — Ondas 7-9)
+- [docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md](docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md): jornada humana V205
+- [docs/tutorials/DOSSIE_RELEASE_V12_0_0205.md](docs/tutorials/DOSSIE_RELEASE_V12_0_0205.md): dossie fonte V205
 
 ## Vault Obsidian (obsidian-vault/)
 
@@ -117,7 +134,9 @@
 - [obsidian-vault/metodologia/02-INTEGRACAO-USEHBN.md](obsidian-vault/metodologia/02-INTEGRACAO-USEHBN.md)
 - [obsidian-vault/metodologia/03-PROTOCOLO-GLASSWING.md](obsidian-vault/metodologia/03-PROTOCOLO-GLASSWING.md)
 - [obsidian-vault/releases/STATUS-OFICIAL.md](obsidian-vault/releases/STATUS-OFICIAL.md): status oficial das versoes
-- [obsidian-vault/releases/V12.0.0202.md](obsidian-vault/releases/V12.0.0202.md): release validada atual
+- [obsidian-vault/releases/V12.0.0205.md](obsidian-vault/releases/V12.0.0205.md): release validada atual
+- [obsidian-vault/releases/V12.0.0204.md](obsidian-vault/releases/V12.0.0204.md): release historica superada pela V205
+- [obsidian-vault/releases/V12.0.0202.md](obsidian-vault/releases/V12.0.0202.md): release historica
 - [obsidian-vault/releases/historico/README.md](obsidian-vault/releases/historico/README.md): histórico de releases (V12.0.0010+ — não navegue exaustivamente)
 
 ## Codigo

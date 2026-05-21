@@ -43,11 +43,11 @@ Public Sub CT2_AbrirCentral()
     ' OFICIAL; Quinteto/Quarteto/Trio descem para [2]/[3]/[4].
     prompt = "=== CENTRAL DE TESTES V2 ===" & vbCrLf
     prompt = prompt & "Build: " & buildLabel & vbCrLf
-    prompt = prompt & "Gate oficial vigente: [1] Sexteto Minimo" & vbCrLf & vbCrLf
+    prompt = prompt & "Gate oficial vigente: [1] Gate de Validacao de Release (RVS)" & vbCrLf & vbCrLf
     prompt = prompt & ">> GATES DE RELEASE (rodar antes de homologar)" & vbCrLf
-    prompt = prompt & "[1] Sexteto Minimo   (Quinteto + bloco adversarial Onda 23)  *** OFICIAL ***" & vbCrLf
-    prompt = prompt & "[2] Quinteto Minimo  (V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes + V2 IntegridadeBase)  -- compatibilidade" & vbCrLf
-    prompt = prompt & "[3] Quarteto Minimo  (V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes)  -- gate intermediario rapido" & vbCrLf
+    prompt = prompt & "[1] Gate de Validacao de Release (RVS) [antigo Sexteto Minimo]  *** OFICIAL ***" & vbCrLf
+    prompt = prompt & "[2] Suite de Regressao Consolidada (SRC) [antigo Quinteto]  -- compatibilidade" & vbCrLf
+    prompt = prompt & "[3] Bateria Rapida Legada (BRL) [antigo Quarteto Direto]  -- legado" & vbCrLf
     prompt = prompt & "[4] Trio Minimo      (V1 + V2 Smoke + V2 Canonica)  -- legado" & vbCrLf & vbCrLf
     prompt = prompt & ">> BATERIA V1 (executavel direto)" & vbCrLf
     prompt = prompt & "[5] V1 - Bateria Oficial completa (~5 min)" & vbCrLf & vbCrLf

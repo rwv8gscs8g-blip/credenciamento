@@ -1,12 +1,36 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1
-proprietario-bastao: Codex CLI (sessao codex-cli-bloco-b-onda18-2026-05-04) — BASTAO RECEBIDO do Opus 4.7 em 2026-05-04T01:34:31-0300; proprietario unico de implementacao da Frente 1 ate devolucao formal via doc 60.
-ciclo-ativo: V12.0.0204 Onda 25 sob Codex CLI. Roadmap V204 Onda 20-25 aprovado e Onda 26 documental adicionada por decisao do operador; MICRO49/MD-24.4 revertido formalmente para MICRO48; MICRO50 rc1, MICRO51 higiene e MICRO52 auditoria cruzada passaram sem P0/P1; MICRO53-fix2 aprovado pelo operador em import M=2/F=0/err=0/skip=0, compile limpo, build f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2, Smoke TV2_20260511_131824 OK=34/FALHA=0/MANUAL=4, testes manuais finais OK e gate final VR_20260511_154433 APROVADO; MICRO54 publicado no GitHub com tag/release v12.0.0204; MICRO55 App_Release final aprovado pelo operador com import M=1/F=0/err=0/skip=0, compile limpo, Sobre V12.0.0204 VALIDADO/OFICIAL alvo V12.0.0205 e Sexteto extra VR_20260511_175849 APROVADO; MICRO56 vitrine humana V204 executado sem VBA; MICRO57 guia humano por interface executado sem VBA, removendo VBE/Janela Imediata do caminho publico principal; MICRO58 vitrine publica V204 racionalizada com regras de negocio canonicas, guia humano DOCX, indice de evidencias, AGENTS atualizado e docs historicos reclassificados; MICRO59 incorporou protocolo Word aprovado de homologacao humana V204 e preparou handoff V205 para Codex 5.5.
+proprietario-bastao: Codex (branch codex/v12-0-0205-estabilizacao-docs) — BASTAO V205 aprovado pelo operador em 2026-05-21 apos cadeia SP1 Claude Opus 4.7, SP2 Antigravity/Gemini 3.5 e SP3 Gemini 3.5.
+ciclo-ativo: V12.0.0205 validada funcionalmente e em fechamento de congelamento. Escopo entregue: estabilizacao para producao, saneamento de CI/CD, nomenclatura RVS/SRC/BRL, melhoria da Central de Testes, evidencias V205, Jornada Humana e Dossie de Release. Regras de negocio RN-01 a RN-17 congeladas; sem PDF automatico VBA, sem renomeacao de simbolos VBA e sem refatoracao profunda nesta release. Proxima etapa: auditoria cruzada final positiva e publicacao GitHub/tag.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Operador aprovar encerramento do bastao atual e abrir novo chat Codex 5.5 para V12.0.0205 usando auditoria/00_status/72_HANDOFF_V205_CODEX55_PREPARACAO.md.
-ultima-atualizacao: 2026-05-12T17:46:46-0300 (MICRO59 documental executado; protocolo humano V204 incorporado e handoff V205 preparado)
+proxima-acao: Rodar auditoria cruzada final entre IAs com os prompts 77-79, corrigir apenas inconsistencias documentais reais e entao congelar/publicar v12.0.0205.
+ultima-atualizacao: 2026-05-21T18:43:00-0300 (Gate RVS V205 aprovado: VR_20260521_182816; Onda 29 de fechamento em execucao)
 ---
+
+## V12.0.0205 — ciclo ativo de estabilização
+
+| Campo | Valor |
+|---|---|
+| Branch | `codex/v12-0-0205-estabilizacao-docs` |
+| Base canônica | `e43352f` |
+| Versão oficial anterior | `V12.0.0204` |
+| Status V205 | VALIDADO/OFICIAL funcionalmente; aguardando auditoria cruzada final e publicação GitHub |
+| Guard funcional | `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0` |
+| Evidência final | `VR_20260521_182816` |
+| Readback | [`../../auditoria/00_status/76_READBACK_ABERTURA_V205_CODEX.md`](../../auditoria/00_status/76_READBACK_ABERTURA_V205_CODEX.md) |
+| Roadmap | [`../../auditoria/02_planos/30_ROADMAP_V205_PRODUCAO.md`](../../auditoria/02_planos/30_ROADMAP_V205_PRODUCAO.md) |
+| ERPs | [`../results/0069-exec-onda26-v205-md26-1-governanca-tooling-abertura.json`](../results/0069-exec-onda26-v205-md26-1-governanca-tooling-abertura.json), [`../results/0070-exec-onda27-v205-md27-1-rvs-labels-csv-prefix.json`](../results/0070-exec-onda27-v205-md27-1-rvs-labels-csv-prefix.json), [`../results/0073-exec-onda28-v205-md28-2-rvs-aprovado.json`](../results/0073-exec-onda28-v205-md28-2-rvs-aprovado.json) |
+
+### Limites do bastão V205
+
+- Permitido: documentação, índices, CI/CD de consistência, labels de UI,
+  prefixos/pastas de evidência e metadados de fechamento.
+- Bloqueado: lógica de rodízio, persistência, cálculo, avaliação, OS,
+  renomeação de símbolos VBA, PDF automático via VBA e refatoração estrutural.
+- Fechamento oficial: compile VBE, Gate RVS e evidência CSV já aprovados.
+  Restam auditoria cruzada final, eventuais correções documentais, commit/tag e
+  publicação GitHub.
 
 > ⚠️ **REGRA INVIOLAVEL (M11 destilada 2026-05-03)**: A IA le `src/vba/`
 > (fonte de verdade — AGENTS.md §62-63) e transporta para

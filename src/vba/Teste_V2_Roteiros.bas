@@ -805,9 +805,9 @@ Public Sub TV2_RunAdversarial_UI(Optional ByVal visual As Boolean = False, Optio
                              "Garante que a nova suite nao fique escondida apenas na janela imediata"
 
     TV2_UIAdv_LogFileTokens SUITE, "UI_ADV_011_SEXTETO_GATE_EXPOSTO", repoRoot, "Teste_Validacao_Release.bas", _
-                             "CT_ValidarRelease_SextetoMinimo|VR_ValidarReleaseSextetoMinimo|VR_SintaxeSexteto|Validacao Release Sexteto", _
-                             "Gate Sexteto possui entrada publica, alias e sintaxe auditavel", _
-                             "Sub oficial, wrapper, sintaxe e mensagem final presentes", _
+                             "CT_ValidarRelease_SextetoMinimo|VR_ValidarReleaseSextetoMinimo|VR_SintaxeSexteto|Gate de Validacao de Release (RVS)", _
+                             "Gate RVS preserva entrada publica, alias e sintaxe auditavel", _
+                             "Sub oficial, wrapper, sintaxe e mensagem final RVS presentes", _
                              "Toda funcionalidade nova precisa de teste correspondente no mesmo microdelta"
 
     TV2_UIAdv_LogFileNaoContemTokens SUITE, "UI_ADV_012_LIMPAR_BASE_SEM_SENHA_CLARA", repoRoot, "Limpar_Base.frm", _

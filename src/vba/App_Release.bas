@@ -4,11 +4,11 @@ Option Explicit
 ' Metadata centralizada da release atual.
 ' O Menu_Principal apenas consome estas funcoes.
 
-Public Const APP_RELEASE_ATUAL As String = "V12.0.0204"
+Public Const APP_RELEASE_ATUAL As String = "V12.0.0205"
 Public Const APP_RELEASE_STATUS As String = "VALIDADO"
 Public Const APP_RELEASE_CANAL As String = "OFICIAL"
-Public Const APP_RELEASE_ALVO As String = "V12.0.0205"
-Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0204|OFICIAL|V12.0.0205"
+Public Const APP_RELEASE_ALVO As String = "V12.0.0206"
+Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0205|OFICIAL|V12.0.0206"
 ' V12.0.0203 ONDA 5 - carimbo manual do build (sem rodar publicar_vba_import.sh).
 ' V12.0.0203 ONDA 10 - bump auto via IV3_BumpBuildLabel / ImportarPacoteV3_Delta.
 ' V12.0.0203 ONDA 11 - rc1 bump: TAG=v12.0.0203-rc1, STATUS=RELEASE_CANDIDATE,
@@ -251,12 +251,12 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0204|OFICIAL|V12.0.0205"
 ' para eliminar erro de sintaxe no compile manual do Preencher.bas.
 ' MICRO53-fix2: TV2_PrepararBaselineCanonica recria CAD_SERV canonico
 ' de forma deterministica apos reset, cobrindo o novo contrato do Limpar_Base.
-Public Const APP_BUILD_IMPORTADO As String = "f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2"
-Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0203-governanca-testes"
-Public Const APP_BUILD_GERADO_EM As String = "2026-05-11 17:54"
-Public Const APP_RELEASE_TAG As String = "v12.0.0204"
-Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0204"
-Public Const APP_RELEASE_TEST_KEY As String = "sexteto-v204-final-2026-05-11"
+Public Const APP_BUILD_IMPORTADO As String = "e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix"
+Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0205-estabilizacao-docs"
+Public Const APP_BUILD_GERADO_EM As String = "2026-05-21 18:43"
+Public Const APP_RELEASE_TAG As String = "v12.0.0205"
+Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0205"
+Public Const APP_RELEASE_TEST_KEY As String = "rvs-v205-final-2026-05-21"
 Public Const APP_GITHUB_REPO_URL As String = "https://github.com/rwv8gscs8g-blip/credenciamento"
 Public Const APP_GITHUB_RELEASE_NOTES_URL As String = APP_GITHUB_REPO_URL & "/tree/main/obsidian-vault/releases"
 

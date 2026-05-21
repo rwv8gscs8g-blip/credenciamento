@@ -1,0 +1,48 @@
+{
+  "schema_version": "1.0",
+  "execution_id": "0074-exec-onda29-v205-md29-1-promocao-auditoria-final",
+  "agent_id": "Codex",
+  "readback_id": "operator-approved-v205-official-numbering-20260521",
+  "action": "Promover vitrine publica para V12.0.0205 e preparar auditoria cruzada final antes do freeze GitHub",
+  "outcome": "EXECUTADO_DOCUMENTAL_GOVERNANCA",
+  "human_status": "approved",
+  "intent_risk_profile": "low",
+  "created_at": "2026-05-21T19:00:00-0300",
+  "versao_sistema": "V12.0.0205",
+  "branch": "codex/v12-0-0205-estabilizacao-docs",
+  "base_referencia": "e43352f",
+  "workbook_validado": "PlanilhaCredenciamento-Homologacao-V4.xlsm",
+  "build_importado": "e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix",
+  "validation_id": "VR_20260521_182816",
+  "sintaxe": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0",
+  "alteracoes": [
+    "App_Release.bas promovido para V12.0.0205 VALIDADO/OFICIAL, com alvo V12.0.0206.",
+    "README, STATUS-OFICIAL, CHANGELOG, AGENTS, llms.txt, docs/INDEX e dashboard atualizados para a vitrine V205.",
+    "Release note V12.0.0205 criada.",
+    "Prompts de auditoria final AF1/AF2/AF3 criados em auditoria/00_status/77-79."
+  ],
+  "pendencias": {
+    "antes_do_freeze": [
+      "Executar auditoria final Claude Opus usando o prompt 77.",
+      "Executar auditoria final Gemini/Antigravity usando o prompt 78.",
+      "Codex consolidar achados usando o prompt 79."
+    ],
+    "v12_0_0206": [
+      "Ajustes incrementais decorrentes de testes manuais.",
+      "PDF automatico robusto com tratamento de erro.",
+      "Pequenos debitos tecnicos e melhorias prorrogadas."
+    ],
+    "v12_0_0207": [
+      "Code review profundo.",
+      "Performance.",
+      "Componentizacao e preparacao SaaS."
+    ]
+  },
+  "asserts": {
+    "grafia_canonica": "V12.0.0205",
+    "nao_usar_v12_0_205": true,
+    "regras_negocio_alteradas": false,
+    "pdf_vba_implementado": false
+  },
+  "decisao": "V12.0.0205 validada funcionalmente e preparada para auditoria cruzada final antes de tag/push."
+}

@@ -4,8 +4,8 @@ diataxis: status
 hbn-track: safe_track
 hbn-status: active
 audiencia: ambos
-versao-sistema: V12.0.0204
-data: 2026-05-11
+versao-sistema: V12.0.0205
+data: 2026-05-21
 ---
 
 # Status Oficial das Versões
@@ -16,18 +16,20 @@ Este arquivo é a fonte canônica para o status de publicação das versões. As
 
 | Versão | Status | Compila | Testes | Observação |
 |--------|--------|---------|--------|------------|
-| V12.0.0204 | VALIDADO | Sim | `VR_20260511_154433` e `VR_20260511_175849` aprovados | Linha oficial vigente; build final validado `f7aa84f+ONDA25.MD25.5-limpar-cad-serv-fix2`; Smoke `34/0/4`; validação manual final aprovada pelo operador; vitrine humana V204 atualizada |
+| V12.0.0205 | VALIDADO | Sim | `VR_20260521_182816` aprovado | Linha oficial vigente; build validado `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix`; Gate RVS preserva a guarda funcional da V204; documentação pública V205 consolidada para produção |
 
-## Linha em estabilizacao, ainda nao oficial
+## Próximas linhas planejadas
 
 | Versão alvo | Status | Build âncora | Compila | Testes | Observação |
 |-------------|--------|--------------|---------|--------|------------|
-| V12.0.0205 | PLANEJAMENTO | pendente | pendente | pendente | Próxima linha: auditoria cruzada Opus/Antigravity, lista mestra de evoluções e renomeação profissional da taxonomia de testes |
+| V12.0.0206 | PLANEJAMENTO | `V12.0.0205` | pendente | pendente | Estabilização incremental pós-produção: ajustes manuais residuais, PDF automático especificado, débitos técnicos pequenos e melhorias prorrogadas sem refatoração profunda |
+| V12.0.0207 | PLANEJAMENTO | `V12.0.0206` | pendente | pendente | Code review profundo, performance, componentização e preparação arquitetural para evolução SaaS |
 
 ## Marcos validados
 
 | Versão | Status | Observação |
 |--------|--------|------------|
+| V12.0.0204 | SUPERADA | Substituída pela V12.0.0205 em 2026-05-21; preservada como baseline funcional estável que originou a guarda RVS |
 | V12.0.0202 | SUPERADA | Substituída pela V12.0.0204, mantendo valor histórico como primeira linha pública validada da fase HBN |
 | V12.0.0203 | SUPERADA | Release candidate e trilha de estabilização absorvidas pela V12.0.0204; não foi promovida como release oficial isolada |
 | V12.0.0190 | VALIDADA | Marco de estabilização da baseline determinística da V2 |
