@@ -6,7 +6,7 @@ hbn-status: active
 audiencia: auditores
 versao-sistema: V12.0.0205
 data: 2026-05-21
-sha256-derivado-docx: A_PREENCHER_NO_FECHAMENTO
+sha256-derivado-docx: d460638f225ab685b727205926e67e9641737fd2d9620b23b894039df89da131
 ---
 
 # Dossiê de Release — V12.0.0205
@@ -74,8 +74,14 @@ numeração, versão, caminhos de arquivos ou protocolo.
 Documentos de prompt:
 
 - `auditoria/00_status/77_PROMPT_AUDITORIA_POSITIVA_V205_CLAUDE_OPUS.md`
-- `auditoria/00_status/78_PROMPT_AUDITORIA_POSITIVA_V205_GEMINI.md`
+- `auditoria/00_status/78_PROMPT_AUDITORIA_DOCS_GITHUB_V205_GEMINI.md`
 - `auditoria/00_status/79_PROMPT_CONSOLIDACAO_FINAL_V205_CODEX.md`
+
+Relatórios finais:
+
+- `auditoria/00_status/80_AUDITORIA_FINAL_POSITIVA_V205_CLAUDE_OPUS.md`
+- `auditoria/00_status/81_AUDITORIA_FINAL_DOCS_GITHUB_V205_GEMINI.md`
+- `auditoria/00_status/82_CONSOLIDACAO_FINAL_FREEZE_V205_CODEX.md`
 
 ## Débitos Diferidos Para V12.0.0206
 

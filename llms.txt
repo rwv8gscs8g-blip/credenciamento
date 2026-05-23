@@ -62,6 +62,9 @@
 - [auditoria/00_status/74_AUDITORIA_CRUZADA_V205_ANTIGRAVITY_GEMINI.md](auditoria/00_status/74_AUDITORIA_CRUZADA_V205_ANTIGRAVITY_GEMINI.md): SP2 Antigravity/Gemini
 - [auditoria/00_status/75_AUDITORIA_UX_DOCS_JORNADA_V205_GEMINI.md](auditoria/00_status/75_AUDITORIA_UX_DOCS_JORNADA_V205_GEMINI.md): SP3 Gemini
 - [auditoria/00_status/76_READBACK_ABERTURA_V205_CODEX.md](auditoria/00_status/76_READBACK_ABERTURA_V205_CODEX.md): abertura Codex
+- [auditoria/00_status/80_AUDITORIA_FINAL_POSITIVA_V205_CLAUDE_OPUS.md](auditoria/00_status/80_AUDITORIA_FINAL_POSITIVA_V205_CLAUDE_OPUS.md): AF1 final positiva Claude Opus
+- [auditoria/00_status/81_AUDITORIA_FINAL_DOCS_GITHUB_V205_GEMINI.md](auditoria/00_status/81_AUDITORIA_FINAL_DOCS_GITHUB_V205_GEMINI.md): AF2 docs/GitHub Gemini
+- [auditoria/00_status/82_CONSOLIDACAO_FINAL_FREEZE_V205_CODEX.md](auditoria/00_status/82_CONSOLIDACAO_FINAL_FREEZE_V205_CODEX.md): AF3 consolidação final Codex
 
 ## Proximas linhas
 

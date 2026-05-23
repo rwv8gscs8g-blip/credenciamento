@@ -1,0 +1,46 @@
+{
+  "execution_id": "0075-exec-onda29-v205-md29-2-af3-freeze",
+  "agent_id": "codex",
+  "readback_id": "0074-exec-onda29-v205-md29-1-promocao-auditoria-final",
+  "action": "Consolidar auditorias finais AF1 Claude Opus e AF2 Gemini/Antigravity, corrigir inconsistencias documentais reais, gerar dossie DOCX derivado e preparar freeze documental da V12.0.0205.",
+  "outcome": "executed_with_condition",
+  "human_status": "conditional_compile_vbe_pos_micro61",
+  "intent_risk_profile": "low",
+  "environment": {
+    "branch": "codex/v12-0-0205-estabilizacao-docs",
+    "version": "V12.0.0205",
+    "tag": "v12.0.0205",
+    "build": "e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix",
+    "evidence_id": "VR_20260521_182816",
+    "importador_v3_micro61": {
+      "delta": "MICRO61-V205-MD29-1",
+      "result": "M=1 | F=0 | err=0 | skip=0",
+      "operator_reported_at": "2026-05-23T17:00:00-03:00",
+      "compile_vbe": "pendente_confirmacao_operador"
+    }
+  },
+  "changes": [
+    "Criado auditoria/00_status/80_AUDITORIA_FINAL_POSITIVA_V205_CLAUDE_OPUS.md",
+    "Criado auditoria/00_status/81_AUDITORIA_FINAL_DOCS_GITHUB_V205_GEMINI.md",
+    "Criado auditoria/00_status/82_CONSOLIDACAO_FINAL_FREEZE_V205_CODEX.md",
+    "Corrigido link do prompt AF2 no dossie V205",
+    "Gerado DOCX derivado do dossie e registrado hash no YAML",
+    "Atualizados auditoria/INDEX.md, llms.txt, llms-full.txt, .hbn/relay/INDEX.md e .hbn/results/INDEX.md"
+  ],
+  "accepted_deferred_scope": {
+    "V12.0.0206": [
+      "PDF automatico robusto",
+      "ajustes manuais e pequenos debitos tecnicos",
+      "revisao de MANIFESTO.csv como derivado",
+      "espelhos fisicos opcionais das ondas 26-29",
+      "texto legado do Importador V3 sobre Trio"
+    ],
+    "V12.0.0207": [
+      "code review profundo",
+      "performance",
+      "componentizacao",
+      "preparacao SaaS"
+    ]
+  },
+  "created_at": "2026-05-23T17:00:00-03:00"
+}

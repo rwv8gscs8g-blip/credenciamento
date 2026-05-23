@@ -14,6 +14,7 @@ data: 2026-05-21
 
 - [JORNADA_VALIDACAO_HUMANA_V205.md](JORNADA_VALIDACAO_HUMANA_V205.md) — tutorial linear para operador, auditor ou testador validar a V205 pela interface do Excel.
 - [DOSSIE_RELEASE_V12_0_0205.md](DOSSIE_RELEASE_V12_0_0205.md) — fonte Markdown do dossiê de release; DOCX/PDF são artefatos derivados.
+- [DOSSIE_RELEASE_V12_0_0205.docx](DOSSIE_RELEASE_V12_0_0205.docx) — DOCX derivado do dossiê, gerado via Pandoc e hashado no YAML da fonte Markdown.
 
 ## Histórico V12.0.0204
 

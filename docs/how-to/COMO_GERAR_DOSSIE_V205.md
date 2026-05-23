@@ -19,8 +19,13 @@ docs/tutorials/DOSSIE_RELEASE_V12_0_0205.md
 ## DOCX
 
 ```bash
-pandoc docs/tutorials/DOSSIE_RELEASE_V12_0_0205.md \
-  --from markdown+reflink_references+pipe_tables \
+awk '!/^sha256-derivado-docx:/' \
+  docs/tutorials/DOSSIE_RELEASE_V12_0_0205.md \
+  > /tmp/DOSSIE_RELEASE_V12_0_0205.pandoc.md
+
+SOURCE_DATE_EPOCH=1779399797 \
+  pandoc /tmp/DOSSIE_RELEASE_V12_0_0205.pandoc.md \
+  --from markdown+pipe_tables \
   --to docx \
   --output docs/tutorials/DOSSIE_RELEASE_V12_0_0205.docx \
   --toc
@@ -33,4 +38,5 @@ shasum -a 256 docs/tutorials/DOSSIE_RELEASE_V12_0_0205.docx
 ```
 
 O hash deve ser registrado no YAML do Markdown fonte antes do fechamento da
-release. O DOCX não deve ser editado manualmente.
+release. A linha `sha256-derivado-docx` é removida do insumo temporário para
+evitar hash autorreferencial. O DOCX não deve ser editado manualmente.

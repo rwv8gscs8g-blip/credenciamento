@@ -47,6 +47,9 @@
 - [auditoria/00_status/77_PROMPT_AUDITORIA_POSITIVA_V205_CLAUDE_OPUS.md](auditoria/00_status/77_PROMPT_AUDITORIA_POSITIVA_V205_CLAUDE_OPUS.md): prompt auditoria positiva final Claude
 - [auditoria/00_status/78_PROMPT_AUDITORIA_DOCS_GITHUB_V205_GEMINI.md](auditoria/00_status/78_PROMPT_AUDITORIA_DOCS_GITHUB_V205_GEMINI.md): prompt auditoria docs/GitHub Gemini
 - [auditoria/00_status/79_PROMPT_CONSOLIDACAO_FINAL_V205_CODEX.md](auditoria/00_status/79_PROMPT_CONSOLIDACAO_FINAL_V205_CODEX.md): prompt consolidacao final Codex
+- [auditoria/00_status/80_AUDITORIA_FINAL_POSITIVA_V205_CLAUDE_OPUS.md](auditoria/00_status/80_AUDITORIA_FINAL_POSITIVA_V205_CLAUDE_OPUS.md): auditoria final positiva AF1 Claude Opus
+- [auditoria/00_status/81_AUDITORIA_FINAL_DOCS_GITHUB_V205_GEMINI.md](auditoria/00_status/81_AUDITORIA_FINAL_DOCS_GITHUB_V205_GEMINI.md): auditoria final docs/GitHub AF2 Gemini
+- [auditoria/00_status/82_CONSOLIDACAO_FINAL_FREEZE_V205_CODEX.md](auditoria/00_status/82_CONSOLIDACAO_FINAL_FREEZE_V205_CODEX.md): consolidacao final AF3 Codex
 
 ### Regras e governanca (auditoria/01_regras_e_governanca/)
 

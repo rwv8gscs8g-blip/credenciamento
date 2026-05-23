@@ -26,6 +26,9 @@ versao-sistema: V12.0.0205
 - [00_status/77_PROMPT_AUDITORIA_POSITIVA_V205_CLAUDE_OPUS.md](00_status/77_PROMPT_AUDITORIA_POSITIVA_V205_CLAUDE_OPUS.md) — prompt AF1 para auditoria positiva final Claude Opus
 - [00_status/78_PROMPT_AUDITORIA_DOCS_GITHUB_V205_GEMINI.md](00_status/78_PROMPT_AUDITORIA_DOCS_GITHUB_V205_GEMINI.md) — prompt AF2 para auditoria adversarial docs/GitHub Gemini
 - [00_status/79_PROMPT_CONSOLIDACAO_FINAL_V205_CODEX.md](00_status/79_PROMPT_CONSOLIDACAO_FINAL_V205_CODEX.md) — prompt AF3 para consolidação final Codex
+- [00_status/80_AUDITORIA_FINAL_POSITIVA_V205_CLAUDE_OPUS.md](00_status/80_AUDITORIA_FINAL_POSITIVA_V205_CLAUDE_OPUS.md) — auditoria final positiva AF1 Claude Opus
+- [00_status/81_AUDITORIA_FINAL_DOCS_GITHUB_V205_GEMINI.md](00_status/81_AUDITORIA_FINAL_DOCS_GITHUB_V205_GEMINI.md) — auditoria final docs/GitHub AF2 Gemini
+- [00_status/82_CONSOLIDACAO_FINAL_FREEZE_V205_CODEX.md](00_status/82_CONSOLIDACAO_FINAL_FREEZE_V205_CODEX.md) — consolidação final AF3 Codex para freeze V205
 - [00_status/00_SUMARIO_EXECUTIVO.md](00_status/00_SUMARIO_EXECUTIVO.md) — status executivo da linha oficial
 - [00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md](00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md) — checkpoint da V12.0.0203
 - [00_status/24_FECHAMENTO_V12_0203.md](00_status/24_FECHAMENTO_V12_0203.md) — fechamento candidato
