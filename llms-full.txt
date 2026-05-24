@@ -55,6 +55,10 @@
 - [auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md](auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md): prompt planejamento V206 Gemini
 - [auditoria/00_status/86_ORQUESTRACAO_IAS_PLANEJAMENTO_V206_CODEX.md](auditoria/00_status/86_ORQUESTRACAO_IAS_PLANEJAMENTO_V206_CODEX.md): orquestracao V206
 - [auditoria/00_status/87_PROMPT_CONSOLIDACAO_ROADMAP_V206_CODEX.md](auditoria/00_status/87_PROMPT_CONSOLIDACAO_ROADMAP_V206_CODEX.md): prompt consolidacao V206 Codex
+- [auditoria/00_status/88_AUDITORIA_PLANEJAMENTO_V206_CLAUDE_OPUS.md](auditoria/00_status/88_AUDITORIA_PLANEJAMENTO_V206_CLAUDE_OPUS.md): auditoria planejamento V206 Claude
+- [auditoria/00_status/89_AUDITORIA_ADVERSARIAL_PLANEJAMENTO_V206_GEMINI.md](auditoria/00_status/89_AUDITORIA_ADVERSARIAL_PLANEJAMENTO_V206_GEMINI.md): auditoria adversarial V206 Gemini
+- [auditoria/00_status/90_CONSOLIDACAO_ROADMAP_V206_CODEX.md](auditoria/00_status/90_CONSOLIDACAO_ROADMAP_V206_CODEX.md): consolidacao roadmap V206 Codex
+- [auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md](auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md): prompt retomada V206 novo chat
 
 ### Regras e governanca (auditoria/01_regras_e_governanca/)
 
@@ -77,6 +81,7 @@
 - [auditoria/02_planos/27_PLANO_ESTEIRA_OPUS_RELEASE_V203.md](auditoria/02_planos/27_PLANO_ESTEIRA_OPUS_RELEASE_V203.md)
 - [auditoria/02_planos/30_ROADMAP_V205_PRODUCAO.md](auditoria/02_planos/30_ROADMAP_V205_PRODUCAO.md): roadmap V205 e linhas V206/V207
 - [auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md](auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md): roadmap preliminar V206
+- [auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md](auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md): roadmap consolidado V206
 
 ### Ondas (auditoria/03_ondas/)
 

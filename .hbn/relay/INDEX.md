@@ -4,8 +4,8 @@ versao-protocolo: HBN 0.3.1
 proprietario-bastao: Codex — bastão de desenvolvimento mantido para planejamento da V12.0.0206.
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Executar validação cruzada de planejamento V206 com Claude Opus e Gemini/Antigravity; consolidar pareceres em roadmap V206 antes de qualquer microdelta de código.
-ultima-atualizacao: 2026-05-24T00:00:00-0300 (planejamento V206 aberto por Codex; prompts 84/85 e orquestração 86 preparados)
+proxima-acao: Abrir novo chat Codex usando `auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md`; pedir hearback humano sobre o roadmap consolidado antes da Onda 31.
+ultima-atualizacao: 2026-05-24T23:33:00-0300 (pareceres 88/89 recebidos; roadmap V206 consolidado em 90/32; bastão preparado para novo chat)
 ---
 
 ## V12.0.0205 — ciclo ativo de estabilização
@@ -37,10 +37,11 @@ ultima-atualizacao: 2026-05-24T00:00:00-0300 (planejamento V206 aberto por Codex
 |---|---|
 | Branch | `codex/v12-0-0206-planejamento` |
 | Base | `v12.0.0205` / commit `f24e535` |
-| Status | Planejamento aberto; validação cruzada pendente |
+| Status | Planejamento consolidado; aguardando hearback humano no novo chat |
 | Roadmap preliminar | [`../../auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md`](../../auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md) |
+| Roadmap consolidado | [`../../auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md`](../../auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md) |
 | Readback | [`../../auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md`](../../auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md) |
-| Prompts | [`../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md`](../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md), [`../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md`](../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md), [`../../auditoria/00_status/87_PROMPT_CONSOLIDACAO_ROADMAP_V206_CODEX.md`](../../auditoria/00_status/87_PROMPT_CONSOLIDACAO_ROADMAP_V206_CODEX.md) |
+| Prompts | [`../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md`](../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md), [`../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md`](../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md), [`../../auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md`](../../auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md) |
 
 ### Limites preliminares V206
 

@@ -75,6 +75,11 @@
 - [auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md](auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md): prompt V206 para Claude Opus
 - [auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md](auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md): prompt V206 para Gemini/Antigravity
 - [auditoria/00_status/86_ORQUESTRACAO_IAS_PLANEJAMENTO_V206_CODEX.md](auditoria/00_status/86_ORQUESTRACAO_IAS_PLANEJAMENTO_V206_CODEX.md): orquestração inter-IA V206
+- [auditoria/00_status/88_AUDITORIA_PLANEJAMENTO_V206_CLAUDE_OPUS.md](auditoria/00_status/88_AUDITORIA_PLANEJAMENTO_V206_CLAUDE_OPUS.md): auditoria V206 Claude Opus
+- [auditoria/00_status/89_AUDITORIA_ADVERSARIAL_PLANEJAMENTO_V206_GEMINI.md](auditoria/00_status/89_AUDITORIA_ADVERSARIAL_PLANEJAMENTO_V206_GEMINI.md): auditoria adversarial V206 Gemini
+- [auditoria/00_status/90_CONSOLIDACAO_ROADMAP_V206_CODEX.md](auditoria/00_status/90_CONSOLIDACAO_ROADMAP_V206_CODEX.md): consolidação roadmap V206
+- [auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md](auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md): roadmap consolidado V206
+- [auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md](auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md): prompt de retomada para novo chat Codex
 
 ## Optional
 

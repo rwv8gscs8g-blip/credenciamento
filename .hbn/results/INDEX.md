@@ -89,3 +89,4 @@ ultima-atualizacao: 2026-05-23
 | 0075 | Onda 29 V205 MD-29.2 AF3 freeze documental | EXECUTADO_COM_CONDICAO_COMPILE_VBE | `0075-exec-onda29-v205-md29-2-af3-freeze.json` | 2026-05-23 |
 | 0076 | Onda 29 V205 MD-29.3 freeze e publicação | APROVADO_OPERADOR_FREEZE | `0076-exec-onda29-v205-md29-3-freeze-publicacao.json` | 2026-05-23 |
 | 0077 | Onda 30 V206 planejamento inicial | EXECUTADO_PLANEJAMENTO | `0077-exec-onda30-v206-planejamento-inicial.json` | 2026-05-24 |
+| 0078 | Onda 30 V206 consolidação roadmap e prompt novo chat | EXECUTADO_HANDOFF_NOVO_CHAT | `0078-exec-onda30-v206-consolidacao-roadmap.json` | 2026-05-24 |
