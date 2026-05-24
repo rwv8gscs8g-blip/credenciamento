@@ -1,26 +1,26 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1
-proprietario-bastao: Codex (branch codex/v12-0-0205-estabilizacao-docs) — BASTAO V205 aprovado pelo operador em 2026-05-21 apos cadeia SP1 Claude Opus 4.7, SP2 Antigravity/Gemini 3.5 e SP3 Gemini 3.5.
-ciclo-ativo: V12.0.0205 validada funcionalmente e em fechamento de congelamento. Escopo entregue: estabilizacao para producao, saneamento de CI/CD, nomenclatura RVS/SRC/BRL, melhoria da Central de Testes, evidencias V205, Jornada Humana e Dossie de Release. Regras de negocio RN-01 a RN-17 congeladas; sem PDF automatico VBA, sem renomeacao de simbolos VBA e sem refatoracao profunda nesta release. Proxima etapa: auditoria cruzada final positiva e publicacao GitHub/tag.
+proprietario-bastao: Codex — V12.0.0205 congelada/publicada; próxima linha operacional V12.0.0206 mediante novo bastão explícito.
+ciclo-ativo: V12.0.0205 validada funcionalmente, auditada e congelada como release oficial. Escopo entregue: estabilizacao para producao, saneamento de CI/CD, nomenclatura RVS/SRC/BRL, melhoria da Central de Testes, evidencias V205, Jornada Humana, Dossie de Release, AF1/AF2/AF3 e tag v12.0.0205. Regras de negocio RN-01 a RN-17 congeladas; sem PDF automatico VBA, sem renomeacao de simbolos VBA e sem refatoracao profunda nesta release.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Confirmar compile VBE limpo apos MICRO61, entao criar tag v12.0.0205 e publicar a branch/tag de freeze; V12.0.0206 absorve ajustes incrementais.
-ultima-atualizacao: 2026-05-23T17:00:00-0300 (AF1/AF2 consolidadas por Codex; P1/P2 documentais resolvidos; aguardando confirmacao final de compile VBE pos-MICRO61)
+proxima-acao: Abrir V12.0.0206 para ajustes incrementais, testes manuais residuais, PDF automatico robusto e pequenos debitos tecnicos.
+ultima-atualizacao: 2026-05-23T22:12:46-0300 (compile VBE pos-MICRO61 confirmado; Gate RVS final VR_20260523_215637 aprovado; freeze V205 autorizado)
 ---
 
 ## V12.0.0205 — ciclo ativo de estabilização
 
 | Campo | Valor |
 |---|---|
-| Branch | `codex/v12-0-0205-estabilizacao-docs` |
+| Branch | `main` após tag `v12.0.0205` |
 | Base canônica | `e43352f` |
 | Versão oficial anterior | `V12.0.0204` |
-| Status V205 | VALIDADO/OFICIAL funcionalmente; auditoria final AF1/AF2/AF3 consolidada; aguardando confirmação final de compile VBE pós-MICRO61 e publicação GitHub |
+| Status V205 | VALIDADO/OFICIAL congelada para produção; compile VBE pós-MICRO61 e Gate RVS final aprovados |
 | Guard funcional | `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0` |
-| Evidência final | `VR_20260521_182816` |
+| Evidência final | `VR_20260523_215637` |
 | Readback | [`../../auditoria/00_status/76_READBACK_ABERTURA_V205_CODEX.md`](../../auditoria/00_status/76_READBACK_ABERTURA_V205_CODEX.md) |
 | Roadmap | [`../../auditoria/02_planos/30_ROADMAP_V205_PRODUCAO.md`](../../auditoria/02_planos/30_ROADMAP_V205_PRODUCAO.md) |
-| ERPs | [`../results/0069-exec-onda26-v205-md26-1-governanca-tooling-abertura.json`](../results/0069-exec-onda26-v205-md26-1-governanca-tooling-abertura.json), [`../results/0070-exec-onda27-v205-md27-1-rvs-labels-csv-prefix.json`](../results/0070-exec-onda27-v205-md27-1-rvs-labels-csv-prefix.json), [`../results/0073-exec-onda28-v205-md28-2-rvs-aprovado.json`](../results/0073-exec-onda28-v205-md28-2-rvs-aprovado.json), [`../results/0075-exec-onda29-v205-md29-2-af3-freeze.json`](../results/0075-exec-onda29-v205-md29-2-af3-freeze.json) |
+| ERPs | [`../results/0069-exec-onda26-v205-md26-1-governanca-tooling-abertura.json`](../results/0069-exec-onda26-v205-md26-1-governanca-tooling-abertura.json), [`../results/0070-exec-onda27-v205-md27-1-rvs-labels-csv-prefix.json`](../results/0070-exec-onda27-v205-md27-1-rvs-labels-csv-prefix.json), [`../results/0073-exec-onda28-v205-md28-2-rvs-aprovado.json`](../results/0073-exec-onda28-v205-md28-2-rvs-aprovado.json), [`../results/0075-exec-onda29-v205-md29-2-af3-freeze.json`](../results/0075-exec-onda29-v205-md29-2-af3-freeze.json), [`../results/0076-exec-onda29-v205-md29-3-freeze-publicacao.json`](../results/0076-exec-onda29-v205-md29-3-freeze-publicacao.json) |
 
 ### Limites do bastão V205
 
@@ -28,8 +28,8 @@ ultima-atualizacao: 2026-05-23T17:00:00-0300 (AF1/AF2 consolidadas por Codex; P1
   prefixos/pastas de evidência e metadados de fechamento.
 - Bloqueado: lógica de rodízio, persistência, cálculo, avaliação, OS,
   renomeação de símbolos VBA, PDF automático via VBA e refatoração estrutural.
-- Fechamento oficial: Gate RVS e evidência CSV já aprovados. Após MICRO61,
-  resta confirmação final de compile VBE limpo, commit/tag e publicação GitHub.
+- Fechamento oficial: Gate RVS final e compile VBE pós-MICRO61 aprovados. A
+  V12.0.0205 está pronta para tag/publicação e a próxima linha é V12.0.0206.
 
 > ⚠️ **REGRA INVIOLAVEL (M11 destilada 2026-05-03)**: A IA le `src/vba/`
 > (fonte de verdade — AGENTS.md §62-63) e transporta para

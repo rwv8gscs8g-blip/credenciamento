@@ -5,7 +5,7 @@
 > prestadores de pequenos reparos em Excel/VBA.
 
 [![Release](https://img.shields.io/badge/release-V12.0.0205-blue)](obsidian-vault/releases/V12.0.0205.md)
-[![Gate](https://img.shields.io/badge/gate-VR_20260521_182816-brightgreen)](auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv)
+[![Gate](https://img.shields.io/badge/gate-VR_20260523_215637-brightgreen)](auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260523_215637.csv)
 [![Status](https://img.shields.io/badge/status-VALIDADO-brightgreen)](obsidian-vault/releases/STATUS-OFICIAL.md)
 [![Licença](https://img.shields.io/badge/licenca-TPGL%20v1.1-6f42c1)](LICENSE)
 [![Auditoria](https://img.shields.io/badge/auditoria-publica-0a7f5a)](auditoria/00_status/00_SUMARIO_EXECUTIVO.md)
@@ -142,9 +142,10 @@ Linha oficial: `V12.0.0205`
 Build final validado no workbook: `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix`
 
 - compilação limpa validada por operador humano
-- import V3 do delta V205 aprovado com `M=5 | F=0 | err=0 | skip=0`
+- import V3 final MICRO61 aprovado com `M=1 | F=0 | err=0 | skip=0`
 - suíte adversarial UI aprovada em `TV2_20260521_182645` com `OK=12 | FALHA=0 | MANUAL=0`
-- Gate RVS `VR_20260521_182816` aprovado com sintaxe `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`
+- compilação VBE final pós-MICRO61 aprovada pelo operador em 23/05/2026
+- Gate RVS final `VR_20260523_215637` aprovado com sintaxe `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`
 - evidências públicas arquivadas em `auditoria/evidencias/V12.0.0205/`
 - pacote humano de teste V205 atualizado para uso por interface: liberar macros, Central de Testes, Gate RVS, jornada humana e dossiê
 - V12.0.0206 concentrará ajustes incrementais, pendências manuais, PDF automático e débitos técnicos pequenos; V12.0.0207 fica reservada para code review profundo, performance, componentização e preparação SaaS

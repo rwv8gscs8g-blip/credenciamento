@@ -136,7 +136,7 @@ A `V12.0.0205` é a linha pública vigente para:
 
 - compilação limpa validada por operador humano;
 - build `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix`;
-- Gate RVS `VR_20260521_182816` aprovado;
+- Gate RVS final `VR_20260523_215637` aprovado;
 - jornada humana por interface;
 - regras de negócio V205, matriz de cobertura, dossiê e evidências publicadas.
 

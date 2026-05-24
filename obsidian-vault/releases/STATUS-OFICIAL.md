@@ -16,7 +16,7 @@ Este arquivo é a fonte canônica para o status de publicação das versões. As
 
 | Versão | Status | Compila | Testes | Observação |
 |--------|--------|---------|--------|------------|
-| V12.0.0205 | VALIDADO | Sim | `VR_20260521_182816` aprovado | Linha oficial vigente; build validado `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix`; Gate RVS preserva a guarda funcional da V204; documentação pública V205 consolidada para produção |
+| V12.0.0205 | VALIDADO | Sim | `VR_20260523_215637` aprovado | Linha oficial vigente; build validado `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix`; compile VBE final pós-MICRO61 aprovado; Gate RVS preserva a guarda funcional da V204; documentação pública V205 consolidada para produção |
 
 ## Próximas linhas planejadas
 

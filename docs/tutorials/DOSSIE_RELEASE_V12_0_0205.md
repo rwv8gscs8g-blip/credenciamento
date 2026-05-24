@@ -6,7 +6,7 @@ hbn-status: active
 audiencia: auditores
 versao-sistema: V12.0.0205
 data: 2026-05-21
-sha256-derivado-docx: d460638f225ab685b727205926e67e9641737fd2d9620b23b894039df89da131
+sha256-derivado-docx: 8ca82b4fc247ac59ae247f8ceaf90ca09fa3826269bb5b390968c756cf822598
 ---
 
 # Dossiê de Release — V12.0.0205
@@ -21,7 +21,7 @@ DOCX e PDF são artefatos derivados.
 | Versão | V12.0.0205 |
 | Natureza | Estabilização para produção |
 | Base | V12.0.0204 VALIDADO/OFICIAL |
-| Status | VALIDADO/OFICIAL após Gate RVS `VR_20260521_182816` |
+| Status | VALIDADO/OFICIAL após Gate RVS final `VR_20260523_215637` |
 | Planilha de homologação | `PlanilhaCredenciamento-Homologacao-V4.xlsm` |
 
 ## Escopo
@@ -50,11 +50,11 @@ Resultado validado em homologação interna:
 
 | Campo | Valor |
 |---|---|
-| Validation ID | `VR_20260521_182816` |
+| Validation ID | `VR_20260523_215637` |
 | Build | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
 | Resultado | `APROVADO` |
-| CSV | `auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv` |
-| SHA-256 | `74c8dbf7fe9e05fdd44014c0079d4d588d6da80e519fcee61a0149c7a7d6eb64` |
+| CSV | `auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260523_215637.csv` |
+| SHA-256 | `7146912436ab0ef3080e90d7183c614699226a65047330a2730718f2cfffbc60` |
 
 ## Evidências
 

@@ -16,7 +16,7 @@
 | Versão oficial vigente | V12.0.0205 |
 | Próxima linha planejada | V12.0.0206 |
 | Build importado no workbook validado | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
-| Branch ativa | `codex/v12-0-0205-estabilizacao-docs` |
+| Branch ativa | `main` após tag `v12.0.0205` |
 | Licença | TPGL v1.1 (auto-conversão para Apache 2.0 em 4 anos) |
 | Protocolo de governança | [HBN — Human Brain Net](https://usehbn.org) |
 
@@ -50,10 +50,9 @@ Cada onda:
 
 ## Quem tem o bastao agora
 
-Veja `.hbn/relay/INDEX.md`. Em 2026-05-21, o bastão operacional da Frente 1
-está com **Codex** para congelamento da V12.0.0205 e auditoria final cruzada
-antes da abertura da V12.0.0206. IAs sem bastão operam em modo **auditoria** ou
-proposta escrita, salvo autorização explícita do operador.
+Veja `.hbn/relay/INDEX.md`. Em 2026-05-23, a V12.0.0205 está congelada como
+linha oficial validada. Novas IAs devem tratar a V12.0.0206 como próxima linha
+incremental e operar em modo auditoria/proposta até novo bastão explícito.
 
 ## Build steps
 

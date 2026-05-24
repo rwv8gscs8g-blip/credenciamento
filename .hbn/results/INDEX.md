@@ -87,3 +87,4 @@ ultima-atualizacao: 2026-05-23
 | 0073 | Onda 28 V205 MD-28.2 RVS aprovado | APROVADO_OPERADOR_RVS | `0073-exec-onda28-v205-md28-2-rvs-aprovado.json` | 2026-05-21 |
 | 0074 | Onda 29 V205 MD-29.1 promoção e auditoria final | EXECUTADO_DOCUMENTAL_GOVERNANCA | `0074-exec-onda29-v205-md29-1-promocao-auditoria-final.json` | 2026-05-21 |
 | 0075 | Onda 29 V205 MD-29.2 AF3 freeze documental | EXECUTADO_COM_CONDICAO_COMPILE_VBE | `0075-exec-onda29-v205-md29-2-af3-freeze.json` | 2026-05-23 |
+| 0076 | Onda 29 V205 MD-29.3 freeze e publicação | APROVADO_OPERADOR_FREEZE | `0076-exec-onda29-v205-md29-3-freeze-publicacao.json` | 2026-05-23 |

@@ -23,7 +23,7 @@ awk '!/^sha256-derivado-docx:/' \
   docs/tutorials/DOSSIE_RELEASE_V12_0_0205.md \
   > /tmp/DOSSIE_RELEASE_V12_0_0205.pandoc.md
 
-SOURCE_DATE_EPOCH=1779399797 \
+SOURCE_DATE_EPOCH=1779585166 \
   pandoc /tmp/DOSSIE_RELEASE_V12_0_0205.pandoc.md \
   --from markdown+pipe_tables \
   --to docx \

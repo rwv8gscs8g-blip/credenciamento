@@ -35,13 +35,14 @@ auditoria/evidencias/V12.0.0205/
 
 | Artefato | Papel | Status | Observação |
 |---|---|---|---|
-| [`csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv`](csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv) | gate funcional RVS | APROVADO | Guarda V204 preservada em V205 |
+| [`csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260523_215637.csv`](csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260523_215637.csv) | gate final RVS pós-MICRO61 | APROVADO | Evidência final de freeze V205 |
+| [`csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv`](csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv) | gate funcional RVS | APROVADO | Homologação interna V205, preservada como evidência complementar |
 
 ## Resultado do Gate RVS
 
 | Campo | Valor |
 |---|---|
-| Validation ID | `VR_20260521_182816` |
+| Validation ID | `VR_20260523_215637` |
 | Build | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
 | Resultado geral | `APROVADO` |
 | Sintaxe | `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0` |

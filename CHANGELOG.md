@@ -7,7 +7,7 @@ tratam apenas da linha pública oficial.
 
 > Release oficial V205. Build validado:
 > `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix`. Gate RVS aprovado em
-> `VR_20260521_182816` com assinatura funcional idêntica à V204:
+> `VR_20260523_215637` com assinatura funcional idêntica à V204:
 > `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
 
 ### Adicionado
@@ -30,6 +30,8 @@ tratam apenas da linha pública oficial.
   `auditoria/evidencias/V12.0.0205/`, com CSV aprovado e manifesto de hash.
 - **Onda 29 / MD29.1** — promoção da vitrine pública para V12.0.0205 como linha
   VALIDADO/OFICIAL e preparação da auditoria final positiva entre IAs.
+- **Onda 29 / MD29.3** — freeze final pós-MICRO61, com compile VBE confirmado
+  pelo operador e novo Gate RVS em `VR_20260523_215637`.
 
 ### Corrigido
 
@@ -42,17 +44,17 @@ tratam apenas da linha pública oficial.
 
 ### Validação
 
-- Import V3 do delta V205 aprovado pelo operador:
-  `M=5 | F=0 | err=0 | skip=0`.
-- Compilação VBE manual aprovada pelo operador em 21/05/2026.
+- Import V3 final MICRO61 aprovado pelo operador:
+  `M=1 | F=0 | err=0 | skip=0`.
+- Compilação VBE final pós-MICRO61 aprovada pelo operador em 23/05/2026.
 - `TV2_RunAdversarial_UI` aprovado em `TV2_20260521_182645`:
   `OK=12 | FALHA=0 | MANUAL=0`.
-- Gate RVS aprovado em `VR_20260521_182816`:
+- Gate RVS final aprovado em `VR_20260523_215637`:
   `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
 - CSV final:
-  `auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv`.
+  `auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260523_215637.csv`.
 - SHA-256 do CSV final:
-  `74c8dbf7fe9e05fdd44014c0079d4d588d6da80e519fcee61a0149c7a7d6eb64`.
+  `7146912436ab0ef3080e90d7183c614699226a65047330a2730718f2cfffbc60`.
 
 ### Próximas Linhas
 

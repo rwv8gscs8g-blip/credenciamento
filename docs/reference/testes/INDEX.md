@@ -61,7 +61,7 @@ teste vigente da V12.0.0205.
 - Suítes adversariais que compõem o bloco Onda 23:
   `ADVERSARIAL_UI=12/0/0`, `TRANSACAO_INTERRUPT=6/0/0`,
   `BOUNDARY_DATES=9/0/0`
-- Evidência final V205: `VR_20260521_182816` em
+- Evidência final V205: `VR_20260523_215637` em
   `auditoria/evidencias/V12.0.0205/`.
 - Débito V206 aceito: automatizar PDF com motor robusto e tratamento de erro,
   mantendo fallback manual na V205.

@@ -1,6 +1,6 @@
 ---
 titulo: Dashboard - Credenciamento
-ultima-atualizacao: 2026-05-21
+ultima-atualizacao: 2026-05-23
 autor-ultima-alteracao: Codex na Onda 29 / fechamento V205
 tags: [vivo, dashboard, hbn-active]
 versao-sistema: V12.0.0205
@@ -26,8 +26,8 @@ audiencia: ambos
 | Próxima linha | V12.0.0206 |
 | Build importado no workbook | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
 | Tag git de publicação | `v12.0.0205` |
-| Branch ativa | `codex/v12-0-0205-estabilizacao-docs` |
-| Bastão de implementação | Codex — Frente 1 Credenciamento |
+| Branch ativa | `main` após tag `v12.0.0205` |
+| Bastão de implementação | V12.0.0205 congelada; próxima linha V12.0.0206 |
 | Ambiente | Windows 10+, Excel 2019/2021/365 |
 | Planilha homologação | `PlanilhaCredenciamento-Homologacao-V4.xlsm` |
 
@@ -35,10 +35,10 @@ audiencia: ambos
 
 **Onda 29 — Fechamento V12.0.0205**
 
-- Status: gate funcional aprovado; auditoria cruzada final e congelamento
-  GitHub em preparação.
+- Status: gate funcional aprovado, auditoria cruzada final consolidada e freeze
+  GitHub concluído.
 - Track HBN: safe_track.
-- Evidência final: `VR_20260521_182816`.
+- Evidência final: `VR_20260523_215637`.
 - Assinatura: `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
 - Documentação principal: release note, regras V205, matriz V205, jornada
   humana, dossiê de release e evidências V205.
@@ -74,7 +74,7 @@ audiencia: ambos
 
 1. [`../auditoria/evidencias/V12.0.0205/INDEX.md`](../auditoria/evidencias/V12.0.0205/INDEX.md) — índice de evidências.
 2. [`../auditoria/evidencias/V12.0.0205/MANIFEST.md`](../auditoria/evidencias/V12.0.0205/MANIFEST.md) — manifesto de evidências.
-3. [`../auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv`](../auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv) — CSV final do Gate RVS.
+3. [`../auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260523_215637.csv`](../auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260523_215637.csv) — CSV final do Gate RVS pós-MICRO61.
 
 ## Checkpoint de testes
 

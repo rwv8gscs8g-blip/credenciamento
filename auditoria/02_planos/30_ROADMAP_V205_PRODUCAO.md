@@ -17,16 +17,16 @@ Transformar a linha V204 validada em uma V205 pronta para produção, com
 documentação clara, evidências auditáveis, nomenclatura profissional e jornada
 humana de validação.
 
-## Status em 21/05/2026
+## Status final em 23/05/2026
 
 | Item | Status |
 |---|---|
-| Import V3 delta V205 | Aprovado pelo operador: `M=5 | F=0 | err=0 | skip=0` |
-| Compile VBE | Aprovado pelo operador |
+| Import V3 final MICRO61 | Aprovado pelo operador: `M=1 | F=0 | err=0 | skip=0` |
+| Compile VBE | Aprovado pelo operador após MICRO61 |
 | Suite adversarial UI | Aprovada: `TV2_20260521_182645`, `OK=12 | FALHA=0 | MANUAL=0` |
-| Gate RVS | Aprovado: `VR_20260521_182816` |
+| Gate RVS final | Aprovado: `VR_20260523_215637` |
 | Assinatura funcional | `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0` |
-| Estado da V205 | Validada funcionalmente; em auditoria final cruzada e congelamento GitHub |
+| Estado da V205 | Validada, auditada, congelada e pronta para publicação GitHub/tag |
 
 ## Onda 26 — Governança e Tooling
 

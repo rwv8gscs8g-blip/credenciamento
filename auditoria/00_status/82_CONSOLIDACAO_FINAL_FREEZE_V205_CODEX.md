@@ -41,10 +41,11 @@ vigentes no módulo são `AppRelease_Atual()` ou `GetReleaseAtual()`.
 
 ## Veredito Consolidado
 
-**CONGELAR COM UMA CONDIÇÃO OPERACIONAL FINAL:** confirmar compile limpo no VBE
-após o import MICRO61. Do ponto de vista documental, de governança, de versão,
-de evidência e de GitHub readiness, a V12.0.0205 está pronta para freeze
-público.
+**CONGELAR:** o operador confirmou compile limpo no VBE após o import MICRO61,
+a tela Sobre mostrou `V12.0.0205`/`VALIDADO`/`OFICIAL`, e o Gate RVS final
+`VR_20260523_215637` passou com a assinatura funcional completa. Do ponto de
+vista documental, de governança, de versão, de evidência e de GitHub readiness,
+a V12.0.0205 está pronta para freeze público.
 
 Não há P0/P1 funcional aberto. O P1 de governança apontado pelo AF2 era a
 ausência física do relatório AF1 e foi resolvido nesta consolidação. O P2 de
@@ -77,11 +78,11 @@ persistência, OS, transações, cálculos ou símbolos VBA internos.
 | Próxima linha | `V12.0.0206` |
 | Build validado | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
 | Evidence dir | `auditoria/evidencias/V12.0.0205` |
-| Gate RVS | `VR_20260521_182816` |
-| CSV final | `auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv` |
-| SHA-256 CSV | `74c8dbf7fe9e05fdd44014c0079d4d588d6da80e519fcee61a0149c7a7d6eb64` |
+| Gate RVS | `VR_20260523_215637` |
+| CSV final | `auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260523_215637.csv` |
+| SHA-256 CSV | `7146912436ab0ef3080e90d7183c614699226a65047330a2730718f2cfffbc60` |
 | DOCX dossiê | `docs/tutorials/DOSSIE_RELEASE_V12_0_0205.docx` |
-| SHA-256 DOCX | `d460638f225ab685b727205926e67e9641737fd2d9620b23b894039df89da131` |
+| SHA-256 DOCX | `8ca82b4fc247ac59ae247f8ceaf90ca09fa3826269bb5b390968c756cf822598` |
 
 ## Evidência Funcional
 
@@ -136,33 +137,30 @@ rg -n "V12\.0\.205|78_PROMPT_AUDITORIA_POSITIVA_V205_GEMINI|A_PREENCHER_NO_FECHA
   auditoria/evidencias/V12.0.0205/INDEX.md \
   auditoria/evidencias/V12.0.0205/MANIFEST.md
 shasum -a 256 docs/tutorials/DOSSIE_RELEASE_V12_0_0205.docx \
-  auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv
+  auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260523_215637.csv
 ```
 
 Resultado: aprovado.
 
-- `verify_release_consistency.sh` passou e informou apenas que a tag
-  `v12.0.0205` ainda está ausente, condição aceita em branch `codex/*` e
-  bloqueante fora dela.
+- `verify_release_consistency.sh` passou; a tag `v12.0.0205` deve apontar para
+  o commit final de freeze.
 - `git diff --check` passou.
 - ERP `0075` é JSON válido.
 - Busca textual nos documentos canônicos não retornou ocorrência da grafia
   incorreta, do link antigo do prompt 78 nem do placeholder de hash.
 - SHA-256 do DOCX:
-  `d460638f225ab685b727205926e67e9641737fd2d9620b23b894039df89da131`.
+  `8ca82b4fc247ac59ae247f8ceaf90ca09fa3826269bb5b390968c756cf822598`.
 - SHA-256 do CSV RVS:
-  `74c8dbf7fe9e05fdd44014c0079d4d588d6da80e519fcee61a0149c7a7d6eb64`.
+  `7146912436ab0ef3080e90d7183c614699226a65047330a2730718f2cfffbc60`.
 
 ## Recomendação
 
-1. Confirmar no Excel: `VBE > Depurar > Compilar VBAProject` após o import
-   MICRO61.
-2. Se o compile passar limpo, criar a tag `v12.0.0205`.
-3. Publicar a branch e a tag no GitHub.
-4. Congelar a V12.0.0205 como linha estável enquanto a V12.0.0206 absorve
+1. Criar a tag `v12.0.0205` no commit final de freeze.
+2. Publicar `main`, a branch de estabilização e a tag no GitHub.
+3. Congelar a V12.0.0205 como linha estável enquanto a V12.0.0206 absorve
    ajustes incrementais e a V12.0.0207 fica reservada para code review e
    evolução arquitetural.
 
-**Recomendação final AF3:** congelar a V12.0.0205 assim que a confirmação
-manual de compile limpo pós-MICRO61 for registrada. A documentação GitHub já
-está em padrão de excelência, com P1/P2 resolvidos e P3 aceitos ou tratados.
+**Recomendação final AF3:** congelar a V12.0.0205. A documentação GitHub está
+em padrão de excelência, com P1/P2 resolvidos, P3 aceitos ou tratados e
+evidência final pós-MICRO61 registrada.
