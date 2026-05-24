@@ -20,34 +20,34 @@ formulário e exibia outra.
 
 ## Escopo Executado
 
-- `Btn_Rel_OS_Empresa_Click` agora cria `Rel_OSEmpresa` antes de chamar
-  `PreenchimentoRelatorioOSEmpresa`.
-- `Rel_EmpXServ_Click` agora cria `Rel_Emp_Serv` antes de chamar
-  `PreenchimentoRel_EmpXServ`.
-- Fix1 pós-incidente: os handlers passam a instância criada diretamente para o
-  preenchimento, no mesmo padrão de `PreenchimentoCRServico`, evitando varredura
-  por `VBA.UserForms`.
-- Cada handler valida `ListCount` antes de exibir o formulário e mostra mensagem
-  informativa se não houver dados.
-- A chamada redundante a `PreenchimentoRelatorioOSEmpresa` no
-  `UserForm_Initialize` do `Menu_Principal` foi removida, porque criava
-  instância invisível de `Rel_OSEmpresa` durante a abertura do menu.
+- `MICRO62-V206-MD33-0` e `MICRO62-V206-MD33-0-fix1` foram reprovados no gate
+  humano porque o compile VBE fechou o Excel.
+- Fix2 final: `Menu_Principal.frm` volta ao padrão estável e não entra no novo
+  pacote de importação.
+- `Rel_OSEmpresa.frm` passa a preencher `RO_Lista` no próprio
+  `UserForm_Initialize`.
+- `Rel_Emp_Serv.frm` passa a preencher `SV_CR_Lista` no próprio
+  `UserForm_Initialize`.
 - `PreenchimentoRelatorioOSEmpresa` e `PreenchimentoRel_EmpXServ` aceitam
   parâmetro opcional `frmJaAberto` para popular a instância exibida.
 - O espelho local de importação foi gerado em
-  `local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm`.
+  `local-ai/vba_import/`.
 - O procedimento canônico de importação está em
-  [`03_PROCEDIMENTO_IMPORT_MICRO62_FIX1.md`](03_PROCEDIMENTO_IMPORT_MICRO62_FIX1.md).
+  [`05_PROCEDIMENTO_IMPORT_MICRO62_FIX2.md`](05_PROCEDIMENTO_IMPORT_MICRO62_FIX2.md).
 
 ## Arquivos Alterados
 
 | Arquivo | Papel |
 |---|---|
-| `src/vba/Menu_Principal.frm` | Fonte de verdade da correção |
+| `src/vba/Menu_Principal.frm` | Revertido ao padrão estável; não é importado no fix2 |
 | `src/vba/Preencher.bas` | Fonte de verdade dos preenchimentos com parâmetro opcional |
-| `local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm` | Espelho importável local, ignorado pelo git |
+| `src/vba/Rel_OSEmpresa.frm` | Autopreenchimento do relatório de OS por empresa |
+| `src/vba/Rel_Emp_Serv.frm` | Autopreenchimento do relatório de empresas por serviço |
 | `local-ai/vba_import/001-modulo/AAU-Preencher.bas` | Espelho importável local, ignorado pelo git |
+| `local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm` | Espelho importável local, ignorado pelo git |
+| `local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm` | Espelho importável local, ignorado pelo git |
 | `auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/04_MANIFESTO_MICRO62_FIX1.txt` | Cópia auditável do manifesto fix1 |
+| `auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/06_MANIFESTO_MICRO62_FIX2.txt` | Cópia auditável do manifesto fix2 |
 
 Nenhum serviço blindado foi alterado.
 
@@ -55,7 +55,8 @@ Nenhum serviço blindado foi alterado.
 
 ### ASS_REL_OS_EMP_LISTA
 
-1. Importar `AAM-Menu_Principal.frm` no workbook de homologação.
+1. Importar `AAU-Preencher.bas` e `AAL-Rel_OSEmpresa.frm` no workbook de
+   homologação.
 2. Abrir o `Menu_Principal`.
 3. Acionar o relatório de Ordens de Serviço por Empresa.
 4. Confirmar que a janela `Rel_OSEmpresa` abre com `RO_Lista` preenchida quando
@@ -68,7 +69,8 @@ fantasma anterior.
 
 ### ASS_REL_EMP_SERV_LISTA
 
-1. Importar `AAM-Menu_Principal.frm` no workbook de homologação.
+1. Importar `AAU-Preencher.bas` e `AAK-Rel_Emp_Serv.frm` no workbook de
+   homologação.
 2. Abrir o `Menu_Principal`.
 3. Acionar o relatório de Empresas Credenciadas por Serviço.
 4. Confirmar que a janela `Rel_Emp_Serv` abre com `SV_CR_Lista` preenchida
@@ -83,19 +85,20 @@ preenchimento em instância oculta.
 
 | Validação | Resultado |
 |---|---|
-| Ordem estática `UserForms.Add` antes de `PreenchimentoRelatorioOSEmpresa` | OK |
-| Ordem estática `UserForms.Add` antes de `PreenchimentoRel_EmpXServ` | OK |
-| Hash `src/vba/Menu_Principal.frm` = espelho `AAM-Menu_Principal.frm` | OK |
+| `Menu_Principal.frm` fora do manifesto fix2 | OK |
 | Hash `src/vba/Preencher.bas` = espelho `AAU-Preencher.bas` | OK |
+| Hash `src/vba/Rel_OSEmpresa.frm` = espelho `AAL-Rel_OSEmpresa.frm` | OK |
+| Hash `src/vba/Rel_Emp_Serv.frm` = espelho `AAK-Rel_Emp_Serv.frm` | OK |
 | `git diff --check` | OK |
 | Link scan dos documentos tocados | `BROKEN_LINKS 0` |
 | Diff em `Svc_*.bas`, `doc/` e contadores RVS | vazio |
 
 ## Gates Do Operador
 
-- Compile VBE após importar `AAU-Preencher.bas` e `AAM-Menu_Principal.frm`.
+- Compile VBE após importar `AAU-Preencher.bas`, `AAK-Rel_Emp_Serv.frm` e
+  `AAL-Rel_OSEmpresa.frm`.
 - Comando de importação:
-  `ImportarPacoteV3_Delta "MICRO62-V206-MD33-0-fix1", "ONDA33.MD33.0-fix1-compile-crash"`.
+  `ImportarPacoteV3_Delta "MICRO62-V206-MD33-0-fix2", "ONDA33.MD33.0-fix2-no-menu-import"`.
 - `TV2_RunSmoke` verde.
 - Executar `ASS_REL_OS_EMP_LISTA`.
 - Executar `ASS_REL_EMP_SERV_LISTA`.
@@ -116,6 +119,21 @@ Diagnóstico consolidado:
   de formulário e importa também `Preencher.bas`, mantendo assinatura coerente
   entre chamador e preenchimento.
 
+## Incidente Pós-Fix1 e Fix2
+
+O operador importou `MICRO62-V206-MD33-0-fix1` com sucesso (`M=1 | F=1 |
+err=0 | skip=0`), mas o compile manual do VBE fechou o Excel novamente.
+
+Diagnóstico consolidado:
+
+- o segundo backup obrigatório foi criado em
+  `backups/vba/20260524_151252-V3-FULL`;
+- os formulários `Rel_OSEmpresa.frm` e `Rel_Emp_Serv.frm` exportados do backup
+  diferem do fonte quase somente por whitespace;
+- o novo pacote deve evitar completamente novo import de `Menu_Principal.frm`;
+- o fix2 importa apenas `AAU-Preencher.bas`, `AAK-Rel_Emp_Serv.frm` e
+  `AAL-Rel_OSEmpresa.frm`, com resultado esperado `M=1 | F=2 | err=0 | skip=0`.
+
 ## Limites Observados
 
 - Não foi implementado motor PDF.
@@ -129,6 +147,6 @@ Diagnóstico consolidado:
 
 ## Próxima Ação
 
-Após import fix1, compile VBE, Smoke e confirmação humana dos dois roteiros
+Após import fix2, compile VBE, Smoke e confirmação humana dos dois roteiros
 assistidos, a V12.0.0206 pode abrir a Onda 34 para o motor PDF central em
 `Util_PDF.bas`.

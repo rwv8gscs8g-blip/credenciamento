@@ -1,0 +1,61 @@
+{
+  "readback_id": "0085-onda33-v206-md33-0-fix2-sem-menu-principal",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "origem_hearback": "Operador importou MICRO62-V206-MD33-0-fix1 com sucesso, mas o compile VBE fechou o Excel novamente.",
+  "contexto": {
+    "versao": "V12.0.0206",
+    "branch": "codex/v12-0-0206-planejamento",
+    "raiz_canonica": "/Users/macbookpro/Projetos/Credenciamento",
+    "import_anterior": "MICRO62-V206-MD33-0-fix1",
+    "resultado_import_anterior": "M=1 | F=1 | err=0 | skip=0",
+    "backup_operador": "\\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260524_151252-V3-FULL",
+    "release_base": "V12.0.0205",
+    "commit_base_estavel": "f24e535"
+  },
+  "diagnostico_inicial": [
+    "O importador V3 e o backup obrigatorio continuam funcionando na raiz canonica.",
+    "A repeticao do crash no compile torna o fix1 reprovado.",
+    "O backup pre-fix1 mostra que Rel_OSEmpresa.frm e Rel_Emp_Serv.frm diferem do src quase somente por whitespace, enquanto Menu_Principal.frm e um formulario grande e mais arriscado para import code-only.",
+    "O fix2 deve evitar totalmente novo import de Menu_Principal.frm e mover o preenchimento para os formularios pequenos de relatorio."
+  ],
+  "escopo_autorizado": [
+    "Criar MICRO62-V206-MD33-0-fix2",
+    "Nao importar Menu_Principal.frm no fix2",
+    "Reverter a fonte Menu_Principal.frm ao padrao estavel para evitar novo pacote futuro com o fix1",
+    "Adicionar autopreenchimento em Rel_OSEmpresa.frm e Rel_Emp_Serv.frm",
+    "Manter Preencher.bas com parametro opcional para preenchimento da instancia recebida",
+    "Documentar procedimento de import e rollback"
+  ],
+  "escopo_bloqueado": [
+    "Avancar Onda 34",
+    "Implementar motor PDF",
+    "Alterar RN-01 a RN-17",
+    "Alterar contadores RVS",
+    "Incluir teste de PDF nas seis baterias do RVS",
+    "Mover ou reorganizar doc/",
+    "Tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+    "Renomear simbolos internos VBA"
+  ],
+  "arquivos_previstos": [
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Rel_OSEmpresa.frm",
+    "src/vba/Rel_Emp_Serv.frm",
+    "src/vba/Preencher.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO62-V206-MD33-0-fix2.txt",
+    "auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/05_PROCEDIMENTO_IMPORT_MICRO62_FIX2.md",
+    "auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/06_MANIFESTO_MICRO62_FIX2.txt"
+  ],
+  "validacoes_planejadas": [
+    "G7/G8 src/vba sincronizado com local-ai/vba_import",
+    "Hash dos tres itens importaveis igual ao espelho",
+    "Diff vazio em Svc_*.bas e doc/",
+    "JSON HBN valido",
+    "Gate humano: importar fix2, compilar VBE, executar TV2_RunSmoke e os dois roteiros ASS_REL_*"
+  ],
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T15:25:00-03:00"
+}

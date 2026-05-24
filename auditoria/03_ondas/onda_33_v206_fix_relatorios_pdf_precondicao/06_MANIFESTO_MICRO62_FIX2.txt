@@ -1,0 +1,37 @@
+# Manifesto V3 DELTA MICRO62-V206-MD33-0-fix2 - V12.0.0206 Onda 33
+# Tema: fix2 pos-crash - corrigir relatorios sem importar Menu_Principal.frm.
+#
+# Contexto:
+#   - MICRO62-V206-MD33-0 importou F=1 e derrubou o Excel no compile.
+#   - MICRO62-V206-MD33-0-fix1 importou M=1/F=1 e derrubou o Excel no compile.
+#   - Este fix2 evita novo import de AAM-Menu_Principal.frm.
+#
+# Mudancas:
+#   AAU-Preencher.bas:
+#     - Mantem os preenchimentos aceitando uma instancia de formulario.
+#   AAK-Rel_Emp_Serv.frm:
+#     - UserForm_Initialize chama PreenchimentoRel_EmpXServ(Me).
+#   AAL-Rel_OSEmpresa.frm:
+#     - UserForm_Initialize chama PreenchimentoRelatorioOSEmpresa(Me).
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "MICRO62-V206-MD33-0-fix2", "ONDA33.MD33.0-fix2-no-menu-import"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=2 | err=0 | skip=0.
+#   - Compile manual passa limpo.
+#   - TV2_RunSmoke passa sem alterar contadores RVS.
+#   - ASS_REL_OS_EMP_LISTA confirma Rel_OSEmpresa preenchido.
+#   - ASS_REL_EMP_SERV_LISTA confirma Rel_Emp_Serv preenchido.
+#
+# Se o compile ainda fechar o Excel:
+#   1. Nao salve o workbook.
+#   2. Restaure primeiro o backup V3 impresso pelo proprio import fix2.
+#   3. Se o fix2 nao chegar a criar novo backup, restaure a partir de:
+#      \\Mac\Home\Projetos\Credenciamento\backups\vba\20260524_151252-V3-FULL
+#   4. Reabrir a planilha e avisar o resultado antes de nova tentativa.
+#
+# GRUPO_DELTA_MICRO62_V206_MD33_0_FIX2_NO_MENU_IMPORT
+M|001-modulo/AAU-Preencher.bas
+F|002-formularios/AAK-Rel_Emp_Serv.frm
+F|002-formularios/AAL-Rel_OSEmpresa.frm
