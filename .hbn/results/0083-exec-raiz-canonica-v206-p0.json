@@ -65,7 +65,7 @@
     "human_gate_pending": [
       "Abrir workbook em \\\\Mac\\Home\\Projetos\\Credenciamento",
       "Executar ImportarPacoteV3_Status",
-      "Executar ImportarPacoteV3_Delta \"MICRO62-V206-MD33-0\", \"a17c332+ONDA33.MD33.0-fix-relatorios\"",
+      "Executar ImportarPacoteV3_Delta \"MICRO62-V206-MD33-0\", \"0b7c4e8+ONDA33.MD33.0-fix-relatorios\"",
       "Compilar no VBE",
       "Rodar TV2_RunSmoke",
       "Executar ASS_REL_OS_EMP_LISTA e ASS_REL_EMP_SERV_LISTA"

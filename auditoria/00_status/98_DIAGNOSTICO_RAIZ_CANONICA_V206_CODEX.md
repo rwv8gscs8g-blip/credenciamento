@@ -118,7 +118,7 @@ workbook:
 Para o MD-33.0, o comando na Janela Imediata sera:
 
 ```vb
-ImportarPacoteV3_Delta "MICRO62-V206-MD33-0", "a17c332+ONDA33.MD33.0-fix-relatorios"
+ImportarPacoteV3_Delta "MICRO62-V206-MD33-0", "0b7c4e8+ONDA33.MD33.0-fix-relatorios"
 ```
 
 Antes disso, rode:
@@ -150,7 +150,7 @@ O manifesto esperado do delta deve existir em:
 3. Executa:
 
 ```vb
-ImportarPacoteV3_Delta "MICRO62-V206-MD33-0", "a17c332+ONDA33.MD33.0-fix-relatorios"
+ImportarPacoteV3_Delta "MICRO62-V206-MD33-0", "0b7c4e8+ONDA33.MD33.0-fix-relatorios"
 ```
 
 4. Compila no VBE.

@@ -52,7 +52,7 @@
       "Svc_*.bas, RN, doc/ e contadores RVS nao alterados"
     ],
     "human_gate_pending": [
-      "Executar ImportarPacoteV3_Delta \"MICRO62-V206-MD33-0\", \"a17c332+ONDA33.MD33.0-fix-relatorios\" no workbook da pasta canonica",
+      "Executar ImportarPacoteV3_Delta \"MICRO62-V206-MD33-0\", \"0b7c4e8+ONDA33.MD33.0-fix-relatorios\" no workbook da pasta canonica",
       "Compile VBE",
       "Rodar TV2_RunSmoke",
       "Executar ASS_REL_OS_EMP_LISTA",

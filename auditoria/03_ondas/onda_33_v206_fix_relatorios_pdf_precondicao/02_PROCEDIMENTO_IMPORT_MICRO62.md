@@ -37,7 +37,7 @@ O manifesto do delta deve existir em:
 Cole na Janela Imediata:
 
 ```vb
-ImportarPacoteV3_Delta "MICRO62-V206-MD33-0", "a17c332+ONDA33.MD33.0-fix-relatorios"
+ImportarPacoteV3_Delta "MICRO62-V206-MD33-0", "0b7c4e8+ONDA33.MD33.0-fix-relatorios"
 ```
 
 ## Arquivo importado

@@ -88,7 +88,7 @@ preenchimento em instância oculta.
 
 - Compile VBE após importar `AAM-Menu_Principal.frm`.
 - Comando de importação:
-  `ImportarPacoteV3_Delta "MICRO62-V206-MD33-0", "a17c332+ONDA33.MD33.0-fix-relatorios"`.
+  `ImportarPacoteV3_Delta "MICRO62-V206-MD33-0", "0b7c4e8+ONDA33.MD33.0-fix-relatorios"`.
 - `TV2_RunSmoke` verde.
 - Executar `ASS_REL_OS_EMP_LISTA`.
 - Executar `ASS_REL_EMP_SERV_LISTA`.
