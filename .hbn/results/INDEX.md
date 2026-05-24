@@ -97,3 +97,4 @@ ultima-atualizacao: 2026-05-24
 | 0083 | P0 raiz canonica V206 | EXECUTADO_PENDENTE_GATE_IMPORTADOR | `0083-exec-raiz-canonica-v206-p0.json` | 2026-05-24 |
 | 0084 | Onda 33 V206 MD-33.0-fix1 compile crash | EXECUTADO_PENDENTE_GATE_HUMANO | `0084-exec-onda33-v206-md33-0-fix1-compile-crash.json` | 2026-05-24 |
 | 0085 | Onda 33 V206 MD-33.0-fix2 sem Menu_Principal | EXECUTADO_PENDENTE_GATE_HUMANO | `0085-exec-onda33-v206-md33-0-fix2-sem-menu-principal.json` | 2026-05-24 |
+| 0086 | V206 pausa MD33 e rebase por planilha limpa | EXECUTADO_PENDENTE_GATE_HUMANO | `0086-exec-v206-pausa-md33-rebase-planilha-limpa.json` | 2026-05-24 |

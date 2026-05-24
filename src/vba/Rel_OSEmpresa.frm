@@ -15,7 +15,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub UserForm_Initialize()
     Me.caption = Rel_TituloExibicao("RELATORIO DE ORDENS DE SERVICO POR EMPRESA")
-    Call PreenchimentoRelatorioOSEmpresa(Me)
 End Sub
 
 Private Sub B_RelEmpresaOS_Click()

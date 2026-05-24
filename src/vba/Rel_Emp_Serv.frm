@@ -15,7 +15,6 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub UserForm_Initialize()
     Me.caption = Rel_TituloExibicao("RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO")
-    Call PreenchimentoRel_EmpXServ(Me)
 End Sub
 
 Private Sub SV_CR_Lista_Click()

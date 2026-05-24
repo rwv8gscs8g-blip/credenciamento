@@ -1,4 +1,5 @@
 # Manifesto V3 DELTA MICRO62-V206-MD33-0-fix1 - V12.0.0206 Onda 33
+# REPROVADO - NAO USAR. Registro historico de tentativa que importou e falhou no compile.
 # Tema: fix1 pos-import - reduzir risco de crash no compile e manter correcao dos relatorios.
 #
 # Contexto:
@@ -28,12 +29,7 @@
 #   - ASS_REL_OS_EMP_LISTA confirma Rel_OSEmpresa preenchido.
 #   - ASS_REL_EMP_SERV_LISTA confirma Rel_Emp_Serv preenchido.
 #
-# Se o compile ainda fechar o Excel:
-#   1. Nao salve o workbook.
-#   2. Restaure primeiro o backup V3 impresso pelo proprio import fix1.
-#   3. Se o fix1 nao chegar a criar novo backup, restaure a partir de:
-#      \\Mac\Home\Projetos\Credenciamento\backups\vba\20260524_145103-V3-FULL
-#   4. Reabrir a planilha e avisar o resultado antes de nova tentativa.
+# Backups V3 nao sao fonte operacional de importacao. Usar somente local-ai/vba_import.
 #
 # GRUPO_DELTA_MICRO62_V206_MD33_0_FIX1_COMPILE_CRASH
 M|001-modulo/AAU-Preencher.bas

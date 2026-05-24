@@ -11,6 +11,9 @@ autor: Codex
 
 # Procedimento Import MICRO62 V206 fix2 - Sem Menu Principal
 
+> **REPROVADO — não usar.** Este procedimento fica apenas como registro
+> histórico. O import passou, mas o compile VBE fechou o Excel.
+
 ## Quando usar
 
 Use este procedimento depois do segundo incidente:
@@ -23,8 +26,8 @@ O fix2 evita novo import de `Menu_Principal.frm`. A correcao passa a acontecer
 nos dois formularios pequenos de relatorio, que se preenchem ao abrir.
 
 Se o Excel oferecer recuperacao automatica apos o fechamento, nao use a versao
-recuperada para homologar o fix2. Reabra a planilha salva ou restaure o backup
-`20260524_151252-V3-FULL` se houver duvida sobre o estado do workbook.
+recuperada para homologar o fix2. A retomada aprovada passa a ser planilha limpa
+copiada para a raiz canonica.
 
 ## Pre-condicao de raiz
 
@@ -86,22 +89,17 @@ Aceite:
 - O relatorio `Rel_Emp_Serv` abre com `SV_CR_Lista` preenchida quando ha
   servicos.
 
-## Se o Excel fechar de novo
-
-Nao salve o workbook.
-
-Restaure primeiro o backup V3 impresso pelo proprio import fix2. Se o fix2 nao
-chegar a criar novo backup, use:
-
-```text
-\\Mac\Home\Projetos\Credenciamento\backups\vba\20260524_151252-V3-FULL
-```
+## Se o Excel fechar
 
 Registre no chat:
 
 - se o import fix2 chegou ao fim;
 - a linha final do Importador V3;
 - se o fechamento ocorreu durante o compile ou antes dele.
+
+Nao importar codigo a partir de `backups/vba`. Backups do V3 sao evidencia e
+material de diagnostico; fonte operacional para o Excel e apenas
+`local-ai/vba_import/`.
 
 ## Limites
 

@@ -11,6 +11,9 @@ autor: Codex
 
 # Procedimento Import MICRO62 V206 fix1 — Compile Crash
 
+> **REPROVADO — não usar.** Este procedimento fica apenas como registro
+> histórico. O import passou, mas o compile VBE fechou o Excel.
+
 ## Quando usar
 
 Use este procedimento somente depois do incidente reportado em 2026-05-24:
@@ -87,24 +90,17 @@ Aceite:
 - `Rel_Emp_Serv` abre com `SV_CR_Lista` preenchida quando ha servicos.
 - Nenhuma tela vazia e exibida quando ha dados canonicos.
 
-## Se o Excel fechar de novo
-
-Nao salve o workbook.
-
-Restaure primeiro o backup V3 impresso pelo proprio import fix1. O Importador V3
-sempre mostra a linha `dest = ...\backups\vba\<RUN>-V3-FULL` antes do delta.
-
-Se o fix1 nao chegar a criar novo backup, use o backup do import anterior:
-
-```text
-\\Mac\Home\Projetos\Credenciamento\backups\vba\20260524_145103-V3-FULL
-```
+## Se o Excel fechar
 
 Registre no chat:
 
 - se o import fix1 chegou ao fim;
 - a linha final do Importador V3;
 - se o fechamento ocorreu durante o compile ou antes dele.
+
+Nao importar codigo a partir de `backups/vba`. Backups do V3 sao evidencia e
+material de diagnostico; fonte operacional para o Excel e apenas
+`local-ai/vba_import/`.
 
 ## Limites
 

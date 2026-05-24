@@ -1,0 +1,48 @@
+{
+  "execution_id": "0086-exec-v206-pausa-md33-rebase-planilha-limpa",
+  "agent_id": "codex",
+  "readback_id": "0086-v206-pausa-md33-rebase-planilha-limpa",
+  "action": "Pausar MD33, corrigir protocolo de restore e preparar rebase por planilha limpa",
+  "outcome": "executed_with_risk",
+  "human_status": "pending",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "target_version": "V12.0.0206"
+  },
+  "changes": [
+    {
+      "file": "src/vba/Preencher.bas",
+      "summary": "Revertido ao padrao anterior aos fixes reprovados de MD33."
+    },
+    {
+      "file": "src/vba/Rel_OSEmpresa.frm",
+      "summary": "Removido autopreenchimento introduzido no fix2 reprovado."
+    },
+    {
+      "file": "src/vba/Rel_Emp_Serv.frm",
+      "summary": "Removido autopreenchimento introduzido no fix2 reprovado."
+    },
+        {
+            "file": "auditoria/00_status/100_PAUSA_REBASE_PLANILHA_LIMPA_V206_CODEX.md",
+            "summary": "Novo status canonico para pausa, rebase limpo e sequencia PDF."
+        },
+        {
+            "file": "src/vba/Importador_V3.bas",
+            "summary": "Mensagem final corrigida: backup e evidencia/diagnostico; nova importacao operacional vem somente de local-ai/vba_import."
+        }
+    ],
+  "validations_local": [
+    "publicar_vba_import_v2.sh --apply executado para restaurar espelho local",
+    "G7/G8 verificados",
+    "Diff vazio em Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas, Svc_PreOS.bas e doc/",
+    "JSON HBN valido"
+  ],
+  "human_gate_pending": [
+    "Abrir copia limpa da planilha na raiz canonica",
+    "Compilar antes de qualquer import",
+    "Exportar componentes para local-ai/incoming/V206_BASE_LIMPA_20260524/"
+  ],
+  "created_at": "2026-05-24T15:45:00-03:00"
+}

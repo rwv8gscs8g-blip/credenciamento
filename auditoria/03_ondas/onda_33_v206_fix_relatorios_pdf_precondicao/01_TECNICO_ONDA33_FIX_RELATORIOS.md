@@ -11,6 +11,10 @@ autor: Codex
 
 # Onda 33 — Correção dos Relatórios Antes do PDF
 
+> **Status em 2026-05-24:** MD33 pausada. As tres tentativas de importacao
+> passaram pelo Importador V3, mas fecharam o Excel no compile manual. Nao usar
+> a planilha contaminada nem os manifestos fix1/fix2 para homologacao.
+
 ## Contexto
 
 A consolidação PDF/UI V206 determinou que os relatórios `Rel_OSEmpresa` e
@@ -95,13 +99,15 @@ preenchimento em instância oculta.
 
 ## Gates Do Operador
 
-- Compile VBE após importar `AAU-Preencher.bas`, `AAK-Rel_Emp_Serv.frm` e
-  `AAL-Rel_OSEmpresa.frm`.
-- Comando de importação:
-  `ImportarPacoteV3_Delta "MICRO62-V206-MD33-0-fix2", "ONDA33.MD33.0-fix2-no-menu-import"`.
-- `TV2_RunSmoke` verde.
-- Executar `ASS_REL_OS_EMP_LISTA`.
-- Executar `ASS_REL_EMP_SERV_LISTA`.
+Gates antigos de MD33/fix1/fix2 estao reprovados.
+
+Novo gate:
+
+- copiar a planilha limpa de `V12-0206-Preparacao` para a raiz canonica;
+- abrir a copia na raiz e confirmar `?ThisWorkbook.Path`;
+- compilar antes de qualquer import;
+- se compilar, exportar componentes para
+  `local-ai/incoming/V206_BASE_LIMPA_20260524/`.
 
 ## Incidente Pós-Import e Fix1
 
@@ -147,6 +153,6 @@ Diagnóstico consolidado:
 
 ## Próxima Ação
 
-Após import fix2, compile VBE, Smoke e confirmação humana dos dois roteiros
-assistidos, a V12.0.0206 pode abrir a Onda 34 para o motor PDF central em
-`Util_PDF.bas`.
+Após rebase limpo, compile VBE e confirmação humana da nova âncora, a
+V12.0.0206 pode retomar Onda 33 ou abrir a Onda 34 para o motor PDF central em
+`Util_PDF.bas`, conforme decisão do operador.

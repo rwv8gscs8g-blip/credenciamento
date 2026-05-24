@@ -17,7 +17,7 @@ Option Explicit
 '      tem caminho proprio para modulos e para forms.
 '   3) Validacao: apos cada item importado, comparar CountOfLines real
 '      vs esperado (lido do arquivo source). Apos cada grupo, compilar.
-'      Falha em qualquer ponto = abort + restore do backup.
+'      Falha em qualquer ponto = abort; backup fica como evidencia.
 '   4) Anti-auto-import: V3 NAO esta no manifesto. Bootstrap externo
 '      (Importador_V3_Bootstrap.bas, raiz de vba_import/) carrega V3.
 '   5) Manifesto proprio: 000-MANIFESTO-V3-PHASE1.txt (Phase 1) ou
@@ -423,12 +423,16 @@ Private Sub IV3_RodarMain(ByVal dryRun As Boolean, _
                "GATE FINAL (manual - V3 NAO faz compile programatico):" & vbCrLf & _
                "  1. VBE > Depurar > Compilar VBAProject (precisa passar limpo)" & vbCrLf & _
                "  2. Imediato: CT_ValidarRelease_TrioMinimo (precisa retornar 171/0+14/0+20/0)" & vbCrLf & vbCrLf & _
-               "Se o passo 1 falhar, NAO salve o workbook. Restaure do backup em:" & vbCrLf & _
-               "  " & mIV3_BackupDir, _
+               "Se o passo 1 falhar, NAO salve o workbook." & vbCrLf & _
+               "Backup criado apenas para evidencia/diagnostico:" & vbCrLf & _
+               "  " & mIV3_BackupDir & vbCrLf & vbCrLf & _
+               "Nova importacao operacional deve vir somente de local-ai\vba_import.", _
                vbInformation, "Importador V3"
     Else
         MsgBox "Importador V3 falhou na fase: " & faseAtual & vbCrLf & resumo & vbCrLf & vbCrLf & _
-               "Backup disponivel em:" & vbCrLf & "  " & mIV3_BackupDir, _
+               "Backup criado apenas para evidencia/diagnostico:" & vbCrLf & _
+               "  " & mIV3_BackupDir & vbCrLf & vbCrLf & _
+               "Nova importacao operacional deve vir somente de local-ai\vba_import.", _
                vbCritical, "Importador V3"
     End If
     Exit Sub
