@@ -1,0 +1,50 @@
+{
+  "execution_id": "0088-exec-v206-handoff-claude-opus-47-usehbn",
+  "agent_id": "codex",
+  "readback_id": "0088-v206-handoff-claude-opus-47-usehbn",
+  "action": "Preparar handoff V206/V207/useHBN e passar bastao para Claude Opus 4.7",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "environment": {
+    "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "target_version": "V12.0.0206"
+  },
+  "changes": [
+    {
+      "file": "auditoria/00_status/102_HANDOFF_CLAUDE_OPUS_47_V206_V207_USEHBN_CODEX.md",
+      "summary": "Handoff completo V206/V207/useHBN, incluindo anchor V5, drift inicial e escopos."
+    },
+    {
+      "file": "auditoria/02_planos/33_ROADMAP_V207_CODE_REVIEW_REFORMULACAO.md",
+      "summary": "Roadmap separado para V207 com code review e reformulacao."
+    },
+    {
+      "file": "auditoria/00_status/103_PROMPT_AUDITORIA_CLAUDE_OPUS_47_HANDOFF_V206_V207_USEHBN.md",
+      "summary": "Prompt para Claude Opus 4.7 auditar o handoff e protocolo."
+    },
+    {
+      "file": "auditoria/00_status/104_PROMPT_RETOMADA_CODEX_V206_NOVO_CONTEXTO.md",
+      "summary": "Prompt para Codex retomar em contexto novo apos devolutiva Claude."
+    },
+    {
+      "file": ".hbn/relay/INDEX.md",
+      "summary": "Bastao passado para Claude Opus 4.7 e Codex bloqueado para implementacao funcional."
+    }
+  ],
+  "validations_local": [
+    "Export V5 presente em local-ai/incoming/V206_ANCHOR_V5_20260524/ com 62 arquivos",
+    "src/vba contem 66 arquivos .bas/.frm/.frx",
+    "Ausentes no export V5: Altera_Entidade.frm, Altera_Entidade.frx, Emergencia_CNAE.bas, Importador_V2.bas",
+    "local-ai/ esta ignorado pelo Git e nao foi commitado",
+    "Nenhuma alteracao funcional VBA nesta micro-onda"
+  ],
+  "handoff_target": "Claude Opus 4.7",
+  "human_gate_pending": [
+    "Claude criar auditoria 105",
+    "Operador aprovar ajustes de protocolo",
+    "Codex retomar em novo contexto usando prompt 104"
+  ],
+  "created_at": "2026-05-24T17:50:00-03:00"
+}

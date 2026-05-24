@@ -99,3 +99,4 @@ ultima-atualizacao: 2026-05-24
 | 0085 | Onda 33 V206 MD-33.0-fix2 sem Menu_Principal | EXECUTADO_PENDENTE_GATE_HUMANO | `0085-exec-onda33-v206-md33-0-fix2-sem-menu-principal.json` | 2026-05-24 |
 | 0086 | V206 pausa MD33 e rebase por planilha limpa | EXECUTADO_PENDENTE_GATE_HUMANO | `0086-exec-v206-pausa-md33-rebase-planilha-limpa.json` | 2026-05-24 |
 | 0087 | V206 anchor V5 e reinicio documental | EXECUTADO_DOCUMENTAL_RVS_APROVADO | `0087-exec-v206-anchor-v5-reinicio-documental.json` | 2026-05-24 |
+| 0088 | V206 handoff Claude Opus 4.7 e protocolo useHBN | EXECUTADO_HANDOFF_CLAUDE | `0088-exec-v206-handoff-claude-opus-47-usehbn.json` | 2026-05-24 |

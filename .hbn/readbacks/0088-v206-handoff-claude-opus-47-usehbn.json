@@ -1,0 +1,39 @@
+{
+  "readback_id": "0088-v206-handoff-claude-opus-47-usehbn",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "origem_hearback": "Operador confirmou export completo da V5 para local-ai/incoming/V206_ANCHOR_V5_20260524/ e solicitou handoff completo para Claude Opus 4.7 revisar V206, V207, protocolo useHBN e barreiras inter-IA antes de fechar este chat.",
+  "contexto": {
+    "versao_ativa": "V12.0.0206",
+    "versao_futura": "V12.0.0207",
+    "branch": "codex/v12-0-0206-planejamento",
+    "raiz_canonica": "/Users/macbookpro/Projetos/Credenciamento",
+    "workbook_anchor": "/Users/macbookpro/Projetos/Credenciamento/PlanilhaCredenciamento-Homologacao-V5.xlsm",
+    "export_v5": "local-ai/incoming/V206_ANCHOR_V5_20260524/",
+    "export_v5_file_count": 62,
+    "src_vba_file_count": 66,
+    "ultimo_commit_pre_handoff": "8317d0c"
+  },
+  "decisao_codex": [
+    "Preparar handoff V206/V207/useHBN para Claude Opus 4.7.",
+    "Preparar roadmap V207 separado da V206.",
+    "Preparar prompt de auditoria para Claude.",
+    "Preparar prompt de retomada Codex em contexto novo.",
+    "Atualizar relay para passar o bastao a Claude e bloquear implementacao Codex ate devolutiva."
+  ],
+  "escopo_bloqueado": [
+    "implementacao funcional VBA",
+    "novo pacote MD33",
+    "motor PDF",
+    "alteracao em Svc_*",
+    "mudanca de RN-01 a RN-17",
+    "alteracao de contadores RVS"
+  ],
+  "proxima_acao_humana": [
+    "Abrir novo chat com Claude Opus 4.7 usando o prompt 103.",
+    "Solicitar documento 105 de auditoria do handoff.",
+    "Trazer a devolutiva para Codex em novo contexto usando o prompt 104."
+  ],
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T17:45:00-03:00"
+}

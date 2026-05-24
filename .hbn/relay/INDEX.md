@@ -1,11 +1,11 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1
-proprietario-bastao: Codex — bastão de desenvolvimento mantido para planejamento da V12.0.0206.
+proprietario-bastao: Claude Opus 4.7 — auditoria do handoff V206/V207/useHBN antes de nova implementacao funcional.
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Anchor V5 aprovado; exportar componentes da PlanilhaCredenciamento-Homologacao-V5.xlsm para local-ai/incoming/V206_ANCHOR_V5_20260524/, comparar contra src/vba/ e so depois preparar novo MD33-restart. Onda 34/PDF permanece bloqueada.
-ultima-atualizacao: 2026-05-24T17:12:00-0300 (V5 derivada de V12-205-OficialCongelada validada com RVS VR_20260524_164612 APROVADO; rota V12-0206-Preparacao superada)
+proxima-acao: Claude Opus 4.7 deve auditar o handoff, ajustar o protocolo useHBN e propor barreiras reais inter-IA. Codex fica bloqueado para implementacao ate existir devolutiva em auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md e hearback humano.
+ultima-atualizacao: 2026-05-24T17:45:00-0300 (handoff V206/V207/useHBN preparado; export V5 existe em local-ai/incoming/V206_ANCHOR_V5_20260524/ com 62 arquivos; requer auditoria Claude antes de retomada)
 ---
 
 ## P0 corrigido — raiz canonica do projeto
@@ -79,6 +79,27 @@ Status canonico:
 - nao usar os manifestos MD33/fix1/fix2 reprovados na V5.
 
 Referencia: [`../../auditoria/00_status/101_ANCHOR_V5_REINICIO_V206_CODEX.md`](../../auditoria/00_status/101_ANCHOR_V5_REINICIO_V206_CODEX.md).
+
+## Bastao Claude Opus 4.7 — auditoria antes de executar
+
+Em 2026-05-24, apos o export bruto da V5, o operador solicitou passagem de
+bastao para Claude Opus 4.7 revisar o handoff, ajustar o protocolo de entrada
+useHBN e propor barreiras reais entre IAs antes de qualquer nova implementacao.
+
+Documentos de entrada:
+
+- [`../../auditoria/00_status/102_HANDOFF_CLAUDE_OPUS_47_V206_V207_USEHBN_CODEX.md`](../../auditoria/00_status/102_HANDOFF_CLAUDE_OPUS_47_V206_V207_USEHBN_CODEX.md)
+- [`../../auditoria/00_status/103_PROMPT_AUDITORIA_CLAUDE_OPUS_47_HANDOFF_V206_V207_USEHBN.md`](../../auditoria/00_status/103_PROMPT_AUDITORIA_CLAUDE_OPUS_47_HANDOFF_V206_V207_USEHBN.md)
+- [`../../auditoria/00_status/104_PROMPT_RETOMADA_CODEX_V206_NOVO_CONTEXTO.md`](../../auditoria/00_status/104_PROMPT_RETOMADA_CODEX_V206_NOVO_CONTEXTO.md)
+- [`../../auditoria/02_planos/33_ROADMAP_V207_CODE_REVIEW_REFORMULACAO.md`](../../auditoria/02_planos/33_ROADMAP_V207_CODE_REVIEW_REFORMULACAO.md)
+
+Codex nao deve retomar implementacao funcional ate que exista:
+
+```text
+auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md
+```
+
+e o operador aprove a devolutiva.
 
 ## V12.0.0205 — ciclo ativo de estabilização
 
