@@ -1,0 +1,140 @@
+{
+  "execution_id": "0089-exec-onda36-cura-protocolo-opus",
+  "agent_id": "claude-opus-4-7",
+  "readback_id": "0089-onda36-cura-protocolo-opus",
+  "action": "Implementar Cura do Protocolo HBN — converter barreiras textuais em guards executáveis, sem tocar VBA funcional.",
+  "outcome": "executed",
+  "human_status": "pending",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "target_version": "V12.0.0206",
+    "agent_runtime": "Claude Cowork (sandbox via VM mounts; arquivos escritos via Write tool host paths)",
+    "smoke_test_path_sandbox": "/sessions/vibrant-peaceful-franklin/mnt/Projetos/Credenciamento"
+  },
+  "changes": [
+    {
+      "file": ".hbn/canonical-root",
+      "summary": "Arquivo novo com path canônico declarado, lido por todos os guards."
+    },
+    {
+      "file": ".hbn/forbidden-paths.txt",
+      "summary": "Lista versionada de paths legacy bloqueados (local-ai/obsidian-vault, V12-*, ~$*.xlsm, .DS_Store, etc.)."
+    },
+    {
+      "file": ".hbn/schemas/README.md",
+      "summary": "Guia dos schemas executáveis."
+    },
+    {
+      "file": ".hbn/schemas/readback.schema.json",
+      "summary": "Contrato JSON Schema draft-07 do readback. scope.files_allowed obrigatório em safe_track; canonical_root e worktree como const."
+    },
+    {
+      "file": ".hbn/schemas/hearback.schema.json",
+      "summary": "Contrato do hearback humano."
+    },
+    {
+      "file": ".hbn/schemas/audit-pre.schema.json",
+      "summary": "Contrato da auditoria adversarial pré-execução (Gemini/Antigravity ou Claude em audit-only)."
+    },
+    {
+      "file": ".hbn/schemas/audit-post.schema.json",
+      "summary": "Contrato da auditoria pós-execução. diff_summary.files_outside_scope deve ser vazio para verdict=pass."
+    },
+    {
+      "file": ".hbn/knowledge/0013-contratos-executaveis.md",
+      "summary": "Regra permanente: se a regra não vira código, ela é sugestão. 6 cláusulas obrigatórias para toda IA executora."
+    },
+    {
+      "file": "scripts/hbn-guards/lib/common.sh",
+      "summary": "Funções comuns (log, ok, warn, fail, canonical_root, check_bypass)."
+    },
+    {
+      "file": "scripts/hbn-guards/assert-canonical-root.sh",
+      "summary": "Guard G-CR: rejeita git toplevel diferente de .hbn/canonical-root. Resolve symlinks via pwd -P."
+    },
+    {
+      "file": "scripts/hbn-guards/forbid-tmp-worktree.sh",
+      "summary": "Guard G-TMP: rejeita worktrees em /tmp, /private/tmp, Downloads/, .Trash/."
+    },
+    {
+      "file": "scripts/hbn-guards/forbid-env-files.sh",
+      "summary": "Guard G-ENV: rejeita commit de .env*, *.dump, *.pem, chaves SSH. Permite .env.example/.sample/.template."
+    },
+    {
+      "file": "scripts/hbn-guards/forbid-legacy-paths.sh",
+      "summary": "Guard G-LEG: lê .hbn/forbidden-paths.txt e rejeita commits que adicionem conteúdo em paths legacy."
+    },
+    {
+      "file": "scripts/hbn-guards/assert-scope-lock.sh",
+      "summary": "Guard G-SCOPE (CRÍTICO): para safe_track, exige human_status=confirmed E rejeita arquivos staged fora de scope.files_allowed do readback ativo. Esta é a guarda que faltou em 02/05 e 24/05."
+    },
+    {
+      "file": "scripts/hbn-guards/validate-readback.sh",
+      "summary": "Valida JSON do readback contra schema. Usa python3 jsonschema com fallback bash."
+    },
+    {
+      "file": "scripts/hbn-guards/hbn-guards-runner.sh",
+      "summary": "Orquestra os 5 guards em ordem (raiz → tmp → env → legacy → scope), fail-fast."
+    },
+    {
+      "file": "scripts/hbn-guards/install.sh",
+      "summary": "Instalador idempotente do pre-commit unificado. Faz backup do antigo (se diferente) e encadeia hbn-guards-runner + Glasswing G7/G8."
+    },
+    {
+      "file": "scripts/hbn-guards/README.md",
+      "summary": "Guia operacional dos guards (instalação, bypass, evolução, smoke tests)."
+    },
+    {
+      "file": "auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md",
+      "summary": "Devolutiva completa de Opus ao handoff do Codex: auditoria item a item das fases V206, decisão sobre reconciliação V5, conversão das 6 barreiras textuais em guards executáveis, próxima ação humana."
+    },
+    {
+      "file": "auditoria/00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md",
+      "summary": "Prompt revisado de retomada Codex sob o novo contrato. Substitui o 104. Inclui exemplo de readback 0090 da Onda 37 (Reconciliação V5)."
+    },
+    {
+      "file": "auditoria/02_planos/34_ROADMAP_PROTOCOLO_90_DIAS_OPUS.md",
+      "summary": "Roadmap paralelo ao funcional para institucionalizar o protocolo. 3 fases × 30 dias com KPIs e critérios de saída."
+    },
+    {
+      "file": "auditoria/02_planos/35_PLANO_ARQUIVAMENTO_LOCAL_AI_E_V12_PASTAS.md",
+      "summary": "Plano de fagocitose das árvores paralelas (local-ai/, V12-*/, obsidian-vault/, usehbn/ cópia). Executável apenas após V12.0.0206 fechada."
+    },
+    {
+      "file": "AGENTS.md",
+      "summary": "Adicionada seção 'Contratos executáveis' apontando para .hbn/schemas, scripts/hbn-guards, knowledge 0013 e auditoria 105. Adicionada referência à raiz canônica em formato bloqueante."
+    },
+    {
+      "file": ".hbn/relay/INDEX.md",
+      "summary": "Bastão atualizado: Opus finaliza Onda 36; bastão volta para Codex para Onda 37 (Reconciliação V5) APENAS após hearback de Mauricio."
+    }
+  ],
+  "validations_local": [
+    "Smoke test: bash scripts/hbn-guards/assert-canonical-root.sh executado no VM path (/sessions/vibrant-peaceful-franklin/mnt/Projetos/Credenciamento) → exit 1 com mensagem clara (esperado: detecta divergência canonical_root)",
+    "Smoke test: bash scripts/hbn-guards/hbn-guards-runner.sh com HBN_GUARDS_BYPASS=1 → exit 0 com warnings em cada guard (rastro auditável)",
+    "Smoke test: bash scripts/hbn-guards/forbid-env-files.sh sem arquivos staged → exit 0",
+    "Smoke test: bash scripts/hbn-guards/forbid-legacy-paths.sh sem arquivos staged → exit 0",
+    "Estrutura: scripts/hbn-guards/ contém 6 scripts + lib/common.sh + install.sh + README.md (10 itens)",
+    "Estrutura: .hbn/schemas/ contém 4 schemas + README.md",
+    "Documentação: 4 documentos novos em auditoria/00_status/ e auditoria/02_planos/",
+    "Nenhum diff em src/vba/, local-ai/vba_import/, V12-*/, obsidian-vault/, doc/"
+  ],
+  "handoff_target": "Mauricio (humano) para hearback; depois Codex para Onda 37",
+  "human_gate_pending": [
+    "Mauricio rodar `bash scripts/hbn-guards/install.sh` no Mac (raiz canônica)",
+    "Mauricio rodar `bash scripts/hbn-guards/hbn-guards-runner.sh` e ver exit 0 na raiz canônica",
+    "Mauricio confirmar hearback explícito (no chat ou em .hbn/hearbacks/0089-*.json com status=confirmed)",
+    "Mauricio commitar Onda 36 em commit único: `git add ... && git commit -m 'feat(hbn): onda 36 cura do protocolo'`",
+    "Mauricio abrir novo chat com Codex usando auditoria/00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md",
+    "Codex em nova sessão produzir readback 0090 (Onda 37) e aguardar hearback antes de executar"
+  ],
+  "signals_emitted": [
+    "✅ HBN ACTIVE",
+    "🔵 HBN HANDOFF READY",
+    "🟡 HBN NEEDS HUMAN DECISION (para arquivos ausentes no export V5 e para hearback da Onda 36)",
+    "🟠 SOURCE DRIFT DETECTED (V5 vs src/vba — endereçado pela Onda 37)"
+  ],
+  "created_at": "2026-05-24T21:35:00-03:00"
+}

@@ -1,12 +1,42 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
-versao-protocolo: HBN 0.3.1
-proprietario-bastao: Claude Opus 4.7 — auditoria do handoff V206/V207/useHBN antes de nova implementacao funcional.
-ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17.
+versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
+proprietario-bastao: Mauricio (hearback pendente do readback 0089 — Onda 36 Cura do Protocolo). Após confirmar, bastão volta para Codex iniciar Onda 37 (Reconciliação V5).
+ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Claude Opus 4.7 deve auditar o handoff, ajustar o protocolo useHBN e propor barreiras reais inter-IA. Codex fica bloqueado para implementacao ate existir devolutiva em auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md e hearback humano.
-ultima-atualizacao: 2026-05-24T17:45:00-0300 (handoff V206/V207/useHBN preparado; export V5 existe em local-ai/incoming/V206_ANCHOR_V5_20260524/ com 62 arquivos; requer auditoria Claude antes de retomada)
+proxima-acao: Mauricio (1) rodar bash scripts/hbn-guards/install.sh, (2) rodar bash scripts/hbn-guards/hbn-guards-runner.sh, (3) confirmar hearback Onda 36, (4) commitar Onda 36, (5) abrir novo chat Codex com auditoria/00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md. Codex fica bloqueado até esses 5 passos estarem feitos.
+ultima-atualizacao: 2026-05-24T21:45:00-0300 (Onda 36 Cura do Protocolo executada por Claude Opus 4.7; guards executáveis + schemas + roadmap 90 dias + plano de arquivamento entregues; aguarda hearback humano)
 ---
+
+## Onda 36 EM HEARBACK — Cura do Protocolo (Claude Opus 4.7)
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track (governança, sem tocar VBA) |
+| Readback | [readbacks/0089-onda36-cura-protocolo-opus.json](../readbacks/0089-onda36-cura-protocolo-opus.json) |
+| Hearback | **pendente** — Mauricio precisa confirmar |
+| ERP | [results/0089-exec-onda36-cura-protocolo-opus.json](../results/0089-exec-onda36-cura-protocolo-opus.json) |
+| Auditoria-mãe | [auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md](../../auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md) |
+| Devolutiva ao Codex | [auditoria/00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md](../../auditoria/00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md) |
+| Roadmap protocolo | [auditoria/02_planos/34_ROADMAP_PROTOCOLO_90_DIAS_OPUS.md](../../auditoria/02_planos/34_ROADMAP_PROTOCOLO_90_DIAS_OPUS.md) |
+| Plano arquivamento | [auditoria/02_planos/35_PLANO_ARQUIVAMENTO_LOCAL_AI_E_V12_PASTAS.md](../../auditoria/02_planos/35_PLANO_ARQUIVAMENTO_LOCAL_AI_E_V12_PASTAS.md) |
+| Knowledge nova | [knowledge/0013-contratos-executaveis.md](../knowledge/0013-contratos-executaveis.md) |
+
+### Entregáveis Onda 36 (todos prontos)
+
+- `.hbn/canonical-root` — path canônico declarativo
+- `.hbn/forbidden-paths.txt` — paths legacy bloqueados em commits novos
+- `.hbn/schemas/` — readback + hearback + audit-pre + audit-post + README
+- `scripts/hbn-guards/` — 5 guards + lib + runner + install + README
+- `AGENTS.md` — seção "Contratos executáveis" + lista de leitura atualizada
+- `.hbn/knowledge/0013-contratos-executaveis.md` — regra permanente
+- 4 documentos canônicos (105, 106, 34, 35)
+
+### Próxima ação após hearback Onda 36
+
+Bastão passa para **Codex**, em sessão nova, para executar **Onda 37 — Reconciliação V5 vs src/vba** sob o novo contrato. Prompt em [auditoria/00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md](../../auditoria/00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md). Codex precisa produzir `.hbn/readbacks/0090-onda37-reconciliacao-v5.json` e aguardar hearback antes de qualquer execução.
+
+
 
 ## P0 corrigido — raiz canonica do projeto
 

@@ -30,6 +30,46 @@ handoff. `/private/tmp`, downloads, areas de IDE e outros worktrees podem ser
 usados apenas como rascunho descartavel; nenhum entregavel pode permanecer
 nesses locais.
 
+> **Onda 36 (2026-05-24) — agora isto é enforçado por código.**
+> O pre-commit instalado por `scripts/hbn-guards/install.sh` recusa
+> mecanicamente qualquer commit cuja `git rev-parse --show-toplevel` seja
+> diferente de `.hbn/canonical-root`, ou que tenha worktree em `/tmp`,
+> `/private/tmp`, `Downloads/` ou `.Trash/`. Detalhes em
+> [`.hbn/knowledge/0013-contratos-executaveis.md`](.hbn/knowledge/0013-contratos-executaveis.md)
+> e em [`auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md`](auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md).
+
+## Contratos executáveis (Onda 36 — 2026-05-24)
+
+A partir do readback `0089-onda36-cura-protocolo-opus`, o protocolo HBN
+neste repositório tem **camada executável**. Os readbacks têm schema JSON
+formal (`.hbn/schemas/readback.schema.json`) e o pre-commit valida:
+
+| Guard | O que rejeita |
+|---|---|
+| `scripts/hbn-guards/assert-canonical-root.sh` | git toplevel ≠ raiz canônica |
+| `scripts/hbn-guards/forbid-tmp-worktree.sh` | worktree em /tmp, Downloads, .Trash |
+| `scripts/hbn-guards/forbid-env-files.sh` | `.env*`, dumps, chaves privadas |
+| `scripts/hbn-guards/forbid-legacy-paths.sh` | adicionar conteúdo a `local-ai/obsidian-vault/`, `V12-*/`, etc. (lista em `.hbn/forbidden-paths.txt`) |
+| `scripts/hbn-guards/assert-scope-lock.sh` | em safe_track: arquivos staged fora do `scope.files_allowed` do readback ativo OU hearback ainda `pending` |
+
+Toda nova onda safe_track deve:
+
+1. Produzir readback em `.hbn/readbacks/NNNN-*.json` conforme schema.
+2. Aguardar hearback humano (`human_status: confirmed` no readback ou
+   `.hbn/hearbacks/NNNN.json` com `status: confirmed`).
+3. Limitar diff git aos paths declarados em `scope.files_allowed`.
+4. Produzir ERP em `.hbn/results/NNNN-exec-*.json` ao fechar.
+
+Detalhes operacionais: [`scripts/hbn-guards/README.md`](scripts/hbn-guards/README.md).
+Razão arquitetural: [`.hbn/knowledge/0013-contratos-executaveis.md`](.hbn/knowledge/0013-contratos-executaveis.md).
+Roadmap de institucionalização: [`auditoria/02_planos/34_ROADMAP_PROTOCOLO_90_DIAS_OPUS.md`](auditoria/02_planos/34_ROADMAP_PROTOCOLO_90_DIAS_OPUS.md).
+
+Bypass de emergência (deixa rastro):
+```bash
+HBN_GUARDS_BYPASS=1 git commit -m "[bypass-hbn-guards] motivo: …"
+```
++ nota em `.hbn/bypasses/AAAAMMDD-HHmmss-<motivo>.md`.
+
 Antes de ler ou editar arquivos, execute e valide:
 
 ```bash
@@ -67,11 +107,15 @@ Leia, em ordem:
 5. [`.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md`](.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md) — regra permanente: funcionalidade nova exige teste correspondente
 6. [`.hbn/knowledge/0011-higiene-documental-recorrente.md`](.hbn/knowledge/0011-higiene-documental-recorrente.md) — regra permanente: higiene documental antes de passar de fase
 7. [`.hbn/knowledge/0012-raiz-canonica-projeto.md`](.hbn/knowledge/0012-raiz-canonica-projeto.md) — regra permanente de raiz canônica
-8. [`obsidian-vault/releases/V12.0.0205.md`](obsidian-vault/releases/V12.0.0205.md) — release oficial vigente
-9. [`docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md`](docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md) — regras de negócio públicas V205
-10. [`docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md`](docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md) — guia humano por interface
-11. [`auditoria/evidencias/V12.0.0205/INDEX.md`](auditoria/evidencias/V12.0.0205/INDEX.md) — evidências públicas V205
-12. [`usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`](usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md) — lições históricas sobre VBA
+8. [`.hbn/knowledge/0013-contratos-executaveis.md`](.hbn/knowledge/0013-contratos-executaveis.md) — **regra permanente de contratos executáveis (Onda 36)**
+9. [`auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md`](auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md) — **auditoria-mãe do protocolo curado (Opus 2026-05-24)**
+10. [`scripts/hbn-guards/README.md`](scripts/hbn-guards/README.md) — guards executáveis no pre-commit
+11. [`.hbn/schemas/README.md`](.hbn/schemas/README.md) — schemas JSON dos artefatos HBN
+12. [`obsidian-vault/releases/V12.0.0205.md`](obsidian-vault/releases/V12.0.0205.md) — release oficial vigente
+13. [`docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md`](docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md) — regras de negócio públicas V205
+14. [`docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md`](docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md) — guia humano por interface
+15. [`auditoria/evidencias/V12.0.0205/INDEX.md`](auditoria/evidencias/V12.0.0205/INDEX.md) — evidências públicas V205
+16. [`usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`](usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md) — lições históricas sobre VBA
 
 ## Working pattern
 

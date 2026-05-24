@@ -1,0 +1,185 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://usehbn.org/schemas/credenciamento/readback/1.0.0",
+  "title": "HBN Readback — Credenciamento",
+  "description": "Contrato executável do readback que toda IA emite ANTES de tocar arquivos. Para safe_track o pre-commit hook bloqueia commit se este readback estiver ausente ou violado.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "readback_id",
+    "data",
+    "agent_id",
+    "track",
+    "version_target",
+    "canonical_root",
+    "branch",
+    "intent",
+    "scope",
+    "risks",
+    "validation_plan",
+    "rollback_plan",
+    "human_status",
+    "created_at"
+  ],
+  "properties": {
+    "readback_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[a-z0-9-]+$",
+      "description": "Identificador único, prefixado pelo número sequencial de 4 dígitos. Ex.: 0089-onda36-cura-protocolo-opus"
+    },
+    "data": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$",
+      "description": "Data do readback (AAAA-MM-DD, hora local do operador)"
+    },
+    "agent_id": {
+      "type": "string",
+      "enum": ["claude-opus-4-7", "claude-sonnet", "codex", "gemini-3-5-antigravity", "copilot", "cursor", "humano"],
+      "description": "IA que está emitindo o readback. 'humano' é permitido para readbacks redigidos diretamente pelo operador."
+    },
+    "track": {
+      "type": "string",
+      "enum": ["safe_track", "fast_track"],
+      "description": "safe_track = toca código de produção (src/vba, local-ai/vba_import). fast_track = só doc/auditoria. Determina quais guards são obrigatórios."
+    },
+    "version_target": {
+      "type": "string",
+      "pattern": "^V[0-9]+\\.[0-9]+\\.[0-9]{4}$",
+      "description": "Versão alvo desta onda. Ex.: V12.0.0206"
+    },
+    "canonical_root": {
+      "type": "string",
+      "const": "/Users/macbookpro/Projetos/Credenciamento",
+      "description": "Raiz canônica obrigatória. Hard-coded como const para que readback fora da raiz seja recusado mecanicamente."
+    },
+    "branch": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Branch git em que esta onda será executada"
+    },
+    "worktree": {
+      "type": "string",
+      "const": "/Users/macbookpro/Projetos/Credenciamento",
+      "description": "Worktree validado. Igual ao canonical_root; recusa /private/tmp ou qualquer outro."
+    },
+    "predecessor_readback_id": {
+      "type": ["string", "null"],
+      "pattern": "^[0-9]{4}-[a-z0-9-]+$",
+      "description": "ID do readback imediatamente anterior nesta linha de trabalho (encadeamento auditável)."
+    },
+    "intent": {
+      "type": "object",
+      "required": ["objective", "non_goals"],
+      "additionalProperties": false,
+      "properties": {
+        "objective": {
+          "type": "string",
+          "minLength": 30,
+          "description": "Frase clara do que esta onda fará."
+        },
+        "non_goals": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 5 },
+          "description": "Explicitamente o que esta onda NÃO fará. Defesa contra scope creep."
+        }
+      }
+    },
+    "scope": {
+      "type": "object",
+      "required": ["files_allowed", "files_forbidden"],
+      "additionalProperties": false,
+      "properties": {
+        "files_allowed": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Path relativo à raiz canônica. Aceita globs simples (* e **). Ex.: 'src/vba/Rel_OSEmpresa.frm' ou 'auditoria/03_ondas/onda_33_*/**'"
+          },
+          "description": "Lista exaustiva de arquivos/globs que ESTA onda pode tocar. assert-scope-lock.sh recusa commit que toque arquivo fora desta lista."
+        },
+        "files_forbidden": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Subconjunto explicitamente proibido mesmo se casasse com algum glob de files_allowed. Tem precedência."
+        },
+        "imports_must_come_from": {
+          "type": "string",
+          "enum": ["local-ai/vba_import/", "n/a"],
+          "default": "n/a",
+          "description": "Para safe_track que toca VBA: confirma que importação no Excel só pode vir de local-ai/vba_import/."
+        }
+      }
+    },
+    "invariants_preserved": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 5 },
+      "description": "Lista de invariantes que esta onda promete preservar. Ex.: 'RN-01 a RN-17 inalteradas', 'contadores RVS inalterados', 'Svc_Rodizio.bas não tocado'."
+    },
+    "risks": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["risk", "mitigation"],
+        "additionalProperties": false,
+        "properties": {
+          "risk": { "type": "string", "minLength": 10 },
+          "mitigation": { "type": "string", "minLength": 10 },
+          "severity": { "type": "string", "enum": ["low", "medium", "high", "p0"] }
+        }
+      },
+      "description": "No mínimo 3 riscos identificados com mitigação. Regra HBN P5."
+    },
+    "validation_plan": {
+      "type": "object",
+      "required": ["gates"],
+      "additionalProperties": false,
+      "properties": {
+        "gates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["gate", "evidence_kind"],
+            "additionalProperties": false,
+            "properties": {
+              "gate": { "type": "string", "minLength": 5, "description": "Ex.: 'TV2_RunSmoke', 'Gate RVS', 'compile manual VBE'." },
+              "evidence_kind": { "type": "string", "enum": ["VR_ID", "screenshot", "csv_hash", "git_sha", "shasum_match", "human_report", "audit_post"] },
+              "evidence_required_in": { "type": "string", "description": "Caminho relativo onde a evidência deve estar registrada após execução." }
+            }
+          }
+        }
+      }
+    },
+    "rollback_plan": {
+      "type": "object",
+      "required": ["steps"],
+      "additionalProperties": false,
+      "properties": {
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 10 },
+          "description": "Como reverter caso a execução falhe. Cada passo verificável."
+        },
+        "anchor_to_restore": {
+          "type": "string",
+          "description": "Snapshot/ancora estável para restaurar (ex.: 'V12-205-OficialCongelada')."
+        }
+      }
+    },
+    "human_status": {
+      "type": "string",
+      "enum": ["pending", "confirmed", "rejected"],
+      "description": "Status do hearback humano. safe_track exige 'confirmed' antes de qualquer escrita em código. O hook assert-hearback.sh lê este campo + .hbn/hearbacks/<id>.json."
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp ISO 8601 com offset, ex.: 2026-05-24T20:30:00-03:00"
+    }
+  }
+}

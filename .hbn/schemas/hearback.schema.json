@@ -1,0 +1,55 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://usehbn.org/schemas/credenciamento/hearback/1.0.0",
+  "title": "HBN Hearback — Credenciamento",
+  "description": "Confirmação humana de um readback. Sem este artefato com status='confirmed', nenhuma onda safe_track pode escrever em código.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "hearback_id",
+    "readback_id",
+    "status",
+    "signed_by",
+    "signed_at"
+  ],
+  "properties": {
+    "hearback_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[a-z0-9-]+$"
+    },
+    "readback_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[a-z0-9-]+$",
+      "description": "Deve corresponder ao readback_id em .hbn/readbacks/."
+    },
+    "status": {
+      "type": "string",
+      "enum": ["confirmed", "rejected", "request_changes"],
+      "description": "confirmed = a IA está autorizada a executar exatamente o que o readback declara. rejected = onda cancelada. request_changes = readback precisa ser refeito antes de nova tentativa."
+    },
+    "signed_by": {
+      "type": "string",
+      "enum": ["mauricio-zanin", "delegate-with-explicit-grant"],
+      "description": "Quem assinou. O operador é a única root of trust default."
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "notes": {
+      "type": "string",
+      "description": "Razão da decisão, condições adicionais, escopo mais estreito que o readback original."
+    },
+    "scope_overrides": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "files_allowed_subset": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Se preenchido, restringe ainda mais o scope.files_allowed do readback. Não pode expandir."
+        }
+      }
+    }
+  }
+}

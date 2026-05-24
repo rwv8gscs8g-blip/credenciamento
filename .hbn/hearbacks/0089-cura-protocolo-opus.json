@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0089-cura-protocolo-opus",
+  "readback_id": "0089-onda36-cura-protocolo-opus",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-05-24T19:00:00-03:00",
+  "notes": "Cura do Protocolo (Onda 36) aprovada. Smoke tests executados no Mac em 24/05 (raiz canonica OK, forbid-tmp/env/legacy OK, scope-lock bloqueou corretamente readback pending). Codex bloqueado para Onda 37 ate este hearback estar commitado. Arquivos orfãos do smoke da sandbox (src/vba/teste_fake.bas) deletados antes do commit. Conserto adicional aplicado no assert-scope-lock.sh para reconhecer meta-paths .hbn/hearbacks/<id>-*.json e .hbn/bypasses/** sem precisar de declaracao explicita."
+}

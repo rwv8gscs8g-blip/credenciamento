@@ -1,0 +1,42 @@
+# =============================================================================
+# .hbn/forbidden-paths.txt
+# Lista de caminhos que NÃO podem ser tocados em commits novos. São paths que
+# existem fisicamente apenas como histórico congelado ou área desativada.
+#
+# Formato: um glob ou caminho exato por linha. Comentários iniciados por #.
+# Padrões usam shell glob (* e ** funcionam dentro de [[ "$f" == $pat ]]).
+# Lido por: scripts/hbn-guards/forbid-legacy-paths.sh
+# =============================================================================
+
+# ---------- Árvore paralela 'local-ai/' que precisa ser fagocitada (planejamento Onda 36) ----------
+# Vault Obsidian antiga, agora documentada como cemitério (auditoria 32, 98)
+local-ai/obsidian-vault/*
+local-ai/obsidian-vault/**
+
+# Cópia antiga de auditoria — auditoria viva é apenas a da raiz
+local-ai/auditoria/*
+local-ai/auditoria/**
+
+# .cursorrules antigo apontando para V12.0.0180 (25 versões atrás)
+local-ai/root/.cursorrules
+
+# ---------- Pastas-snapshot V12-* que devem migrar para LFS ou repo separado ----------
+# Bloqueia ADICIONAR arquivos novos nessas pastas. O conteúdo atual permanece
+# como histórico. Migração planejada em auditoria/02_planos/35_*.
+V12-204-Micro48/**
+V12-205-001-Inicial/**
+V12-205-OficialCongelada/**
+V12-0206-Preparaçao/**
+V12-2024-Micro54-RC1/**
+
+# ---------- Scripts antigos declarados descontinuados em CLAUDE.md ----------
+local-ai/scripts/publicar_vba_import.sh
+
+# ---------- Lock files do Excel jamais deveriam ser staged ----------
+~$*.xlsm
+~$*.xls
+~$*.xlsx
+
+# ---------- .DS_Store nunca ----------
+.DS_Store
+**/.DS_Store

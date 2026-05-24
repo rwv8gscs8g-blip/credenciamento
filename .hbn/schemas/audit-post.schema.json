@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://usehbn.org/schemas/credenciamento/audit-post/1.0.0",
+  "title": "HBN Auditoria Pós-Execução — Credenciamento",
+  "description": "Parecer da IA auditora sobre o diff git e a saída dos gates DEPOIS da execução. Pré-requisito para fechamento da onda (ERP).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "audit_id",
+    "readback_id",
+    "auditor_agent",
+    "verdict",
+    "diff_summary",
+    "gates_evidence",
+    "findings",
+    "recommendation",
+    "signed_at"
+  ],
+  "properties": {
+    "audit_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-post$"
+    },
+    "readback_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[a-z0-9-]+$"
+    },
+    "auditor_agent": {
+      "type": "string",
+      "enum": ["gemini-3-5-antigravity", "claude-opus-4-7", "claude-sonnet", "humano"]
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["pass", "warn", "fail"]
+    },
+    "diff_summary": {
+      "type": "object",
+      "required": ["files_touched", "files_outside_scope"],
+      "additionalProperties": false,
+      "properties": {
+        "files_touched": { "type": "array", "items": { "type": "string" } },
+        "files_outside_scope": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Arquivos tocados fora do scope.files_allowed do readback. Se não-vazio, verdict deve ser 'fail'."
+        },
+        "lines_added": { "type": "integer", "minimum": 0 },
+        "lines_removed": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "gates_evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["gate", "status", "evidence_ref"],
+        "additionalProperties": false,
+        "properties": {
+          "gate": { "type": "string" },
+          "status": { "type": "string", "enum": ["pass", "fail", "skipped"] },
+          "evidence_ref": { "type": "string", "description": "VR_ID, sha do commit, caminho do CSV, etc." }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["severity", "category", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "severity": { "type": "string", "enum": ["info", "low", "medium", "high", "p0"] },
+          "category": { "type": "string", "enum": ["scope_violation", "invariant_broken", "gate_red", "missing_evidence", "doctrinal_drift", "naming_drift", "other"] },
+          "description": { "type": "string", "minLength": 10 }
+        }
+      }
+    },
+    "recommendation": {
+      "type": "string",
+      "enum": ["aceitar", "aceitar_com_debito", "revisar", "reverter"]
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

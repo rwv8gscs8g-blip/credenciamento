@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://usehbn.org/schemas/credenciamento/audit-pre/1.0.0",
+  "title": "HBN Auditoria Pré-Execução — Credenciamento",
+  "description": "Parecer de uma IA auditora adversarial (Gemini/Antigravity ou Claude em modo auditoria) sobre o readback ANTES da execução começar. Cobre coerência, riscos não declarados, violação de invariantes, scope ambíguo.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "audit_id",
+    "readback_id",
+    "auditor_agent",
+    "verdict",
+    "findings",
+    "signed_at"
+  ],
+  "properties": {
+    "audit_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-pre$"
+    },
+    "readback_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[a-z0-9-]+$"
+    },
+    "auditor_agent": {
+      "type": "string",
+      "enum": ["gemini-3-5-antigravity", "claude-opus-4-7", "claude-sonnet", "humano"]
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["pass", "warn", "fail"],
+      "description": "pass = readback pode prosseguir para hearback humano. warn = pode prosseguir mas com nota explícita ao operador. fail = readback deve ser refeito antes de hearback."
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["severity", "category", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "severity": { "type": "string", "enum": ["info", "low", "medium", "high", "p0"] },
+          "category": { "type": "string", "enum": ["scope_ambiguity", "missing_risk", "invariant_violation_risk", "rollback_weak", "evidence_weak", "doctrinal_drift", "naming_drift", "other"] },
+          "description": { "type": "string", "minLength": 10 },
+          "suggested_fix": { "type": "string" }
+        }
+      },
+      "description": "Lista de achados (pode ser vazia se verdict=pass sem ressalvas)."
+    },
+    "signals_emitted": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "✅ HBN ACTIVE",
+          "🟡 HBN NEEDS HUMAN DECISION",
+          "❌ HBN SECURITY BLOCKED SUGGESTION",
+          "🔍 GROUPTHINK ALARM",
+          "🪞 MIRROR DRIFT",
+          "🟠 SOURCE DRIFT DETECTED",
+          "⚪ HBN AUDIT-ONLY"
+        ]
+      }
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

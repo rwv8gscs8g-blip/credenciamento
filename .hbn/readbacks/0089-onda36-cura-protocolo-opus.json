@@ -1,0 +1,131 @@
+{
+  "readback_id": "0089-onda36-cura-protocolo-opus",
+  "data": "2026-05-24",
+  "agent_id": "claude-opus-4-7",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0088-v206-handoff-claude-opus-47-usehbn",
+  "intent": {
+    "objective": "Curar o protocolo HBN convertendo barreiras textuais em guards executáveis no pre-commit, antes que Codex retome implementação funcional da V206. Endereça gap diagnosticado nos incidentes 2026-05-02 (Onda 10) e 2026-05-24 (worktree /private/tmp/cred-v205).",
+    "non_goals": [
+      "Tocar qualquer arquivo em src/vba/",
+      "Tocar qualquer arquivo em local-ai/vba_import/",
+      "Iniciar MD33-restart ou motor PDF",
+      "Alterar RN-01 a RN-17",
+      "Alterar contadores RVS",
+      "Mover ou reorganizar doc/",
+      "Tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas, Svc_PreOS.bas",
+      "Renomear símbolos VBA",
+      "Executar reconciliação V5 vs src/vba (essa é a Onda 37, do Codex)"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/canonical-root",
+      ".hbn/forbidden-paths.txt",
+      ".hbn/schemas/**",
+      ".hbn/knowledge/0013-contratos-executaveis.md",
+      ".hbn/readbacks/0089-onda36-cura-protocolo-opus.json",
+      ".hbn/results/0089-exec-onda36-cura-protocolo-opus.json",
+      ".hbn/relay/INDEX.md",
+      "scripts/hbn-guards/**",
+      "auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md",
+      "auditoria/00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md",
+      "auditoria/02_planos/34_ROADMAP_PROTOCOLO_90_DIAS_OPUS.md",
+      "auditoria/02_planos/35_PLANO_ARQUIVAMENTO_LOCAL_AI_E_V12_PASTAS.md",
+      "AGENTS.md",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "local-ai/incoming/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "doc/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      ".git/hooks/pre-commit"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "Nenhum arquivo VBA funcional alterado",
+    "RN-01 a RN-17 inalteradas",
+    "Contadores RVS inalterados (171/0+34/0+24/0+76/0+4/0+27/0)",
+    "Svc_* intactos",
+    "Mod_Types.bas intacto",
+    "Importador_V3.bas intacto",
+    "Workbook V5 intacto",
+    "Pre-commit existente (G7/G8 Glasswing) preservado e encadeado, não substituído",
+    "Branch codex/v12-0-0206-planejamento mantém histórico"
+  ],
+  "risks": [
+    {
+      "risk": "Guard novo bloquear commit legítimo do operador por falha sutil de path (ex.: macOS resolvendo /tmp ↔ /private/tmp).",
+      "mitigation": "assert-canonical-root.sh usa `pwd -P` e `cd ... && pwd -P` para resolver symlinks consistentemente; smoke test rodado mostra OK; bypass HBN_GUARDS_BYPASS=1 disponível para emergência com nota.",
+      "severity": "medium"
+    },
+    {
+      "risk": "scope.files_allowed deste próprio readback ser violado pelo próprio Opus ao criar artefatos.",
+      "mitigation": "Lista de paths definida de forma explícita antes de qualquer write; pre-commit instalado pelo Mauricio só depois da Onda 36 commitada — primeiro commit validado manualmente.",
+      "severity": "low"
+    },
+    {
+      "risk": "Codex em sessão nova ignorar o prompt 106 e seguir o 104 antigo, perdendo as novas regras.",
+      "mitigation": "Prompt 106 começa com verificação de pré-condições (existência dos arquivos da Onda 36); se faltar, Codex deve parar. Atualizar AGENTS.md também.",
+      "severity": "high"
+    },
+    {
+      "risk": "Schema do readback rejeitar leituras programáticas posteriores (incompatibilidade com tools).",
+      "mitigation": "Schema é JSON Schema draft-07 padrão; usar python3 jsonschema ou ajv (Node); fallback bash valida campos top-level.",
+      "severity": "low"
+    },
+    {
+      "risk": "Bypass virar hábito por fricção excessiva.",
+      "mitigation": "Roadmap 34 prevê revisão semanal de bypasses sem nota; cada bypass exige justificativa em .hbn/bypasses/; medir taxa de bypass por mês como KPI.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Smoke do hbn-guards-runner.sh quando pwd é raiz canônica → exit 0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md §Parte 4 B2"
+      },
+      {
+        "gate": "Smoke do hbn-guards-runner.sh quando pwd é /private/tmp → exit 1 com mensagem clara",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md §Parte 4 B2"
+      },
+      {
+        "gate": "Smoke de tentativa de commit em /tmp/ falha por forbid-tmp-worktree.sh",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/02_planos/34_ROADMAP_PROTOCOLO_90_DIAS_OPUS.md §Critério de saída F1 teste 1"
+      },
+      {
+        "gate": "Smoke de stagging de .env.local falha por forbid-env-files.sh",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/02_planos/34_ROADMAP_PROTOCOLO_90_DIAS_OPUS.md §Critério de saída F1 teste 3"
+      },
+      {
+        "gate": "AGENTS.md tem seção 'Contratos executáveis' apontando para 0013 + 105 + scripts/hbn-guards",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "AGENTS.md"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "git reset --hard <commit-antes-da-onda-36> desfaz todos os artefatos novos",
+      "scripts/hbn-guards/install.sh restore pode reinstalar backup do pre-commit antigo (cópia em .git/hooks/pre-commit.pre-onda36.<timestamp>.bak)",
+      "Nenhum arquivo funcional VBA foi tocado, então o workbook V5 e o estado da V12.0.0205 ficam intactos automaticamente"
+    ],
+    "anchor_to_restore": "v12.0.0205 (tag) + commit 8317d0c (handoff Codex pré-Onda 36)"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T21:30:00-03:00"
+}
