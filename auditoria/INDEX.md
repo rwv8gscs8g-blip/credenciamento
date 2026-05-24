@@ -29,6 +29,11 @@ versao-sistema: V12.0.0205
 - [00_status/80_AUDITORIA_FINAL_POSITIVA_V205_CLAUDE_OPUS.md](00_status/80_AUDITORIA_FINAL_POSITIVA_V205_CLAUDE_OPUS.md) — auditoria final positiva AF1 Claude Opus
 - [00_status/81_AUDITORIA_FINAL_DOCS_GITHUB_V205_GEMINI.md](00_status/81_AUDITORIA_FINAL_DOCS_GITHUB_V205_GEMINI.md) — auditoria final docs/GitHub AF2 Gemini
 - [00_status/82_CONSOLIDACAO_FINAL_FREEZE_V205_CODEX.md](00_status/82_CONSOLIDACAO_FINAL_FREEZE_V205_CODEX.md) — consolidação final AF3 Codex para freeze V205
+- [00_status/83_READBACK_ABERTURA_V206_CODEX.md](00_status/83_READBACK_ABERTURA_V206_CODEX.md) — readback de abertura da V12.0.0206
+- [00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md](00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md) — prompt V206-P1 para Claude Opus
+- [00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md](00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md) — prompt V206-P2 para Gemini/Antigravity
+- [00_status/86_ORQUESTRACAO_IAS_PLANEJAMENTO_V206_CODEX.md](00_status/86_ORQUESTRACAO_IAS_PLANEJAMENTO_V206_CODEX.md) — orquestração inter-IA do planejamento V206
+- [00_status/87_PROMPT_CONSOLIDACAO_ROADMAP_V206_CODEX.md](00_status/87_PROMPT_CONSOLIDACAO_ROADMAP_V206_CODEX.md) — prompt V206-P3 para consolidação Codex
 - [00_status/00_SUMARIO_EXECUTIVO.md](00_status/00_SUMARIO_EXECUTIVO.md) — status executivo da linha oficial
 - [00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md](00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md) — checkpoint da V12.0.0203
 - [00_status/24_FECHAMENTO_V12_0203.md](00_status/24_FECHAMENTO_V12_0203.md) — fechamento candidato
@@ -50,6 +55,7 @@ versao-sistema: V12.0.0205
 ## 02_planos/ — planos de execucao
 
 - [02_planos/30_ROADMAP_V205_PRODUCAO.md](02_planos/30_ROADMAP_V205_PRODUCAO.md) — roadmap V205 de estabilização para produção
+- [02_planos/31_ROADMAP_V206_PRELIMINAR.md](02_planos/31_ROADMAP_V206_PRELIMINAR.md) — roadmap preliminar V206 para validação cruzada
 - [02_planos/15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md](02_planos/15_PLANO_LINHA_CORTE_PUBLICA_V12_0202.md)
 - [02_planos/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md](02_planos/20_PLANO_SPRINT_2_TESTES_E_DESACOPLAMENTO_V12_0203.md)
 - [02_planos/25_PLANO_HARDENING_POS_0203.md](02_planos/25_PLANO_HARDENING_POS_0203.md)

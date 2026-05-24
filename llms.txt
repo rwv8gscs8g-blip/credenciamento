@@ -70,6 +70,11 @@
 
 - V12.0.0206: estabilizacao incremental, ajustes de testes manuais, PDF automatico, pequenos debitos tecnicos e melhorias prorrogadas.
 - V12.0.0207: code review profundo, performance, componentizacao e preparacao SaaS, salvo decisao posterior de roadmap.
+- [auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md](auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md): abertura do planejamento V206
+- [auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md](auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md): roadmap preliminar V206
+- [auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md](auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md): prompt V206 para Claude Opus
+- [auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md](auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md): prompt V206 para Gemini/Antigravity
+- [auditoria/00_status/86_ORQUESTRACAO_IAS_PLANEJAMENTO_V206_CODEX.md](auditoria/00_status/86_ORQUESTRACAO_IAS_PLANEJAMENTO_V206_CODEX.md): orquestração inter-IA V206
 
 ## Optional
 

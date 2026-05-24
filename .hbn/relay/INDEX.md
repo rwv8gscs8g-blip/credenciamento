@@ -1,11 +1,11 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1
-proprietario-bastao: Codex — V12.0.0205 congelada/publicada; próxima linha operacional V12.0.0206 mediante novo bastão explícito.
-ciclo-ativo: V12.0.0205 validada funcionalmente, auditada e congelada como release oficial. Escopo entregue: estabilizacao para producao, saneamento de CI/CD, nomenclatura RVS/SRC/BRL, melhoria da Central de Testes, evidencias V205, Jornada Humana, Dossie de Release, AF1/AF2/AF3 e tag v12.0.0205. Regras de negocio RN-01 a RN-17 congeladas; sem PDF automatico VBA, sem renomeacao de simbolos VBA e sem refatoracao profunda nesta release.
+proprietario-bastao: Codex — bastão de desenvolvimento mantido para planejamento da V12.0.0206.
+ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Abrir V12.0.0206 para ajustes incrementais, testes manuais residuais, PDF automatico robusto e pequenos debitos tecnicos.
-ultima-atualizacao: 2026-05-23T22:12:46-0300 (compile VBE pos-MICRO61 confirmado; Gate RVS final VR_20260523_215637 aprovado; freeze V205 autorizado)
+proxima-acao: Executar validação cruzada de planejamento V206 com Claude Opus e Gemini/Antigravity; consolidar pareceres em roadmap V206 antes de qualquer microdelta de código.
+ultima-atualizacao: 2026-05-24T00:00:00-0300 (planejamento V206 aberto por Codex; prompts 84/85 e orquestração 86 preparados)
 ---
 
 ## V12.0.0205 — ciclo ativo de estabilização
@@ -30,6 +30,25 @@ ultima-atualizacao: 2026-05-23T22:12:46-0300 (compile VBE pos-MICRO61 confirmado
   renomeação de símbolos VBA, PDF automático via VBA e refatoração estrutural.
 - Fechamento oficial: Gate RVS final e compile VBE pós-MICRO61 aprovados. A
   V12.0.0205 está pronta para tag/publicação e a próxima linha é V12.0.0206.
+
+## V12.0.0206 — ciclo de planejamento
+
+| Campo | Valor |
+|---|---|
+| Branch | `codex/v12-0-0206-planejamento` |
+| Base | `v12.0.0205` / commit `f24e535` |
+| Status | Planejamento aberto; validação cruzada pendente |
+| Roadmap preliminar | [`../../auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md`](../../auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md) |
+| Readback | [`../../auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md`](../../auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md) |
+| Prompts | [`../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md`](../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md), [`../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md`](../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md), [`../../auditoria/00_status/87_PROMPT_CONSOLIDACAO_ROADMAP_V206_CODEX.md`](../../auditoria/00_status/87_PROMPT_CONSOLIDACAO_ROADMAP_V206_CODEX.md) |
+
+### Limites preliminares V206
+
+- Permitido: PDF automático robusto, ajustes manuais, evidências, Importador V3,
+  documentação e pequenos débitos técnicos.
+- Bloqueado: code review profundo, performance estrutural, componentização,
+  preparação SaaS e renomeações internas amplas; esses itens ficam para
+  V12.0.0207 salvo nova decisão humana.
 
 > ⚠️ **REGRA INVIOLAVEL (M11 destilada 2026-05-03)**: A IA le `src/vba/`
 > (fonte de verdade — AGENTS.md §62-63) e transporta para
