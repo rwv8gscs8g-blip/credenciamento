@@ -1,0 +1,45 @@
+{
+  "execution_id": "0087-exec-v206-anchor-v5-reinicio-documental",
+  "agent_id": "codex",
+  "readback_id": "0087-v206-anchor-v5-reinicio-documental",
+  "action": "Registrar anchor V5 de reinicio V206 e atualizar bastao documental",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "environment": {
+    "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "target_version": "V12.0.0206"
+  },
+  "changes": [
+    {
+      "file": "auditoria/00_status/101_ANCHOR_V5_REINICIO_V206_CODEX.md",
+      "summary": "Novo status canonico da V5 com evidencia de caminho, build e RVS aprovado."
+    },
+    {
+      "file": ".hbn/relay/INDEX.md",
+      "summary": "Bastao atualizado para V5 e proxima acao de comparacao V5 contra src/vba."
+    },
+    {
+      "file": "auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/01_TECNICO_ONDA33_FIX_RELATORIOS.md",
+      "summary": "Gate antigo por V12-0206-Preparacao marcado como superado pela V5."
+    },
+    {
+      "file": "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260524_164612.csv",
+      "summary": "Evidencia CSV do Gate RVS aprovado na V5."
+    }
+  ],
+  "validations_local": [
+    "ThisWorkbook.Path informado pelo operador aponta para \\\\Mac\\Home\\Projetos\\Credenciamento",
+    "ImportarPacoteV3_Status informou manifesto presente",
+    "Metadados GetReleaseTag/GetReleaseAtual/GetReleaseAlvo/GetBuildImportado conferidos pelo operador",
+    "Gate RVS VR_20260524_164612 aprovado com assinatura V205 congelada",
+    "Nenhuma alteracao funcional VBA nesta micro-onda"
+  ],
+  "human_gate_pending": [
+    "Exportar componentes da V5 para local-ai/incoming/V206_ANCHOR_V5_20260524/",
+    "Comparar export V5 contra src/vba/",
+    "So entao preparar novo microdelta MD33-restart"
+  ],
+  "created_at": "2026-05-24T17:12:00-03:00"
+}

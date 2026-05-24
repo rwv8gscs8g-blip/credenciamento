@@ -11,6 +11,11 @@ autor: Codex
 
 # Pausa MD33 e Rebase em Planilha Limpa V206
 
+> Status operacional superado em 2026-05-24 pelo anchor V5:
+> [`101_ANCHOR_V5_REINICIO_V206_CODEX.md`](101_ANCHOR_V5_REINICIO_V206_CODEX.md).
+> Este documento permanece como historico do incidente MD33/fix1/fix2 e da
+> correcao de protocolo `backups/vba`.
+
 ## Veredito
 
 As tentativas `MICRO62-V206-MD33-0`, `MICRO62-V206-MD33-0-fix1` e

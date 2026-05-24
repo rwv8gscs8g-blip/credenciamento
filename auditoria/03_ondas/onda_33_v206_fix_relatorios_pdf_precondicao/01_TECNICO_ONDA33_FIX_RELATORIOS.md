@@ -101,13 +101,28 @@ preenchimento em instância oculta.
 
 Gates antigos de MD33/fix1/fix2 estao reprovados.
 
-Novo gate:
+O gate de rebase por `V12-0206-Preparacao` tambem foi superado: o operador
+informou que aquela planilha nao compilava. A nova ancora e a V5 derivada da
+V12.0.0205 oficial congelada:
 
-- copiar a planilha limpa de `V12-0206-Preparacao` para a raiz canonica;
-- abrir a copia na raiz e confirmar `?ThisWorkbook.Path`;
-- compilar antes de qualquer import;
-- se compilar, exportar componentes para
-  `local-ai/incoming/V206_BASE_LIMPA_20260524/`.
+```text
+/Users/macbookpro/Projetos/Credenciamento/PlanilhaCredenciamento-Homologacao-V5.xlsm
+```
+
+Evidencia da V5:
+
+- `?ThisWorkbook.Path` retornou `\\Mac\Home\Projetos\Credenciamento`;
+- `ImportarPacoteV3_Status` encontrou o manifesto em `local-ai\vba_import`;
+- `GetReleaseTag` retornou `v12.0.0205`;
+- `GetReleaseAtual` retornou `V12.0.0205`;
+- `GetReleaseAlvo` retornou `V12.0.0206`;
+- `GetBuildImportado` retornou
+  `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix`;
+- Gate RVS `VR_20260524_164612` APROVADO com assinatura
+  `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+
+Antes de qualquer novo microdelta, exportar componentes da V5 para
+`local-ai/incoming/V206_ANCHOR_V5_20260524/` e comparar contra `src/vba/`.
 
 ## Incidente Pós-Import e Fix1
 
@@ -153,6 +168,6 @@ Diagnóstico consolidado:
 
 ## Próxima Ação
 
-Após rebase limpo, compile VBE e confirmação humana da nova âncora, a
-V12.0.0206 pode retomar Onda 33 ou abrir a Onda 34 para o motor PDF central em
-`Util_PDF.bas`, conforme decisão do operador.
+Apos comparacao da V5 contra `src/vba/`, a V12.0.0206 pode preparar um novo
+MD33-restart para corrigir os dois relatorios. A Onda 34/PDF permanece
+bloqueada ate o anchor V5 estar reconciliado.

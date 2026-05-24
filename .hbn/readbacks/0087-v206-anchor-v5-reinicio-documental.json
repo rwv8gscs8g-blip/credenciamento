@@ -1,0 +1,43 @@
+{
+  "readback_id": "0087-v206-anchor-v5-reinicio-documental",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "origem_hearback": "Operador informou que a planilha V12-0206-Preparacao tambem nao compilava, copiou a planilha da pasta V12-205-OficialCongelada para a raiz como PlanilhaCredenciamento-Homologacao-V5.xlsm, confirmou ThisWorkbook.Path canonico, metadados V205/V206 e Gate RVS aprovado.",
+  "contexto": {
+    "versao": "V12.0.0206",
+    "branch": "codex/v12-0-0206-planejamento",
+    "raiz_canonica": "/Users/macbookpro/Projetos/Credenciamento",
+    "workbook_anchor": "/Users/macbookpro/Projetos/Credenciamento/PlanilhaCredenciamento-Homologacao-V5.xlsm",
+    "workbook_origem": "/Users/macbookpro/Projetos/Credenciamento/V12-205-OficialCongelada",
+    "this_workbook_path": "\\\\Mac\\Home\\Projetos\\Credenciamento",
+    "release_tag": "v12.0.0205",
+    "release_atual": "V12.0.0205",
+    "release_alvo": "V12.0.0206",
+    "build_importado": "e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix",
+    "rvs_anchor": {
+      "id": "VR_20260524_164612",
+      "resultado": "APROVADO",
+      "assinatura": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0",
+      "csv": "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260524_164612.csv"
+    }
+  },
+  "decisao_codex": [
+    "Registrar micro-onda documental de reinicio V5.",
+    "Marcar a rota V12-0206-Preparacao/V4 como superada para acao operacional.",
+    "Nao tocar VBA funcional nesta micro-onda.",
+    "Exigir comparacao V5 exportada contra src/vba antes de qualquer novo microdelta."
+  ],
+  "escopo_bloqueado": [
+    "motor PDF",
+    "novo import MD33 na V5",
+    "alteracao funcional VBA",
+    "uso de backups/vba como fonte operacional"
+  ],
+  "proxima_acao_tecnica": [
+    "Exportar componentes da V5 para local-ai/incoming/V206_ANCHOR_V5_20260524/.",
+    "Comparar incoming contra src/vba/.",
+    "Preparar novo MD33-restart apenas depois da comparacao."
+  ],
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T17:08:00-03:00"
+}

@@ -4,8 +4,8 @@ versao-protocolo: HBN 0.3.1
 proprietario-bastao: Codex — bastão de desenvolvimento mantido para planejamento da V12.0.0206.
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Pausar MD33 na planilha contaminada; copiar a planilha limpa de V12-0206-Preparacao para a raiz canonica, compilar antes de qualquer import e exportar componentes para local-ai/incoming/V206_BASE_LIMPA_20260524/; Onda 34 permanece bloqueada.
-ultima-atualizacao: 2026-05-24T15:45:00-0300 (MD33 reprovado apos tres imports OK e compile crash; rebase por planilha limpa aprovado como proxima rota)
+proxima-acao: Anchor V5 aprovado; exportar componentes da PlanilhaCredenciamento-Homologacao-V5.xlsm para local-ai/incoming/V206_ANCHOR_V5_20260524/, comparar contra src/vba/ e so depois preparar novo MD33-restart. Onda 34/PDF permanece bloqueada.
+ultima-atualizacao: 2026-05-24T17:12:00-0300 (V5 derivada de V12-205-OficialCongelada validada com RVS VR_20260524_164612 APROVADO; rota V12-0206-Preparacao superada)
 ---
 
 ## P0 corrigido — raiz canonica do projeto
@@ -42,6 +42,44 @@ git worktree list
 Se `pwd` ou `git rev-parse --show-toplevel` forem diferentes de
 `/Users/macbookpro/Projetos/Credenciamento`, a IA deve parar e registrar P0.
 
+## Anchor V5 — reinicio operacional V206
+
+Em 2026-05-24, o operador descartou a rota de `V12-0206-Preparacao` porque a
+planilha tambem nao compilava. A nova ancora operacional local e:
+
+```text
+/Users/macbookpro/Projetos/Credenciamento/PlanilhaCredenciamento-Homologacao-V5.xlsm
+```
+
+Origem declarada:
+
+```text
+/Users/macbookpro/Projetos/Credenciamento/V12-205-OficialCongelada
+```
+
+Confirmacoes humanas:
+
+- `?ThisWorkbook.Path` retornou `\\Mac\Home\Projetos\Credenciamento`;
+- `ImportarPacoteV3_Status` encontrou o manifesto em `local-ai\vba_import`;
+- `GetReleaseTag` retornou `v12.0.0205`;
+- `GetReleaseAtual` retornou `V12.0.0205`;
+- `GetReleaseAlvo` retornou `V12.0.0206`;
+- `GetBuildImportado` retornou
+  `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix`;
+- Gate RVS `VR_20260524_164612` APROVADO com assinatura
+  `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+
+Status canonico:
+
+- a V5 e workbook local ignorado pelo Git;
+- `src/vba/` segue como fonte versionada da verdade;
+- `local-ai/vba_import/` segue como unica fonte operacional de import;
+- antes de qualquer novo microdelta, exportar V5 para
+  `local-ai/incoming/V206_ANCHOR_V5_20260524/` e comparar contra `src/vba/`;
+- nao usar os manifestos MD33/fix1/fix2 reprovados na V5.
+
+Referencia: [`../../auditoria/00_status/101_ANCHOR_V5_REINICIO_V206_CODEX.md`](../../auditoria/00_status/101_ANCHOR_V5_REINICIO_V206_CODEX.md).
+
 ## V12.0.0205 — ciclo ativo de estabilização
 
 | Campo | Valor |
@@ -71,12 +109,13 @@ Se `pwd` ou `git rev-parse --show-toplevel` forem diferentes de
 |---|---|
 | Branch | `codex/v12-0-0206-planejamento` |
 | Base | `v12.0.0205` / commit `f24e535` |
-| Status | Roadmap aprovado; Onda 31 documental executada; Onda 32 consolidou auditoria cruzada PDF/UI; Onda 33 pausada apos tres imports OK e compile crash; retomada sera por planilha limpa V12-0206-Preparacao |
+| Status | Roadmap aprovado; Onda 31 documental executada; Onda 32 consolidou auditoria cruzada PDF/UI; Onda 33 pausada apos tres imports OK e compile crash; retomada reancorada na V5 derivada de V12-205-OficialCongelada com RVS aprovado |
 | Roadmap preliminar | [`../../auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md`](../../auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md) |
 | Roadmap consolidado | [`../../auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md`](../../auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md) |
 | Readback | [`../../auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md`](../../auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md) |
 | Prompts planejamento | [`../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md`](../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md), [`../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md`](../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md), [`../../auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md`](../../auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md) |
 | PDF/UI | [`../../auditoria/00_status/92_PROMPT_AUDITORIA_PDF_UI_V206_CLAUDE_OPUS.md`](../../auditoria/00_status/92_PROMPT_AUDITORIA_PDF_UI_V206_CLAUDE_OPUS.md), [`../../auditoria/00_status/93_PROMPT_AUDITORIA_ADVERSARIAL_PDF_UI_V206_GEMINI.md`](../../auditoria/00_status/93_PROMPT_AUDITORIA_ADVERSARIAL_PDF_UI_V206_GEMINI.md), [`../../auditoria/00_status/94_PROMPT_CONSOLIDACAO_PDF_UI_V206_CODEX.md`](../../auditoria/00_status/94_PROMPT_CONSOLIDACAO_PDF_UI_V206_CODEX.md), [`../../auditoria/00_status/97_CONSOLIDACAO_PDF_UI_V206_CODEX.md`](../../auditoria/00_status/97_CONSOLIDACAO_PDF_UI_V206_CODEX.md) |
+| Anchor V5 | [`../../auditoria/00_status/101_ANCHOR_V5_REINICIO_V206_CODEX.md`](../../auditoria/00_status/101_ANCHOR_V5_REINICIO_V206_CODEX.md) |
 
 ### Limites preliminares V206
 
