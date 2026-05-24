@@ -95,3 +95,4 @@ ultima-atualizacao: 2026-05-24
 | 0081 | Onda 32 V206 consolidação PDF/UI | EXECUTADO_DOCUMENTAL | `0081-exec-onda32-v206-consolidacao-pdf-ui.json` | 2026-05-24 |
 | 0082 | Onda 33 V206 MD-33.0 fix relatórios pré-PDF | EXECUTADO_PENDENTE_GATE_HUMANO | `0082-exec-onda33-v206-md33-0-fix-relatorios-pdf-precondicao.json` | 2026-05-24 |
 | 0083 | P0 raiz canonica V206 | EXECUTADO_PENDENTE_GATE_IMPORTADOR | `0083-exec-raiz-canonica-v206-p0.json` | 2026-05-24 |
+| 0084 | Onda 33 V206 MD-33.0-fix1 compile crash | EXECUTADO_PENDENTE_GATE_HUMANO | `0084-exec-onda33-v206-md33-0-fix1-compile-crash.json` | 2026-05-24 |

@@ -3106,20 +3106,13 @@ Private Sub Btn_Rel_OS_Empresa_Click()
     ' Relatorio "Ordens de Servico por Empresa" - nome separado do TextBox TXT_OS_NomeEmpresa (evita colisao OS_Empresa).
     On Error GoTo falha
     Dim frmRelOSEmpresa As Object
-    Dim frmExistente As Object
     Dim qtdLinhas As Long
     Dim errDescRelOSEmpresa As String
 
-    ' V12.0.0206: cria a instancia exibida antes do preenchimento.
-    ' Evita popular uma instancia fantasma e mostrar outra vazia.
-    On Error Resume Next
-    For Each frmExistente In VBA.UserForms
-        If typeName(frmExistente) = "Rel_OSEmpresa" Then Unload frmExistente
-    Next frmExistente
-    On Error GoTo falha
-
+    ' V12.0.0206-fix1: passa a instancia exibida ao preenchimento.
+    ' Evita busca por nome no UserForms e reduz risco de instancia fantasma.
     Set frmRelOSEmpresa = VBA.UserForms.Add("Rel_OSEmpresa")
-    Call PreenchimentoRelatorioOSEmpresa
+    Call PreenchimentoRelatorioOSEmpresa(frmRelOSEmpresa)
 
     On Error Resume Next
     qtdLinhas = frmRelOSEmpresa.Controls("RO_Lista").ListCount
@@ -3244,20 +3237,13 @@ End Sub
 Private Sub Rel_EmpXServ_Click()
     On Error GoTo falha
     Dim frmRelEmpServ As Object
-    Dim frmExistente As Object
     Dim qtdLinhas As Long
     Dim errDescRelEmpServ As String
 
-    ' V12.0.0206: cria a instancia exibida antes do preenchimento.
-    ' Evita popular uma instancia fantasma e mostrar outra vazia.
-    On Error Resume Next
-    For Each frmExistente In VBA.UserForms
-        If typeName(frmExistente) = "Rel_Emp_Serv" Then Unload frmExistente
-    Next frmExistente
-    On Error GoTo falha
-
+    ' V12.0.0206-fix1: passa a instancia exibida ao preenchimento.
+    ' Evita busca por nome no UserForms e reduz risco de instancia fantasma.
     Set frmRelEmpServ = VBA.UserForms.Add("Rel_Emp_Serv")
-    Call PreenchimentoRel_EmpXServ
+    Call PreenchimentoRel_EmpXServ(frmRelEmpServ)
 
     On Error Resume Next
     qtdLinhas = frmRelEmpServ.Controls("SV_CR_Lista").ListCount

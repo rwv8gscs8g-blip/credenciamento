@@ -24,24 +24,30 @@ formulário e exibia outra.
   `PreenchimentoRelatorioOSEmpresa`.
 - `Rel_EmpXServ_Click` agora cria `Rel_Emp_Serv` antes de chamar
   `PreenchimentoRel_EmpXServ`.
-- Cada handler descarrega instâncias antigas do mesmo formulário antes de criar
-  a instância exibida.
+- Fix1 pós-incidente: os handlers passam a instância criada diretamente para o
+  preenchimento, no mesmo padrão de `PreenchimentoCRServico`, evitando varredura
+  por `VBA.UserForms`.
 - Cada handler valida `ListCount` antes de exibir o formulário e mostra mensagem
   informativa se não houver dados.
 - A chamada redundante a `PreenchimentoRelatorioOSEmpresa` no
   `UserForm_Initialize` do `Menu_Principal` foi removida, porque criava
   instância invisível de `Rel_OSEmpresa` durante a abertura do menu.
+- `PreenchimentoRelatorioOSEmpresa` e `PreenchimentoRel_EmpXServ` aceitam
+  parâmetro opcional `frmJaAberto` para popular a instância exibida.
 - O espelho local de importação foi gerado em
   `local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm`.
 - O procedimento canônico de importação está em
-  [`02_PROCEDIMENTO_IMPORT_MICRO62.md`](02_PROCEDIMENTO_IMPORT_MICRO62.md).
+  [`03_PROCEDIMENTO_IMPORT_MICRO62_FIX1.md`](03_PROCEDIMENTO_IMPORT_MICRO62_FIX1.md).
 
 ## Arquivos Alterados
 
 | Arquivo | Papel |
 |---|---|
 | `src/vba/Menu_Principal.frm` | Fonte de verdade da correção |
+| `src/vba/Preencher.bas` | Fonte de verdade dos preenchimentos com parâmetro opcional |
 | `local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm` | Espelho importável local, ignorado pelo git |
+| `local-ai/vba_import/001-modulo/AAU-Preencher.bas` | Espelho importável local, ignorado pelo git |
+| `auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/04_MANIFESTO_MICRO62_FIX1.txt` | Cópia auditável do manifesto fix1 |
 
 Nenhum serviço blindado foi alterado.
 
@@ -80,18 +86,35 @@ preenchimento em instância oculta.
 | Ordem estática `UserForms.Add` antes de `PreenchimentoRelatorioOSEmpresa` | OK |
 | Ordem estática `UserForms.Add` antes de `PreenchimentoRel_EmpXServ` | OK |
 | Hash `src/vba/Menu_Principal.frm` = espelho `AAM-Menu_Principal.frm` | OK |
+| Hash `src/vba/Preencher.bas` = espelho `AAU-Preencher.bas` | OK |
 | `git diff --check` | OK |
 | Link scan dos documentos tocados | `BROKEN_LINKS 0` |
 | Diff em `Svc_*.bas`, `doc/` e contadores RVS | vazio |
 
 ## Gates Do Operador
 
-- Compile VBE após importar `AAM-Menu_Principal.frm`.
+- Compile VBE após importar `AAU-Preencher.bas` e `AAM-Menu_Principal.frm`.
 - Comando de importação:
-  `ImportarPacoteV3_Delta "MICRO62-V206-MD33-0", "0b7c4e8+ONDA33.MD33.0-fix-relatorios"`.
+  `ImportarPacoteV3_Delta "MICRO62-V206-MD33-0-fix1", "ONDA33.MD33.0-fix1-compile-crash"`.
 - `TV2_RunSmoke` verde.
 - Executar `ASS_REL_OS_EMP_LISTA`.
 - Executar `ASS_REL_EMP_SERV_LISTA`.
+
+## Incidente Pós-Import e Fix1
+
+O operador importou `MICRO62-V206-MD33-0` com sucesso (`M=0 | F=1 | err=0 |
+skip=0`), mas o compile manual do VBE ficou preso e fechou o Excel. Ao reabrir,
+o comportamento se repetiu.
+
+Diagnóstico consolidado:
+
+- o importador V3 usou a raiz correta do projeto;
+- o backup obrigatório foi criado em `backups/vba/20260524_145103-V3-FULL`;
+- a falha é gate de compilação pós-import, portanto `MICRO62-V206-MD33-0` não é
+  aceito como aprovado;
+- `MICRO62-V206-MD33-0-fix1` reduz o delta para o padrão de referência direta
+  de formulário e importa também `Preencher.bas`, mantendo assinatura coerente
+  entre chamador e preenchimento.
 
 ## Limites Observados
 
@@ -106,5 +129,6 @@ preenchimento em instância oculta.
 
 ## Próxima Ação
 
-Após compile VBE, Smoke e confirmação humana dos dois roteiros assistidos, a
-V12.0.0206 pode abrir a Onda 34 para o motor PDF central em `Util_PDF.bas`.
+Após import fix1, compile VBE, Smoke e confirmação humana dos dois roteiros
+assistidos, a V12.0.0206 pode abrir a Onda 34 para o motor PDF central em
+`Util_PDF.bas`.

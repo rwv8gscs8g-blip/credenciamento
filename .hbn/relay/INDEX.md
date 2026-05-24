@@ -4,8 +4,8 @@ versao-protocolo: HBN 0.3.1
 proprietario-bastao: Codex — bastão de desenvolvimento mantido para planejamento da V12.0.0206.
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Validar raiz canonica consolidada; depois operador deve importar MICRO62-V206-MD33-0, compilar no VBE, rodar TV2_RunSmoke e executar ASS_REL_OS_EMP_LISTA + ASS_REL_EMP_SERV_LISTA; depois abrir Onda 34 do motor PDF central.
-ultima-atualizacao: 2026-05-24T13:55:00-0300 (P0 raiz canonica corrigido; branch V206 consolidada em /Users/macbookpro/Projetos/Credenciamento)
+proxima-acao: Operador deve importar MICRO62-V206-MD33-0-fix1, compilar no VBE, rodar TV2_RunSmoke e executar ASS_REL_OS_EMP_LISTA + ASS_REL_EMP_SERV_LISTA; Onda 34 permanece bloqueada ate gate humano limpo.
+ultima-atualizacao: 2026-05-24T15:16:00-0300 (Onda 33 fix1 preparado apos compile crash reportado pelo operador)
 ---
 
 ## P0 corrigido — raiz canonica do projeto
@@ -71,7 +71,7 @@ Se `pwd` ou `git rev-parse --show-toplevel` forem diferentes de
 |---|---|
 | Branch | `codex/v12-0-0206-planejamento` |
 | Base | `v12.0.0205` / commit `f24e535` |
-| Status | Roadmap aprovado; Onda 31 documental executada; Onda 32 consolidou auditoria cruzada PDF/UI; Onda 33 MD-33.0 implementada e aguardando gate humano |
+| Status | Roadmap aprovado; Onda 31 documental executada; Onda 32 consolidou auditoria cruzada PDF/UI; Onda 33 MD-33.0-fix1 preparada apos compile crash e aguardando gate humano |
 | Roadmap preliminar | [`../../auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md`](../../auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md) |
 | Roadmap consolidado | [`../../auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md`](../../auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md) |
 | Readback | [`../../auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md`](../../auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md) |

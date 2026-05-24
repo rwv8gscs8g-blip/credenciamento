@@ -1382,7 +1382,7 @@ Sub PreencherAvaliarOS()
 erro_carregamento:
 End Sub
 
-Sub PreenchimentoRelatorioOSEmpresa()
+Sub PreenchimentoRelatorioOSEmpresa(Optional ByVal frmJaAberto As Object = Nothing)
 On Error GoTo erro_carregamento
 Dim primeiraLinhaEmp As Long
 Dim lst As Object
@@ -1392,7 +1392,11 @@ Dim idx As Long
 
 cont = 1
 NItem = 0
-Set lst = ControleFormulario("Rel_OSEmpresa", "RO_Lista", True)
+If frmJaAberto Is Nothing Then
+    Set lst = ControleFormulario("Rel_OSEmpresa", "RO_Lista", True)
+Else
+    Set lst = BuscarControleRecursivo(frmJaAberto, "RO_Lista")
+End If
 If lst Is Nothing Then Exit Sub
 Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
 primeiraLinhaEmp = PrimeiraLinhaDadosEmpresas()
@@ -1430,7 +1434,7 @@ Exit Sub
 erro_carregamento:
 End Sub
 
-Sub PreenchimentoRel_EmpXServ()
+Sub PreenchimentoRel_EmpXServ(Optional ByVal frmJaAberto As Object = Nothing)
 
 On Error GoTo erro_carregamento
 Dim lst As Object
@@ -1440,7 +1444,11 @@ Dim idx As Long
 
 cont = 1
 NItem = 0
-Set lst = ControleFormulario("Rel_Emp_Serv", "SV_CR_Lista")
+If frmJaAberto Is Nothing Then
+    Set lst = ControleFormulario("Rel_Emp_Serv", "SV_CR_Lista")
+Else
+    Set lst = BuscarControleRecursivo(frmJaAberto, "SV_CR_Lista")
+End If
 If lst Is Nothing Then Exit Sub
 Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
 nLinhas = UltimaLinhaAba(SHEET_CAD_SERV)

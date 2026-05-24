@@ -1,0 +1,57 @@
+{
+  "readback_id": "0084-onda33-v206-md33-0-fix1-compile-crash",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "origem_hearback": "Operador importou MICRO62-V206-MD33-0 com sucesso, mas o compile VBE ficou preso e fechou o Excel. Ao reabrir, nova tentativa de compile repetiu a falha.",
+  "contexto": {
+    "versao": "V12.0.0206",
+    "branch": "codex/v12-0-0206-planejamento",
+    "raiz_canonica": "/Users/macbookpro/Projetos/Credenciamento",
+    "import_anterior": "MICRO62-V206-MD33-0",
+    "resultado_import_anterior": "M=0 | F=1 | err=0 | skip=0",
+    "backup_operador": "\\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260524_145103-V3-FULL",
+    "release_base": "V12.0.0205",
+    "commit_base_estavel": "f24e535",
+    "assinatura_nao_regressao": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "diagnostico_inicial": [
+    "O importador V3 concluiu o delta anterior sem erro.",
+    "A falha aparece no gate de compile VBE, portanto o delta anterior nao pode ser considerado aprovado.",
+    "O fix deve evitar padrao de busca/descarga de formularios por colecao UserForms no novo trecho e usar referencia direta ao formulario, como ja ocorre em PreenchimentoCRServico."
+  ],
+  "escopo_autorizado": [
+    "Criar MICRO62-V206-MD33-0-fix1",
+    "Alterar Menu_Principal.frm apenas nos dois handlers de relatorio afetados",
+    "Alterar Preencher.bas para aceitar formulario ja criado como parametro opcional nos dois preenchimentos de relatorio",
+    "Gerar espelho local-ai/vba_import e manifesto do fix1",
+    "Documentar procedimento de import e rollback usando o backup V3 gerado pelo operador"
+  ],
+  "escopo_bloqueado": [
+    "Avancar Onda 34",
+    "Implementar motor PDF",
+    "Alterar RN-01 a RN-17",
+    "Alterar contadores RVS",
+    "Incluir teste de PDF nas seis baterias do RVS",
+    "Mover ou reorganizar doc/",
+    "Tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+    "Renomear simbolos internos VBA"
+  ],
+  "arquivos_previstos": [
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Preencher.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO62-V206-MD33-0-fix1.txt",
+    "auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/03_PROCEDIMENTO_IMPORT_MICRO62_FIX1.md",
+    ".hbn/results/0084-exec-onda33-v206-md33-0-fix1-compile-crash.json"
+  ],
+  "validacoes_planejadas": [
+    "Comparar ausencia de alteracao em Svc_*.bas e doc/",
+    "Glasswing G7: src/vba sincronizado com local-ai/vba_import",
+    "JSON HBN valido",
+    "Manifesto fix1 presente",
+    "Gate humano: importar fix1, compilar VBE, executar TV2_RunSmoke e os dois roteiros ASS_REL_*"
+  ],
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T15:05:00-03:00"
+}

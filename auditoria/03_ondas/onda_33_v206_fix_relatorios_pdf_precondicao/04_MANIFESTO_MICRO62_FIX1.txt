@@ -1,0 +1,40 @@
+# Manifesto V3 DELTA MICRO62-V206-MD33-0-fix1 - V12.0.0206 Onda 33
+# Tema: fix1 pos-import - reduzir risco de crash no compile e manter correcao dos relatorios.
+#
+# Contexto:
+#   - MICRO62-V206-MD33-0 importou com sucesso, mas o compile VBE travou e
+#     fechou o Excel no ambiente do operador.
+#   - Este fix1 substitui o trecho novo por um padrao ja estabilizado no
+#     projeto: o menu cria o formulario e passa a instancia diretamente para
+#     o preenchimento, como PreenchimentoCRServico ja faz.
+#
+# Mudancas:
+#   AAU-Preencher.bas:
+#     - PreenchimentoRelatorioOSEmpresa aceita Optional frmJaAberto As Object.
+#     - PreenchimentoRel_EmpXServ aceita Optional frmJaAberto As Object.
+#     - Quando frmJaAberto e informado, o ListBox e localizado nessa instancia.
+#   AAM-Menu_Principal.frm:
+#     - Btn_Rel_OS_Empresa_Click chama PreenchimentoRelatorioOSEmpresa(frm).
+#     - Rel_EmpXServ_Click chama PreenchimentoRel_EmpXServ(frm).
+#     - Removido do trecho novo o loop de descarga por VBA.UserForms.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "MICRO62-V206-MD33-0-fix1", "ONDA33.MD33.0-fix1-compile-crash"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=1 | err=0 | skip=0.
+#   - Compile manual passa limpo.
+#   - TV2_RunSmoke passa sem alterar contadores RVS.
+#   - ASS_REL_OS_EMP_LISTA confirma Rel_OSEmpresa preenchido.
+#   - ASS_REL_EMP_SERV_LISTA confirma Rel_Emp_Serv preenchido.
+#
+# Se o compile ainda fechar o Excel:
+#   1. Nao salve o workbook.
+#   2. Restaure primeiro o backup V3 impresso pelo proprio import fix1.
+#   3. Se o fix1 nao chegar a criar novo backup, restaure a partir de:
+#      \\Mac\Home\Projetos\Credenciamento\backups\vba\20260524_145103-V3-FULL
+#   4. Reabrir a planilha e avisar o resultado antes de nova tentativa.
+#
+# GRUPO_DELTA_MICRO62_V206_MD33_0_FIX1_COMPILE_CRASH
+M|001-modulo/AAU-Preencher.bas
+F|002-formularios/AAM-Menu_Principal.frm

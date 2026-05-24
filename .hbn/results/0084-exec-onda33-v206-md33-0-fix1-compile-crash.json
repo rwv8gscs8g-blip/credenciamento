@@ -1,0 +1,78 @@
+{
+  "execution_id": "0084-exec-onda33-v206-md33-0-fix1-compile-crash",
+  "agent_id": "codex",
+  "readback_id": "0084-onda33-v206-md33-0-fix1-compile-crash",
+  "action": "Estabilizar MICRO62-V206-MD33-0 apos compile crash reportado pelo operador",
+  "outcome": "executed_with_risk",
+  "human_status": "pending",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "base_release": "V12.0.0205",
+    "target_version": "V12.0.0206"
+  },
+  "operator_report": {
+    "previous_delta": "MICRO62-V206-MD33-0",
+    "previous_import_result": "M=0 | F=1 | err=0 | skip=0",
+    "backup_created": "\\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260524_145103-V3-FULL",
+    "failure": "Compile VBE ficou preso em Compilando... e o Excel fechou; ao reabrir, nova tentativa repetiu a falha."
+  },
+  "changes": [
+    {
+      "file": "src/vba/Menu_Principal.frm",
+      "summary": "Remove varredura de VBA.UserForms nos dois handlers e passa a instancia criada diretamente para os preenchimentos."
+    },
+    {
+      "file": "src/vba/Preencher.bas",
+      "summary": "PreenchimentoRelatorioOSEmpresa e PreenchimentoRel_EmpXServ aceitam parametro opcional frmJaAberto para popular a instancia exibida."
+    },
+    {
+      "file": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO62-V206-MD33-0-fix1.txt",
+      "summary": "Manifesto local ignorado pelo git, necessario para o Importador V3 no workbook."
+    },
+    {
+      "file": "auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/04_MANIFESTO_MICRO62_FIX1.txt",
+      "summary": "Copia auditavel do manifesto para GitHub e passagem de bastao."
+    }
+  ],
+  "manifest": {
+    "delta": "MICRO62-V206-MD33-0-fix1",
+    "build_label": "ONDA33.MD33.0-fix1-compile-crash",
+    "items": [
+      "M|001-modulo/AAU-Preencher.bas",
+      "F|002-formularios/AAM-Menu_Principal.frm"
+    ],
+    "expected_import_result": "M=1 | F=1 | err=0 | skip=0"
+  },
+  "validations_local": [
+    "Sync src/vba -> local-ai/vba_import executado com publicar_vba_import_v2.sh --apply",
+    "G7/G8 verificados por publicar_vba_import_v2.sh --check",
+    "Hash src/vba/Menu_Principal.frm igual ao espelho local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "Hash src/vba/Preencher.bas igual ao espelho local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "Diff vazio nos servicos blindados e em doc/",
+    "JSON HBN valido",
+    "verify_release_consistency.sh executado"
+  ],
+  "human_gate_pending": [
+    "ImportarPacoteV3_Delta \"MICRO62-V206-MD33-0-fix1\", \"ONDA33.MD33.0-fix1-compile-crash\"",
+    "Depurar > Compilar VBAProject",
+    "TV2_RunSmoke",
+    "ASS_REL_OS_EMP_LISTA",
+    "ASS_REL_EMP_SERV_LISTA"
+  ],
+  "blocked_until_human_gate": [
+    "Onda 34",
+    "motor PDF",
+    "integracao PDF em Pre-OS, OS, Avaliacao e Relatorios"
+  ],
+  "constraints_observed": [
+    "RN-01 a RN-17 nao alteradas",
+    "Contadores RVS nao alterados",
+    "Teste PDF nao incluido nas seis baterias RVS",
+    "doc/ nao movido nem reorganizado",
+    "Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas e Svc_PreOS.bas nao alterados",
+    "Nenhum simbolo interno VBA renomeado"
+  ],
+  "created_at": "2026-05-24T15:16:00-03:00"
+}
