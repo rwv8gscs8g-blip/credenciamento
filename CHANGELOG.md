@@ -3,6 +3,22 @@
 Este projeto adota o espírito do Keep a Changelog. As mudanças aqui registradas
 tratam apenas da linha pública oficial.
 
+## [v12.0.0206] — em planejamento
+
+### Adicionado
+
+- **Onda 37** — reconciliação V5 vs `src/vba/` com manifesto SHA-256 e matriz
+  de classificação em
+  `auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/`, sem tocar código
+  VBA nem pacote `local-ai/vba_import/`.
+
+### Governança
+
+- `Emergencia_CNAE.bas` ficou classificado como `precisa_decisao_humana` antes
+  de qualquer remoção, reincorporação ou importação futura.
+- `Importador_V2.bas` ficou classificado como `obsoleto_no_repo`, sem remoção
+  nesta onda.
+
 ## [v12.0.0205] — 2026-05-21
 
 > Release oficial V205. Build validado:

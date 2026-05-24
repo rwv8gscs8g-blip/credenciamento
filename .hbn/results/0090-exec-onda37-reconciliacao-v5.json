@@ -1,0 +1,114 @@
+{
+  "execution_id": "0090-exec-onda37-reconciliacao-v5",
+  "agent_id": "codex",
+  "readback_id": "0090-onda37-reconciliacao-v5",
+  "action": "Executar reconciliacao V5 vs src/vba produzindo manifesto SHA-256 e matriz de classificacao, sem alterar VBA funcional.",
+  "outcome": "executed_with_human_decision_pending",
+  "human_status": "confirmed",
+  "hearback_source": "Chat de 2026-05-24: Mauricio confirmou readback 0090 e informou aprovacao de Opus (audit) + Mauricio (hearback).",
+  "environment": {
+    "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "target_version": "V12.0.0206",
+    "worktree": "/Users/macbookpro/Projetos/Credenciamento"
+  },
+  "inputs": {
+    "src_vba": {
+      "path": "src/vba/",
+      "file_count": 66
+    },
+    "export_v5": {
+      "path": "local-ai/incoming/V206_ANCHOR_V5_20260524/",
+      "file_count": 64
+    }
+  },
+  "outputs": [
+    {
+      "file": "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/manifest.sha256.csv",
+      "sha256": "5b4db9a3839dac6fe90d576e16954c067780dd2f84ec0437e6509c6a6c8b7cdf",
+      "summary": "CSV com path_src_vba, sha256_src, path_export_v5, sha256_v5 e classe para 66 arquivos."
+    },
+    {
+      "file": "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/classificacao.md",
+      "sha256": "49fcbc156b3b7003360c5549ee840487b0d1c293e13a62c09b41f150b0ac49aa",
+      "summary": "Matriz humana com seis categorias e decisao por arquivo."
+    },
+    {
+      "file": "auditoria/03_ondas/onda_37_reconciliacao_v5/37_TECNICO.md",
+      "sha256": "165bfb61627c9c39746828987e30998293a9c5672623c748bd3057c2490f7491",
+      "summary": "Documento tecnico curto da Onda 37."
+    }
+  ],
+  "classification_counts": {
+    "igual": 8,
+    "drift_export_benigno": 28,
+    "diferenca_funcional": 28,
+    "ausente_no_workbook": 0,
+    "obsoleto_no_repo": 1,
+    "precisa_decisao_humana": 1
+  },
+  "missing_from_export_v5": [
+    {
+      "file": "Emergencia_CNAE.bas",
+      "classification": "precisa_decisao_humana"
+    },
+    {
+      "file": "Importador_V2.bas",
+      "classification": "obsoleto_no_repo"
+    }
+  ],
+  "metadata_drift_detected": [
+    "Altera_Entidade.frm/.frx estavam citados como ausentes no handoff anterior, mas existem no export V5 atual."
+  ],
+  "human_decisions_required": [
+    {
+      "marker": "🟡 HBN NEEDS HUMAN DECISION",
+      "file": "src/vba/Emergencia_CNAE.bas",
+      "question": "Manter fora da V206 e abrir decisao especifica de arquivamento/remocao/reincorporacao, ou orientar outra acao?",
+      "recommended_option": "Manter fora do workbook V5 e fora de local-ai/vba_import/ nesta V206, sem apagar do repo agora; abrir decisao especifica antes de qualquer remocao ou reincorporacao."
+    }
+  ],
+  "validation": {
+    "gates": [
+      {
+        "gate": "manifest.sha256.csv produzido e tem linha por arquivo",
+        "status": "pass",
+        "evidence_ref": "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/manifest.sha256.csv"
+      },
+      {
+        "gate": "classificacao.md produzido com decisao por arquivo",
+        "status": "pass",
+        "evidence_ref": "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/classificacao.md"
+      },
+      {
+        "gate": "nenhum diff em src/vba/ ou local-ai/vba_import/",
+        "status": "pass",
+        "evidence_ref": "git status e staged scope antes do commit"
+      },
+      {
+        "gate": "arquivos de decisao humana listados com opcao recomendada",
+        "status": "pass",
+        "evidence_ref": "este ERP + classificacao.md"
+      },
+      {
+        "gate": "audit-post formal",
+        "status": "skipped",
+        "evidence_ref": "nao aplicado: onda documental sem alteracao de codigo; usuario informou aprovacao de Opus audit para retomada"
+      }
+    ],
+    "code_touched": false,
+    "vba_import_touched": false,
+    "incoming_touched": false,
+    "workbook_touched": false
+  },
+  "scope_check": {
+    "files_allowed_source": ".hbn/readbacks/0090-onda37-reconciliacao-v5.json",
+    "files_outside_scope": [],
+    "forbidden_paths_touched": []
+  },
+  "rollback": [
+    "Reverter o commit da Onda 37 remove apenas evidencia, ERP, relay e changelog desta reconciliacao.",
+    "Confirmar por git diff --name-only que src/vba/, local-ai/vba_import/ e local-ai/incoming/ continuam sem alteracao."
+  ],
+  "created_at": "2026-05-24T19:56:01-03:00"
+}

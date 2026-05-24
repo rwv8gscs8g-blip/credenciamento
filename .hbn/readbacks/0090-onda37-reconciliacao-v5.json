@@ -1,0 +1,138 @@
+{
+  "readback_id": "0090-onda37-reconciliacao-v5",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0089-onda36-cura-protocolo-opus",
+  "intent": {
+    "objective": "Reconciliar o export bruto V5 em local-ai/incoming/V206_ANCHOR_V5_20260524/ contra src/vba/ e produzir manifesto SHA-256 mais matriz de classificacao versionados, sem alterar nenhum arquivo VBA funcional.",
+    "non_goals": [
+      "tocar src/vba/*.bas, src/vba/*.frm ou src/vba/*.frx",
+      "iniciar MD33-restart",
+      "criar pacote em local-ai/vba_import/",
+      "alterar quaisquer Svc_* ou Mod_Types.bas",
+      "alterar Importador_V3.bas",
+      "alterar RN-01 a RN-17",
+      "alterar workbook V5 ou export bruto em local-ai/incoming/"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/**",
+      "auditoria/03_ondas/onda_37_reconciliacao_v5/**",
+      ".hbn/readbacks/0090-onda37-reconciliacao-v5.json",
+      ".hbn/results/0090-exec-onda37-reconciliacao-v5.json",
+      ".hbn/audits/0090-post.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "obsidian-vault/**",
+      "V12-*/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "*.xlsm"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "src/vba/ intacto",
+    "local-ai/vba_import/ intacto",
+    "local-ai/incoming/ export bruto intacto",
+    "RN-01 a RN-17 inalteradas",
+    "contadores RVS inalterados (171/0+34/0+24/0+76/0+4/0+27/0)",
+    "Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas e Svc_PreOS.bas intactos",
+    "Mod_Types.bas intacto",
+    "Importador_V3.bas intacto",
+    "Workbook V5 nao alterado"
+  ],
+  "expected_inputs": [
+    "local-ai/incoming/V206_ANCHOR_V5_20260524/",
+    "src/vba/"
+  ],
+  "planned_outputs": [
+    "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/manifest.sha256.csv",
+    "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/classificacao.md",
+    "auditoria/03_ondas/onda_37_reconciliacao_v5/37_TECNICO.md",
+    ".hbn/results/0090-exec-onda37-reconciliacao-v5.json"
+  ],
+  "normalization_policy": {
+    "line_endings": "normalizar CRLF/LF antes de calcular hashes comparativos",
+    "trailing_whitespace": "remover trailing whitespace para classificacao textual",
+    "blank_lines": "normalizar linhas vazias consecutivas antes de concluir drift funcional",
+    "binary_files": "hash binario bruto para .frx, sem normalizacao textual"
+  },
+  "risks": [
+    {
+      "risk": "Conclusao errada de drift por diferenca benigna de export VBE, CRLF, espacos finais, linhas vazias ou comentarios gerados pelo ambiente.",
+      "mitigation": "Aplicar politica de normalizacao documentada antes da classificacao textual e separar hash bruto de hash normalizado quando relevante.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Perder evidencia se local-ai/incoming/ for limpo antes da matriz ser versionada.",
+      "mitigation": "Produzir manifest.sha256.csv e classificacao.md como primeiros artefatos da execucao apos hearback, citando paths e hashes para preservar rastreabilidade.",
+      "severity": "high"
+    },
+    {
+      "risk": "Classificar arquivo como obsoleto no repo sem ADR, ERP ou decisao humana que justifique remocao futura.",
+      "mitigation": "Para cada candidato a obsoleto exigir referencia documental existente; sem referencia, marcar como precisa de decisao humana.",
+      "severity": "high"
+    },
+    {
+      "risk": "A matriz induzir overwrite automatico do src/vba pelo export V5.",
+      "mitigation": "Registrar no classificacao.md que src/vba continua fonte versionada da verdade e que local-ai/incoming e apenas evidencia de comparacao.",
+      "severity": "high"
+    },
+    {
+      "risk": "Scope documental ficar estreito demais para ERP, audit-post ou handoff da propria onda.",
+      "mitigation": "Declarar explicitamente readback, ERP, audit-post, relay, CHANGELOG, evidencia e pasta tecnica da Onda 37 no files_allowed.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "manifest.sha256.csv produzido e contem linha por arquivo de src/vba e por correspondente V5 quando existir",
+        "evidence_kind": "csv_hash",
+        "evidence_required_in": "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/manifest.sha256.csv"
+      },
+      {
+        "gate": "classificacao.md produzido com decisao por arquivo nas seis categorias da matriz",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/classificacao.md"
+      },
+      {
+        "gate": "nenhum diff em src/vba/, local-ai/vba_import/, local-ai/incoming/ ou workbook V5",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0090-exec-onda37-reconciliacao-v5.json"
+      },
+      {
+        "gate": "arquivos marcados como precisa de decisao humana listados com opcao recomendada",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0090-exec-onda37-reconciliacao-v5.json"
+      },
+      {
+        "gate": "audit-post registra que a classificacao e coerente antes do fechamento da onda, se o auditor humano solicitar",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/audits/0090-post.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "git revert <commit-da-onda-37> remove o commit documental da reconciliacao mantendo historico auditavel",
+      "se a execucao ainda nao tiver commit, descartar apenas os artefatos permitidos desta onda e reabrir o readback com novo scope",
+      "confirmar por git diff --name-only que src/vba/, local-ai/vba_import/, local-ai/incoming/ e o workbook V5 continuam sem alteracao"
+    ],
+    "anchor_to_restore": "v12.0.0205 + PlanilhaCredenciamento-Homologacao-V5.xlsm"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T19:56:01-03:00"
+}

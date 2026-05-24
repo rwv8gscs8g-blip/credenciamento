@@ -1,20 +1,44 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Mauricio (hearback pendente do readback 0089 — Onda 36 Cura do Protocolo). Após confirmar, bastão volta para Codex iniciar Onda 37 (Reconciliação V5).
+proprietario-bastao: Mauricio (decisao pendente da Onda 37 sobre `Emergencia_CNAE.bas`). Codex concluiu a reconciliacao V5 vs src/vba sem tocar VBA e aguarda hearback antes da proxima onda funcional.
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Mauricio (1) rodar bash scripts/hbn-guards/install.sh, (2) rodar bash scripts/hbn-guards/hbn-guards-runner.sh, (3) confirmar hearback Onda 36, (4) commitar Onda 36, (5) abrir novo chat Codex com auditoria/00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md. Codex fica bloqueado até esses 5 passos estarem feitos.
-ultima-atualizacao: 2026-05-24T21:45:00-0300 (Onda 36 Cura do Protocolo executada por Claude Opus 4.7; guards executáveis + schemas + roadmap 90 dias + plano de arquivamento entregues; aguarda hearback humano)
+proxima-acao: Mauricio decidir o destino de `Emergencia_CNAE.bas` (manter fora da V206 e abrir decisao especifica de arquivamento/remocao/reincorporacao, ou orientar outra acao). Depois disso, Codex pode abrir novo readback para MD33-restart.
+ultima-atualizacao: 2026-05-24T19:56:01-0300 (Onda 37 Reconciliacao V5 executada por Codex; manifest SHA-256 + classificacao produzidos; `Emergencia_CNAE.bas` exige decisao humana)
 ---
 
-## Onda 36 EM HEARBACK — Cura do Protocolo (Claude Opus 4.7)
+## Onda 37 EXECUTADA — Reconciliacao V5 vs src/vba (Codex)
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track (evidencia/auditoria, sem tocar VBA) |
+| Readback | [readbacks/0090-onda37-reconciliacao-v5.json](../readbacks/0090-onda37-reconciliacao-v5.json) |
+| Hearback | confirmed — Mauricio informou aprovacao de Opus (audit) e Mauricio (hearback) no chat de 2026-05-24 |
+| ERP | [results/0090-exec-onda37-reconciliacao-v5.json](../results/0090-exec-onda37-reconciliacao-v5.json) |
+| Evidencia | [manifest.sha256.csv](../../auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/manifest.sha256.csv) |
+| Classificacao | [classificacao.md](../../auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/classificacao.md) |
+| Doc tecnico | [37_TECNICO.md](../../auditoria/03_ondas/onda_37_reconciliacao_v5/37_TECNICO.md) |
+
+### Resultado Onda 37
+
+- `src/vba/`: 66 arquivos analisados.
+- Export V5: 64 arquivos analisados.
+- Classes: `igual=8`, `drift_export_benigno=28`, `diferenca_funcional=28`, `ausente_no_workbook=0`, `obsoleto_no_repo=1`, `precisa_decisao_humana=1`.
+- `Altera_Entidade.frm/.frx` estao presentes no export atual da V5; isso corrige o metadata drift do handoff anterior.
+- `Importador_V2.bas` classificado como `obsoleto_no_repo` com referencia documental de nao reintegracao.
+- `Emergencia_CNAE.bas` classificado como `precisa_decisao_humana`.
+
+🟡 HBN NEEDS HUMAN DECISION: decidir o destino de `Emergencia_CNAE.bas` antes de qualquer onda que mexa em pacote importavel ou remocao de arquivo.
+
+
+## Onda 36 FECHADA — Cura do Protocolo (Claude Opus 4.7)
 
 | Campo | Valor |
 |---|---|
 | Track | safe_track (governança, sem tocar VBA) |
 | Readback | [readbacks/0089-onda36-cura-protocolo-opus.json](../readbacks/0089-onda36-cura-protocolo-opus.json) |
-| Hearback | **pendente** — Mauricio precisa confirmar |
+| Hearback | confirmed — confirmado antes da retomada da Onda 37 |
 | ERP | [results/0089-exec-onda36-cura-protocolo-opus.json](../results/0089-exec-onda36-cura-protocolo-opus.json) |
 | Auditoria-mãe | [auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md](../../auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md) |
 | Devolutiva ao Codex | [auditoria/00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md](../../auditoria/00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md) |
