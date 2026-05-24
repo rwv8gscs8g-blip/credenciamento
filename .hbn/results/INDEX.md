@@ -1,6 +1,6 @@
 ---
 titulo: Results HBN — ERPs vinculados a readbacks
-ultima-atualizacao: 2026-05-23
+ultima-atualizacao: 2026-05-24
 ---
 
 # Results HBN — Credenciamento
@@ -90,3 +90,8 @@ ultima-atualizacao: 2026-05-23
 | 0076 | Onda 29 V205 MD-29.3 freeze e publicação | APROVADO_OPERADOR_FREEZE | `0076-exec-onda29-v205-md29-3-freeze-publicacao.json` | 2026-05-23 |
 | 0077 | Onda 30 V206 planejamento inicial | EXECUTADO_PLANEJAMENTO | `0077-exec-onda30-v206-planejamento-inicial.json` | 2026-05-24 |
 | 0078 | Onda 30 V206 consolidação roadmap e prompt novo chat | EXECUTADO_HANDOFF_NOVO_CHAT | `0078-exec-onda30-v206-consolidacao-roadmap.json` | 2026-05-24 |
+| 0079 | Onda 31 V206 higiene documental e evidências | EXECUTADO_DOCUMENTAL | `0079-exec-onda31-v206-higiene-documental-evidencias.json` | 2026-05-24 |
+| 0080 | Onda 32 V206 prompts auditoria cruzada PDF/UI | EXECUTADO_DOCUMENTAL | `0080-exec-onda32-v206-auditoria-cruzada-pdf-ui.json` | 2026-05-24 |
+| 0081 | Onda 32 V206 consolidação PDF/UI | EXECUTADO_DOCUMENTAL | `0081-exec-onda32-v206-consolidacao-pdf-ui.json` | 2026-05-24 |
+| 0082 | Onda 33 V206 MD-33.0 fix relatórios pré-PDF | EXECUTADO_PENDENTE_GATE_HUMANO | `0082-exec-onda33-v206-md33-0-fix-relatorios-pdf-precondicao.json` | 2026-05-24 |
+| 0083 | P0 raiz canonica V206 | EXECUTADO_PENDENTE_GATE_IMPORTADOR | `0083-exec-raiz-canonica-v206-p0.json` | 2026-05-24 |

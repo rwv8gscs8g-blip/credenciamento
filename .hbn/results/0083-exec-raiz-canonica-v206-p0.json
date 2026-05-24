@@ -1,0 +1,90 @@
+{
+  "execution_id": "0083-exec-raiz-canonica-v206-p0",
+  "agent_id": "codex",
+  "readback_id": "0083-raiz-canonica-v206-p0",
+  "action": "Corrigir P0 de raiz canonica e consolidar a branch V12.0.0206 na pasta do projeto.",
+  "outcome": "executed_pending_human_import_gate",
+  "human_status": "confirmed",
+  "intent_risk_profile": "high",
+  "environment": {
+    "branch": "codex/v12-0-0206-planejamento",
+    "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+    "worktree_removed": "/private/tmp/cred-v205",
+    "version": "V12.0.0206",
+    "base_release": "V12.0.0205",
+    "base_commit": "f24e535",
+    "base_evidence": "VR_20260523_215637",
+    "signature": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "changes": {
+    "implemented": [
+      "Criado backup de resgate em backups/raiz_canonica/20260524_134722/",
+      "Removido worktree temporario /private/tmp/cred-v205",
+      "Pasta canonica alternada para codex/v12-0-0206-planejamento",
+      "Deltas V206 de Onda 31, Onda 32 e Onda 33 reaplicados na pasta canonica",
+      "AGENTS.md passou a exigir raiz canonica absoluta e preflight obrigatorio",
+      "Criada entrada HBN 0012-raiz-canonica-projeto.md",
+      "Readback/ERP 0082 marcados com correcao de raiz canonica",
+      "Criado diagnostico 98 da raiz canonica",
+      "Preparado manifesto MICRO62-V206-MD33-0 na pasta canonica do Importador V3",
+      "Sincronizado espelho local-ai/vba_import via Glasswing G7; App_Release.bas teve apenas normalizacao CRLF sem mudanca de valor"
+    ],
+    "files_changed": [
+      "AGENTS.md",
+      ".hbn/knowledge/0012-raiz-canonica-projeto.md",
+      ".hbn/knowledge/INDEX.md",
+      ".hbn/relay/INDEX.md",
+      ".hbn/readbacks/0082-onda33-v206-md33-0-fix-relatorios-pdf-precondicao.json",
+      ".hbn/results/0082-exec-onda33-v206-md33-0-fix-relatorios-pdf-precondicao.json",
+      ".hbn/readbacks/0083-raiz-canonica-v206-p0.json",
+      ".hbn/results/0083-exec-raiz-canonica-v206-p0.json",
+      "auditoria/00_status/98_DIAGNOSTICO_RAIZ_CANONICA_V206_CODEX.md",
+      "auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/02_PROCEDIMENTO_IMPORT_MICRO62.md",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO62-V206-MD33-0.txt",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "src/vba/App_Release.bas"
+    ],
+    "backup_outputs": [
+      "backups/raiz_canonica/20260524_134722/status-before-canonical.txt",
+      "backups/raiz_canonica/20260524_134722/status-before-tmp.txt",
+      "backups/raiz_canonica/20260524_134722/worktree-list-before.txt",
+      "backups/raiz_canonica/20260524_134722/tmp_v206_rescue/uncommitted.patch",
+      "backups/raiz_canonica/20260524_134722/tmp_v206_rescue/untracked-files.tgz",
+      "backups/raiz_canonica/20260524_134722/pre_switch_collisions/"
+    ],
+    "validation_local": [
+      "pwd = /Users/macbookpro/Projetos/Credenciamento",
+      "git rev-parse --show-toplevel = /Users/macbookpro/Projetos/Credenciamento",
+      "git worktree list sem /private/tmp/cred-v205",
+      "branch canonica = codex/v12-0-0206-planejamento",
+      "manifesto MICRO62-V206-MD33-0 presente em local-ai/vba_import",
+      "hash src/vba/Menu_Principal.frm igual ao espelho AAM-Menu_Principal.frm",
+      "JSON HBN validado",
+      "git -c core.whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol diff --cached --check limpo para arquivos VBA CRLF"
+    ],
+    "human_gate_pending": [
+      "Abrir workbook em \\\\Mac\\Home\\Projetos\\Credenciamento",
+      "Executar ImportarPacoteV3_Status",
+      "Executar ImportarPacoteV3_Delta \"MICRO62-V206-MD33-0\", \"a17c332+ONDA33.MD33.0-fix-relatorios\"",
+      "Compilar no VBE",
+      "Rodar TV2_RunSmoke",
+      "Executar ASS_REL_OS_EMP_LISTA e ASS_REL_EMP_SERV_LISTA"
+    ]
+  },
+  "scope_guards": {
+    "svc_rodizio_touched": false,
+    "svc_avaliacao_touched": false,
+    "svc_os_touched": false,
+    "svc_preos_touched": false,
+    "doc_touched": false,
+    "rvs_counters_changed": false,
+    "rn_01_to_rn_17_changed": false,
+    "pdf_engine_implemented": false,
+    "pdf_test_added_to_rvs": false
+  },
+  "next": [
+    "Operador importa MICRO62-V206-MD33-0 no workbook da pasta canonica",
+    "Apos gate humano verde, abrir Onda 34 para motor PDF central"
+  ],
+  "created_at": "2026-05-24T13:58:00-03:00"
+}

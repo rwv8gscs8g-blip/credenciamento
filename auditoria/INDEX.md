@@ -1,10 +1,11 @@
 ---
 titulo: Indice das Auditorias (pos-Onda 6)
-ultima-atualizacao: 2026-05-21
+ultima-atualizacao: 2026-05-24
 diataxis: reference
 hbn-track: fast_track
+hbn-status: active
 audiencia: ambos
-versao-sistema: V12.0.0205
+versao-sistema: V12.0.0206
 ---
 
 # Indice das Auditorias
@@ -38,6 +39,11 @@ versao-sistema: V12.0.0205
 - [00_status/89_AUDITORIA_ADVERSARIAL_PLANEJAMENTO_V206_GEMINI.md](00_status/89_AUDITORIA_ADVERSARIAL_PLANEJAMENTO_V206_GEMINI.md) — auditoria V206-P2 Gemini/Antigravity
 - [00_status/90_CONSOLIDACAO_ROADMAP_V206_CODEX.md](00_status/90_CONSOLIDACAO_ROADMAP_V206_CODEX.md) — consolidação V206-P3 Codex
 - [00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md](00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md) — prompt de retomada em novo chat Codex
+- [00_status/92_PROMPT_AUDITORIA_PDF_UI_V206_CLAUDE_OPUS.md](00_status/92_PROMPT_AUDITORIA_PDF_UI_V206_CLAUDE_OPUS.md) — prompt para auditoria PDF/UI V206 Claude Opus
+- [00_status/93_PROMPT_AUDITORIA_ADVERSARIAL_PDF_UI_V206_GEMINI.md](00_status/93_PROMPT_AUDITORIA_ADVERSARIAL_PDF_UI_V206_GEMINI.md) — prompt para auditoria adversarial PDF/UI V206 Gemini
+- [00_status/94_PROMPT_CONSOLIDACAO_PDF_UI_V206_CODEX.md](00_status/94_PROMPT_CONSOLIDACAO_PDF_UI_V206_CODEX.md) — prompt de consolidação Codex para PDF/UI V206
+- [00_status/97_CONSOLIDACAO_PDF_UI_V206_CODEX.md](00_status/97_CONSOLIDACAO_PDF_UI_V206_CODEX.md) — consolidação PDF/UI V206 Codex para ondas 32 a 37
+- [00_status/98_DIAGNOSTICO_RAIZ_CANONICA_V206_CODEX.md](00_status/98_DIAGNOSTICO_RAIZ_CANONICA_V206_CODEX.md) — P0 raiz canonica: diagnostico e correcao antes da V206 avancar
 - [00_status/00_SUMARIO_EXECUTIVO.md](00_status/00_SUMARIO_EXECUTIVO.md) — status executivo da linha oficial
 - [00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md](00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md) — checkpoint da V12.0.0203
 - [00_status/24_FECHAMENTO_V12_0203.md](00_status/24_FECHAMENTO_V12_0203.md) — fechamento candidato
@@ -76,11 +82,15 @@ versao-sistema: V12.0.0205
 | 4 | [03_ondas/onda_04_config_strikes/](03_ondas/onda_04_config_strikes/) | config strikes na interface + diag rodizio |
 | 5 | [03_ondas/onda_05_form_deterministico/](03_ondas/onda_05_form_deterministico/) | form deterministico + Limpa_Base robusta |
 | 6 | [03_ondas/onda_06_consolidacao_documental/](03_ondas/onda_06_consolidacao_documental/) | consolidacao documental + integracao HBN/Diataxis/llms.txt/AGENTS.md/Glasswing |
+| 31 | [03_ondas/onda_31_v206_higiene_documental/](03_ondas/onda_31_v206_higiene_documental/) | higiene documental e evidências V206 |
+| 33 | [03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/](03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/) | correção dos relatórios antes do motor PDF |
 
 ## 04_evidencias/ — CSVs e manifestos hashados
 
 - [evidencias/V12.0.0205/INDEX.md](evidencias/V12.0.0205/INDEX.md) — índice canônico de evidências V205
 - [evidencias/V12.0.0205/MANIFEST.md](evidencias/V12.0.0205/MANIFEST.md) — manifesto de evidências V205
+- [evidencias/V12.0.0206/INDEX.md](evidencias/V12.0.0206/INDEX.md) — área canônica de evidências V206
+- [evidencias/V12.0.0206/MANIFEST.md](evidencias/V12.0.0206/MANIFEST.md) — manifesto inicial de evidências V206
 - [04_evidencias/V12.0.0202/MANIFEST.md](04_evidencias/V12.0.0202/MANIFEST.md) — manifesto hashado da release V12.0.0202
 - [04_evidencias/V12.0.0202/V2_VALIDACAO_HUMANA_2026-04-20.md](04_evidencias/V12.0.0202/V2_VALIDACAO_HUMANA_2026-04-20.md)
 - [04_evidencias/V12.0.0203/MANIFEST.md](04_evidencias/V12.0.0203/MANIFEST.md) — manifesto candidato

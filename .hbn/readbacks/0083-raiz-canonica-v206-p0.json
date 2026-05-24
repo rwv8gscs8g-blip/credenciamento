@@ -1,0 +1,64 @@
+{
+  "readback_id": "0083-raiz-canonica-v206-p0",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "origem_hearback": "Operador determinou corrigir a raiz canonica antes de avancar a V12.0.0206; workbook fechado; implementacao autorizada.",
+  "contexto": {
+    "versao": "V12.0.0206",
+    "branch": "codex/v12-0-0206-planejamento",
+    "raiz_canonica": "/Users/macbookpro/Projetos/Credenciamento",
+    "worktree_errado_detectado": "/private/tmp/cred-v205",
+    "workbook_path_reportado": "\\\\Mac\\Home\\Projetos\\Credenciamento",
+    "release_base": "V12.0.0205",
+    "commit_base_estavel": "f24e535",
+    "evidencia_final_v205": "VR_20260523_215637",
+    "assinatura_nao_regressao": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "problema": [
+    "A branch V206 estava ativa em /private/tmp/cred-v205, fora da pasta do projeto.",
+    "A pasta canonica /Users/macbookpro/Projetos/Credenciamento estava em main antigo 9275640.",
+    "O Importador V3 usa ThisWorkbook.Path e portanto procurava manifests em \\\\Mac\\Home\\Projetos\\Credenciamento\\local-ai\\vba_import.",
+    "Backups obrigatorios do workbook tambem ficam abaixo da pasta do projeto, nao no tmp."
+  ],
+  "escopo_autorizado": [
+    "Remover a dependencia operacional de /private/tmp/cred-v205",
+    "Liberar a branch codex/v12-0-0206-planejamento",
+    "Trocar a pasta canonica para a branch V206",
+    "Resgatar e reaplicar na pasta canonica os deltas documentais e de codigo ja aprovados",
+    "Registrar a regra permanente de raiz canonica em AGENTS.md e HBN",
+    "Preparar manifesto importavel do MD-33.0 na pasta canonica"
+  ],
+  "escopo_bloqueado": [
+    "Avancar Onda 34 antes da raiz canonica ficar validada",
+    "Alterar RN-01 a RN-17",
+    "Alterar contadores RVS",
+    "Incluir teste de PDF nas seis baterias do RVS",
+    "Mover ou reorganizar doc/",
+    "Tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+    "Renomear simbolos internos VBA"
+  ],
+  "arquivos_previstos": [
+    "AGENTS.md",
+    ".hbn/knowledge/0012-raiz-canonica-projeto.md",
+    ".hbn/knowledge/INDEX.md",
+    ".hbn/relay/INDEX.md",
+    ".hbn/readbacks/0083-raiz-canonica-v206-p0.json",
+    ".hbn/results/0083-exec-raiz-canonica-v206-p0.json",
+    "auditoria/00_status/98_DIAGNOSTICO_RAIZ_CANONICA_V206_CODEX.md",
+    "auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/02_PROCEDIMENTO_IMPORT_MICRO62.md",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO62-V206-MD33-0.txt",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm"
+  ],
+  "validacoes_planejadas": [
+    "pwd aponta para /Users/macbookpro/Projetos/Credenciamento",
+    "git rev-parse --show-toplevel aponta para /Users/macbookpro/Projetos/Credenciamento",
+    "git status mostra branch codex/v12-0-0206-planejamento na pasta canonica",
+    "git worktree list nao mostra /private/tmp/cred-v205",
+    "manifesto MICRO62-V206-MD33-0 existe na pasta canonica do importador",
+    "hash src/vba/Menu_Principal.frm igual ao espelho local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "JSON HBN 0082 e 0083 validos",
+    "git diff --check limpo"
+  ],
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T13:55:00-03:00"
+}

@@ -1,0 +1,59 @@
+{
+  "readback_id": "0082-onda33-v206-md33-0-fix-relatorios-pdf-precondicao",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "origem_hearback": "Operador aprovou a consolidacao PDF/UI V206 e autorizou implementar a proxima etapa.",
+  "contexto": {
+    "versao": "V12.0.0206",
+    "branch": "codex/v12-0-0206-planejamento",
+    "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+    "worktree_original_corrigido": "/private/tmp/cred-v205",
+    "correcao_raiz_canonica": "P0 registrado em 0083; deltas reaplicados na raiz canonica antes de importacao pelo operador",
+    "release_base": "V12.0.0205",
+    "commit_base_estavel": "f24e535",
+    "evidencia_final_v205": "VR_20260523_215637",
+    "assinatura_nao_regressao": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "escopo_autorizado": [
+    "Corrigir o bug de instancia fantasma em Rel_OSEmpresa",
+    "Corrigir o bug de instancia fantasma em Rel_Emp_Serv",
+    "Remover preaquecimento redundante de PreenchimentoRelatorioOSEmpresa no UserForm_Initialize se confirmado como origem de instancia fantasma",
+    "Criar documentacao tecnica da Onda 33 com roteiros de teste assistido",
+    "Atualizar relay, indices e ERP HBN",
+    "Gerar espelho local-ai/vba_import do arquivo tocado se a pasta de espelho estiver disponivel ou puder ser criada localmente"
+  ],
+  "escopo_bloqueado": [
+    "Implementar motor PDF nesta etapa",
+    "Alterar RN-01 a RN-17",
+    "Alterar contadores RVS",
+    "Incluir teste de PDF nas seis baterias do RVS",
+    "Mover ou reorganizar doc/",
+    "Tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+    "Renomear simbolos internos VBA",
+    "Alterar Preencher.bas salvo necessidade comprovada durante o patch"
+  ],
+  "arquivos_previstos": [
+    "src/vba/Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-MICRO62-V206-MD33-0.txt",
+    "auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/01_TECNICO_ONDA33_FIX_RELATORIOS.md",
+    "auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/02_PROCEDIMENTO_IMPORT_MICRO62.md",
+    ".hbn/results/0082-exec-onda33-v206-md33-0-fix-relatorios-pdf-precondicao.json"
+  ],
+  "testes_planejados": [
+    "Inspecao estatica: UserForms.Add deve ocorrer antes de PreenchimentoRelatorioOSEmpresa",
+    "Inspecao estatica: UserForms.Add deve ocorrer antes de PreenchimentoRel_EmpXServ",
+    "ASS_REL_OS_EMP_LISTA: abrir Relatorio de OS por Empresa pela interface e confirmar lista preenchida",
+    "ASS_REL_EMP_SERV_LISTA: abrir Relatorio de Empresas por Servico pela interface e confirmar lista preenchida",
+    "Compile VBE e TV2_RunSmoke pelo operador no workbook importado"
+  ],
+  "gate_local": [
+    "git diff --check",
+    "validacao JSON HBN",
+    "link scan dos documentos tocados",
+    "confirmacao de ausencia de mudanca em Svc_*.bas, RN, doc/ e contadores RVS",
+    "comparacao de hash entre src/vba/Menu_Principal.frm e espelho importavel quando espelho for criado"
+  ],
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T13:10:00-03:00"
+}

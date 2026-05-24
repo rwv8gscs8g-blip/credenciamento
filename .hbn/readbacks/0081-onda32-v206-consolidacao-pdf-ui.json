@@ -1,0 +1,69 @@
+{
+  "readback_id": "0081-onda32-v206-consolidacao-pdf-ui",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "origem_hearback": "Operador entregou os pareceres 95 Claude Opus e 96 Gemini/Antigravity sobre PDF/UI V206 e autorizou a consolidacao Codex pelo prompt 94, sem implementar codigo neste passo.",
+  "contexto": {
+    "versao": "V12.0.0206",
+    "branch": "codex/v12-0-0206-planejamento",
+    "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+    "worktree_original_corrigido": "/private/tmp/cred-v205",
+    "correcao_raiz_canonica": "P0 registrado em 0083; deltas reaplicados na raiz canonica",
+    "release_base": "V12.0.0205",
+    "commit_base_estavel": "f24e535",
+    "evidencia_final_v205": "VR_20260523_215637",
+    "assinatura_nao_regressao": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "entradas_lidas": [
+    "/Users/macbookpro/Projetos/Credenciamento/auditoria/00_status/95_AUDITORIA_PDF_UI_V206_CLAUDE_OPUS.md",
+    "/Users/macbookpro/Projetos/Credenciamento/auditoria/00_status/96_AUDITORIA_ADVERSARIAL_PDF_UI_V206_GEMINI.md",
+    "auditoria/00_status/92_PROMPT_AUDITORIA_PDF_UI_V206_CLAUDE_OPUS.md",
+    "auditoria/00_status/93_PROMPT_AUDITORIA_ADVERSARIAL_PDF_UI_V206_GEMINI.md",
+    "auditoria/00_status/94_PROMPT_CONSOLIDACAO_PDF_UI_V206_CODEX.md",
+    "auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md",
+    "auditoria/03_ondas/onda_31_v206_higiene_documental/01_TECNICO_ONDA31_HIGIENE_DOCUMENTAL.md",
+    "docs/reference/testes/ESPEC_PDF_AUTOMATICO_V205.md",
+    "auditoria/00_status/35_SPEC_DT5_PDFs_V12_0204.md",
+    "auditoria/02_planos/25_PLANO_HARDENING_POS_0203.md",
+    "AGENTS.md",
+    ".hbn/relay/INDEX.md"
+  ],
+  "decisoes_confirmadas": [
+    "Estrutura aprovada: Documentos_Gerados/Pre-OS, OS, Avaliacoes, Relatorios, Validacao e Testes_UI/<RUN_ID>",
+    "Nome aprovado: <TIPO>_<NUMERO_DOCUMENTO>_CNPJ_<CNPJ_LIMPO>_<AAAAMMDD_HHNNSS>.pdf",
+    "Fix dos dois relatorios deve preceder o motor PDF",
+    "Motor PDF deve ficar em novo Util_PDF.bas quando chegar a etapa de codigo",
+    "Testes UI/PDF devem ser isolados do RVS"
+  ],
+  "escopo_autorizado": [
+    "Criar auditoria/00_status/97_CONSOLIDACAO_PDF_UI_V206_CODEX.md",
+    "Atualizar indices e relay para apontar a consolidacao e a proxima acao",
+    "Registrar ERP da consolidacao documental"
+  ],
+  "escopo_bloqueado": [
+    "Implementar codigo VBA neste passo",
+    "Alterar RN-01 a RN-17",
+    "Alterar contadores RVS",
+    "Incluir teste de PDF nas seis baterias do RVS",
+    "Mover ou reorganizar doc/",
+    "Tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+    "Renomear simbolos internos VBA",
+    "Tocar local-ai/vba_import/ neste passo"
+  ],
+  "acao_planejada": [
+    "Consolidar veredito, decisoes finais e arquitetura PDF/UI V206",
+    "Resolver divergencias entre raiz ao lado da planilha e raiz fora do git",
+    "Definir contrato de nomes, pastas, validacao, fallback e log",
+    "Definir microdeltas e gates das Ondas 32 a 37",
+    "Registrar proximo readback para Onda 33 MD-33.0 antes de qualquer codigo"
+  ],
+  "gate_local": [
+    "frontmatter do documento 97",
+    "link scan dos documentos tocados",
+    "git diff --check",
+    "validacao JSON HBN",
+    "confirmacao de ausencia de mudanca em src/vba/, local-ai/vba_import/ e doc/"
+  ],
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T13:00:00-03:00"
+}

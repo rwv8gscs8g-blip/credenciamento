@@ -16,9 +16,45 @@
 | Versão oficial vigente | V12.0.0205 |
 | Próxima linha planejada | V12.0.0206 |
 | Build importado no workbook validado | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
-| Branch ativa | `main` após tag `v12.0.0205` |
+| Branch V206 ativa | `codex/v12-0-0206-planejamento` |
+| Raiz canônica local | `/Users/macbookpro/Projetos/Credenciamento` |
 | Licença | TPGL v1.1 (auto-conversão para Apache 2.0 em 4 anos) |
 | Protocolo de governança | [HBN — Human Brain Net](https://usehbn.org) |
+
+## Raiz canônica obrigatória
+
+Toda IA deve escrever artefatos do projeto somente em
+`/Users/macbookpro/Projetos/Credenciamento`. Isso inclui codigo, auditoria,
+HBN, evidencias, pacotes de importacao, backups operacionais e documentos de
+handoff. `/private/tmp`, downloads, areas de IDE e outros worktrees podem ser
+usados apenas como rascunho descartavel; nenhum entregavel pode permanecer
+nesses locais.
+
+Antes de ler ou editar arquivos, execute e valide:
+
+```bash
+pwd
+git rev-parse --show-toplevel
+git status --short --branch
+git worktree list
+```
+
+O valor de `pwd` e de `git rev-parse --show-toplevel` deve ser exatamente
+`/Users/macbookpro/Projetos/Credenciamento`. Se qualquer comando apontar para
+`/private/tmp` ou outra raiz, a IA deve parar, registrar P0 em HBN e pedir
+hearback humano. Readbacks e ERPs devem registrar a raiz canônica; um readback
+com `worktree` fora dela e invalido para nova execucao.
+
+Quando a tarefa envolver importacao no workbook, conferir tambem no VBE:
+
+```vb
+?ThisWorkbook.Path
+ImportarPacoteV3_Status
+```
+
+O caminho esperado do workbook e `\\Mac\Home\Projetos\Credenciamento`. O
+manifesto importavel deve existir em
+`\\Mac\Home\Projetos\Credenciamento\local-ai\vba_import\`.
 
 ## Antes de tocar qualquer coisa
 
@@ -30,11 +66,12 @@ Leia, em ordem:
 4. [`.hbn/knowledge/0003-glasswing-style-preventive-security.md`](.hbn/knowledge/0003-glasswing-style-preventive-security.md) — camada de segurança preventiva
 5. [`.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md`](.hbn/knowledge/0010-funcionalidade-nova-exige-teste.md) — regra permanente: funcionalidade nova exige teste correspondente
 6. [`.hbn/knowledge/0011-higiene-documental-recorrente.md`](.hbn/knowledge/0011-higiene-documental-recorrente.md) — regra permanente: higiene documental antes de passar de fase
-7. [`obsidian-vault/releases/V12.0.0205.md`](obsidian-vault/releases/V12.0.0205.md) — release oficial vigente
-8. [`docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md`](docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md) — regras de negócio públicas V205
-9. [`docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md`](docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md) — guia humano por interface
-10. [`auditoria/evidencias/V12.0.0205/INDEX.md`](auditoria/evidencias/V12.0.0205/INDEX.md) — evidências públicas V205
-11. [`usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`](usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md) — lições históricas sobre VBA
+7. [`.hbn/knowledge/0012-raiz-canonica-projeto.md`](.hbn/knowledge/0012-raiz-canonica-projeto.md) — regra permanente de raiz canônica
+8. [`obsidian-vault/releases/V12.0.0205.md`](obsidian-vault/releases/V12.0.0205.md) — release oficial vigente
+9. [`docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md`](docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md) — regras de negócio públicas V205
+10. [`docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md`](docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md) — guia humano por interface
+11. [`auditoria/evidencias/V12.0.0205/INDEX.md`](auditoria/evidencias/V12.0.0205/INDEX.md) — evidências públicas V205
+12. [`usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`](usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md) — lições históricas sobre VBA
 
 ## Working pattern
 

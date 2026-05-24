@@ -1,0 +1,62 @@
+{
+  "readback_id": "0079-onda31-v206-higiene-documental-evidencias",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "origem_hearback": "Operador aprovou o roadmap consolidado V12.0.0206 e autorizou iniciar a Onda 31 no chat novo.",
+  "contexto": {
+    "versao": "V12.0.0206",
+    "release_base_congelada": "V12.0.0205",
+    "tag_base": "v12.0.0205",
+    "commit_base_estavel": "f24e535",
+    "branch": "codex/v12-0-0206-planejamento",
+    "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+    "worktree_original_corrigido": "/private/tmp/cred-v205",
+    "correcao_raiz_canonica": "P0 registrado em 0083; deltas reaplicados na raiz canonica",
+    "evidencia_final_v205": "VR_20260523_215637",
+    "assinatura_nao_regressao": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "escopo_autorizado": [
+    "Higiene documental e evidencias",
+    "Link scan dos documentos canonicos",
+    "Frontmatter de documentos versionados quando relevante",
+    "Decisao documental sobre o papel de auditoria/evidencias/V12.0.0205/MANIFESTO.csv",
+    "Registro tecnico da Onda 31 sem procedimento de importacao VBA"
+  ],
+  "escopo_bloqueado": [
+    "Alterar RN-01 a RN-17",
+    "Alterar contadores do RVS",
+    "Incluir teste de PDF nas seis baterias do RVS",
+    "Mover ou reorganizar doc/",
+    "Tocar src/vba/ ou local-ai/vba_import/",
+    "Tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+    "Renomear simbolos internos VBA",
+    "Criar mudanca funcional sem teste correspondente"
+  ],
+  "acao_planejada": [
+    "Auditar frontmatter dos documentos V206/V205 tocados pela onda",
+    "Auditar links relativos nos documentos canonicos V206/V205",
+    "Auditar manifesto e estrutura de evidencias V12.0.0205",
+    "Documentar papel canonico de MANIFESTO.csv sem alterar evidencias brutas",
+    "Atualizar relay/roadmap/status apenas se necessario para refletir o estado real",
+    "Criar ERP final com validacoes locais executadas"
+  ],
+  "gate_local": [
+    "git diff --check",
+    "validacao JSON dos artefatos HBN criados",
+    "link scan documental",
+    "frontmatter scan documental",
+    "confirmacao de ausencia de mudanca em src/vba/ e local-ai/vba_import/"
+  ],
+  "glasswing_checks": {
+    "G1_macro_nao_confiavel": "nao_aplicavel",
+    "G2_config_validada": "nao_aplicavel",
+    "G3_formulas_privilegiadas": "nao_aplicavel",
+    "G4_audit_log_append_only": "nao_aplicavel",
+    "G5_claims_proporcionais": "ok",
+    "G6_codigo_no_chat": "ok",
+    "G7_vba_import_sincronizado": "nao_aplicavel",
+    "G8_public_type_isolado": "nao_aplicavel"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T23:45:00-03:00"
+}

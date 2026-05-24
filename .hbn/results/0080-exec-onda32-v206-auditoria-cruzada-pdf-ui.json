@@ -1,0 +1,54 @@
+{
+  "execution_id": "0080-exec-onda32-v206-auditoria-cruzada-pdf-ui",
+  "agent_id": "codex",
+  "readback_id": "0080-onda32-v206-auditoria-cruzada-pdf-ui",
+  "action": "Preparar prompts completos para auditoria cruzada rapida PDF/UI V206 com Claude Opus, Gemini e consolidacao Codex, registrando a estrutura de pastas/nomeacao aprovada e orientacoes para testes por simulacao de cliques.",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "environment": {
+    "branch": "codex/v12-0-0206-planejamento",
+    "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+    "worktree_original_corrigido": "/private/tmp/cred-v205",
+    "correcao_raiz_canonica": "P0 registrado em 0083; deltas reaplicados na raiz canonica",
+    "version": "V12.0.0206",
+    "base_release": "V12.0.0205",
+    "base_evidence": "VR_20260523_215637",
+    "signature": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "changes": {
+    "implemented": [
+      "Criado prompt 92 para auditoria PDF/UI V206 Claude Opus",
+      "Criado prompt 93 para auditoria adversarial PDF/UI V206 Gemini",
+      "Criado prompt 94 para consolidacao Codex dos pareceres",
+      "Roadmap consolidado V206 atualizado para cadencia 32-37 focada em PDF/UI, relatorios, bateria isolada e RC/freeze",
+      "auditoria/INDEX.md atualizado com prompts 92/93/94",
+      "relay atualizado para proxima acao de encaminhar auditorias cruzadas"
+    ],
+    "output_documents_expected": [
+      "auditoria/00_status/95_AUDITORIA_PDF_UI_V206_CLAUDE_OPUS.md",
+      "auditoria/00_status/96_AUDITORIA_ADVERSARIAL_PDF_UI_V206_GEMINI.md",
+      "auditoria/00_status/97_CONSOLIDACAO_PDF_UI_V206_CODEX.md"
+    ],
+    "validation_local": [
+      "frontmatter dos prompts 92/93/94: OK",
+      "link scan dos documentos tocados: BROKEN_LINKS 0",
+      "python3 -m json.tool .hbn/readbacks/0080-onda32-v206-auditoria-cruzada-pdf-ui.json",
+      "git diff --check: sem problemas",
+      "git diff --name-only -- src/vba local-ai/vba_import doc: vazio"
+    ]
+  },
+  "scope_guards": {
+    "src_vba_touched": false,
+    "local_ai_vba_import_touched": false,
+    "doc_touched": false,
+    "rvs_counters_changed": false,
+    "rn_01_to_rn_17_changed": false,
+    "pdf_test_added_to_rvs": false
+  },
+  "next": [
+    "Encaminhar prompt 92 para Claude Opus e prompt 93 para Gemini/Antigravity",
+    "Apos receber 95 e 96, executar prompt 94 para consolidar especificacao e microdeltas antes de codificar"
+  ],
+  "created_at": "2026-05-24T20:45:00-03:00"
+}

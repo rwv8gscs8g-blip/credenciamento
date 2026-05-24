@@ -1,6 +1,6 @@
 ---
 titulo: Knowledge Base do Credenciamento (HBN)
-ultima-atualizacao: 2026-05-06
+ultima-atualizacao: 2026-05-24
 ---
 
 # Knowledge Base do Credenciamento (HBN)
@@ -29,6 +29,7 @@ ultima-atualizacao: 2026-05-06
 | Padronizacao obrigatoria de encoding, line endings e EOF | [0006-padronizacao-encoding-line-endings-frm.md](0006-padronizacao-encoding-line-endings-frm.md) | Antes de salvar/comitar qualquer `.frm` ou `.bas`. Root cause comprovada do bug 0005. |
 | Funcionalidade nova exige teste correspondente | [0010-funcionalidade-nova-exige-teste.md](0010-funcionalidade-nova-exige-teste.md) | Antes de propor ou implementar qualquer nova funcionalidade, regra de negocio, fluxo de UI ou comportamento de servico |
 | Higiene documental recorrente | [0011-higiene-documental-recorrente.md](0011-higiene-documental-recorrente.md) | Antes de passar de microdelta, onda, release ou bastao |
+| Raiz canonica obrigatoria do projeto | [0012-raiz-canonica-projeto.md](0012-raiz-canonica-projeto.md) | Antes de qualquer leitura, escrita, importacao, handoff ou uso de worktree |
 
 ## Por decisao (decisoes que afetam comportamento)
 

@@ -1,0 +1,78 @@
+{
+  "execution_id": "0082-exec-onda33-v206-md33-0-fix-relatorios-pdf-precondicao",
+  "agent_id": "codex",
+  "readback_id": "0082-onda33-v206-md33-0-fix-relatorios-pdf-precondicao",
+  "action": "Corrigir a criacao de instancias dos relatorios Rel_OSEmpresa e Rel_Emp_Serv antes do motor PDF da V12.0.0206.",
+  "outcome": "executed_pending_human_gate",
+  "human_status": "confirmed",
+  "intent_risk_profile": "medium",
+  "environment": {
+    "branch": "codex/v12-0-0206-planejamento",
+    "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+    "worktree_original_corrigido": "/private/tmp/cred-v205",
+    "correcao_raiz_canonica": "P0 registrado em 0083; worktree temporario removido e deltas reaplicados na pasta canonica antes de importacao pelo operador",
+    "version": "V12.0.0206",
+    "base_release": "V12.0.0205",
+    "base_commit": "f24e535",
+    "base_evidence": "VR_20260523_215637",
+    "signature": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "changes": {
+    "implemented": [
+      "Btn_Rel_OS_Empresa_Click agora cria Rel_OSEmpresa antes de chamar PreenchimentoRelatorioOSEmpresa",
+      "Rel_EmpXServ_Click agora cria Rel_Emp_Serv antes de chamar PreenchimentoRel_EmpXServ",
+      "Os dois handlers descarregam instancias antigas do mesmo formulario antes de criar a instancia exibida",
+      "Os dois handlers validam ListCount antes de exibir o formulario e mostram mensagem informativa se nao houver dados",
+      "Removido preaquecimento de PreenchimentoRelatorioOSEmpresa no UserForm_Initialize do Menu_Principal",
+      "Criada documentacao tecnica da Onda 33 com roteiros ASS_REL_OS_EMP_LISTA e ASS_REL_EMP_SERV_LISTA",
+      "Gerado espelho local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm sincronizado por hash"
+    ],
+    "files_changed": [
+      "src/vba/Menu_Principal.frm",
+      "auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/01_TECNICO_ONDA33_FIX_RELATORIOS.md",
+      "auditoria/03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/02_PROCEDIMENTO_IMPORT_MICRO62.md",
+      "auditoria/INDEX.md",
+      "auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md",
+      ".hbn/relay/INDEX.md",
+      ".hbn/results/INDEX.md",
+      ".hbn/readbacks/0082-onda33-v206-md33-0-fix-relatorios-pdf-precondicao.json",
+      ".hbn/results/0082-exec-onda33-v206-md33-0-fix-relatorios-pdf-precondicao.json"
+    ],
+    "ignored_local_outputs": [
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm"
+    ],
+    "validation_local": [
+      "Ordem estatica: UserForms.Add antes de PreenchimentoRelatorioOSEmpresa = OK",
+      "Ordem estatica: UserForms.Add antes de PreenchimentoRel_EmpXServ = OK",
+      "UserForm_Initialize sem PreenchimentoRelatorioOSEmpresa = OK",
+      "Hash src/vba/Menu_Principal.frm igual ao espelho AAM-Menu_Principal.frm = OK",
+      "git diff --check = OK",
+      "link scan documentos tocados = BROKEN_LINKS 0",
+      "json HBN 0082 valido",
+      "Svc_*.bas, RN, doc/ e contadores RVS nao alterados"
+    ],
+    "human_gate_pending": [
+      "Executar ImportarPacoteV3_Delta \"MICRO62-V206-MD33-0\", \"a17c332+ONDA33.MD33.0-fix-relatorios\" no workbook da pasta canonica",
+      "Compile VBE",
+      "Rodar TV2_RunSmoke",
+      "Executar ASS_REL_OS_EMP_LISTA",
+      "Executar ASS_REL_EMP_SERV_LISTA"
+    ]
+  },
+  "scope_guards": {
+    "svc_rodizio_touched": false,
+    "svc_avaliacao_touched": false,
+    "svc_os_touched": false,
+    "svc_preos_touched": false,
+    "doc_touched": false,
+    "rvs_counters_changed": false,
+    "rn_01_to_rn_17_changed": false,
+    "pdf_engine_implemented": false,
+    "pdf_test_added_to_rvs": false
+  },
+  "next": [
+    "Aguardar gate humano da Onda 33",
+    "Apos aprovacao do operador, abrir Onda 34 para Util_PDF.bas"
+  ],
+  "created_at": "2026-05-24T13:25:00-03:00"
+}

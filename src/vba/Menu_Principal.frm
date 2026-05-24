@@ -3106,12 +3106,40 @@ Private Sub Btn_Rel_OS_Empresa_Click()
     ' Relatorio "Ordens de Servico por Empresa" - nome separado do TextBox TXT_OS_NomeEmpresa (evita colisao OS_Empresa).
     On Error GoTo falha
     Dim frmRelOSEmpresa As Object
-    Call PreenchimentoRelatorioOSEmpresa
+    Dim frmExistente As Object
+    Dim qtdLinhas As Long
+    Dim errDescRelOSEmpresa As String
+
+    ' V12.0.0206: cria a instancia exibida antes do preenchimento.
+    ' Evita popular uma instancia fantasma e mostrar outra vazia.
+    On Error Resume Next
+    For Each frmExistente In VBA.UserForms
+        If typeName(frmExistente) = "Rel_OSEmpresa" Then Unload frmExistente
+    Next frmExistente
+    On Error GoTo falha
+
     Set frmRelOSEmpresa = VBA.UserForms.Add("Rel_OSEmpresa")
+    Call PreenchimentoRelatorioOSEmpresa
+
+    On Error Resume Next
+    qtdLinhas = frmRelOSEmpresa.Controls("RO_Lista").ListCount
+    On Error GoTo falha
+
+    If qtdLinhas = 0 Then
+        Unload frmRelOSEmpresa
+        Set frmRelOSEmpresa = Nothing
+        MsgBox "Nao ha empresas cadastradas para o relatorio de OS por Empresa.", vbInformation, "Relatorio"
+        Exit Sub
+    End If
+
     frmRelOSEmpresa.Show vbModal
     Exit Sub
 falha:
-    MsgBox "Erro ao abrir relatorio OS por Empresa: " & Err.Description, vbCritical, "Relatorio"
+    errDescRelOSEmpresa = Err.Description
+    On Error Resume Next
+    If Not frmRelOSEmpresa Is Nothing Then Unload frmRelOSEmpresa
+    On Error GoTo 0
+    MsgBox "Erro ao abrir relatorio OS por Empresa: " & errDescRelOSEmpresa, vbCritical, "Relatorio"
 End Sub
 
 Private Sub PRE_OS_Vencidas_Click()
@@ -3214,13 +3242,42 @@ MsgBox "Erro ao gerar relatório de pré-OS vencidas: " & Err.Description, vbCri
 End Sub
 
 Private Sub Rel_EmpXServ_Click()
+    On Error GoTo falha
+    Dim frmRelEmpServ As Object
+    Dim frmExistente As Object
+    Dim qtdLinhas As Long
+    Dim errDescRelEmpServ As String
 
-Dim frmRelEmpServ As Object
-Call PreenchimentoRel_EmpXServ
+    ' V12.0.0206: cria a instancia exibida antes do preenchimento.
+    ' Evita popular uma instancia fantasma e mostrar outra vazia.
+    On Error Resume Next
+    For Each frmExistente In VBA.UserForms
+        If typeName(frmExistente) = "Rel_Emp_Serv" Then Unload frmExistente
+    Next frmExistente
+    On Error GoTo falha
 
-Set frmRelEmpServ = VBA.UserForms.Add("Rel_Emp_Serv")
-frmRelEmpServ.Show
+    Set frmRelEmpServ = VBA.UserForms.Add("Rel_Emp_Serv")
+    Call PreenchimentoRel_EmpXServ
 
+    On Error Resume Next
+    qtdLinhas = frmRelEmpServ.Controls("SV_CR_Lista").ListCount
+    On Error GoTo falha
+
+    If qtdLinhas = 0 Then
+        Unload frmRelEmpServ
+        Set frmRelEmpServ = Nothing
+        MsgBox "Nao ha servicos cadastrados para o relatorio de Empresas por Servico.", vbInformation, "Relatorio"
+        Exit Sub
+    End If
+
+    frmRelEmpServ.Show
+    Exit Sub
+falha:
+    errDescRelEmpServ = Err.Description
+    On Error Resume Next
+    If Not frmRelEmpServ Is Nothing Then Unload frmRelEmpServ
+    On Error GoTo 0
+    MsgBox "Erro ao abrir relatorio Empresas por Servico: " & errDescRelEmpServ, vbCritical, "Relatorio"
 End Sub
 
 
@@ -3351,7 +3408,6 @@ Private Sub UserForm_Initialize()
     Call PreenchimentoEntidadeRodizio
     Call PreencherPreencheOS
     Call PreencherAvaliarOS
-    Call PreenchimentoRelatorioOSEmpresa
     Call PreencherManutencaoValor
     Call PreenchimentoListaAtividade
     Call Tela_Inicial

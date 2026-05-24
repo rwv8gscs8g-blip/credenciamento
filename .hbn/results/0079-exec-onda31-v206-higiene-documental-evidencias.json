@@ -1,0 +1,56 @@
+{
+  "execution_id": "0079-exec-onda31-v206-higiene-documental-evidencias",
+  "agent_id": "codex",
+  "readback_id": "0079-onda31-v206-higiene-documental-evidencias",
+  "action": "Executar Onda 31 V206 de higiene documental e evidencias: link scan, frontmatter scan, decisao sobre MANIFESTO.csv, abertura da area de evidencias V206 e registro tecnico sem tocar codigo VBA.",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "environment": {
+    "branch": "codex/v12-0-0206-planejamento",
+    "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+    "worktree_original_corrigido": "/private/tmp/cred-v205",
+    "correcao_raiz_canonica": "P0 registrado em 0083; deltas reaplicados na raiz canonica",
+    "base_release": "V12.0.0205",
+    "base_tag": "v12.0.0205",
+    "base_commit": "f24e535",
+    "next_version": "V12.0.0206",
+    "evidence_final_v205": "VR_20260523_215637",
+    "signature": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "changes": {
+    "implemented": [
+      "Criado readback HBN 0079 para abertura da Onda 31",
+      "Documentado contrato de MANIFESTO.csv como espelho tabular de MANIFEST.md",
+      "Inicializada area de evidencias V12.0.0206 com INDEX.md, MANIFEST.md e MANIFESTO.csv",
+      "Criado documento tecnico da Onda 31 em auditoria/03_ondas/onda_31_v206_higiene_documental/",
+      "Registrada decisao de nao retrocriar pastas fisicas para Ondas 26-30",
+      "Corrigidos links historicos quebrados no relay convertendo paths ausentes de local-ai para texto monoespacado",
+      "Atualizado roadmap consolidado V206 com decisoes da Onda 31",
+      "Atualizado indice de auditoria para evidencias V206 e pasta tecnica da Onda 31"
+    ],
+    "validation_local": [
+      "Link scan dos documentos canonicos: BROKEN_LINKS 0",
+      "Frontmatter scan dos documentos tocados: OK",
+      "MANIFESTO.csv V205: 2 linhas, arquivos existentes e sha256 conferindo",
+      "MANIFESTO.csv V206: 0 linhas, cabecalho preparado",
+      "python3 -m json.tool .hbn/readbacks/0079-onda31-v206-higiene-documental-evidencias.json",
+      "bash .github/scripts/verify_release_consistency.sh: Release consistente para V12.0.0205",
+      "git diff --check: sem problemas",
+      "git diff --name-only -- src/vba local-ai/vba_import doc: vazio"
+    ]
+  },
+  "scope_guards": {
+    "src_vba_touched": false,
+    "local_ai_vba_import_touched": false,
+    "doc_touched": false,
+    "rvs_counters_changed": false,
+    "rn_01_to_rn_17_changed": false,
+    "pdf_test_added_to_rvs": false
+  },
+  "next": [
+    "Iniciar Onda 32 apenas com novo readback/hearback operacional",
+    "Onda 32 deve tratar Importador V3 e mensagens operacionais, com compile VBE + Smoke quando houver alteracao VBA"
+  ],
+  "created_at": "2026-05-24T23:59:00-03:00"
+}

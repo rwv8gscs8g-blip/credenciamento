@@ -4,9 +4,43 @@ versao-protocolo: HBN 0.3.1
 proprietario-bastao: Codex — bastão de desenvolvimento mantido para planejamento da V12.0.0206.
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Abrir novo chat Codex usando `auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md`; pedir hearback humano sobre o roadmap consolidado antes da Onda 31.
-ultima-atualizacao: 2026-05-24T23:33:00-0300 (pareceres 88/89 recebidos; roadmap V206 consolidado em 90/32; bastão preparado para novo chat)
+proxima-acao: Validar raiz canonica consolidada; depois operador deve importar MICRO62-V206-MD33-0, compilar no VBE, rodar TV2_RunSmoke e executar ASS_REL_OS_EMP_LISTA + ASS_REL_EMP_SERV_LISTA; depois abrir Onda 34 do motor PDF central.
+ultima-atualizacao: 2026-05-24T13:55:00-0300 (P0 raiz canonica corrigido; branch V206 consolidada em /Users/macbookpro/Projetos/Credenciamento)
 ---
+
+## P0 corrigido — raiz canonica do projeto
+
+Em 2026-05-24 foi identificado que a branch
+`codex/v12-0-0206-planejamento` estava sendo executada no worktree
+`/private/tmp/cred-v205`, enquanto o workbook e o Importador V3 apontavam para
+`\\Mac\Home\Projetos\Credenciamento`. Isso quebrava a fonte unica de verdade:
+os deltas V206 existiam no tmp, mas o operador e o backup obrigatorio do
+workbook liam a pasta do projeto.
+
+Correcao aplicada:
+
+- `/private/tmp/cred-v205` foi removido como worktree ativo.
+- A branch `codex/v12-0-0206-planejamento` agora esta em
+  `/Users/macbookpro/Projetos/Credenciamento`.
+- Os deltas V206 feitos no tmp foram resgatados e reaplicados na pasta
+  canonica.
+- Evidencias de resgate e colisao ficaram em
+  `backups/raiz_canonica/20260524_134722/`.
+- A regra permanente foi registrada em
+  [`.hbn/knowledge/0012-raiz-canonica-projeto.md`](../knowledge/0012-raiz-canonica-projeto.md)
+  e em [`AGENTS.md`](../../AGENTS.md).
+
+Preflight obrigatorio para qualquer IA:
+
+```bash
+pwd
+git rev-parse --show-toplevel
+git status --short --branch
+git worktree list
+```
+
+Se `pwd` ou `git rev-parse --show-toplevel` forem diferentes de
+`/Users/macbookpro/Projetos/Credenciamento`, a IA deve parar e registrar P0.
 
 ## V12.0.0205 — ciclo ativo de estabilização
 
@@ -37,11 +71,12 @@ ultima-atualizacao: 2026-05-24T23:33:00-0300 (pareceres 88/89 recebidos; roadmap
 |---|---|
 | Branch | `codex/v12-0-0206-planejamento` |
 | Base | `v12.0.0205` / commit `f24e535` |
-| Status | Planejamento consolidado; aguardando hearback humano no novo chat |
+| Status | Roadmap aprovado; Onda 31 documental executada; Onda 32 consolidou auditoria cruzada PDF/UI; Onda 33 MD-33.0 implementada e aguardando gate humano |
 | Roadmap preliminar | [`../../auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md`](../../auditoria/02_planos/31_ROADMAP_V206_PRELIMINAR.md) |
 | Roadmap consolidado | [`../../auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md`](../../auditoria/02_planos/32_ROADMAP_V206_CONSOLIDADO.md) |
 | Readback | [`../../auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md`](../../auditoria/00_status/83_READBACK_ABERTURA_V206_CODEX.md) |
-| Prompts | [`../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md`](../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md), [`../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md`](../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md), [`../../auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md`](../../auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md) |
+| Prompts planejamento | [`../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md`](../../auditoria/00_status/84_PROMPT_PLANEJAMENTO_V206_CLAUDE_OPUS.md), [`../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md`](../../auditoria/00_status/85_PROMPT_PLANEJAMENTO_V206_GEMINI_ANTIGRAVITY.md), [`../../auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md`](../../auditoria/00_status/91_PROMPT_RETOMADA_CODEX_V206_NOVO_CHAT.md) |
+| PDF/UI | [`../../auditoria/00_status/92_PROMPT_AUDITORIA_PDF_UI_V206_CLAUDE_OPUS.md`](../../auditoria/00_status/92_PROMPT_AUDITORIA_PDF_UI_V206_CLAUDE_OPUS.md), [`../../auditoria/00_status/93_PROMPT_AUDITORIA_ADVERSARIAL_PDF_UI_V206_GEMINI.md`](../../auditoria/00_status/93_PROMPT_AUDITORIA_ADVERSARIAL_PDF_UI_V206_GEMINI.md), [`../../auditoria/00_status/94_PROMPT_CONSOLIDACAO_PDF_UI_V206_CODEX.md`](../../auditoria/00_status/94_PROMPT_CONSOLIDACAO_PDF_UI_V206_CODEX.md), [`../../auditoria/00_status/97_CONSOLIDACAO_PDF_UI_V206_CODEX.md`](../../auditoria/00_status/97_CONSOLIDACAO_PDF_UI_V206_CODEX.md) |
 
 ### Limites preliminares V206
 
@@ -320,7 +355,7 @@ Esta sessao usa os marcadores visiveis do adapter HBN:
 |---|---|
 | ID | E1 — Radar Bootstrap |
 | Status | ✅ APROVADA com débito DT-FRENTE2-01 (templates genéricos nas 53 fichas — endereçado em E1.1) |
-| Spec | [`300-SPRINT-0-HBN-PHAGO-CODEX.md`](../../local-ai/Time_AI/2026-05-02-V203-fechamento/300-SPRINT-0-HBN-PHAGO-CODEX.md) |
+| Spec | `local-ai/Time_AI/2026-05-02-V203-fechamento/300-SPRINT-0-HBN-PHAGO-CODEX.md` |
 | ERP | [`local-ai/Time_AI/codex-erps/2026-05-02_E1-radar-bootstrap.json`](../../local-ai/Time_AI/codex-erps/2026-05-02_E1-radar-bootstrap.json) |
 | Resultado | 55 fichas + REGISTRY + MATRIX + repo `~/Projetos/usehbn-phago/` (LICENSE AGPLv3) |
 | Validação Opus | V1-V12 verdes (estrutura); A1 amarelo (justificativas template — endereçado em E1.1) |
@@ -332,7 +367,7 @@ Esta sessao usa os marcadores visiveis do adapter HBN:
 |---|---|
 | ID | E1.1 — Radar Content Deepening |
 | Status | ✅ APROVADA com débito DT-FRENTE2-02 (justificativas template por categoria — não-bloqueante) |
-| Spec | [`302-ESTEIRA-E1-1-RADAR-CONTENT-DEEPENING.md`](../../local-ai/Time_AI/2026-05-02-V203-fechamento/302-ESTEIRA-E1-1-RADAR-CONTENT-DEEPENING.md) |
+| Spec | `local-ai/Time_AI/2026-05-02-V203-fechamento/302-ESTEIRA-E1-1-RADAR-CONTENT-DEEPENING.md` |
 | ERP | [`2026-05-02_E1-1-radar-deepening.json`](../../local-ai/Time_AI/codex-erps/2026-05-02_E1-1-radar-deepening.json) |
 | Resultado | 43 fichas reescritas (templates por categoria) + 10 arquivadas + REGISTRY/MATRIX regenerados + relatório `auditoria/00_status/40` |
 | Validação Opus | V1-V3, V7-V15 verdes; V4/V5/V6 amarelos (templates persistentes — não-bloqueante) |
@@ -402,8 +437,8 @@ Esta sessao usa os marcadores visiveis do adapter HBN:
 |---|---|
 | [`usehbn/methodology/INTER-CHAT-COORDINATION.md`](../../usehbn/methodology/INTER-CHAT-COORDINATION.md) | Protocolo de coexistência F1 ↔ F2 (particionamento de paths, mensageria, soft-locks) |
 | [`usehbn/methodology/RADAR-PHAGOCYTOSIS-PIPELINE.md`](../../usehbn/methodology/RADAR-PHAGOCYTOSIS-PIPELINE.md) | Camada 0 — Radar formalizada (estados, transições, schema de ficha) |
-| [`local-ai/Time_AI/2026-05-02-V203-fechamento/300-SPRINT-0-HBN-PHAGO-CODEX.md`](../../local-ai/Time_AI/2026-05-02-V203-fechamento/300-SPRINT-0-HBN-PHAGO-CODEX.md) | Spec executável da esteira E1 (Codex) |
-| [`local-ai/Time_AI/2026-05-02-V203-fechamento/301-PROTOCOLO-PINGPONG-OPUS-CODEX.md`](../../local-ai/Time_AI/2026-05-02-V203-fechamento/301-PROTOCOLO-PINGPONG-OPUS-CODEX.md) | Protocolo Opus ↔ Codex (handoff, ERP, validação, iteração) |
+| `local-ai/Time_AI/2026-05-02-V203-fechamento/300-SPRINT-0-HBN-PHAGO-CODEX.md` | Spec executável da esteira E1 (Codex) |
+| `local-ai/Time_AI/2026-05-02-V203-fechamento/301-PROTOCOLO-PINGPONG-OPUS-CODEX.md` | Protocolo Opus ↔ Codex (handoff, ERP, validação, iteração) |
 | [`.hbn/messages/2026-05-02_01_de-frente2_para-frente1.md`](../messages/2026-05-02_01_de-frente2_para-frente1.md) | Mensagem informativa de abertura para a Frente 1 |
 
 ## Particionamento de paths vigente

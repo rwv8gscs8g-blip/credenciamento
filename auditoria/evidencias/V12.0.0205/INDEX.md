@@ -5,7 +5,7 @@ hbn-track: safe_track
 hbn-status: active
 audiencia: ambos
 versao-sistema: V12.0.0205
-data: 2026-05-21
+data: 2026-05-24
 ---
 
 # Índice de Evidências V12.0.0205
@@ -31,6 +31,17 @@ auditoria/evidencias/V12.0.0205/
 - PDF manual: `pdf/V2_VALIDACAO_HUMANA_RVS_V12_0_0205_<VALIDATION_ID>.pdf`
 - Prints: `prints/Assinatura_RVS_Aprovada_<timestamp>.png`
 
+## Papel do `MANIFESTO.csv`
+
+`MANIFESTO.csv` é o espelho tabular e legível por ferramentas do manifesto
+humano `MANIFEST.md`. Ele deve conter uma linha por artefato de evidência,
+com o mesmo `sha256`, caminho e papel registrados no manifesto Markdown.
+
+O `MANIFEST.md` continua sendo a leitura canônica para humanos. O
+`MANIFESTO.csv` é mantido para automações, conferência de hash e ingestão por
+planilhas ou scripts. Novos PDFs ou prints complementares devem ser incluídos
+nos dois arquivos no mesmo delta documental.
+
 ## Evidências Registradas
 
 | Artefato | Papel | Status | Observação |
@@ -49,9 +60,9 @@ auditoria/evidencias/V12.0.0205/
 
 ## Evidências Complementares
 
-- PDF manual da aba `VALIDACAO_RELEASE` pode ser anexado em `pdf/` antes da
-  tag ou na V12.0.0206.
+- PDF manual da aba `VALIDACAO_RELEASE` pode ser anexado em `pdf/` como
+  evidência humana complementar histórica, sem alterar o freeze V205.
 - Print de homologação pode ser arquivado em `prints/` como evidência humana
-  complementar.
+  complementar, sem alterar a assinatura RVS.
 - Hashes dos artefatos manuais devem ser adicionados ao manifesto se forem
   anexados.

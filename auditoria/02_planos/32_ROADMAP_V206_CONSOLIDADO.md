@@ -44,12 +44,12 @@ Codex adota a recomendação mais conservadora:
 |---|---|---|---|
 | 30 | Planejamento V206 | Registrar 88/89, consolidar roadmap 90 e prompt 91 | hearback humano |
 | 31 | Higiene documental e evidências | `MANIFEST.md`, `MANIFESTO.csv`, link scan, frontmatter, decisão sobre ondas físicas 26-29 | `verify_release_consistency.sh` + `git diff --check` |
-| 32 | Importador V3 e mensagens | Remover orientação ativa a Trio/Quarteto/Sexteto legado e orientar Gate RVS | compile VBE + Smoke |
-| 33 | Especificação e teste PDF isolado | Criar especificação final do teste PDF fora do RVS | documento aprovado + hearback |
-| 34 | PDF automático robusto | Exportar `VALIDACAO_RELEASE` para PDF com handler, pasta, fallback e teste isolado | compile VBE + Smoke + teste PDF + RVS completo |
-| 35 | Jornada humana V206 | Atualizar checklist humano, hash, triagem P0/P1/P2/P3 e fluxo PDF | dry-run humano |
-| 36 | Débitos pequenos nominais | Apenas itens listados e aprovados; sem lógica de negócio | teste específico + RVS completo se tocar código |
-| 37 | RC e freeze V206 | App_Release, release note, evidências V206, auditoria cruzada final e tag | RVS completo + AF1/AF2/AF3 V206 |
+| 32 | Auditoria cruzada PDF/UI | Preparar prompts Opus/Gemini/Codex para PDF automático, relatórios e testes por simulação de cliques | prompts 92/93/94 + hearback |
+| 33 | Correção dos relatórios pendentes | Corrigir `Rel_Emp_Serv` e `Rel_OSEmpresa` na interface, sem reabrir lógica de negócio | compile VBE + Smoke + teste específico |
+| 34 | Motor PDF central | Implementar pastas, nomeação, fallback, validação de arquivo e log de PDFs | compile VBE + Smoke + teste PDF isolado |
+| 35 | Integração PDF operacional | Integrar PDF em Pré-OS, OS, Avaliação e Relatórios, preservando fallback humano | teste específico + RVS completo se tocar fluxo crítico |
+| 36 | Bateria UI/PDF isolada | Simular cliques/fluxos de interface e gerar PDFs em `Documentos_Gerados/Testes_UI/<RUN_ID>/` | suíte isolada fora do RVS + evidências |
+| 37 | Jornada humana e RC/freeze | Atualizar jornada humana V206, evidências, App_Release, release note e auditoria final | RVS completo + AF1/AF2/AF3 V206 |
 
 ## Blindagens Obrigatórias
 
@@ -59,7 +59,8 @@ Codex adota a recomendação mais conservadora:
   `Svc_PreOS.bas` salvo P0 explícito e hearback humano.
 - Não renomear símbolos internos de VBA.
 - Não incorporar PDF aos contadores RVS.
-- Não abrir Onda 36 sem lista nominal de débitos.
+- Não abrir débitos técnicos nominais sem lista aprovada; após a decisão
+  humana de PDF/UI, a Onda 36 passa a ser a bateria isolada UI/PDF.
 
 ## Entregáveis Preliminares Para Onda 31
 
@@ -67,6 +68,58 @@ Codex adota a recomendação mais conservadora:
 - Link scan dos documentos canônicos.
 - Atualização de frontmatter com datas de última alteração quando relevante.
 - Decisão sobre espelho físico de ondas 26-29 em `auditoria/03_ondas/`.
+
+## Decisões Registradas Pela Onda 31
+
+- `MANIFESTO.csv` permanece como espelho tabular do `MANIFEST.md`, voltado a
+  automações, planilhas e conferência de hashes.
+- Novos artefatos de evidência devem atualizar `MANIFEST.md` e `MANIFESTO.csv`
+  no mesmo delta.
+- As Ondas 26-29 e a Onda 30 não serão retrocriadas em `auditoria/03_ondas/`;
+  a rastreabilidade dessas ondas permanece em ERPs HBN, `auditoria/00_status/`,
+  roadmaps e evidências.
+- A partir da Onda 31, ondas executivas V206 com entrega técnica própria voltam
+  a ter pasta física em `auditoria/03_ondas/`.
+
+## Decisões Registradas Pela Onda 32
+
+- Estrutura de PDFs aprovada: `Documentos_Gerados/Pre-OS/`,
+  `Documentos_Gerados/OS/`, `Documentos_Gerados/Avaliacoes/`,
+  `Documentos_Gerados/Relatorios/`, `Documentos_Gerados/Validacao/` e
+  `Documentos_Gerados/Testes_UI/<RUN_ID>/`.
+- Nomeação aprovada: `<TIPO>_<NUMERO_DOCUMENTO>_CNPJ_<CNPJ_LIMPO>_<AAAAMMDD_HHNNSS>.pdf`.
+- A auditoria cruzada rápida deve orientar a arquitetura antes da implementação
+  para reduzir retrabalho e preparar a bateria futura de simulação de cliques.
+- O antigo item de mensagens do Importador V3 fica deferido como débito pequeno
+  nominal, a reavaliar após o ciclo PDF/UI ou no RC, sem bloquear a cadência
+  principal aprovada.
+
+## Decisões Registradas Pela Consolidação PDF/UI
+
+- A consolidação Codex da auditoria cruzada foi registrada em
+  `auditoria/00_status/97_CONSOLIDACAO_PDF_UI_V206_CODEX.md`.
+- A Onda 33 começa pela correção de instância fantasma em `Rel_OSEmpresa` e
+  `Rel_Emp_Serv`, antes de qualquer motor PDF.
+- A raiz operacional `Documentos_Gerados/` deve ser criada ao lado da planilha
+  quando o workbook estiver salvo, gravável e fora do repositório git; caso
+  contrário, usa fallback canônico em `Documents/Documentos_Gerados/`.
+- O motor PDF deve nascer em `Util_PDF.bas`, com log append-only
+  `Documentos_Gerados/_LOG/RPT_PDFs_EMITIDOS.csv`, validação de existência,
+  tamanho e assinatura `%PDF`.
+- Testes UI/PDF permanecem isolados em suites complementares e não alteram a
+  assinatura RVS herdada da V12.0.0205.
+
+## Decisões Registradas Pela Onda 33
+
+- A correção de `Rel_OSEmpresa` e `Rel_Emp_Serv` foi limitada ao
+  `Menu_Principal.frm`.
+- Os handlers dos dois relatórios agora criam a instância exibida antes de
+  chamar as rotinas `PreenchimentoRelatorioOSEmpresa` e
+  `PreenchimentoRel_EmpXServ`.
+- O preaquecimento de `Rel_OSEmpresa` no `UserForm_Initialize` foi removido
+  para não criar instância invisível ao abrir o menu.
+- A próxima frente continua sendo a Onda 34: motor PDF central, sem tocar os
+  serviços blindados.
 
 ## Itens Movidos Para V12.0.0207
 
@@ -77,4 +130,3 @@ Codex adota a recomendação mais conservadora:
 - Racionalização de `doc/`/CNAE.
 - Arquitetura SaaS.
 - Migração estratégica do `usehbn/`, se aprovada.
-

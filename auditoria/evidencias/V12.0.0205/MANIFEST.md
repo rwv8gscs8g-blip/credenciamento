@@ -5,15 +5,19 @@ hbn-track: safe_track
 hbn-status: active
 audiencia: ia
 versao-sistema: V12.0.0205
-data: 2026-05-21
+data: 2026-05-24
 ---
 
 # Manifesto de Evidências V12.0.0205
 
 Este manifesto registra os artefatos finais da V12.0.0205. O CSV do Gate RVS
-foi aprovado em homologação interna e é a evidência funcional bloqueante da
-release. PDF e print manuais são complementares e devem ser adicionados aqui se
-forem anexados antes da tag.
+final é a evidência funcional bloqueante da release. PDF e print manuais são
+complementares e devem ser adicionados aqui se forem anexados depois do freeze,
+sem alterar a assinatura RVS nem o status da tag `v12.0.0205`.
+
+O arquivo `MANIFESTO.csv` é o espelho tabular deste manifesto. Ele não substitui
+o `MANIFEST.md`: os dois devem permanecer em sincronia, com uma linha por
+artefato e o mesmo `sha256` registrado.
 
 | arquivo | tipo | papel | build | validation_id | timestamp | aba_origem | status | sha256 | caminho |
 |---|---|---|---|---|---|---|---|---|---|

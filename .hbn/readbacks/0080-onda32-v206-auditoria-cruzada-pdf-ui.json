@@ -1,0 +1,55 @@
+{
+  "readback_id": "0080-onda32-v206-auditoria-cruzada-pdf-ui",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "origem_hearback": "Operador aprovou a estrutura de pastas/nomeacao recomendada para PDFs e solicitou prompts completos para auditoria cruzada rapida com Claude Opus e Gemini, incluindo orientacao sobre testes por simulacao de cliques na interface.",
+  "contexto": {
+    "versao": "V12.0.0206",
+    "branch": "codex/v12-0-0206-planejamento",
+    "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+    "worktree_original_corrigido": "/private/tmp/cred-v205",
+    "correcao_raiz_canonica": "P0 registrado em 0083; deltas reaplicados na raiz canonica",
+    "release_base": "V12.0.0205",
+    "evidencia_final_v205": "VR_20260523_215637",
+    "assinatura_nao_regressao": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0"
+  },
+  "decisoes_confirmadas": [
+    "PDFs devem usar subpasta por tipo e nome comecando pelo tipo e numero do documento, com CNPJ logo depois",
+    "Raiz operacional recomendada: Documentos_Gerados/",
+    "Subpastas alvo: Pre-OS/, OS/, Avaliacoes/, Relatorios/, Validacao/ e Testes_UI/<RUN_ID>/",
+    "Antes de implementar, solicitar auditoria cruzada curta para reduzir risco de retrabalho",
+    "A auditoria deve orientar a implementacao para simplificar futura bateria por simulacao de cliques na interface"
+  ],
+  "escopo_autorizado": [
+    "Criar prompts completos para Claude Opus e Gemini",
+    "Criar prompt de consolidacao Codex para receber os pareceres",
+    "Registrar documentos de saida esperados",
+    "Atualizar roadmap/relay/indices apenas para refletir a nova cadencia aprovada",
+    "Manter decisao de PDF isolado fora dos contadores RVS"
+  ],
+  "escopo_bloqueado": [
+    "Alterar codigo VBA nesta onda documental",
+    "Alterar RN-01 a RN-17",
+    "Alterar contadores RVS",
+    "Incluir teste de PDF nas seis baterias do RVS",
+    "Mover ou reorganizar doc/",
+    "Tocar src/vba/ ou local-ai/vba_import/",
+    "Renomear simbolos internos VBA"
+  ],
+  "acao_planejada": [
+    "Criar 92_PROMPT_AUDITORIA_PDF_UI_V206_CLAUDE_OPUS.md",
+    "Criar 93_PROMPT_AUDITORIA_ADVERSARIAL_PDF_UI_V206_GEMINI.md",
+    "Criar 94_PROMPT_CONSOLIDACAO_PDF_UI_V206_CODEX.md",
+    "Atualizar roadmap consolidado V206 com a cadencia 32-37 revisada",
+    "Atualizar auditoria/INDEX.md, relay e ERP final"
+  ],
+  "gate_local": [
+    "frontmatter dos prompts",
+    "link scan dos documentos tocados",
+    "git diff --check",
+    "validacao JSON HBN",
+    "confirmacao de ausencia de mudanca em src/vba/, local-ai/vba_import/ e doc/"
+  ],
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T20:30:00-03:00"
+}
