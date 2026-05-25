@@ -272,7 +272,7 @@ Public Function AvaliarOS( _
     Dim haDivergencia As Boolean
     Dim justifEfetiva As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     ' 1. Buscar OS (critério 32)
     os = RepoOS_BuscarPorId(OS_ID)
@@ -512,7 +512,7 @@ Public Function AvaliarOS( _
     AvaliarOS = res
     Exit Function
 
-Erro:
+erro:
     res.sucesso = False
     res.mensagem = "Erro em AvaliarOS: " & Err.Description
     res.CodigoErro = Err.Number

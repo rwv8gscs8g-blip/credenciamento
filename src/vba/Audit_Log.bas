@@ -33,7 +33,7 @@ Public Enum eEntidadeAfetada
 End Enum
 
 ' Retorna descrição legível do tipo de evento
-Private Function DescricaoEvento(ByVal tipo As eTipoEvento, Optional ByVal Entidade As eEntidadeAfetada = 0) As String
+Private Function DescricaoEvento(ByVal tipo As eTipoEvento, Optional ByVal entidade As eEntidadeAfetada = 0) As String
     Select Case tipo
         Case EVT_CAD_EMP:        DescricaoEvento = "Cadastro de Empresa"
         Case EVT_CRED_ATIV:      DescricaoEvento = "Credenciamento em Atividade"
@@ -46,13 +46,13 @@ Private Function DescricaoEvento(ByVal tipo As eTipoEvento, Optional ByVal Entid
         Case EVT_AVALIACAO:      DescricaoEvento = "Avaliacao Registrada"
         Case EVT_SUSPENSAO:      DescricaoEvento = "Empresa Suspensa"
         Case EVT_REATIVACAO
-            If Entidade = ENT_ENTIDADE Then
+            If entidade = ENT_ENTIDADE Then
                 DescricaoEvento = "Entidade Reativada"
             Else
                 DescricaoEvento = "Empresa Reativada"
             End If
         Case EVT_INATIVACAO
-            If Entidade = ENT_ENTIDADE Then
+            If entidade = ENT_ENTIDADE Then
                 DescricaoEvento = "Entidade Inativada"
             Else
                 DescricaoEvento = "Empresa Inativada"
@@ -82,7 +82,7 @@ End Function
 ' Registra um evento de auditoria na aba AUDIT_LOG.
 Public Sub RegistrarEvento( _
     ByVal tipo As eTipoEvento, _
-    ByVal Entidade As eEntidadeAfetada, _
+    ByVal entidade As eEntidadeAfetada, _
     ByVal IdAfetado As String, _
     ByVal Antes As String, _
     ByVal Depois As String, _
@@ -105,8 +105,8 @@ Public Sub RegistrarEvento( _
     ws.Cells(linha, COL_AUDIT_DT).Value = Now
     ws.Cells(linha, COL_AUDIT_USUARIO).Value = usuario
     ws.Cells(linha, COL_AUDIT_TIPO).Value = CLng(tipo)
-    ws.Cells(linha, COL_AUDIT_TIPO_DESC).Value = DescricaoEvento(tipo, Entidade)
-    ws.Cells(linha, COL_AUDIT_ENTIDADE).Value = DescricaoEntidade(Entidade)
+    ws.Cells(linha, COL_AUDIT_TIPO_DESC).Value = DescricaoEvento(tipo, entidade)
+    ws.Cells(linha, COL_AUDIT_ENTIDADE).Value = DescricaoEntidade(entidade)
     ws.Cells(linha, COL_AUDIT_ID_AFETADO).Value = IdAfetado
     ws.Cells(linha, COL_AUDIT_ANTES).Value = Antes
     ws.Cells(linha, COL_AUDIT_DEPOIS).Value = Depois

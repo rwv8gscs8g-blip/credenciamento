@@ -11,26 +11,26 @@ Private gTransacaoWrites() As Variant
 Private gTransacaoWriteCount As Long
 
 Public Sub Transacao_Iniciar(Optional ByVal idOperacao As String = "")
-    Dim novoId As String
+    Dim novoID As String
 
     If Trim$(idOperacao) <> "" Then
-        novoId = Trim$(idOperacao)
+        novoID = Trim$(idOperacao)
     Else
-        novoId = "TX_" & Format$(Now, "yyyymmdd_hhnnss")
+        novoID = "TX_" & Format$(Now, "yyyymmdd_hhnnss")
     End If
 
     If gTransacaoAtiva Then
         RegistrarEvento _
             EVT_TRANSACAO, ENT_CRED, gTransacaoId, _
             "STATUS=ABERTA; TX_ATUAL=" & gTransacaoId & "; WRITES=" & CStr(Transacao_QtdWrites()), _
-            "STATUS=REJEITADA; MOTIVO=TRANSACAO_ANINHADA; TX_NOVA=" & novoId, _
+            "STATUS=REJEITADA; MOTIVO=TRANSACAO_ANINHADA; TX_NOVA=" & novoID, _
             "Svc_Transacao"
         Err.Raise 1004, "Svc_Transacao.Transacao_Iniciar", _
-                  "Transacao ja ativa: " & gTransacaoId & ". Nova transacao rejeitada: " & novoId
+                  "Transacao ja ativa: " & gTransacaoId & ". Nova transacao rejeitada: " & novoID
     End If
 
     gTransacaoAtiva = True
-    gTransacaoId = novoId
+    gTransacaoId = novoID
     Erase gTransacaoWrites
     gTransacaoWriteCount = 0
     RegistrarEvento _

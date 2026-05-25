@@ -143,4 +143,6 @@ Private Function CodAtivServIgual(ByVal origem As Variant, ByVal alvo As String)
     CodAtivServIgual = (NormalizeCodAtivServ(origem) = NormalizeCodAtivServ(alvo))
 End Function
 
+                
+
 

@@ -918,7 +918,7 @@ Private Function CTR_ExportarTesteOficialCSVInterno(ByVal somenteFalhas As Boole
     If wsSrc Is Nothing Then Exit Function
 
     Dim pastaBase As String
-    pastaBase = Trim$(ThisWorkbook.Path)
+    pastaBase = Trim$(ThisWorkbook.path)
     If Len(pastaBase) = 0 Then
         pastaBase = Environ$("TEMP")
     End If

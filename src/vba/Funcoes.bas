@@ -187,4 +187,3 @@ Public Function Pad3(ByVal numero As Long) As String
     Pad3 = Right$("000" & CStr(numero), 3)
 End Function
 
-

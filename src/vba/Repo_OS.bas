@@ -14,7 +14,7 @@ Public Function Inserir(ByRef O As TOS) As TResult
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
@@ -51,7 +51,7 @@ Public Function Inserir(ByRef O As TOS) As TResult
     Inserir = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
@@ -139,7 +139,7 @@ Public Function ExcluirPorId(ByVal OS_ID As String) As TResult
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     If Trim$(OS_ID) = "" Then
         res.sucesso = False
@@ -180,7 +180,7 @@ Public Function ExcluirPorId(ByVal OS_ID As String) As TResult
     ExcluirPorId = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
@@ -202,7 +202,7 @@ Public Function Atualizar(ByRef O As TOS) As TResult
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
@@ -236,7 +236,7 @@ Public Function Atualizar(ByRef O As TOS) As TResult
     Atualizar = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
@@ -287,7 +287,7 @@ Public Function RepoOS_DiagnosticarReferenciasCADOS( _
     Dim empKey As String
     Dim ativKey As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     qtdOrfaEmp = 0
     qtdOrfaAtiv = 0
@@ -332,7 +332,7 @@ Public Function RepoOS_DiagnosticarReferenciasCADOS( _
     RepoOS_DiagnosticarReferenciasCADOS = res
     Exit Function
 
-Erro:
+erro:
     res.sucesso = False
     res.mensagem = "Erro ao diagnosticar referencias CAD_OS: " & Err.Description
     res.CodigoErro = Err.Number
@@ -351,7 +351,7 @@ Public Function RepoOS_LimparResiduosCADOSSemChave( _
     Dim senhaProtecao As String
     Dim abaPreparada As Boolean
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     qtdLimpas = 0
     relatorio = ""
@@ -389,7 +389,7 @@ Public Function RepoOS_LimparResiduosCADOSSemChave( _
     RepoOS_LimparResiduosCADOSSemChave = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
@@ -414,7 +414,7 @@ Public Function RepoOS_MigrarRefOrfaLegado() As String
     Dim detalhesDepois As String
     Dim relatorio As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     resAntes = RepoOS_DiagnosticarReferenciasCADOS(qtdOrfaEmpAntes, qtdOrfaAtivAntes, qtdResidAntes, detalhesAntes)
     If Not resAntes.sucesso Then
@@ -445,7 +445,7 @@ Public Function RepoOS_MigrarRefOrfaLegado() As String
         " | DETALHES=" & detalhesDepois
     Exit Function
 
-Erro:
+erro:
     RepoOS_MigrarRefOrfaLegado = "ERRO_FATAL: " & Err.Description
 End Function
 

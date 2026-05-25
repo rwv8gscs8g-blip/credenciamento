@@ -15,7 +15,7 @@ Public Function Inserir(ByRef p As TPreOS) As TResult
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
@@ -54,7 +54,7 @@ Public Function Inserir(ByRef p As TPreOS) As TResult
     Inserir = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
@@ -167,7 +167,7 @@ Public Function AtualizarStatus( _
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
@@ -201,7 +201,7 @@ Public Function AtualizarStatus( _
     AtualizarStatus = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0

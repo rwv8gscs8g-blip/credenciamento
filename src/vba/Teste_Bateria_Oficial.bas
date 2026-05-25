@@ -79,7 +79,7 @@ Public Sub RunBateriaOficial(Optional ByVal silencioso As Boolean = False)
     Dim csvPathFalhas As String
     Dim msgFim As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     BA_InitExecucao
     gUltimoCsvFalhas = ""
@@ -109,7 +109,7 @@ Public Sub RunBateriaOficial(Optional ByVal silencioso As Boolean = False)
         On Error Resume Next
         csvPathFalhas = CTR_ExportarTesteOficialFalhasCSV()
         gUltimoCsvFalhas = csvPathFalhas
-        On Error GoTo Erro
+        On Error GoTo erro
     End If
 
     msgFim = "Bateria Oficial concluída. " & BA_ResumoExecucaoTexto()
@@ -128,7 +128,7 @@ Public Sub RunBateriaOficial(Optional ByVal silencioso As Boolean = False)
     BA_FinalizarExecucao
     Exit Sub
 
-Erro:
+erro:
     fatalNumero = Err.Number
     fatalDescricao = Err.Description
     fatalOrigem = Err.Source
@@ -1650,9 +1650,9 @@ Private Function BA_CriarBackup(ByVal identificador As String) As String
 
     On Error GoTo falha
 
-    If ThisWorkbook.Path = "" Then Exit Function
+    If ThisWorkbook.path = "" Then Exit Function
 
-    pasta = ThisWorkbook.Path & Application.PathSeparator & "backup_bateria_oficial"
+    pasta = ThisWorkbook.path & Application.PathSeparator & "backup_bateria_oficial"
     Set fso = CreateObject("Scripting.FileSystemObject")
     If Not fso.FolderExists(pasta) Then
         fso.CreateFolder pasta

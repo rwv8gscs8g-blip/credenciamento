@@ -20,6 +20,33 @@ tratam apenas da linha pública oficial.
 - **Onda 37.2** — reversão controlada dos três `drift_md33_descartar`
   (`Importador_V3.bas`, `Menu_Principal.frm`, `Preencher.bas`) para estado
   equivalente à V5, com espelhos correspondentes em `local-ai/vba_import/`.
+- **Onda 37.3** (Opus, bastão recebido de Codex) — reset completo de
+  `src/vba/` ao estado equivalente exato do export V5 (64 arquivos),
+  após ImportarPacoteV3 + compile VBE falharem com os 28 `drift_legitimo_anterior_v5`
+  remanescentes na 37.2. Backup defensivo preservado em
+  `auditoria/03_ondas/onda_37_3_reset_src_vba_v5/backup_pre_reset/`.
+  Remoção física de `Importador_V2.bas` e `Emergencia_CNAE.bas` aplicada
+  conforme ADRs da Onda 37.1. **Gate humano (compile VBE + smoke)
+  fechado em 2026-05-25 com `CT_ValidarRelease_TrioMinimo` APROVADO
+  `VR_20260524_235715` (V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0).**
+- **Onda 37.4** (Opus) — microdelta NOOP `ONDA37-4-TESTE-NOOP` que
+  validou o fluxo `ImportarPacoteV3_Delta(nomeDelta, buildLabel)` no
+  workbook V5 reconstituído. Resultado: `M=1 | F=0 | err=0 | skip=0`,
+  compile limpo, trio APROVADO. Manifesto em
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA37-4-TESTE-NOOP.txt`.
+  Carimbo: `APP_BUILD_IMPORTADO = e43352f+ONDA37.4-teste-delta-noop`.
+
+### Conhecimento
+
+- **Knowledge `0018-uso-delta-vs-completo.md`** (L33) — Regra permanente:
+  `ImportarPacoteV3_Delta` é o caminho default; `ImportarPacoteV3()`
+  completo gera fantasma de cache no VBE e fica restrito a Fresh workbook
+  ou emergência. **Débito técnico V207**: investigar e marcar uso restrito
+  formalmente.
+- **Superprompt `107_SUPERPROMPT_CODEX_RETOMADA_ONDA_38_PDF.md`** — handoff
+  do bastão Opus → Codex para retomada da V206 a partir da Onda 38
+  (correção `Rel_OSEmpresa` / `Rel_Emp_Serv`) via microdeltas, sem
+  `ImportarPacoteV3()` completo.
 
 ### Governança
 

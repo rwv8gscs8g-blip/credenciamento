@@ -1,0 +1,43 @@
+# Manifesto V3 DELTA ONDA37-4-TESTE-NOOP
+# Tema: Validacao do fluxo ImportarPacoteV3_Delta apos Onda 37.3 (Reset V5).
+#
+# Contexto operacional:
+#   - Workbook V5 derivado de V12-205-OficialCongelada (cópia limpa).
+#   - Apos Onda 37.3, src/vba = export V5 exato (64 arquivos).
+#   - Estado validado por CT_ValidarRelease_TrioMinimo APROVADO VR_20260524_235715
+#     com sintaxe V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+#   - Este microdelta valida o caminho operacional via _Delta SEM mudanca
+#     funcional de codigo (apenas bump de carimbo APP_BUILD_IMPORTADO).
+#
+# Decisao Opus 2026-05-25:
+#   - Onda 37.2 + Onda 37.3 usaram ImportarPacoteV3() completo, que reimporta
+#     todos os 34 modulos + 13 forms e gera fantasma de cache no VBE.
+#   - L33 derivada: o fluxo historico do projeto sempre foi via _Delta com
+#     manifesto pequeno (vide MICRO01..MICRO62), nao ImportarPacoteV3 completo.
+#   - Este teste NOOP prova que _Delta funciona limpo na base V5 atual,
+#     habilitando Codex a retomar Onda 38 (correcao Rel_*) e Onda 39
+#     (Util_PDF.bas) via microdeltas de 1-5 arquivos cada.
+#
+# Mudancas (1 arquivo, alteracao de carimbo apenas):
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = "e43352f+ONDA37.4-teste-delta-noop"
+#     - APP_BUILD_GERADO_EM = "2026-05-25 00:30"
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA37-4-TESTE-NOOP", "e43352f+ONDA37.4-teste-delta-noop"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=0 | err=0 | skip=0.
+#   - Janela Imediata: ?GetBuildImportado retorna "e43352f+ONDA37.4-teste-delta-noop".
+#   - Compile manual passa limpo (estado anterior ja compilava).
+#   - CT_ValidarRelease_TrioMinimo continua APROVADO com mesmos contadores
+#     171/0+34/0+24/0 — bump de label NAO altera comportamento funcional.
+#
+# Rollback se algo falhar:
+#   - Nao salvar workbook.
+#   - Reverter src/vba/App_Release.bas via git checkout HEAD -- src/vba/App_Release.bas.
+#   - Re-rodar publicar_vba_import_v2.sh --apply.
+#   - Reabrir workbook V5 do disco (intacto).
+#
+# GRUPO_DELTA_ONDA37_4_TESTE_NOOP
+M|001-modulo/AAX-App_Release.bas

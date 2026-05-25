@@ -1,12 +1,30 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Mauricio (gate humano Onda 37.2). Codex entregou a reversao controlada dos drifts MD33 descartaveis; ERP fica pendente ate importacao de local-ai/vba_import/ e compile VBE humano.
+proprietario-bastao: Codex (bastao devolvido por Claude Opus 4.7 em 2026-05-25 apos Onda 37.3+37.4 fechadas com compile VBE OK e CT_ValidarRelease_TrioMinimo APROVADO). Codex retoma Onda 38 (MD33-restart correto Rel_OSEmpresa+Rel_Emp_Serv) via microdelta _Delta. Superprompt em auditoria/00_status/107.
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Mauricio importar exclusivamente os arquivos autorizados de `local-ai/vba_import/` no workbook V5 e executar `Debug > Compile VBAProject`; somente depois disso a Onda 37.2 pode ter ERP fechado funcionalmente.
-ultima-atualizacao: 2026-05-24T21:35:43-0300 (Onda 37.2 entregue por Codex para gate humano; workbook, incoming e .frx intactos)
+proxima-acao: Mauricio salvar workbook V5 (Cmd+S no Excel apos compile OK + smoke APROVADO), depois commit Onda 37.3+37.4, push, e abrir NOVA sessao Codex usando auditoria/00_status/107_SUPERPROMPT_CODEX_RETOMADA_ONDA_38_PDF.md. Codex retoma com base V5 limpa + carimbo ONDA37.4-teste-delta-noop, usando exclusivamente ImportarPacoteV3_Delta (knowledge 0018).
+ultima-atualizacao: 2026-05-25T00:30:00-0300 (Onda 37.3 + 37.4 fechadas; compile VBE OK; TrioMinimo APROVADO VR_20260524_235715; bastao devolvido para Codex)
 ---
+
+## Onda 37.3 EM EXECUCAO — Reset src/vba para V5 (Opus, bastao recebido de Codex)
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track (reset estrutural de src/vba e local-ai/vba_import) |
+| Readback | [readbacks/0093-onda37-3-reset-src-vba-para-v5.json](../readbacks/0093-onda37-3-reset-src-vba-para-v5.json) |
+| Hearback | confirmed (Mauricio em chat 2026-05-24 apos falha de compile pos-37.2) |
+| ERP | [results/0093-exec-onda37-3-reset-src-vba-para-v5.json](../results/0093-exec-onda37-3-reset-src-vba-para-v5.json) — delivered_for_human_gate |
+| Doc tecnico | [auditoria/03_ondas/onda_37_3_reset_src_vba_v5/37_3_TECNICO.md](../../auditoria/03_ondas/onda_37_3_reset_src_vba_v5/37_3_TECNICO.md) |
+| Backup pre-reset | [backup_pre_reset/](../../auditoria/03_ondas/onda_37_3_reset_src_vba_v5/backup_pre_reset/) (66 arquivos + manifest SHA-256) |
+| Manifest incoming V5 | [manifest_incoming_v5.sha256.csv](../../auditoria/03_ondas/onda_37_3_reset_src_vba_v5/manifest_incoming_v5.sha256.csv) (64 arquivos validados) |
+| Estado src/vba apos reset | 64 arquivos = paridade exata com export V5 (verificado via diff -rq vazio) |
+| Workbook V5 .xlsm | INTACTO no disco (operador fechou sem salvar) |
+| local-ai/incoming/ | INTACTO (read-only) |
+| Bastao apos compile OK | volta para Codex (Onda 38 = MD33-restart correto sobre base V5 limpa) |
+
+
 
 ## Onda 37.2 ENTREGUE PARA GATE HUMANO — Reversao drift MD33 (Codex)
 

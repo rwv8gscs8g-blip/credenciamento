@@ -51,7 +51,7 @@ Public Function SelecionarEmpresa(ByVal ATIV_ID As String) As TRodizioResultado
     Dim cntFiltroE As Long
     Dim cntSemEmpresa As Long
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     resultado.encontrou = False
     resultado.MotivoFalha = MOTIVO_SEM_CREDENCIADOS
@@ -147,7 +147,7 @@ ProximaEmpresa:
     SelecionarEmpresa = resultado
     Exit Function
 
-Erro:
+erro:
     resultado.encontrou = False
     resultado.MotivoFalha = "ERRO_INTERNO: " & Err.Description
     SelecionarEmpresa = resultado
@@ -185,7 +185,7 @@ Public Function AvancarFila( _
     Dim credOriginal As TCredenciamento
     Dim posicaoOriginal As Long
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     credOriginal = BuscarPorEmpresaAtividade(EMP_ID, ATIV_ID, linhaCredOriginal)
     If linhaCredOriginal > 0 Then posicaoOriginal = credOriginal.POSICAO_FILA
@@ -273,7 +273,7 @@ Public Function AvancarFila( _
     AvancarFila = res
     Exit Function
 
-Erro:
+erro:
     res.sucesso = False
     res.mensagem = "Erro em AvancarFila: " & Err.Description
     res.CodigoErro = Err.Number
@@ -304,7 +304,7 @@ Public Function Suspender( _
     Dim empDepois As TEmpresa
     Dim linhaEmpDepois As Long
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     emp = LerEmpresa(EMP_ID, linhaEmp)
 
@@ -371,7 +371,7 @@ Public Function Suspender( _
     Suspender = res
     Exit Function
 
-Erro:
+erro:
     res.sucesso = False
     res.mensagem = "Erro em Suspender: " & Err.Description
     res.CodigoErro = Err.Number
@@ -387,7 +387,7 @@ Public Function Reativar(ByVal EMP_ID As String) As TResult
     Dim emp As TEmpresa
     Dim linhaEmp As Long
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     emp = LerEmpresa(EMP_ID, linhaEmp)
 
@@ -401,7 +401,7 @@ Public Function Reativar(ByVal EMP_ID As String) As TResult
     Reativar = ReativarLinhaEmpresa(linhaEmp, "Svc_Rodizio")
     Exit Function
 
-Erro:
+erro:
     res.sucesso = False
     res.mensagem = "Erro em Reativar: " & Err.Description
     res.CodigoErro = Err.Number
@@ -422,7 +422,7 @@ Public Function ReativarLinhaEmpresa( _
     Dim dtGravada As Variant
     Dim resGravacao As TResult
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     If linhaEmp < PrimeiraLinhaDadosEmpresas() Then
         res.sucesso = False
@@ -488,7 +488,7 @@ Public Function ReativarLinhaEmpresa( _
     ReativarLinhaEmpresa = res
     Exit Function
 
-Erro:
+erro:
     res.sucesso = False
     res.mensagem = "Erro em ReativarLinhaEmpresa: " & Err.Description
     res.CodigoErro = Err.Number
@@ -515,7 +515,7 @@ Public Function RestaurarCredenciamentosEmpresa( _
     Dim erroNumero As Long
     Dim erroMensagem As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     EMP_ID = Trim$(CStr(EMP_ID))
     If EMP_ID = "" Then
@@ -591,7 +591,7 @@ Public Function RestaurarCredenciamentosEmpresa( _
     RestaurarCredenciamentosEmpresa = res
     Exit Function
 
-Erro:
+erro:
     erroNumero = Err.Number
     erroMensagem = Err.Description
     On Error Resume Next

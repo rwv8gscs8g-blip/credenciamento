@@ -8,7 +8,7 @@ Public Function GetConfig() As TConfig
     Dim ws As Worksheet
     Dim cfg As TConfig
 
-    On Error GoTo Erro
+    On Error GoTo erro
     Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
 
     cfg.GESTOR_NOME = Trim$(CStr(ws.Cells(LINHA_CFG_VALORES, COL_CFG_GESTOR).Value))
@@ -27,7 +27,7 @@ Public Function GetConfig() As TConfig
     GetConfig = cfg
     Exit Function
 
-Erro:
+erro:
     cfg.DIAS_DECISAO = 5
     cfg.MAX_RECUSAS = 3
     cfg.PERIODO_SUSPENSAO_MESES = 6

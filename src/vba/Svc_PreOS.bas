@@ -124,7 +124,7 @@ Public Function EmitirPreOS( _
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     ' 1. Validar e extrair IDs do código (critério 1)
     If Not ExtrairIdsCodServico(COD_SERVICO, ATIV_ID, SERV_ID) Then
@@ -223,7 +223,7 @@ Public Function EmitirPreOS( _
     EmitirPreOS = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
@@ -256,7 +256,7 @@ Public Function RecusarPreOS( _
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     ' 1. Localizar PRE_OS (critério 11)
     LerPreOS PREOS_ID, linhaPreOS, empId, ativId, statusAtual
@@ -312,7 +312,7 @@ Public Function RecusarPreOS( _
     RecusarPreOS = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
@@ -337,7 +337,7 @@ Public Function ExpirarPreOS(ByVal PREOS_ID As String) As TResult
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     LerPreOS PREOS_ID, linhaPreOS, empId, ativId, statusAtual
 
@@ -391,7 +391,7 @@ Public Function ExpirarPreOS(ByVal PREOS_ID As String) As TResult
     ExpirarPreOS = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0

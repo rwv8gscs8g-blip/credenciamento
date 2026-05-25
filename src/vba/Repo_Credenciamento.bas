@@ -22,7 +22,7 @@ Public Function BuscarFila(ByVal ATIV_ID As String) As TCredenciamento()
     Dim temp As TCredenciamento
     Dim j As Long
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
     ult = UltimaLinhaAba(SHEET_CREDENCIADOS)
@@ -71,7 +71,7 @@ Public Function BuscarFila(ByVal ATIV_ID As String) As TCredenciamento()
     BuscarFila = resultado
     Exit Function
 
-Erro:
+erro:
     ReDim resultado(1 To 1)
     resultado(1).CRED_ID = ""
     BuscarFila = resultado
@@ -123,7 +123,7 @@ Public Function MoverFinal( _
     Dim senhaProtecao As String
     Dim abaPreparada As Boolean
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
     cred = BuscarPorEmpresaAtividade(EMP_ID, ATIV_ID, linhaAlvo)
@@ -159,7 +159,7 @@ Public Function MoverFinal( _
     MoverFinal = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
@@ -183,7 +183,7 @@ Public Function RestaurarPosicaoFila( _
     Dim senhaProtecao As String
     Dim abaPreparada As Boolean
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
     cred = BuscarPorEmpresaAtividade(EMP_ID, ATIV_ID, linhaAlvo)
@@ -221,7 +221,7 @@ Public Function RestaurarPosicaoFila( _
     RestaurarPosicaoFila = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     If abaPreparada Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
@@ -261,7 +261,7 @@ Public Function IncrementarRecusa( _
     Dim numeroErro As Long
     Dim mensagemErro As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     Set wsCred = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
     Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
@@ -332,7 +332,7 @@ Public Function IncrementarRecusa( _
     IncrementarRecusa = res
     Exit Function
 
-Erro:
+erro:
     numeroErro = Err.Number
     mensagemErro = Err.Description
     On Error Resume Next

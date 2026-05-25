@@ -1,0 +1,89 @@
+{
+  "execution_id": "0093-exec-onda37-3-reset-src-vba-para-v5",
+  "agent_id": "claude-opus-4-7",
+  "readback_id": "0093-onda37-3-reset-src-vba-para-v5",
+  "baton_received_from": "codex (autorizado por mauricio em chat 2026-05-24)",
+  "action": "Reset src/vba ao estado equivalente exato do export V5 funcional, com remocao dos 2 arquivos orfaos (Importador_V2.bas e Emergencia_CNAE.bas) conforme ADRs da Onda 37.1. Inclui sub-onda 37.4 (microdelta NOOP de teste do ImportarPacoteV3_Delta) que validou o fluxo correto.",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "high",
+  "environment": {
+    "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "target_version": "V12.0.0206",
+    "predecessor_commit": "868e959"
+  },
+  "changes": [
+    {
+      "scope": "src/vba/**",
+      "summary": "63 arquivos sobrescritos com conteudo exato do export V5 + 1 mantido equivalente; 2 arquivos removidos (Importador_V2.bas, Emergencia_CNAE.bas). Resultado: 64 arquivos = paridade total com local-ai/incoming/V206_ANCHOR_V5_20260524/.",
+      "executor": "rsync -av --delete + rm manual dos orfaos"
+    },
+    {
+      "scope": "auditoria/03_ondas/onda_37_3_reset_src_vba_v5/",
+      "summary": "Backup defensivo (66 arquivos pre-reset), manifests SHA-256 (pre-reset e incoming), 37_3_TECNICO.md"
+    }
+  ],
+  "validations_local": [
+    "diff -rq local-ai/incoming/V206_ANCHOR_V5_20260524/ src/vba/ retornou vazio (paridade total)",
+    "src/vba tem 64 arquivos (38 .bas + 13 .frm + 13 .frx) — bate com incoming",
+    "incoming intacto (read-only, conforme files_forbidden)",
+    "workbook V5 .xlsm intacto no disco (operador fechou sem salvar apos compile falhar na Onda 37.2)",
+    "Backup pre-reset preservado em auditoria/03_ondas/onda_37_3_reset_src_vba_v5/backup_pre_reset/ (66 arquivos + manifest SHA-256)"
+  ],
+  "gates_evidence": [
+    {
+      "gate": "G1: incoming/V5 integridade",
+      "status": "pass",
+      "evidence_ref": "auditoria/03_ondas/onda_37_3_reset_src_vba_v5/manifest_incoming_v5.sha256.csv (64 linhas, todos nao-zero)"
+    },
+    {
+      "gate": "G2: diff vazio incoming vs src/vba pos-reset",
+      "status": "pass",
+      "evidence_ref": "verificado em terminal operador: diff -rq retornou vazio"
+    },
+    {
+      "gate": "G3: hbn-guards-runner 5/5 apos publicar_vba_import",
+      "status": "pending_human",
+      "evidence_ref": "operador executa proxima"
+    },
+    {
+      "gate": "G4: Importador_V2 e Emergencia_CNAE removidos",
+      "status": "pass",
+      "evidence_ref": "verificado em terminal: ls src/vba | wc -l = 64"
+    },
+    {
+      "gate": "G5: compile humano VBE apos ImportarPacoteV3",
+      "status": "pass",
+      "evidence_ref": "Cópia limpa do V12-205-OficialCongelada renomeada para V5; compile passou limpo; CT_ValidarRelease_TrioMinimo APROVADO VR_20260524_235715 com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0"
+    },
+    {
+      "gate": "G6 (Onda 37.4): ImportarPacoteV3_Delta com microdelta NOOP funciona",
+      "status": "pass",
+      "evidence_ref": "Comando ImportarPacoteV3_Delta \"ONDA37-4-TESTE-NOOP\", \"e43352f+ONDA37.4-teste-delta-noop\" retornou M=1|F=0|err=0|skip=0; manifesto em local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA37-4-TESTE-NOOP.txt"
+    }
+  ],
+  "handoff_target": "codex (bastao retorna para Onda 38 — MD33-restart correto via microdelta, conforme superprompt 107)",
+  "lessons_captured": [
+    "L33 -> .hbn/knowledge/0018-uso-delta-vs-completo.md: ImportarPacoteV3_Delta e default; ImportarPacoteV3 completo gera fantasma de cache VBE; uso restrito a Fresh workbook ou emergencia.",
+    "L29 -> antes de aprovar onda safe_track VBA, declarar comportamento do importador no readback.",
+    "L30 -> bastao codex->opus em emergencia operacional registrado via campo baton_transfer no readback.",
+    "L31 -> local-ai/incoming/ e fonte de reset, nao de import (G7 vale).",
+    "Debito tecnico V207: investigar fantasma de cache do ImportarPacoteV3() completo, marcar uso restrito."
+  ],
+  "human_gate_pending": [
+    "Rodar bash local-ai/scripts/publicar_vba_import_v2.sh --apply",
+    "Rodar bash scripts/hbn-guards/hbn-guards-runner.sh (esperado 5/5 verde)",
+    "Commitar onda 37.3 (G3 fechamento)",
+    "Abrir workbook V5, rodar ImportarPacoteV3 no painel/Imediato",
+    "Debug > Compile VBAProject no VBE (G5 fechamento)",
+    "Se compile OK: reportar 'ok' no chat para Opus atualizar ERP e devolver bastao para Codex",
+    "Se compile FAIL: nao salvar workbook, reportar mensagem exata"
+  ],
+  "signals_emitted": [
+    "✅ HBN ACTIVE",
+    "🟠 SOURCE DRIFT DETECTED (resolvido por reset; src/vba agora = V5 exato)",
+    "🔵 HBN HANDOFF READY (para gate humano G3 e G5)"
+  ],
+  "created_at": "2026-05-24T23:30:00-03:00"
+}

@@ -189,7 +189,7 @@ On Error GoTo erro_carregamento:
     End If
 
     NomePasta = InputBox("Informe o Nome para a Pasta", "Iniciando um Novo Per" & ChrW(237) & "odo")
-    pasta = ThisWorkbook.Path & "\" & NomePasta & "\"
+    pasta = ThisWorkbook.path & "\" & NomePasta & "\"
     Copia = pasta & Format(Now(), "dd_mm_yyyy hh_mm_ss") & NomeArquivo
     Dim fso As Object
     Set fso = CreateObject("Scripting.FileSystemObject")

@@ -1715,7 +1715,7 @@ Public Function TV2_InativarEmpresaCadastro(ByVal empId As String) As TResult
         Exit Function
     End If
 
-    On Error GoTo Erro
+    On Error GoTo erro
     If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
     If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
     If Not Util_PrepararAbaParaEscrita(wsCred, estavaProtegidaCred, senhaCred) Then GoTo erroPreparacao
@@ -1759,7 +1759,7 @@ Public Function TV2_InativarEmpresaCadastro(ByVal empId As String) As TResult
 erroPreparacao:
     Err.Raise 1004, "TV2_InativarEmpresaCadastro", "Não foi possível preparar as abas de empresa."
 
-Erro:
+erro:
     On Error Resume Next
     If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
     If credPreparado Then Util_RestaurarProtecaoAba wsCred, estavaProtegidaCred, senhaCred
@@ -1803,7 +1803,7 @@ Public Function TV2_ReativarEmpresaCadastro(ByVal empId As String) As TResult
         Exit Function
     End If
 
-    On Error GoTo Erro
+    On Error GoTo erro
     If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
     If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
 
@@ -1839,7 +1839,7 @@ Public Function TV2_ReativarEmpresaCadastro(ByVal empId As String) As TResult
 erroPreparacao:
     Err.Raise 1004, "TV2_ReativarEmpresaCadastro", "Não foi possível preparar as abas de empresa."
 
-Erro:
+erro:
     On Error Resume Next
     If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
     Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
@@ -1884,7 +1884,7 @@ Public Function TV2_InativarEntidadeCadastro(ByVal entId As String) As TResult
         Exit Function
     End If
 
-    On Error GoTo Erro
+    On Error GoTo erro
     If Not Util_PrepararAbaParaEscrita(wsOrigem, estavaProtegidaOrigem, senhaOrigem) Then GoTo erroPreparacao
     If Not Util_PrepararAbaParaEscrita(wsDestino, estavaProtegidaDestino, senhaDestino) Then GoTo erroPreparacao
 
@@ -1914,7 +1914,7 @@ Public Function TV2_InativarEntidadeCadastro(ByVal entId As String) As TResult
 erroPreparacao:
     Err.Raise 1004, "TV2_InativarEntidadeCadastro", "Não foi possível preparar as abas de entidade."
 
-Erro:
+erro:
     On Error Resume Next
     If copiou Then Util_ExcluirLinhaSegura wsDestino, linhaDestino
     Util_RestaurarProtecaoAba wsDestino, estavaProtegidaDestino, senhaDestino
@@ -2725,7 +2725,7 @@ Public Function TV2_ExportarFalhasCSV(ByVal execucaoId As String) As String
     If Trim$(execucaoId) = "" Then Exit Function
     Set wsSrc = TV2_EnsureResultadoSheet()
 
-    pastaBase = Trim$(ThisWorkbook.Path)
+    pastaBase = Trim$(ThisWorkbook.path)
     If Len(pastaBase) = 0 Then pastaBase = Environ$("TEMP")
 
     suite = TV2_SuiteDaExecucao(execucaoId)

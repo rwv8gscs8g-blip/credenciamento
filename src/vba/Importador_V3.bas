@@ -235,7 +235,7 @@ End Sub
 ' delta sem efetuar import de codigo de producao.
 '
 ' Reusa pipeline padrao IV3_ImportarModulo (Remove+Import com validacao
-' por CountOfLines). Backup nao e disparado aqui - bump sozinho e
+' por CountOfLines). Backup nao e disparado aqui — bump sozinho e
 ' considerado operacao de baixa criticidade (afeta so um modulo
 ' isolado de metadados). Para auditoria com backup, use
 ' ImportarPacoteV3_Delta apontando para um manifesto delta dedicado.
@@ -420,7 +420,7 @@ Private Sub IV3_RodarMain(ByVal dryRun As Boolean, _
 
     If resultado Then
         MsgBox "Importador V3 concluiu o import OK." & vbCrLf & resumo & vbCrLf & vbCrLf & _
-               "GATE FINAL (manual - V3 NAO faz compile programatico):" & vbCrLf & _
+               "GATE FINAL (manual — V3 NAO faz compile programatico):" & vbCrLf & _
                "  1. VBE > Depurar > Compilar VBAProject (precisa passar limpo)" & vbCrLf & _
                "  2. Imediato: CT_ValidarRelease_TrioMinimo (precisa retornar 171/0+14/0+20/0)" & vbCrLf & vbCrLf & _
                "Se o passo 1 falhar, NAO salve o workbook. Restaure do backup em:" & vbCrLf & _
@@ -1049,7 +1049,7 @@ End Function
 
 ' Remove linhas que comecam com "Attribute " do conteudo de um form code-only.txt.
 ' Per-symbol Attribute (ex.: "Attribute X.VB_VarHelpID = -1") aparece em arquivos
-' .frm exportados mas nao e aceito por cm.AddFromString - gera "Erro de sintaxe".
+' .frm exportados mas nao e aceito por cm.AddFromString — gera "Erro de sintaxe".
 ' VBE regenera defaults automaticamente quando o form e usado em runtime.
 ' Form-level Attribute (VB_Name, VB_GlobalNameSpace, etc.) nao deveria aparecer
 ' aqui pois o extrator de .code-only.txt ja descarta o cabecalho do .frm; mesmo
@@ -1435,5 +1435,4 @@ Private Sub IV3_LogEvento(ByVal evento As String, _
                 caminho & " | " & detalhes
     On Error GoTo 0
 End Sub
-
 

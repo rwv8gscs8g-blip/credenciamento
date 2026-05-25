@@ -494,7 +494,7 @@ Private Function VR_PastaSaida() As String
     Dim pasta As String
 
     sep = Application.PathSeparator
-    base = Trim$(ThisWorkbook.Path)
+    base = Trim$(ThisWorkbook.path)
     If Len(base) = 0 Then base = Environ$("TEMP")
 
     pasta = base & sep & "auditoria"

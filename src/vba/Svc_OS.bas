@@ -86,7 +86,7 @@ Public Function EmitirOS( _
     Dim resRollbackOS As TResult
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
-    Dim preosPreparada As Boolean
+    Dim preOSPreparada As Boolean
     Dim preosConvertida As Boolean
     Dim osCriada As Boolean
     Dim operacaoConcluida As Boolean
@@ -98,7 +98,7 @@ Public Function EmitirOS( _
     Dim rollbackPreOSOk As Boolean
     Dim rollbackOSOk As Boolean
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     ' 1. Ler e validar PRE_OS (critérios 20-21)
     LerPreOSCompleto PREOS_ID, linhaPreOS, preos
@@ -149,7 +149,7 @@ Public Function EmitirOS( _
         EmitirOS = res
         Exit Function
     End If
-    preosPreparada = True
+    preOSPreparada = True
     preosOldStatus = wsPreOS.Cells(linhaPreOS, COL_PREOS_STATUS).Value
     preosOldOsId = wsPreOS.Cells(linhaPreOS, COL_PREOS_OS_ID).Value
     preosOldDtEmOs = wsPreOS.Cells(linhaPreOS, COL_PREOS_DT_EM_OS).Value
@@ -160,7 +160,7 @@ Public Function EmitirOS( _
         res.sucesso = False
         res.mensagem = "Falha ao inserir OS: " & resInsert.mensagem
         Util_RestaurarProtecaoAba wsPreOS, estavaProtegida, senhaProtecao
-        preosPreparada = False
+        preOSPreparada = False
         EmitirOS = res
         Exit Function
     End If
@@ -177,7 +177,7 @@ Public Function EmitirOS( _
     End If
     preosConvertida = True
     Util_RestaurarProtecaoAba wsPreOS, estavaProtegida, senhaProtecao
-    preosPreparada = False
+    preOSPreparada = False
 
     ' 6. Auditoria ANTES de AvancarFila (critério 27)
     RegistrarEvento _
@@ -210,16 +210,16 @@ Public Function EmitirOS( _
     EmitirOS = res
     Exit Function
 
-Erro:
+erro:
     erroNumero = Err.Number
     erroMensagem = Err.Description
     On Error Resume Next
-    If preosPreparada Or preosConvertida Then
-        If Not preosPreparada Then
+    If preOSPreparada Or preosConvertida Then
+        If Not preOSPreparada Then
             Set wsPreOS = ThisWorkbook.Sheets(SHEET_PREOS)
-            preosPreparada = Util_PrepararAbaParaEscrita(wsPreOS, estavaProtegida, senhaProtecao)
+            preOSPreparada = Util_PrepararAbaParaEscrita(wsPreOS, estavaProtegida, senhaProtecao)
         End If
-        If preosPreparada Then
+        If preOSPreparada Then
             wsPreOS.Cells(linhaPreOS, COL_PREOS_STATUS).Value = preosOldStatus
             wsPreOS.Cells(linhaPreOS, COL_PREOS_OS_ID).Value = preosOldOsId
             wsPreOS.Cells(linhaPreOS, COL_PREOS_DT_EM_OS).Value = preosOldDtEmOs
@@ -340,7 +340,7 @@ Public Function CancelarOS( _
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     linhaOS = 0
     Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
@@ -399,7 +399,7 @@ Public Function CancelarOS( _
     CancelarOS = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0

@@ -17,16 +17,16 @@ End Function
 ' Converte texto monetário ("R$ 1.234,56", "1234.56") em Currency.
 ' Nunca retorna erro - retorna 0 se inválido.
 Public Function ToCurrency(ByVal v As Variant) As Currency
-    Dim n As Double
+    Dim N As Double
     
     If IsEmpty(v) Or IsNull(v) Then
         ToCurrency = 0
         Exit Function
     End If
 
-    n = ParseNumeroFlex(CStr(v))
+    N = ParseNumeroFlex(CStr(v))
     On Error Resume Next
-    ToCurrency = CCur(n)
+    ToCurrency = CCur(N)
     If Err.Number <> 0 Then ToCurrency = 0
     On Error GoTo 0
 End Function

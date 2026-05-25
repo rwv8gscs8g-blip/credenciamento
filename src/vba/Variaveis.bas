@@ -33,7 +33,7 @@ Public Empresa_email        As String
 Public Empresa_TelCel       As String
 Public Desc_Ativi           As String
 Public Desc_Serv            As String
-Public Entidade             As String
+Public entidade             As String
 Public Desc_entidade        As String
 Public cont_entidade        As String
 Public telcont_entidade     As String

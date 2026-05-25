@@ -1,0 +1,131 @@
+{
+  "readback_id": "0093-onda37-3-reset-src-vba-para-v5",
+  "data": "2026-05-24",
+  "agent_id": "claude-opus-4-7",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0092-onda37-2-reversao-md33",
+  "baton_transfer": "codex -> claude-opus-4-7 (operador autorizou em chat 2026-05-24 apos falha de compile pos-Onda 37.2; Opus assume execucao ate compile VBE OK)",
+  "intent": {
+    "objective": "Resetar src/vba ao estado equivalente exato do export V5 funcional (local-ai/incoming/V206_ANCHOR_V5_20260524/), regenerar local-ai/vba_import via publicar_vba_import_v2 e habilitar import + compile VBE para retomar desenvolvimento sobre base que compila. Aceita perda temporaria de commits pos-V5 das Ondas 28-29 (preservados no historico git, reimportaveis caso a caso depois).",
+    "non_goals": [
+      "tocar local-ai/incoming/V206_ANCHOR_V5_20260524/ (somente leitura, evidence)",
+      "tocar o workbook PlanilhaCredenciamento-Homologacao-V5.xlsm (operador faz import via ImportarPacoteV3)",
+      "tocar V12-*/**, obsidian-vault/**, doc/**",
+      "alterar regras RN-01 a RN-17 (vem do conteudo do V5 que sera restaurado)",
+      "alterar contadores RVS (vem do V5)",
+      "iniciar MD33-restart ou motor PDF nesta onda",
+      "reescrever historico git (operacao e forward-only, novo commit que reseta)"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "auditoria/03_ondas/onda_37_3_reset_src_vba_v5/**",
+      ".hbn/readbacks/0093-onda37-3-reset-src-vba-para-v5.json",
+      ".hbn/results/0093-exec-onda37-3-reset-src-vba-para-v5.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      ".hbn/knowledge/0018-uso-delta-vs-completo.md",
+      "auditoria/00_status/107_SUPERPROMPT_CODEX_RETOMADA_ONDA_38_PDF.md",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseTrio_V12_0_0205_VR_20260524_235715.csv"
+    ],
+    "files_forbidden": [
+      "local-ai/incoming/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "doc/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "*.xlsm",
+      "backups/vba/**",
+      ".git/hooks/pre-commit"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Remocao fisica de src/vba/Importador_V2.bas conforme ADR-20260524-remocao-importador-v2.md (Onda 37.1)",
+    "Remocao fisica de src/vba/Emergencia_CNAE.bas conforme ADR-20260524-pendencia-emergencia-cnae.md (decisao 'manter fora' aplicada aqui via reset)",
+    "Aceitar perda temporaria dos 25 arquivos drift_legitimo_anterior_v5 em src/vba — historico git preserva, reimportaveis caso a caso em ondas futuras se necessario",
+    "Operador autorizou bastao Codex -> Opus em chat para esta onda especifica"
+  ],
+  "invariants_preserved": [
+    "Workbook V5 (.xlsm) intacto no disco — operador fechou sem salvar apos compile falhar",
+    "local-ai/incoming/V206_ANCHOR_V5_20260524/ intacto (apenas leitura)",
+    "Historico git preservado: nenhuma reescrita, apenas novo commit forward-only",
+    "Apos reset, src/vba contem exatamente o conteudo do export V5 (64 arquivos)",
+    "Apos publicar_vba_import_v2 --apply, local-ai/vba_import espelha src/vba (G7 verde)",
+    "Mod_Types.bas vem do V5 (sera importado em modo Estabilizado normalmente)"
+  ],
+  "risks": [
+    {
+      "risk": "incoming/V206_ANCHOR_V5_20260524/ pode estar incompleto ou corrompido em algum arquivo, fazendo reset gerar src/vba quebrado.",
+      "mitigation": "Verificar antes de copiar: contagem = 64 arquivos (38 .bas + 13 .frm + 13 .frx) ja confirmada. Se algum arquivo zerado ou ilegivel, parar antes do reset e investigar.",
+      "severity": "high"
+    },
+    {
+      "risk": "Apos reset, ImportarPacoteV3 + compile VBE ainda falhar — significa que problema esta no workbook V5 mesmo (Mod_Types interno divergente, planilha de dados inconsistente, etc.).",
+      "mitigation": "Workbook V5 .xlsm continua intacto no disco (nao salvo). Em ultimo caso, abrir copia limpa do V5 e analisar diferenca via Janela Imediata sem alterar.",
+      "severity": "medium"
+    },
+    {
+      "risk": "publicar_vba_import_v2.sh --apply pode falhar ou produzir espelho incorreto.",
+      "mitigation": "Conferir saida do script; rodar hbn-guards-runner para que G7 valide shasum src/vba vs vba_import.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Perda dos 25 arquivos pos-V5 ser percebida como regressao funcional pelo usuario final.",
+      "mitigation": "Sao features que NUNCA estiveram no workbook V5 (V5 foi exportado de build anterior). Nao ha regressao para o usuario do workbook; apenas drift versionado fica historico. CHANGELOG documenta.",
+      "severity": "low"
+    },
+    {
+      "risk": "Bastao informalmente transferido (Codex -> Opus) sem onda HBN dedicada criar ambiguidade futura.",
+      "mitigation": "Campo baton_transfer neste readback registra autorizacao explicita do operador em chat. ERP 0093 confirma fechamento da operacao Opus antes do bastao voltar para Codex (via Onda 38).",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "incoming/V5 integridade: 64 arquivos, todos nao-zero, hash legivel",
+        "evidence_kind": "csv_hash",
+        "evidence_required_in": "auditoria/03_ondas/onda_37_3_reset_src_vba_v5/manifest_incoming_v5.sha256.csv"
+      },
+      {
+        "gate": "Apos reset, diff -rq incoming vs src/vba retorna vazio (paridade total)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_37_3_reset_src_vba_v5/37_3_TECNICO.md"
+      },
+      {
+        "gate": "Apos publicar_vba_import_v2.sh --apply, hbn-guards-runner passa todos os 5 guards (incluindo G7 shasum_match na FASE 2)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0093-exec-onda37-3-reset-src-vba-para-v5.json"
+      },
+      {
+        "gate": "Importador_V2.bas e Emergencia_CNAE.bas nao existem mais em src/vba",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0093-exec-onda37-3-reset-src-vba-para-v5.json"
+      },
+      {
+        "gate": "Operador importa via ImportarPacoteV3 no workbook V5 e Debug -> Compile VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0093-exec-onda37-3-reset-src-vba-para-v5.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se reset criar src/vba quebrado: git checkout HEAD -- src/vba/ restaura estado pre-reset",
+      "Se publicar_vba_import falhar: git checkout HEAD -- local-ai/vba_import/ restaura espelho anterior",
+      "Se compile VBE falhar apos reset: nao salvar workbook; reabrir V5 .xlsm original (intacto no disco) que compila; investigar diferenca em onda safe_track propria",
+      "Em qualquer cenario, .xlsm V5 no disco permanece intacto enquanto operador NAO SALVAR; reabrir = estado original funcional",
+      "Se commit ja feito e reverter for necessario: git revert <hash> cria commit forward-only que desfaz"
+    ],
+    "anchor_to_restore": "868e959 (commit pos-Onda 37.2) ou V5 .xlsm original no disco"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T23:15:00-03:00"
+}

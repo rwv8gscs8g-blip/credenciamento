@@ -35,7 +35,7 @@ Public Function ReativarEntidadePorChave( _
     Dim erroNumero As Long
     Dim erroMensagem As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     ENT_ID = Trim$(CStr(ENT_ID))
     cnpjLista = Trim$(CStr(cnpjLista))
@@ -160,7 +160,7 @@ Public Function ReativarEntidadePorChave( _
     ReativarEntidadePorChave = res
     Exit Function
 
-Erro:
+erro:
     erroNumero = Err.Number
     erroMensagem = Err.Description
     On Error Resume Next

@@ -23,7 +23,7 @@ Public Function Inserir( _
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     linhaOS = 0
     Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
@@ -86,7 +86,7 @@ Public Function Inserir( _
     Inserir = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0

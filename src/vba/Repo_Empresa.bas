@@ -76,7 +76,7 @@ Public Function GravarStatusEmpresa( _
     Dim erroNumero As Long
     Dim erroMensagem As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     Set ws = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     If linhaEmp < PrimeiraLinhaDadosEmpresas() Or linhaEmp > UltimaLinhaAba(SHEET_EMPRESAS) Then
@@ -161,7 +161,7 @@ Public Function GravarStatusEmpresa( _
     GravarStatusEmpresa = res
     Exit Function
 
-Erro:
+erro:
     erroNumero = Err.Number
     erroMensagem = Err.Description
     On Error Resume Next
@@ -227,7 +227,7 @@ Public Function Inserir( _
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     Set ws = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
@@ -267,7 +267,7 @@ Public Function Inserir( _
     Inserir = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
@@ -299,7 +299,7 @@ Public Function Atualizar( _
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     If linhaEmp < LINHA_DADOS Then
         res.sucesso = False
@@ -337,7 +337,7 @@ Public Function Atualizar( _
     Atualizar = res
     Exit Function
 
-Erro:
+erro:
     On Error Resume Next
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
     On Error GoTo 0
@@ -359,7 +359,7 @@ Public Function RepoEmpresa_DtUltReativInvalidasResumo( _
     Dim empId As String
     Dim valor As Variant
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     qtdInvalidas = 0
     detalhes = ""
@@ -382,7 +382,7 @@ Public Function RepoEmpresa_DtUltReativInvalidasResumo( _
     RepoEmpresa_DtUltReativInvalidasResumo = res
     Exit Function
 
-Erro:
+erro:
     res.sucesso = False
     res.mensagem = "Erro ao detectar DT_ULT_REATIV invalidas: " & Err.Description
     res.CodigoErro = Err.Number
@@ -401,7 +401,7 @@ Public Function RepoEmpresa_DtUltReativBackfillResumo( _
     Dim empId As String
     Dim dtAudit As Date
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     qtdPendentes = 0
     detalhes = ""
@@ -426,7 +426,7 @@ Public Function RepoEmpresa_DtUltReativBackfillResumo( _
     RepoEmpresa_DtUltReativBackfillResumo = res
     Exit Function
 
-Erro:
+erro:
     res.sucesso = False
     res.mensagem = "Erro ao detectar backfill DT_ULT_REATIV: " & Err.Description
     res.CodigoErro = Err.Number
@@ -450,7 +450,7 @@ Public Function RepoEmpresa_BackfillDtUltReativPorAuditLog( _
     Dim erroNumero As Long
     Dim erroMensagem As String
 
-    On Error GoTo Erro
+    On Error GoTo erro
 
     qtdAtualizadas = 0
     relatorio = ""
@@ -497,7 +497,7 @@ Public Function RepoEmpresa_BackfillDtUltReativPorAuditLog( _
     RepoEmpresa_BackfillDtUltReativPorAuditLog = res
     Exit Function
 
-Erro:
+erro:
     erroNumero = Err.Number
     erroMensagem = Err.Description
     On Error Resume Next

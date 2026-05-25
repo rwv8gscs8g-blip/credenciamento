@@ -49,4 +49,3 @@ Public Sub Invalidate()
     ctx.IsEntidadeValida = False
 End Sub
 
-
