@@ -17,6 +17,14 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.1** — destrava os relatórios `Rel_OSEmpresa` e
+  `Rel_Emp_Serv` após gate humano da Onda 38: os forms agora preparam e
+  restauram a proteção da aba `RELATORIO`, limpam resíduos/área impressa,
+  aplicam formatação mínima padrão e o botão **Imprimir Relatório** de OS por
+  Empresa passa a gerar o relatório com a empresa selecionada e a data atual
+  digitada no form. Manifesto delta:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-RELATORIOS-PROTECAO.txt`.
+  Carimbo: `cf778b2+ONDA38.1-relatorios-protecao`.
 - **Onda 38** — MD33 restart correto para `Rel_OSEmpresa` e
   `Rel_Emp_Serv`: os handlers em `Menu_Principal.frm` agora criam a
   instância via `VBA.UserForms.Add` antes do preenchimento, `Preencher.bas`

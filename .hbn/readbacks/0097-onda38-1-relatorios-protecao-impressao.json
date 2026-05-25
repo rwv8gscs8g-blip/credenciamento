@@ -1,0 +1,161 @@
+{
+  "readback_id": "0097-onda38-1-relatorios-protecao-impressao",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0096-onda38-md33-restart-rel-os-rel-emp-serv-exec",
+  "intent": {
+    "objective": "Corrigir a Onda 38.1 para destravar relatorios Rel_OSEmpresa e Rel_Emp_Serv apos gate humano: preparar/restaurar protecao da aba RELATORIO, eliminar residuos de area impressa, fazer o botao Imprimir Relatorio regenerar OS por Empresa com a data atual e aplicar formatacao minima padrao nos dois relatorios afetados.",
+    "non_goals": [
+      "alterar RN-01 a RN-17",
+      "alterar contadores RVS",
+      "usar ImportarPacoteV3 completo",
+      "tocar qualquer arquivo .frx",
+      "tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+      "tocar Mod_Types.bas ou Importador_V3.bas",
+      "padronizar todos os relatorios da aplicacao nesta onda",
+      "incluir PDF ou testes PDF no RVS"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-RELATORIOS-PROTECAO.txt",
+      ".hbn/readbacks/0097-onda38-1-relatorios-protecao-impressao.json",
+      ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json",
+      ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_1_relatorios_protecao_impressao/**"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Rel_OSEmpresa.frx",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Menu_Principal.frx",
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio confirmou importacao Onda 38 com M=2 | F=1 | err=0 | skip=0, compile VBE limpo e RVS completo aprovado.",
+    "Mauricio reportou erro funcional de protecao da aba RELATORIO e inconsistencia no botao Imprimir Relatorio.",
+    "Mauricio aprovou em chat executar a recomendacao de Onda 38.1 para correcao funcional e manter 38.2 como onda separada de padronizacao visual ampla."
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-1-RELATORIOS-PROTECAO",
+    "build_label": "cf778b2+ONDA38.1-relatorios-protecao",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-RELATORIOS-PROTECAO.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-1-RELATORIOS-PROTECAO\", \"cf778b2+ONDA38.1-relatorios-protecao\"",
+    "expected_import_result": "M=1 | F=2 | err=0 | skip=0"
+  },
+  "invariants_preserved": [
+    "Importacao operacional somente por ImportarPacoteV3_Delta",
+    "RN-01 a RN-17 permanecem inalteradas",
+    "Contadores RVS permanecem V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Nenhum servico blindado sera tocado",
+    "Nenhum .frx sera tocado",
+    "Menu_Principal.frm e Preencher.bas permanecem congelados apos Onda 38",
+    "Onda 38.2 fica separada para padronizacao visual ampla"
+  ],
+  "risks": [
+    {
+      "risk": "Botao Imprimir Relatorio continuar imprimindo conteudo stale se a geracao permanecer no clique da lista.",
+      "mitigation": "Mover a geracao efetiva do OS por Empresa para o botao, deixando RO_Lista_Click apenas como selecao.",
+      "severity": "high"
+    },
+    {
+      "risk": "Aba RELATORIO protegida bloquear ClearContents, PageSetup ou PrintOut.",
+      "mitigation": "Usar Util_PrepararAbaParaEscrita e Util_RestaurarProtecaoAba nos dois forms afetados, incluindo handlers de erro.",
+      "severity": "high"
+    },
+    {
+      "risk": "Area impressa e colunas residuais de relatorio anterior contaminarem o PDF gerado.",
+      "mitigation": "Limpar a aba RELATORIO antes/depois, definir PrintArea explicitamente e imprimir somente o range do relatorio atual.",
+      "severity": "high"
+    },
+    {
+      "risk": "Padronizacao visual nesta onda ampliar blast radius funcional.",
+      "mitigation": "Aplicar apenas Rel_FormatarCabecalho/Rel_FormatarDados aos dois relatorios afetados e deferir padronizacao global para Onda 38.2.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff --name-only confirma apenas arquivos permitidos pelo scope 0097, ignorando untracked preexistentes nao stageados",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json"
+      },
+      {
+        "gate": "bash local-ai/scripts/publicar_vba_import_v2.sh --apply e --check confirmam G7/G8 e espelho sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json"
+      },
+      {
+        "gate": "bash scripts/hbn-guards/hbn-guards-runner.sh usa 0097 como readback ativo e passa 5/5",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-1-RELATORIOS-PROTECAO retorna M=1 | F=2 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json"
+      },
+      {
+        "gate": "Relatorio OS por Empresa: selecionar empresa, preencher data opcional, clicar Imprimir Relatorio e confirmar que a data atual e respeitada sem erro de protecao",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json"
+      },
+      {
+        "gate": "Relatorio Empresas por Servico: selecionar servico, gerar PDF/preview sem colunas residuais de OS e sem erro de protecao",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import delta falhar, Mauricio nao deve salvar o workbook e deve colar a mensagem exata do Importador V3.",
+      "Se o compile VBE falhar, Mauricio nao deve salvar o workbook; reabrir o workbook V5 validado apos Onda 38.",
+      "Se CT_ValidarRelease_TrioMinimo mudar contadores ou falhar, nao prosseguir para Onda 38.2.",
+      "Se algum relatorio continuar gerando erro de protecao ou residuo, registrar screenshot e nao salvar o workbook.",
+      "Se commit ja tiver sido criado e rollback git for necessario, usar git revert do commit da Onda 38.1 em vez de reescrever historico."
+    ],
+    "anchor_to_restore": "Workbook V5 salvo apos Onda 38 com build e43352f+ONDA38.MD33-restart-relatorios e commit cf778b2"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-25T12:05:00-03:00"
+}

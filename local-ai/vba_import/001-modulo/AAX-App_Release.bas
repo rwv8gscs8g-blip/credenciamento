@@ -251,9 +251,9 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0205|OFICIAL|V12.0.0206"
 ' para eliminar erro de sintaxe no compile manual do Preencher.bas.
 ' MICRO53-fix2: TV2_PrepararBaselineCanonica recria CAD_SERV canonico
 ' de forma deterministica apos reset, cobrindo o novo contrato do Limpar_Base.
-Public Const APP_BUILD_IMPORTADO As String = "e43352f+ONDA38.MD33-restart-relatorios"
+Public Const APP_BUILD_IMPORTADO As String = "cf778b2+ONDA38.1-relatorios-protecao"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0206-planejamento"
-Public Const APP_BUILD_GERADO_EM As String = "2026-05-25 10:14"
+Public Const APP_BUILD_GERADO_EM As String = "2026-05-25 12:05"
 Public Const APP_RELEASE_TAG As String = "v12.0.0205"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0205"
 Public Const APP_RELEASE_TEST_KEY As String = "rvs-v205-final-2026-05-21"

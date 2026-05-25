@@ -1,12 +1,35 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Codex (Onda 38 implementada com ajustes pos-auditoria Opus/Gemini: MD33 restart correto em Menu_Principal.frm+Preencher.bas, sem tocar Rel_*; readback sucessor 0096 criado para reativar scope-lock; aguardando guards finais, commit e gate humano de import). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
+proprietario-bastao: Codex (Onda 38 importada/compilada/RVS aprovada; Onda 38.1 implementada localmente para corrigir protecao, residuos e fluxo de impressao dos forms Rel_OSEmpresa/Rel_Emp_Serv; aguardando commit/push e gate humano delta). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Codex rodar checks finais com readback 0096 ativo, stagear somente o scope permitido, commitar e entregar comando delta para Mauricio importar no workbook V5.
-ultima-atualizacao: 2026-05-25T10:42:00-0300 (Onda 38 ajustada apos auditorias Opus/Gemini; 0096 criado; aguardando guards finais e commit)
+proxima-acao: Codex finalizar Onda 38.1 com guards/G7 verdes, commit/push e entregar o comando ImportarPacoteV3_Delta ONDA38-1-RELATORIOS-PROTECAO para Mauricio importar no workbook V5.
+ultima-atualizacao: 2026-05-25T12:05:00-0300 (Onda 38.1 implementada localmente apos gate funcional da Onda 38 detectar protecao/area impressa/fluxo de botao)
 ---
+
+## Onda 38.1 IMPLEMENTADA LOCALMENTE — Relatorios protecao e impressao (Codex)
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track |
+| Readback | [readbacks/0097-onda38-1-relatorios-protecao-impressao.json](../readbacks/0097-onda38-1-relatorios-protecao-impressao.json) |
+| Hearback | confirmed — Mauricio aprovou executar Onda 38.1 e 38.2; 38.1 separa correcao funcional urgente |
+| ERP | [results/0097-exec-onda38-1-relatorios-protecao-impressao.json](../results/0097-exec-onda38-1-relatorios-protecao-impressao.json) — delivered_for_human_gate |
+| Doc tecnico | [38_1_TECNICO.md](../../auditoria/03_ondas/onda_38_1_relatorios_protecao_impressao/38_1_TECNICO.md) |
+| Manifesto delta | [000-MANIFESTO-V3-DELTA-ONDA38-1-RELATORIOS-PROTECAO.txt](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-RELATORIOS-PROTECAO.txt) |
+| Build label | `cf778b2+ONDA38.1-relatorios-protecao` |
+
+### Resultado Onda 38.1
+
+- `Rel_OSEmpresa.frm` agora gera o relatorio no botao `Imprimir Relatorio`,
+  usando a empresa selecionada e a data atual digitada em `Dt_inicial`.
+- `RO_Lista_Click` passa a ser selecao simples, sem gerar relatorio pesado.
+- `Rel_Emp_Serv.frm` prepara/restaura protecao da aba `RELATORIO`, limpa
+  residuos e define `PrintArea` para evitar colunas de relatorio anterior.
+- Os dois forms aplicam formatacao minima com `Rel_FormatarCabecalho` e
+  `Rel_FormatarDados`.
+- Onda 38.2 fica deferida ate Onda 38.1 passar compile/RVS/gates funcionais.
 
 ## Onda 38 IMPLEMENTADA LOCALMENTE — MD33 restart Relatorios (Codex)
 

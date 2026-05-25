@@ -1,0 +1,65 @@
+{
+  "result_id": "0097-exec-onda38-1-relatorios-protecao-impressao",
+  "readback_id": "0097-onda38-1-relatorios-protecao-impressao",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "delivered_for_human_gate",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "summary": "Onda 38.1 corrige protecao, residuos de area impressa e fluxo do botao Imprimir Relatorio nos forms Rel_OSEmpresa e Rel_Emp_Serv, mantendo a padronizacao visual ampla para Onda 38.2.",
+  "files_changed": [
+    "src/vba/Rel_OSEmpresa.frm",
+    "src/vba/Rel_Emp_Serv.frm",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-RELATORIOS-PROTECAO.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+    "auditoria/03_ondas/onda_38_1_relatorios_protecao_impressao/38_1_TECNICO.md",
+    ".hbn/readbacks/0097-onda38-1-relatorios-protecao-impressao.json",
+    ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json",
+    ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-1-RELATORIOS-PROTECAO",
+    "build_label": "cf778b2+ONDA38.1-relatorios-protecao",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-1-RELATORIOS-PROTECAO\", \"cf778b2+ONDA38.1-relatorios-protecao\"",
+    "expected_import_result": "M=1 | F=2 | err=0 | skip=0"
+  },
+  "local_validation": [
+    {
+      "gate": "publicar_vba_import_v2.sh --apply",
+      "status": "pass",
+      "evidence": "3 arquivos applied: AAX-App_Release.bas, AAK-Rel_Emp_Serv.frm, AAL-Rel_OSEmpresa.frm; G8 OK; G7 OK"
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --check",
+      "status": "pass",
+      "evidence": "vba_import 100% sincronizado com src/vba"
+    },
+    {
+      "gate": "hbn-guards-runner",
+      "status": "pass",
+      "evidence": "Readback ativo 0097 confirmado; todos os arquivos staged dentro do scope declarado; 5/5 guards verdes"
+    }
+  ],
+  "human_gates_pending": [
+    "ImportarPacoteV3_Delta \"ONDA38-1-RELATORIOS-PROTECAO\", \"cf778b2+ONDA38.1-relatorios-protecao\"",
+    "Depurar > Compilar VBAProject",
+    "CT_ValidarRelease_TrioMinimo com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "OS por Empresa: selecionar empresa, preencher data opcional e clicar Imprimir Relatorio; confirmar que respeita a data atual e nao gera erro de protecao",
+    "Empresas por Servico: selecionar servico; confirmar que PDF/preview nao traz colunas residuais de OS e nao gera erro de protecao"
+  ],
+  "next_wave": {
+    "id": "0098-onda38-2-padronizacao-visual-relatorios",
+    "status": "deferred_until_0097_human_gate",
+    "summary": "Padronizacao visual ampla dos relatorios apos Onda 38.1 passar em compile/RVS/gates funcionais."
+  },
+  "created_at": "2026-05-25T12:05:00-03:00"
+}

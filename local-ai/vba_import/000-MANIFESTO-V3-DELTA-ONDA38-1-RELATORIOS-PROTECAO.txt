@@ -1,0 +1,39 @@
+# Manifesto V3 DELTA ONDA38-1-RELATORIOS-PROTECAO - V12.0.0206
+# Tema: Protecao, fluxo de impressao e limpeza da aba RELATORIO nos relatorios afetados.
+#
+# Contexto:
+#   - Onda 38 importou, compilou e passou RVS completo.
+#   - Gate humano encontrou erro funcional ao gerar/imprimir relatorios:
+#     aba RELATORIO protegida, residuos de area impressa e botao de OS por
+#     Empresa imprimindo conteudo pre-gerado antes da data atual.
+#   - Importacao permitida exclusivamente via ImportarPacoteV3_Delta.
+#
+# Mudancas:
+#   AAL-Rel_OSEmpresa.frm:
+#     - RO_Lista_Click deixa de gerar relatorio; apenas preserva selecao.
+#     - B_RelEmpresaOS_Click passa a gerar/imprimir com empresa e data atuais.
+#     - Gera relatorio com Util_PrepararAbaParaEscrita/Util_RestaurarProtecaoAba.
+#     - Limpa residuos, define PrintArea e aplica formatacao minima padrao.
+#   AAK-Rel_Emp_Serv.frm:
+#     - Gera relatorio com preparo/restauro de protecao.
+#     - Limpa a aba RELATORIO inteira antes/depois e define PrintArea A:D.
+#     - Aplica formatacao minima padrao e evita colunas residuais de OS.
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = "cf778b2+ONDA38.1-relatorios-protecao"
+#     - APP_BUILD_GERADO_EM = "2026-05-25 12:05"
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38-1-RELATORIOS-PROTECAO", "cf778b2+ONDA38.1-relatorios-protecao"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=2 | err=0 | skip=0.
+#   - Compile manual passa limpo.
+#   - CT_ValidarRelease_TrioMinimo permanece APROVADO:
+#     V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+#   - OS por Empresa respeita data digitada no botao Imprimir Relatorio.
+#   - Empresas por Servico nao carrega colunas residuais de outro relatorio.
+#
+# GRUPO_DELTA_ONDA38_1_RELATORIOS_PROTECAO
+F|002-formularios/AAL-Rel_OSEmpresa.frm
+F|002-formularios/AAK-Rel_Emp_Serv.frm
+M|001-modulo/AAX-App_Release.bas
