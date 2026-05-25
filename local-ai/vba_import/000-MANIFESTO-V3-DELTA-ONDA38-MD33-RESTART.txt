@@ -1,0 +1,38 @@
+# Manifesto V3 DELTA ONDA38-MD33-RESTART - V12.0.0206
+# Tema: Correcao minima do bug de instancia fantasma em Rel_OSEmpresa e Rel_Emp_Serv.
+#
+# Contexto:
+#   - Workbook V5 validado com APP_BUILD_IMPORTADO=e43352f+ONDA37.4-teste-delta-noop.
+#   - O bug real esta nos handlers de Menu_Principal.frm e no lookup de
+#     Preencher.bas, nao nos forms Rel_*.
+#   - Importacao permitida exclusivamente via ImportarPacoteV3_Delta.
+#
+# Mudancas:
+#   AAM-Menu_Principal.frm:
+#     - Btn_Rel_OS_Empresa_Click cria Rel_OSEmpresa via VBA.UserForms.Add antes
+#       de chamar PreenchimentoRelatorioOSEmpresa.
+#     - Rel_EmpXServ_Click cria Rel_Emp_Serv via VBA.UserForms.Add antes de
+#       chamar PreenchimentoRel_EmpXServ.
+#     - UserForm_Initialize deixa de preaquecer PreenchimentoRelatorioOSEmpresa.
+#   AAU-Preencher.bas:
+#     - PreenchimentoRelatorioOSEmpresa nao cria formulario fallback invisivel.
+#     - PreenchimentoRel_EmpXServ explicita lookup sem criar nova instancia.
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = "e43352f+ONDA38.MD33-restart-relatorios"
+#     - APP_BUILD_GERADO_EM = "2026-05-25 10:14"
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38-MD33-RESTART", "e43352f+ONDA38.MD33-restart-relatorios"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=1 | err=0 | skip=0.
+#   - Compile manual passa limpo.
+#   - CT_ValidarRelease_TrioMinimo permanece APROVADO:
+#     V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+#   - ASS_REL_OS_EMP_LISTA confirma RO_Lista com >=1 empresa quando ha dados.
+#   - ASS_REL_EMP_SERV_LISTA confirma SV_CR_Lista com >=1 servico quando ha dados.
+#
+# GRUPO_DELTA_ONDA38_MD33_RESTART
+F|002-formularios/AAM-Menu_Principal.frm
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/AAX-App_Release.bas

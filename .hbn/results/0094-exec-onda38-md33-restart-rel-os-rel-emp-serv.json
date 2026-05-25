@@ -1,0 +1,62 @@
+{
+  "result_id": "0094-exec-onda38-md33-restart-rel-os-rel-emp-serv",
+  "readback_id": "0094-onda38-md33-restart-rel-os-rel-emp-serv",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "delivered_for_human_gate",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "summary": "Onda 38 implementa correcao minima do bug de instancia fantasma nos relatorios Rel_OSEmpresa e Rel_Emp_Serv, corrigindo handlers em Menu_Principal.frm e lookup em Preencher.bas, sem tocar Rel_* ou servicos blindados.",
+  "files_changed": [
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Preencher.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-MD33-RESTART.txt",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "auditoria/03_ondas/onda_38_md33_restart_rel_os_rel_emp_serv/38_TECNICO.md",
+    "auditoria/03_ondas/onda_38_md33_restart_rel_os_rel_emp_serv/38_PROMPT_AUDITORIA_CRUZADA_OPUS_GEMINI.md",
+    "auditoria/03_ondas/onda_38_md33_restart_rel_os_rel_emp_serv/39_CONSOLIDADO_AUDITORIA_CRUZADA.md",
+    ".hbn/readbacks/0094-onda38-md33-restart-rel-os-rel-emp-serv.json",
+    ".hbn/readbacks/0096-onda38-md33-restart-rel-os-rel-emp-serv-exec.json",
+    ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-MD33-RESTART",
+    "build_label": "e43352f+ONDA38.MD33-restart-relatorios",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-MD33-RESTART\", \"e43352f+ONDA38.MD33-restart-relatorios\"",
+    "expected_import_result": "M=2 | F=1 | err=0 | skip=0"
+  },
+  "local_validation": [
+    {
+      "gate": "publicar_vba_import_v2.sh --apply",
+      "status": "pass",
+      "evidence": "3 arquivos applied: AAX-App_Release.bas, AAM-Menu_Principal.frm, AAU-Preencher.bas; G8 OK; G7 OK"
+    },
+    {
+      "gate": "hbn-guards-runner",
+      "status": "pass",
+      "evidence": "Readback ativo 0096 confirmado; todos os arquivos staged dentro do scope declarado; 5/5 guards verdes"
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --check",
+      "status": "pass",
+      "evidence": "vba_import 100% sincronizado com src/vba"
+    }
+  ],
+  "human_gates_pending": [
+    "ImportarPacoteV3_Delta \"ONDA38-MD33-RESTART\", \"e43352f+ONDA38.MD33-restart-relatorios\"",
+    "Depurar > Compilar VBAProject",
+    "CT_ValidarRelease_TrioMinimo com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "ASS_REL_OS_EMP_LISTA: RO_Lista com >=1 empresa quando ha dados canonicos",
+    "ASS_REL_EMP_SERV_LISTA: SV_CR_Lista com >=1 servico quando ha dados canonicos",
+    "Relatar se Rel_Emp_Serv bloqueia o menu ou deixa o menu clicavel durante exibicao"
+  ],
+  "created_at": "2026-05-25T10:14:00-03:00"
+}

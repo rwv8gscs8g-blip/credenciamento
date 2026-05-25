@@ -1392,7 +1392,7 @@ Dim idx As Long
 
 cont = 1
 NItem = 0
-Set lst = ControleFormulario("Rel_OSEmpresa", "RO_Lista", True)
+Set lst = ControleFormulario("Rel_OSEmpresa", "RO_Lista", False)
 If lst Is Nothing Then Exit Sub
 Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
 primeiraLinhaEmp = PrimeiraLinhaDadosEmpresas()
@@ -1440,7 +1440,7 @@ Dim idx As Long
 
 cont = 1
 NItem = 0
-Set lst = ControleFormulario("Rel_Emp_Serv", "SV_CR_Lista")
+Set lst = ControleFormulario("Rel_Emp_Serv", "SV_CR_Lista", False)
 If lst Is Nothing Then Exit Sub
 Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
 nLinhas = UltimaLinhaAba(SHEET_CAD_SERV)

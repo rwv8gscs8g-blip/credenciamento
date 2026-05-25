@@ -1,0 +1,151 @@
+{
+  "readback_id": "0096-onda38-md33-restart-rel-os-rel-emp-serv-exec",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0094-onda38-md33-restart-rel-os-rel-emp-serv",
+  "intent": {
+    "objective": "Reabilitar o assert-scope-lock para a Onda 38 apos o readback 0095 da Onda 36.1 ficar numericamente ativo, preservando o mesmo escopo funcional aprovado no 0094 e aplicando os ajustes aprovados das auditorias Opus e Gemini/Antigravity.",
+    "non_goals": [
+      "alterar RN-01 a RN-17",
+      "alterar contadores RVS",
+      "usar ImportarPacoteV3 completo",
+      "tocar Rel_OSEmpresa.frm, Rel_Emp_Serv.frm ou qualquer .frx",
+      "tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+      "tocar Mod_Types.bas ou Importador_V3.bas",
+      "incluir PDF ou testes PDF no RVS",
+      "renumerar ou editar o readback 0095"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-MD33-RESTART.txt",
+      "auditoria/03_ondas/onda_38_md33_restart_rel_os_rel_emp_serv/**",
+      ".hbn/readbacks/0094-onda38-md33-restart-rel-os-rel-emp-serv.json",
+      ".hbn/readbacks/0096-onda38-md33-restart-rel-os-rel-emp-serv-exec.json",
+      ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_OSEmpresa.frx",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Menu_Principal.frx",
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio aprovou em chat a criacao do readback 0096 para resolver o lock ativo 0095 vs 0094.",
+    "Mauricio aprovou remover Unload/Set Nothing do handler Rel_EmpXServ_Click para evitar fechamento instantaneo em caso modeless.",
+    "Mauricio aprovou reverter o vazamento fora de escopo em auditoria/03_ondas/onda_37_2_reversao_md33/37_2_PROCEDIMENTO_IMPORT.md.",
+    "Mauricio aprovou limpar locks Git locais vazios antes de validar e commitar."
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-MD33-RESTART",
+    "build_label": "e43352f+ONDA38.MD33-restart-relatorios",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-MD33-RESTART.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-MD33-RESTART\", \"e43352f+ONDA38.MD33-restart-relatorios\"",
+    "expected_import_result": "M=2 | F=1 | err=0 | skip=0"
+  },
+  "invariants_preserved": [
+    "Importacao operacional somente por ImportarPacoteV3_Delta",
+    "RN-01 a RN-17 permanecem inalteradas",
+    "Contadores RVS permanecem V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Nenhum servico blindado sera tocado",
+    "Nenhum Rel_* ou .frx sera tocado",
+    "Padrao VBA.UserForms.Add preservado em todos os handlers",
+    "Readback 0095 permanece historicamente intacto"
+  ],
+  "risks": [
+    {
+      "risk": "Readback 0096 divergir do escopo funcional aprovado no 0094.",
+      "mitigation": "Copiar o mesmo conjunto de arquivos permitidos e proibidos do 0094, acrescentando apenas o proprio 0096 como artefato de governanca.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Rel_EmpXServ_Click fechar instantaneamente se a chamada .Show se comportar como modeless.",
+      "mitigation": "Remover Unload e Set Nothing desse handler, mantendo descarte preventivo antes de abrir nova instancia.",
+      "severity": "high"
+    },
+    {
+      "risk": "Arquivo fora de escopo da Onda 37.2 ser incluido no commit da Onda 38.",
+      "mitigation": "Restaurar auditoria/03_ondas/onda_37_2_reversao_md33/37_2_PROCEDIMENTO_IMPORT.md antes de stage e confirmar git diff --name-only contra scope.",
+      "severity": "high"
+    },
+    {
+      "risk": "Locks Git vazios bloquearem git add ou commit.",
+      "mitigation": "Remover somente .git/index.lock e .git/refs/stash.lock quando vazios e sem stash ativo.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff --name-only confirma apenas arquivos permitidos pelo scope 0096, ignorando untracked preexistentes nao stageados",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      },
+      {
+        "gate": "bash local-ai/scripts/publicar_vba_import_v2.sh --apply e --check confirmam G7/G8 e espelho sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      },
+      {
+        "gate": "bash scripts/hbn-guards/hbn-guards-runner.sh usa 0096 como readback ativo e passa 5/5",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-MD33-RESTART retorna M=2 | F=1 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o scope-lock ainda apontar para 0095, parar e nao commitar.",
+      "Se o import delta falhar, Mauricio nao deve salvar o workbook e deve colar a mensagem exata do Importador V3.",
+      "Se o compile VBE falhar, Mauricio nao deve salvar o workbook; reabrir a V5 salva com APP_BUILD_IMPORTADO e43352f+ONDA37.4-teste-delta-noop.",
+      "Se CT_ValidarRelease_TrioMinimo mudar contadores ou falhar, nao prosseguir para Onda 39.",
+      "Se commit ja tiver sido criado e rollback git for necessario, usar git revert do commit da Onda 38 em vez de reescrever historico."
+    ],
+    "anchor_to_restore": "Workbook V5 salvo com APP_BUILD_IMPORTADO=e43352f+ONDA37.4-teste-delta-noop e commit 78d97fb"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-25T10:42:53-03:00"
+}

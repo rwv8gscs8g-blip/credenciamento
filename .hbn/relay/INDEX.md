@@ -1,12 +1,41 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Codex (Onda 38 em pause aguardando hearback Mauricio para readback 0094 com scope expandido — bug confirmado em Menu_Principal.frm+Preencher.bas, NAO em Rel_*). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
+proprietario-bastao: Codex (Onda 38 implementada com ajustes pos-auditoria Opus/Gemini: MD33 restart correto em Menu_Principal.frm+Preencher.bas, sem tocar Rel_*; readback sucessor 0096 criado para reativar scope-lock; aguardando guards finais, commit e gate humano de import). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Mauricio salvar workbook V5 (Cmd+S no Excel apos compile OK + smoke APROVADO), depois commit Onda 37.3+37.4, push, e abrir NOVA sessao Codex usando auditoria/00_status/107_SUPERPROMPT_CODEX_RETOMADA_ONDA_38_PDF.md. Codex retoma com base V5 limpa + carimbo ONDA37.4-teste-delta-noop, usando exclusivamente ImportarPacoteV3_Delta (knowledge 0018).
-ultima-atualizacao: 2026-05-25T01:00:00-0300 (Onda 36.1 fechada; knowledge 0014 protocolo fim-de-sessao publicado e auto-aplicado; handoff Opus em .hbn/messages/20260525-0100; Codex em hold no readback 0094 da Onda 38)
+proxima-acao: Codex rodar checks finais com readback 0096 ativo, stagear somente o scope permitido, commitar e entregar comando delta para Mauricio importar no workbook V5.
+ultima-atualizacao: 2026-05-25T10:42:00-0300 (Onda 38 ajustada apos auditorias Opus/Gemini; 0096 criado; aguardando guards finais e commit)
 ---
+
+## Onda 38 IMPLEMENTADA LOCALMENTE — MD33 restart Relatorios (Codex)
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track |
+| Readback | [readbacks/0094-onda38-md33-restart-rel-os-rel-emp-serv.json](../readbacks/0094-onda38-md33-restart-rel-os-rel-emp-serv.json) |
+| Hearback | confirmed — Mauricio aprovou escopo expandido em 2026-05-25 |
+| ERP | [results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json](../results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json) — implemented_awaiting_commit_and_human_gate |
+| Doc tecnico | [38_TECNICO.md](../../auditoria/03_ondas/onda_38_md33_restart_rel_os_rel_emp_serv/38_TECNICO.md) |
+| Prompt auditoria | [38_PROMPT_AUDITORIA_CRUZADA_OPUS_GEMINI.md](../../auditoria/03_ondas/onda_38_md33_restart_rel_os_rel_emp_serv/38_PROMPT_AUDITORIA_CRUZADA_OPUS_GEMINI.md) |
+| Consolidado auditoria | [39_CONSOLIDADO_AUDITORIA_CRUZADA.md](../../auditoria/03_ondas/onda_38_md33_restart_rel_os_rel_emp_serv/39_CONSOLIDADO_AUDITORIA_CRUZADA.md) |
+| Manifesto delta | [000-MANIFESTO-V3-DELTA-ONDA38-MD33-RESTART.txt](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-MD33-RESTART.txt) |
+| Build label | `e43352f+ONDA38.MD33-restart-relatorios` |
+
+### Resultado Onda 38
+
+- `Menu_Principal.frm` agora cria `Rel_OSEmpresa` e `Rel_Emp_Serv` via
+  `VBA.UserForms.Add` antes de chamar as rotinas de preenchimento.
+- `Preencher.bas` nao cria instancia fallback invisivel para
+  `Rel_OSEmpresa`; ambos os preenchimentos dependem da instancia exibida ja
+  registrada em `VBA.UserForms`.
+- `Rel_OSEmpresa.frm`, `Rel_Emp_Serv.frm` e arquivos `.frx` permaneceram
+  intocados.
+- Auditorias Opus e Gemini/Antigravity aprovadas com ressalvas resolvidas:
+  `Rel_EmpXServ_Click` nao faz unload imediato apos `.Show`, vazamento 37.2
+  revertido, locks Git limpos e readback sucessor 0096 criado.
+- Proximo gate: guards finais, commit/import delta, compile VBE e
+  `CT_ValidarRelease_TrioMinimo`.
 
 ## Onda 37.3 EM EXECUCAO — Reset src/vba para V5 (Opus, bastao recebido de Codex)
 

@@ -17,6 +17,13 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38** — MD33 restart correto para `Rel_OSEmpresa` e
+  `Rel_Emp_Serv`: os handlers em `Menu_Principal.frm` agora criam a
+  instância via `VBA.UserForms.Add` antes do preenchimento, `Preencher.bas`
+  deixa de criar fallback invisível para `Rel_OSEmpresa`, e o preaquecimento
+  do relatório no `UserForm_Initialize` do menu foi removido. Manifesto delta:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-MD33-RESTART.txt`.
+  Carimbo: `e43352f+ONDA38.MD33-restart-relatorios`.
 - **Onda 37.2** — reversão controlada dos três `drift_md33_descartar`
   (`Importador_V3.bas`, `Menu_Principal.frm`, `Preencher.bas`) para estado
   equivalente à V5, com espelhos correspondentes em `local-ai/vba_import/`.

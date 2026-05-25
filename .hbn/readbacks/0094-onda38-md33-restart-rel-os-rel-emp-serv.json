@@ -1,0 +1,248 @@
+{
+  "readback_id": "0094-onda38-md33-restart-rel-os-rel-emp-serv",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0093-onda37-3-reset-src-vba-para-v5",
+  "baton_transfer": "claude-opus-4-7 -> codex (2026-05-25; Onda 37.3 + 37.4 fechadas com compile VBE OK e CT_ValidarRelease_TrioMinimo aprovado)",
+  "decisions_preconfirmed": [
+    "Bastao Codex segue ativo nesta onda — Opus auditou e aprovou expansao de scope baseada em auditoria de codigo real",
+    "Bug real confirmado em Menu_Principal.frm e Preencher.bas; Rel_OSEmpresa.frm e Rel_Emp_Serv.frm nao devem ser tocados nesta onda",
+    "Microdelta deve usar exclusivamente ImportarPacoteV3_Delta com nome ONDA38-MD33-RESTART",
+    "AAX-App_Release.bas deve ser o ultimo item do manifesto delta"
+  ],
+  "intent": {
+    "objective": "Corrigir bug de instanciacao errada em Menu_Principal.frm linhas 3091-3093/3201-3204/3336 e Preencher.bas linhas 1395/1443, conforme auditoria 95/97 — sem tocar Rel_* (bug confirmado nao esta neles).",
+    "non_goals": [
+      "usar ImportarPacoteV3 completo",
+      "implementar motor PDF ou integrar PDF em qualquer fluxo",
+      "alterar RN-01 a RN-17",
+      "alterar contadores ou baterias RVS",
+      "tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+      "tocar Rel_OSEmpresa.frm, Rel_Emp_Serv.frm ou respectivos .frx",
+      "tocar Menu_Principal.frx ou qualquer binario de formulario",
+      "renomear simbolos VBA",
+      "migrar arquitetura de preenchimento dos relatorios para camada nova"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-MD33-RESTART.txt",
+      "auditoria/03_ondas/onda_38_md33_restart_rel_os_rel_emp_serv/**",
+      ".hbn/readbacks/0094-onda38-md33-restart-rel-os-rel-emp-serv.json",
+      ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_OSEmpresa.frx",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Menu_Principal.frx",
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "source_audit": {
+    "actual_bug_lines_found": [
+      {
+        "file": "src/vba/Menu_Principal.frm",
+        "lines": "3091-3093",
+        "finding": "Btn_Rel_OS_Empresa_Click chama PreenchimentoRelatorioOSEmpresa antes de criar a instancia Rel_OSEmpresa que sera exibida."
+      },
+      {
+        "file": "src/vba/Menu_Principal.frm",
+        "lines": "3201-3204",
+        "finding": "Rel_EmpXServ_Click chama PreenchimentoRel_EmpXServ antes de criar e exibir Rel_Emp_Serv."
+      },
+      {
+        "file": "src/vba/Menu_Principal.frm",
+        "line": "3336",
+        "finding": "UserForm_Initialize preaquece PreenchimentoRelatorioOSEmpresa e pode criar instancia Rel_OSEmpresa inutil."
+      },
+      {
+        "file": "src/vba/Preencher.bas",
+        "line": "1395",
+        "finding": "PreenchimentoRelatorioOSEmpresa usa ControleFormulario(\"Rel_OSEmpresa\", \"RO_Lista\", True), permitindo criacao de formulario fallback invisivel."
+      },
+      {
+        "file": "src/vba/Preencher.bas",
+        "line": "1443",
+        "finding": "PreenchimentoRel_EmpXServ usa ControleFormulario(\"Rel_Emp_Serv\", \"SV_CR_Lista\") e sai sem preencher quando chamado antes da instancia existir."
+      }
+    ],
+    "approved_scope_revision": "Mauricio aprovou em 2026-05-25 a expansao do scope para Menu_Principal.frm e Preencher.bas, com Rel_* explicitamente proibidos."
+  },
+  "pre_hearback_questions_resolved": [
+    {
+      "question": "UI_DescartarFormVisivel existe no codigo atual?",
+      "answer": "Sim. rg -in encontrou chamadas em src/vba/Menu_Principal.frm:167, 353, 372, 558, 559 e a definicao Private Sub UI_DescartarFormVisivel(ByVal nomeFormulario As String) em src/vba/Menu_Principal.frm:315. Nao e preciso criar funcao nem expandir scope."
+    },
+    {
+      "question": "A mudanca .Show -> .Show vbModal em Rel_Emp_Serv e proposital?",
+      "answer": "Nao sera aplicada nesta onda. O codigo atual usa frmRelEmpServ.Show sem argumento em src/vba/Menu_Principal.frm:3204 e nao ha ShowModal = 0 no export Rel_Emp_Serv.frm, mas nao ha ADR/documento provando intencao modal. A Onda 38 preservara a chamada .Show para evitar mudanca comportamental desnecessaria; se o operador quiser confirmar runtime, usar VBE Immediate para inspecionar Rel_Emp_Serv.ShowModal antes de nova decisao."
+    },
+    {
+      "question": "ControleFormulario confirma que True/False controla criacao de formulario?",
+      "answer": "Sim. A assinatura atual e Private Function ControleFormulario(ByVal nomeFormulario As String, ByVal nomeControle As String, Optional ByVal criarFormulario As Boolean = False) As Object, e ela repassa criarFormulario para FormularioAberto(nomeFormulario, criarFormulario). Portanto True permite criar fallback; False evita criar instancia nova."
+    },
+    {
+      "question": "Tipagem dos formularios sera padronizada?",
+      "answer": "Revisado apos auditoria round 2. A proposta passa a padronizar ambos como Object, porque o padrao seguro do projeto para formularios criados dinamicamente e Dim frm As Object + VBA.UserForms.Add(\"NomeDoForm\")."
+    },
+    {
+      "question": "Set frm = New Rel_* funciona com ControleFormulario/FormularioAberto?",
+      "answer": "Nao. Instancias criadas com New nao sao registradas em VBA.UserForms; ControleFormulario chama FormularioAberto, que itera VBA.UserForms. Portanto a proposta deve usar VBA.UserForms.Add(\"Rel_OSEmpresa\") e VBA.UserForms.Add(\"Rel_Emp_Serv\"), nao New, para que PreenchimentoRelatorioOSEmpresa e PreenchimentoRel_EmpXServ encontrem a instancia exibida."
+    }
+  ],
+  "proposed_implementation": {
+    "strategy": "Menu_Principal registra a instancia exibida em VBA.UserForms via VBA.UserForms.Add antes de chamar Preencher; Preencher passa a localizar apenas formulario ja existente, sem criar instancia fallback para Rel_OSEmpresa; Rel_Emp_Serv preserva a chamada .Show atual sem forcar vbModal nesta onda.",
+    "menu_principal": [
+      "Btn_Rel_OS_Empresa_Click: Dim frmRelOSEmpresa As Object; UI_DescartarFormVisivel(\"Rel_OSEmpresa\"); Set frmRelOSEmpresa = VBA.UserForms.Add(\"Rel_OSEmpresa\"); PreenchimentoRelatorioOSEmpresa; Show vbModal; Unload; Set Nothing.",
+      "Rel_EmpXServ_Click: Dim frmRelEmpServ As Object; UI_DescartarFormVisivel(\"Rel_Emp_Serv\"); Set frmRelEmpServ = VBA.UserForms.Add(\"Rel_Emp_Serv\"); PreenchimentoRel_EmpXServ; Show; Unload; Set Nothing.",
+      "UserForm_Initialize: remover chamada de preaquecimento Call PreenchimentoRelatorioOSEmpresa."
+    ],
+    "preencher": [
+      "PreenchimentoRelatorioOSEmpresa: trocar criarFormulario=True por lookup de instancia existente.",
+      "PreenchimentoRel_EmpXServ: manter lookup de instancia existente, agora garantida pelo caller."
+    ]
+  },
+  "delta_contract": {
+    "delta_name": "ONDA38-MD33-RESTART",
+    "build_label": "e43352f+ONDA38.MD33-restart-relatorios",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-MD33-RESTART.txt",
+    "manifest_items_in_order": [
+      "F|002-formularios/AAM-Menu_Principal.frm",
+      "M|001-modulo/AAU-Preencher.bas",
+      "M|001-modulo/AAX-App_Release.bas"
+    ],
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-MD33-RESTART\", \"e43352f+ONDA38.MD33-restart-relatorios\"",
+    "expected_import_result": "M=2 | F=1 | err=0 | skip=0"
+  },
+  "invariants_preserved": [
+    "Importacao operacional somente por ImportarPacoteV3_Delta",
+    "Workbook V5 permanece como ancora compilavel; operador nao deve salvar em caso de falha",
+    "src/vba permanece fonte versionada e local-ai/vba_import permanece espelho operacional",
+    "RN-01 a RN-17 permanecem inalteradas",
+    "Contadores RVS herdados permanecem V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Nenhum servico blindado sera tocado",
+    "Nenhum teste PDF sera incluido nas baterias RVS",
+    "Nenhum .frx sera tocado",
+    "Padrao VBA.UserForms.Add preservado em todos os handlers"
+  ],
+  "risks": [
+    {
+      "risk": "Instancia via New nao registra em VBA.UserForms; ControleFormulario via FormularioAberto falha em achar a forma.",
+      "mitigation": "Usar VBA.UserForms.Add e nao New nos dois handlers corrigidos.",
+      "severity": "high"
+    },
+    {
+      "risk": "A mudanca em Preencher.bas pode afetar outros consumidores de PreenchimentoRelatorioOSEmpresa ou PreenchimentoRel_EmpXServ.",
+      "mitigation": "Auditar referencias com rg antes de editar; manter assinaturas publicas iguais; alterar somente o lookup de formulario das duas rotinas.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Editar Menu_Principal.frm pode dessincronizar o .frm textual do binario Menu_Principal.frx se o designer for aberto ou modificado.",
+      "mitigation": "Editar somente codigo textual no .frm via patch; manter src/vba/Menu_Principal.frx e local-ai frx fora do scope e forbidden.",
+      "severity": "high"
+    },
+    {
+      "risk": "O fix dos handlers pode alterar comportamento visual/modal dos relatorios.",
+      "mitigation": "Preservar Show vbModal para Rel_OSEmpresa e a chamada .Show sem argumento para Rel_Emp_Serv, adicionando cleanup somente apos retorno do Show.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Contadores RVS podem mudar por efeito colateral inesperado em Preencher.bas ou Menu_Principal.frm.",
+      "mitigation": "Gate humano obrigatorio CT_ValidarRelease_TrioMinimo com assinatura V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0 antes de fechar ERP.",
+      "severity": "high"
+    },
+    {
+      "risk": "Usar importacao completa reintroduziria o fantasma de cache VBE observado nas Ondas 37.2/37.3.",
+      "mitigation": "Manifesto delta pequeno e comando unico ImportarPacoteV3_Delta; ImportarPacoteV3 completo permanece fora do procedimento.",
+      "severity": "high"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff --name-only antes de stage confirma diff restrito ao scope.files_allowed do readback 0094",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      },
+      {
+        "gate": "bash local-ai/scripts/publicar_vba_import_v2.sh --apply sincroniza espelho e shasum src/vba vs local-ai/vba_import permanece coerente",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      },
+      {
+        "gate": "bash scripts/hbn-guards/hbn-guards-runner.sh passa 5/5 antes de commit",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-MD33-RESTART retorna M=2 | F=1 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo no workbook V5",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo permanece APROVADO sem mudanca de contadores: V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0094-exec-onda38-md33-restart-rel-os-rel-emp-serv.json"
+      },
+      {
+        "gate": "ASS_REL_OS_EMP_LISTA e ASS_REL_EMP_SERV_LISTA confirmam listas preenchidas pela interface quando ha dados canonicos",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_md33_restart_rel_os_rel_emp_serv/38_TECNICO.md"
+      },
+      {
+        "gate": "Roteiro assistido confirma RO_Lista renderiza com >=1 empresa cadastrada e SV_CR_Lista renderiza com >=1 servico cadastrado, capturando especificamente falha de instancia fora de VBA.UserForms",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_md33_restart_rel_os_rel_emp_serv/38_TECNICO.md"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import delta falhar, Mauricio nao deve salvar o workbook e deve colar a mensagem exata do Importador V3.",
+      "Se o compile VBE falhar, Mauricio nao deve salvar o workbook; reabrir a V5 salva com APP_BUILD_IMPORTADO e43352f+ONDA37.4-teste-delta-noop.",
+      "Se CT_ValidarRelease_TrioMinimo mudar contadores ou falhar, nao prosseguir para Onda 39; abrir micro-onda corretiva com escopo revisado.",
+      "Se o gate funcional dos relatorios falhar, nao prosseguir para Onda 39; manter ERP em delivered_for_human_gate e diagnosticar com evidencia humana.",
+      "Se commit ja tiver sido criado e rollback git for necessario, usar git revert do commit da Onda 38 em vez de reescrever historico."
+    ],
+    "anchor_to_restore": "Workbook V5 salvo com APP_BUILD_IMPORTADO=e43352f+ONDA37.4-teste-delta-noop e commit c47fb53"
+  },
+  "human_status": "confirmed",
+  "human_hearback": {
+    "confirmed_by": "Mauricio",
+    "confirmed_at": "2026-05-25",
+    "confirmation": "Aprovado. Faça as implementações e ao final prepare um prompt para solicitar auditoria cruzada do Claude opus e do Antigravity com o gemini 3.5."
+  },
+  "created_at": "2026-05-25T00:58:39-03:00"
+}
