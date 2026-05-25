@@ -1,12 +1,39 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Mauricio (decisao sobre abrir Onda 37.2 safe_track). Codex concluiu a Onda 37.1 sem tocar VBA e propos reversao controlada dos drifts MD33 descartaveis.
+proprietario-bastao: Mauricio (gate humano Onda 37.2). Codex entregou a reversao controlada dos drifts MD33 descartaveis; ERP fica pendente ate importacao de local-ai/vba_import/ e compile VBE humano.
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Mauricio decidir se autoriza novo readback safe_track 0092 para Onda 37.2, revertendo `Importador_V3.bas`, `Menu_Principal.frm` e `Preencher.bas` ao estado equivalente a V5/compilavel.
-ultima-atualizacao: 2026-05-24T20:00:00-0300 (Onda 37.1 executada por Codex; drift funcional subclassificado; L26, knowledge 0014 e ADRs produzidos; nenhum VBA tocado)
+proxima-acao: Mauricio importar exclusivamente os arquivos autorizados de `local-ai/vba_import/` no workbook V5 e executar `Debug > Compile VBAProject`; somente depois disso a Onda 37.2 pode ter ERP fechado funcionalmente.
+ultima-atualizacao: 2026-05-24T21:35:43-0300 (Onda 37.2 entregue por Codex para gate humano; workbook, incoming e .frx intactos)
 ---
+
+## Onda 37.2 ENTREGUE PARA GATE HUMANO — Reversao drift MD33 (Codex)
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track (toca VBA e pacote importavel declarado) |
+| Readback | [readbacks/0092-onda37-2-reversao-md33.json](../readbacks/0092-onda37-2-reversao-md33.json) |
+| Hearback | confirmed — Mauricio informou aprovacao do readback 0092 no chat |
+| ERP | [results/0092-exec-onda37-2-reversao-md33.json](../results/0092-exec-onda37-2-reversao-md33.json) |
+| Doc tecnico | [37_2_TECNICO.md](../../auditoria/03_ondas/onda_37_2_reversao_md33/37_2_TECNICO.md) |
+| Procedimento | [37_2_PROCEDIMENTO_IMPORT.md](../../auditoria/03_ondas/onda_37_2_reversao_md33/37_2_PROCEDIMENTO_IMPORT.md) |
+
+### Resultado Onda 37.2
+
+- `src/vba/Importador_V3.bas`, `src/vba/Menu_Principal.frm` e
+  `src/vba/Preencher.bas` foram restaurados ao estado equivalente ao export
+  V5.
+- Espelhos declarados em `local-ai/vba_import/` foram atualizados para o gate
+  humano; a importacao operacional deve vir somente dessa pasta.
+- `local-ai/incoming/`, `backups/vba/`, workbook V5 e `Menu_Principal.frx`
+  permaneceram intactos.
+- ERP esta em `delivered_for_human_gate`, com compile VBE pendente de
+  confirmacao humana.
+
+🟠 SOURCE DRIFT DETECTED: a reversao corrige o drift MD33 descartavel em
+`src/vba/`, mas a confirmacao final depende do VBE detectar se ha qualquer
+dessincronizacao residual entre `.frm` e `.frx`.
 
 ## Onda 37.1 EXECUTADA — Decisoes de drift e licoes MD33 (Codex)
 

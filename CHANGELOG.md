@@ -15,6 +15,12 @@ tratam apenas da linha pública oficial.
   das tentativas MD33 frustradas, knowledge HBN 0014 e ADRs para
   `Importador_V2.bas` e `Emergencia_CNAE.bas`, sem tocar VBA.
 
+### Corrigido
+
+- **Onda 37.2** — reversão controlada dos três `drift_md33_descartar`
+  (`Importador_V3.bas`, `Menu_Principal.frm`, `Preencher.bas`) para estado
+  equivalente à V5, com espelhos correspondentes em `local-ai/vba_import/`.
+
 ### Governança
 
 - `Emergencia_CNAE.bas` ficou classificado como `precisa_decisao_humana` antes
@@ -23,7 +29,14 @@ tratam apenas da linha pública oficial.
   nesta onda.
 - A cadeia MD33 descartável ficou identificada como origem de drift em
   `Importador_V3.bas`, `Menu_Principal.frm` e `Preencher.bas`; a execução de
-  reversão foi deferida para readback safe_track próprio.
+  reversão foi executada em readback safe_track próprio e entregue para gate
+  humano de importação/compile no VBE.
+
+### Validação
+
+- **Onda 37.2** permanece `delivered_for_human_gate`: o ERP só fecha depois de
+  Mauricio importar exclusivamente de `local-ai/vba_import/` e confirmar
+  `Debug > Compile VBAProject` no VBE.
 
 ## [v12.0.0205] — 2026-05-21
 

@@ -1,0 +1,67 @@
+{
+  "execution_id": "0092-exec-onda37-2-reversao-md33",
+  "agent_id": "codex",
+  "readback_id": "0092-onda37-2-reversao-md33",
+  "action": "Reverter em src/vba apenas Importador_V3.bas, Menu_Principal.frm e Preencher.bas ao estado equivalente ao export V5, espelhar os arquivos importaveis declarados em local-ai/vba_import e entregar para gate humano de importacao/compile.",
+  "outcome": "delivered_for_human_gate",
+  "human_status": "confirmed",
+  "human_gate_status": "pending_vbe_compile",
+  "environment": {
+    "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "target_version": "V12.0.0206",
+    "base_commit": "d82d851"
+  },
+  "files_reverted": [
+    "src/vba/Importador_V3.bas",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Preencher.bas"
+  ],
+  "import_package_mirrors": [
+    "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt"
+  ],
+  "hash_evidence": {
+    "src_vba_Importador_V3__mirror_ABK": "949ac61884af9e1e8dc1b888bae673081750220a05fc15068c3b1f1cb344bd6f",
+    "src_vba_Preencher__mirror_AAU": "8efe8005e8abe2df6b9cdd237a4b6ccac8e4cfd183d5d0c1fd51a7048a0c2d71",
+    "src_vba_Menu_Principal_frm__mirror_AAM_frm": "fbc9e2e964df3e19431fa72cdd69f2bbcd815cae3c0a299ab1ba7d241e600df5",
+    "menu_principal_code_only_body": "537b82d5c75f42a61cb833f426a23514a4391fd54a04bec77664d4e7b74460b9"
+  },
+  "validation": {
+    "gates": [
+      {
+        "gate": "git diff limitado aos 7 arquivos declarados e meta",
+        "status": "pass",
+        "evidence_ref": "git diff --cached --name-only; local-ai/vba_import esta em .gitignore e os quatro espelhos entraram via git add -f somente nos paths declarados"
+      },
+      {
+        "gate": "shasum_match src/vba contra local-ai/vba_import",
+        "status": "pass",
+        "evidence_ref": "auditoria/03_ondas/onda_37_2_reversao_md33/37_2_TECNICO.md; bash local-ai/scripts/publicar_vba_import_v2.sh --check"
+      },
+      {
+        "gate": "zero diff em forbidden paths",
+        "status": "pass",
+        "evidence_ref": "git status --short -- local-ai/incoming backups/vba src/vba/Svc_* src/vba/Mod_Types.bas src/vba/Rel_Emp_Serv.* src/vba/Rel_OSEmpresa.* src/vba/Menu_Principal.frx"
+      },
+      {
+        "gate": "procedimento humano registra importacao apenas de local-ai/vba_import",
+        "status": "pass",
+        "evidence_ref": "auditoria/03_ondas/onda_37_2_reversao_md33/37_2_PROCEDIMENTO_IMPORT.md"
+      },
+      {
+        "gate": "compile humano no VBE executado antes do ERP fechar",
+        "status": "pending_human",
+        "evidence_ref": "Aguardando Mauricio importar no Excel e confirmar Debug > Compile VBAProject"
+      }
+    ],
+    "workbook_touched": false,
+    "incoming_touched": false,
+    "frx_touched": false,
+    "forbidden_paths_touched": []
+  },
+  "next_required_human_action": "Mauricio deve importar exclusivamente de local-ai/vba_import/, executar compile no VBE e confirmar o resultado antes de qualquer fechamento funcional da Onda 37.2.",
+  "created_at": "2026-05-24T21:35:43-03:00"
+}

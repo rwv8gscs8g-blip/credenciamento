@@ -1,0 +1,135 @@
+{
+  "readback_id": "0092-onda37-2-reversao-md33",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0091-onda37-1-decisoes-drift",
+  "intent": {
+    "objective": "Reverter em src/vba apenas os tres arquivos classificados como drift_md33_descartar ao estado equivalente a V5, publicar seus espelhos em local-ai/vba_import conforme Regra de Ouro, sem tocar o workbook V5 nem local-ai/incoming/.",
+    "non_goals": [
+      "tocar o workbook V5",
+      "tocar local-ai/incoming/**",
+      "usar local-ai/incoming como fonte operacional de importacao no Excel",
+      "corrigir Rel_Emp_Serv.frm ou Rel_OSEmpresa.frm nesta onda",
+      "alterar qualquer Svc_* ou Mod_Types.bas",
+      "alterar RN-01 a RN-17",
+      "alterar contadores RVS",
+      "executar importacao no Excel"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Importador_V3.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "auditoria/03_ondas/onda_37_2_reversao_md33/**",
+      ".hbn/readbacks/0092-onda37-2-reversao-md33.json",
+      ".hbn/results/0092-exec-onda37-2-reversao-md33.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "src/vba/Svc_*.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Rel_OSEmpresa.frx",
+      "src/vba/Menu_Principal.frx",
+      "*.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "source_strategy": {
+    "v5_export": "local-ai/incoming/V206_ANCHOR_V5_20260524/ pode ser lido apenas como evidencia read-only para restaurar equivalencia textual; nao pode ser alterado nem usado como fonte de importacao no Excel.",
+    "published_package": "qualquer importacao humana futura deve usar somente os espelhos declarados em local-ai/vba_import/ apos hash bater com src/vba/."
+  },
+  "invariants_preserved": [
+    "Workbook V5 nao e tocado",
+    "local-ai/incoming/ intacto",
+    "Apenas Importador_V3.bas, Menu_Principal.frm e Preencher.bas podem mudar em src/vba/",
+    "local-ai/vba_import/ so muda nos espelhos correspondentes declarados",
+    "RN-01 a RN-17 inalteradas",
+    "contadores RVS inalterados",
+    "Svc_* intactos",
+    "Mod_Types.bas intacto",
+    "Rel_Emp_Serv e Rel_OSEmpresa permanecem fora do escopo"
+  ],
+  "risks": [
+    {
+      "risk": "Restaurar conteudo da V5 de forma incorreta por copiar metadados de export VBE que nao pertencem ao espelho importavel.",
+      "mitigation": "Para .bas e .frm, usar normalizacao textual controlada; para Menu_Principal.code-only.txt, extrair apenas o codigo apropriado do .frm e validar hash esperado contra src/vba/Menu_Principal.frm apos normalizacao de header.",
+      "severity": "high"
+    },
+    {
+      "risk": "Quebrar a Regra de Ouro editando src/vba sem espelhar local-ai/vba_import.",
+      "mitigation": "Declarar espelhos correspondentes no scope e exigir gate shasum_match entre src/vba e local-ai/vba_import para cada arquivo alterado.",
+      "severity": "high"
+    },
+    {
+      "risk": "Confundir reversao de drift MD33 com autorizacao para importar no workbook sem compile humano.",
+      "mitigation": "ERP so fecha depois de registrar que o operador importou apenas de local-ai/vba_import e executou compile VBE humano; antes disso a onda fica entregue para gate humano, nao fechada funcionalmente.",
+      "severity": "high"
+    },
+    {
+      "risk": "Tocar acidentalmente relatorios ou Menu_Principal.frx, ampliando o blast radius da reversao.",
+      "mitigation": "Listar Rel_Emp_Serv, Rel_OSEmpresa e Menu_Principal.frx em files_forbidden; guards bloqueiam staged fora do scope safe_track.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Reintroduzir orientacao operacional incorreta sobre backups ou incoming como fonte de importacao.",
+      "mitigation": "Documentar no procedimento que incoming e backups sao somente evidencia; fonte de importacao e exclusivamente local-ai/vba_import/.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff mostra somente os tres arquivos src/vba declarados, seus quatro espelhos local-ai/vba_import declarados, documentos da onda, relay, CHANGELOG e ERP",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0092-exec-onda37-2-reversao-md33.json"
+      },
+      {
+        "gate": "hash/normalizacao de src/vba bate com os espelhos importaveis correspondentes",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": "auditoria/03_ondas/onda_37_2_reversao_md33/37_2_TECNICO.md"
+      },
+      {
+        "gate": "nenhum diff em local-ai/incoming/, backups/vba/, Svc_*, Mod_Types.bas, Rel_Emp_Serv.*, Rel_OSEmpresa.* ou workbook .xlsm",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0092-exec-onda37-2-reversao-md33.json"
+      },
+      {
+        "gate": "procedimento humano registra importacao exclusivamente a partir de local-ai/vba_import/",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_37_2_reversao_md33/37_2_PROCEDIMENTO_IMPORT.md"
+      },
+      {
+        "gate": "compile humano no VBE executado antes do ERP fechar",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0092-exec-onda37-2-reversao-md33.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "se ainda nao houver commit, descartar apenas os arquivos declarados no scope desta onda e confirmar git status",
+      "se houver commit e gate humano reprovar, criar onda de rollback declarando os mesmos paths e restaurar o commit anterior",
+      "confirmar que workbook V5 nao foi salvo ou alterado pela execucao desta onda",
+      "confirmar por git diff --name-only que local-ai/incoming/ e backups/vba/ permanecem sem alteracao"
+    ],
+    "anchor_to_restore": "d82d851"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T21:26:12-03:00"
+}
