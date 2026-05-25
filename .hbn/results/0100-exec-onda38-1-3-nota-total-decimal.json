@@ -5,7 +5,7 @@
   "agent_id": "codex",
   "track": "safe_track",
   "version_target": "V12.0.0206",
-  "status": "delivered_for_human_gate",
+  "status": "human_gate_failed",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "summary": "Onda 38.1.3 padroniza a exibicao da coluna NOTA TOTAL em OS por Empresa para duas casas decimais, preservando o calculo e o cabecalho.",
@@ -46,13 +46,24 @@
       "evidence": "5/5 guards verdes; assert-scope-lock usou readback ativo 0100 e confirmou todos os arquivos staged dentro do scope."
     }
   ],
-  "human_gates_pending": [
-    "ImportarPacoteV3_Delta ONDA38-1-3-NOTA-TOTAL-DECIMAL e confirmar M=1 | F=1 | err=0 | skip=0",
-    "Depurar > Compilar VBAProject passa limpo",
-    "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
-    "OS por Empresa: PDF mostra NOTA TOTAL com duas casas decimais e alinhamento numerico consistente"
+  "human_gates_pending": [],
+  "human_gate_evidence": [
+    {
+      "gate": "ImportarPacoteV3_Delta ONDA38-1-3-NOTA-TOTAL-DECIMAL",
+      "status": "pass",
+      "evidence": "Mauricio reportou importacao OK com M=1 | F=1 | err=0 | skip=0."
+    },
+    {
+      "gate": "Depurar > Compilar VBAProject",
+      "status": "fail",
+      "evidence": "Mauricio reportou que o Excel fechou durante o compile manual. Onda 38.1.3 considerada suspeita e substituida por 38.1.4 de restauracao."
+    },
+    {
+      "gate": "Tentativa de reimportar manifesto antigo 38.1.2",
+      "status": "fail",
+      "evidence": "Import passou, mas nao restaurou o conteudo antigo porque o manifesto apontou para o arquivo vivo local-ai/vba_import ainda no estado da 38.1.3."
+    }
   ],
-  "human_gate_evidence": [],
   "next_wave": {
     "id": "onda39-util-pdf",
     "status": "ready_after_0100_human_gate",

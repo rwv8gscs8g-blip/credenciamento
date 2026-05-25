@@ -1,0 +1,72 @@
+{
+  "result_id": "0101-exec-onda38-1-4-restaura-rel-os-empresa",
+  "readback_id": "0101-onda38-1-4-restaura-rel-os-empresa",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "delivered_for_human_gate",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "summary": "Onda 38.1.4 restaura Rel_OSEmpresa.frm ao conteudo compilavel da Onda 38.1.2 e registra a licao de que manifesto delta antigo nao congela conteudo.",
+  "files_changed": [
+    "src/vba/Rel_OSEmpresa.frm",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-4-RESTAURA-REL-OS-EMPRESA.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+    "auditoria/03_ondas/onda_38_1_4_restaura_rel_os_empresa/38_1_4_TECNICO.md",
+    ".hbn/readbacks/0101-onda38-1-4-restaura-rel-os-empresa.json",
+    ".hbn/results/0101-exec-onda38-1-4-restaura-rel-os-empresa.json",
+    ".hbn/results/0100-exec-onda38-1-3-nota-total-decimal.json",
+    ".hbn/relay/INDEX.md",
+    ".hbn/knowledge/0009-licoes-importador-v3-phase1.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-1-4-RESTAURA-REL-OS-EMPRESA",
+    "build_label": "8d5e2e6+ONDA38.1.4-restaura-rel-os-empresa",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-1-4-RESTAURA-REL-OS-EMPRESA\", \"8d5e2e6+ONDA38.1.4-restaura-rel-os-empresa\"",
+    "expected_import_result": "M=1 | F=1 | err=0 | skip=0"
+  },
+  "local_validation": [
+    {
+      "gate": "Restauracao Rel_OSEmpresa vs commit bom",
+      "status": "pass",
+      "evidence": "git diff --exit-code 35775b3 -- src/vba/Rel_OSEmpresa.frm sem diferencas; SHA-256 do form restaurado = b6dc369ed51441771f9ea85a48731b1e5f7484cbaa1d3af08906760a98098ac6."
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --apply",
+      "status": "pass",
+      "evidence": "2 arquivos applied: AAX-App_Release.bas, AAL-Rel_OSEmpresa.frm; G8 OK; G7 OK"
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --check",
+      "status": "pass",
+      "evidence": "vba_import 100% sincronizado com src/vba; Rel_OSEmpresa.frm e AAL-Rel_OSEmpresa.frm com SHA-256 identico."
+    },
+    {
+      "gate": "grep anti-regressao 38.1.3",
+      "status": "pass",
+      "evidence": "Ausentes em src e local-ai: Var8 As Variant, Util_Conversao.ToDouble, NumberFormat = \"0.00\"."
+    },
+    {
+      "gate": "hbn-guards-runner staged",
+      "status": "pass",
+      "evidence": "5/5 guards verdes; assert-scope-lock usou readback ativo 0101 e confirmou todos os arquivos staged dentro do scope."
+    }
+  ],
+  "human_gates_pending": [
+    "ImportarPacoteV3_Delta ONDA38-1-4-RESTAURA-REL-OS-EMPRESA e confirmar M=1 | F=1 | err=0 | skip=0",
+    "Depurar > Compilar VBAProject passa limpo sem fechar Excel",
+    "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0"
+  ],
+  "human_gate_evidence": [],
+  "next_wave": {
+    "id": "onda39-util-pdf",
+    "status": "ready_after_0101_human_gate",
+    "summary": "Retomar roadmap de PDF automatico com Util_PDF.bas central somente apos compile da restauracao passar."
+  },
+  "created_at": "2026-05-25T17:36:37-03:00"
+}

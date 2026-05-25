@@ -1,0 +1,154 @@
+{
+  "readback_id": "0101-onda38-1-4-restaura-rel-os-empresa",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0100-onda38-1-3-nota-total-decimal",
+  "intent": {
+    "objective": "Restaurar de forma real o Rel_OSEmpresa.frm ao conteudo compilavel da Onda 38.1.2 apos a Onda 38.1.3 derrubar o compile, criando novo manifesto delta e documentando a licao de que manifestos antigos apontam para arquivos vivos em local-ai/vba_import.",
+    "non_goals": [
+      "manter a formatacao decimal da Onda 38.1.3",
+      "alterar calculo de nota ou media",
+      "alterar cabecalho NOTA TOTAL",
+      "mudar fluxo de impressao ou mensagem de identificacao sugerida",
+      "alterar RN-01 a RN-17",
+      "alterar contadores RVS",
+      "usar ImportarPacoteV3 completo",
+      "tocar qualquer arquivo .frx",
+      "tocar Menu_Principal.frm ou Preencher.bas",
+      "tocar Rel_Emp_Serv.frm",
+      "tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+      "padronizar visual amplo dos relatorios nesta onda"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-4-RESTAURA-REL-OS-EMPRESA.txt",
+      ".hbn/readbacks/0101-onda38-1-4-restaura-rel-os-empresa.json",
+      ".hbn/results/0101-exec-onda38-1-4-restaura-rel-os-empresa.json",
+      ".hbn/results/0100-exec-onda38-1-3-nota-total-decimal.json",
+      ".hbn/relay/INDEX.md",
+      ".hbn/knowledge/0009-licoes-importador-v3-phase1.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_1_4_restaura_rel_os_empresa/**"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_OSEmpresa.frx",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Menu_Principal.frx",
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio reportou que a Onda 38.1.3 importou com M=1 | F=1 | err=0 | skip=0, mas o Excel fechou durante o compile VBE.",
+    "Mauricio tentou importar o delta antigo ONDA38-1-2-REL-OS-EMPRESA-BOTAO, mas o compile continuou falhando.",
+    "Diagnostico Codex confirmou que o manifesto antigo apontou para o arquivo vivo atual em local-ai/vba_import, ainda contendo o codigo da 38.1.3.",
+    "Mauricio aprovou a Onda 38.1.4 e pediu documentar a licao aprendida."
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-1-4-RESTAURA-REL-OS-EMPRESA",
+    "build_label": "8d5e2e6+ONDA38.1.4-restaura-rel-os-empresa",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-4-RESTAURA-REL-OS-EMPRESA.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-1-4-RESTAURA-REL-OS-EMPRESA\", \"8d5e2e6+ONDA38.1.4-restaura-rel-os-empresa\"",
+    "expected_import_result": "M=1 | F=1 | err=0 | skip=0"
+  },
+  "invariants_preserved": [
+    "Importacao operacional somente por ImportarPacoteV3_Delta",
+    "RN-01 a RN-17 permanecem inalteradas",
+    "Contadores RVS permanecem V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Nenhum servico blindado sera tocado",
+    "Nenhum .frx sera tocado",
+    "Rel_OSEmpresa.frm volta ao conteudo compilavel do commit 35775b3, exceto carimbo de App_Release",
+    "O cabecalho NOTA TOTAL permanece conforme decisao do operador"
+  ],
+  "risks": [
+    {
+      "risk": "Reusar manifesto antigo pode reimportar conteudo vivo divergente e nao restaurar o workbook.",
+      "mitigation": "Criar manifesto novo da 38.1.4 apos restaurar local-ai/vba_import ao conteudo desejado e documentar a licao em knowledge.",
+      "severity": "high"
+    },
+    {
+      "risk": "Apos crash de compile, o workbook pode estar com cache VBE instavel.",
+      "mitigation": "Operador deve reabrir workbook limpo/ultimo salvo conhecido antes de aplicar o novo delta e nao salvar workbooks que falharam compile.",
+      "severity": "high"
+    },
+    {
+      "risk": "Restaurar o form poderia acidentalmente remover o handler real B_RelMEIOS da 38.1.2.",
+      "mitigation": "Restaurar especificamente ao commit 35775b3, que ja contem B_RelMEIOS_Click e foi validado por import, compile, RVS e PDF funcional.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Atualizar knowledge dentro da mesma onda amplia escopo documental.",
+      "mitigation": "Limitar a doc ao fato reutilizavel do Importador V3, sem alterar regras de negocio ou codigo do importador.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff 35775b3..HEAD para Rel_OSEmpresa.frm fica vazio apos restauracao do form",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0101-exec-onda38-1-4-restaura-rel-os-empresa.json"
+      },
+      {
+        "gate": "bash local-ai/scripts/publicar_vba_import_v2.sh --apply e --check confirmam espelho sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0101-exec-onda38-1-4-restaura-rel-os-empresa.json"
+      },
+      {
+        "gate": "bash scripts/hbn-guards/hbn-guards-runner.sh usa 0101 como readback ativo e passa 5/5",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0101-exec-onda38-1-4-restaura-rel-os-empresa.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-1-4-RESTAURA-REL-OS-EMPRESA retorna M=1 | F=1 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0101-exec-onda38-1-4-restaura-rel-os-empresa.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo sem fechar Excel",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0101-exec-onda38-1-4-restaura-rel-os-empresa.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0101-exec-onda38-1-4-restaura-rel-os-empresa.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import delta falhar, Mauricio nao deve salvar o workbook e deve colar a mensagem exata do Importador V3.",
+      "Se o compile VBE falhar ou Excel fechar de novo, Mauricio nao deve salvar o workbook e deve parar a linha de importacao de forms ate auditoria adversarial.",
+      "Se CT_ValidarRelease_TrioMinimo mudar contadores ou falhar, nao prosseguir para PDF automatico.",
+      "Se rollback git for necessario apos commit, usar git revert do commit da Onda 38.1.4 em vez de reescrever historico."
+    ],
+    "anchor_to_restore": "Workbook V5 salvo apos Onda 38.1.2 com build 10ef253+ONDA38.1.2-rel-os-empresa-botao e commit 35775b3"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-25T17:36:37-03:00"
+}

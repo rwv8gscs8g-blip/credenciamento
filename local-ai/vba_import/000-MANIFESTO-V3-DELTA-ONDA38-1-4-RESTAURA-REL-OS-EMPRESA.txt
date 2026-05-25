@@ -1,0 +1,33 @@
+# Manifesto V3 DELTA ONDA38-1-4-RESTAURA-REL-OS-EMPRESA - V12.0.0206
+# Tema: Restauracao real do Rel_OSEmpresa para o estado compilavel da 38.1.2.
+#
+# Contexto:
+#   - Onda 38.1.3 importou, mas o Excel fechou durante compile VBE.
+#   - Reimportar o manifesto antigo 38.1.2 nao restaurou, pois manifestos
+#     apontam para arquivos vivos em local-ai/vba_import.
+#   - Este delta restaura explicitamente o conteudo do form ao commit bom
+#     35775b3 e recarimba App_Release.
+#   - Importacao permitida exclusivamente via ImportarPacoteV3_Delta.
+#
+# Mudancas:
+#   AAL-Rel_OSEmpresa.frm:
+#     - Remove as mudancas da 38.1.3: Var8 Variant, Util_Conversao.ToDouble e
+#       NumberFormat decimal da coluna H.
+#     - Restaura o form ao conteudo compilavel da 38.1.2, mantendo
+#       B_RelMEIOS_Click e o fluxo funcional validado.
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = "8d5e2e6+ONDA38.1.4-restaura-rel-os-empresa"
+#     - APP_BUILD_GERADO_EM = "2026-05-25 17:36"
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38-1-4-RESTAURA-REL-OS-EMPRESA", "8d5e2e6+ONDA38.1.4-restaura-rel-os-empresa"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=1 | err=0 | skip=0.
+#   - Compile manual passa limpo sem fechar Excel.
+#   - CT_ValidarRelease_TrioMinimo permanece APROVADO:
+#     V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+#
+# GRUPO_DELTA_ONDA38_1_4_RESTAURA_REL_OS_EMPRESA
+F|002-formularios/AAL-Rel_OSEmpresa.frm
+M|001-modulo/AAX-App_Release.bas

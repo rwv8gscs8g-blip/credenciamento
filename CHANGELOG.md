@@ -17,9 +17,16 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.1.4** — restaura `Rel_OSEmpresa.frm` ao conteúdo compilável da
+  Onda 38.1.2 após a tentativa 38.1.3 derrubar o compile VBE. Também registra
+  a lição HBN L11: manifesto delta aponta para arquivo vivo em
+  `local-ai/vba_import/`, não para snapshot histórico. Manifesto delta:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-4-RESTAURA-REL-OS-EMPRESA.txt`.
+  Carimbo: `8d5e2e6+ONDA38.1.4-restaura-rel-os-empresa`.
 - **Onda 38.1.3** — padroniza a apresentação da coluna `NOTA TOTAL` em
   `Rel_OSEmpresa` para duas casas decimais, preservando o cálculo e o
-  cabeçalho aprovados. Manifesto delta:
+  cabeçalho aprovados. **Reprovada no gate humano: importou, mas o Excel
+  fechou durante o compile VBE; substituída pela Onda 38.1.4.** Manifesto delta:
   `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-3-NOTA-TOTAL-DECIMAL.txt`.
   Carimbo: `35775b3+ONDA38.1.3-nota-total-decimal`.
 - **Onda 38.1.2** — corrige o botão real de `Rel_OSEmpresa`: o

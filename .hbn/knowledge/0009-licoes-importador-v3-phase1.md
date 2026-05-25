@@ -115,6 +115,19 @@ src/vba para o espelho, REMOVER qualificacao `Modulo.` em chamadas a
 standard modules. Manter qualificacao apenas em chamadas a Class
 modules.
 
+## L11 — Manifesto delta aponta para arquivo vivo, nao para snapshot historico
+
+| Campo | Valor |
+|---|---|
+| Hipotese | Reexecutar um manifesto delta antigo restaura automaticamente o conteudo que aquele delta importou no passado |
+| Tese | **FALSO**. O manifesto V3 delta lista caminhos em `local-ai/vba_import/`; ele nao embute hash nem copia congelada do conteudo. Se o arquivo vivo apontado pelo manifesto foi alterado por onda posterior, reexecutar o manifesto antigo importa o conteudo atual, nao o conteudo historico |
+| Evidencia | Em 2026-05-25, apos a Onda 38.1.3 derrubar o compile VBE de `Rel_OSEmpresa`, Mauricio tentou reimportar `ONDA38-1-2-REL-OS-EMPRESA-BOTAO`. O import retornou `M=1 | F=1 | err=0 | skip=0`, mas o compile continuou falhando porque `local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm` e `.code-only.txt` ainda continham o codigo vivo da 38.1.3 (`Var8 As Variant`, `Util_Conversao.ToDouble`, `NumberFormat = "0.00"`), nao o conteudo do commit bom `35775b3` |
+| Mitigacao | Rollback funcional de delta deve ser um **novo delta de restauracao**: restaurar explicitamente `src/vba/` e `local-ai/vba_import/` ao conteudo desejado, criar manifesto novo com nome novo, recarimbar `App_Release`, e so entao importar via `ImportarPacoteV3_Delta`. Nunca assumir que manifesto antigo e snapshot |
+
+**Regra operacional:** manifestos V3 delta sao contratos de caminho/ordem de
+importacao, nao artefatos imutaveis de conteudo. Para rollback, use um delta
+novo de restauracao ou um pacote com conteudo restaurado e hashes conferidos.
+
 ## L9 — `MkDir` aninhado falha se pasta-pai nao existir
 
 | Campo | Valor |
