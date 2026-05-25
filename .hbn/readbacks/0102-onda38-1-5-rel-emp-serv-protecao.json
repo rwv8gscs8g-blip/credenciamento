@@ -1,0 +1,155 @@
+{
+  "readback_id": "0102-onda38-1-5-rel-emp-serv-protecao",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0101-onda38-1-4-restaura-rel-os-empresa",
+  "intent": {
+    "objective": "Reaplicar exclusivamente o Rel_Emp_Serv.frm corrigido para workbook restaurado de base anterior a 38.1, eliminando o erro de aba RELATORIO protegida em Empresas por Servico sem tocar Rel_OSEmpresa.",
+    "non_goals": [
+      "alterar Rel_OSEmpresa.frm",
+      "alterar calculos de nota ou formatacao decimal",
+      "padronizar visual amplo dos relatorios",
+      "alterar RN-01 a RN-17",
+      "alterar contadores RVS",
+      "usar ImportarPacoteV3 completo",
+      "tocar qualquer arquivo .frx",
+      "tocar Menu_Principal.frm ou Preencher.bas",
+      "tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+      "alterar helpers compartilhados de protecao ou PDF"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-5-REL-EMP-SERV-PROTECAO.txt",
+      ".hbn/readbacks/0102-onda38-1-5-rel-emp-serv-protecao.json",
+      ".hbn/results/0102-exec-onda38-1-5-rel-emp-serv-protecao.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_1_5_rel_emp_serv_protecao/**"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/Rel_OSEmpresa.frx",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Menu_Principal.frx",
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio restaurou workbook de base anterior a 38.1, importou a 38.1.4 e confirmou compile VBE limpo.",
+    "Mauricio reportou retorno do erro de planilha protegida em Rel_Emp_Serv/Empresas por Servico.",
+    "Codex diagnosticou que a 38.1.4 nao importava Rel_Emp_Serv.frm, deixando o workbook restaurado sem a correcao de protecao da 38.1.",
+    "Mauricio aprovou a micro-onda 38.1.5 para replay minimo do Rel_Emp_Serv corrigido."
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-1-5-REL-EMP-SERV-PROTECAO",
+    "build_label": "696a8c2+ONDA38.1.5-rel-emp-serv-protecao",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-5-REL-EMP-SERV-PROTECAO.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-1-5-REL-EMP-SERV-PROTECAO\", \"696a8c2+ONDA38.1.5-rel-emp-serv-protecao\"",
+    "expected_import_result": "M=1 | F=1 | err=0 | skip=0"
+  },
+  "invariants_preserved": [
+    "Importacao operacional somente por ImportarPacoteV3_Delta",
+    "RN-01 a RN-17 permanecem inalteradas",
+    "Contadores RVS permanecem V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Nenhum servico blindado sera tocado",
+    "Nenhum .frx sera tocado",
+    "Rel_OSEmpresa.frm permanece congelado no estado compilavel da 38.1.4",
+    "Rel_Emp_Serv.frm preserva o padrao de protecao/restauracao ja validado no fonte"
+  ],
+  "risks": [
+    {
+      "risk": "Workbook restaurado a partir de base anterior pode estar sem outros deltas funcionais ja aplicados no repositorio.",
+      "mitigation": "Importar somente o form ausente que explica o erro observado e manter novos replays em microdeltas auditaveis.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Reimportar Rel_OSEmpresa junto poderia reabrir instabilidade de compile ja encerrada pela 38.1.4.",
+      "mitigation": "Nao incluir Rel_OSEmpresa no manifesto nem no scope permitido.",
+      "severity": "high"
+    },
+    {
+      "risk": "Erro de protecao persistir por senha/estado de workbook diferente do esperado.",
+      "mitigation": "Gate funcional deve tentar Empresas por Servico apos compile; se falhar, parar sem salvar e capturar mensagem exata.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Dessincronizacao entre src/vba e local-ai/vba_import.",
+      "mitigation": "Rodar publicar_vba_import_v2.sh --apply e --check antes do commit.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff limitado ao scope 0102 e sem Rel_OSEmpresa.frm",
+        "evidence_kind": "git_diff",
+        "evidence_required_in": ".hbn/results/0102-exec-onda38-1-5-rel-emp-serv-protecao.json"
+      },
+      {
+        "gate": "publicar_vba_import_v2.sh --apply e --check confirmam espelho sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0102-exec-onda38-1-5-rel-emp-serv-protecao.json"
+      },
+      {
+        "gate": "hbn-guards-runner usa 0102 como readback ativo e passa 5/5",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0102-exec-onda38-1-5-rel-emp-serv-protecao.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-1-5-REL-EMP-SERV-PROTECAO retorna M=1 | F=1 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0102-exec-onda38-1-5-rel-emp-serv-protecao.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0102-exec-onda38-1-5-rel-emp-serv-protecao.json"
+      },
+      {
+        "gate": "Empresas por Servico gera/imprime sem erro de planilha protegida",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0102-exec-onda38-1-5-rel-emp-serv-protecao.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0102-exec-onda38-1-5-rel-emp-serv-protecao.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import delta falhar, Mauricio nao deve salvar o workbook e deve colar a mensagem exata do Importador V3.",
+      "Se o compile VBE falhar, Mauricio nao deve salvar o workbook e deve restaurar pelo backup indicado pelo Importador V3.",
+      "Se Empresas por Servico continuar acusando planilha protegida, parar sem salvar e abrir diagnostico do helper de protecao em onda separada.",
+      "Se CT_ValidarRelease_TrioMinimo mudar contadores ou falhar, nao prosseguir para Onda 39."
+    ],
+    "anchor_to_restore": "Workbook restaurado que compilou apos Onda 38.1.4, antes de aplicar 38.1.5"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-25T20:17:19-03:00"
+}

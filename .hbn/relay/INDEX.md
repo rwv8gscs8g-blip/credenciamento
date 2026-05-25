@@ -1,12 +1,36 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Codex (Onda 38.1.4 restauracao Rel_OSEmpresa entregue para gate humano apos falha de compile da 38.1.3; Onda 38.2 de padronizacao visual ampla permanece deferida; Onda 39 Util_PDF e proxima etapa funcional do roadmap). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
+proprietario-bastao: Codex (Onda 38.1.5 preparada para reaplicar Rel_Emp_Serv corrigido em workbook restaurado de base anterior a 38.1; Onda 38.2 de padronizacao visual ampla permanece deferida; Onda 39 Util_PDF e proxima etapa funcional do roadmap). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Mauricio reabrir workbook limpo/ultimo salvo conhecido, importar Onda 38.1.4 via ImportarPacoteV3_Delta, compilar e rodar CT_ValidarRelease_TrioMinimo. Nao salvar workbook que falhou compile na 38.1.3.
-ultima-atualizacao: 2026-05-25T17:36:00-0300 (Onda 38.1.4 preparada para restauracao real; licao L11 adicionada: manifesto delta antigo nao e snapshot)
+proxima-acao: Mauricio importar Onda 38.1.5 via ImportarPacoteV3_Delta no workbook que compilou apos 38.1.4, compilar, testar Empresas por Servico sem erro de planilha protegida e rodar CT_ValidarRelease_TrioMinimo.
+ultima-atualizacao: 2026-05-25T20:17:19-0300 (Onda 38.1.5 preparada para replay minimo de Rel_Emp_Serv apos restauracao por workbook pre-38.1)
 ---
+
+## Onda 38.1.5 ENTREGUE PARA GATE HUMANO — Replay Rel_Emp_Serv protecao (Codex)
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track |
+| Readback | [readbacks/0102-onda38-1-5-rel-emp-serv-protecao.json](../readbacks/0102-onda38-1-5-rel-emp-serv-protecao.json) |
+| Hearback | confirmed — Mauricio aprovou microdelta minimo apos diagnostico de replay incompleto em workbook pre-38.1 |
+| ERP | [results/0102-exec-onda38-1-5-rel-emp-serv-protecao.json](../results/0102-exec-onda38-1-5-rel-emp-serv-protecao.json) — delivered_for_human_gate |
+| Doc tecnico | [38_1_5_TECNICO.md](../../auditoria/03_ondas/onda_38_1_5_rel_emp_serv_protecao/38_1_5_TECNICO.md) |
+| Manifesto delta | [000-MANIFESTO-V3-DELTA-ONDA38-1-5-REL-EMP-SERV-PROTECAO.txt](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-5-REL-EMP-SERV-PROTECAO.txt) |
+| Build label | `696a8c2+ONDA38.1.5-rel-emp-serv-protecao` |
+
+### Resultado Onda 38.1.5
+
+- Reaplica `Rel_Emp_Serv.frm` corrigido no workbook restaurado de base anterior
+  a 38.1.
+- O delta 38.1.4 compilou, mas nao importava `Rel_Emp_Serv.frm`; por isso o
+  erro de planilha protegida voltou no relatório Empresas por Serviço.
+- Esta onda importa somente `AAK-Rel_Emp_Serv.frm` e `AAX-App_Release.bas`.
+- `Rel_OSEmpresa.frm`, `.frx`, `Menu_Principal.frm`, `Preencher.bas` e serviços
+  blindados permanecem intocados.
+- Proximo gate: import delta 38.1.5, compile VBE, teste funcional Empresas por
+  Serviço e `CT_ValidarRelease_TrioMinimo`.
 
 ## Onda 38.1.4 ENTREGUE PARA GATE HUMANO — Restauracao Rel_OSEmpresa (Codex)
 

@@ -17,6 +17,12 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.1.5** — reaplica exclusivamente `Rel_Emp_Serv.frm` corrigido em
+  workbook restaurado de base anterior à 38.1, recuperando o preparo/restauro
+  de proteção da aba `RELATORIO` para o relatório de Empresas Credenciadas por
+  Serviço sem tocar `Rel_OSEmpresa.frm`. Manifesto delta:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-5-REL-EMP-SERV-PROTECAO.txt`.
+  Carimbo: `696a8c2+ONDA38.1.5-rel-emp-serv-protecao`.
 - **Onda 38.1.4** — restaura `Rel_OSEmpresa.frm` ao conteúdo compilável da
   Onda 38.1.2 após a tentativa 38.1.3 derrubar o compile VBE. Também registra
   a lição HBN L11: manifesto delta aponta para arquivo vivo em

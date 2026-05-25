@@ -1,0 +1,78 @@
+{
+  "result_id": "0102-exec-onda38-1-5-rel-emp-serv-protecao",
+  "readback_id": "0102-onda38-1-5-rel-emp-serv-protecao",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "delivered_for_human_gate",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "summary": "Onda 38.1.5 reaplica Rel_Emp_Serv.frm corrigido em workbook restaurado de base anterior a 38.1, sem tocar Rel_OSEmpresa.",
+  "files_changed": [
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-5-REL-EMP-SERV-PROTECAO.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "auditoria/03_ondas/onda_38_1_5_rel_emp_serv_protecao/38_1_5_TECNICO.md",
+    ".hbn/readbacks/0102-onda38-1-5-rel-emp-serv-protecao.json",
+    ".hbn/results/0102-exec-onda38-1-5-rel-emp-serv-protecao.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-1-5-REL-EMP-SERV-PROTECAO",
+    "build_label": "696a8c2+ONDA38.1.5-rel-emp-serv-protecao",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-1-5-REL-EMP-SERV-PROTECAO\", \"696a8c2+ONDA38.1.5-rel-emp-serv-protecao\"",
+    "expected_import_result": "M=1 | F=1 | err=0 | skip=0"
+  },
+  "local_validation": [
+    {
+      "gate": "Diagnostico de replay incompleto",
+      "status": "pass",
+      "evidence": "Manifesto 38.1.4 continha somente AAL-Rel_OSEmpresa.frm e AAX-App_Release.bas; workbook restaurado de base pre-38.1 nao receberia AAK-Rel_Emp_Serv.frm."
+    },
+    {
+      "gate": "Rel_Emp_Serv fonte e pacote oficial sincronizados",
+      "status": "pass",
+      "evidence": "SHA-256 src/vba/Rel_Emp_Serv.frm = local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm = 07ced55846ef9cd448710e661e5af346ce9ccebea3c6f772363e68359ed585c2."
+    },
+    {
+      "gate": "App_Release fonte e pacote oficial sincronizados",
+      "status": "pass",
+      "evidence": "SHA-256 src/vba/App_Release.bas = local-ai/vba_import/001-modulo/AAX-App_Release.bas = 1281233899623b7ad36f94dd6563b5df4a3872136baa2f689c69ada83602d756."
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --apply",
+      "status": "pass",
+      "evidence": "1 arquivo applied: AAX-App_Release.bas; AAK-Rel_Emp_Serv.frm ja estava in_sync; G8 OK; G7 OK."
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --check",
+      "status": "pass",
+      "evidence": "51 arquivos in_sync; vba_import 100% sincronizado com src/vba."
+    },
+    {
+      "gate": "Rel_OSEmpresa congelado",
+      "status": "pass",
+      "evidence": "git diff -- src/vba/Rel_OSEmpresa.frm local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm sem saida."
+    },
+    {
+      "gate": "hbn-guards-runner staged",
+      "status": "pass",
+      "evidence": "5/5 guards verdes; assert-scope-lock usou readback ativo 0102 e confirmou todos os arquivos staged dentro do scope."
+    }
+  ],
+  "human_gates_pending": [
+    "ImportarPacoteV3_Delta ONDA38-1-5-REL-EMP-SERV-PROTECAO e confirmar M=1 | F=1 | err=0 | skip=0",
+    "Depurar > Compilar VBAProject passa limpo",
+    "Empresas por Servico gera/imprime sem erro de planilha protegida",
+    "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0"
+  ],
+  "human_gate_evidence": [],
+  "next_wave": {
+    "id": "onda39-util-pdf",
+    "status": "ready_after_0102_human_gate",
+    "summary": "Retomar roadmap de PDF automatico apos confirmar que os dois relatorios da Onda 38 permanecem funcionais."
+  },
+  "created_at": "2026-05-25T20:17:19-03:00"
+}

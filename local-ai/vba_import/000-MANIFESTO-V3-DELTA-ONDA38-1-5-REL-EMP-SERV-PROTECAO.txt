@@ -1,0 +1,36 @@
+# Manifesto V3 DELTA ONDA38-1-5-REL-EMP-SERV-PROTECAO - V12.0.0206
+# Tema: Reaplicar correcao de protecao do Rel_Emp_Serv apos restauracao por workbook pre-38.1.
+#
+# Contexto:
+#   - Mauricio restaurou workbook de base anterior a Onda 38.1 para aplicar a
+#     restauracao 38.1.4 do Rel_OSEmpresa.
+#   - A Onda 38.1.4 importou e compilou, mas seu manifesto continha somente
+#     AAL-Rel_OSEmpresa.frm e AAX-App_Release.bas.
+#   - Como a base era anterior a 38.1, Rel_Emp_Serv ficou sem o ajuste de
+#     Util_PrepararAbaParaEscrita/Util_RestaurarProtecaoAba e voltou a falhar
+#     por aba RELATORIO protegida.
+#   - Importacao permitida exclusivamente via ImportarPacoteV3_Delta.
+#
+# Mudancas:
+#   AAK-Rel_Emp_Serv.frm:
+#     - Reaplica o estado corrigido ja versionado: prepara/restaura protecao da
+#       aba RELATORIO, limpa residuos, define PrintArea A:D e usa impressao
+#       direta com Nao = cancelar.
+#     - Nao altera Rel_OSEmpresa.frm nem qualquer .frx.
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = "696a8c2+ONDA38.1.5-rel-emp-serv-protecao"
+#     - APP_BUILD_GERADO_EM = "2026-05-25 20:17"
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38-1-5-REL-EMP-SERV-PROTECAO", "696a8c2+ONDA38.1.5-rel-emp-serv-protecao"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=1 | err=0 | skip=0.
+#   - Compile manual passa limpo.
+#   - CT_ValidarRelease_TrioMinimo permanece APROVADO:
+#     V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+#   - Empresas por Servico gera/imprime sem erro de planilha protegida.
+#
+# GRUPO_DELTA_ONDA38_1_5_REL_EMP_SERV_PROTECAO
+F|002-formularios/AAK-Rel_Emp_Serv.frm
+M|001-modulo/AAX-App_Release.bas
