@@ -1,0 +1,88 @@
+{
+  "execution_id": "0095-exec-onda36-1-knowledge-0014-fim-sessao",
+  "agent_id": "claude-opus-4-7",
+  "readback_id": "0095-onda36-1-knowledge-0014-fim-sessao",
+  "baton_source": "Ativacao manual do PROMPT_ARQUITETO_USEHBN_AUTONOMO por Mauricio em 2026-05-25 00:45 BRT (primeira iteracao real)",
+  "action": "Formalizar knowledge HBN 0014 protocolo de fim-de-sessao + atualizar AGENTS.md + auto-aplicacao com primeiro handoff real desta sessao Opus.",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "environment": {
+    "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "target_version": "V12.0.0206",
+    "predecessor_commit": "c47fb53"
+  },
+  "changes": [
+    {
+      "file": ".hbn/knowledge/0014-protocolo-fim-de-sessao.md",
+      "summary": "Knowledge novo, 96 linhas, estrutura fixa (Regra / Gatilhos / Conteudo minimo / Aplicacao inicial / Como evoluir). Regra: handoff obrigatorio em .hbn/messages/AAAAMMDD-HHmm-handoff-fim-sessao-<agente>.md em 5 gatilhos."
+    },
+    {
+      "file": "AGENTS.md",
+      "summary": "1 linha nova inserida apos item 0013; lista de leitura obrigatoria cresce de 16 para 17 itens; renumeracao simples."
+    },
+    {
+      "file": "auditoria/03_ondas/onda_36_1_knowledge_fim_sessao/36_1_TECNICO.md",
+      "summary": "Doc tecnico da onda registrando origem da regra, gates atingidos, e bastao apos onda."
+    },
+    {
+      "file": ".hbn/messages/20260525-0100-handoff-fim-sessao-opus.md",
+      "summary": "AUTO-APLICACAO da regra recem-criada (Gate 4): primeiro handoff de fim-de-sessao real desta sessao Opus, com os 12 itens minimos do schema."
+    },
+    {
+      "file": "CHANGELOG.md",
+      "summary": "Entrada nova na secao Conhecimento descrevendo knowledge 0014."
+    },
+    {
+      "file": ".hbn/relay/INDEX.md",
+      "summary": "Bastao atualizado: Opus encerra sessao Onda 36.1; Codex segue ativo em Onda 38."
+    }
+  ],
+  "validations_local": [
+    "Knowledge 0014 tem 96 linhas (<=100 conforme readback)",
+    "AGENTS.md item novo inserido entre 0013 e 105; ordem semantica preservada",
+    "Nenhum diff em src/vba/, local-ai/vba_import/, V12-*/, obsidian-vault/, doc/, schemas, knowledge 0013/0018",
+    "Handoff real produzido em .hbn/messages/ com os 12 itens minimos do schema (auto-aplicacao Gate 4)",
+    "scope-lock validou (5/5 guards verde) com readback 0095 ativo confirmed"
+  ],
+  "gates_evidence": [
+    {
+      "gate": "G1: knowledge/0014 criado com <= 100 linhas, estrutura fixa",
+      "status": "pass",
+      "evidence_ref": ".hbn/knowledge/0014-protocolo-fim-de-sessao.md (96 linhas)"
+    },
+    {
+      "gate": "G2: AGENTS.md secao 'Antes de tocar qualquer coisa' inclui referencia a 0014",
+      "status": "pass",
+      "evidence_ref": "AGENTS.md item 9 novo"
+    },
+    {
+      "gate": "G3: nenhum diff em paths proibidos",
+      "status": "pass",
+      "evidence_ref": "git diff confirma scope restrito"
+    },
+    {
+      "gate": "G4: primeiro handoff de fim-de-sessao real produzido (auto-aplicacao)",
+      "status": "pass",
+      "evidence_ref": ".hbn/messages/20260525-0100-handoff-fim-sessao-opus.md"
+    },
+    {
+      "gate": "G5: CHANGELOG.md atualizado",
+      "status": "pass",
+      "evidence_ref": "CHANGELOG.md secao Conhecimento, entrada nova antes do 0018"
+    }
+  ],
+  "handoff_target": "Mauricio para commit final; depois bastao continua disponivel para (a) Codex prosseguir Onda 38 quando retomar, (b) Opus em nova ativacao manual do PROMPT_ARQUITETO para Trilha A item A3 ou A4",
+  "lessons_captured": [
+    "Knowledge 0014 -> Auto-aplicacao imediata como gate de validacao e melhor que esperar prova futura. Vira padrao para qualquer knowledge novo: a propria onda que cria a regra deve aplicar a regra antes de fechar.",
+    "Primeira iteracao manual do PROMPT_ARQUITETO_USEHBN_AUTONOMO completou ciclo inteiro em 1 chat: pre-flight -> backlog -> readback -> hearback -> execucao -> auto-aplicacao -> ERP. Modelo replicavel para A3, A4, A5.",
+    "Sessoes longas (>12h, >30 turnos) precisam handoff formal. Esta sessao Opus consumiu 14h e teria sido recuperavel apenas por memoria humana sem o handoff. Knowledge 0014 fecha o gap."
+  ],
+  "signals_emitted": [
+    "✅ HBN ACTIVE",
+    "🔵 HBN HANDOFF READY (handoff em .hbn/messages/)",
+    "🟢 GATE PASSED (5 de 5 gates do readback 0095)"
+  ],
+  "created_at": "2026-05-25T01:00:00-03:00"
+}

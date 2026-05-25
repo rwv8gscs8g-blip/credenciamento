@@ -1,0 +1,132 @@
+{
+  "readback_id": "0095-onda36-1-knowledge-0014-fim-sessao",
+  "data": "2026-05-25",
+  "agent_id": "claude-opus-4-7",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0093-onda37-3-reset-src-vba-para-v5",
+  "baton_transfer": "Ativacao manual do PROMPT_ARQUITETO_USEHBN_AUTONOMO por Mauricio em 2026-05-25 00:45 BRT (primeira iteracao real). Trilha A item A2 do backlog selecionado por Opus.",
+  "intent": {
+    "objective": "Formalizar como knowledge HBN 0014 o protocolo de fim-de-sessao a aproximadamente 50% de contexto, derivado da pratica implicita usada durante a sessao Onda 37 (sem handoff formal entre Opus, Codex e operador). Cria regra permanente + atualiza AGENTS.md para incluir referencia + valida usando como gate o proprio handoff de fim desta sessao Opus em .hbn/messages/.",
+    "non_goals": [
+      "Tocar qualquer arquivo em src/vba/",
+      "Tocar qualquer arquivo em local-ai/vba_import/",
+      "Tocar workbook V5 ou qualquer .xlsm",
+      "Alterar regras de negocio, RN-01 a RN-17, contadores RVS",
+      "Iniciar Onda 38 (esta sob bastao Codex em paralelo)",
+      "Modificar schemas HBN existentes (.hbn/schemas/)",
+      "Atualizar PROMPT_ARQUITETO_USEHBN_AUTONOMO (vive fora do repo Credenciamento, em /Users/macbookpro/Projetos/)",
+      "Configurar scheduled task (Mauricio prefere ativacao manual por enquanto)"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/knowledge/0014-protocolo-fim-de-sessao.md",
+      ".hbn/readbacks/0095-onda36-1-knowledge-0014-fim-sessao.json",
+      ".hbn/results/0095-exec-onda36-1-knowledge-0014-fim-sessao.json",
+      ".hbn/messages/**",
+      ".hbn/relay/INDEX.md",
+      "AGENTS.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_36_1_knowledge_fim_sessao/**"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "local-ai/incoming/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "doc/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "*.xlsm",
+      "backups/vba/**",
+      ".git/hooks/pre-commit",
+      ".hbn/schemas/**",
+      ".hbn/knowledge/0013-contratos-executaveis.md",
+      ".hbn/knowledge/0018-uso-delta-vs-completo.md",
+      ".hbn/readbacks/0094-onda38-md33-restart-rel-os-rel-emp-serv.json"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio ativou manualmente o PROMPT_ARQUITETO_USEHBN_AUTONOMO em 2026-05-25 00:45 BRT.",
+    "Backlog Trilha A item A2 selecionado por Opus por (a) ser pre-requisito de A3 e A4, (b) baixo risco (zero codigo VBA), (c) endereca gap real vivido na sessao Onda 37, (d) escopo disjunto da Onda 38 (Codex) — execucao paralela segura.",
+    "Knowledge 0014 sera <= 100 linhas (regra one-rule-one-knowledge).",
+    "AGENTS.md recebe 1 linha nova na lista de leitura obrigatoria entre item 0013 e item seguinte; nada mais e reorganizado.",
+    "Auditoria/03_ondas/onda_36_1_knowledge_fim_sessao/ recebe doc tecnico opcional curto (<= 50 linhas) registrando origem da regra."
+  ],
+  "invariants_preserved": [
+    "Workbook V5 intacto",
+    "src/vba/ intacto (64 arquivos, hash bate com export V5)",
+    "local-ai/vba_import/ intacto",
+    "Schemas HBN existentes intactos",
+    "Knowledge 0001-0013 e 0018 intactos",
+    "Onda 38 (Codex) pode prosseguir em paralelo sem conflito (escopos disjuntos)",
+    "Branch codex/v12-0-0206-planejamento mantem historico forward-only"
+  ],
+  "risks": [
+    {
+      "risk": "Knowledge 0014 ficar verboso demais (regra de 'one knowledge = one rule' violada) ou virar manual de uso ao inves de regra acionavel.",
+      "mitigation": "Limitar a 100 linhas; estrutura fixa (Regra / Por que existe / Gatilhos / Conteudo minimo / Aplicacao inicial / Como evoluir); revisao Opus antes do commit.",
+      "severity": "low"
+    },
+    {
+      "risk": "Conflito de merge se Codex (Onda 38) tambem atualizar .hbn/relay/INDEX.md antes desta onda fechar.",
+      "mitigation": "Esta Onda 36.1 atualiza INDEX.md apenas no passo final do ERP; se Codex commitar antes, Opus rebase ou merge limpo. Escopos disjuntos no codigo VBA garantem zero conflito real.",
+      "severity": "medium"
+    },
+    {
+      "risk": "AGENTS.md ja tem 16 itens na lista de leitura obrigatoria; adicionar mais 1 (0014) torna a lista pesada para IA nova.",
+      "mitigation": "Inserir 0014 logo apos 0013 (mesma categoria 'regras permanentes de protocolo'); nao quebra ordem semantica; lista cresce de 16 para 17 itens (incremento marginal).",
+      "severity": "low"
+    },
+    {
+      "risk": "Knowledge 0014 ser publicado mas nunca aplicado de fato (regra fantasma).",
+      "mitigation": "Gate 4 do validation_plan exige que esta propria sessao Opus produza o primeiro handoff de fim-de-sessao real em .hbn/messages/ antes de fechar ERP 0095 — auto-aplicacao imediata.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "knowledge/0014-protocolo-fim-de-sessao.md criado com <= 100 linhas; estrutura fixa (Regra / Por que / Gatilhos / Conteudo minimo / Aplicacao inicial / Como evoluir)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/knowledge/0014-protocolo-fim-de-sessao.md"
+      },
+      {
+        "gate": "AGENTS.md secao 'Antes de tocar qualquer coisa' inclui linha para .hbn/knowledge/0014-protocolo-fim-de-sessao.md entre item 0013 e item seguinte",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "AGENTS.md"
+      },
+      {
+        "gate": "Nenhum diff em src/vba/, local-ai/vba_import/, V12-*, obsidian-vault, doc/, schemas HBN, knowledge 0013/0018",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0095-exec-onda36-1-knowledge-0014-fim-sessao.json"
+      },
+      {
+        "gate": "Primeiro handoff de fim-de-sessao real produzido em .hbn/messages/20260525-XXXX-handoff-fim-sessao-opus.md ao fechar esta sessao Opus (auto-aplicacao da regra recem-criada)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/messages/20260525-XXXX-handoff-fim-sessao-opus.md"
+      },
+      {
+        "gate": "CHANGELOG.md atualizado com entrada 'Onda 36.1 — knowledge 0014 protocolo de fim-de-sessao'",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "CHANGELOG.md"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se knowledge 0014 nao for aceito por Mauricio na revisao: git restore --staged + rm dos arquivos novos antes do commit",
+      "Se commit ja feito: git revert <hash da 36.1> (forward-only, preserva historico)",
+      "Estado anterior recuperavel: c47fb53 (HEAD pos-Onda 37.3/37.4)",
+      "Onda 38 (Codex) NAO e afetada — escopos completamente disjuntos"
+    ],
+    "anchor_to_restore": "c47fb53 (HEAD apos commit Onda 37.3+37.4)"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-25T00:45:00-03:00"
+}

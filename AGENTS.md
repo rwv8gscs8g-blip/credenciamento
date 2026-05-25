@@ -108,7 +108,8 @@ Leia, em ordem:
 6. [`.hbn/knowledge/0011-higiene-documental-recorrente.md`](.hbn/knowledge/0011-higiene-documental-recorrente.md) — regra permanente: higiene documental antes de passar de fase
 7. [`.hbn/knowledge/0012-raiz-canonica-projeto.md`](.hbn/knowledge/0012-raiz-canonica-projeto.md) — regra permanente de raiz canônica
 8. [`.hbn/knowledge/0013-contratos-executaveis.md`](.hbn/knowledge/0013-contratos-executaveis.md) — **regra permanente de contratos executáveis (Onda 36)**
-9. [`auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md`](auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md) — **auditoria-mãe do protocolo curado (Opus 2026-05-24)**
+9. [`.hbn/knowledge/0014-protocolo-fim-de-sessao.md`](.hbn/knowledge/0014-protocolo-fim-de-sessao.md) — **regra permanente de handoff a 50% de contexto ou transferência de bastão (Onda 36.1)**
+10. [`auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md`](auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md) — **auditoria-mãe do protocolo curado (Opus 2026-05-24)**
 10. [`scripts/hbn-guards/README.md`](scripts/hbn-guards/README.md) — guards executáveis no pre-commit
 11. [`.hbn/schemas/README.md`](.hbn/schemas/README.md) — schemas JSON dos artefatos HBN
 12. [`obsidian-vault/releases/V12.0.0205.md`](obsidian-vault/releases/V12.0.0205.md) — release oficial vigente

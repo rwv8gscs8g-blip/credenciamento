@@ -38,6 +38,14 @@ tratam apenas da linha pública oficial.
 
 ### Conhecimento
 
+- **Knowledge `0014-protocolo-fim-de-sessao.md`** (Onda 36.1) — Regra
+  permanente: toda IA que opere em sessão longa produz handoff de
+  fim-de-sessão em `.hbn/messages/AAAAMMDD-HHmm-handoff-fim-sessao-<agente>.md`
+  ao detectar gatilho (operador pede stop, >30 turnos, contexto >50%,
+  transferência de bastão, ou ERP fechado). Auto-aplicação imediata: primeiro
+  handoff real foi o desta própria sessão Opus que criou a regra
+  (`.hbn/messages/20260525-0100-handoff-fim-sessao-opus.md`). Primeira
+  iteração manual do `PROMPT_ARQUITETO_USEHBN_AUTONOMO`.
 - **Knowledge `0018-uso-delta-vs-completo.md`** (L33) — Regra permanente:
   `ImportarPacoteV3_Delta` é o caminho default; `ImportarPacoteV3()`
   completo gera fantasma de cache no VBE e fica restrito a Fresh workbook
