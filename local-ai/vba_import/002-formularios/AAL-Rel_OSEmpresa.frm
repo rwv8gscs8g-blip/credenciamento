@@ -15,6 +15,7 @@ Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
 Private Sub UserForm_Initialize()
     Me.caption = Rel_TituloExibicao("RELATORIO DE ORDENS DE SERVICO POR EMPRESA")
+    Dt_inicial.Value = Format$(Rel_DataInicialPadrao(), "dd/mm/yyyy")
 End Sub
 
 Private Sub B_RelEmpresaOS_Click()
@@ -29,6 +30,15 @@ Private Sub RO_Lista_Click()
     If RO_Lista.ListIndex < 0 Then Exit Sub
 End Sub
 
+Private Sub Dt_inicial_AfterUpdate()
+    Dim dataNormalizada As Date
+
+    If Trim$(CStr(Dt_inicial.Value)) = "" Then Exit Sub
+    If Rel_ParseDataBR(CStr(Dt_inicial.Value), dataNormalizada) Then
+        Dt_inicial.Value = Format$(dataNormalizada, "dd/mm/yyyy")
+    End If
+End Sub
+
 Private Sub GerarImprimirRelatorioOSEmpresa()
     On Error GoTo erro_carregamento
 
@@ -36,16 +46,15 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
     Dim wsServ As Worksheet
     Dim wsRel As Worksheet
     Dim EncontrarServ As Range
-    Dim EncontrarID As Range
     Dim empresaId As String
     Dim linhaAtual As Long
     Dim relLinha As Long
+    Dim ultimaOS As Long
     Dim Var1 As String, Var2 As String, Var3 As String, Var4 As String
     Dim Var5 As String, Var6 As String, Var7 As String, Var8 As String
     Dim Var9 As String, Var10 As String
     Dim dataTexto As String
     Dim dataInicial As Date
-    Dim filtroData As Boolean
     Dim incluirLinha As Boolean
     Dim totalRegistros As Long
     Dim estRel As Boolean
@@ -72,19 +81,13 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
     Var10 = ""
     dataTexto = Trim$(CStr(Dt_inicial.Value))
 
-    If dataTexto <> "" Then
-        If Not Rel_ParseDataBR(dataTexto, dataInicial) Then
-            MsgBox "Data inicial inválida. Informe no formato dd/mm/aaaa ou ddmmaaaa.", vbExclamation, "Relatório"
-            Dt_inicial.SetFocus
-            Exit Sub
-        End If
-        filtroData = True
-    Else
-        If MsgBox("Deseja emitir relatório com todas as Solicitações dessa Empresa?", _
-                  vbQuestion + vbYesNo, "Ordens de Serviço") = vbNo Then
-            Dt_inicial.SetFocus
-            Exit Sub
-        End If
+    If dataTexto = "" Then
+        dataInicial = Rel_DataInicialPadrao()
+        Dt_inicial.Value = Format$(dataInicial, "dd/mm/yyyy")
+    ElseIf Not Rel_ParseDataBR(dataTexto, dataInicial) Then
+        MsgBox "Data inicial inválida. Informe no formato dd/mm/aaaa, ddmmaaaa ou ddmmaa.", vbExclamation, "Relatório"
+        Dt_inicial.SetFocus
+        Exit Sub
     End If
 
     Set wsOS = ThisWorkbook.Sheets(SHEET_CAD_OS)
@@ -110,51 +113,44 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
 
     Call ClassificaOSEmpresa
 
-    With wsOS.Range("D:D")
-        Set EncontrarID = .Find(What:=empresaId, LookAt:=xlWhole)
-        If Not EncontrarID Is Nothing Then
-            linhaAtual = EncontrarID.row
+    ultimaOS = UltimaLinhaAba(SHEET_CAD_OS)
+    For linhaAtual = LINHA_DADOS To ultimaOS
+        If IdsIguais(wsOS.Cells(linhaAtual, COL_OS_EMP_ID).Value, empresaId) Then
+            incluirLinha = Rel_DataEmPeriodo(wsOS.Cells(linhaAtual, COL_OS_DT_SS).Value, dataInicial)
 
-            Do While wsOS.Cells(linhaAtual, COL_OS_EMP_ID).Value = empresaId
-                incluirLinha = True
-                If filtroData Then
-                    incluirLinha = Rel_DataIgual(wsOS.Cells(linhaAtual, COL_OS_DT_SS).Value, dataInicial)
-                End If
+            If incluirLinha Then
+                Var1 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_NUM).Value)
+                Var2 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_DEMANDANTE).Value)
+                Var4 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_EMPENHO).Value)
+                Var5 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_DT_SS).Value)
+                Var6 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_DT_FECH).Value)
+                Var7 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_VALOR).Value)
+                Var8 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_NOTA).Value)
+                Var9 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_SERV_ID).Value)
 
-                If incluirLinha Then
-                    Var1 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_NUM).Value)
-                    Var2 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_DEMANDANTE).Value)
-                    Var4 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_EMPENHO).Value)
-                    Var5 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_DT_SS).Value)
-                    Var6 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_DT_FECH).Value)
-                    Var7 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_VALOR).Value)
-                    Var8 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_NOTA).Value)
-                    Var9 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_SERV_ID).Value)
-
-                    If Var10 <> Var9 Then
-                        Set EncontrarServ = wsServ.Range("A:A").Find(What:=Var9, LookAt:=xlWhole)
-                        If Not EncontrarServ Is Nothing Then
-                            Var3 = SafeListVal(EncontrarServ.Offset(0, 3).Value)
-                            Var10 = SafeListVal(EncontrarServ.Value)
-                        End If
+                If Var10 <> Var9 Then
+                    Set EncontrarServ = wsServ.Range("A:A").Find(What:=Var9, LookAt:=xlWhole)
+                    If Not EncontrarServ Is Nothing Then
+                        Var3 = SafeListVal(EncontrarServ.Offset(0, 3).Value)
+                        Var10 = SafeListVal(EncontrarServ.Value)
+                    Else
+                        Var3 = ""
+                        Var10 = Var9
                     End If
-
-                    wsRel.Cells(relLinha, 1).Value = Format(Var1, "000")
-                    wsRel.Cells(relLinha, 2).Value = Var2
-                    wsRel.Cells(relLinha, 3).Value = Var3
-                    wsRel.Cells(relLinha, 4).Value = Var4
-                    wsRel.Cells(relLinha, 5).Value = Var5
-                    wsRel.Cells(relLinha, 6).Value = Var6
-                    wsRel.Cells(relLinha, 7).Value = Format(Var7, "CURRENCY")
-                    wsRel.Cells(relLinha, 8).Value = Var8
-                    relLinha = relLinha + 1
                 End If
 
-                linhaAtual = linhaAtual + 1
-                If linhaAtual > wsOS.Rows.count Then Exit Do
-            Loop
+                wsRel.Cells(relLinha, 1).Value = Format(Var1, "000")
+                wsRel.Cells(relLinha, 2).Value = Var2
+                wsRel.Cells(relLinha, 3).Value = Var3
+                wsRel.Cells(relLinha, 4).Value = Var4
+                wsRel.Cells(relLinha, 5).Value = Var5
+                wsRel.Cells(relLinha, 6).Value = Var6
+                wsRel.Cells(relLinha, 7).Value = Format(Var7, "CURRENCY")
+                wsRel.Cells(relLinha, 8).Value = Var8
+                relLinha = relLinha + 1
+            End If
         End If
-    End With
+    Next linhaAtual
 
     totalRegistros = relLinha - 2
     If totalRegistros <= 0 Then
@@ -162,7 +158,9 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
         wsRel.PageSetup.PrintArea = ""
         Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
         relPreparado = False
-        MsgBox "Não há ordens de serviço para a empresa e data informadas.", vbInformation, "Relatório"
+        Call ClassificaOS
+        MsgBox "Não há ordens de serviço para a empresa selecionada desde " & _
+               Format$(dataInicial, "dd/mm/yyyy") & ".", vbInformation, "Relatório"
         Exit Sub
     End If
 
@@ -178,7 +176,7 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
                "Identificação sugerida: " & Rel_NomeArquivoSugerido("RELATORIO DE ORDENS DE SERVICO POR EMPRESA"), _
                vbInformation, "Impressão"
     Else
-        wsRel.PrintPreview
+        MsgBox "Impressão cancelada.", vbInformation, "Relatório"
     End If
 
     wsRel.Cells.Clear
@@ -196,10 +194,15 @@ erro_carregamento:
         wsRel.Cells.Clear
         If relPreparado Then Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
     End If
+    Call ClassificaOS
     On Error GoTo 0
     If errMsg = "" Then errMsg = "Erro não identificado."
     MsgBox "Erro ao gerar relatório: " & errMsg, vbCritical, "Relatório"
 End Sub
+
+Private Function Rel_DataInicialPadrao() As Date
+    Rel_DataInicialPadrao = DateSerial(Year(Date), Month(Date) - 7, 1)
+End Function
 
 Private Function Rel_ParseDataBR(ByVal texto As String, ByRef dtOut As Date) As Boolean
     Dim partes() As String
@@ -221,10 +224,17 @@ Private Function Rel_ParseDataBR(ByVal texto As String, ByRef dtOut As Date) As 
         y = CLng(Val(partes(2)))
     Else
         digitos = Rel_ApenasDigitos(texto)
-        If Len(digitos) <> 8 Then Exit Function
-        d = CLng(Val(Left$(digitos, 2)))
-        m = CLng(Val(Mid$(digitos, 3, 2)))
-        y = CLng(Val(Right$(digitos, 4)))
+        If Len(digitos) = 8 Then
+            d = CLng(Val(Left$(digitos, 2)))
+            m = CLng(Val(Mid$(digitos, 3, 2)))
+            y = CLng(Val(Right$(digitos, 4)))
+        ElseIf Len(digitos) = 6 Then
+            d = CLng(Val(Left$(digitos, 2)))
+            m = CLng(Val(Mid$(digitos, 3, 2)))
+            y = CLng(Val(Right$(digitos, 2)))
+        Else
+            Exit Function
+        End If
     End If
 
     If y < 100 Then y = 2000 + y
@@ -241,21 +251,6 @@ falha:
     Rel_ParseDataBR = False
 End Function
 
-Private Function Rel_DataIgual(ByVal valor As Variant, ByVal alvo As Date) As Boolean
-    Dim dtValor As Date
-
-    On Error GoTo tentar_texto
-    If IsDate(valor) Then
-        Rel_DataIgual = (DateValue(CDate(valor)) = DateValue(alvo))
-        Exit Function
-    End If
-
-tentar_texto:
-    If Rel_ParseDataBR(CStr(valor), dtValor) Then
-        Rel_DataIgual = (DateValue(dtValor) = DateValue(alvo))
-    End If
-End Function
-
 Private Function Rel_ApenasDigitos(ByVal texto As String) As String
     Dim i As Long
     Dim c As String
@@ -267,6 +262,21 @@ Private Function Rel_ApenasDigitos(ByVal texto As String) As String
     Next i
 
     Rel_ApenasDigitos = saida
+End Function
+
+Private Function Rel_DataEmPeriodo(ByVal valor As Variant, ByVal dataInicial As Date) As Boolean
+    Dim dtValor As Date
+
+    On Error GoTo tentar_texto
+    If IsDate(valor) Then
+        Rel_DataEmPeriodo = (DateValue(CDate(valor)) >= DateValue(dataInicial))
+        Exit Function
+    End If
+
+tentar_texto:
+    If Rel_ParseDataBR(CStr(valor), dtValor) Then
+        Rel_DataEmPeriodo = (DateValue(dtValor) >= DateValue(dataInicial))
+    End If
 End Function
 
 

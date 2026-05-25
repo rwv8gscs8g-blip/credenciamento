@@ -1,0 +1,163 @@
+{
+  "readback_id": "0098-onda38-1-1-relatorios-hotfix",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0097-onda38-1-relatorios-protecao-impressao",
+  "intent": {
+    "objective": "Aplicar hotfix minimo nos relatorios afetados pela Onda 38.1: remover caminhos de PrintPreview que travam a interface, cancelar limpo quando o operador escolhe Nao, e corrigir OS por Empresa para usar periodo padrao de 7 meses com varredura completa por empresa.",
+    "non_goals": [
+      "alterar RN-01 a RN-17",
+      "alterar contadores RVS",
+      "usar ImportarPacoteV3 completo",
+      "tocar qualquer arquivo .frx",
+      "tocar Menu_Principal.frm ou Preencher.bas",
+      "tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+      "tocar Mod_Types.bas ou Importador_V3.bas",
+      "executar padronizacao visual ampla dos relatorios nesta onda",
+      "incluir PDF ou testes PDF no RVS"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-1-RELATORIOS-HOTFIX.txt",
+      ".hbn/readbacks/0098-onda38-1-1-relatorios-hotfix.json",
+      ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json",
+      ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_1_1_relatorios_hotfix/**"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Rel_OSEmpresa.frx",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Menu_Principal.frx",
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio confirmou em chat que o escopo 38.1.1 esta aprovado e que a solucao proposta e simples e de baixo impacto.",
+    "Mauricio reportou que Empresas por Servico imprime com sucesso quando escolhe Sim, mas a opcao Nao/visualizar trava a interface.",
+    "Mauricio reportou que OS por Empresa nao imprime nem mostra resultado pela interface, tanto sem data quanto com data digitada.",
+    "Data padrao sera calculada por DateSerial(Year(Date), Month(Date) - 7, 1), evitando DateAdd, nomes localizados e ambiguidade de meses sem dia 29/30/31."
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-1-1-RELATORIOS-HOTFIX",
+    "build_label": "6103cab+ONDA38.1.1-relatorios-hotfix",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-1-RELATORIOS-HOTFIX.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-1-1-RELATORIOS-HOTFIX\", \"6103cab+ONDA38.1.1-relatorios-hotfix\"",
+    "expected_import_result": "M=1 | F=2 | err=0 | skip=0"
+  },
+  "invariants_preserved": [
+    "Importacao operacional somente por ImportarPacoteV3_Delta",
+    "RN-01 a RN-17 permanecem inalteradas",
+    "Contadores RVS permanecem V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Nenhum servico blindado sera tocado",
+    "Nenhum .frx sera tocado",
+    "Menu_Principal.frm e Preencher.bas permanecem congelados nesta onda",
+    "Padronizacao visual ampla fica separada para onda posterior"
+  ],
+  "risks": [
+    {
+      "risk": "PrintPreview continuar travando a interface quando chamado a partir de UserForm modal/modeless no ambiente Excel atual.",
+      "mitigation": "Remover PrintPreview dos dois relatorios nesta onda; Nao passa a significar cancelar/voltar ao fluxo sem preview.",
+      "severity": "high"
+    },
+    {
+      "risk": "Data padrao de sete meses pode cair em dia inexistente quando o mes alvo tem menos dias se preservar o dia atual.",
+      "mitigation": "Usar DateSerial(Year(Date), Month(Date) - 7, 1), primeiro dia do mes alvo, e exibir sempre com Format$ dd/mm/yyyy.",
+      "severity": "medium"
+    },
+    {
+      "risk": "OS por Empresa pode falhar se a aba CAD_OS nao estiver agrupada como o loop antigo esperava.",
+      "mitigation": "Manter ClassificaOSEmpresa, mas trocar Find + Do While contiguo por varredura completa ate UltimaLinhaAba(SHEET_CAD_OS) comparando IdsIguais.",
+      "severity": "high"
+    },
+    {
+      "risk": "Cancelamento de impressora pode deixar RELATORIO sujo ou protegido no estado errado.",
+      "mitigation": "Unificar caminho de limpeza/restauracao apos Sim/Nao/cancelamento e manter handler de erro restaurando protecao.",
+      "severity": "high"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff --name-only confirma apenas arquivos permitidos pelo scope 0098, ignorando untracked preexistentes nao stageados",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json"
+      },
+      {
+        "gate": "bash local-ai/scripts/publicar_vba_import_v2.sh --apply e --check confirmam G7/G8 e espelho sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json"
+      },
+      {
+        "gate": "bash scripts/hbn-guards/hbn-guards-runner.sh usa 0098 como readback ativo e passa 5/5",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-1-1-RELATORIOS-HOTFIX retorna M=1 | F=2 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json"
+      },
+      {
+        "gate": "Empresas por Servico: Sim imprime; Nao cancela limpo sem PrintPreview e sem travar interface",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json"
+      },
+      {
+        "gate": "OS por Empresa: form abre com data padrao dos ultimos 7 meses, seleciona empresa e imprime registros do periodo sem preview e sem bloqueio",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import delta falhar, Mauricio nao deve salvar o workbook e deve colar a mensagem exata do Importador V3.",
+      "Se o compile VBE falhar, Mauricio nao deve salvar o workbook; reabrir o workbook salvo apos Onda 38.1.",
+      "Se CT_ValidarRelease_TrioMinimo mudar contadores ou falhar, nao prosseguir para padronizacao visual.",
+      "Se algum relatorio continuar travando ou nao imprimir, registrar screenshot e nao salvar o workbook.",
+      "Se rollback git for necessario apos commit, usar git revert do commit da Onda 38.1.1 em vez de reescrever historico."
+    ],
+    "anchor_to_restore": "Workbook V5 salvo apos Onda 38.1 com build cf778b2+ONDA38.1-relatorios-protecao e commit 6103cab"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-25T14:43:00-03:00"
+}

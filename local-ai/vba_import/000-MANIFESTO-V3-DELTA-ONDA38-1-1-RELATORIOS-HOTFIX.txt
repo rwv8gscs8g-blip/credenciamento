@@ -1,0 +1,40 @@
+# Manifesto V3 DELTA ONDA38-1-1-RELATORIOS-HOTFIX - V12.0.0206
+# Tema: Hotfix dos fluxos de impressao dos relatorios afetados pela Onda 38.1.
+#
+# Contexto:
+#   - Onda 38.1 importou, compilou e passou RVS completo.
+#   - Gate funcional humano confirmou Empresas por Servico imprimindo quando
+#     a opcao Sim e escolhida, mas a opcao Nao/visualizar travava a interface.
+#   - Gate funcional humano confirmou que OS por Empresa nao imprimia de forma
+#     confiavel pela interface, com ou sem data digitada.
+#   - Importacao permitida exclusivamente via ImportarPacoteV3_Delta.
+#
+# Mudancas:
+#   AAL-Rel_OSEmpresa.frm:
+#     - Preenche Dt_inicial com o primeiro dia do mes de 7 meses atras.
+#     - Normaliza datas digitadas nos formatos dd/mm/aaaa, ddmmaaaa e ddmmaa.
+#     - Troca filtro de data exata por periodo desde a data inicial.
+#     - Troca busca Find + bloco contiguo por varredura completa de CAD_OS.
+#     - Remove PrintPreview; cancelamento de impressora limpa/restaura estado.
+#   AAK-Rel_Emp_Serv.frm:
+#     - Remove PrintPreview do caminho Nao e do cancelamento de impressora.
+#     - Nao agora cancela limpo, evitando travamento de interface.
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = "6103cab+ONDA38.1.1-relatorios-hotfix"
+#     - APP_BUILD_GERADO_EM = "2026-05-25 14:43"
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38-1-1-RELATORIOS-HOTFIX", "6103cab+ONDA38.1.1-relatorios-hotfix"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=2 | err=0 | skip=0.
+#   - Compile manual passa limpo.
+#   - CT_ValidarRelease_TrioMinimo permanece APROVADO:
+#     V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+#   - Empresas por Servico: Sim imprime; Nao cancela sem travar.
+#   - OS por Empresa: data padrao aparece, selecao de empresa imprime o periodo.
+#
+# GRUPO_DELTA_ONDA38_1_1_RELATORIOS_HOTFIX
+F|002-formularios/AAL-Rel_OSEmpresa.frm
+F|002-formularios/AAK-Rel_Emp_Serv.frm
+M|001-modulo/AAX-App_Release.bas

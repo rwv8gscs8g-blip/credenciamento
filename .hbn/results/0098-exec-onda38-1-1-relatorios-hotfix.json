@@ -1,0 +1,76 @@
+{
+  "result_id": "0098-exec-onda38-1-1-relatorios-hotfix",
+  "readback_id": "0098-onda38-1-1-relatorios-hotfix",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "delivered_for_human_gate",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "summary": "Onda 38.1.1 aplica hotfix minimo nos relatorios afetados: remove PrintPreview que travava a UI, transforma Nao/cancelamento em saida limpa, preenche OS por Empresa com data padrao robusta e troca busca contigua por varredura completa de CAD_OS.",
+  "files_changed": [
+    "src/vba/Rel_OSEmpresa.frm",
+    "src/vba/Rel_Emp_Serv.frm",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-1-RELATORIOS-HOTFIX.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+    "auditoria/03_ondas/onda_38_1_1_relatorios_hotfix/38_1_1_TECNICO.md",
+    ".hbn/readbacks/0098-onda38-1-1-relatorios-hotfix.json",
+    ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json",
+    ".hbn/results/0097-exec-onda38-1-relatorios-protecao-impressao.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-1-1-RELATORIOS-HOTFIX",
+    "build_label": "6103cab+ONDA38.1.1-relatorios-hotfix",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-1-1-RELATORIOS-HOTFIX\", \"6103cab+ONDA38.1.1-relatorios-hotfix\"",
+    "expected_import_result": "M=1 | F=2 | err=0 | skip=0"
+  },
+  "local_validation": [
+    {
+      "gate": "publicar_vba_import_v2.sh --apply",
+      "status": "pass",
+      "evidence": "3 arquivos applied: AAX-App_Release.bas, AAK-Rel_Emp_Serv.frm, AAL-Rel_OSEmpresa.frm; G8 OK; G7 OK"
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --check",
+      "status": "pass",
+      "evidence": "vba_import 100% sincronizado com src/vba"
+    },
+    {
+      "gate": "readback jq",
+      "status": "pass",
+      "evidence": "jq empty .hbn/readbacks/0098-onda38-1-1-relatorios-hotfix.json"
+    },
+    {
+      "gate": "hbn-guards-runner staged",
+      "status": "pass",
+      "evidence": "Readback ativo 0098 confirmado; todos os arquivos staged dentro do scope declarado; 5/5 guards verdes"
+    },
+    {
+      "gate": "shasum src vs local-ai",
+      "status": "pass",
+      "evidence": "Rel_OSEmpresa.frm, Rel_Emp_Serv.frm e App_Release.bas com SHA-256 identico entre src/vba e local-ai/vba_import"
+    }
+  ],
+  "human_gates_pending": [
+    "ImportarPacoteV3_Delta ONDA38-1-1-RELATORIOS-HOTFIX e confirmar M=1 | F=2 | err=0 | skip=0",
+    "Depurar > Compilar VBAProject passa limpo",
+    "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Empresas por Servico: Sim imprime; Nao cancela limpo sem travar interface",
+    "OS por Empresa: abre com data padrao no formato dd/mm/aaaa, aceita ddmmaaaa/ddmmaa, seleciona empresa e imprime OS do periodo"
+  ],
+  "human_gate_evidence": [],
+  "next_wave": {
+    "id": "0099-onda38-2-padronizacao-visual-relatorios",
+    "status": "deferred_until_0098_functional_gate",
+    "summary": "Padronizacao visual ampla dos relatorios apos Onda 38.1.1 passar em compile/RVS/gates funcionais."
+  },
+  "created_at": "2026-05-25T14:43:00-03:00"
+}

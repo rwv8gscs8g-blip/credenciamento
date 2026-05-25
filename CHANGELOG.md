@@ -17,6 +17,14 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.1.1** — hotfix mínimo dos relatórios afetados pela Onda 38.1:
+  remove `PrintPreview` dos caminhos que travavam a interface, transforma
+  **Não** em cancelamento limpo, preenche `Dt_inicial` em OS por Empresa com o
+  primeiro dia do mês de sete meses atrás, normaliza datas `dd/mm/aaaa`,
+  `ddmmaaaa` e `ddmmaa`, e troca a busca contígua em `CAD_OS` por varredura
+  completa por empresa/período. Manifesto delta:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-1-RELATORIOS-HOTFIX.txt`.
+  Carimbo: `6103cab+ONDA38.1.1-relatorios-hotfix`.
 - **Onda 38.1** — destrava os relatórios `Rel_OSEmpresa` e
   `Rel_Emp_Serv` após gate humano da Onda 38: os forms agora preparam e
   restauram a proteção da aba `RELATORIO`, limpam resíduos/área impressa,

@@ -1,12 +1,39 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Codex (Onda 38.1 importada, compilada e RVS aprovada; aguardando apenas gate funcional humano dos dois relatorios antes de liberar Onda 38.2 de padronizacao visual ampla). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
+proprietario-bastao: Codex (Onda 38.1.1 hotfix relatorios entregue para gate humano; Onda 38.2 de padronizacao visual ampla permanece deferida). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Mauricio executar os dois gates funcionais da Onda 38.1: OS por Empresa com data opcional e Empresas por Servico sem residuos/erro de protecao. Codex so inicia Onda 38.2 apos confirmacao.
-ultima-atualizacao: 2026-05-25T14:20:00-0300 (Onda 38.1 importada com M=1/F=2/err=0, compile limpo e RVS VR_20260525_124700 APROVADO)
+proxima-acao: Mauricio importar Onda 38.1.1 via ImportarPacoteV3_Delta, compilar, rodar CT_ValidarRelease_TrioMinimo e repetir gates funcionais de Empresas por Servico e OS por Empresa.
+ultima-atualizacao: 2026-05-25T14:43:00-0300 (Onda 38.1.1 hotfix preparado para importacao delta; Onda 38.1 ja tinha import/compile/RVS aprovados, mas exigiu follow-up funcional)
 ---
+
+## Onda 38.1.1 ENTREGUE PARA GATE HUMANO — Hotfix relatorios (Codex)
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track |
+| Readback | [readbacks/0098-onda38-1-1-relatorios-hotfix.json](../readbacks/0098-onda38-1-1-relatorios-hotfix.json) |
+| Hearback | confirmed — Mauricio confirmou escopo e aprovou as mudanças |
+| ERP | [results/0098-exec-onda38-1-1-relatorios-hotfix.json](../results/0098-exec-onda38-1-1-relatorios-hotfix.json) — delivered_for_human_gate |
+| Doc tecnico | [38_1_1_TECNICO.md](../../auditoria/03_ondas/onda_38_1_1_relatorios_hotfix/38_1_1_TECNICO.md) |
+| Manifesto delta | [000-MANIFESTO-V3-DELTA-ONDA38-1-1-RELATORIOS-HOTFIX.txt](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-1-RELATORIOS-HOTFIX.txt) |
+| Build label | `6103cab+ONDA38.1.1-relatorios-hotfix` |
+
+### Resultado Onda 38.1.1
+
+- `Rel_Emp_Serv.frm` remove `PrintPreview`; `Sim` imprime e `Nao` cancela
+  limpo sem travar a interface.
+- `Rel_OSEmpresa.frm` preenche `Dt_inicial` automaticamente com o primeiro dia
+  do mes de sete meses atras, normaliza `dd/mm/aaaa`, `ddmmaaaa` e `ddmmaa`, e
+  filtra por periodo desde a data inicial.
+- `Rel_OSEmpresa.frm` troca a busca `Find` + bloco contiguo por varredura
+  completa de `CAD_OS`, comparando empresa com `IdsIguais`.
+- `App_Release.bas` carimbado com
+  `6103cab+ONDA38.1.1-relatorios-hotfix`.
+- Proximo gate: import delta, compile VBE, `CT_ValidarRelease_TrioMinimo`,
+  Empresas por Servico (`Sim` imprime, `Nao` cancela) e OS por Empresa (data
+  padrao + impressao do periodo).
 
 ## Onda 38.1 IMPLEMENTADA LOCALMENTE — Relatorios protecao e impressao (Codex)
 

@@ -92,15 +92,15 @@ Private Sub SV_CR_Lista_Click()
 
     If MsgBox("Relatório gerado com " & CStr(totalRegistros) & " registro(s)." & vbCrLf & _
               "Identificação sugerida: " & Rel_NomeArquivoSugerido("RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO") & vbCrLf & _
-              "Deseja imprimir agora? (Nao = visualizar na tela)", vbQuestion + vbYesNo, "Relatório") = vbYes Then
+              "Deseja imprimir agora? (Nao = cancelar)", vbQuestion + vbYesNo, "Relatório") = vbYes Then
         If Application.Dialogs(xlDialogPrinterSetup).Show Then
             wsRel.PrintOut
             MsgBox "Relatório impresso com sucesso.", vbInformation, "Relatório"
         Else
-            wsRel.PrintPreview
+            MsgBox "Impressão cancelada.", vbInformation, "Relatório"
         End If
     Else
-        wsRel.PrintPreview
+        MsgBox "Relatório cancelado.", vbInformation, "Relatório"
     End If
 
     wsRel.Cells.Clear
