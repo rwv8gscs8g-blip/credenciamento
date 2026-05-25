@@ -1,0 +1,72 @@
+{
+  "result_id": "0099-exec-onda38-1-2-rel-os-empresa-botao-real",
+  "readback_id": "0099-onda38-1-2-rel-os-empresa-botao-real",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "delivered_for_human_gate",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "summary": "Onda 38.1.2 corrige o botao real do form Rel_OSEmpresa: o controle visivel se chama B_RelMEIOS e agora dispara a rotina de impressao do relatorio de OS por Empresa.",
+  "files_changed": [
+    "src/vba/Rel_OSEmpresa.frm",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-2-REL-OS-EMPRESA-BOTAO.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+    "auditoria/03_ondas/onda_38_1_2_rel_os_empresa_botao_real/38_1_2_TECNICO.md",
+    ".hbn/readbacks/0099-onda38-1-2-rel-os-empresa-botao-real.json",
+    ".hbn/results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json",
+    ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-1-2-REL-OS-EMPRESA-BOTAO",
+    "build_label": "10ef253+ONDA38.1.2-rel-os-empresa-botao",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-1-2-REL-OS-EMPRESA-BOTAO\", \"10ef253+ONDA38.1.2-rel-os-empresa-botao\"",
+    "expected_import_result": "M=1 | F=1 | err=0 | skip=0"
+  },
+  "local_validation": [
+    {
+      "gate": "strings src/vba/Rel_OSEmpresa.frx",
+      "status": "pass",
+      "evidence": "Controle real identificado como B_RelMEIOS; confirmado por screenshot do VBE enviado por Mauricio."
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --apply",
+      "status": "pass",
+      "evidence": "2 arquivos applied: AAX-App_Release.bas, AAL-Rel_OSEmpresa.frm; G8 OK; G7 OK"
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --check",
+      "status": "pass",
+      "evidence": "vba_import 100% sincronizado com src/vba"
+    },
+    {
+      "gate": "hbn-guards-runner staged",
+      "status": "pass",
+      "evidence": "Readback ativo 0099 confirmado; todos os arquivos staged dentro do scope declarado; 5/5 guards verdes"
+    },
+    {
+      "gate": "shasum src vs local-ai",
+      "status": "pass",
+      "evidence": "Rel_OSEmpresa.frm e App_Release.bas com SHA-256 identico entre src/vba e local-ai/vba_import"
+    }
+  ],
+  "human_gates_pending": [
+    "ImportarPacoteV3_Delta ONDA38-1-2-REL-OS-EMPRESA-BOTAO e confirmar M=1 | F=1 | err=0 | skip=0",
+    "Depurar > Compilar VBAProject passa limpo",
+    "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "OS por Empresa: clicar Imprimir Relatorio dispara PDF com titulo Relatorio de Ordens de Servico por Empresa"
+  ],
+  "human_gate_evidence": [],
+  "next_wave": {
+    "id": "0100-onda38-2-padronizacao-visual-relatorios",
+    "status": "deferred_until_0099_functional_gate",
+    "summary": "Padronizacao visual ampla dos relatorios apos Onda 38.1.2 passar em compile/RVS/gate funcional."
+  },
+  "created_at": "2026-05-25T15:36:00-03:00"
+}

@@ -5,7 +5,7 @@
   "agent_id": "codex",
   "track": "safe_track",
   "version_target": "V12.0.0206",
-  "status": "delivered_for_human_gate",
+  "status": "human_gate_compile_pass_functional_followup_required",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "summary": "Onda 38.1.1 aplica hotfix minimo nos relatorios afetados: remove PrintPreview que travava a UI, transforma Nao/cancelamento em saida limpa, preenche OS por Empresa com data padrao robusta e troca busca contigua por varredura completa de CAD_OS.",
@@ -67,10 +67,32 @@
     "OS por Empresa: abre com data padrao no formato dd/mm/aaaa, aceita ddmmaaaa/ddmmaa, seleciona empresa e imprime OS do periodo"
   ],
   "human_gate_evidence": [],
+  "human_gate_followup": [
+    {
+      "gate": "ImportarPacoteV3_Delta ONDA38-1-1-RELATORIOS-HOTFIX",
+      "status": "pass",
+      "evidence": "Mauricio reportou Importador V3 OK em modo Estabilizado: M=1 | F=2 | err=0 | skip=0"
+    },
+    {
+      "gate": "Depurar > Compilar VBAProject",
+      "status": "pass",
+      "evidence": "Mauricio reportou compile limpo apos importacao 38.1.1"
+    },
+    {
+      "gate": "Empresas por Servico Nao = cancelar",
+      "status": "pass",
+      "evidence": "Mauricio confirmou por screenshot que a opcao Nao cancela corretamente sem travar."
+    },
+    {
+      "gate": "OS por Empresa botao Imprimir Relatorio",
+      "status": "followup_required",
+      "evidence": "Mauricio confirmou no VBE que o CommandButton real se chama B_RelMEIOS; o codigo 38.1.1 tinha apenas B_RelEmpresaOS_Click, entao o clique nao disparava a rotina."
+    }
+  ],
   "next_wave": {
-    "id": "0099-onda38-2-padronizacao-visual-relatorios",
-    "status": "deferred_until_0098_functional_gate",
-    "summary": "Padronizacao visual ampla dos relatorios apos Onda 38.1.1 passar em compile/RVS/gates funcionais."
+    "id": "0099-onda38-1-2-rel-os-empresa-botao-real",
+    "status": "delivered_for_human_gate",
+    "summary": "Corrigir handler do botao real B_RelMEIOS antes de qualquer padronizacao visual ampla."
   },
   "created_at": "2026-05-25T14:43:00-03:00"
 }

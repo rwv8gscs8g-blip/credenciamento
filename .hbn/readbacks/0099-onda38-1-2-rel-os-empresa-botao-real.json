@@ -1,0 +1,163 @@
+{
+  "readback_id": "0099-onda38-1-2-rel-os-empresa-botao-real",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0098-onda38-1-1-relatorios-hotfix",
+  "intent": {
+    "objective": "Corrigir o clique do botao real de impressao em Rel_OSEmpresa: o FRX mostra que o controle se chama B_RelMEIOS, enquanto o codigo atual possui apenas B_RelEmpresaOS_Click, compilando mas sem disparar a rotina ao clicar.",
+    "non_goals": [
+      "alterar RN-01 a RN-17",
+      "alterar contadores RVS",
+      "usar ImportarPacoteV3 completo",
+      "tocar qualquer arquivo .frx",
+      "tocar Menu_Principal.frm ou Preencher.bas",
+      "tocar Rel_Emp_Serv.frm",
+      "tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+      "tocar Mod_Types.bas ou Importador_V3.bas",
+      "padronizar visual amplo dos relatorios nesta onda"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-2-REL-OS-EMPRESA-BOTAO.txt",
+      ".hbn/readbacks/0099-onda38-1-2-rel-os-empresa-botao-real.json",
+      ".hbn/results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json",
+      ".hbn/results/0098-exec-onda38-1-1-relatorios-hotfix.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_1_2_rel_os_empresa_botao_real/**"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_OSEmpresa.frx",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Menu_Principal.frx",
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio reportou importacao Onda 38.1.1 OK com M=1 | F=2 | err=0 | skip=0.",
+    "Mauricio reportou compile VBE limpo apos Onda 38.1.1.",
+    "PDFs ccc/ccc2/ccc3/ccc4/ccc5 mostram relatorios de Entidades, Empresas, OS Abertas e Empresas por Servico, mas nenhum Relatorio de Ordens de Servico por Empresa.",
+    "strings src/vba/Rel_OSEmpresa.frx identificou o controle de botao como B_RelMEIOS; o codigo atual possui B_RelEmpresaOS_Click, que nao dispara no clique real.",
+    "Mauricio confirmou por screenshot do VBE que o nome do CommandButton e B_RelMEIOS e aprovou executar a correcao 38.1.2.",
+    "Mauricio confirmou que, no outro form, o fluxo Nao = cancelar funcionou corretamente apos Onda 38.1.1."
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-1-2-REL-OS-EMPRESA-BOTAO",
+    "build_label": "10ef253+ONDA38.1.2-rel-os-empresa-botao",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-2-REL-OS-EMPRESA-BOTAO.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-1-2-REL-OS-EMPRESA-BOTAO\", \"10ef253+ONDA38.1.2-rel-os-empresa-botao\"",
+    "expected_import_result": "M=1 | F=1 | err=0 | skip=0"
+  },
+  "invariants_preserved": [
+    "Importacao operacional somente por ImportarPacoteV3_Delta",
+    "RN-01 a RN-17 permanecem inalteradas",
+    "Contadores RVS permanecem V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Nenhum servico blindado sera tocado",
+    "Nenhum .frx sera tocado",
+    "Filtro de periodo e data padrao implementados na Onda 38.1.1 permanecem inalterados",
+    "Rel_Emp_Serv.frm permanece congelado nesta onda"
+  ],
+  "risks": [
+    {
+      "risk": "Controle real do botao no FRX nao acionar a rotina por divergencia de nome do evento.",
+      "mitigation": "Adicionar handler B_RelMEIOS_Click chamando a mesma rotina central de impressao e manter B_RelEmpresaOS_Click como compatibilidade.",
+      "severity": "high"
+    },
+    {
+      "risk": "Renomear o handler antigo poderia esconder compatibilidade historica de outro export ou evidencia.",
+      "mitigation": "Nao renomear nem remover o handler antigo; apenas adicionar o handler do controle real e centralizar o corpo em sub privada.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Tocar FRX para renomear controle aumentaria risco de dessincronizacao binaria no VBE.",
+      "mitigation": "Nao tocar Rel_OSEmpresa.frx; corrigir somente o codigo VBA code-only do form.",
+      "severity": "high"
+    },
+    {
+      "risk": "Local-ai AAX foi alterado operacionalmente pelo importador com timestamp 15:01 apos importacao humana.",
+      "mitigation": "Recarimbar App_Release em src/vba e sincronizar por publicar_vba_import_v2.sh --apply antes do manifesto 0099.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "strings src/vba/Rel_OSEmpresa.frx confirma controle B_RelMEIOS sem tocar o FRX",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json"
+      },
+      {
+        "gate": "git diff --name-only confirma apenas arquivos permitidos pelo scope 0099, ignorando untracked preexistentes nao stageados",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json"
+      },
+      {
+        "gate": "bash local-ai/scripts/publicar_vba_import_v2.sh --apply e --check confirmam G7/G8 e espelho sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json"
+      },
+      {
+        "gate": "bash scripts/hbn-guards/hbn-guards-runner.sh usa 0099 como readback ativo e passa 5/5",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-1-2-REL-OS-EMPRESA-BOTAO retorna M=1 | F=1 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json"
+      },
+      {
+        "gate": "OS por Empresa: selecionar Empresa 3, manter data 01/10/2025, clicar Imprimir Relatorio e obter PDF com titulo Relatorio de Ordens de Servico por Empresa",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import delta falhar, Mauricio nao deve salvar o workbook e deve colar a mensagem exata do Importador V3.",
+      "Se o compile VBE falhar, Mauricio nao deve salvar o workbook; reabrir o workbook salvo apos Onda 38.1.1.",
+      "Se CT_ValidarRelease_TrioMinimo mudar contadores ou falhar, nao prosseguir para padronizacao visual.",
+      "Se o botao continuar sem acao, registrar screenshot e nao salvar o workbook; proximo diagnostico devera inspecionar os eventos reais no VBE.",
+      "Se rollback git for necessario apos commit, usar git revert do commit da Onda 38.1.2 em vez de reescrever historico."
+    ],
+    "anchor_to_restore": "Workbook V5 salvo apos Onda 38.1.1 com build 6103cab+ONDA38.1.1-relatorios-hotfix e commit 10ef253"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-25T15:21:00-03:00"
+}

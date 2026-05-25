@@ -1,0 +1,33 @@
+# Manifesto V3 DELTA ONDA38-1-2-REL-OS-EMPRESA-BOTAO - V12.0.0206
+# Tema: Handler do botao real de OS por Empresa.
+#
+# Contexto:
+#   - Onda 38.1.1 importou com M=1 | F=2 | err=0 | skip=0 e compilou.
+#   - Gate funcional mostrou que Empresas por Servico cancela corretamente.
+#   - OS por Empresa continuou sem imprimir porque o controle real do botao no
+#     form se chama B_RelMEIOS, mas o codigo tinha apenas B_RelEmpresaOS_Click.
+#   - Importacao permitida exclusivamente via ImportarPacoteV3_Delta.
+#
+# Mudancas:
+#   AAL-Rel_OSEmpresa.frm:
+#     - Adiciona B_RelMEIOS_Click chamando a mesma rotina central.
+#     - Mantem B_RelEmpresaOS_Click como compatibilidade.
+#     - Nao toca filtros, data padrao, formatacao ou FRX.
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = "10ef253+ONDA38.1.2-rel-os-empresa-botao"
+#     - APP_BUILD_GERADO_EM = "2026-05-25 15:36"
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38-1-2-REL-OS-EMPRESA-BOTAO", "10ef253+ONDA38.1.2-rel-os-empresa-botao"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=1 | err=0 | skip=0.
+#   - Compile manual passa limpo.
+#   - CT_ValidarRelease_TrioMinimo permanece APROVADO:
+#     V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+#   - OS por Empresa: clicar Imprimir Relatorio dispara a rotina e gera/imprime
+#     o relatorio do periodo selecionado.
+#
+# GRUPO_DELTA_ONDA38_1_2_REL_OS_EMPRESA_BOTAO
+F|002-formularios/AAL-Rel_OSEmpresa.frm
+M|001-modulo/AAX-App_Release.bas

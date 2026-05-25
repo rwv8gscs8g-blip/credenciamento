@@ -4,6 +4,14 @@ Private Sub UserForm_Initialize()
 End Sub
 
 Private Sub B_RelEmpresaOS_Click()
+    Call AcionarRelatorioOSEmpresa
+End Sub
+
+Private Sub B_RelMEIOS_Click()
+    Call AcionarRelatorioOSEmpresa
+End Sub
+
+Private Sub AcionarRelatorioOSEmpresa()
     On Error GoTo erro_carregamento
     Call GerarImprimirRelatorioOSEmpresa
     Exit Sub

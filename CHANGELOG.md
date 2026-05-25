@@ -17,6 +17,13 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.1.2** — corrige o botão real de `Rel_OSEmpresa`: o
+  `CommandButton` do form chama-se `B_RelMEIOS`, enquanto o código anterior
+  tinha apenas `B_RelEmpresaOS_Click`. O novo handler `B_RelMEIOS_Click`
+  chama a mesma rotina central de impressão, mantendo o handler antigo como
+  compatibilidade, sem tocar `.frx`. Manifesto delta:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-2-REL-OS-EMPRESA-BOTAO.txt`.
+  Carimbo: `10ef253+ONDA38.1.2-rel-os-empresa-botao`.
 - **Onda 38.1.1** — hotfix mínimo dos relatórios afetados pela Onda 38.1:
   remove `PrintPreview` dos caminhos que travavam a interface, transforma
   **Não** em cancelamento limpo, preenche `Dt_inicial` em OS por Empresa com o
