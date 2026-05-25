@@ -1,0 +1,154 @@
+{
+  "readback_id": "0100-onda38-1-3-nota-total-decimal",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0099-onda38-1-2-rel-os-empresa-botao-real",
+  "intent": {
+    "objective": "Padronizar a apresentacao da coluna NOTA TOTAL no relatorio OS por Empresa para duas casas decimais, preservando o calculo existente e o rotulo solicitado pelo operador.",
+    "non_goals": [
+      "alterar calculo de nota ou media em qualquer servico",
+      "renomear o cabecalho NOTA TOTAL",
+      "mudar fluxo de impressao ou mensagem de identificacao sugerida",
+      "alterar RN-01 a RN-17",
+      "alterar contadores RVS",
+      "usar ImportarPacoteV3 completo",
+      "tocar qualquer arquivo .frx",
+      "tocar Menu_Principal.frm ou Preencher.bas",
+      "tocar Rel_Emp_Serv.frm",
+      "tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+      "padronizar visual amplo dos relatorios nesta onda"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-3-NOTA-TOTAL-DECIMAL.txt",
+      ".hbn/readbacks/0100-onda38-1-3-nota-total-decimal.json",
+      ".hbn/results/0100-exec-onda38-1-3-nota-total-decimal.json",
+      ".hbn/results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_1_3_nota_total_decimal/**"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_OSEmpresa.frx",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Menu_Principal.frx",
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio reportou importacao da Onda 38.1.2 OK com M=1 | F=1 | err=0 | skip=0.",
+    "Mauricio reportou compile VBE limpo apos Onda 38.1.2.",
+    "Mauricio reportou RVS completo APROVADO em VR_20260525_160433 com contadores preservados.",
+    "Mauricio reportou que OS por Empresa funcionou e gerou PDF apos Onda 38.1.2.",
+    "Mauricio aprovou manter o termo NOTA TOTAL e limitar esta onda a duas casas decimais, sem alterar calculos."
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-1-3-NOTA-TOTAL-DECIMAL",
+    "build_label": "35775b3+ONDA38.1.3-nota-total-decimal",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-3-NOTA-TOTAL-DECIMAL.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-1-3-NOTA-TOTAL-DECIMAL\", \"35775b3+ONDA38.1.3-nota-total-decimal\"",
+    "expected_import_result": "M=1 | F=1 | err=0 | skip=0"
+  },
+  "invariants_preserved": [
+    "Importacao operacional somente por ImportarPacoteV3_Delta",
+    "RN-01 a RN-17 permanecem inalteradas",
+    "Contadores RVS permanecem V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Nenhum servico blindado sera tocado",
+    "Nenhum .frx sera tocado",
+    "O cabecalho NOTA TOTAL permanece conforme decisao do operador",
+    "O calculo de nota/media em CAD_OS permanece inalterado"
+  ],
+  "risks": [
+    {
+      "risk": "Converter texto de nota com virgula poderia variar por idioma do Excel se usado CDbl diretamente sobre string local.",
+      "mitigation": "Usar Util_Conversao.ToDouble para parsing flexivel e aplicar NumberFormat invariavel 0.00 na coluna do relatorio.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Formatar a coluna como texto manteria alinhamento inconsistente entre linhas.",
+      "mitigation": "Gravar valor numerico na celula do relatorio quando houver nota e alinhar a coluna H a direita.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Ampliar para padronizacao visual geral atrasaria o roadmap de PDF automatico.",
+      "mitigation": "Restringir esta onda a Rel_OSEmpresa.frm e adiar padronizacao ampla para onda separada.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff --name-only confirma apenas arquivos permitidos pelo scope 0100, ignorando limpeza V12-204-Micro48 nao stageada",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0100-exec-onda38-1-3-nota-total-decimal.json"
+      },
+      {
+        "gate": "bash local-ai/scripts/publicar_vba_import_v2.sh --apply e --check confirmam espelho sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0100-exec-onda38-1-3-nota-total-decimal.json"
+      },
+      {
+        "gate": "bash scripts/hbn-guards/hbn-guards-runner.sh usa 0100 como readback ativo e passa 5/5",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0100-exec-onda38-1-3-nota-total-decimal.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-1-3-NOTA-TOTAL-DECIMAL retorna M=1 | F=1 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0100-exec-onda38-1-3-nota-total-decimal.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0100-exec-onda38-1-3-nota-total-decimal.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0100-exec-onda38-1-3-nota-total-decimal.json"
+      },
+      {
+        "gate": "OS por Empresa: PDF mostra coluna NOTA TOTAL com duas casas decimais e alinhamento numerico consistente",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0100-exec-onda38-1-3-nota-total-decimal.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import delta falhar, Mauricio nao deve salvar o workbook e deve colar a mensagem exata do Importador V3.",
+      "Se o compile VBE falhar, Mauricio nao deve salvar o workbook; reabrir o workbook salvo apos Onda 38.1.2.",
+      "Se CT_ValidarRelease_TrioMinimo mudar contadores ou falhar, nao prosseguir para PDF automatico.",
+      "Se a coluna NOTA TOTAL aparecer como texto apos import, nao salvar o workbook e reportar screenshot/PDF para ajuste de formatacao.",
+      "Se rollback git for necessario apos commit, usar git revert do commit da Onda 38.1.3 em vez de reescrever historico."
+    ],
+    "anchor_to_restore": "Workbook V5 salvo apos Onda 38.1.2 com build 10ef253+ONDA38.1.2-rel-os-empresa-botao e commit 35775b3"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-25T16:34:02-03:00"
+}

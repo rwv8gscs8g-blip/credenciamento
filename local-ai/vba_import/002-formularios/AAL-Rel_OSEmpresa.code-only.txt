@@ -44,7 +44,8 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
     Dim relLinha As Long
     Dim ultimaOS As Long
     Dim Var1 As String, Var2 As String, Var3 As String, Var4 As String
-    Dim Var5 As String, Var6 As String, Var7 As String, Var8 As String
+    Dim Var5 As String, Var6 As String, Var7 As String
+    Dim Var8 As Variant
     Dim Var9 As String, Var10 As String
     Dim dataTexto As String
     Dim dataInicial As Date
@@ -118,7 +119,7 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
                 Var5 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_DT_SS).Value)
                 Var6 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_DT_FECH).Value)
                 Var7 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_VALOR).Value)
-                Var8 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_NOTA).Value)
+                Var8 = wsOS.Cells(linhaAtual, COL_OS_NOTA).Value
                 Var9 = SafeListVal(wsOS.Cells(linhaAtual, COL_OS_SERV_ID).Value)
 
                 If Var10 <> Var9 Then
@@ -139,7 +140,11 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
                 wsRel.Cells(relLinha, 5).Value = Var5
                 wsRel.Cells(relLinha, 6).Value = Var6
                 wsRel.Cells(relLinha, 7).Value = Format(Var7, "CURRENCY")
-                wsRel.Cells(relLinha, 8).Value = Var8
+                If Trim$(SafeListVal(Var8)) <> "" Then
+                    wsRel.Cells(relLinha, 8).Value = Util_Conversao.ToDouble(Var8)
+                Else
+                    wsRel.Cells(relLinha, 8).ClearContents
+                End If
                 relLinha = relLinha + 1
             End If
         End If
@@ -160,6 +165,8 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
     wsRel.Columns("A:H").AutoFit
     Call Rel_FormatarCabecalho(wsRel, 8)
     Call Rel_FormatarDados(wsRel, 2, relLinha - 1, 8)
+    wsRel.Range("H2:H" & CStr(relLinha - 1)).NumberFormat = "0.00"
+    wsRel.Range("H2:H" & CStr(relLinha - 1)).HorizontalAlignment = xlRight
     Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE ORDENS DE SERVICO POR EMPRESA", "H", False, xlLandscape)
     wsRel.PageSetup.PrintArea = wsRel.Range("A1:H" & CStr(relLinha - 1)).Address
 

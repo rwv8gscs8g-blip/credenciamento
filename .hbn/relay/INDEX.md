@@ -1,12 +1,35 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Codex (Onda 38.1.2 botao real Rel_OSEmpresa entregue para gate humano; Onda 38.2 de padronizacao visual ampla permanece deferida). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
+proprietario-bastao: Codex (Onda 38.1.3 nota total decimal entregue para gate humano; Onda 38.2 de padronizacao visual ampla permanece deferida; Onda 39 Util_PDF e proxima etapa funcional do roadmap). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Mauricio importar Onda 38.1.2 via ImportarPacoteV3_Delta, compilar, rodar CT_ValidarRelease_TrioMinimo e testar OS por Empresa clicando no botao real B_RelMEIOS.
-ultima-atualizacao: 2026-05-25T15:36:00-0300 (Onda 38.1.2 preparada para importacao delta; causa confirmada no VBE: botao real B_RelMEIOS sem handler)
+proxima-acao: Mauricio importar Onda 38.1.3 via ImportarPacoteV3_Delta, compilar, rodar CT_ValidarRelease_TrioMinimo e confirmar que a coluna NOTA TOTAL do PDF de OS por Empresa aparece com duas casas decimais.
+ultima-atualizacao: 2026-05-25T16:34:00-0300 (Onda 38.1.3 preparada para importacao delta; Onda 38.1.2 fechada com import, compile, RVS e PDF funcional)
 ---
+
+## Onda 38.1.3 ENTREGUE PARA GATE HUMANO — Nota Total decimal (Codex)
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track |
+| Readback | [readbacks/0100-onda38-1-3-nota-total-decimal.json](../readbacks/0100-onda38-1-3-nota-total-decimal.json) |
+| Hearback | confirmed — Mauricio aprovou escopo minimo: duas casas decimais na Nota Total, sem alterar calculos nem cabecalho |
+| ERP | [results/0100-exec-onda38-1-3-nota-total-decimal.json](../results/0100-exec-onda38-1-3-nota-total-decimal.json) — delivered_for_human_gate |
+| Doc tecnico | [38_1_3_TECNICO.md](../../auditoria/03_ondas/onda_38_1_3_nota_total_decimal/38_1_3_TECNICO.md) |
+| Manifesto delta | [000-MANIFESTO-V3-DELTA-ONDA38-1-3-NOTA-TOTAL-DECIMAL.txt](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-3-NOTA-TOTAL-DECIMAL.txt) |
+| Build label | `35775b3+ONDA38.1.3-nota-total-decimal` |
+
+### Resultado Onda 38.1.3
+
+- `Rel_OSEmpresa.frm` preserva o cabecalho `NOTA TOTAL`.
+- A coluna H do relatorio passa a receber valor numerico quando preenchida.
+- A coluna H recebe `NumberFormat = "0.00"` e alinhamento a direita, mantendo
+  duas casas decimais no PDF.
+- Nenhum calculo, servico, `.frx`, `Menu_Principal.frm`, `Preencher.bas` ou
+  `Rel_Emp_Serv.frm` foi tocado.
+- Proximo gate: import delta, compile VBE, `CT_ValidarRelease_TrioMinimo` e
+  PDF de OS por Empresa conferindo duas casas decimais.
 
 ## Onda 38.1.2 ENTREGUE PARA GATE HUMANO — Botao real Rel_OSEmpresa (Codex)
 
@@ -15,7 +38,7 @@ ultima-atualizacao: 2026-05-25T15:36:00-0300 (Onda 38.1.2 preparada para importa
 | Track | safe_track |
 | Readback | [readbacks/0099-onda38-1-2-rel-os-empresa-botao-real.json](../readbacks/0099-onda38-1-2-rel-os-empresa-botao-real.json) |
 | Hearback | confirmed — Mauricio confirmou screenshot do VBE com CommandButton `B_RelMEIOS` e aprovou correcao |
-| ERP | [results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json](../results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json) — delivered_for_human_gate |
+| ERP | [results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json](../results/0099-exec-onda38-1-2-rel-os-empresa-botao-real.json) — human_gate_passed |
 | Doc tecnico | [38_1_2_TECNICO.md](../../auditoria/03_ondas/onda_38_1_2_rel_os_empresa_botao_real/38_1_2_TECNICO.md) |
 | Manifesto delta | [000-MANIFESTO-V3-DELTA-ONDA38-1-2-REL-OS-EMPRESA-BOTAO.txt](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-2-REL-OS-EMPRESA-BOTAO.txt) |
 | Build label | `10ef253+ONDA38.1.2-rel-os-empresa-botao` |

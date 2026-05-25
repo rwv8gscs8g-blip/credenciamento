@@ -17,6 +17,11 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.1.3** — padroniza a apresentação da coluna `NOTA TOTAL` em
+  `Rel_OSEmpresa` para duas casas decimais, preservando o cálculo e o
+  cabeçalho aprovados. Manifesto delta:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-1-3-NOTA-TOTAL-DECIMAL.txt`.
+  Carimbo: `35775b3+ONDA38.1.3-nota-total-decimal`.
 - **Onda 38.1.2** — corrige o botão real de `Rel_OSEmpresa`: o
   `CommandButton` do form chama-se `B_RelMEIOS`, enquanto o código anterior
   tinha apenas `B_RelEmpresaOS_Click`. O novo handler `B_RelMEIOS_Click`
