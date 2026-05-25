@@ -5,7 +5,7 @@
   "agent_id": "codex",
   "track": "safe_track",
   "version_target": "V12.0.0206",
-  "status": "delivered_for_human_gate",
+  "status": "human_gate_rvs_pass_functional_pending",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "summary": "Onda 38.1 corrige protecao, residuos de area impressa e fluxo do botao Imprimir Relatorio nos forms Rel_OSEmpresa e Rel_Emp_Serv, mantendo a padronizacao visual ampla para Onda 38.2.",
@@ -50,15 +50,29 @@
     }
   ],
   "human_gates_pending": [
-    "ImportarPacoteV3_Delta \"ONDA38-1-RELATORIOS-PROTECAO\", \"cf778b2+ONDA38.1-relatorios-protecao\"",
-    "Depurar > Compilar VBAProject",
-    "CT_ValidarRelease_TrioMinimo com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
     "OS por Empresa: selecionar empresa, preencher data opcional e clicar Imprimir Relatorio; confirmar que respeita a data atual e nao gera erro de protecao",
     "Empresas por Servico: selecionar servico; confirmar que PDF/preview nao traz colunas residuais de OS e nao gera erro de protecao"
   ],
+  "human_gate_evidence": [
+    {
+      "gate": "ImportarPacoteV3_Delta ONDA38-1-RELATORIOS-PROTECAO",
+      "status": "pass",
+      "evidence": "Mauricio reportou Importador V3 OK em modo Estabilizado: M=1 | F=2 | err=0 | skip=0; backup completo em backups/vba/20260525_124451-V3-FULL"
+    },
+    {
+      "gate": "Depurar > Compilar VBAProject",
+      "status": "pass",
+      "evidence": "Mauricio reportou compile limpo apos importacao"
+    },
+    {
+      "gate": "Gate RVS completo",
+      "status": "pass",
+      "evidence": "VR_20260525_124700 APROVADO; sintaxe reportada V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0; CSV ValidacaoReleaseRVS_V12_0_0205_VR_20260525_124700.csv"
+    }
+  ],
   "next_wave": {
     "id": "0098-onda38-2-padronizacao-visual-relatorios",
-    "status": "deferred_until_0097_human_gate",
+    "status": "deferred_until_0097_functional_gate",
     "summary": "Padronizacao visual ampla dos relatorios apos Onda 38.1 passar em compile/RVS/gates funcionais."
   },
   "created_at": "2026-05-25T12:05:00-03:00"

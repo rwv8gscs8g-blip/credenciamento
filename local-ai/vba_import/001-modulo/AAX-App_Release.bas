@@ -253,7 +253,7 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0205|OFICIAL|V12.0.0206"
 ' de forma deterministica apos reset, cobrindo o novo contrato do Limpar_Base.
 Public Const APP_BUILD_IMPORTADO As String = "cf778b2+ONDA38.1-relatorios-protecao"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0206-planejamento"
-Public Const APP_BUILD_GERADO_EM As String = "2026-05-25 12:05"
+Public Const APP_BUILD_GERADO_EM As String = "2026-05-25 12:44"
 Public Const APP_RELEASE_TAG As String = "v12.0.0205"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0205"
 Public Const APP_RELEASE_TEST_KEY As String = "rvs-v205-final-2026-05-21"
