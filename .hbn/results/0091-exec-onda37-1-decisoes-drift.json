@@ -1,0 +1,96 @@
+{
+  "execution_id": "0091-exec-onda37-1-decisoes-drift",
+  "agent_id": "codex",
+  "readback_id": "0091-onda37-1-decisoes-drift",
+  "co_authored_by_audit": "claude-opus-4-7",
+  "action": "Diagnosticar drift funcional V5 vs src/vba, extrair licoes das tentativas MD33 reprovadas e produzir ADRs/propostas documentais sem tocar VBA.",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "environment": {
+    "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "target_version": "V12.0.0206",
+    "base_commit": "baad6ea"
+  },
+  "post_v205_commits_touching_src_vba": [
+    {
+      "commit": "0b7c4e8",
+      "date": "2026-05-24",
+      "message": "fix: consolidate v206 canonical project root",
+      "files": ["src/vba/App_Release.bas", "src/vba/Menu_Principal.frm"]
+    },
+    {
+      "commit": "7ba5d97",
+      "date": "2026-05-24",
+      "message": "fix: stabilize v206 report import compile gate",
+      "files": ["src/vba/Menu_Principal.frm", "src/vba/Preencher.bas"]
+    },
+    {
+      "commit": "031e077",
+      "date": "2026-05-24",
+      "message": "fix: avoid menu import for v206 report gate",
+      "files": ["src/vba/Menu_Principal.frm", "src/vba/Rel_Emp_Serv.frm", "src/vba/Rel_OSEmpresa.frm"]
+    },
+    {
+      "commit": "0d3893f",
+      "date": "2026-05-24",
+      "message": "fix: pause v206 report gate and reset clean baseline",
+      "files": ["src/vba/Importador_V3.bas", "src/vba/Preencher.bas", "src/vba/Rel_Emp_Serv.frm", "src/vba/Rel_OSEmpresa.frm"]
+    }
+  ],
+  "subclassification_counts": {
+    "drift_md33_descartar": 3,
+    "drift_legitimo_anterior_v5": 25,
+    "drift_misto": 0,
+    "drift_inesperado_investigar": 0
+  },
+  "drift_md33_descartar": [
+    "src/vba/Importador_V3.bas",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Preencher.bas"
+  ],
+  "human_decisions_required": [],
+  "decisions_registered": [
+    "Importador_V2.bas: ADR de remocao futura em onda safe_track propria.",
+    "Emergencia_CNAE.bas: manter fora do workbook V5 e fora de local-ai/vba_import/ nesta V206; pendencia documentada."
+  ],
+  "outputs": [
+    "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/classificacao_drift_funcional.md",
+    "auditoria/03_ondas/onda_37_1_decisoes_drift/37_1_TECNICO.md",
+    "auditoria/03_ondas/onda_37_1_decisoes_drift/PROPOSTA_ONDA_37_2_SAFE_TRACK.md",
+    "auditoria/01_regras_e_governanca/L26_LICOES_MD33_TENTATIVAS_FRUSTRADAS.md",
+    "auditoria/01_regras_e_governanca/ADR-20260524-remocao-importador-v2.md",
+    "auditoria/01_regras_e_governanca/ADR-20260524-pendencia-emergencia-cnae.md",
+    ".hbn/knowledge/0014-protocolo-reprovacao-onda.md"
+  ],
+  "validation": {
+    "gates": [
+      {
+        "gate": "matriz de sub-classes produzida para os 28 arquivos diferenca_funcional",
+        "status": "pass",
+        "evidence_ref": "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/classificacao_drift_funcional.md"
+      },
+      {
+        "gate": "L26 e knowledge 0014 produzidos",
+        "status": "pass",
+        "evidence_ref": "auditoria/01_regras_e_governanca/L26_LICOES_MD33_TENTATIVAS_FRUSTRADAS.md + .hbn/knowledge/0014-protocolo-reprovacao-onda.md"
+      },
+      {
+        "gate": "nenhum diff em src/vba, local-ai/vba_import ou local-ai/incoming",
+        "status": "pass",
+        "evidence_ref": "git status --short -- src/vba local-ai/vba_import local-ai/incoming"
+      },
+      {
+        "gate": "drift_legitimo_anterior_v5 cruzado contra ondas fechadas",
+        "status": "pass",
+        "evidence_ref": "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/classificacao_drift_funcional.md"
+      }
+    ],
+    "code_touched": false,
+    "vba_import_touched": false,
+    "incoming_touched": false,
+    "drift_inesperado_investigar": []
+  },
+  "next_recommended_action": "Abrir Onda 37.2 safe_track para reverter apenas os arquivos drift_md33_descartar ao estado equivalente a V5, com readback proprio e hearback humano.",
+  "created_at": "2026-05-24T20:00:00-03:00"
+}

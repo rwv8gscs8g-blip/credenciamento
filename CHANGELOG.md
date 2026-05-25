@@ -11,6 +11,9 @@ tratam apenas da linha pública oficial.
   de classificação em
   `auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/`, sem tocar código
   VBA nem pacote `local-ai/vba_import/`.
+- **Onda 37.1** — subclassificação dos 28 `diferenca_funcional`, lição L26
+  das tentativas MD33 frustradas, knowledge HBN 0014 e ADRs para
+  `Importador_V2.bas` e `Emergencia_CNAE.bas`, sem tocar VBA.
 
 ### Governança
 
@@ -18,6 +21,9 @@ tratam apenas da linha pública oficial.
   de qualquer remoção, reincorporação ou importação futura.
 - `Importador_V2.bas` ficou classificado como `obsoleto_no_repo`, sem remoção
   nesta onda.
+- A cadeia MD33 descartável ficou identificada como origem de drift em
+  `Importador_V3.bas`, `Menu_Principal.frm` e `Preencher.bas`; a execução de
+  reversão foi deferida para readback safe_track próprio.
 
 ## [v12.0.0205] — 2026-05-21
 

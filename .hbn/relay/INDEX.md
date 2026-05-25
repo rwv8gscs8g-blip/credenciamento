@@ -1,12 +1,35 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Mauricio (decisao pendente da Onda 37 sobre `Emergencia_CNAE.bas`). Codex concluiu a reconciliacao V5 vs src/vba sem tocar VBA e aguarda hearback antes da proxima onda funcional.
+proprietario-bastao: Mauricio (decisao sobre abrir Onda 37.2 safe_track). Codex concluiu a Onda 37.1 sem tocar VBA e propos reversao controlada dos drifts MD33 descartaveis.
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Mauricio decidir o destino de `Emergencia_CNAE.bas` (manter fora da V206 e abrir decisao especifica de arquivamento/remocao/reincorporacao, ou orientar outra acao). Depois disso, Codex pode abrir novo readback para MD33-restart.
-ultima-atualizacao: 2026-05-24T19:56:01-0300 (Onda 37 Reconciliacao V5 executada por Codex; manifest SHA-256 + classificacao produzidos; `Emergencia_CNAE.bas` exige decisao humana)
+proxima-acao: Mauricio decidir se autoriza novo readback safe_track 0092 para Onda 37.2, revertendo `Importador_V3.bas`, `Menu_Principal.frm` e `Preencher.bas` ao estado equivalente a V5/compilavel.
+ultima-atualizacao: 2026-05-24T20:00:00-0300 (Onda 37.1 executada por Codex; drift funcional subclassificado; L26, knowledge 0014 e ADRs produzidos; nenhum VBA tocado)
 ---
+
+## Onda 37.1 EXECUTADA — Decisoes de drift e licoes MD33 (Codex)
+
+| Campo | Valor |
+|---|---|
+| Track | fast_track (documental, sem tocar VBA) |
+| Readback | [readbacks/0091-onda37-1-decisoes-drift.json](../readbacks/0091-onda37-1-decisoes-drift.json) |
+| Hearback | confirmed — Mauricio informou aprovacao e criacao do readback com auditoria Opus |
+| ERP | [results/0091-exec-onda37-1-decisoes-drift.json](../results/0091-exec-onda37-1-decisoes-drift.json) |
+| Matriz | [classificacao_drift_funcional.md](../../auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/classificacao_drift_funcional.md) |
+| Doc tecnico | [37_1_TECNICO.md](../../auditoria/03_ondas/onda_37_1_decisoes_drift/37_1_TECNICO.md) |
+| Proposta | [PROPOSTA_ONDA_37_2_SAFE_TRACK.md](../../auditoria/03_ondas/onda_37_1_decisoes_drift/PROPOSTA_ONDA_37_2_SAFE_TRACK.md) |
+
+### Resultado Onda 37.1
+
+- `drift_md33_descartar=3`: `Importador_V3.bas`, `Menu_Principal.frm`, `Preencher.bas`.
+- `drift_legitimo_anterior_v5=25`: sem commits pos-V205; cruzados contra linhas/ondas fechadas.
+- `drift_misto=0`.
+- `drift_inesperado_investigar=0`; nenhum arquivo exigiu decisao humana individual nessa classe.
+- ADRs produzidos: remocao futura de `Importador_V2.bas` e pendencia documentada de `Emergencia_CNAE.bas` fora da V206.
+
+🟠 SOURCE DRIFT DETECTED: a cadeia MD33 deixou `src/vba/` com drift que nao representa a unica ancora compilavel conhecida (V5). A correcao deve ser uma nova onda safe_track, nao import direto.
+
 
 ## Onda 37 EXECUTADA — Reconciliacao V5 vs src/vba (Codex)
 

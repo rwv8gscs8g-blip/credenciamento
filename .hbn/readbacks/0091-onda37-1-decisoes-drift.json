@@ -1,0 +1,109 @@
+{
+  "readback_id": "0091-onda37-1-decisoes-drift",
+  "data": "2026-05-24",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0090-onda37-reconciliacao-v5",
+  "co_authored_by_audit": "claude-opus-4-7",
+  "intent": {
+    "objective": "Diagnosticar a origem cronologica dos drift funcionais V5 vs src/vba, extrair licoes das tentativas frustradas MD33 e produzir ADRs/propostas documentais sem tocar VBA, vba_import ou incoming.",
+    "non_goals": [
+      "tocar src/vba/**",
+      "tocar local-ai/vba_import/**",
+      "tocar local-ai/incoming/**",
+      "reverter arquivos",
+      "criar pacote importavel",
+      "executar MD33-restart"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/**",
+      "auditoria/03_ondas/onda_37_1_decisoes_drift/**",
+      "auditoria/01_regras_e_governanca/L26_LICOES_MD33_TENTATIVAS_FRUSTRADAS.md",
+      "auditoria/01_regras_e_governanca/ADR-*-remocao-importador-v2.md",
+      "auditoria/01_regras_e_governanca/ADR-*-pendencia-emergencia-cnae.md",
+      ".hbn/knowledge/0014-protocolo-reprovacao-onda.md",
+      ".hbn/readbacks/0091-onda37-1-decisoes-drift.json",
+      ".hbn/results/0091-exec-onda37-1-decisoes-drift.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "local-ai/incoming/**"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "decisions_preconfirmed": [
+    "Importador_V2.bas -> ADR de remocao, execucao futura em onda safe_track",
+    "Emergencia_CNAE.bas -> ADR de manter fora, pendencia documentada"
+  ],
+  "invariants_preserved": [
+    "V5 permanece unica versao que compila",
+    "src/vba/ nao sera alterado",
+    "local-ai/vba_import/ nao sera alterado",
+    "local-ai/incoming/ nao sera alterado",
+    "nenhuma decisao unilateral sobre reversao de VBA sera tomada"
+  ],
+  "risks": [
+    {
+      "risk": "Confundir drift causado por MD33 frustrada com melhoria legitima.",
+      "mitigation": "Classificar por commit pos-f24e535 e registrar cadeia MD33 descartavel separadamente.",
+      "severity": "high"
+    },
+    {
+      "risk": "Recomendar revert amplo demais sem distinguir drift anterior ao V5.",
+      "mitigation": "Separar drift_md33_descartar de drift_legitimo_anterior_v5 e propor apenas plano, sem execucao.",
+      "severity": "high"
+    },
+    {
+      "risk": "Perder a licao operacional das tentativas reprovadas.",
+      "mitigation": "Criar L26 e knowledge 0014 antes do proximo readback funcional.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Aceitar a hipotese 'drift_legitimo_anterior_v5' por inferencia, sem verificar commit-evidence individual de cada um dos 25 arquivos.",
+      "mitigation": "Gate 4 obriga listar ultimo commit e cruzar contra onda fechada; se algum nao tiver evidencia, reclassificar como drift_inesperado_investigar.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "matriz de sub-classes produzida para os 28 arquivos diferenca_funcional",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/classificacao_drift_funcional.md"
+      },
+      {
+        "gate": "L26 e knowledge 0014 produzidos",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0091-exec-onda37-1-decisoes-drift.json"
+      },
+      {
+        "gate": "nenhum diff em src/vba, local-ai/vba_import ou local-ai/incoming",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0091-exec-onda37-1-decisoes-drift.json"
+      },
+      {
+        "gate": "para cada arquivo classificado como drift_legitimo_anterior_v5, listar ultimo commit que tocou (git log -1) e cruzar contra onda fechada documentada em auditoria/03_ondas/ ou .hbn/results/; se nao encontrar evidencia, reclassificar como drift_inesperado_investigar",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/04_evidencias/V12.0.0206/reconciliacao_v5/classificacao_drift_funcional.md"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "reverter o commit documental da Onda 37.1",
+      "confirmar que src/vba, local-ai/vba_import e local-ai/incoming continuam sem diff"
+    ],
+    "anchor_to_restore": "baad6ea"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-24T20:00:00-03:00"
+}
