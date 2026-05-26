@@ -17,6 +17,22 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.2.1-AR1-FIX2-PERF (em execução)** — combina **Parte A**
+  (ID monotônico) e **Parte B.lite** (Excel performance wrapper para
+  `Repo_Empresa`). Parte A: `Util_Sanear_Contadores.SanearAR1EmAbaPareada`
+  ganha guarda `If maxId < valorAnterior Then maxId = valorAnterior`
+  (resolve regressão F5 — CRED_IDs 005/006 viram gaps permanentes);
+  `Util_Planilha.ProximoId` ganha defesa em profundidade chamando nova
+  `Public Util_MaxIdNaColunaA` (cobre AR1 dessincronizado por edição
+  manual). Parte B.lite: novo módulo `Util_Excel_Performance.bas` com
+  `Util_IniciarBlocoRapido()`/`Util_FinalizarBlocoRapido()` (usa
+  `Variant array` por Glasswing G8) aplicado a 4 funções de
+  `Repo_Empresa` + `SanearContadoresAR1`. Cadastro/edição de empresa
+  esperado 10–30× mais rápido em PCs antigos. Cadastros em `.frm`
+  (entidade, credenciamento, atividade) ficam para Onda 38.2.2 com
+  deep-dive PHAGOCYTOSIS antes. Readback 0108, manifesto delta
+  `ONDA38-2-1-AR1-FIX2-PERF`, build label
+  `ad5b487+ONDA38.2.1-AR1-FIX2-PERF`.
 - **Onda 38.2.1-AR1 gate humano APROVADO** — `SanearContadoresAR1`
   executou com `ok=7 falhas=0`; cadastro de empresa nova retornou ID
   004 (vs 001 anterior, F1 resolvido); cadastro de entidade nova

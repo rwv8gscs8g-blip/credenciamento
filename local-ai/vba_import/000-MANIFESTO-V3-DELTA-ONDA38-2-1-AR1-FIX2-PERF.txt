@@ -1,0 +1,93 @@
+# Manifesto V3 DELTA ONDA38-2-1-AR1-FIX2-PERF - V12.0.0206
+# Tema: Combinacao A+B.lite em onda unica sem tocar .frm nem Svc_*.
+#
+# Contexto:
+#   - Onda predecessora 38.2.1-AR1 (ERP 0106) fechou human_gate_passed_with_minor_finding.
+#     F1 (cadastro empresa ID 001) e F2 (entidade no topo) resolvidos. F5 minor
+#     ficou aberto: CREDENCIADOS!AR1 decresceu de 6 para 4 apos saneamento porque
+#     CRED_IDs 005 e 006 foram deletados historicamente e o algoritmo max(coluna_A)
+#     ressincronizou para o max real. Implica risco R1 de reuso de IDs.
+#   - F4 (lentidao em PCs antigos) promovido de V207 para V206 por decisao Mauricio:
+#     cadastros de empresa fazem 15+ escritas celula-a-celula sem ScreenUpdating
+#     desligado, multiplicando latencia em PC antigo.
+#   - Mauricio aprovou em chat 2026-05-26 a combinacao A + B.lite em onda unica.
+#
+# Parte A - ID monotonico (resolve R1 / F5):
+#   AAE-Util_Planilha.bas:
+#     - Nova Public Function Util_MaxIdNaColunaA(nomeAba) As Long - itera coluna A
+#       de LINHA_DADOS ate UltimaLinhaAba e retorna max(CLng(Val(...))). Promovida
+#       a partir do que estava Private em Util_Sanear_Contadores.
+#     - ProximoId agora chama Util_MaxIdNaColunaA(nomeAba) e usa o maior entre
+#       AR1+1 e max_real+1 antes de incrementar. Defesa em profundidade contra
+#       AR1 dessincronizado (backup pre-38.2 ou edicao manual).
+#   ABN-Util_Sanear_Contadores.bas:
+#     - SanearAR1EmAbaPareada ganha guarda 'If maxId < valorAnterior Then maxId = valorAnterior'
+#       antes de gravar em AR1. Cobre o caso F5: linhas deletadas manualmente nao
+#       fazem AR1 regredir; CRED_IDs 005/006 viram gaps historicos permanentes.
+#     - MaxIdNaColunaA Private removido - usa Util_MaxIdNaColunaA Public.
+#     - SanearContadoresAR1 envelopado por Util_Excel_Performance (bonus B).
+#
+# Parte B.lite - Excel performance wrapper (resolve F4 para Empresa):
+#   ABO-Util_Excel_Performance.bas (NOVO):
+#     - Public Function Util_IniciarBlocoRapido() As Variant - le 4 flags
+#       Application, retorna array(0..3) com o estado, desliga os 4 flags.
+#     - Public Sub Util_FinalizarBlocoRapido(ByVal st As Variant) - restaura
+#       cada flag ao valor salvo no Variant.
+#     - Usa Variant em vez de Public Type por Glasswing G8 (Public Type apenas
+#       em Mod_Types.bas, tabu fora da Onda 9).
+#   AAO-Repo_Empresa.bas:
+#     - 4 funcoes envelopadas com Util_IniciarBlocoRapido/Util_FinalizarBlocoRapido:
+#       Inserir, Atualizar, GravarStatusEmpresa, RepoEmpresa_BackfillDtUltReativPorAuditLog.
+#     - Cada Exit Function precoce restaura estado antes de retornar.
+#     - Handler de erro restaura estado antes de Resume Next.
+#     - Cadastro de empresa esperado 10-30x mais rapido em PC antigo.
+#
+# Fora de escopo desta onda (vai para Onda 38.2.2 e seguintes):
+#   - Wrapper em cadastros .frm (Menu_Principal entidade/empresa-alt,
+#     Credencia_Empresa, Cadastro_Servico) - tocar .frm exige deep-dive
+#     PHAGOCYTOSIS-VBA-PATTERNS antes (M9, L22-L24, M15-M17). Pre-trabalho
+#     ja agendado para Onda 38.2.2 (filtros nativos).
+#   - Wrapper em Preencher.bas (loops de atividade).
+#   - Wrapper em outros Repo_* (Credenciamento, OS, PreOS, Avaliacao).
+#   - Implementacao de CNPJ como chave secundaria (Alternativa B do F5).
+#   - Soft delete (Alternativa C do F5).
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38-2-1-AR1-FIX2-PERF", "ad5b487+ONDA38.2.1-AR1-FIX2-PERF"
+#
+# Pos-import esperado:
+#   - Importador V3: M=4 | F=0 | err=0 | skip=0.
+#   - BUMP de APP_BUILD_IMPORTADO e APP_BUILD_GERADO_EM em AAX-App_Release.bas
+#     (Knowledge 0016 OK: src/vba/App_Release.bas mantem label antigo
+#     7bca168+ONDA38.2.1-revert-filtros-menu / 2026-05-26 15:00; o V3 detecta
+#     diferenca e faz BUMP no AAX em disco).
+#   - Compile manual passa limpo (novo modulo Util_Excel_Performance referenciado
+#     por Repo_Empresa e Util_Sanear_Contadores).
+#   - Opcional: rodar 'SanearContadoresAR1' no Imediato confirma idempotencia
+#     (nenhuma das 7 abas decresce; log mostra X -> X quando ja estava correto).
+#
+# Gates funcionais explicitos:
+#   T-MONO-1: deletar manualmente uma linha de EMPRESAS (Shift+Delete), rodar
+#             SanearContadoresAR1, depois cadastrar nova empresa.
+#             Esperado: AR1 NAO decresce no log do saneamento; nova empresa
+#             recebe ID = AR1_anterior + 1, NAO o ID da empresa deletada.
+#   T-MONO-2: zerar manualmente EMPRESAS!AR1 (Imediato:
+#             ThisWorkbook.Sheets("EMPRESAS").Cells(1,44).Value=0), depois
+#             cadastrar nova empresa SEM rodar SanearContadoresAR1 antes.
+#             Esperado: ProximoId detecta max(coluna_A) > AR1, salta para
+#             max+1; nova empresa NAO recebe ID 001.
+#   T-PERF-1: cadastrar empresa nova em PC antigo. Comparar tempo com
+#             baseline da Onda 38.2.1-AR1 (sem wrapper). Esperado: tempo
+#             perceptivelmente mais rapido (estimativa 10-30x).
+#   RVS:      CT_ValidarRelease_TrioMinimo APROVADO com
+#             V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+#
+# Anchor de rollback: commit ad5b487 (handoff fim-de-sessao Opus 2026-05-26
+#                     + Sexteto APROVADO VR_20260526_035523).
+#
+# GRUPO_DELTA_ONDA38_2_1_AR1_FIX2_PERF
+M|001-modulo/AAE-Util_Planilha.bas
+M|001-modulo/ABN-Util_Sanear_Contadores.bas
+M|001-modulo/ABO-Util_Excel_Performance.bas
+M|001-modulo/AAO-Repo_Empresa.bas
+M|001-modulo/AAX-App_Release.bas

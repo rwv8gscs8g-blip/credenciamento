@@ -45,6 +45,7 @@ MODULOS (.bas):
 - AAW-Util_Empresa.bas => Util_Empresa.bas (V12.0.0203 ONDA 16 MD-16.4)
 - ABM-Util_PDF.bas => Util_PDF.bas (V12.0.0203 ONDA 16 MD-16.4)
 - ABN-Util_Sanear_Contadores.bas => Util_Sanear_Contadores.bas (V12.0.0206 Onda 38.2.1-AR1)
+- ABO-Util_Excel_Performance.bas => Util_Excel_Performance.bas (V12.0.0206 Onda 38.2.1-AR1-FIX2-PERF)
 
 FORMULARIOS (.frm / .frx):
 - AAA-Fundo_Branco.frm => Fundo_Branco.frm

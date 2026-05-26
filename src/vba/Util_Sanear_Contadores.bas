@@ -22,6 +22,10 @@ Option Explicit
 '     SanearContadoresAR1
 '
 ' Onda 38.2.1-AR1, 2026-05-26
+' Onda 38.2.1-AR1-FIX2-PERF (2026-05-26): guarda monotonica em
+' SanearAR1EmAbaPareada (AR1 nunca decresce) + envelopa
+' SanearContadoresAR1 com Util_Excel_Performance. MaxIdNaColunaA
+' Private removido - chama Util_MaxIdNaColunaA Public em Util_Planilha.
 ' ============================================================
 
 ' ------------------------------------------------------------
@@ -32,9 +36,13 @@ Option Explicit
 Public Sub SanearContadoresAR1()
     Dim totalOk As Long
     Dim totalFalhas As Long
+    Dim estadoExcel As Variant
 
     totalOk = 0
     totalFalhas = 0
+
+    estadoExcel = Util_IniciarBlocoRapido()
+    On Error GoTo handler
 
     Debug.Print "[SanearContadoresAR1] INICIO " & Format$(Now, "yyyy-mm-dd hh:nn:ss")
 
@@ -81,6 +89,12 @@ Public Sub SanearContadoresAR1()
     End If
 
     Debug.Print "[SanearContadoresAR1] FIM ok=" & totalOk & " falhas=" & totalFalhas
+    Util_FinalizarBlocoRapido estadoExcel
+    Exit Sub
+
+handler:
+    Util_FinalizarBlocoRapido estadoExcel
+    Debug.Print "[SanearContadoresAR1] FALHA INESPERADA: #" & Err.Number & " " & Err.Description
 End Sub
 
 ' ------------------------------------------------------------
@@ -121,11 +135,16 @@ Private Function SanearAR1EmAbaPareada( _
     detalhes = ""
     For i = LBound(sources) To UBound(sources)
         srcNome = CStr(sources(i))
-        parcial = MaxIdNaColunaA(srcNome)
+        parcial = Util_MaxIdNaColunaA(srcNome)
         If parcial > maxId Then maxId = parcial
         If detalhes <> "" Then detalhes = detalhes & ", "
         detalhes = detalhes & srcNome & "=" & parcial
     Next i
+
+    ' Guarda monotonica (Onda 38.2.1-AR1-FIX2-PERF): AR1 nunca decresce.
+    ' Cobre o caso F5: linhas deletadas manualmente da coluna A fazem
+    ' max(dados) < AR1; preservar AR1 evita reuso de IDs historicos.
+    If maxId < valorAnterior Then maxId = valorAnterior
 
     If Not Util_PrepararAbaParaEscrita(wsTarget, estavaProtegida, senhaProtecao) Then
         Err.Raise 1004, "SanearAR1EmAbaPareada", _
@@ -156,39 +175,9 @@ falha:
     SanearAR1EmAbaPareada = False
 End Function
 
-' ------------------------------------------------------------
-' MaxIdNaColunaA
-' Le coluna A (COL_*_ID = 1 para todas as 7 abas alvo) de
-' LINHA_DADOS ate UltimaLinhaAba. Retorna max(CLng(Val(...))).
-' Aba inexistente retorna 0 sem erro fatal.
-' ------------------------------------------------------------
-Private Function MaxIdNaColunaA(ByVal nomeAba As String) As Long
-    Dim ws As Worksheet
-    Dim ultLinha As Long
-    Dim r As Long
-    Dim val_ As Long
-    Dim maxId As Long
-
-    On Error GoTo aba_indisponivel
-
-    Set ws = ThisWorkbook.Sheets(nomeAba)
-    ultLinha = UltimaLinhaAba(nomeAba)
-    maxId = 0
-    If ultLinha < LINHA_DADOS Then
-        MaxIdNaColunaA = 0
-        Exit Function
-    End If
-    For r = LINHA_DADOS To ultLinha
-        val_ = CLng(Val(ws.Cells(r, 1).Value))
-        If val_ > maxId Then maxId = val_
-    Next r
-    MaxIdNaColunaA = maxId
-    Exit Function
-
-aba_indisponivel:
-    Debug.Print "[SanearContadoresAR1] aba '" & nomeAba & _
-        "' indisponivel (#" & Err.Number & "); tratada como max=0"
-    MaxIdNaColunaA = 0
-End Function
+' MaxIdNaColunaA Private removido na Onda 38.2.1-AR1-FIX2-PERF.
+' Funcionalidade promovida para Public Util_MaxIdNaColunaA em
+' Util_Planilha.bas (reutilizada por Util_Planilha.ProximoId para
+' defesa em profundidade contra AR1 dessincronizado).
 
 

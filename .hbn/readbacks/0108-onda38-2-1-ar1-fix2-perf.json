@@ -1,0 +1,347 @@
+{
+  "readback_id": "0108-onda38-2-1-ar1-fix2-perf",
+  "data": "2026-05-26",
+  "agent_id": "claude-opus-4-7",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0107-handoff-fim-sessao-opus",
+  "intent": {
+    "objective": "Combinar duas mitigacoes em uma unica onda safe_track sem tocar .frm nem Svc_* blindado. Parte A (microdelta ID monotonico): bloquear definitivamente o reuso de IDs corrigindo a UNICA fonte de regressao em Util_Sanear_Contadores.SanearAR1EmAbaPareada (linha 136 grava maxId mesmo se for inferior a valorAnterior) + adicionar defesa em profundidade em Util_Planilha.ProximoId para o caso AR1 estar atras do max(coluna_A). Resolve R1 (CRED_IDs 005/006 viraram gaps permanentes; futuro cadastro NAO reusa). Parte B (wrapper Excel performance LITE): criar Util_Excel_Performance.bas com Util_IniciarBlocoRapido/Util_FinalizarBlocoRapido (TEstadoExcel) que desligam ScreenUpdating/Calculation/EnableEvents/DisplayAlerts e restauram estado anterior; envelopar as 4 rotinas de Repo_Empresa que fazem escrita pesada (Inserir 17 escritas, Atualizar 14, GravarStatusEmpresa 5, BackfillDtUltReativPorAuditLog loop linear) + a propria SanearContadoresAR1. Resolve parcialmente F4 (cadastro/edicao de empresa em PCs antigos; ~10-30x speedup esperado). Entidade/credenciamento/atividade ficam para Onda 38.2.2 (que ja precisa tocar .frm para filtros).",
+    "non_goals": [
+      "tocar qualquer .frm ou .frx (incluindo Menu_Principal.frm, Credencia_Empresa.frm, Cadastro_Servico.frm, Cadastro_Empresa.frm)",
+      "tocar Preencher.bas (loops de atividade ficam para depois)",
+      "tocar Repo_Credenciamento.bas, Repo_OS.bas, Repo_PreOS.bas, Repo_Avaliacao.bas (escopo expandido fica para ondas seguintes)",
+      "tocar servicos blindados Svc_Rodizio, Svc_Avaliacao, Svc_OS, Svc_PreOS, Svc_Entidade, Svc_Transacao",
+      "tocar Mod_Types.bas, Importador_V3.bas, Auto_Open.bas",
+      "alterar a assinatura publica de Util_Planilha.ProximoId (apenas algoritmo interno; chamadas externas inalteradas)",
+      "alterar a assinatura publica de SanearContadoresAR1 (continua Public Sub sem argumentos)",
+      "implementar escrita em bloco (S2) ou lazy reload de listas (S3); essas opcoes ficam para ondas futuras",
+      "implementar filtros nativos do Menu_Principal (Onda 38.2.2)",
+      "implementar CNPJ como chave secundaria (Alternativa B do F5, possivel V207)",
+      "implementar soft delete (Alternativa C do F5, V207)",
+      "chamar Util_IniciarBlocoRapido automaticamente em rotinas que ja desligam ScreenUpdating manualmente (Configuracao_Inicial.bas, tests)"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Util_Sanear_Contadores.bas",
+      "src/vba/Util_Excel_Performance.bas",
+      "src/vba/Repo_Empresa.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/A*-Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/A*-Util_Sanear_Contadores.bas",
+      "local-ai/vba_import/001-modulo/A*-Util_Excel_Performance.bas",
+      "local-ai/vba_import/001-modulo/A*-Repo_Empresa.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-FIX2-PERF.txt",
+      "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+      ".hbn/readbacks/0108-onda38-2-1-ar1-fix2-perf.json",
+      ".hbn/results/0108-exec-onda38-2-1-ar1-fix2-perf.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_2_1_ar1_fix2_perf/**",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260526_035523.csv",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseTrio_V12_0_0205_VR_20260526_024718.csv"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Svc_Entidade.bas",
+      "src/vba/Svc_Transacao.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/Repo_Credenciamento.bas",
+      "src/vba/Repo_OS.bas",
+      "src/vba/Repo_PreOS.bas",
+      "src/vba/Repo_Avaliacao.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/*.frm",
+      "src/vba/*.frx",
+      "local-ai/incoming/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio aprovou em chat 2026-05-26 (sessao sucessora pos-handoff 0107): combinar Caminho A (microdelta ID monotonico) com B.lite (wrapper Excel performance aplicado apenas a Repo_Empresa, sem .frm) em onda unica. Recomendacao Opus: B.lite agora, B.full junto com Onda 38.2.2 quando o deep-dive PHAGOCYTOSIS for feito.",
+    "Causa raiz do F5 (CRED_IDs 005/006 deletados, AR1 6->4) isolada em Util_Sanear_Contadores.SanearAR1EmAbaPareada linha 136: 'wsTarget.Cells(1, COL_CONTADOR_AR).Value = maxId' executa sem checagem de regressao. Fix: 'If maxId < valorAnterior Then maxId = valorAnterior' antes do grava. Custo: 1 linha de codigo.",
+    "Util_Planilha.ProximoId atual ja e monotonico isoladamente (incrementa AR1), mas pode regredir se AR1 for corrompido entre dois cadastros (cenario backup pre-38.2 com AR1=0 e dados existentes - causa original F1). Fix: ProximoId checa max(coluna_A) e usa o maior entre AR1+1 e max_coluna_A+1. Custo: 3 linhas + helper publico Util_MaxIdNaColunaA (15 linhas, migrado/promovido do que estava como Private em Util_Sanear_Contadores).",
+    "Causa raiz F4 (lentidao em PCs antigos) confirmada por leitura: Repo_Empresa.Inserir faz 17 escritas celula-a-celula sequenciais sem ScreenUpdating=False. Mesma classe em Atualizar (14), GravarStatusEmpresa (5), BackfillDtUltReativPorAuditLog (loop linear sobre EMPRESAS). Wrapper salva estado anterior, desliga 4 flags Application (ScreenUpdating, Calculation, EnableEvents, DisplayAlerts), restaura em fim. Estimativa: 10-30x mais rapido em PC antigo.",
+    "Escopo B.lite NAO inclui .frm: cadastro de entidade esta em Menu_Principal.frm:1595-1700, cadastro alternativo de empresa em Menu_Principal.frm:2242, credenciamento em Credencia_Empresa.frm:153, atividade em Cadastro_Servico.frm:112,143. Tocar .frm em safe_track exige deep-dive PHAGOCYTOSIS-VBA-PATTERNS (M9, L22-L24, M15-M17) - pre-trabalho ja agendado para Onda 38.2.2 (filtros).",
+    "Tradeoff registrado: cadastros de entidade/credenciamento/atividade permanecem lentos em PCs antigos ate Onda 38.2.2. Mauricio aceitou em chat - prefere onda curta segura agora do que onda larga arriscada. Risco mitigado: empresa e o tipo mais frequente de cadastro reportado por Mauricio.",
+    "Houseekeping inclusao dos 2 CSVs do RVS aprovado (VR_20260526_035523 Sexteto AR1 + VR_20260526_024718 Trio 38.2.1) no commit final desta onda - eram evidencias dos gates aprovados que ficaram untracked apos a sessao 0107.",
+    "Modificacao manual em AAX-App_Release.bas no working tree (label 'e9bcf42+ONDA38.2.1-AR1-sanear-contadores' timestamp '03:48' resultado do BUMP do V3 durante import da AR1) sera revertida automaticamente pelo publicar_vba_import_v2.sh --apply (sincroniza src/vba -> vba_import). Comportamento esperado documentado em Knowledge 0016."
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-2-1-AR1-FIX2-PERF",
+    "build_label": "ad5b487+ONDA38.2.1-AR1-FIX2-PERF",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-FIX2-PERF.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-2-1-AR1-FIX2-PERF\", \"ad5b487+ONDA38.2.1-AR1-FIX2-PERF\"",
+    "expected_import_result": "M=4 | F=0 | err=0 | skip=0",
+    "expected_modules_imported": [
+      "Util_Planilha (M)",
+      "Util_Sanear_Contadores (M)",
+      "Util_Excel_Performance (NOVO via M com criacao)",
+      "Repo_Empresa (M)",
+      "App_Release (M - apenas BUMP de label e timestamp)"
+    ],
+    "post_import_manual_step": "Mauricio executa no Imediato (opcional): SanearContadoresAR1 para confirmar idempotencia. Sem esta chamada o saneamento NAO precisa rodar pois a base ja foi saneada pela Onda 38.2.1-AR1; a chamada aqui valida apenas que (a) o novo algoritmo monotonico nao decresce nada e (b) o wrapper de performance nao quebrou o fluxo."
+  },
+  "invariants_preserved": [
+    "RN-01 a RN-17 inalteradas",
+    "Contadores RVS preservados V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0 (esperado Sexteto APROVADO mantido)",
+    "Assinatura publica de Util_Planilha.ProximoId(nomeAba As String) As String NAO muda (apenas algoritmo interno)",
+    "Assinatura publica de SanearContadoresAR1() NAO muda (apenas guarda monotonica interna)",
+    "Assinatura publica de Repo_Empresa.{Inserir,Atualizar,GravarStatusEmpresa,RepoEmpresa_BackfillDtUltReativPorAuditLog} NAO muda (apenas wrapper em torno do corpo)",
+    "Nenhum dado de empresa, entidade, atividade, servico, OS, Pre-OS ou credenciamento sera modificado",
+    "Nenhum servico blindado sera tocado",
+    "Mod_Types, Importador_V3, Auto_Open NAO tocados",
+    "Nenhum .frm ou .frx tocado",
+    "Outros Repo_* (Credenciamento, OS, PreOS, Avaliacao) NAO tocados",
+    "Preencher.bas NAO tocado",
+    "Util_IniciarBlocoRapido/Util_FinalizarBlocoRapido restauram estado anterior (NAO forcam xlCalculationAutomatic cego)",
+    "Pareamento iniciar/finalizar coberto por On Error GoTo em todas as rotinas envelopadas (restauracao garantida mesmo em falha)",
+    "Importacao operacional somente via ImportarPacoteV3_Delta",
+    "App_Release.bas em src/vba/ deixado no estado da onda anterior (label '7bca168+ONDA38.2.1-revert-filtros-menu' timestamp '15:00') conforme Knowledge 0016 - V3 fara BUMP no import"
+  ],
+  "design_partes": {
+    "parte_A_id_monotonico": {
+      "A1_Util_Sanear_Contadores_bas": {
+        "funcao_alvo": "SanearAR1EmAbaPareada (Private)",
+        "mudanca": "antes de 'wsTarget.Cells(1, COL_CONTADOR_AR).Value = maxId' adicionar: 'If maxId < valorAnterior Then maxId = valorAnterior'",
+        "impacto_log": "Log Debug.Print mantem formato 'aba!AR1 X -> Y (sources: ...)' mas agora Y nunca decresce; quando max_real < AR1_atual, log mostra X -> X (no-op de saneamento, mas algoritmo continua exibindo sources para auditoria)",
+        "remocao": "Funcao Private MaxIdNaColunaA (linhas 165-192) removida - substituida pela publica Util_MaxIdNaColunaA em Util_Planilha.bas",
+        "linhas_modificadas_estimadas": 4
+      },
+      "A2_Util_Planilha_ProximoId": {
+        "funcao_alvo": "ProximoId (Public)",
+        "mudanca": "apos 'atual = CLng(Val(ws.Cells(1, COL_CONTADOR_AR).Value))' adicionar declaracao 'Dim maxIdReal As Long' + atribuicao 'maxIdReal = Util_MaxIdNaColunaA(nomeAba)' + 'If maxIdReal > atual Then atual = maxIdReal'",
+        "impacto_runtime": "Cada chamada a ProximoId faz varredura adicional da coluna A da aba. Em ATIVIDADES (~1332 linhas) isso e mensuravel mas ProximoId NAO esta no caminho critico de cadastros frequentes; aceitavel. Para cadastros de empresa/entidade (~3-10 linhas) overhead e nulo.",
+        "linhas_modificadas_estimadas": 4
+      },
+      "A3_Util_Planilha_helper_publico": {
+        "funcao_nova": "Public Function Util_MaxIdNaColunaA(ByVal nomeAba As String) As Long",
+        "logica": "Identica a Private MaxIdNaColunaA que estava em Util_Sanear_Contadores: itera coluna A de LINHA_DADOS ate UltimaLinhaAba(nomeAba), retorna max(CLng(Val(...))). Aba inexistente retorna 0 via On Error GoTo.",
+        "posicao_no_modulo": "Logo apos UltimaLinhaAba (linha ~529), antes de ProximoId (linha 533), para que ProximoId possa chama-la sem forward declaration",
+        "linhas_adicionadas_estimadas": 22
+      }
+    },
+    "parte_B_excel_performance_lite": {
+      "B1_modulo_novo_Util_Excel_Performance_bas": {
+        "modulo": "src/vba/Util_Excel_Performance.bas (NOVO)",
+        "interface_publica": [
+          "Public Type TEstadoExcel { screenUpdating As Boolean; calculation As XlCalculation; enableEvents As Boolean; displayAlerts As Boolean }",
+          "Public Function Util_IniciarBlocoRapido() As TEstadoExcel",
+          "Public Sub Util_FinalizarBlocoRapido(ByRef st As TEstadoExcel)"
+        ],
+        "logica": "Util_IniciarBlocoRapido le os 4 flags atuais em TEstadoExcel, desliga os 4 (False, xlCalculationManual, False, False) e retorna o estado para o caller. Util_FinalizarBlocoRapido aceita TEstadoExcel ByRef e restaura os 4 flags ao estado anterior. NAO forca xlCalculationAutomatic cego (preserva configuracao do operador).",
+        "linhas_estimadas": 50
+      },
+      "B2_Repo_Empresa_Inserir_envelopado": {
+        "funcao_alvo": "Inserir",
+        "pattern": "Dim estadoExcel As TEstadoExcel: estadoExcel = Util_IniciarBlocoRapido() ... toda a logica original ... Util_FinalizarBlocoRapido estadoExcel: Exit Function / erro: Util_FinalizarBlocoRapido estadoExcel + restante do handler",
+        "linhas_adicionadas_estimadas": 5
+      },
+      "B3_Repo_Empresa_Atualizar_envelopado": {
+        "funcao_alvo": "Atualizar",
+        "pattern": "Identico a B2",
+        "linhas_adicionadas_estimadas": 5
+      },
+      "B4_Repo_Empresa_GravarStatusEmpresa_envelopado": {
+        "funcao_alvo": "GravarStatusEmpresa",
+        "pattern": "Identico a B2 (cuidado: ja tem ResumeNext interno no handler para Util_RestaurarProtecaoAba; Util_FinalizarBlocoRapido entra ANTES do GoTo 0 final)",
+        "linhas_adicionadas_estimadas": 5
+      },
+      "B5_Repo_Empresa_BackfillDtUltReativPorAuditLog_envelopado": {
+        "funcao_alvo": "RepoEmpresa_BackfillDtUltReativPorAuditLog",
+        "pattern": "Identico a B2 - loop sobre EMPRESAS internamente, beneficio adicional",
+        "linhas_adicionadas_estimadas": 5
+      },
+      "B6_SanearContadoresAR1_envelopado": {
+        "funcao_alvo": "Util_Sanear_Contadores.SanearContadoresAR1 (Public Sub)",
+        "pattern": "Identico a B2, no nivel do Sub publico (cada chamada interna a SanearAR1EmAbaPareada ja roda dentro do bloco rapido)",
+        "linhas_adicionadas_estimadas": 5
+      }
+    }
+  },
+  "ordem_de_execucao": [
+    "1. Criar src/vba/Util_Excel_Performance.bas",
+    "2. Editar src/vba/Util_Planilha.bas: adicionar Public Function Util_MaxIdNaColunaA + atualizar ProximoId com defesa monotonica",
+    "3. Editar src/vba/Util_Sanear_Contadores.bas: adicionar guarda monotonica em SanearAR1EmAbaPareada + remover Private MaxIdNaColunaA (passa a usar publica) + envelopar SanearContadoresAR1 com Util_IniciarBlocoRapido",
+    "4. Editar src/vba/Repo_Empresa.bas: envelopar 4 funcoes (Inserir, Atualizar, GravarStatusEmpresa, RepoEmpresa_BackfillDtUltReativPorAuditLog) com Util_IniciarBlocoRapido/Util_FinalizarBlocoRapido",
+    "5. Confirmar src/vba/App_Release.bas inalterado (label antigo 7bca168 timestamp 15:00 - Knowledge 0016)",
+    "6. Rodar local-ai/scripts/publicar_vba_import_v2.sh --apply (sync src/vba -> vba_import; AAX volta para label antigo)",
+    "7. Rodar local-ai/scripts/publicar_vba_import_v2.sh --check (validar shasum match)",
+    "8. Atualizar local-ai/vba_import/000-MAPA-PREFIXOS.txt com entrada de A*-Util_Excel_Performance.bas",
+    "9. Criar local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-FIX2-PERF.txt com 5 entradas M",
+    "10. Criar auditoria/03_ondas/onda_38_2_1_ar1_fix2_perf/38_2_1_AR1_FIX2_PERF_TECNICO.md",
+    "11. Adicionar 2 CSVs de evidencia historica em auditoria/evidencias/V12.0.0205/csv/ (housekeeping)",
+    "12. Rodar scripts/hbn-guards/hbn-guards-runner.sh - exigir 5/5 verdes",
+    "13. Atualizar .hbn/relay/INDEX.md com a nova onda",
+    "14. Atualizar CHANGELOG.md",
+    "15. Commit 1 primario (escopo da onda + housekeeping)",
+    "16. Push para origem ou aguardar diretiva Mauricio sobre push"
+  ],
+  "human_gates_pos_commit": [
+    {
+      "gate": "ImportarPacoteV3_Delta ONDA38-2-1-AR1-FIX2-PERF",
+      "expected": "M=4 | F=0 | err=0 | skip=0 | BUMP de label e timestamp em AAX-App_Release.bas"
+    },
+    {
+      "gate": "Depurar > Compilar VBAProject",
+      "expected": "compile limpo (novo modulo Util_Excel_Performance referenciado por Repo_Empresa e Util_Sanear_Contadores)"
+    },
+    {
+      "gate": "Imediato (OPCIONAL): SanearContadoresAR1",
+      "expected": "Log FIM ok=7 falhas=0; nenhuma das 7 abas decresce; idempotencia confirmada"
+    },
+    {
+      "gate": "Cadastrar empresa nova (T1)",
+      "expected": "ID sequencial correto = max(EMPRESAS) + 1 = 005 (assumindo 4 empresas atuais); tempo de cadastro perceptivelmente mais rapido em PC antigo"
+    },
+    {
+      "gate": "Editar empresa existente (T2)",
+      "expected": "Edicao confirma persistencia + tempo melhor"
+    },
+    {
+      "gate": "T-MONO-1: deletar manualmente uma linha de EMPRESAS (Shift+Delete), rodar SanearContadoresAR1, depois cadastrar nova",
+      "expected": "AR1 NAO decresce no log do saneamento (X -> X); novo cadastro recebe ID = AR1_anterior + 1, NAO o ID da empresa deletada"
+    },
+    {
+      "gate": "T-MONO-2: zerar manualmente EMPRESAS!AR1 (Imediato: ThisWorkbook.Sheets(\"EMPRESAS\").Cells(1,44).Value=0), cadastrar nova empresa SEM rodar SanearContadoresAR1",
+      "expected": "ProximoId detecta max(coluna_A) > AR1, salta para max+1; novo cadastro NAO recebe ID 001"
+    },
+    {
+      "gate": "CT_ValidarRelease_TrioMinimo OU Sexteto",
+      "expected": "APROVADO mantendo V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0 (Trio minimo) ou Sexteto completo"
+    }
+  ],
+  "risks": [
+    {
+      "risk": "Util_Excel_Performance.bas falha de compile por TEstadoExcel ja existir em outro modulo",
+      "mitigation": "grep -r 'Type TEstadoExcel' src/vba/ antes do edit. Se existir, renomear para Util_TEstadoExcel ou consolidar.",
+      "severity": "low"
+    },
+    {
+      "risk": "Pareamento Util_IniciarBlocoRapido/Util_FinalizarBlocoRapido desbalanceado em algum handler de erro (sai sem restaurar)",
+      "mitigation": "Cada funcao envelopada tem On Error GoTo erro/handler que chama Util_FinalizarBlocoRapido antes de Resume Next. Validacao manual no diff antes do commit.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Util_Restaurar em estado salvo errado se outra rotina externa mudou flags durante o bloco rapido (cenario: macro paralela)",
+      "mitigation": "VBA roda single-threaded; nao ha cenario realista de concorrencia. Documentado.",
+      "severity": "low"
+    },
+    {
+      "risk": "ProximoId fica perceptivelmente mais lento em abas grandes (ATIVIDADES tem 1332 linhas) por causa do Util_MaxIdNaColunaA adicional",
+      "mitigation": "Cadastro de atividade e raro; mesmo se cada chamada custar 50ms em PC antigo, o impacto agregado e desprezivel. Se virar problema, otimizar com escrita em bloco (S2) em onda futura.",
+      "severity": "low"
+    },
+    {
+      "risk": "Util_MaxIdNaColunaA varre toda coluna A inclusive linhas com texto livre - CLng(Val) retorna 0 para nao-numerico, mas se houver IDs como texto formatado com prefixo (ex: 'EMP005'), CLng(Val) retorna 0 e o calculo subestima max",
+      "mitigation": "Inspecionada coluna A das 7 abas alvo - todos sao numericos formatados como '000'. Documentar limitacao: funcao assume IDs numericos puros.",
+      "severity": "low"
+    },
+    {
+      "risk": "Conflito BUMP_NO_CHANGE no import (Knowledge 0016)",
+      "mitigation": "src/vba/App_Release.bas deixado intocado (label '7bca168+ONDA38.2.1-revert-filtros-menu' timestamp '15:00'); publicar_vba_import_v2.sh --apply sincroniza AAX com src/vba; V3 detecta diferenca ao import (target ad5b487 != 7bca168) e faz BUMP corretamente.",
+      "severity": "low"
+    },
+    {
+      "risk": "Sexteto reprova por regressao induzida pelo wrapper de performance (algum teste depende de estado de ScreenUpdating ou EnableEvents)",
+      "mitigation": "Trio minimo cobre 229 testes; se passar Trio, baixo risco de regressao. Sexteto valida ainda mais cenarios.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Repo_Empresa.GravarStatusEmpresa tem cinco Exit Function precoces (validacoes de persistencia); cada um precisa restaurar estado Excel antes de retornar",
+      "mitigation": "Padrao: chamada Util_FinalizarBlocoRapido em CADA Exit Function precoce. Validar diff conta exit points.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff limitado ao scope 0108 (assert-scope-lock.sh)",
+        "evidence_kind": "git_diff",
+        "evidence_required_in": ".hbn/results/0108-exec-onda38-2-1-ar1-fix2-perf.json"
+      },
+      {
+        "gate": "local-ai/scripts/publicar_vba_import_v2.sh --apply + --check (sync com Util_Excel_Performance novo e modulos editados)",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0108-exec-onda38-2-1-ar1-fix2-perf.json"
+      },
+      {
+        "gate": "scripts/hbn-guards/hbn-guards-runner.sh passa 5/5 verdes",
+        "evidence_kind": "command_output",
+        "evidence_required_in": ".hbn/results/0108-exec-onda38-2-1-ar1-fix2-perf.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-2-1-AR1-FIX2-PERF retorna M=4 | F=0 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0108-exec-onda38-2-1-ar1-fix2-perf.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0108-exec-onda38-2-1-ar1-fix2-perf.json"
+      },
+      {
+        "gate": "T-MONO-1: deletar manualmente linha de EMPRESAS, SanearContadoresAR1, cadastrar nova - AR1 NAO decresce e novo ID = AR1_anterior+1",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0108-exec-onda38-2-1-ar1-fix2-perf.json"
+      },
+      {
+        "gate": "T-MONO-2: zerar manualmente EMPRESAS!AR1, cadastrar nova - novo ID NAO e 001",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0108-exec-onda38-2-1-ar1-fix2-perf.json"
+      },
+      {
+        "gate": "T-PERF-1: cadastrar empresa nova em PC antigo - tempo perceptivelmente mais rapido vs baseline",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0108-exec-onda38-2-1-ar1-fix2-perf.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo retorna APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0108-exec-onda38-2-1-ar1-fix2-perf.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se publicar_vba_import_v2.sh --check falhar, abortar antes do commit e refazer --apply ate sync.",
+      "Se hbn-guards-runner reprovar, ajustar scope.files_allowed ou conteudo do staged conforme indicacao.",
+      "Se ImportarPacoteV3_Delta falhar com BUMP_NO_CHANGE, validar Knowledge 0016 - confirmar src/vba/App_Release.bas mantem label antigo, refazer --apply, tentar import de novo.",
+      "Se ImportarPacoteV3_Delta falhar por outro motivo, colar mensagem do V3 e abrir Onda 38.2.1-AR1-FIX2-PERF-FIX.",
+      "Se Depurar > Compilar falhar, restaurar workbook pelo backup do V3 e abrir investigacao.",
+      "Se T-MONO-1 ou T-MONO-2 falharem (regressao de IDs), abrir Onda 38.2.1-AR1-FIX2-DEEP para investigar.",
+      "Se T-PERF-1 nao mostrar melhoria perceptivel em PC antigo, abrir Onda 38.2.x-perf-S2 para implementar escrita em bloco (S2) sobre o wrapper atual.",
+      "Se Trio reprovar, anchor de rollback e commit ad5b487 (estado pos-handoff 0107).",
+      "Se Sexteto reprovar mas Trio passar, registrar finding pos-gate e decidir com Mauricio se reverte ou aceita debito."
+    ],
+    "anchor_to_restore": "Commit ad5b487 (handoff fim-de-sessao Opus 2026-05-26 + Sexteto APROVADO VR_20260526_035523)"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "pending",
+      "at": "2026-05-26T18:30:00-03:00",
+      "by": "claude-opus-4-7",
+      "note": "Readback aberto para Onda 38.2.1-AR1-FIX2-PERF combinando Caminho A (microdelta ID monotonico) + B.lite (wrapper Excel performance apenas em Repo_Empresa, sem .frm). Decisao Mauricio em chat: 'A + B lite'. Workaround bootstrap (Knowledge 0015): readback fica no working tree ate hearback confirmed."
+    },
+    {
+      "status": "confirmed",
+      "at": "2026-05-26T18:45:00-03:00",
+      "by": "humano",
+      "note": "Mauricio confirmou hearback em chat: 'confirmo.' Opus prossegue com a implementacao dos passos 1-15 do ordem_de_execucao."
+    }
+  ],
+  "created_at": "2026-05-26T18:30:00-03:00"
+}
