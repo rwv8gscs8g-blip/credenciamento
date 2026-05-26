@@ -17,6 +17,17 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.2.1-AR1 gate humano APROVADO** — `SanearContadoresAR1`
+  executou com `ok=7 falhas=0`; cadastro de empresa nova retornou ID
+  004 (vs 001 anterior, F1 resolvido); cadastro de entidade nova
+  aparece no fim da lista (F2 resolvido); Sexteto completo APROVADO
+  em `VR_20260526_035523` (V1=171/0 + V2_Smoke=34/0 + V2_Canonica=24/0
+  + E2E_Strikes=76/0 + IntegridadeBase=4/0 + Onda23Adv=27/0). Finding
+  minor F5 registrado para decisão: `CREDENCIADOS!AR1` decresceu de
+  6 para 4 (IDs 005 e 006 deletados historicamente; algoritmo
+  `max(ID)` ressincronizou; próximo cadastro reusará ID 005). Aguarda
+  decisão sobre mitigar agora (microdelta), deferir V207, ou
+  descartar.
 - **Onda 38.2.1-AR1 hotfix BUMP** — reverte `src/vba/App_Release.bas` ao
   estado do commit `e9bcf42` (Onda 38.2.1) após primeiro
   `ImportarPacoteV3_Delta` abortar com `[V3 FALHA] BUMP_NO_CHANGE`. Causa:

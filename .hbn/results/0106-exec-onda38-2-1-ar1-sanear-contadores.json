@@ -5,7 +5,7 @@
   "agent_id": "claude-opus-4-7",
   "track": "safe_track",
   "version_target": "V12.0.0206",
-  "status": "delivered_for_human_gate",
+  "status": "human_gate_passed_with_minor_finding",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "summary": "Onda 38.2.1-AR1 cria modulo Util_Sanear_Contadores.bas com Public Sub SanearContadoresAR1() idempotente para corrigir os contadores AR1 das 7 abas que usam Util_Planilha.ProximoId. Para EMPRESAS e ENTIDADE considera tambem EMPRESAS_INATIVAS e ENTIDADE_INATIVOS como sources do calculo de max(ID), conforme preocupacao levantada por Mauricio em chat 2026-05-26.",
@@ -98,9 +98,56 @@
   ],
   "next_wave": {
     "id": "onda38-2-2-filtros-handlers-nativos",
-    "status": "deferred_until_human_gate_passes",
-    "summary": "Implementar filtros nativos do Menu_Principal pela arquitetura segura aprovada em chat 2026-05-26: handlers TextBox16..22_Change estaticos + funcao filtro PURA stateless; ZERO WithEvents dinamico; ZERO Controls.Add; ZERO heuristica. Pre-trabalho: deep-dive PHAGOCYTOSIS-VBA-PATTERNS leitura completa de M9 + L22-L24 + M15-M17.",
-    "wave_conditional": "Se F2 (entidade no topo) persistir apos o saneamento, antes da 38.2.2 abre-se Onda 38.2.1-AR2 para investigar logica de ordenacao."
+    "status": "ready_to_open",
+    "summary": "Implementar filtros nativos do Menu_Principal pela arquitetura segura aprovada em chat 2026-05-26: handlers TextBox16..22_Change estaticos + funcao filtro PURA stateless; ZERO WithEvents dinamico; ZERO Controls.Add; ZERO heuristica. Pre-trabalho Opus: deep-dive PHAGOCYTOSIS-VBA-PATTERNS leitura completa de M9 + L22-L24 + M15-M17 antes do readback 0107.",
+    "wave_conditional_cancelled": "F2 (entidade no topo) foi resolvida pela 38.2.1-AR1 (Local 4 aparece no FIM da lista). Onda 38.2.1-AR2 NAO sera mais necessaria."
   },
+  "human_gate_evidence": {
+    "data_gate": "2026-05-26 04:14",
+    "import_delta_pos_hotfix": {
+      "status": "pass",
+      "evidencia": "Importador V3: M=2 | F=0 | err=0 | skip=0. BUMP_BUILD_LABEL OK para e9bcf42+ONDA38.2.1-AR1-sanear-contadores. MODULO_OK Util_Sanear_Contadores (NOVO). MODULO_OK App_Release.bas."
+    },
+    "compile_vbe": {
+      "status": "pass",
+      "evidencia": "Compile limpo apos import"
+    },
+    "sanear_contadores_ar1_execucao": {
+      "status": "pass",
+      "evidencia": "Log do Imediato em 2026-05-26 03:49:39: ok=7 falhas=0. Detalhes por aba: EMPRESAS!AR1 0->3 (sources EMPRESAS=3, EMPRESAS_INATIVAS=0), ENTIDADE!AR1 0->3 (sources ENTIDADE=3, ENTIDADE_INATIVOS=0), ATIVIDADES!AR1 1332->1332 (no-op, ja correto), CAD_SERV!AR1 0->1, PRE_OS!AR1 27->27 (no-op), CAD_OS!AR1 25->25 (no-op), CREDENCIADOS!AR1 6->4 (DECRESCEU - ver finding F5)"
+    },
+    "cadastro_empresa_id_sequencial": {
+      "status": "pass",
+      "evidencia": "Cadastro 'Empresa 4' realizado com ID 004 (= max anterior + 1). F1 RESOLVIDO."
+    },
+    "cadastro_entidade_no_fim_da_lista": {
+      "status": "pass",
+      "evidencia": "Cadastro 'Local 4' realizado e aparece no FIM da lista (CNPJ 44.444.555/5555-57). F2 RESOLVIDO. Onda 38.2.1-AR2 NAO sera necessaria."
+    },
+    "rvs_sexteto_completo": {
+      "status": "pass",
+      "evidencia": "VR_20260526_035523 BUILD e9bcf42+ONDA38.2.1-AR1-sanear-contadores RESULTADO APROVADO. Sintaxe: V1=171/0 + V2_Smoke=34/0 + V2_Canonica=24/0 + E2E_Strikes=76/0 + IntegridadeBase=4/0 + Onda23Adv=27/0. Mauricio rodou o teste mais abrangente (sexteto completo, alem do trio minimo). CSV em auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260526_035523.csv"
+    },
+    "F_NEW1_inativos_empresa": {
+      "status": "not_tested",
+      "evidencia": "EMPRESAS_INATIVAS=0 no momento do gate (nenhuma empresa inabilitada). Logica do codigo esta pronta para o caso quando houver. Sugere-se testar quando Mauricio inabilitar a primeira empresa."
+    },
+    "F_NEW2_inativos_entidade": {
+      "status": "not_tested",
+      "evidencia": "Mesma situacao: ENTIDADE_INATIVOS=0 no momento do gate."
+    },
+    "decisao_mauricio": "Gate aprovado em chat 2026-05-26: 'Sexteto passado com sucesso. Fiz o teste mais abrangente para ter certeza e passou.'"
+  },
+  "findings_pos_gate": [
+    {
+      "id": "F5",
+      "descricao": "CREDENCIADOS!AR1 decresceu de 6 para 4 apos saneamento. Indica que CRED_IDs 005 e 006 existiram historicamente mas foram deletados antes do gate (provavelmente em fluxo de teste). O algoritmo max(ID) ressincronizou para o max real (4), o que significa que o proximo cadastro de credenciamento vai reusar o ID 005.",
+      "severidade": "low",
+      "impacto": "Reuso de IDs deletados pode tornar ambiguo qualquer log de auditoria historico que referencie CRED_ID 005 ou 006. Para CREDENCIADOS especificamente o impacto e baixo (e tabela transacional, nao identidade persistente). Para EMPRESAS/ENTIDADE este algoritmo nao tem o mesmo risco porque inabilitadas sao consideradas como sources.",
+      "mitigacao_proposta": "Trocar algoritmo de 'AR1 = max(coluna_A)' para 'AR1 = max(max_existente_em_dados, AR1_atual)' - preserva contador alto quando ja estava a frente. Mitigacao deferida para decisao do Mauricio: pode ser implementada como Onda 38.2.1-AR1-FIX2 (microdelta de 5 linhas no Util_Sanear_Contadores) ou ficar para V207.",
+      "decisao_pendente": "Aguarda Mauricio: (a) implementar fix agora antes da 38.2.2 ; (b) deferir para V207 ; (c) descartar (reuso de CRED_ID e aceitavel)."
+    }
+  ],
+  "closed_at": "2026-05-26T04:20:00-03:00",
   "created_at": "2026-05-26T03:30:00-03:00"
 }
