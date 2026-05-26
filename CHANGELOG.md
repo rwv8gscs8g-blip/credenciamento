@@ -17,6 +17,13 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.2** — corrige filtros do `Menu_Principal.frm` com ponteiros
+  `WithEvents` explícitos para `TextBox16` a `TextBox22`, incluindo filtros
+  opcionais em `PreencherPreencheOS` e `PreencherAvaliarOS` para as listas de
+  Pré-OS e Avaliação. Não renomeia controles no VBE e não toca `.frx`.
+  Manifesto delta:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-FILTROS-MENU.txt`.
+  Carimbo: `a6ad842+ONDA38.2-filtros-menu`.
 - **Onda 38.1.5** — reaplica exclusivamente `Rel_Emp_Serv.frm` corrigido em
   workbook restaurado de base anterior à 38.1, recuperando o preparo/restauro
   de proteção da aba `RELATORIO` para o relatório de Empresas Credenciadas por

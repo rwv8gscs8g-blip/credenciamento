@@ -1,12 +1,38 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Codex (Onda 38.1.5 fechada com import, compile, relatorios funcionais e RVS completo aprovados; Onda 38.2 de padronizacao visual ampla permanece deferida; Onda 39 Util_PDF e proxima etapa funcional do roadmap). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
+proprietario-bastao: Codex (Onda 38.2 entregue para gate humano: filtros do Menu Principal com ponteiros WithEvents explicitos; Onda 39 Util_PDF e proxima etapa funcional apos import/compile/RVS da 38.2). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
 ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Codex abrir Onda 39 Util_PDF.bas como microdelta separado para o motor central de PDF automatico, mantendo ImportarPacoteV3_Delta e readback proprio.
-ultima-atualizacao: 2026-05-25T21:10:00-0300 (Onda 38.1.5 human_gate_passed: import M=1/F=1/err=0, compile limpo, relatorios impressos e RVS VR_20260525_204559 APROVADO)
+proxima-acao: Mauricio importar ONDA38-2-FILTROS-MENU, compilar, testar filtros TextBox16 a TextBox22 e rodar CT_ValidarRelease_TrioMinimo; se passar, Codex fecha ERP human_gate_passed e abre Onda 39 Util_PDF.bas como microdelta separado.
+ultima-atualizacao: 2026-05-25T21:55:00-0300 (Onda 38.2 delivered_for_human_gate: filtros do Menu Principal prontos para import delta)
 ---
+
+## Onda 38.2 ENTREGUE PARA GATE HUMANO — Filtros Menu Principal (Codex)
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track |
+| Readback | [readbacks/0104-onda38-2-filtros-menu-principal.json](../readbacks/0104-onda38-2-filtros-menu-principal.json) |
+| Hearback | confirmed — Mauricio aprovou recomendações e avanço em microdeltas pequenos antes da V207 |
+| ERP | [results/0104-exec-onda38-2-filtros-menu-principal.json](../results/0104-exec-onda38-2-filtros-menu-principal.json) — delivered_for_human_gate |
+| Doc tecnico | [38_2_TECNICO.md](../../auditoria/03_ondas/onda_38_2_filtros_menu_principal/38_2_TECNICO.md) |
+| Manifesto delta | [000-MANIFESTO-V3-DELTA-ONDA38-2-FILTROS-MENU.txt](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-FILTROS-MENU.txt) |
+| Build label | `a6ad842+ONDA38.2-filtros-menu` |
+
+### Resultado Onda 38.2
+
+- Prints em `local-ai/incoming/filtros/` confirmaram os filtros `TextBox16` a
+  `TextBox22` no Menu Principal.
+- `Menu_Principal.frm` declara ponteiros `Private WithEvents` para Entidade,
+  Empresa, Atribuicao Servico, Pre-OS, Avaliacao, Cadastro de Servico e
+  Atribuicao Empresa.
+- `PreencherPreencheOS` e `PreencherAvaliarOS` recebem filtro opcional,
+  preservando chamadas sem argumento.
+- Nenhum `.frx`, controle de designer, regra de negocio, servico blindado ou
+  contador RVS foi alterado.
+- Antes do freeze V206, fica planejada passagem assistida tela a tela e botao a
+  botao para fechar a interface e registrar melhorias V207.
 
 ## Onda 38.1.5 ENTREGUE PARA GATE HUMANO — Replay Rel_Emp_Serv protecao (Codex)
 

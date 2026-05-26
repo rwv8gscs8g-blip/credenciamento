@@ -1,0 +1,150 @@
+{
+  "readback_id": "0104-onda38-2-filtros-menu-principal",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0103-onda36-2-ci-hbn-guards",
+  "intent": {
+    "objective": "Corrigir filtros da interface do Menu_Principal.frm com ponteiros explicitos para TextBox16 a TextBox22, incluindo suporte a filtro opcional em PreencherPreencheOS e PreencherAvaliarOS, sem tocar .frx nem renomear controles no designer.",
+    "non_goals": [
+      "alterar RN-01 a RN-17",
+      "alterar contadores RVS",
+      "tocar arquivos .frx",
+      "renomear controles no VBE",
+      "refatorar arquitetura de UI para V207",
+      "tocar forms fora do Menu_Principal.frm",
+      "tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas ou Svc_PreOS.bas",
+      "usar ImportarPacoteV3 completo"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-FILTROS-MENU.txt",
+      ".hbn/readbacks/0104-onda38-2-filtros-menu-principal.json",
+      ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_2_filtros_menu_principal/**"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/*.frx",
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio aprovou em chat a continuidade da Onda 38.2 com microdeltas pequenos e controlados antes do refatoramento V207.",
+    "Mauricio forneceu prints em local-ai/incoming/filtros para leitura precisa dos nomes dos controles; a pasta permanece evidencia read-only.",
+    "Codex confirmou pelos prints que Menu_Principal usa TextBox16 a TextBox22 para filtros de Entidade, Empresa, Atribuicao de Servico, Pre-OS, Avaliacao, Cadastro de Servico e Atribuicao de Empresa.",
+    "Mauricio confirmou aprovacao do readback 0103 pendente para destravar a sequencia; a Onda 38.2 usa 0104 como readback ativo de escopo."
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-2-FILTROS-MENU",
+    "build_label": "a6ad842+ONDA38.2-filtros-menu",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-FILTROS-MENU.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-2-FILTROS-MENU\", \"a6ad842+ONDA38.2-filtros-menu\"",
+    "expected_import_result": "M=2 | F=1 | err=0 | skip=0"
+  },
+  "invariants_preserved": [
+    "Importacao operacional somente por ImportarPacoteV3_Delta",
+    "RN-01 a RN-17 permanecem inalteradas",
+    "Contadores RVS permanecem V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Nenhum servico blindado sera tocado",
+    "Nenhum .frx sera tocado",
+    "Controles nao serao renomeados no designer",
+    "Filtros passam a usar ponteiros explicitos WithEvents em vez de depender de variaveis implicitas"
+  ],
+  "risks": [
+    {
+      "risk": "Declarar WithEvents para filtros que antes eram variaveis implicitas pode expor double-call em TextBox17_Change legado.",
+      "mitigation": "Manter TextBox17_Change como fallback e sair imediatamente quando mTxtFiltroEmpresa ja estiver vinculado.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Adicionar filtro opcional em PreencherPreencheOS ou PreencherAvaliarOS pode ocultar itens se a composicao textual for incompleta.",
+      "mitigation": "Filtro opcional preserva chamada sem argumento; texto de busca inclui colunas visiveis e ids ocultos relevantes.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Dessincronizacao entre src/vba e local-ai/vba_import.",
+      "mitigation": "Rodar publicar_vba_import_v2.sh --apply e --check antes de commit.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Alguns forms fora do Menu_Principal ainda usam heuristica de busca de TextBox.",
+      "mitigation": "Registrar como limpeza posterior/V207; nao ampliar a Onda 38.2 alem do Menu_Principal e rotinas chamadas.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff limitado ao scope 0104",
+        "evidence_kind": "git_diff",
+        "evidence_required_in": ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json"
+      },
+      {
+        "gate": "publicar_vba_import_v2.sh --apply e --check confirmam espelho sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json"
+      },
+      {
+        "gate": "hbn-guards-runner usa 0104 como readback ativo e passa 5/5",
+        "evidence_kind": "command_output",
+        "evidence_required_in": ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-2-FILTROS-MENU retorna M=2 | F=1 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json"
+      },
+      {
+        "gate": "Teste assistido confirma filtros TextBox16 a TextBox22 no Menu_Principal filtrando as listas esperadas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import delta falhar, Mauricio nao deve salvar o workbook e deve colar a mensagem exata do Importador V3.",
+      "Se o compile VBE falhar, Mauricio nao deve salvar o workbook e deve restaurar pelo backup indicado pelo Importador V3.",
+      "Se algum filtro nao responder, capturar print da tela e nome do controle no VBE antes de nova onda.",
+      "Se CT_ValidarRelease_TrioMinimo mudar contadores ou falhar, nao prosseguir para Onda 39."
+    ],
+    "anchor_to_restore": "Workbook validado apos Onda 38.1.5, build 696a8c2+ONDA38.1.5-rel-emp-serv-protecao"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-05-25T21:55:00-03:00"
+}

@@ -1,0 +1,94 @@
+{
+  "result_id": "0104-exec-onda38-2-filtros-menu-principal",
+  "readback_id": "0104-onda38-2-filtros-menu-principal",
+  "data": "2026-05-25",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "delivered_for_human_gate",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "summary": "Onda 38.2 corrige os filtros do Menu Principal com ponteiros WithEvents explicitos para TextBox16 a TextBox22 e filtros opcionais nas listas de Pre-OS e Avaliacao.",
+  "files_changed": [
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Preencher.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-FILTROS-MENU.txt",
+    "auditoria/03_ondas/onda_38_2_filtros_menu_principal/38_2_TECNICO.md",
+    ".hbn/readbacks/0104-onda38-2-filtros-menu-principal.json",
+    ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-2-FILTROS-MENU",
+    "build_label": "a6ad842+ONDA38.2-filtros-menu",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-2-FILTROS-MENU\", \"a6ad842+ONDA38.2-filtros-menu\"",
+    "expected_import_result": "M=2 | F=1 | err=0 | skip=0"
+  },
+  "local_validation": [
+    {
+      "gate": "Prints de filtros acessiveis",
+      "status": "pass",
+      "evidence": "11 screenshots encontrados em local-ai/incoming/filtros; nomes confirmados: TextBox16, TextBox17, TextBox18, TextBox19, TextBox20, TextBox21 e TextBox22 no Menu_Principal."
+    },
+    {
+      "gate": "Menu_Principal usa WithEvents explicito",
+      "status": "pass",
+      "evidence": "mTxtFiltroEntidade, mTxtFiltroEmpresa, mTxtFiltroServico, mTxtFiltroRodizio, mTxtFiltroCadServ, mTxtFiltroPreOS e mTxtFiltroAvaliacao declarados como Private WithEvents MSForms.TextBox."
+    },
+    {
+      "gate": "PreencherPreencheOS e PreencherAvaliarOS aceitam filtro opcional",
+      "status": "pass",
+      "evidence": "Assinaturas preservam chamadas sem argumento e permitem chamadas filtradas pelo Menu_Principal."
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh apply",
+      "status": "pass",
+      "evidence": "Applied: AAX-App_Release.bas, AAM-Menu_Principal.frm (frx_sync, code_only_gen), AAU-Preencher.bas; G8 OK; G7 OK."
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh check",
+      "status": "pass",
+      "evidence": "51 arquivos in_sync; vba_import 100% sincronizado com src/vba."
+    },
+    {
+      "gate": "shasum src/vba vs local-ai/vba_import",
+      "status": "pass",
+      "evidence": "Menu_Principal.frm = 8b55cee3efb73c1ed9840fe695fddb72e0a7e8253e8707910a22ea917e5503d9; Preencher.bas = b65b4f221e21b495c3d583ce496381c0bdce4a33a28b4372250bcd2c5559448f; App_Release.bas = 5a42972e3a6a648d67c62e2abbad16347a4abf909ddf087180a782d71899a024."
+    },
+    {
+      "gate": "hbn-guards-runner com stage 0104",
+      "status": "pass",
+      "evidence": "5/5 guards verdes; assert-scope-lock usou readback ativo 0104 com human_status=confirmed e confirmou todos os arquivos staged dentro do scope."
+    }
+  ],
+  "human_gates_pending": [
+    {
+      "gate": "ImportarPacoteV3_Delta ONDA38-2-FILTROS-MENU",
+      "expected": "M=2 | F=1 | err=0 | skip=0"
+    },
+    {
+      "gate": "Depurar > Compilar VBAProject",
+      "expected": "compile limpo"
+    },
+    {
+      "gate": "Teste assistido dos filtros TextBox16 a TextBox22",
+      "expected": "listas filtram sem travar e sem double-call visivel"
+    },
+    {
+      "gate": "CT_ValidarRelease_TrioMinimo",
+      "expected": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0"
+    }
+  ],
+  "next_wave": {
+    "id": "onda39-util-pdf",
+    "status": "after_human_gate",
+    "summary": "Retomar motor central PDF apos confirmar filtros do Menu Principal e compile/RVS."
+  },
+  "created_at": "2026-05-25T21:55:00-03:00"
+}

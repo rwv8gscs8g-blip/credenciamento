@@ -1,0 +1,37 @@
+# Manifesto V3 DELTA ONDA38-2-FILTROS-MENU - V12.0.0206
+# Tema: Corrigir filtros do Menu Principal com ponteiros explicitos.
+#
+# Contexto:
+#   - Mauricio forneceu prints dos campos de filtro em local-ai/incoming/filtros.
+#   - Os prints confirmaram TextBox16 a TextBox22 no Menu_Principal.frm.
+#   - O codigo possuia handlers mTxtFiltro*_Change, mas os ponteiros nao estavam
+#     declarados como WithEvents e duas listas ainda nao aceitavam filtro.
+#   - Importacao permitida exclusivamente via ImportarPacoteV3_Delta.
+#
+# Mudancas:
+#   AAM-Menu_Principal.frm:
+#     - Declara mTxtFiltroEntidade/Empresa/Servico/Rodizio/CadServ/PreOS/Avaliacao
+#       como Private WithEvents MSForms.TextBox.
+#     - Amarra explicitamente TextBox16 a TextBox22 sem renomear controles no VBE.
+#     - Mantem TextBox17_Change apenas como fallback legado para evitar double-call.
+#   AAU-Preencher.bas:
+#     - PreencherPreencheOS e PreencherAvaliarOS passam a aceitar filtro opcional.
+#     - Chamadas sem argumento preservam o comportamento existente.
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = "a6ad842+ONDA38.2-filtros-menu"
+#     - APP_BUILD_GERADO_EM = "2026-05-25 21:55"
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38-2-FILTROS-MENU", "a6ad842+ONDA38.2-filtros-menu"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=1 | err=0 | skip=0.
+#   - Compile manual passa limpo.
+#   - CT_ValidarRelease_TrioMinimo permanece APROVADO:
+#     V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+#   - Filtros TextBox16 a TextBox22 filtram as listas do Menu Principal.
+#
+# GRUPO_DELTA_ONDA38_2_FILTROS_MENU
+F|002-formularios/AAM-Menu_Principal.frm
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/AAX-App_Release.bas
