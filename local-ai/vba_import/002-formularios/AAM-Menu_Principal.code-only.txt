@@ -3831,7 +3831,7 @@ Private Sub TextBox16_Change()   ' Cadastro de Entidades
         If mTxtFiltroEntidade Is TextBox16 Then Exit Sub
     End If
     On Error Resume Next
-    Call Preencher.Preencher_FiltrarPorBoxEstatico("entidade", CStr(TextBox16.Text))
+    Call Preencher_FiltrarPorBoxEstatico("entidade", CStr(TextBox16.Text))
     On Error GoTo 0
 End Sub
 
@@ -3841,7 +3841,7 @@ Private Sub TextBox17_Change()   ' Cadastro de Empresas
         If mTxtFiltroEmpresa Is TextBox17 Then Exit Sub
     End If
     On Error Resume Next
-    Call Preencher.Preencher_FiltrarPorBoxEstatico("empresa", CStr(TextBox17.Text))
+    Call Preencher_FiltrarPorBoxEstatico("empresa", CStr(TextBox17.Text))
     On Error GoTo 0
 End Sub
 
@@ -3851,21 +3851,21 @@ Private Sub TextBox18_Change()   ' Atribuicao de Servico
         If mTxtFiltroServico Is TextBox18 Then Exit Sub
     End If
     On Error Resume Next
-    Call Preencher.Preencher_FiltrarPorBoxEstatico("atrib_servico", CStr(TextBox18.Text))
+    Call Preencher_FiltrarPorBoxEstatico("atrib_servico", CStr(TextBox18.Text))
     On Error GoTo 0
 End Sub
 
 Private Sub TextBox19_Change()   ' Emite Solicitacao de Servico (OS)
     If mInicializando Then Exit Sub
     On Error Resume Next
-    Call Preencher.Preencher_FiltrarPorBoxEstatico("os", CStr(TextBox19.Text))
+    Call Preencher_FiltrarPorBoxEstatico("os", CStr(TextBox19.Text))
     On Error GoTo 0
 End Sub
 
 Private Sub TextBox20_Change()   ' Avaliacao / Encerramento
     If mInicializando Then Exit Sub
     On Error Resume Next
-    Call Preencher.Preencher_FiltrarPorBoxEstatico("aval", CStr(TextBox20.Text))
+    Call Preencher_FiltrarPorBoxEstatico("aval", CStr(TextBox20.Text))
     On Error GoTo 0
 End Sub
 
@@ -3875,7 +3875,7 @@ Private Sub TextBox21_Change()   ' Cadastro e Alteracao de Servico
         If mTxtFiltroCadServ Is TextBox21 Then Exit Sub
     End If
     On Error Resume Next
-    Call Preencher.Preencher_FiltrarPorBoxEstatico("cad_servico", CStr(TextBox21.Text))
+    Call Preencher_FiltrarPorBoxEstatico("cad_servico", CStr(TextBox21.Text))
     On Error GoTo 0
 End Sub
 
@@ -3885,7 +3885,7 @@ Private Sub TextBox22_Change()   ' Atribuicao de Empresa (Rodizio)
         If mTxtFiltroRodizio Is TextBox22 Then Exit Sub
     End If
     On Error Resume Next
-    Call Preencher.Preencher_FiltrarPorBoxEstatico("atrib_empresa", CStr(TextBox22.Text))
+    Call Preencher_FiltrarPorBoxEstatico("atrib_empresa", CStr(TextBox22.Text))
     On Error GoTo 0
 End Sub
 
