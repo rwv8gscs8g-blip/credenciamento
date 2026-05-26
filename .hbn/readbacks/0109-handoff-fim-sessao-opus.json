@@ -1,0 +1,86 @@
+{
+  "readback_id": "0109-handoff-fim-sessao-opus",
+  "data": "2026-05-26",
+  "agent_id": "claude-opus-4-7",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0108-onda38-2-1-ar1-fix2-perf",
+  "intent": {
+    "objective": "Fechar a sessao Opus 4.7 sucessora (2026-05-26 ~10:00 -> 11:18, ~1h20) com handoff completo + prompts prontos da auditoria cruzada Codex + Antigravity/Gemini + atualizacao do relay/INDEX. Sessao encerra em ~90% contexto - regra dos 50% violada para fechamento da Onda 38.2.1-AR1-FIX2-PERF; licao registrada por Mauricio em chat ('deveriamos ter feito o handoff com 50% do contexto') e incorporada ao prompt de retomada 108. Onda 38.2.2 (filtros nativos + envelopamento .frm + fix F-NEW3) NAO sera aberta aqui - fica para proxima sessao apos auditoria cruzada e/ou em paralelo a ela.",
+    "non_goals": [
+      "abrir Onda 38.2.2 nesta sessao",
+      "tocar codigo de producao",
+      "fazer deep-dive PHAGOCYTOSIS (fica para proxima sessao)",
+      "implementar fix de F-NEW3",
+      "iniciar refatoracao V207 (fica para depois das 6 propostas)"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/messages/20260526-1118-handoff-fim-sessao-opus.md",
+      "auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md",
+      ".hbn/readbacks/0109-handoff-fim-sessao-opus.json",
+      ".hbn/relay/INDEX.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "auditoria/03_ondas/**"
+    ],
+    "imports_must_come_from": "n/a (fast_track doc-only)"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio aprovou em chat 2026-05-26 11:00 a sequencia: (1) commits da onda + push origin; (2) handoff fim-de-sessao completo; (3) auditoria cruzada Codex + Antigravity/Gemini com 3 propostas V207 cada na proxima sessao; (4) ciclos acelerados durante estabilizacao V206; (5) hearback HBN continua mandatorio como instrumento pedagogico.",
+    "Mauricio anexou prompt extenso de 'banca de auditoria tecnica' com 3 papeis (Opus arquiteto + Codex executor + Gemini auditor de contexto) - Opus avaliou e incorporou no item 13.A do handoff, ajustando 7 pontos: especificidade por agente, referencias concretas ao repo, output versionavel em .hbn/proposals/, escopo de leitura priorizado, 3 propostas alternativas com tradeoffs comparaveis, tabu liberado para refatoracao V207, principio NAO desenvolver apenas analisar.",
+    "Mauricio confirmou: F-NEW3 cosmetico vai para Onda 38.2.2; F-NEW4 parcial vai para Onda 38.2.2 + V207; F-NEW4-DT (testes E2E cadastros) vai para V207.",
+    "Onda 38.2.2 (V206 puro) pode rodar em paralelo a auditoria cruzada (V207 prep) - escopos independentes."
+  ],
+  "delta_contract": {
+    "delta_name": "n/a (fast_track doc-only)",
+    "build_label": "n/a",
+    "manifest_path": "n/a",
+    "import_command": "n/a",
+    "expected_import_result": "n/a",
+    "post_import_manual_step": "n/a"
+  },
+  "invariants_preserved": [
+    "Nenhum codigo de producao tocado",
+    "Anchor V206 funcional preservado (commit ee75b30, build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio VR_20260526_102200)",
+    "Tabus V206 inalterados (Mod_Types, Importador_V3, Svc_*, .frm)",
+    "Tabus 'liberados para V207' permanecem apenas para analise/proposta - NAO implementacao"
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "scripts/hbn-guards/hbn-guards-runner.sh passa 5/5 verdes",
+        "evidence_kind": "command_output",
+        "evidence_required_in": "commit final docs(hbn)"
+      },
+      {
+        "gate": "git push origin codex/v12-0-0206-planejamento bem-sucedido",
+        "evidence_kind": "command_output",
+        "evidence_required_in": "commit final docs(hbn)"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se algum guard reprovar, ajustar scope.files_allowed e re-hearback",
+      "Se push falhar, validar credenciais github e retentar (sem force)"
+    ],
+    "anchor_to_restore": "Commit 067f2dc (fechamento ERP 0108)"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "confirmed",
+      "at": "2026-05-26T11:18:00-03:00",
+      "by": "claude-opus-4-7",
+      "note": "Readback fast_track para handoff fim-de-sessao. Mauricio aprovou em chat o conteudo do handoff e o esquema da auditoria cruzada Codex + Antigravity/Gemini. Pre-confirmado em fast_track conforme padrao do 0107 anterior."
+    }
+  ],
+  "created_at": "2026-05-26T11:18:00-03:00"
+}

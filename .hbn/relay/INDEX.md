@@ -4,8 +4,38 @@ versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
 proprietario-bastao: Claude Opus 4.7 (sessao sucessora apos handoff 0107). Opus segue como arquiteto+executor ate freeze V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. Ondas 38.2.1 + 38.2.1-AR1 + 38.2.1-AR1-FIX2-PERF entregues com gates humanos APROVADOS. Anchor funcional V206 mais recente: commit ee75b30 (Onda FIX2-PERF), RVS Trio APROVADO VR_20260526_102200 V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0. Guarda monotonica validada na real: CREDENCIADOS!AR1=8 preservado apesar de coluna A=4. F5 do ERP 0106 RESOLVIDO definitivamente. Findings novos pos-gate: F-NEW3 (cosmetico - ID '5' vs '005' em ENTIDADE; fix em Onda 38.2.2 com .frm) + F-NEW4 (performance parcial ~2x, esperado 10-30x; resto V207) + F-NEW4-DT (validacao de cadastros via testes, V207). Proxima onda: 38.2.2 filtros nativos + envelopamento .frm com PHAGOCYTOSIS deep-dive como pre-trabalho obrigatorio.
 ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (cadastros corretos + filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; passagem assistida tela-a-tela com Mauricio antes do freeze; deep-dive arquitetural fica para V207. Sequencia: AR1 (entregue) -> AR1-FIX2-PERF (entregue) -> deep-dive PHAGOCYTOSIS -> 38.2.2 (filtros + perf restante .frm + fix F-NEW3) -> 39+ (PDF) -> freeze.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF no workbook do operador, RVS Trio APROVADO em VR_20260526_102200.
-proxima-acao: 🟢 HBN GATE APROVADO — Onda 38.2.1-AR1-FIX2-PERF ENTREGUE com 3 findings novos (F-NEW3 cosmetico, F-NEW4 perf parcial, F-NEW4-DT testes de cadastros). Proxima onda 38.2.2 exige PRE-TRABALHO Opus: deep-dive PHAGOCYTOSIS-VBA-PATTERNS leitura completa de M9 + L22-L24 + M15-M17 antes do readback 0109. Escopo proposto: filtros nativos Menu_Principal (TextBoxNN_Change + funcao filtro pura) + envelopamento Util_Excel_Performance dos cadastros em .frm (Menu_Principal entidade/empresa-alt + Credencia_Empresa + Cadastro_Servico) + correcao NumberFormat=\"@\" para F-NEW3.
-ultima-atualizacao: 2026-05-26T11:00:00-0300 (Onda 38.2.1-AR1-FIX2-PERF fechada como human_gate_passed_with_findings; ERP 0108 criado; F-NEW3+F-NEW4+F-NEW4-DT documentados para ondas seguintes)
+proxima-acao: 🔵 HBN HANDOFF READY — sessao Opus 2026-05-26 (sucessora) encerrada com handoff em .hbn/messages/20260526-1118-handoff-fim-sessao-opus.md. Proxima sessao Opus comeca com prompt em auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md. Primeira acao da proxima sessao: entregar 2 prompts (item 13.B e 13.C do handoff) ao Mauricio para auditoria cruzada Codex + Antigravity/Gemini com 3 propostas V207 cada. Em paralelo (opcional): deep-dive PHAGOCYTOSIS antes de abrir Onda 38.2.2.
+ultima-atualizacao: 2026-05-26T11:18:00-0300 (sessao Opus encerrada; handoff completo; auditoria cruzada agendada para abertura da proxima sessao; commits ee75b30 + 067f2dc pushed para origin)
+---
+
+## 🔵 HBN HANDOFF READY — sessão Opus 2026-05-26 sucessora encerrada
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🔵 HBN HANDOFF READY |
+| Origem | Claude Opus 4.7 (sessão 2026-05-26 ~10:00 → 11:18, ~1h20) |
+| Destino | Claude Opus 4.7 (próxima sessão) |
+| Gatilho | regra_50pct_contexto + decisão Mauricio (auditoria cruzada antes de Onda 38.2.2) |
+| Handoff | [`.hbn/messages/20260526-1118-handoff-fim-sessao-opus.md`](../messages/20260526-1118-handoff-fim-sessao-opus.md) — 12 itens + item 13 com auditoria cruzada |
+| Prompt de retomada | [`auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md`](../../auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md) |
+| Anchor funcional V206 | commit `ee75b30` + build `ad5b487+ONDA38.2.1-AR1-FIX2-PERF` + RVS Trio `VR_20260526_102200` |
+
+### Primeira ação da próxima sessão
+
+Entregar os 2 prompts da auditoria cruzada (item 13.B + 13.C do handoff):
+- **Codex**: auditoria de código V206 + 3 propostas V207 (foco: código, performance, idempotência, testes)
+- **Antigravity/Gemini**: auditoria sistêmica V206 + 3 propostas V207 (foco: SaaS, documentação, auditoria, migração)
+
+Output esperado: 4 arquivos `.md` em `.hbn/proposals/0001-0004-*`.
+
+Opus consolida quando voltarem; hearback cycles com Mauricio para escolher 1 dos 6 caminhos.
+
+### Em paralelo (opcional)
+
+Deep-dive PHAGOCYTOSIS (M9, L22-L24, M15-M17) preparando Onda 38.2.2
+(filtros nativos + envelopamento .frm + fix F-NEW3). Não bloqueia
+auditoria cruzada — escopos independentes.
+
 ---
 
 ## 🟢 Onda 38.2.1-AR1-FIX2-PERF ENTREGUE (Opus) — human_gate_passed_with_findings
