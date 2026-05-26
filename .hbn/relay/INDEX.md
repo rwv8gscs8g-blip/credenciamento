@@ -1,69 +1,84 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.3 (auto-evolucao por handoff)
-proprietario-bastao: Claude Opus 4.7 (sessao sucessora apos handoff 0108 + onda 0110 ENTREGUE). Opus segue como arquiteto+executor ate freeze V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. Ondas 38.2.1 + 38.2.1-AR1 + 38.2.1-AR1-FIX2-PERF entregues com gates humanos APROVADOS. Onda 0110 (fast_track doc-only) entregue 2026-05-26 ~12:55 commit 91037f1 + commit adjacente f4d1884 (anexa CSV RVS Trio V206 evidencia aprovada que estava untracked). Anchor funcional V206 mais recente: commit ee75b30 (Onda FIX2-PERF), RVS Trio APROVADO VR_20260526_102200 V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0. Guarda monotonica validada na real: CREDENCIADOS!AR1=8 preservado apesar de coluna A=4. F5 do ERP 0106 RESOLVIDO definitivamente. Findings novos pos-gate: F-NEW3 (cosmetico - ID '5' vs '005' em ENTIDADE; fix em Onda 38.2.2 com .frm) + F-NEW4 (performance parcial ~2x, esperado 10-30x; resto V207) + F-NEW4-DT (validacao de cadastros via testes, V207). Proxima onda: 38.2.2 filtros nativos + envelopamento .frm com PHAGOCYTOSIS deep-dive como pre-trabalho obrigatorio - APOS auditoria cruzada Codex+Antigravity.
-ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (cadastros corretos + filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; passagem assistida tela-a-tela com Mauricio antes do freeze; deep-dive arquitetural fica para V207. Sequencia: AR1 (entregue) -> AR1-FIX2-PERF (entregue) -> evolucao protocolo v1.3 + knowledge 0017 (entregue, onda 0110, commit 91037f1) -> auditoria cruzada Codex+Antigravity (EM ANDAMENTO - prompts 13.B/13.C entregues ao operador) -> deep-dive PHAGOCYTOSIS -> 38.2.2 (filtros + perf restante .frm + fix F-NEW3) -> 39+ (PDF) -> freeze.
+proprietario-bastao: Claude Opus 4.7 (sessao sucessora encerrada 15:26 BRT pos auditoria cruzada 1a rodada consolidada). Opus segue como arquiteto+executor ate freeze V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. Ondas 38.2.1 + 38.2.1-AR1 + 38.2.1-AR1-FIX2-PERF entregues com gates humanos APROVADOS. Onda 0110 (fast_track doc-only) entregue 2026-05-26 ~12:55 commit 91037f1 + adjacente f4d1884 (anexa CSV RVS Trio V206) + fechamento ERP/relay 8c03e34. Auditoria cruzada V207 1a rodada ENTREGUE: 4 arquivos .hbn/proposals/0001-0004-* (commits Codex b33d904 + Antigravity 2d49259 ambos sem push) - consolidada por Opus em auditoria/00_status/111_ANALISE_AUDITORIA_CRUZADA_V207.md. Decisao preliminar Mauricio (chat ~15:00): vai escolher entre Alternativa I (Caminho 1 -> Caminho 2 puro) ou Alternativa II (Opcao 4 hibrida = Caminho 1 + in-memory parcial nas listas) MAS so apos 2a rodada de auditoria cruzada. Anchor funcional V206 inalterado: commit ee75b30 (Onda FIX2-PERF), RVS Trio APROVADO VR_20260526_102200. Findings ativos: F-NEW3 (cosmetico, Onda 38.2.2 ou V207.x) + F-NEW4 (medio, arquitetural, resolucao depende do caminho V207 escolhido) + F-NEW4-DT (medio, testes E2E V207).
+ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (cadastros corretos + filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; deep-dive arquitetural fica para V207. Sequencia: AR1 (entregue) -> AR1-FIX2-PERF (entregue) -> evolucao protocolo v1.3 + knowledge 0017 (entregue, onda 0110, commit 91037f1) -> auditoria cruzada 1a rodada (entregue + consolidada em 111) -> 2a rodada de auditoria cruzada (PENDENTE - prompts prontos em 110) -> decisao Alternativa I vs II vs III -> V207.0+ em ondas refinadas. Onda 38.2.2 (V206 puro) pode rodar em paralelo a 2a rodada se aprovado pelo operador.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF no workbook do operador, RVS Trio APROVADO em VR_20260526_102200 (CSV anexado em commit f4d1884).
-proxima-acao: 🟡 AUDITORIA CRUZADA EM ANDAMENTO — prompts 13.B (Codex auditoria codigo V206 + 3 propostas V207) e 13.C (Antigravity/Gemini auditoria sistemica V206 + 3 propostas V207) entregues a Mauricio para abertura de 2 sessoes paralelas. Output esperado: 4 arquivos .md em .hbn/proposals/0001-0004-*. Opus consolida quando voltarem em hearback cycles ate definir 1 caminho V207. Em paralelo opcional (nao bloqueia): deep-dive PHAGOCYTOSIS-VBA-PATTERNS M9 + L22-L24 + M15-M17 preparando Onda 38.2.2 (V206 puro, escopo independente).
-ultima-atualizacao: 2026-05-26T12:55:00-0300 (onda 0110 entregue commit 91037f1 + adjacente CSV V206 f4d1884; ERP 0110 fechado; auditoria cruzada Codex+Antigravity entregue a Mauricio em prompts 13.B/13.C)
+proxima-acao: 🔵 HBN HANDOFF READY — sessao 12:30->15:26 BRT encerrada com 4 artefatos (analise 111 + prompt retomada 110 + handoff 20260526-1526 + protocol-evolutions 20260526-1526). Proxima Opus cola prompt 110, faz pre-flight, entrega prompts 2a rodada (em 110 §"Prompts 2a rodada") para Mauricio abrir 2 sessoes paralelas. Output esperado: 4 arquivos .hbn/proposals/0005-0008-*.md. Opus consolida + Mauricio decide. Em paralelo opcional (nao bloqueia): Onda 38.2.2 (V206 puro - PHAGOCYTOSIS deep-dive ja sintetizada + 2 quick wins Codex item 68/69 incorporados).
+ultima-atualizacao: 2026-05-26T15:26:00-0300 (sessao Opus encerrada apos consolidacao auditoria cruzada 1a rodada + 4 artefatos handoff §7.3 PROMPT_ARQUITETO v1.3 + 1a aplicacao pratica do mecanismo de protocol-evolutions; bastao mantido com Opus 4.7)
 ---
 
-## 🟢 Onda 0110 PRONTA PARA COMMIT (fast_track doc-only) — Evolução manual do protocolo v1.2 → v1.3
+## 🔵 HBN HANDOFF READY — sessão Opus 2026-05-26 ~12:30 → 15:26 encerrada (NOVO)
 
 | Campo | Valor |
 |---|---|
-| Sinal | 🟢 PRONTA PARA COMMIT |
+| Sinal | 🔵 HBN HANDOFF READY |
+| Origem | Claude Opus 4.7 (sessão 2026-05-26 ~12:30 → 15:26, ~3h, ~70% contexto fadigado) |
+| Destino | Claude Opus 4.7 (próxima sessão) |
+| Gatilho | regra_50pct_contexto (com exceção documentada — input externo grande pós-50%) + §7 Passo 5 + §7.3 v1.3 |
+| Handoff | [`.hbn/messages/20260526-1526-handoff-fim-sessao-opus.md`](../messages/20260526-1526-handoff-fim-sessao-opus.md) — 12 itens + 13 (cláusula exceção 50%) + 14 (memory updates) + 15 (encerramento) |
+| Prompt de retomada | [`auditoria/00_status/110_PROMPT_RETOMADA_SESSAO_OPUS.md`](../../auditoria/00_status/110_PROMPT_RETOMADA_SESSAO_OPUS.md) — inclui prompts 2ª rodada para Codex+Antigravity |
+| Análise auditoria cruzada 1ª rodada | [`auditoria/00_status/111_ANALISE_AUDITORIA_CRUZADA_V207.md`](../../auditoria/00_status/111_ANALISE_AUDITORIA_CRUZADA_V207.md) |
+| Protocol evolutions (1ª aplicação §7.3) | [`.hbn/protocol-evolutions/20260526-1526-onda0111-proposals.md`](../protocol-evolutions/20260526-1526-onda0111-proposals.md) — L29 (confirmada), L30 (confirmada), L31 (NOVA), L32 (NOVA) |
+| Anchor funcional V206 | commit `ee75b30` + build `ad5b487+ONDA38.2.1-AR1-FIX2-PERF` + RVS Trio `VR_20260526_102200` |
+
+### Primeira ação da próxima sessão
+
+**Entregar os 2 prompts da 2ª rodada de auditoria cruzada** (textos prontos no 110 §"Prompts 2ª rodada"). Mauricio abre 2 sessões paralelas Codex + Antigravity refinando 2 alternativas:
+
+- **Alternativa I**: Caminho 1 → Caminho 2 puro (V207 + V208 sequencial, 12-17 ondas)
+- **Alternativa II**: Opção 4 híbrida (Caminho 1 + in-memory parcial nas listas, 7-9 ondas em 1 release)
+
+Output esperado: 4 arquivos `.md` em `.hbn/proposals/0005-0008-*`. Opus consolida em sucessor do 111; Mauricio decide com hearback explícito.
+
+### Em paralelo (opcional, não bloqueia 2ª rodada)
+
+**Onda 38.2.2 (V206 puro)** — pré-trabalho PHAGOCYTOSIS já consolidado (M9, L22-L24, M15-M17) + 2 quick wins identificados na 1ª rodada Codex:
+- Item 68 (severidade alto): `Util_MaxIdOperacional(nomeAba)` pair-aware EMPRESAS+EMPRESAS_INATIVAS / ENTIDADE+ENTIDADE_INATIVOS
+- Item 69 (severidade médio): instalar `On Error GoTo` ANTES de chamar `Util_IniciarBlocoRapido` em 5 callers
+
+Pode abrir readback 0111 se Mauricio aprovar — escopo independente da decisão V207.
+
+---
+
+## 🟢 Auditoria cruzada V207 1ª rodada — CONSOLIDADA
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 CONSOLIDADA |
+| Track | meta (ato cognitivo sem readback safe_track) |
+| Inputs | [`0001-codex-auditoria-v206-codigo.md`](../proposals/0001-codex-auditoria-v206-codigo.md) (~23KB), [`0002-codex-tres-propostas-v207-codigo.md`](../proposals/0002-codex-tres-propostas-v207-codigo.md) (~17KB), [`0003-antigravity-auditoria-v206-sistemica.md`](../proposals/0003-antigravity-auditoria-v206-sistemica.md) (~18KB), [`0004-antigravity-tres-propostas-v207-sistemica.md`](../proposals/0004-antigravity-tres-propostas-v207-sistemica.md) (~16KB) |
+| Commits originais | Codex `b33d904` + Antigravity `2d49259` (ambos commits locais sem push pelas IAs auxiliares; pushados nesta sessão Opus junto com artefatos handoff) |
+| Output | [`auditoria/00_status/111_ANALISE_AUDITORIA_CRUZADA_V207.md`](../../auditoria/00_status/111_ANALISE_AUDITORIA_CRUZADA_V207.md) |
+| Estrutura da análise | 8 convergências base sólida + 3 divergências reais + tabela 6→3 caminhos consolidados + recomendação Opus + decisão preliminar Mauricio |
+| Decisão preliminar Mauricio | Alternativa I (Caminho 1→2 puro) OU Alternativa II (Opção 4 híbrida) — só decide após 2ª rodada |
+
+### Quick wins não-implementação aprovados (sem precisar de decisão arquitetural)
+
+1. **Knowledge 0018 — Doc-Delta Pattern** (proposto por Antigravity §3.3): a criar em onda safe_track doc-only futura, idealmente antes de V207.0.
+2. **Util_MaxIdOperacional pair-aware** + **handler-before-flag** — compatíveis com escopo Onda 38.2.2 (V206 puro).
+
+---
+
+## 🟢 Onda 0110 ENTREGUE (fast_track doc-only) — Evolução manual do protocolo v1.2 → v1.3
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 ENTREGUE |
 | Track | fast_track (doc-only) |
-| Origem | Claude Opus (sessão Cowork de evolução manual, 2026-05-26 ~12:00 → 12:30) |
+| Origem | Claude Opus (sessão Cowork de evolução manual, 2026-05-26 ~12:00 → 12:30) + sessão sucessora (commit+push 12:50+) |
 | Readback | [`readbacks/0110-evolucao-protocolo-v13-knowledge-0017.json`](../readbacks/0110-evolucao-protocolo-v13-knowledge-0017.json) — **human_status: confirmed** |
 | Doc de auditoria (par.11 PROMPT_ARQUITETO) | [`109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md`](../../auditoria/00_status/109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md) |
-| Sequência de commit | Bloco copiável em §"Sequência de versionamento" do 109 acima |
+| ERP | [`results/0110-exec-evolucao-protocolo-v13.json`](../results/0110-exec-evolucao-protocolo-v13.json) — **outcome: executed** |
+| Commits | `91037f1` (primário, 6 arquivos +498/-24) + `f4d1884` (adjacente CSV V206 evidência aprovada) + `8c03e34` (fechamento ERP+relay) |
+| Push | ✅ origin atualizado |
 
-### Mudanças (4 alvos atômicos)
+### Mudanças entregues (4 alvos atômicos)
 
 1. **`/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md`** (fora do repo) — v1.2 → **v1.3**: §7.3 novo (auto-evolução do protocolo a cada handoff) + Passo 5 do §7 + passo F do §2 pré-flight + changelog.
 2. **`.hbn/knowledge/0017-handoff-aos-50-pct-contexto.md`** (NOVO) — formaliza a regra dos 50% com orçamento 50/30/20 e cláusula de exceção.
 3. **`auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md`** — Atenção e Quando-50% atualizadas para v1.3; exige 3 artefatos no próximo handoff.
 4. **`.hbn/knowledge/INDEX.md`** — linha 0017 + bump de data.
-
-### Próxima ação concreta
-
-Mauricio executa a sequência de commit em `auditoria/00_status/109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md` §"Sequência de versionamento" e abre nova janela Opus colando o prompt 108 atualizado. A próxima sessão Opus:
-
-1. Cria o ERP `0110-exec-evolucao-protocolo-v13.json` (registro pós-commit, ~1 min).
-2. Entrega os prompts 13.B (Codex) e 13.C (Antigravity/Gemini) do handoff 1118 para Mauricio abrir as 2 sessões paralelas.
-3. Em paralelo (opcional, ~30% contexto): deep-dive PHAGOCYTOSIS-VBA-PATTERNS M9, L22-L24, M15-M17 preparando Onda 38.2.2.
-4. **Aplica §7.3 ao próprio fim-de-sessão**: produz handoff + prompt 110 retomada + `.hbn/protocol-evolutions/AAAAMMDD-HHmm-onda<N>-proposals.md` (primeira aplicação prática do mecanismo novo).
-
----
-
-## 🔵 HBN HANDOFF READY — sessão Opus 2026-05-26 sucessora encerrada (CONSUMIDO pela onda 0110)
-
-| Campo | Valor |
-|---|---|
-| Sinal | 🔵 HBN HANDOFF READY |
-| Origem | Claude Opus 4.7 (sessão 2026-05-26 ~10:00 → 11:18, ~1h20) |
-| Destino | Claude Opus 4.7 (próxima sessão) |
-| Gatilho | regra_50pct_contexto + decisão Mauricio (auditoria cruzada antes de Onda 38.2.2) |
-| Handoff | [`.hbn/messages/20260526-1118-handoff-fim-sessao-opus.md`](../messages/20260526-1118-handoff-fim-sessao-opus.md) — 12 itens + item 13 com auditoria cruzada |
-| Prompt de retomada | [`auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md`](../../auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md) |
-| Anchor funcional V206 | commit `ee75b30` + build `ad5b487+ONDA38.2.1-AR1-FIX2-PERF` + RVS Trio `VR_20260526_102200` |
-
-### Primeira ação da próxima sessão
-
-Entregar os 2 prompts da auditoria cruzada (item 13.B + 13.C do handoff):
-- **Codex**: auditoria de código V206 + 3 propostas V207 (foco: código, performance, idempotência, testes)
-- **Antigravity/Gemini**: auditoria sistêmica V206 + 3 propostas V207 (foco: SaaS, documentação, auditoria, migração)
-
-Output esperado: 4 arquivos `.md` em `.hbn/proposals/0001-0004-*`.
-
-Opus consolida quando voltarem; hearback cycles com Mauricio para escolher 1 dos 6 caminhos.
-
-### Em paralelo (opcional)
-
-Deep-dive PHAGOCYTOSIS (M9, L22-L24, M15-M17) preparando Onda 38.2.2
-(filtros nativos + envelopamento .frm + fix F-NEW3). Não bloqueia
-auditoria cruzada — escopos independentes.
 
 ---
 
