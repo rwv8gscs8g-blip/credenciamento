@@ -17,11 +17,23 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
-- **Onda 38.2** — corrige filtros do `Menu_Principal.frm` com ponteiros
-  `WithEvents` explícitos para `TextBox16` a `TextBox22`, incluindo filtros
-  opcionais em `PreencherPreencheOS` e `PreencherAvaliarOS` para as listas de
-  Pré-OS e Avaliação. Não renomeia controles no VBE e não toca `.frx`.
-  Manifesto delta:
+- **Onda 38.2.1** — revert forward-only dos filtros do `Menu_Principal.frm`
+  após reprovação da Onda 38.2 no gate humano (erro VBA 424 ao digitar nos
+  campos, filtros inconsistentes, suspeita de corrupção de estado com
+  cadastro de empresa retornando ID 001). Restaura `Menu_Principal.frm` e
+  `Preencher.bas` byte-a-byte do anchor `a6ad842` (Onda 38.1.5 estável);
+  `App_Release.bas` carimbado com novo build label. ERP 0104 fechado como
+  `human_gate_failed`. Bastão transferido provisoriamente Codex → Claude
+  Opus 4.7 para esta fase de estabilização da V12.0.0206. Manifesto delta:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-REVERT-FILTROS-MENU.txt`.
+  Carimbo: `7bca168+ONDA38.2.1-revert-filtros-menu`.
+- **Onda 38.2** — REPROVADA NO GATE HUMANO em 2026-05-25. Tentou corrigir
+  filtros do `Menu_Principal.frm` com ponteiros `WithEvents` dinâmicos para
+  `TextBox16` a `TextBox22`. Falhou por double-handler competindo com os
+  `TextBoxNN_Change` nativos do `.frm`, gerando erro VBA 424 e mutação dupla
+  de variáveis globais (`cont`, `NItem`, `nLinhas`, `i`). Diagnóstico
+  convergente: Antigravity/Gemini + Opus + Codex aprovaram reverter. Manifesto
+  delta da tentativa (revertido pela Onda 38.2.1):
   `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-FILTROS-MENU.txt`.
   Carimbo: `a6ad842+ONDA38.2-filtros-menu`.
 - **Onda 38.1.5** — reaplica exclusivamente `Rel_Emp_Serv.frm` corrigido em

@@ -858,7 +858,7 @@ Exit Sub
 carregamento:
 End Sub
 
-Sub PreencherPreencheOS(Optional ByVal filtro As String = "")
+Sub PreencherPreencheOS()
     ' Refatorado: sem Select/ActiveCell, uso de Range.Find seguro e filtro claro de Pré-OS pendentes.
     Dim Linhalistbox As Integer
     Dim linha As Long
@@ -869,8 +869,6 @@ Sub PreencherPreencheOS(Optional ByVal filtro As String = "")
     Dim wsEmp As Worksheet
     Dim rngResult As Range
     Dim lst As Object
-    Dim filtroBusca As String
-    Dim textoBusca As String
 
     Set wsPreOS = ThisWorkbook.Sheets(SHEET_PREOS)
     Set wsEntidade = ThisWorkbook.Sheets(SHEET_ENTIDADE)
@@ -878,7 +876,6 @@ Sub PreencherPreencheOS(Optional ByVal filtro As String = "")
     Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     Set lst = ControleFormulario("Menu_Principal", "OS_Lista")
     If lst Is Nothing Then Exit Sub
-    filtroBusca = SafeListVal(filtro)
 
     Linhalistbox = 0
     nLinhas = wsPreOS.Range("A1048576").End(xlUp).row
@@ -943,24 +940,7 @@ Sub PreencherPreencheOS(Optional ByVal filtro As String = "")
                     SafeSetList lst, Linhalistbox, 9, wsEmp.Cells(linhaEmp, COL_EMP_ID).Value
                 End If
 
-                textoBusca = SafeListText(lst.List(Linhalistbox, 0)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 1)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 2)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 3)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 4)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 5)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 6)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 7)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 8)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 9)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 10)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 11)) & " " & _
-                             SafeListText(lst.List(Linhalistbox, 12))
-                If UtilFiltro_LinhaAtende(textoBusca, filtroBusca) Then
-                    Linhalistbox = Linhalistbox + 1
-                Else
-                    lst.RemoveItem Linhalistbox
-                End If
+                Linhalistbox = Linhalistbox + 1
             End If
         Next linha
     End With
@@ -1323,7 +1303,7 @@ If Not ws.Range("M23").HasFormula Then ws.Range("M23").Value = 0
 If Not ws.Range("M31").HasFormula Then ws.Range("M31").Value = 0
 
 End Sub
-Sub PreencherAvaliarOS(Optional ByVal filtro As String = "")
+Sub PreencherAvaliarOS()
     On Error GoTo erro_carregamento
 
     Dim wsOS     As Worksheet
@@ -1332,15 +1312,12 @@ Sub PreencherAvaliarOS(Optional ByVal filtro As String = "")
     Dim i        As Long
     Dim lb       As Long
     Dim lst      As Object
-    Dim filtroBusca As String
-    Dim textoBusca As String
 
     Set wsOS = ThisWorkbook.Sheets(SHEET_CAD_OS)
     Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
     Set lst = ControleFormulario("Menu_Principal", "AV_Lista")
     If lst Is Nothing Then Exit Sub
-    filtroBusca = SafeListVal(filtro)
 
     lb = 0
     lst.Clear
@@ -1397,21 +1374,7 @@ Sub PreencherAvaliarOS(Optional ByVal filtro As String = "")
             lst.List(lb, 6) = SafeListVal(wsOS.Cells(i, COL_OS_VL_TOTAL).Value)
             lst.List(lb, 9) = SafeListVal(wsOS.Cells(i, COL_OS_EMP_ID).Value)
 
-            textoBusca = SafeListText(lst.List(lb, 0)) & " " & _
-                         SafeListText(lst.List(lb, 1)) & " " & _
-                         SafeListText(lst.List(lb, 2)) & " " & _
-                         SafeListText(lst.List(lb, 3)) & " " & _
-                         SafeListText(lst.List(lb, 4)) & " " & _
-                         SafeListText(lst.List(lb, 5)) & " " & _
-                         SafeListText(lst.List(lb, 6)) & " " & _
-                         SafeListText(lst.List(lb, 7)) & " " & _
-                         SafeListText(lst.List(lb, 8)) & " " & _
-                         SafeListText(lst.List(lb, 9))
-            If UtilFiltro_LinhaAtende(textoBusca, filtroBusca) Then
-                lb = lb + 1
-            Else
-                lst.RemoveItem lb
-            End If
+            lb = lb + 1
         End If
     Next i
 

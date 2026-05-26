@@ -5,7 +5,7 @@
   "agent_id": "codex",
   "track": "safe_track",
   "version_target": "V12.0.0206",
-  "status": "delivered_for_human_gate",
+  "status": "human_gate_failed",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "summary": "Onda 38.2 corrige os filtros do Menu Principal com ponteiros WithEvents explicitos para TextBox16 a TextBox22 e filtros opcionais nas listas de Pre-OS e Avaliacao.",
@@ -86,9 +86,23 @@
     }
   ],
   "next_wave": {
-    "id": "onda39-util-pdf",
-    "status": "after_human_gate",
-    "summary": "Retomar motor central PDF apos confirmar filtros do Menu Principal e compile/RVS."
+    "id": "onda38-2-1-revert-filtros-menu",
+    "status": "active",
+    "summary": "Revert forward-only dos filtros do Menu Principal ao anchor 38.1.5. Onda 39 (Util_PDF) fica DEFERIDA ate gate humano da 38.2.1 passar."
   },
+  "human_gate_evidence": {
+    "data_reprovacao": "2026-05-25",
+    "import_delta": "OK (delta importou sem erro do Importador V3)",
+    "compile_vbe": "OK (compile limpo)",
+    "teste_funcional_filtros": "FALHA - filtros nao filtraram de forma consistente; erro VBA 424 'O objeto e obrigatorio' ao digitar nos campos de busca TextBox16 a TextBox22",
+    "regressao_colateral": "Suspeita de corrupcao de estado global - cadastro de empresa nova retornando ID 001 em vez de proximo sequencial; instabilidade em outras telas",
+    "rvs_trio_minimo": "NAO RODADO - gate funcional ja havia reprovado, nao faz sentido rodar RVS sobre interface quebrada",
+    "diagnostico_causa_raiz": "WithEvents dinamico declarado para TextBox16..22 (mTxtFiltroXxxxx) competiu com handlers TextBoxNN_Change nativos existentes no .frm; cada digitar disparou DOIS handlers que mutaram variaveis globais (cont, NItem, nLinhas, i) em ordem indeterminada, causando o 424",
+    "diagnostico_convergente": "Antigravity/Gemini + Claude Opus anterior + Codex convergiram para REVERTER IMEDIATAMENTE e refazer em micro-ondas com arquitetura sem WithEvents dinamico",
+    "decisao_mauricio": "REVERTER via Onda 38.2.1 (revert forward-only do anchor a6ad842) e refazer filtros na Onda 38.2.2 com handlers nativos estaticos + funcao filtro PURA stateless"
+  },
+  "closed_by": "claude-opus-4-7",
+  "closing_context": "Bastao transferido Codex -> Claude Opus 4.7 em 2026-05-26 para estabilizacao da V12.0.0206. Edicao deste ERP feita por Opus sob readback 0105 com decision_preconfirmed expressa de Mauricio em chat. Autoria original (agent_id: codex) preservada.",
+  "closed_at": "2026-05-26T15:00:00-03:00",
   "created_at": "2026-05-25T21:55:00-03:00"
 }

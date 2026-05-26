@@ -1,14 +1,58 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Codex (Onda 38.2 entregue para gate humano: filtros do Menu Principal com ponteiros WithEvents explicitos; Onda 39 Util_PDF e proxima etapa funcional apos import/compile/RVS da 38.2). Opus encerrou Onda 36.1 (knowledge 0014 protocolo fim-de-sessao) com auto-aplicacao em .hbn/messages/20260525-0100-handoff-fim-sessao-opus.md. Disponivel para nova ativacao manual do PROMPT_ARQUITETO em Trilha A item A3 (CI semanal) ou A4 (revisao bypasses).
-ciclo-ativo: V12.0.0206 em planejamento. V12.0.0205 permanece congelada como release oficial; V12.0.0206 deve absorver ajustes incrementais, testes manuais residuais, PDF automático robusto e pequenos débitos técnicos sem reabrir regras RN-01 a RN-17. Camada de protocolo executável adicionada pela Onda 36 antes de qualquer retomada.
-ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0; Quarteto VR_20260504_000004 APROVADO sintaxe IDENTICA ao MD-17.1.e V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0 MANUAL=5.
-proxima-acao: Mauricio importar ONDA38-2-FILTROS-MENU, compilar, testar filtros TextBox16 a TextBox22 e rodar CT_ValidarRelease_TrioMinimo; se passar, Codex fecha ERP human_gate_passed e abre Onda 39 Util_PDF.bas como microdelta separado.
-ultima-atualizacao: 2026-05-25T21:55:00-0300 (Onda 38.2 delivered_for_human_gate: filtros do Menu Principal prontos para import delta)
+proprietario-bastao: Claude Opus 4.7 (bastao transferido provisoriamente Codex -> Opus em 2026-05-26 apos reprovacao da Onda 38.2 no gate humano - filtros do Menu Principal falharam funcional com erro 424 e suspeita de corrupcao de estado ID 001 cadastro empresa). Opus assume como arquiteto+executor para estabilizacao da V12.0.0206 (revert filtros 38.2.1 + refazer filtros 38.2.2 + PDF Onda 39+ + freeze) ate tag V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. Readback 0105 PENDING aguarda hearback Mauricio.
+ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; passagem assistida tela-a-tela com Mauricio antes do freeze; deep-dive arquitetural fica para V207.
+ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0. CICLO V206 anchor funcional: commit git a6ad842 (Onda 38.1.5 confirmed_human_gate_passed), build 696a8c2+ONDA38.1.5-rel-emp-serv-protecao, workbook restaurado por Mauricio em 2026-05-25 20:38.
+proxima-acao: Mauricio dar hearback ao readback 0105 (confirmed ou correcoes). Apos confirmed, Opus executa: (1) restaura src/vba/Menu_Principal.frm, Preencher.bas e App_Release.bas a partir do anchor git a6ad842 (App_Release ajusta apenas build label); (2) sync vba_import via publicar_vba_import_v2.sh; (3) cria manifesto delta ONDA38-2-1-REVERT-FILTROS-MENU; (4) fecha ERP 0104 como human_gate_failed; (5) cria ERP 0105; (6) doc tecnico 38_2_1_TECNICO.md; (7) entrega para gate humano - Mauricio importa delta, compila, testa cadastro empresa para confirmar ID sequencial correto, roda CT_ValidarRelease_TrioMinimo. Apos passar 38.2.1: deep-dive PHAGOCYTOSIS + design 38.2.2 filtros nativos.
+ultima-atualizacao: 2026-05-26T14:30:00-0300 (Onda 38.2 REPROVADA no gate humano; bastao transferido para Opus; housekeeping working tree feito em commit 7e98926; readback 0105 PENDING aguarda hearback)
 ---
 
-## Onda 38.2 ENTREGUE PARA GATE HUMANO — Filtros Menu Principal (Codex)
+## Onda 38.2.1 ABERTA — Revert filtros Menu Principal (Opus) — readback PENDING
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track |
+| Readback | [readbacks/0105-onda38-2-1-revert-filtros-menu.json](../readbacks/0105-onda38-2-1-revert-filtros-menu.json) — **human_status: pending** (aguarda hearback Mauricio) |
+| Hearback | PENDENTE — Opus apresentou plano de revert forward-only em 2026-05-26; aguarda confirmed |
+| ERP | a criar pos-execucao: `.hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json` |
+| Doc tecnico | a criar pos-aprovacao: `auditoria/03_ondas/onda_38_2_1_revert_filtros_menu/38_2_1_TECNICO.md` |
+| Manifesto delta | a criar pos-aprovacao: `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-REVERT-FILTROS-MENU.txt` |
+| Build label | `7bca168+ONDA38.2.1-revert-filtros-menu` |
+| Predecessor | [0104-onda38-2-filtros-menu-principal.json](../readbacks/0104-onda38-2-filtros-menu-principal.json) |
+| Housekeeping pre-onda | commit `7e98926` (chore housekeeping pre-Onda 38.2.1) - remove V12-204-Micro48/, descarta AAX dirty, limpa CSVs untracked, remove 0103 orfao e doc orfao raiz - aprovado Mauricio 2026-05-26 |
+
+### Resumo da onda 38.2.1
+
+**Causa**: a Onda 38.2 (commit 7bca168) introduziu WithEvents dinamico
+para os filtros TextBox16..22 do Menu_Principal competindo com handlers
+nativos `TextBoxNN_Change`. Resultado: erro 424 ao digitar, filtros
+inconsistentes, suspeita de corrupcao de estado global (cadastro de
+empresa retornando ID 001). Gate funcional reprovado por Mauricio; RVS
+nao rodou por falha funcional anterior. Diagnostico Antigravity/Gemini
++ Opus anterior + Codex convergiram para REVERTER IMEDIATAMENTE.
+
+**Acao**: revert forward-only (sem `git revert`). Restaurar
+`src/vba/Menu_Principal.frm` e `src/vba/Preencher.bas` byte-a-byte do
+anchor git `a6ad842` (Onda 38.1.5 estavel). Atualizar `App_Release.bas`
+trocando apenas as strings `APP_BUILD_IMPORTADO` e `APP_BUILD_GERADO_EM`.
+Sincronizar `local-ai/vba_import/` via `publicar_vba_import_v2.sh`.
+
+**Fora de escopo** (deferido): implementar filtros novos (38.2.2),
+investigar ID 001 (condicional ao gate humano da 38.2.1), Onda 39+ PDF.
+
+**Arquitetura aprovada para 38.2.2** (apos 38.2.1 passar gate):
+handlers nativos `TextBoxNN_Change` estaticos + funcao filtro PURA
+stateless; ZERO WithEvents dinamico; ZERO Controls.Add; ZERO heuristica;
+Clear+AddItem construtivo (nunca RemoveItem); variaveis locais; possivel
+reuso de `Util_Filtro_Lista.bas`.
+
+**Bastao**: Codex -> Claude Opus 4.7 (provisorio ate freeze V12.0.0206).
+Codex volta como auditor adversarial pos-implementacao.
+
+---
+
+## Onda 38.2 REPROVADA NO GATE HUMANO — Filtros Menu Principal (Codex)
 
 | Campo | Valor |
 |---|---|

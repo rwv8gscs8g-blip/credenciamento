@@ -1,0 +1,100 @@
+{
+  "result_id": "0105-exec-onda38-2-1-revert-filtros-menu",
+  "readback_id": "0105-onda38-2-1-revert-filtros-menu",
+  "data": "2026-05-26",
+  "agent_id": "claude-opus-4-7",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "delivered_for_human_gate",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "summary": "Onda 38.2.1 reverte forward-only os filtros do Menu_Principal ao anchor a6ad842 (Onda 38.1.5 estavel). Menu_Principal.frm e Preencher.bas restaurados byte-a-byte; App_Release.bas restaurado com apenas APP_BUILD_IMPORTADO e APP_BUILD_GERADO_EM atualizados. Encerra ERP 0104 como human_gate_failed apos transferencia de bastao Codex -> Claude Opus 4.7.",
+  "files_changed": [
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Preencher.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-REVERT-FILTROS-MENU.txt",
+    "auditoria/03_ondas/onda_38_2_1_revert_filtros_menu/38_2_1_TECNICO.md",
+    ".hbn/readbacks/0105-onda38-2-1-revert-filtros-menu.json",
+    ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json",
+    ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json",
+    ".hbn/relay/INDEX.md",
+    ".hbn/knowledge/0015-readback-opening-bootstrap.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-2-1-REVERT-FILTROS-MENU",
+    "build_label": "7bca168+ONDA38.2.1-revert-filtros-menu",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-2-1-REVERT-FILTROS-MENU\", \"7bca168+ONDA38.2.1-revert-filtros-menu\"",
+    "expected_import_result": "M=2 | F=1 | err=0 | skip=0"
+  },
+  "local_validation": [
+    {
+      "gate": "shasum src/vba/Menu_Principal.frm vs git a6ad842",
+      "status": "pass",
+      "evidence": "shasum 818bdbdde17ccfd8de7144d714953bfdfa4e2855 em ambos - byte-identico"
+    },
+    {
+      "gate": "shasum src/vba/Preencher.bas vs git a6ad842",
+      "status": "pass",
+      "evidence": "shasum 1073edb02d4982f295a3b848adc51de98f77f636 em ambos - byte-identico"
+    },
+    {
+      "gate": "diff src/vba/App_Release.bas vs git a6ad842 restrito as 2 linhas esperadas",
+      "status": "pass",
+      "evidence": "diff retorna apenas 2 mudancas: linha 254 (APP_BUILD_IMPORTADO 696a8c2+ONDA38.1.5... -> 7bca168+ONDA38.2.1...) e linha 256 (APP_BUILD_GERADO_EM 2026-05-25 20:17 -> 2026-05-26 15:00). Demais conteudo byte-identico"
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --apply (sync src/vba -> vba_import)",
+      "status": "pass",
+      "evidence": "Aplicado: 64 arquivos espelhados; AAM-Menu_Principal.frm com frx_sync e code_only_gen; G7 OK; G8 OK"
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --check",
+      "status": "pass",
+      "evidence": "vba_import 100% sincronizado com src/vba; G7 OK; G8 OK"
+    },
+    {
+      "gate": "Manifesto delta criado com 3 arquivos no padrao M=2|F=1",
+      "status": "pass",
+      "evidence": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-REVERT-FILTROS-MENU.txt: F|AAM-Menu_Principal.frm + M|AAU-Preencher.bas + M|AAX-App_Release.bas"
+    },
+    {
+      "gate": "ERP 0104 fechado como human_gate_failed",
+      "status": "pass",
+      "evidence": ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json status: human_gate_failed; human_gate_evidence + closed_by + closing_context + closed_at adicionados; autoria original agent_id: codex preservada"
+    }
+  ],
+  "human_gates_pending": [
+    {
+      "gate": "ImportarPacoteV3_Delta ONDA38-2-1-REVERT-FILTROS-MENU",
+      "expected": "M=2 | F=1 | err=0 | skip=0"
+    },
+    {
+      "gate": "Depurar > Compilar VBAProject",
+      "expected": "compile limpo (sem erros, sem warnings novos)"
+    },
+    {
+      "gate": "Abrir Menu_Principal e telas-filhas, digitar nos campos TextBox16..22",
+      "expected": "ausencia de erro VBA 424; filtros INATIVOS como na 38.1.5 (campos aceitam texto mas listas nao reagem)"
+    },
+    {
+      "gate": "Cadastrar empresa nova (gate critico: ID sequencial)",
+      "expected": "ID sequencial proximo correto (NAO 001); se ID 001 persistir, abrir Onda 38.2.1-AR1 antes de qualquer outra coisa"
+    },
+    {
+      "gate": "CT_ValidarRelease_TrioMinimo",
+      "expected": "APROVADO V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0"
+    }
+  ],
+  "next_wave": {
+    "id": "onda38-2-2-filtros-handlers-nativos",
+    "status": "deferred_until_human_gate_passes",
+    "summary": "Implementar filtros do Menu_Principal pela forma correta: handlers TextBox16..22_Change estaticos + funcao filtro PURA stateless; ZERO WithEvents dinamico; ZERO Controls.Add; ZERO heuristica. Precedido por deep-dive PHAGOCYTOSIS-VBA-PATTERNS (M9 + L22-L24 + M15-M17 leitura completa)."
+  },
+  "created_at": "2026-05-26T15:00:00-03:00"
+}

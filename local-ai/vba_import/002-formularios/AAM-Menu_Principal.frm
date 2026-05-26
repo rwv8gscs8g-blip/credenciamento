@@ -12,20 +12,6 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = True
 Attribute VB_Exposed = False
-Private WithEvents mTxtFiltroEntidade As MSForms.TextBox
-Attribute mTxtFiltroEntidade.VB_VarHelpID = -1
-Private WithEvents mTxtFiltroEmpresa As MSForms.TextBox
-Attribute mTxtFiltroEmpresa.VB_VarHelpID = -1
-Private WithEvents mTxtFiltroServico As MSForms.TextBox
-Attribute mTxtFiltroServico.VB_VarHelpID = -1
-Private WithEvents mTxtFiltroRodizio As MSForms.TextBox
-Attribute mTxtFiltroRodizio.VB_VarHelpID = -1
-Private WithEvents mTxtFiltroCadServ As MSForms.TextBox
-Attribute mTxtFiltroCadServ.VB_VarHelpID = -1
-Private WithEvents mTxtFiltroPreOS As MSForms.TextBox
-Attribute mTxtFiltroPreOS.VB_VarHelpID = -1
-Private WithEvents mTxtFiltroAvaliacao As MSForms.TextBox
-Attribute mTxtFiltroAvaliacao.VB_VarHelpID = -1
 Private mInicializando As Boolean
 Private mAvaliacaoDefaultsOSID As String
 Private mAvaliacaoDefaultsEmpenho As String
@@ -269,7 +255,7 @@ Private Sub B_Emite_OS_Click()
         B_Relatorios.BackStyle = fmBackStyleTransparent
 
         PAGINAS.Value = 4
-        Call UI_RecarregarPreOSFiltroAtual
+        Call PreencherPreencheOS
 
 End Sub
 
@@ -500,8 +486,8 @@ Private Sub BE_ImprimeOS_Click()
         Call ImprimirOS
     End If
     Call LimparOS
-    Call UI_RecarregarPreOSFiltroAtual
-    Call UI_RecarregarAvaliacaoFiltroAtual
+    Call PreencherPreencheOS
+    Call PreencherAvaliarOS
 
 limpar:
     OS_QT_Estimada = Empty
@@ -978,7 +964,7 @@ limpar:
     AV_Nota6 = Empty: AV_Nota7 = Empty: AV_Nota8 = Empty
     AV_Nota9 = Empty: AV_Nota10 = Empty: AV_OBS = Empty
     AV_Total = Empty
-    Call UI_RecarregarAvaliacaoFiltroAtual
+    Call PreencherAvaliarOS
     Exit Sub
 erro_carregamento:
     MsgBox "Erro inesperado em EncerraOS_Click: " & Err.Description, vbCritical, "Erro"
@@ -1993,7 +1979,7 @@ Private Sub RefreshPosPreOS()
     Call PreenchimentoEscolhaAtividade
     If Err.Number <> 0 Then Err.Clear
     Call Rodizio_RecarregarAtribuicao(True, True)
-    Call UI_RecarregarPreOSFiltroAtual
+    Call PreencherPreencheOS
     If Err.Number <> 0 Then Err.Clear
     On Error GoTo 0
 End Sub
@@ -2068,7 +2054,7 @@ Private Sub RejeitarPreOSSelecionada()
     End If
 
     MsgBox "Pre-OS " & preosId & " rejeitada e fila avançada com punição.", vbInformation, "Rejeitar Pre-OS"
-    Call UI_RecarregarPreOSFiltroAtual
+    Call PreencherPreencheOS
     Call RefreshPosPreOS
     ErrorBoundary.CommitWrite
     Exit Sub
@@ -2132,7 +2118,7 @@ Private Sub ExpirarPreOSSelecionada()
     End If
 
     MsgBox "Pre-OS " & preosId & " expirada e fila avançada com punição.", vbInformation, "Expirar Pre-OS"
-    Call UI_RecarregarPreOSFiltroAtual
+    Call PreencherPreencheOS
     Call RefreshPosPreOS
     ErrorBoundary.CommitWrite
     Exit Sub
@@ -2182,7 +2168,7 @@ Private Sub CancelarOSSelecionada()
     End If
 
     MsgBox "OS " & osId & " cancelada com sucesso.", vbInformation, "Cancelar OS"
-    Call UI_RecarregarAvaliacaoFiltroAtual
+    Call PreencherAvaliarOS
     Call RefreshPosPreOS
     ErrorBoundary.CommitWrite
     Exit Sub
@@ -3349,8 +3335,8 @@ Private Sub UserForm_Initialize()
     Call PreenchimentoEntidade
     Call PreenchimentoEmpresa
     Call PreenchimentoEntidadeRodizio
-    Call UI_RecarregarPreOSFiltroAtual
-    Call UI_RecarregarAvaliacaoFiltroAtual
+    Call PreencherPreencheOS
+    Call PreencherAvaliarOS
     Call PreencherManutencaoValor
     Call PreenchimentoListaAtividade
     Call Tela_Inicial
@@ -3390,19 +3376,6 @@ usarText:
     UI_TextoFiltro = Trim$(tb.Text)
     On Error GoTo 0
 End Function
-
-Private Function UI_TextoFiltroSeguro(ByVal tb As MSForms.TextBox) As String
-    If tb Is Nothing Then Exit Function
-    UI_TextoFiltroSeguro = UI_TextoFiltro(tb)
-End Function
-
-Private Sub UI_RecarregarPreOSFiltroAtual()
-    Call PreencherPreencheOS(UI_TextoFiltroSeguro(mTxtFiltroPreOS))
-End Sub
-
-Private Sub UI_RecarregarAvaliacaoFiltroAtual()
-    Call PreencherAvaliarOS(UI_TextoFiltroSeguro(mTxtFiltroAvaliacao))
-End Sub
 
 Private Sub Rodizio_LimparSelecaoEntidade()
     On Error Resume Next
@@ -3760,16 +3733,8 @@ Private Sub Filtros_CriarDinamico()
     If mTxtFiltroRodizio Is Nothing Then Set mTxtFiltroRodizio = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_EntidadeRodizio")
     If mTxtFiltroRodizio Is Nothing Then Set mTxtFiltroRodizio = UI_TextBoxSeExisteRecursivo(Me, "TextBox22")
 
-    ' Filtros das paginas de Pre-OS e Avaliacao: nomes reais confirmados por print/VBE.
-    Set mTxtFiltroPreOS = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_PreOS")
-    If mTxtFiltroPreOS Is Nothing Then Set mTxtFiltroPreOS = UI_TextBoxSeExisteRecursivo(Me, "TextBox19")
-
-    Set mTxtFiltroAvaliacao = UI_TextBoxSeExisteRecursivo(Me, "TxtFiltro_Avaliacao")
-    If mTxtFiltroAvaliacao Is Nothing Then Set mTxtFiltroAvaliacao = UI_TextBoxSeExisteRecursivo(Me, "TextBox20")
-
     ' Busca na lista de manutencao de servicos (H_Lista)
     Set mTxtFiltroCadServ = UI_TextBoxSeExisteRecursivo(H_Lista.Parent, "TxtFiltro_CadServ")
-    If mTxtFiltroCadServ Is Nothing Then Set mTxtFiltroCadServ = UI_TextBoxSeExisteRecursivo(Me, "TextBox21")
     If mTxtFiltroCadServ Is Nothing Then Set mTxtFiltroCadServ = UI_PegarTextBoxBuscaDaLista(H_Lista)
     If mTxtFiltroCadServ Is Nothing Then Set mTxtFiltroCadServ = UI_TextBoxSeExisteRecursivo(H_Lista.Parent, "TxtFiltroCadServDin")
     If mTxtFiltroCadServ Is Nothing Then
@@ -3802,7 +3767,6 @@ End Sub
 
 Private Sub mTxtFiltroEmpresa_Change()
     If mInicializando Then Exit Sub
-    If mTxtFiltroEmpresa Is Nothing Then Exit Sub
     Call PreenchimentoEmpresa(mTxtFiltroEmpresa.Text)
 End Sub
 
@@ -3827,24 +3791,10 @@ Private Sub mTxtFiltroRodizio_Change()
 End Sub
 Private Sub mTxtFiltroCadServ_Change()
     If mInicializando Then Exit Sub
-    If mTxtFiltroCadServ Is Nothing Then Exit Sub
     Call PreencherManutencaoValor(mTxtFiltroCadServ.Text)
 End Sub
 
-Private Sub mTxtFiltroPreOS_Change()
-    If mInicializando Then Exit Sub
-    If mTxtFiltroPreOS Is Nothing Then Exit Sub
-    Call UI_RecarregarPreOSFiltroAtual
-End Sub
-
-Private Sub mTxtFiltroAvaliacao_Change()
-    If mInicializando Then Exit Sub
-    If mTxtFiltroAvaliacao Is Nothing Then Exit Sub
-    Call UI_RecarregarAvaliacaoFiltroAtual
-End Sub
-
 Private Sub TextBox17_Change()
-    If Not mTxtFiltroEmpresa Is Nothing Then Exit Sub
     On Error Resume Next
     Call PreenchimentoEmpresa(TextBox17.Text)
     On Error GoTo 0

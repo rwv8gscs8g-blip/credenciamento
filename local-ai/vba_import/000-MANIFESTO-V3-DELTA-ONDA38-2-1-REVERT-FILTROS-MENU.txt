@@ -1,0 +1,66 @@
+# Manifesto V3 DELTA ONDA38-2-1-REVERT-FILTROS-MENU - V12.0.0206
+# Tema: Revert forward-only dos filtros do Menu Principal apos reprovacao
+# da Onda 38.2 no gate humano.
+#
+# Contexto:
+#   - A Onda 38.2 (commit 7bca168) introduziu WithEvents dinamico para
+#     os filtros TextBox16 a TextBox22 do Menu_Principal, competindo com
+#     handlers nativos TextBoxNN_Change ja existentes.
+#   - Resultado funcional: erro VBA 424 ao digitar nos campos de busca,
+#     filtros inconsistentes, suspeita de corrupcao de estado global com
+#     cadastro de empresa retornando ID 001, instabilidade em outras telas.
+#   - Diagnostico convergente (Antigravity/Gemini + Opus anterior + Codex):
+#     REVERTER IMEDIATAMENTE. Causa raiz: double-handler em TextBoxNN_Change
+#     gerando mutacao dupla de variaveis globais (cont, NItem, nLinhas, i).
+#   - Bastao transferido provisoriamente Codex -> Claude Opus 4.7 em
+#     2026-05-26 para esta fase de estabilizacao da V12.0.0206.
+#   - Onda 38.2 ERP 0104 sera fechada como human_gate_failed por esta onda.
+#   - Importacao permitida exclusivamente via ImportarPacoteV3_Delta.
+#
+# Mudancas (revert byte-a-byte do anchor git a6ad842, Onda 38.1.5 estavel):
+#   AAM-Menu_Principal.frm:
+#     - Remove declaracoes Private WithEvents mTxtFiltroXxxxx As MSForms.TextBox
+#       (Entidade, Empresa, Servico, Rodizio, CadServ, PreOS, Avaliacao).
+#     - Remove UserForm_Initialize que fazia Set mTxtFiltroXxxxx via
+#       Me.Controls("TextBoxNN").
+#     - Remove os 7 handlers mTxtFiltroXxxxx_Change.
+#     - Volta ao estado funcional 38.1.5: filtros INATIVOS no Menu_Principal
+#       (mesma situacao da release V12.0.0205 oficial).
+#     - Trailing whitespace preservado byte-a-byte do anchor a6ad842.
+#     - Nenhum .frx tocado; nenhum controle renomeado no designer.
+#   AAU-Preencher.bas:
+#     - Remove argumento opcional de filtro adicionado em PreencherPreencheOS
+#       e PreencherAvaliarOS pela Onda 38.2.
+#     - Volta a assinatura original 38.1.5.
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = "7bca168+ONDA38.2.1-revert-filtros-menu"
+#     - APP_BUILD_GERADO_EM = "2026-05-26 15:00"
+#     - Demais campos identicos ao anchor a6ad842.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38-2-1-REVERT-FILTROS-MENU", "7bca168+ONDA38.2.1-revert-filtros-menu"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=1 | err=0 | skip=0.
+#   - Compile manual passa limpo.
+#   - Telas com TextBox16..22 voltam a NAO emitir erro 424 ao digitar
+#     (filtros sao inativos, como na 38.1.5).
+#   - GATE FUNCIONAL EXPLICITO: cadastrar empresa nova e confirmar ID
+#     sequencial correto (NAO 001). Se ID 001 persistir, parar e abrir
+#     Onda 38.2.1-AR1 para investigar Repo_Empresa.ProximoId/AR1.
+#   - CT_ValidarRelease_TrioMinimo permanece APROVADO:
+#     V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+#
+# Proxima onda (38.2.2, somente apos 38.2.1 passar gate humano):
+#   Implementar filtros do Menu_Principal pela forma correta:
+#     - Handlers nativos TextBox16..22_Change estaticos no .frm.
+#     - Funcao filtro PURA stateless por filtro.
+#     - ZERO WithEvents dinamico; ZERO Controls.Add; ZERO heuristica.
+#     - Clear+AddItem construtivo (nunca RemoveItem).
+#     - Variaveis locais (cont, NItem, nLinhas, i nunca globais em filtro).
+#     - Possivel reuso de Util_Filtro_Lista.bas.
+#
+# GRUPO_DELTA_ONDA38_2_1_REVERT_FILTROS_MENU
+F|002-formularios/AAM-Menu_Principal.frm
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/AAX-App_Release.bas

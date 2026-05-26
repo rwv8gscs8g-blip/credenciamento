@@ -1,0 +1,212 @@
+{
+  "readback_id": "0105-onda38-2-1-revert-filtros-menu",
+  "data": "2026-05-26",
+  "agent_id": "claude-opus-4-7",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0104-onda38-2-filtros-menu-principal",
+  "intent": {
+    "objective": "Restaurar Menu_Principal.frm, Preencher.bas e App_Release.bas ao estado funcional da Onda 38.1.5 (anchor git a6ad842), reverter forward-only as mudancas introduzidas pelo commit 7bca168 (Onda 38.2) que reprovou no gate humano, e formalizar o fechamento do ERP 0104 como human_gate_failed. Bastao transferido temporariamente Codex -> Claude Opus para esta fase de estabilizacao da V12.0.0206.",
+    "non_goals": [
+      "implementar filtros novos do Menu Principal (fica para Onda 38.2.2 com arquitetura aprovada pelo Mauricio: handlers nativos TextBoxNN_Change estaticos + funcao filtro pura stateless)",
+      "investigar regressao de ID 001 no cadastro de empresa (deferido condicional ao gate humano da 38.2.1 confirmar que o revert ja resolveu)",
+      "tocar qualquer .frx",
+      "renomear controles no designer do VBE",
+      "tocar Svc_Rodizio.bas, Svc_Avaliacao.bas, Svc_OS.bas, Svc_PreOS.bas, Mod_Types.bas, Importador_V3.bas",
+      "tocar regras de negocio RN-01 a RN-17",
+      "alterar contadores RVS",
+      "usar ImportarPacoteV3 completo (somente _Delta)",
+      "tocar local-ai/incoming/** (evidencia read-only)",
+      "avancar para Onda 39/PDF antes do gate humano da 38.2.1 passar"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-REVERT-FILTROS-MENU.txt",
+      ".hbn/readbacks/0105-onda38-2-1-revert-filtros-menu.json",
+      ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json",
+      ".hbn/results/0104-exec-onda38-2-filtros-menu-principal.json",
+      ".hbn/relay/INDEX.md",
+      ".hbn/knowledge/0015-readback-opening-bootstrap.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_2_1_revert_filtros_menu/**"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/*.frx",
+      "local-ai/incoming/**",
+      "backups/vba/**",
+      "V12-*/**",
+      "obsidian-vault/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio aprovou em chat 2026-05-26 a transferencia provisoria de bastao Codex -> Claude Opus para a fase de estabilizacao da V12.0.0206 (filtros + PDF) ate o freeze.",
+    "Mauricio aprovou em chat 2026-05-26 o uso do anchor git a6ad842 como fonte de verdade para o revert (em vez do export read-only em local-ai/incoming/export_workbook_38_1_5_estavel_20260525/), com base na evidencia de que o export tem ruido de trailing whitespace em Menu_Principal.frm e App_Release.bas enquanto o anchor git e limpo e identico ao trailer atual.",
+    "Mauricio aprovou em chat 2026-05-26 o build label '7bca168+ONDA38.2.1-revert-filtros-menu', consistente com o padrao da 38.2 (prefixo = HEAD antes da onda).",
+    "Mauricio aprovou em chat 2026-05-26 a sequencia em duas etapas (readback PENDING -> hearback confirmed -> execucao), sem burlar o protocolo HBN.",
+    "Mauricio aprovou em chat 2026-05-26 a edicao do ERP 0104 (autoria Codex) para flipar status de delivered_for_human_gate para human_gate_failed, dada a transferencia formal de bastao.",
+    "Mauricio aprovou em chat 2026-05-26 o cleanup categorico do working tree (a+b+c+d) executado no commit 7e98926 (chore: housekeeping pre-Onda 38.2.1) antes da abertura formal desta onda.",
+    "Mauricio aprovou em chat 2026-05-26 o gate explicito de teste de cadastro de empresa nova como parte do gate humano desta onda: se o ID 001 voltar normal apos o revert, a investigacao de AR1/Repo_Empresa fica deferida; se persistir, abre Onda 38.2.1-AR1 antes da 38.2.2.",
+    "Mauricio aprovou em chat 2026-05-26 a arquitetura proposta para a Onda 38.2.2 (filtros novos): handlers nativos TextBox16..22_Change estaticos no .frm + funcao filtro PURA stateless; ZERO WithEvents dinamico; ZERO Controls.Add; ZERO heuristica de posicao; Clear+AddItem construtivo (nunca RemoveItem); variaveis locais (cont/NItem/nLinhas/i nunca globais em filtro); possivel reuso de Util_Filtro_Lista.bas.",
+    "READ-FIRST PHAGOCYTOSIS UI/Forms light concluido (M9, L22, L23, L24, M15, M16, M17) - sintese: revert puro deve preservar trailing exato do anchor a6ad842, espelhar .frm e .code-only.txt via publicar_vba_import_v2.sh, comparar com normalizacao tolerante (RTrim + skip empty).",
+    "Mauricio confirmou hearback em chat 2026-05-26 e pediu explicitamente que a sugestao de bootstrap-de-readback (caminho seguro para commitar abertura de onda safe_track sem burlar assert-scope-lock) fosse documentada como licao aprendida em .hbn/knowledge/0015-readback-opening-bootstrap.md para incorporacao no protocolo HBN. Knowledge file adicionada ao scope desta onda."
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-2-1-REVERT-FILTROS-MENU",
+    "build_label": "7bca168+ONDA38.2.1-revert-filtros-menu",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-REVERT-FILTROS-MENU.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-2-1-REVERT-FILTROS-MENU\", \"7bca168+ONDA38.2.1-revert-filtros-menu\"",
+    "expected_import_result": "M=2 | F=1 | err=0 | skip=0"
+  },
+  "invariants_preserved": [
+    "RN-01 a RN-17 permanecem inalteradas",
+    "Contadores RVS permanecem V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Servicos blindados (Svc_Rodizio, Svc_Avaliacao, Svc_OS, Svc_PreOS) nao serao tocados",
+    "Mod_Types.bas e Importador_V3.bas nao serao tocados",
+    "Nenhum .frx sera tocado",
+    "Importacao operacional somente via ImportarPacoteV3_Delta",
+    "Fonte operacional de importacao continua sendo local-ai/vba_import/ (espelho)",
+    "Conteudo de src/vba/Menu_Principal.frm e src/vba/Preencher.bas voltara byte-a-byte ao anchor a6ad842 (trailing whitespace inclusive)",
+    "App_Release.bas mantem mesma estrutura do anchor a6ad842, alterando apenas a string APP_BUILD_IMPORTADO para 7bca168+ONDA38.2.1-revert-filtros-menu e APP_BUILD_GERADO_EM com timestamp de execucao"
+  ],
+  "risks": [
+    {
+      "risk": "Restauracao byte-a-byte do anchor a6ad842 nao reproduz exatamente o estado funcional 38.1.5 no workbook (ex.: drift entre src/vba versionado e workbook real).",
+      "mitigation": "shasum dos 3 arquivos restaurados vs anchor a6ad842 deve bater 100%; comparacao cruzada (informativa) com export read-only em local-ai/incoming/export_workbook_38_1_5_estavel_20260525/ usando normalizacao tolerante L24 (RTrim + skip empty) - export tem ruido cosmetico de trailing mas conteudo logico deve coincidir.",
+      "severity": "low"
+    },
+    {
+      "risk": "Erro 424 / corrupcao de ID 001 nao desaparece apos revert (causa raiz nao era apenas o WithEvents dinamico da 38.2).",
+      "mitigation": "Gate humano da 38.2.1 inclui teste explicito de cadastro de empresa nova; se ID 001 persistir, parar e abrir Onda 38.2.1-AR1 antes de qualquer outra coisa.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Sync entre src/vba e local-ai/vba_import quebrar apos restauracao manual.",
+      "mitigation": "Rodar local-ai/scripts/publicar_vba_import_v2.sh --apply e depois --check antes do commit; bloqueio HBN guard se shasum divergir.",
+      "severity": "low"
+    },
+    {
+      "risk": "App_Release.bas com novo build label nao bate shasum exato com anchor (esperado e desejado: APP_BUILD_IMPORTADO muda).",
+      "mitigation": "Validar apenas que diff vs anchor a6ad842 e SOMENTE nas 2 strings APP_BUILD_IMPORTADO e APP_BUILD_GERADO_EM; resto byte-identico.",
+      "severity": "low"
+    },
+    {
+      "risk": "ERP 0104 (autoria Codex) ser editado por Opus quebrar rastreio de autoria HBN.",
+      "mitigation": "Adicionar campo 'closed_by' = 'claude-opus-4-7' e 'closing_context' = 'bastao_transferido_codex_para_opus_2026-05-26' no ERP 0104; preservar todos os campos originais inclusive 'agent_id': 'codex'.",
+      "severity": "low"
+    },
+    {
+      "risk": "pre-commit hbn-guards-runner reprovar commit por scope-lock se human_status do 0105 ainda for pending no momento do commit pos-execucao.",
+      "mitigation": "Apos hearback confirmed do Mauricio, atualizar human_status do 0105 para confirmed (mesmo padrao do 0104) antes do commit de execucao."
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff limitado ao scope 0105 (assert-scope-lock.sh)",
+        "evidence_kind": "git_diff",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      },
+      {
+        "gate": "shasum src/vba/Menu_Principal.frm == shasum git a6ad842:src/vba/Menu_Principal.frm (byte-identico)",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      },
+      {
+        "gate": "shasum src/vba/Preencher.bas == shasum git a6ad842:src/vba/Preencher.bas (byte-identico)",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      },
+      {
+        "gate": "diff src/vba/App_Release.bas vs a6ad842 restrito a APP_BUILD_IMPORTADO + APP_BUILD_GERADO_EM (2 linhas)",
+        "evidence_kind": "git_diff",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      },
+      {
+        "gate": "local-ai/scripts/publicar_vba_import_v2.sh --apply (sync src/vba -> vba_import)",
+        "evidence_kind": "command_output",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      },
+      {
+        "gate": "local-ai/scripts/publicar_vba_import_v2.sh --check (espelho 100% in_sync)",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      },
+      {
+        "gate": "scripts/hbn-guards/hbn-guards-runner.sh com stage 0105 passa 5/5 verdes",
+        "evidence_kind": "command_output",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-2-1-REVERT-FILTROS-MENU retorna M=2 | F=1 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo no VBE",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      },
+      {
+        "gate": "Abrir Menu Principal e telas-filhas, confirmar ausencia do erro 424 ao digitar nos campos TextBox16..22 (filtros voltam a estar inativos como na 38.1.5)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      },
+      {
+        "gate": "Cadastrar empresa nova e confirmar ID sequencial correto (NAO 001) - gate explicito para validar que a corrupcao da 38.2 foi removida",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo retorna APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se shasum dos 3 arquivos vs anchor a6ad842 nao bater (alem da exception controlada do App_Release.bas), abortar antes do commit e refazer restauracao via git show a6ad842:<path>.",
+      "Se publicar_vba_import_v2.sh --check falhar, abortar antes do commit; refazer --apply ate sync completo.",
+      "Se ImportarPacoteV3_Delta falhar, Mauricio nao salva o workbook e cola a mensagem do Importador V3 em chat.",
+      "Se Depurar > Compilar falhar, Mauricio nao salva o workbook e restaura pelo backup indicado pelo Importador V3.",
+      "Se cadastro de empresa nova retornar ID 001 apos o revert, parar imediatamente, abrir Onda 38.2.1-AR1 e investigar AR1/Repo_Empresa.ProximoId antes de qualquer outra acao.",
+      "Se CT_ValidarRelease_TrioMinimo mudar contadores ou falhar, nao prosseguir; abrir investigacao de regressao em onda separada antes da 38.2.2."
+    ],
+    "anchor_to_restore": "Anchor git a6ad842 (commit 'docs(hbn): fecha gate humano onda 38.1.5'), workbook validado apos Onda 38.1.5 com build 696a8c2+ONDA38.1.5-rel-emp-serv-protecao"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "pending",
+      "at": "2026-05-26T14:30:00-03:00",
+      "by": "claude-opus-4-7",
+      "note": "readback aberto apos transferencia de bastao Codex -> Opus"
+    },
+    {
+      "status": "confirmed",
+      "at": "2026-05-26T15:00:00-03:00",
+      "by": "humano",
+      "note": "Mauricio confirmou em chat: 'confirmado. Pode seguir.' Hearback usado para validacao tecnica detalhada e para construcao iterativa do protocolo usehbn. Pediu documentacao da sugestao de bootstrap-de-readback em .hbn/knowledge/0015."
+    }
+  ],
+  "created_at": "2026-05-26T14:30:00-03:00"
+}
