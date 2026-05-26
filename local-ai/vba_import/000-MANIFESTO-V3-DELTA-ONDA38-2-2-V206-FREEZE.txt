@@ -154,6 +154,6 @@ M|001-modulo/ABN-Util_Sanear_Contadores.bas
 M|001-modulo/AAO-Repo_Empresa.bas
 M|001-modulo/AAU-Preencher.bas
 M|001-modulo/AAX-App_Release.bas
-M|002-formularios/AAM-Menu_Principal.frm
-M|002-formularios/AAI-Credencia_Empresa.frm
-M|002-formularios/AAD-Cadastro_Servico.frm
+F|002-formularios/AAM-Menu_Principal.frm
+F|002-formularios/AAI-Credencia_Empresa.frm
+F|002-formularios/AAD-Cadastro_Servico.frm
