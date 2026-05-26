@@ -1,0 +1,90 @@
+{
+  "readback_id": "0107-handoff-fim-sessao-opus",
+  "data": "2026-05-26",
+  "agent_id": "claude-opus-4-7",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0106-onda38-2-1-ar1-sanear-contadores",
+  "intent": {
+    "objective": "Encerrar sessao 2026-05-26 (Opus assumiu o bastao por transferencia provisoria Codex -> Opus em 14:30 e operou 4 ondas ate ~04:25). Produzir handoff completo conforme knowledge/0014 cobrindo os 12 itens minimos, prompt de retomada para a proxima sessao Opus, analises tecnicas profundas de F4 (lentidao cadastros) e F5 (deleção de linhas + chave estavel), e atualizacao final do relay/INDEX. Bastao continua com Opus apos handoff (proxima sessao retoma).",
+    "non_goals": [
+      "implementar qualquer correcao de F4 ou F5 nesta sessao",
+      "abrir readback de Onda 38.2.2 ou 38.3 nesta sessao",
+      "tocar codigo VBA",
+      "tocar local-ai/vba_import/",
+      "transferir bastao para outra IA"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0107-handoff-fim-sessao-opus.json",
+      ".hbn/messages/20260526-0425-handoff-fim-sessao-opus.md",
+      "auditoria/00_status/106_PROMPT_RETOMADA_SESSAO_OPUS.md",
+      ".hbn/relay/INDEX.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "local-ai/incoming/**"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio aprovou Opcao B em chat 2026-05-26 04:20: 'vamos de opcao B, faca a analise dessas informacoes e prepare um prompt novo para comecarmos zerado na proxima sessao com foco em avancarmos nos pontos pendentes e efetuando toda a organizacao dos documentos antes de passar o bastao para o claude opus na proxima sessao.'",
+    "Mauricio aprovou F3 (filtros) continuar como planejado: Onda 38.2.2 handlers nativos + funcao filtro pura.",
+    "Mauricio promoveu F4 (lentidao cadastros) de V207 para PRIORIDADE NA V206: 'vamos resolver agora, e ja entregamos um sistema em producao mais agil. E importante validar a logica de forma exaustiva com a inativacao de empresas e entidades e a logica do rodizio. Isso esta limitando o uso no mundo real em computadores mais antigos pois demora muito.'",
+    "Mauricio levantou F5 como problema arquitetural mais profundo (nao apenas algoritmo de saneamento): 'se cada vez que uma empresa e inabilitada e reabilitada ela herda uma nova numeracao o numero da empresa nao pode ser utilizado como chave e como caracteristica do relatorio. Precisamos ter uma chave de identificacao da empresa unica, como o cnpj ou uma chave primaria.'",
+    "Mauricio pediu alternativas para corrigir definitivamente o problema com base no comportamento do codigo que permite a delecao de linhas/colunas: 'Mas isso precisa ser pensando e analisado na logica do vba, do sistema de rodizio. Traga alternativas para corrigir o problema de forma definitiva com base no comportamento do codigo que permite a delecao de linhas ou colunas.'"
+  ],
+  "invariants_preserved": [
+    "Nenhum codigo VBA tocado",
+    "Bastao continua com Claude Opus 4.7 (sessao proxima retoma)",
+    "Onda 38.2.1-AR1 permanece fechada human_gate_passed_with_minor_finding",
+    "Sexteto APROVADO VR_20260526_035523 permanece como anchor funcional V206"
+  ],
+  "risks": [
+    {
+      "risk": "Proxima sessao Opus pode nao ler o prompt de retomada e perder contexto",
+      "mitigation": "Prompt em auditoria/00_status/106 + handoff em .hbn/messages/ + relay/INDEX apontando para ambos. Mauricio cola o prompt no primeiro turno da nova sessao.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Handoff file criado em .hbn/messages/ com 12 itens obrigatorios do knowledge/0014",
+        "evidence_kind": "file_exists",
+        "evidence_required_in": "este readback ja é a evidencia"
+      },
+      {
+        "gate": "Prompt de retomada criado em auditoria/00_status/106",
+        "evidence_kind": "file_exists",
+        "evidence_required_in": "este readback ja é a evidencia"
+      },
+      {
+        "gate": "relay/INDEX apontando para o handoff com sinal HBN HANDOFF READY",
+        "evidence_kind": "git_diff",
+        "evidence_required_in": "este readback ja é a evidencia"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Nenhum rollback necessario: este readback so produz documentos. Em caso de erro, retornar para o commit 433f25c."
+    ],
+    "anchor_to_restore": "Commit 433f25c (Onda 38.2.1-AR1 fechada)"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "confirmed",
+      "at": "2026-05-26T04:20:00-03:00",
+      "by": "humano",
+      "note": "Mauricio confirmou Opcao B handoff em chat: prepare prompt novo + organize documentos antes de passar bastao para Opus na proxima sessao."
+    }
+  ],
+  "created_at": "2026-05-26T04:25:00-03:00"
+}

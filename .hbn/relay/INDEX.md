@@ -4,9 +4,34 @@ versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
 proprietario-bastao: Claude Opus 4.7 (bastao transferido provisoriamente Codex -> Opus em 2026-05-26 apos reprovacao da Onda 38.2). Opus segue como arquiteto+executor para estabilizacao da V12.0.0206 ate freeze; Codex retorna como auditor adversarial pos-implementacao. Onda 38.2.1 ENTREGUE (revert filtros) + Onda 38.2.1-AR1 ENTREGUE (saneamento contadores AR1) com gate humano passado e Sexteto APROVADO em VR_20260526_035523 (V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0). F1 e F2 do ERP 0105 resolvidos. Finding F5 minor sobre CREDENCIADOS!AR1 decresceu 6->4 (deferido decisao Mauricio). Proxima onda: 38.2.2 (filtros nativos do Menu_Principal) com deep-dive PHAGOCYTOSIS-VBA-PATTERNS como pre-trabalho.
 ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (cadastros corretos + filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; passagem assistida tela-a-tela com Mauricio antes do freeze; deep-dive arquitetural fica para V207. Caminho A aprovado: AR1 (contadores) -> [AR2 condicional se F2 persistir] -> 38.2.2 (filtros nativos) -> 39+ (PDF) -> freeze.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD e9bcf42 (Onda 38.2.1 entregue), build 7bca168+ONDA38.2.1-revert-filtros-menu, RVS Trio APROVADO em VR_20260526_024718 V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
-proxima-acao: Opus faz deep-dive PHAGOCYTOSIS-VBA-PATTERNS (M9 + L22-L24 + M15-M17 leitura completa) e propoe readback 0107 para Onda 38.2.2 (filtros nativos do Menu_Principal: handlers TextBox16..22_Change estaticos + funcao filtro PURA stateless). Mauricio decide se quer (a) tratar finding F5 do CREDENCIADOS!AR1 como microdelta antes da 38.2.2 ; (b) deferir para V207 ; (c) descartar.
-ultima-atualizacao: 2026-05-26T04:20:00-0300 (Onda 38.2.1-AR1 fechada human_gate_passed_with_minor_finding; commit 9592e0f + sexteto APROVADO; finding F5 sobre CREDENCIADOS!AR1 aguarda decisao Mauricio)
+proxima-acao: 🔵 HBN HANDOFF READY — sessao Opus 2026-05-26 encerrada com handoff completo. Proxima sessao Opus retoma com prompt em auditoria/00_status/106_PROMPT_RETOMADA_SESSAO_OPUS.md. Decisao Mauricio pendente entre 3 caminhos: (A) microdelta ID monotonico (~5 linhas, urgente, resolve R1 reuso de IDs); (B) otimizacao Excel performance para PCs antigos (F4 promovido V207->V206); (C) Onda 38.2.2 filtros nativos com pre-trabalho PHAGOCYTOSIS. Recomendacao Opus: (A) -> (B) -> (C).
+ultima-atualizacao: 2026-05-26T04:30:00-0300 (sessao Opus encerrada; handoff em .hbn/messages/20260526-0425-handoff-fim-sessao-opus.md; prompt de retomada em auditoria/00_status/106_PROMPT_RETOMADA_SESSAO_OPUS.md; F4 e F5 promovidos para V206 com analises tecnicas profundas no handoff item 13)
 ---
+
+## 🔵 HBN HANDOFF READY — sessão Opus 2026-05-26 encerrada
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🔵 HBN HANDOFF READY |
+| Origem | Claude Opus 4.7 (sessão 2026-05-26 14:30 → 04:25) |
+| Destino | Claude Opus 4.7 (próxima sessão) |
+| Gatilho | explicit_request_mauricio (Opção B de pausa) |
+| Handoff completo | [`.hbn/messages/20260526-0425-handoff-fim-sessao-opus.md`](../messages/20260526-0425-handoff-fim-sessao-opus.md) (12 itens + análise técnica F4 e F5) |
+| Prompt de retomada | [`auditoria/00_status/106_PROMPT_RETOMADA_SESSAO_OPUS.md`](../../auditoria/00_status/106_PROMPT_RETOMADA_SESSAO_OPUS.md) |
+| Readback de handoff | [`readbacks/0107-handoff-fim-sessao-opus.json`](../readbacks/0107-handoff-fim-sessao-opus.json) (fast_track, confirmed) |
+| Anchor funcional V206 | commit `433f25c` (Sexteto APROVADO `VR_20260526_035523`) |
+
+### Decisão pendente Mauricio na próxima sessão
+
+Escolher entre 3 caminhos (recomendação Opus = A → B → C):
+
+| Onda | Tema | Escopo | Custo |
+|---|---|---|---|
+| **(A) 38.2.1-AR1-FIX2** | algoritmo monotônico (`max(max_existente, AR1_atual)`) | `Util_Planilha.ProximoId` + `Util_Sanear_Contadores` | ~5 linhas, microdelta urgente |
+| **(B) 38.2.x-perf** | wrapper Excel performance (ScreenUpdating/Calculation off) | `Util_Excel_Performance.bas` novo + aplicar em `Repo_Empresa.*`, `Repo_Credenciamento.*`, etc. | médio, 10-30x mais rápido em PCs antigos |
+| **(C) 38.2.2** | filtros nativos Menu_Principal | handlers `TextBoxNN_Change` estáticos + função filtro pura | médio, com pré-trabalho deep-dive PHAGOCYTOSIS |
+
+(A) e (B) podem ser combinadas em microdelta único se Mauricio preferir.
 
 ## Onda 38.2.1-AR1 ENTREGUE — Saneamento contadores AR1 (Opus) — human_gate_passed_with_minor_finding
 
