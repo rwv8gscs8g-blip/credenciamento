@@ -95,7 +95,7 @@ Dim faltantes As String
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
     Dim msgSave As String
-    Dim estadoExcel As TEstadoExcel
+    Dim estadoExcel As Variant
     Dim blocoRapidoIniciado As Boolean
 
 blocoRapidoIniciado = False

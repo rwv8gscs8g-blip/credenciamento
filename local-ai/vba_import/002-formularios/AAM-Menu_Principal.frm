@@ -1599,7 +1599,7 @@ On Error GoTo erro_carregamento:
     Dim ultimaLinhaEnt As Long
     Dim estEntProt As Boolean
     Dim senhaEntProt As String
-    Dim estadoExcel As TEstadoExcel
+    Dim estadoExcel As Variant
     Dim blocoRapidoIniciado As Boolean
 
     blocoRapidoIniciado = False
@@ -2212,7 +2212,7 @@ Dim errNum As Long
 Dim errDesc As String
 Dim msgSave As String
 Dim primeiraLinhaEmp As Long
-Dim estadoExcel As TEstadoExcel
+Dim estadoExcel As Variant
 Dim blocoRapidoIniciado As Boolean
 
 blocoRapidoIniciado = False

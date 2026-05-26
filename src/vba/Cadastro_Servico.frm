@@ -65,7 +65,7 @@ Dim senhaProtServ As String
 Dim estavaProtAtiv As Boolean
 Dim senhaProtAtiv As String
 Dim msgSave As String
-Dim estadoExcel As TEstadoExcel
+Dim estadoExcel As Variant
 Dim blocoRapidoIniciado As Boolean
 
 blocoRapidoIniciado = False
