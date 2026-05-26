@@ -5,7 +5,7 @@
   "agent_id": "claude-opus-4-7",
   "track": "safe_track",
   "version_target": "V12.0.0206",
-  "status": "delivered_for_human_gate",
+  "status": "human_gate_passed_with_findings",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "summary": "Onda 38.2.1 reverte forward-only os filtros do Menu_Principal ao anchor a6ad842 (Onda 38.1.5 estavel). Menu_Principal.frm e Preencher.bas restaurados byte-a-byte; App_Release.bas restaurado com apenas APP_BUILD_IMPORTADO e APP_BUILD_GERADO_EM atualizados. Encerra ERP 0104 como human_gate_failed apos transferencia de bastao Codex -> Claude Opus 4.7.",
@@ -92,9 +92,77 @@
     }
   ],
   "next_wave": {
-    "id": "onda38-2-2-filtros-handlers-nativos",
-    "status": "deferred_until_human_gate_passes",
-    "summary": "Implementar filtros do Menu_Principal pela forma correta: handlers TextBox16..22_Change estaticos + funcao filtro PURA stateless; ZERO WithEvents dinamico; ZERO Controls.Add; ZERO heuristica. Precedido por deep-dive PHAGOCYTOSIS-VBA-PATTERNS (M9 + L22-L24 + M15-M17 leitura completa)."
+    "id": "onda38-2-1-ar1-sanear-contadores",
+    "status": "active",
+    "summary": "Saneamento dos contadores AR1 em todas as abas com ProximoId (EMPRESAS, ENTIDADES, CAD_OS, etc.) que ficaram dessincronizados pelo restore de workbook pre-38.2. Resolve F1 (ID 001) e provavelmente F2 (ordenacao entidade no topo). Onda 38.2.2 (filtros nativos) fica deferida ate AR1 passar gate humano."
   },
+  "human_gate_evidence": {
+    "data_gate": "2026-05-26",
+    "import_delta": {
+      "status": "pass",
+      "evidencia": "Importador V3: modo=Estabilizado | dryRun=Falso | M=2 | F=1 | err=0 | skip=0; BUMP_BUILD_LABEL ok para 7bca168+ONDA38.2.1-revert-filtros-menu; FORM_ESTAB_OK Menu_Principal (3792 linhas, 1x DeleteLines); MODULO_OK Preencher (4039 linhas); MODULO_OK App_Release (406 linhas); backup gerado em backups/vba/20260526_023928-V3-FULL"
+    },
+    "compile_vbe": {
+      "status": "pass",
+      "evidencia": "Mauricio reportou compile limpo apos Depurar > Compilar VBAProject"
+    },
+    "erro_424": {
+      "status": "pass",
+      "evidencia": "Nao reincidiu ao digitar nos campos do Menu_Principal apos o revert"
+    },
+    "rvs_trio_minimo": {
+      "status": "pass",
+      "evidencia": "VR_20260526_024718; BUILD=7bca168+ONDA38.2.1-revert-filtros-menu; V1_RAPIDA=OK (171/0); V2_SMOKE=OK (34/0); V2_CANONICO=OK (24/0); RESULTADO=APROVADO"
+    },
+    "cadastro_empresa_id_sequencial": {
+      "status": "fail",
+      "evidencia": "Cadastro de empresa nova retornou ID 001 (vs IDs 001/002/003 ja existentes); causa raiz identificada em Util_Planilha.ProximoId (le EMPRESAS!AR1 contador, incrementa e grava); EMPRESAS!AR1 dessincronizado pelo restore de workbook pre-38.2; NAO e regressao da Onda 38.2; sera tratado pela Onda 38.2.1-AR1"
+    },
+    "filtros_observados": {
+      "TextBox17_empresa": "OK - handler nativo TextBox17_Change pre-existente desde 38.1.5",
+      "TextBox16_entidade": "INATIVO - sem handler nativo no .frm 38.1.5 (esperado, sera tratado pela Onda 38.2.2)",
+      "TextBox18_atribuicao_servico": "INATIVO - sem handler nativo (sera 38.2.2)",
+      "TextBox19_rodizio": "NAO TESTADO",
+      "TextBox20_cadastro_servico": "NAO TESTADO",
+      "TextBox21_preos": "NAO TESTADO",
+      "TextBox22_avaliacao": "NAO TESTADO"
+    },
+    "regressao_visivel_pos_estabilizacao": {
+      "cadastro_entidade_topo_da_lista": "Entidade nova aparece no TOPO em vez de no FIM; hipotese principal: ENTIDADES!AR1 tambem dessincronizado (mesma causa do F1); fix esperado junto da Onda 38.2.1-AR1; se persistir abre Onda 38.2.1-AR2",
+      "lentidao_cadastros": "Cadastros de empresa e entidade lentos; DEFERIDO V207 conforme decisao Mauricio"
+    },
+    "decisao_mauricio": "Caminho A aprovado em chat 2026-05-26: (1) Onda 38.2.1-AR1 saneamento contadores AR1; (2) Onda 38.2.1-AR2 condicional se F2 persistir; (3) Onda 38.2.2 filtros nativos."
+  },
+  "findings_para_proximas_ondas": [
+    {
+      "id": "F1",
+      "descricao": "ID 001 cadastro empresa - contador EMPRESAS!AR1 dessincronizado",
+      "severidade": "high",
+      "impacto": "IDs duplicados quebram Svc_Rodizio.SelecionarEmpresa (LerEmpresa retorna primeiro encontrado, empresa nova fica invisivel ao rodizio)",
+      "proxima_onda": "38.2.1-AR1"
+    },
+    {
+      "id": "F2",
+      "descricao": "Cadastro de entidade nova aparecendo no topo (antes era no fim)",
+      "severidade": "medium",
+      "impacto": "UX desorganizada; possivel sintoma do mesmo bug de contador AR1 em ENTIDADES",
+      "proxima_onda": "38.2.1-AR1 (provavel) ou 38.2.1-AR2 (se persistir)"
+    },
+    {
+      "id": "F3",
+      "descricao": "Filtros faltantes - Entidade, Atribuicao Empresa P/Servico e possivelmente outros sem handler nativo no .frm",
+      "severidade": "medium",
+      "impacto": "UX degradada; usuario consegue trabalhar mas sem busca rapida",
+      "proxima_onda": "38.2.2"
+    },
+    {
+      "id": "F4",
+      "descricao": "Lentidao nos cadastros de empresa e entidade",
+      "severidade": "low",
+      "impacto": "UX aceitavel mas com fricao",
+      "proxima_onda": "V207 (deferido)"
+    }
+  ],
+  "closed_at": "2026-05-26T03:10:00-03:00",
   "created_at": "2026-05-26T15:00:00-03:00"
 }

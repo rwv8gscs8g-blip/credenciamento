@@ -1,0 +1,106 @@
+{
+  "result_id": "0106-exec-onda38-2-1-ar1-sanear-contadores",
+  "readback_id": "0106-onda38-2-1-ar1-sanear-contadores",
+  "data": "2026-05-26",
+  "agent_id": "claude-opus-4-7",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "delivered_for_human_gate",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "summary": "Onda 38.2.1-AR1 cria modulo Util_Sanear_Contadores.bas com Public Sub SanearContadoresAR1() idempotente para corrigir os contadores AR1 das 7 abas que usam Util_Planilha.ProximoId. Para EMPRESAS e ENTIDADE considera tambem EMPRESAS_INATIVAS e ENTIDADE_INATIVOS como sources do calculo de max(ID), conforme preocupacao levantada por Mauricio em chat 2026-05-26.",
+  "files_changed": [
+    "src/vba/Util_Sanear_Contadores.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABN-Util_Sanear_Contadores.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-SANEAR-CONTADORES.txt",
+    "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+    "auditoria/03_ondas/onda_38_2_1_ar1_sanear_contadores/38_2_1_AR1_TECNICO.md",
+    ".hbn/readbacks/0106-onda38-2-1-ar1-sanear-contadores.json",
+    ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json",
+    ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-2-1-AR1-SANEAR-CONTADORES",
+    "build_label": "e9bcf42+ONDA38.2.1-AR1-sanear-contadores",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-2-1-AR1-SANEAR-CONTADORES\", \"e9bcf42+ONDA38.2.1-AR1-sanear-contadores\"",
+    "expected_import_result": "M=2 | F=0 | err=0 | skip=0",
+    "post_import_manual_step": "Mauricio executa no Imediato: SanearContadoresAR1"
+  },
+  "local_validation": [
+    {
+      "gate": "Util_Sanear_Contadores.bas criado em src/vba/",
+      "status": "pass",
+      "evidence": "Modulo com Public Sub SanearContadoresAR1() + helpers Private SanearAR1EmAbaPareada, SanearAR1EmAbaSimples e MaxIdNaColunaA"
+    },
+    {
+      "gate": "App_Release.bas atualizado apenas em build label e timestamp",
+      "status": "pass",
+      "evidence": "APP_BUILD_IMPORTADO = e9bcf42+ONDA38.2.1-AR1-sanear-contadores; APP_BUILD_GERADO_EM = 2026-05-26 03:30"
+    },
+    {
+      "gate": "Entrada ABN-Util_Sanear_Contadores.bas adicionada em 000-MAPA-PREFIXOS.txt",
+      "status": "pass",
+      "evidence": "Linha final do mapa: 'ABN-Util_Sanear_Contadores.bas => Util_Sanear_Contadores.bas (V12.0.0206 Onda 38.2.1-AR1)'"
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --apply",
+      "status": "pass",
+      "evidence": "Aplicado; ABN-Util_Sanear_Contadores.bas gerado em local-ai/vba_import/001-modulo/; G7+G8 OK"
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --check",
+      "status": "pass",
+      "evidence": "vba_import 100% sincronizado com src/vba"
+    },
+    {
+      "gate": "Manifesto delta criado",
+      "status": "pass",
+      "evidence": "000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-SANEAR-CONTADORES.txt com 2 entradas: M|ABN-Util_Sanear_Contadores.bas + M|AAX-App_Release.bas"
+    }
+  ],
+  "human_gates_pending": [
+    {
+      "gate": "ImportarPacoteV3_Delta ONDA38-2-1-AR1-SANEAR-CONTADORES",
+      "expected": "M=2 | F=0 | err=0 | skip=0"
+    },
+    {
+      "gate": "Depurar > Compilar VBAProject",
+      "expected": "compile limpo"
+    },
+    {
+      "gate": "Imediato: SanearContadoresAR1",
+      "expected": "Logs INICIO + 7 linhas <aba>!AR1 X -> Y (sources: ...) + FIM ok=7 falhas=0; Mauricio cola o log"
+    },
+    {
+      "gate": "Cadastrar empresa nova",
+      "expected": "ID = max+1 sequencial correto (NAO 001); para o estado atual com 3 empresas, esperado ID 004"
+    },
+    {
+      "gate": "Cadastrar entidade nova",
+      "expected": "ID sequencial correto e entidade nova aparece no FIM da lista; se persistir no topo, abrir Onda 38.2.1-AR2"
+    },
+    {
+      "gate": "CT_ValidarRelease_TrioMinimo",
+      "expected": "APROVADO V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0"
+    },
+    {
+      "gate": "OPCIONAL F-NEW1: inabilitar empresa de maior ID, rodar SanearContadoresAR1, cadastrar empresa nova",
+      "expected": "ID novo = ID da inabilitada (porque ela ainda esta em EMPRESAS_INATIVAS e participa do max). Se vier ID inferior, F-NEW1 reprovado e abre Onda 38.2.1-AR1-INATIVOS"
+    },
+    {
+      "gate": "OPCIONAL F-NEW2: analogo para entidade",
+      "expected": "Mesmo comportamento esperado de F-NEW1"
+    }
+  ],
+  "next_wave": {
+    "id": "onda38-2-2-filtros-handlers-nativos",
+    "status": "deferred_until_human_gate_passes",
+    "summary": "Implementar filtros nativos do Menu_Principal pela arquitetura segura aprovada em chat 2026-05-26: handlers TextBox16..22_Change estaticos + funcao filtro PURA stateless; ZERO WithEvents dinamico; ZERO Controls.Add; ZERO heuristica. Pre-trabalho: deep-dive PHAGOCYTOSIS-VBA-PATTERNS leitura completa de M9 + L22-L24 + M15-M17.",
+    "wave_conditional": "Se F2 (entidade no topo) persistir apos o saneamento, antes da 38.2.2 abre-se Onda 38.2.1-AR2 para investigar logica de ordenacao."
+  },
+  "created_at": "2026-05-26T03:30:00-03:00"
+}

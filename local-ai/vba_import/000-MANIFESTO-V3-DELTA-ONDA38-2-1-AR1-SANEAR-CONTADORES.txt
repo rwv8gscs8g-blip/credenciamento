@@ -1,0 +1,76 @@
+# Manifesto V3 DELTA ONDA38-2-1-AR1-SANEAR-CONTADORES - V12.0.0206
+# Tema: Saneamento dos contadores AR1 de todas as abas que usam
+# Util_Planilha.ProximoId, corrigindo a regressao F1 do gate humano
+# da Onda 38.2.1 (cadastro de empresa retornando ID 001) e provavel
+# F2 (cadastro entidade nova aparecendo no topo da lista).
+#
+# Contexto:
+#   - Onda 38.2.1 (commit e9bcf42) reverteu os filtros do Menu_Principal
+#     com sucesso (RVS APROVADO VR_20260526_024718), mas o gate humano
+#     revelou que ID 001 e ordenacao da entidade NAO eram regressao
+#     do 38.2 - sao bugs de contador AR1 mascarados pela instabilidade
+#     anterior.
+#   - Util_Planilha.ProximoId(aba) le ws.Cells(1, 44) - coluna AR - le,
+#     incrementa e grava. Se essa celula estiver dessincronizada do
+#     max(ID) real, todo cadastro novo pega o mesmo ID e duplica.
+#   - O workbook restaurado de backup pre-38.2 veio com EMPRESAS!AR1
+#     e ENTIDADE!AR1 dessincronizados, ja que as 3 empresas e 3
+#     entidades originais tinham IDs 001/002/003 mas AR1 estava em 0.
+#   - Importacao permitida exclusivamente via ImportarPacoteV3_Delta.
+#   - Bastao continua com Claude Opus 4.7.
+#
+# Mudancas:
+#   ABN-Util_Sanear_Contadores.bas (MODULO NOVO):
+#     - Public Sub SanearContadoresAR1() - ponto de entrada idempotente.
+#     - Saneia 7 abas alvo: EMPRESAS, ENTIDADE, ATIVIDADES, CAD_SERV,
+#       PRE_OS, CAD_OS, CREDENCIADOS.
+#     - Para EMPRESAS e ENTIDADE: considera TAMBEM as abas pareadas
+#       EMPRESAS_INATIVAS e ENTIDADE_INATIVOS no calculo de max(ID),
+#       cobrindo o cenario em que a empresa/entidade de maior ID foi
+#       inabilitada (preocupacao levantada por Mauricio em chat).
+#     - Algoritmo: max(coluna_A) em todas as sources -> escreve em
+#       AR1 da target. Usa Util_PrepararAbaParaEscrita/Util_RestaurarProtecaoAba.
+#     - Log via Debug.Print por aba: valor anterior -> novo valor + sources.
+#     - Tratamento de erro por aba: se uma falhar, segue para as outras.
+#     - NAO altera Util_Planilha.ProximoId nem dados de empresa/entidade.
+#   AAX-App_Release.bas:
+#     - APP_BUILD_IMPORTADO = "e9bcf42+ONDA38.2.1-AR1-sanear-contadores"
+#     - APP_BUILD_GERADO_EM = "2026-05-26 03:30"
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38-2-1-AR1-SANEAR-CONTADORES", "e9bcf42+ONDA38.2.1-AR1-sanear-contadores"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=0 | err=0 | skip=0.
+#   - Compile manual passa limpo.
+#
+# Passo manual obrigatorio (Mauricio executa no Imediato 1x):
+#   SanearContadoresAR1
+#
+#   Esperado nos logs (Debug.Print) algo como:
+#     [SanearContadoresAR1] INICIO 2026-05-26 hh:nn:ss
+#     [SanearContadoresAR1] EMPRESAS!AR1 0 -> 3 (sources: EMPRESAS=3, EMPRESAS_INATIVAS=0)
+#     [SanearContadoresAR1] ENTIDADE!AR1 0 -> 3 (sources: ENTIDADE=3, ENTIDADE_INATIVOS=0)
+#     [SanearContadoresAR1] ATIVIDADES!AR1 ... etc
+#     [SanearContadoresAR1] FIM ok=7 falhas=0
+#
+# Validacao funcional pos-saneamento:
+#   - Cadastrar empresa nova: ID = 004 (max anterior +1), NAO 001.
+#   - Cadastrar entidade nova: ID sequencial correto e ela aparece no
+#     FIM da lista (nao mais no topo).
+#   - CT_ValidarRelease_TrioMinimo permanece APROVADO:
+#     V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+#
+# Onda proxima (38.2.1-AR2, condicional):
+#   Aberta APENAS se cadastro de entidade continuar aparecendo no topo
+#   apos AR1 OK. Nesse caso, investigar logica de ordenacao em
+#   Cadastro_Entidade.frm ou rotina de preenchimento da lista.
+#
+# Onda seguinte (38.2.2, apos AR1 fechar gate humano):
+#   Implementar filtros nativos do Menu_Principal (handlers
+#   TextBoxNN_Change + funcao filtro pura), conforme arquitetura
+#   aprovada em chat 2026-05-26.
+#
+# GRUPO_DELTA_ONDA38_2_1_AR1_SANEAR_CONTADORES
+M|001-modulo/ABN-Util_Sanear_Contadores.bas
+M|001-modulo/AAX-App_Release.bas

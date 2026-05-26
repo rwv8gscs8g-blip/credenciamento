@@ -1,0 +1,220 @@
+{
+  "readback_id": "0106-onda38-2-1-ar1-sanear-contadores",
+  "data": "2026-05-26",
+  "agent_id": "claude-opus-4-7",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0105-onda38-2-1-revert-filtros-menu",
+  "intent": {
+    "objective": "Sanear os contadores AR1 em todas as abas que usam Util_Planilha.ProximoId(nomeAba), corrigindo a regressao F1 (cadastro empresa retornando ID 001) e provavel F2 (cadastro entidade nova aparecendo no topo da lista) sem tocar dados de empresa, entidade ou qualquer logica de cadastro. Cria modulo novo Util_Sanear_Contadores.bas com funcao Public idempotente SanearContadoresAR1() que recalcula <aba>!AR1 = max(coluna_A_ID) para 7 abas alvo. Mauricio roda 1x via Imediato apos import.",
+    "non_goals": [
+      "tocar dados de empresa, entidade, atividade, servico, OS, Pre-OS ou credenciamento",
+      "alterar a logica de Util_Planilha.ProximoId (refatoracao fica para V207)",
+      "tocar servicos blindados (Svc_Rodizio, Svc_Avaliacao, Svc_OS, Svc_PreOS)",
+      "tocar Mod_Types.bas, Importador_V3.bas",
+      "tocar qualquer .frm ou .frx",
+      "chamar SanearContadoresAR1 automaticamente em Auto_Open (fica como decisao explicita futura)",
+      "investigar lentidao de cadastros (F4, deferido V207)",
+      "implementar filtros nativos do Menu_Principal (fica para Onda 38.2.2)",
+      "avancar para PDF/Onda 39 antes do gate humano da AR1 passar"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Util_Sanear_Contadores.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/A*-Util_Sanear_Contadores.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-SANEAR-CONTADORES.txt",
+      "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+      ".hbn/readbacks/0106-onda38-2-1-ar1-sanear-contadores.json",
+      ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json",
+      ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_2_1_ar1_sanear_contadores/**"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Repo_Empresa.bas",
+      "src/vba/Repo_Credenciamento.bas",
+      "src/vba/Repo_OS.bas",
+      "src/vba/Repo_PreOS.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/*.frm",
+      "src/vba/*.frx",
+      "local-ai/incoming/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio aprovou em chat 2026-05-26 o Caminho A: Onda 38.2.1-AR1 saneamento contadores AR1 ANTES da Onda 38.2.2 filtros nativos. Justificativa: F1 e load-bearing para Svc_Rodizio (IDs duplicados quebram SelecionarEmpresa); causa raiz ja identificada permite fix microdelta de baixo risco.",
+    "Mauricio aprovou fechamento do ERP 0105 como human_gate_passed_with_findings (RVS APROVADO em VR_20260526_024718 + escopo da onda entregue + 4 findings registrados para ondas futuras).",
+    "Causa raiz F1 identificada por Opus em Util_Planilha.ProximoId(): le ws.Cells(1, COL_CONTADOR_AR=44).Value, incrementa e grava. Se AR1 esta zerada/vazia, Val('')=0 e proximo ID e 1 (formatado como 001). EMPRESAS!AR1 ficou dessincronizado pelo restore de workbook pre-38.2 e provavel que ENTIDADE!AR1 tambem.",
+    "Mapeamento das 7 abas com ProximoId(): EMPRESAS, ENTIDADE, ATIVIDADES, CAD_SERV, PRE_OS, CAD_OS, CREDENCIADOS. Todas tem ID na coluna A (COL_EMP_ID/COL_ENT_ID/COL_ATIV_ID/COL_SERV_ID/COL_PREOS_ID/COL_OS_ID/COL_CRED_ID todas iguais a 1). Contador fica em AR1 (COL_CONTADOR_AR=44).",
+    "AUDIT_LOG deliberadamente excluido do saneamento - audit log tem seu proprio padrao de ID e nao usa rodizio.",
+    "Mauricio levantou em chat 2026-05-26 a preocupacao com o caso de inabilitar empresa/entidade: empresa inabilitada e movida de EMPRESAS para EMPRESAS_INATIVAS; se for a de maior ID, max(EMPRESAS coluna A) cai e o proximo cadastro pode duplicar o ID da inabilitada. EXPANSAO da implementacao (custo marginal nulo): para EMPRESAS!AR1 e ENTIDADE!AR1, calcular max(ID) considerando AMBAS as abas pareadas (ativa + inativa). EMPRESAS_INATIVAS e ENTIDADE_INATIVOS entram como SOURCES do calculo, NAO como TARGETS de escrita (elas nao tem AR1 contador proprio porque nao usam ProximoId). Implementado nesta onda mesmo."
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-2-1-AR1-SANEAR-CONTADORES",
+    "build_label": "e9bcf42+ONDA38.2.1-AR1-sanear-contadores",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-SANEAR-CONTADORES.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-2-1-AR1-SANEAR-CONTADORES\", \"e9bcf42+ONDA38.2.1-AR1-sanear-contadores\"",
+    "expected_import_result": "M=2 | F=0 | err=0 | skip=0",
+    "post_import_manual_step": "Mauricio executa no Imediato: SanearContadoresAR1 (chamada Public sem argumento; idempotente; pode rodar quantas vezes for preciso; loga em Debug.Print os 7 valores AR1 atualizados)"
+  },
+  "invariants_preserved": [
+    "RN-01 a RN-17 permanecem inalteradas",
+    "Contadores RVS permanecem V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Util_Planilha.ProximoId NAO sera modificado (apenas o estado das celulas AR1 sera corrigido)",
+    "Nenhum dado de empresa, entidade, atividade, servico, OS, Pre-OS ou credenciamento sera modificado",
+    "Nenhum servico blindado sera tocado",
+    "Mod_Types.bas e Importador_V3.bas nao serao tocados",
+    "Nenhum .frm ou .frx sera tocado",
+    "Repo_Empresa, Repo_OS, Repo_PreOS, Repo_Credenciamento, Auto_Open nao serao tocados",
+    "Importacao operacional somente via ImportarPacoteV3_Delta",
+    "Funcao SanearContadoresAR1 e idempotente: rodar varias vezes produz o mesmo resultado"
+  ],
+  "design_da_funcao": {
+    "modulo": "src/vba/Util_Sanear_Contadores.bas",
+    "assinatura_publica": "Public Sub SanearContadoresAR1()",
+    "abas_target_de_escrita": [
+      "EMPRESAS",
+      "ENTIDADE",
+      "ATIVIDADES",
+      "CAD_SERV",
+      "PRE_OS",
+      "CAD_OS",
+      "CREDENCIADOS"
+    ],
+    "abas_source_para_calculo_max_id": {
+      "EMPRESAS": ["EMPRESAS", "EMPRESAS_INATIVAS"],
+      "ENTIDADE": ["ENTIDADE", "ENTIDADE_INATIVOS"],
+      "ATIVIDADES": ["ATIVIDADES"],
+      "CAD_SERV": ["CAD_SERV"],
+      "PRE_OS": ["PRE_OS"],
+      "CAD_OS": ["CAD_OS"],
+      "CREDENCIADOS": ["CREDENCIADOS"]
+    },
+    "algoritmo": "Para cada aba target: percorre todas as abas source declaradas, itera de LINHA_DADOS ate UltimaLinhaAba(source_aba) lendo coluna A, computa maxId = max(CLng(Val(...))). Apenas a aba target tem AR1 escrito; abas inativas sao apenas lidas. Usa Util_PrepararAbaParaEscrita/Util_RestaurarProtecaoAba na aba target (mesma blindagem usada por ProximoId). Loga Debug.Print 'aba!AR1 atualizado de X para Y (sources: aba1=N1, aba2=N2)'.",
+    "tratamento_de_erro": "On Error GoTo handler em volta de cada aba individualmente; se uma aba falhar, segue para as proximas e reporta no final. Garante restauracao de protecao mesmo em falha (mesmo padrao de ProximoId).",
+    "idempotencia": "Sim. Se rodar 2x seguidas, segunda execucao calcula o mesmo max(ID) e regrava o mesmo valor em AR1.",
+    "side_effects": "Apenas escrita em 7 celulas <aba>!AR1. Nenhuma alteracao em dados, em linhas de dados, em formatacao, em protecao apos restore.",
+    "logs": "Debug.Print por aba: 'SanearContadoresAR1: EMPRESAS!AR1 atualizado de X para Y (linhas N)'"
+  },
+  "risks": [
+    {
+      "risk": "Funcao novamodifica AR1 com valor inferior ao corrente (caso onde AR1 esta correto e nao precisava de saneamento, mas o algoritmo recalcula mesmo).",
+      "mitigation": "Idempotente: max(ID existente) e sempre o ID correto para o proximo contador. Se ja estava correto, recalcular nao muda nada. Logs em Debug.Print permitem auditoria.",
+      "severity": "low"
+    },
+    {
+      "risk": "Algum ID na coluna A nao e numerico (ex.: texto livre invalido).",
+      "mitigation": "CLng(Val(...)) retorna 0 para nao-numerico; nao quebra; apenas ignora esse ID. Se TODOS os IDs forem invalidos, max = 0 e proximo cadastro vira ID 001 (estado atual). Log no Debug.Print mostra.",
+      "severity": "low"
+    },
+    {
+      "risk": "Aba alvo nao existe (ex.: workbook sem CAD_OS por algum motivo).",
+      "mitigation": "On Error GoTo handler captura, registra Debug.Print 'aba X nao encontrada, pulando' e segue para as proximas.",
+      "severity": "low"
+    },
+    {
+      "risk": "Mauricio esquece de rodar SanearContadoresAR1 no Imediato apos import.",
+      "mitigation": "Gate humano explicito no protocolo: cadastrar empresa nova e confirmar ID = max+1 = sequencial correto. Se vier 001, Mauricio sabe que precisa rodar.",
+      "severity": "low"
+    },
+    {
+      "risk": "Bug similar nao coberto por essa onda (ex.: outro contador armazenado em outra celula).",
+      "mitigation": "Documentar no doc tecnico que esta onda cobre APENAS o padrao AR1 + ProximoId. Outros contadores ficam para investigacao futura caso surjam.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "git diff limitado ao scope 0106 (assert-scope-lock.sh)",
+        "evidence_kind": "git_diff",
+        "evidence_required_in": ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json"
+      },
+      {
+        "gate": "local-ai/scripts/publicar_vba_import_v2.sh --apply + --check (sync com novo modulo Util_Sanear_Contadores)",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json"
+      },
+      {
+        "gate": "scripts/hbn-guards/hbn-guards-runner.sh passa 5/5 verdes",
+        "evidence_kind": "command_output",
+        "evidence_required_in": ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json"
+      },
+      {
+        "gate": "ImportarPacoteV3_Delta ONDA38-2-1-AR1-SANEAR-CONTADORES retorna M=2 | F=0 | err=0 | skip=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json"
+      },
+      {
+        "gate": "Depurar > Compilar VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json"
+      },
+      {
+        "gate": "Imediato: SanearContadoresAR1 executa sem erro e loga 7 valores AR1",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json"
+      },
+      {
+        "gate": "Cadastrar empresa nova retorna ID sequencial correto (max+1, NAO 001)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json"
+      },
+      {
+        "gate": "Cadastrar entidade nova aparece no FIM da lista (nao mais no topo)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_TrioMinimo retorna APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0 (contadores preservados)",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se publicar_vba_import_v2.sh --check falhar apos a criacao do novo modulo, abortar antes do commit e refazer --apply ate sync.",
+      "Se hbn-guards-runner reprovar, ajustar scope.files_allowed ou conteudo do staged conforme indicacao do guard.",
+      "Se ImportarPacoteV3_Delta falhar, Mauricio nao salva o workbook e cola a mensagem do Importador V3.",
+      "Se Depurar > Compilar falhar, restaurar workbook pelo backup indicado pelo Importador V3.",
+      "Se SanearContadoresAR1 falhar em alguma aba, registrar qual e abrir Onda 38.2.1-AR1-fix sem prejuizo das outras (a funcao continua para as demais abas).",
+      "Se ID 001 persistir apos rodar SanearContadoresAR1, abrir Onda 38.2.1-AR1-DEEP para investigar se ha outro path de geracao de ID (ex.: bug em outro lugar do codigo que sobrescreve AR1).",
+      "Se F2 (entidade no topo) persistir apos AR1 OK, abrir Onda 38.2.1-AR2 para investigar logica de ordenacao da lista de entidades no Cadastro_Entidade.frm.",
+      "Se CT_ValidarRelease_TrioMinimo falhar, abrir investigacao em onda separada antes de avancar para 38.2.2."
+    ],
+    "anchor_to_restore": "Commit e9bcf42 (Onda 38.2.1 entregue + RVS APROVADO em VR_20260526_024718)"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "pending",
+      "at": "2026-05-26T03:10:00-03:00",
+      "by": "claude-opus-4-7",
+      "note": "readback aberto para Onda 38.2.1-AR1 saneamento contadores apos findings F1 + F2 do ERP 0105"
+    },
+    {
+      "status": "confirmed",
+      "at": "2026-05-26T03:25:00-03:00",
+      "by": "humano",
+      "note": "Mauricio confirmou em chat: 'confirmado. pode avancar.' + pediu para verificar no proximo ciclo se inabilitar empresa/entidade sofre do mesmo problema. Decisao tomada: expandir o calculo de max(ID) para incluir EMPRESAS_INATIVAS e ENTIDADE_INATIVOS como sources ja nesta onda (custo marginal nulo, robustez maxima)."
+    }
+  ],
+  "created_at": "2026-05-26T03:10:00-03:00"
+}

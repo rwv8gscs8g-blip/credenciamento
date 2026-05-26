@@ -17,6 +17,21 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.2.1-AR1** — saneamento idempotente dos contadores `AR1`
+  das 7 abas que usam `Util_Planilha.ProximoId` (EMPRESAS, ENTIDADE,
+  ATIVIDADES, CAD_SERV, PRE_OS, CAD_OS, CREDENCIADOS), corrigindo a
+  regressão de cadastro de empresa retornando ID 001 observada no gate
+  humano da Onda 38.2.1. Causa raiz: workbook restaurado de backup
+  pré-38.2 veio com `<aba>!AR1` dessincronizado do `max(ID)` real.
+  Cria módulo `Util_Sanear_Contadores.bas` com `Public Sub
+  SanearContadoresAR1()` chamada manualmente uma vez no Imediato após
+  o import. Para EMPRESAS e ENTIDADE, considera também as abas
+  pareadas `EMPRESAS_INATIVAS` e `ENTIDADE_INATIVOS` no cálculo de
+  `max(ID)`, blindando contra o caso em que a empresa/entidade de
+  maior ID foi inabilitada. Não altera `Util_Planilha.ProximoId` nem
+  qualquer dado de cadastro. Manifesto delta:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-SANEAR-CONTADORES.txt`.
+  Carimbo: `e9bcf42+ONDA38.2.1-AR1-sanear-contadores`.
 - **Onda 38.2.1** — revert forward-only dos filtros do `Menu_Principal.frm`
   após reprovação da Onda 38.2 no gate humano (erro VBA 424 ao digitar nos
   campos, filtros inconsistentes, suspeita de corrupção de estado com

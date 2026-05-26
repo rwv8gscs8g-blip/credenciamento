@@ -1,26 +1,84 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Claude Opus 4.7 (bastao transferido provisoriamente Codex -> Opus em 2026-05-26 apos reprovacao da Onda 38.2 no gate humano - filtros do Menu Principal falharam funcional com erro 424 e suspeita de corrupcao de estado ID 001 cadastro empresa). Opus assume como arquiteto+executor para estabilizacao da V12.0.0206 (revert filtros 38.2.1 + refazer filtros 38.2.2 + PDF Onda 39+ + freeze) ate tag V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. Readback 0105 PENDING aguarda hearback Mauricio.
-ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; passagem assistida tela-a-tela com Mauricio antes do freeze; deep-dive arquitetural fica para V207.
-ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO V1=171/0+V2_Smoke=27/0+V2_Canonica=23/0+E2E_Strikes=65/0+IntegridadeBase=3/0. CICLO V206 anchor funcional: commit git a6ad842 (Onda 38.1.5 confirmed_human_gate_passed), build 696a8c2+ONDA38.1.5-rel-emp-serv-protecao, workbook restaurado por Mauricio em 2026-05-25 20:38.
-proxima-acao: Mauricio dar hearback ao readback 0105 (confirmed ou correcoes). Apos confirmed, Opus executa: (1) restaura src/vba/Menu_Principal.frm, Preencher.bas e App_Release.bas a partir do anchor git a6ad842 (App_Release ajusta apenas build label); (2) sync vba_import via publicar_vba_import_v2.sh; (3) cria manifesto delta ONDA38-2-1-REVERT-FILTROS-MENU; (4) fecha ERP 0104 como human_gate_failed; (5) cria ERP 0105; (6) doc tecnico 38_2_1_TECNICO.md; (7) entrega para gate humano - Mauricio importa delta, compila, testa cadastro empresa para confirmar ID sequencial correto, roda CT_ValidarRelease_TrioMinimo. Apos passar 38.2.1: deep-dive PHAGOCYTOSIS + design 38.2.2 filtros nativos.
-ultima-atualizacao: 2026-05-26T14:30:00-0300 (Onda 38.2 REPROVADA no gate humano; bastao transferido para Opus; housekeeping working tree feito em commit 7e98926; readback 0105 PENDING aguarda hearback)
+proprietario-bastao: Claude Opus 4.7 (bastao transferido provisoriamente Codex -> Opus em 2026-05-26 apos reprovacao da Onda 38.2). Opus segue como arquiteto+executor para estabilizacao da V12.0.0206 ate freeze; Codex retorna como auditor adversarial pos-implementacao. Onda 38.2.1 ENTREGUE no gate humano em 2026-05-26 03:00 com human_gate_passed_with_findings (RVS APROVADO + revert OK + sem erro 424; F1 ID 001 cadastro empresa e F2 ordenacao entidade NAO sao regressao do 38.2 mas bugs de contador AR1 mascarados pela instabilidade anterior). Onda 38.2.1-AR1 ABERTA (readback 0106 PENDING) - saneamento de contadores AR1.
+ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (cadastros corretos + filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; passagem assistida tela-a-tela com Mauricio antes do freeze; deep-dive arquitetural fica para V207. Caminho A aprovado: AR1 (contadores) -> [AR2 condicional se F2 persistir] -> 38.2.2 (filtros nativos) -> 39+ (PDF) -> freeze.
+ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD e9bcf42 (Onda 38.2.1 entregue), build 7bca168+ONDA38.2.1-revert-filtros-menu, RVS Trio APROVADO em VR_20260526_024718 V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
+proxima-acao: Mauricio dar hearback ao readback 0106 (Onda 38.2.1-AR1 saneamento contadores). Apos confirmed, Opus implementa Util_Sanear_Contadores.SanearContadoresAR1() que recalcula AR1 = max(coluna_ID) em todas as abas com ProximoId, carimba novo build label e entrega para gate humano (testar cadastro empresa nova com ID sequencial correto).
+ultima-atualizacao: 2026-05-26T03:10:00-0300 (Onda 38.2.1 fechada com findings; readback 0106 Onda 38.2.1-AR1 sera aberto PENDING)
 ---
 
-## Onda 38.2.1 ABERTA — Revert filtros Menu Principal (Opus) — readback PENDING
+## Onda 38.2.1-AR1 ABERTA — Saneamento contadores AR1 (Opus) — readback 0106 PENDING
 
 | Campo | Valor |
 |---|---|
 | Track | safe_track |
-| Readback | [readbacks/0105-onda38-2-1-revert-filtros-menu.json](../readbacks/0105-onda38-2-1-revert-filtros-menu.json) — **human_status: pending** (aguarda hearback Mauricio) |
-| Hearback | PENDENTE — Opus apresentou plano de revert forward-only em 2026-05-26; aguarda confirmed |
-| ERP | a criar pos-execucao: `.hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json` |
-| Doc tecnico | a criar pos-aprovacao: `auditoria/03_ondas/onda_38_2_1_revert_filtros_menu/38_2_1_TECNICO.md` |
-| Manifesto delta | a criar pos-aprovacao: `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-REVERT-FILTROS-MENU.txt` |
+| Readback | [readbacks/0106-onda38-2-1-ar1-sanear-contadores.json](../readbacks/0106-onda38-2-1-ar1-sanear-contadores.json) — **human_status: pending** (aguarda hearback Mauricio) |
+| Hearback | PENDENTE — Opus apresentando plano apos analise tecnica do F1 (causa raiz em Util_Planilha.ProximoId, contador AR1 dessincronizado pelo restore de workbook pre-38.2) |
+| Predecessor | [0105-onda38-2-1-revert-filtros-menu.json](../readbacks/0105-onda38-2-1-revert-filtros-menu.json) (CONFIRMED + ERP fechado com findings) |
+| Build label | `e9bcf42+ONDA38.2.1-AR1-sanear-contadores` |
+| Origem | F1 + F2 do ERP 0105 (cadastro empresa ID 001 + cadastro entidade no topo) |
+
+### Resumo da onda 38.2.1-AR1
+
+**Causa**: `Util_Planilha.ProximoId(nomeAba)` le `<aba>!AR1` (coluna
+`COL_CONTADOR_AR=44`), incrementa e grava. Quando o workbook foi
+restaurado de backup pre-38.2 para aplicar a Onda 38.2.1, os
+contadores `EMPRESAS!AR1` e (provavel) `ENTIDADES!AR1` ficaram
+dessincronizados do max(ID) real das empresas/entidades ja existentes.
+Resultado: cadastro novo pega ID 001 ou similar e duplica IDs, o que
+e CRITICO para `Svc_Rodizio.SelecionarEmpresa` (`LerEmpresa` retorna
+o primeiro encontrado e empresa nova fica invisivel ao rodizio).
+
+**Acao**: criar `src/vba/Util_Sanear_Contadores.bas` com funcao
+`SanearContadoresAR1()` que percorre as abas que usam `ProximoId`
+(EMPRESAS, ENTIDADES, CAD_OS, PRE_OS, AVALIACOES, CREDENCIAMENTO,
+SERVICOS), calcula `max(coluna_ID)` e grava em `<aba>!AR1`.
+Funcao idempotente, pode rodar quantas vezes for preciso. Mauricio
+roda 1x apos import via macro no Imediato. NAO toca .frm/.frx, NAO
+toca servicos blindados, NAO toca dados de empresa/entidade.
+
+**Fora de escopo** (deferido): filtros novos (38.2.2), PDF (39+),
+lentidao cadastros (V207), refatoracao de ProximoId (V207).
+
+## Onda 38.2.1 ENTREGUE — Revert filtros Menu Principal (Opus) — human_gate_passed_with_findings
+
+| Campo | Valor |
+|---|---|
+| Track | safe_track |
+| Readback | [readbacks/0105-onda38-2-1-revert-filtros-menu.json](../readbacks/0105-onda38-2-1-revert-filtros-menu.json) — **human_status: confirmed** |
+| Hearback | confirmed — Mauricio aprovou plano de revert + arquitetura 38.2.2 em chat 2026-05-26 |
+| ERP | [results/0105-exec-onda38-2-1-revert-filtros-menu.json](../results/0105-exec-onda38-2-1-revert-filtros-menu.json) — **human_gate_passed_with_findings** |
+| Doc tecnico | [38_2_1_TECNICO.md](../../auditoria/03_ondas/onda_38_2_1_revert_filtros_menu/38_2_1_TECNICO.md) |
+| Manifesto delta | [000-MANIFESTO-V3-DELTA-ONDA38-2-1-REVERT-FILTROS-MENU.txt](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-REVERT-FILTROS-MENU.txt) |
 | Build label | `7bca168+ONDA38.2.1-revert-filtros-menu` |
-| Predecessor | [0104-onda38-2-filtros-menu-principal.json](../readbacks/0104-onda38-2-filtros-menu-principal.json) |
-| Housekeeping pre-onda | commit `7e98926` (chore housekeeping pre-Onda 38.2.1) - remove V12-204-Micro48/, descarta AAX dirty, limpa CSVs untracked, remove 0103 orfao e doc orfao raiz - aprovado Mauricio 2026-05-26 |
+| Predecessor | [0104-onda38-2-filtros-menu-principal.json](../readbacks/0104-onda38-2-filtros-menu-principal.json) (human_gate_failed) |
+| Commit | `e9bcf42` (15 arquivos, 5/5 guards verdes) |
+| Housekeeping pre-onda | commit `7e98926` - V12-204-Micro48 removida, AAX dirty descartada, CSVs/0103/AUDITORIA_ESCOPO untracked apagados |
+
+### Resultado Onda 38.2.1
+
+**Entregue**: import OK (`M=2|F=1|err=0|skip=0`); compile VBE limpo;
+**erro 424 eliminado**; build label propagado; RVS Trio APROVADO
+em `VR_20260526_024718` com `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0`.
+Filtro de Empresa (TextBox17) funciona — handler nativo
+`TextBox17_Change` pre-existente desde 38.1.5 confirma a hipotese
+arquitetural da 38.2.2.
+
+**Findings** (debitos abertos para ondas futuras, NAO regressao do 38.2):
+- **F1** ID 001 cadastro empresa - causa em `Util_Planilha.ProximoId`
+  + `EMPRESAS!AR1` dessincronizado - **Onda 38.2.1-AR1 (ativa)**.
+- **F2** Cadastro entidade nova no topo - provavel mesmo bug AR1 em
+  ENTIDADES - **Onda 38.2.1-AR1 (provavel cobre)**.
+- **F3** Filtros faltantes (Entidade, Atribuicao Servico, etc.) -
+  **Onda 38.2.2** (handlers nativos + funcao pura).
+- **F4** Lentidao cadastros - **DEFERIDO V207**.
+
+**Knowledge HBN nova**: `.hbn/knowledge/0015-readback-opening-bootstrap.md`
+documenta licao sobre commit de abertura de onda safe_track e propoe
+melhoria no `assert-scope-lock.sh`.
+
+**Bastao**: continua com Claude Opus 4.7.
 
 ### Resumo da onda 38.2.1
 
