@@ -17,6 +17,22 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.2.1-AR1-FIX2-PERF gate humano APROVADO com findings** —
+  Import V3 `M=5 | F=0 | err=0 | skip=0`; compile limpo;
+  `SanearContadoresAR1` `ok=7 falhas=0` com guarda monotônica validada
+  na real (`CREDENCIADOS!AR1 8 -> 8 (sources: CREDENCIADOS=4)` — sem a
+  guarda, AR1 cairia para 4 e reusaria IDs deletados; **F5 do ERP 0106
+  RESOLVIDO definitivamente**); cadastros sequenciais (empresa 6 → ID
+  004, empresa 7 → ID 005); performance ~2× mais rápida (esperado
+  10–30×, parcial); RVS Trio APROVADO `VR_20260526_102200`
+  (`V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0`). Findings novos:
+  **F-NEW3** (cosmético — ID `5` em ENTIDADE em vez de `005`, causa em
+  `Menu_Principal.frm:1622` ListObject sem `NumberFormat="@"`),
+  **F-NEW4** (continuação F4 — performance parcial, gargalo residual em
+  `.frm` e reload de ListBox), **F-NEW4-DT** (débito técnico V207 —
+  testes E2E de cadastros não existem). Próxima onda 38.2.2 cobre
+  filtros nativos + envelopamento `.frm` + fix F-NEW3, com deep-dive
+  PHAGOCYTOSIS como pré-trabalho obrigatório.
 - **Onda 38.2.1-AR1-FIX2-PERF (em execução)** — combina **Parte A**
   (ID monotônico) e **Parte B.lite** (Excel performance wrapper para
   `Repo_Empresa`). Parte A: `Util_Sanear_Contadores.SanearAR1EmAbaPareada`

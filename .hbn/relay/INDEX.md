@@ -1,46 +1,49 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Claude Opus 4.7 (sessao sucessora apos handoff 0107 confirmed). Opus segue como arquiteto+executor para estabilizacao da V12.0.0206 ate freeze; Codex retorna como auditor adversarial pos-implementacao. Onda 38.2.1 ENTREGUE + Onda 38.2.1-AR1 ENTREGUE com Sexteto APROVADO em VR_20260526_035523. Onda 38.2.1-AR1-FIX2-PERF ABERTA (readback 0108 PENDING) combinando Caminho A (ID monotonico) com B.lite (wrapper Excel performance apenas em Repo_Empresa) - aprovacao Mauricio em chat 2026-05-26.
-ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (cadastros corretos + filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; passagem assistida tela-a-tela com Mauricio antes do freeze; deep-dive arquitetural fica para V207. Sequencia atualizada: AR1 (entregue) -> AR1-FIX2-PERF (ativa) -> deep-dive PHAGOCYTOSIS -> 38.2.2 (filtros + perf restante .frm) -> 39+ (PDF) -> freeze.
-ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ad5b487 (handoff Opus pos-AR1), Sexteto APROVADO em VR_20260526_035523 com build e9bcf42+ONDA38.2.1-AR1-sanear-contadores no workbook do operador.
-proxima-acao: 🟡 HBN READBACK PENDING (0108) — aguardando hearback confirmed do Mauricio para Onda 38.2.1-AR1-FIX2-PERF. Conteudo: Parte A monotonicidade em SanearAR1EmAbaPareada + ProximoId; Parte B.lite wrapper Util_Excel_Performance aplicado a Repo_Empresa.{Inserir,Atualizar,GravarStatusEmpresa,BackfillDtUltReativ} + SanearContadoresAR1. Escopo NAO toca .frm nem Svc_*.
-ultima-atualizacao: 2026-05-26T18:30:00-0300 (sessao sucessora pos-handoff 0107; readback 0108 criado PENDING; bootstrap pattern Knowledge 0015 aplicado - readback+INDEX ficam no working tree ate confirmed)
+proprietario-bastao: Claude Opus 4.7 (sessao sucessora apos handoff 0107). Opus segue como arquiteto+executor ate freeze V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. Ondas 38.2.1 + 38.2.1-AR1 + 38.2.1-AR1-FIX2-PERF entregues com gates humanos APROVADOS. Anchor funcional V206 mais recente: commit ee75b30 (Onda FIX2-PERF), RVS Trio APROVADO VR_20260526_102200 V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0. Guarda monotonica validada na real: CREDENCIADOS!AR1=8 preservado apesar de coluna A=4. F5 do ERP 0106 RESOLVIDO definitivamente. Findings novos pos-gate: F-NEW3 (cosmetico - ID '5' vs '005' em ENTIDADE; fix em Onda 38.2.2 com .frm) + F-NEW4 (performance parcial ~2x, esperado 10-30x; resto V207) + F-NEW4-DT (validacao de cadastros via testes, V207). Proxima onda: 38.2.2 filtros nativos + envelopamento .frm com PHAGOCYTOSIS deep-dive como pre-trabalho obrigatorio.
+ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (cadastros corretos + filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; passagem assistida tela-a-tela com Mauricio antes do freeze; deep-dive arquitetural fica para V207. Sequencia: AR1 (entregue) -> AR1-FIX2-PERF (entregue) -> deep-dive PHAGOCYTOSIS -> 38.2.2 (filtros + perf restante .frm + fix F-NEW3) -> 39+ (PDF) -> freeze.
+ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF no workbook do operador, RVS Trio APROVADO em VR_20260526_102200.
+proxima-acao: 🟢 HBN GATE APROVADO — Onda 38.2.1-AR1-FIX2-PERF ENTREGUE com 3 findings novos (F-NEW3 cosmetico, F-NEW4 perf parcial, F-NEW4-DT testes de cadastros). Proxima onda 38.2.2 exige PRE-TRABALHO Opus: deep-dive PHAGOCYTOSIS-VBA-PATTERNS leitura completa de M9 + L22-L24 + M15-M17 antes do readback 0109. Escopo proposto: filtros nativos Menu_Principal (TextBoxNN_Change + funcao filtro pura) + envelopamento Util_Excel_Performance dos cadastros em .frm (Menu_Principal entidade/empresa-alt + Credencia_Empresa + Cadastro_Servico) + correcao NumberFormat=\"@\" para F-NEW3.
+ultima-atualizacao: 2026-05-26T11:00:00-0300 (Onda 38.2.1-AR1-FIX2-PERF fechada como human_gate_passed_with_findings; ERP 0108 criado; F-NEW3+F-NEW4+F-NEW4-DT documentados para ondas seguintes)
 ---
 
-## 🟡 HBN READBACK PENDING — Onda 38.2.1-AR1-FIX2-PERF (Opus) aguardando hearback
+## 🟢 Onda 38.2.1-AR1-FIX2-PERF ENTREGUE (Opus) — human_gate_passed_with_findings
 
 | Campo | Valor |
 |---|---|
-| Sinal | 🟡 HBN READBACK PENDING |
 | Track | safe_track |
-| Readback | [`readbacks/0108-onda38-2-1-ar1-fix2-perf.json`](../readbacks/0108-onda38-2-1-ar1-fix2-perf.json) — **human_status: pending** |
-| Predecessor | [`readbacks/0107-handoff-fim-sessao-opus.json`](../readbacks/0107-handoff-fim-sessao-opus.json) (confirmed) |
-| Aprovacao Mauricio em chat | "Confirmo A + B lite" (2026-05-26) |
+| Readback | [`readbacks/0108-onda38-2-1-ar1-fix2-perf.json`](../readbacks/0108-onda38-2-1-ar1-fix2-perf.json) — **human_status: confirmed** |
+| ERP | [`results/0108-exec-onda38-2-1-ar1-fix2-perf.json`](../results/0108-exec-onda38-2-1-ar1-fix2-perf.json) — **human_gate_passed_with_findings** |
+| Doc tecnico | [`38_2_1_AR1_FIX2_PERF_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_1_ar1_fix2_perf/38_2_1_AR1_FIX2_PERF_TECNICO.md) |
+| Manifesto | `ONDA38-2-1-AR1-FIX2-PERF` (M=5 importados pelo V3) |
 | Build label | `ad5b487+ONDA38.2.1-AR1-FIX2-PERF` |
-| Modulos a importar | M=4: Util_Planilha, Util_Sanear_Contadores, Repo_Empresa, Util_Excel_Performance (NOVO) + App_Release (BUMP) |
-| Anchor de rollback | commit `ad5b487` (handoff + Sexteto APROVADO `VR_20260526_035523`) |
+| Commit primario | `ee75b30` |
+| RVS Trio | **APROVADO** `VR_20260526_102200` `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0` |
+| Anchor de rollback | commit `ad5b487` (handoff Opus + Sexteto VR_20260526_035523) |
 
-### Escopo combinado A + B.lite
+### Resultado
 
-**Parte A — ID monotonico**:
-- `Util_Sanear_Contadores.SanearAR1EmAbaPareada` ganha guarda `If maxId < valorAnterior Then maxId = valorAnterior` (resolve regressao CRED 6->4 do F5; CRED_IDs 005/006 viram gaps permanentes)
-- `Util_Planilha.ProximoId` ganha defesa em profundidade `If Util_MaxIdNaColunaA(nomeAba) > atual Then atual = max_real` (resolve cenario backup pre-38.2 com AR1=0)
-- `Util_Planilha` ganha `Public Function Util_MaxIdNaColunaA(nomeAba) As Long` (helper promovido do que estava Private em Util_Sanear_Contadores)
+**Entregue**: Parte A (microdelta ID monotonico) + Parte B.lite (wrapper Excel performance em Repo_Empresa).
 
-**Parte B.lite — Excel performance**:
-- Novo `Util_Excel_Performance.bas` com `Public Type TEstadoExcel` + `Util_IniciarBlocoRapido()`/`Util_FinalizarBlocoRapido(st)` (desliga e RESTAURA 4 flags Application)
-- Envelopa `Repo_Empresa.{Inserir, Atualizar, GravarStatusEmpresa, RepoEmpresa_BackfillDtUltReativPorAuditLog}` + `Util_Sanear_Contadores.SanearContadoresAR1`
-- Cadastro/edicao de empresa esperado 10-30x mais rapido em PC antigo
+- **Guarda monotonica validada na real**: `CREDENCIADOS!AR1 8 -> 8 (sources: CREDENCIADOS=4)`. AR1 estava em 8, coluna A so tinha 4 IDs (CRED_IDs 005-008 deletados historicamente). Sem a guarda, AR1 cairia para 4 e reusaria IDs. **F5 do ERP 0106 RESOLVIDO definitivamente.**
+- Import V3: `M=5 | F=0 | err=0 | skip=0`. Compile limpo.
+- Cadastros sequenciais: empresa 6 → ID 004, empresa 7 → ID 005. Local 4 → ID 004, Local 5 → ID 5 (ver F-NEW3).
+- Performance: ~2x mais rapida (esperado 10-30x; ver F-NEW4).
 
-**Fora de escopo** (vai para Onda 38.2.2 ou seguintes, com deep-dive PHAGOCYTOSIS antes):
-- Cadastros em .frm (Menu_Principal entidade/empresa-alt, Credencia_Empresa, Cadastro_Servico)
-- Preencher.bas (loops de atividade)
-- Outros Repo_* (Credenciamento, OS, PreOS, Avaliacao)
+### Findings pos-gate
 
-### Bootstrap pattern (Knowledge 0015)
+- **F-NEW3** (cosmetico): ID `5` em ENTIDADE em vez de `005`. Causa: ListObject sem `.NumberFormat="@"` em `Menu_Principal.frm:1622`. Funcionalmente OK (`IdsIguais` trata). Fix em Onda 38.2.2.
+- **F-NEW4** (medium - continuacao F4): performance parcial. Gargalo residual: reload de ListBox + cadastros em `.frm`. Resto na Onda 38.2.2 + refatoracao V207.
+- **F-NEW4-DT** (medium): testes E2E de cadastros nao existem; debito tecnico V207.
 
-O readback 0108 + esta atualizacao do INDEX ficam no working tree (NAO commitados) ate o hearback `confirmed`. Mauricio confirma em chat e Opus muda `human_status: confirmed` antes do commit primario da onda.
+### Proxima onda
+
+**38.2.2 — filtros nativos + envelopamento .frm + fix F-NEW3**:
+- Handlers `TextBox16..22_Change` estaticos + funcao filtro pura.
+- Envelopa `Util_Excel_Performance` em cadastros .frm (Menu_Principal entidade/empresa-alt + Credencia_Empresa + Cadastro_Servico).
+- `Range.NumberFormat = "@"` para a coluna A da nova linha em cadastros.
+- **PRE-TRABALHO OBRIGATORIO Opus**: deep-dive PHAGOCYTOSIS-VBA-PATTERNS leitura completa de **M9, L22, L23, L24, M15, M16, M17** antes do readback 0109.
 
 ---
 

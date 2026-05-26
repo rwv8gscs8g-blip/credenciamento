@@ -1,0 +1,122 @@
+{
+  "result_id": "0108-exec-onda38-2-1-ar1-fix2-perf",
+  "readback_id": "0108-onda38-2-1-ar1-fix2-perf",
+  "data": "2026-05-26",
+  "agent_id": "claude-opus-4-7",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "human_gate_passed_with_findings",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "summary": "Onda 38.2.1-AR1-FIX2-PERF entregue: Parte A (microdelta ID monotonico em SanearAR1EmAbaPareada + ProximoId + helper Util_MaxIdNaColunaA publico) + Parte B.lite (modulo novo Util_Excel_Performance.bas com Util_IniciarBlocoRapido/Util_FinalizarBlocoRapido aplicado a 4 funcoes de Repo_Empresa e SanearContadoresAR1). Importador V3 M=5|F=0|err=0|skip=0; compile limpo; SanearContadoresAR1 ok=7 falhas=0 com guarda monotonica validada na real (CREDENCIADOS!AR1=8 preservado apesar de dados=4); cadastros empresa empresa 6 ID 004 + empresa 7 ID 005 sequenciais; RVS Trio APROVADO em VR_20260526_102200 V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0. Performance de cadastro caiu ~50% (parcial - resto fica para Onda 38.2.2 + V207 refatoracao).",
+  "commit_primario": "ee75b30",
+  "files_changed": [
+    "src/vba/Util_Planilha.bas",
+    "src/vba/Util_Sanear_Contadores.bas",
+    "src/vba/Util_Excel_Performance.bas",
+    "src/vba/Repo_Empresa.bas",
+    "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-FIX2-PERF.txt",
+    "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+    "local-ai/vba_import/001-modulo/AAO-Repo_Empresa.bas",
+    "local-ai/vba_import/001-modulo/ABN-Util_Sanear_Contadores.bas",
+    "local-ai/vba_import/001-modulo/ABO-Util_Excel_Performance.bas",
+    ".hbn/readbacks/0108-onda38-2-1-ar1-fix2-perf.json",
+    ".hbn/results/0108-exec-onda38-2-1-ar1-fix2-perf.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/03_ondas/onda_38_2_1_ar1_fix2_perf/38_2_1_AR1_FIX2_PERF_TECNICO.md",
+    "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260526_035523.csv",
+    "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseTrio_V12_0_0205_VR_20260526_024718.csv"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38-2-1-AR1-FIX2-PERF",
+    "build_label": "ad5b487+ONDA38.2.1-AR1-FIX2-PERF",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38-2-1-AR1-FIX2-PERF\", \"ad5b487+ONDA38.2.1-AR1-FIX2-PERF\"",
+    "expected_import_result": "M=4 | F=0 | err=0 | skip=0",
+    "actual_import_result": "M=5 | F=0 | err=0 | skip=0 (5 inclui BUMP do AAX-App_Release.bas que conta como modulo no V3; previsao 4 nao contou o AAX porque a edicao e dinamica)",
+    "post_import_manual_step": "Mauricio executa no Imediato (opcional): SanearContadoresAR1"
+  },
+  "local_validation": [
+    {
+      "gate": "5/5 guards verdes (assert-scope-lock validou todos os arquivos staged contra 0108)",
+      "status": "pass",
+      "evidence": "scripts/hbn-guards/hbn-guards-runner.sh OK; pre-commit hook validou G7+G8 antes do commit ee75b30"
+    },
+    {
+      "gate": "publicar_vba_import_v2.sh --check pos-apply",
+      "status": "pass",
+      "evidence": "G8 OK (Variant em vez de Public Type), G7 OK (vba_import 100% sincronizado com src/vba)"
+    },
+    {
+      "gate": "G8 violacao detectada e corrigida durante implementacao",
+      "status": "pass_with_lesson",
+      "evidence": "Primeira tentativa do Util_Excel_Performance.bas usava 'Public Type TEstadoExcel'; G8 reprovou com 'Util_Excel_Performance.bas:34: Public Type TEstadoExcel'; refatorado para 'Variant array(0..3)' preservando API funcional"
+    }
+  ],
+  "human_gate_evidence": {
+    "data_gate": "2026-05-26 10:08-10:58",
+    "import_v3": {
+      "status": "pass",
+      "evidencia": "Importador V3 modo=Estabilizado dryRun=Falso M=5|F=0|err=0|skip=0. BACKUP ok=52 fail=0 em \\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260526_100814-V3-FULL. BUMP_BUILD_LABEL OK (delta=ONDA38-2-1-AR1-FIX2-PERF build=ad5b487+ONDA38.2.1-AR1-FIX2-PERF). 5 MODULO_OK: Util_Planilha (629), Util_Sanear_Contadores (182), Util_Excel_Performance (78 NOVO), Repo_Empresa (607), App_Release (406)."
+    },
+    "compile_vbe": {
+      "status": "pass",
+      "evidencia": "Compile manual passou limpo apos import"
+    },
+    "sanear_contadores_ar1_idempotencia_e_monotonicidade": {
+      "status": "pass_com_validacao_critica_da_guarda_monotonica",
+      "evidencia": "Log 2026-05-26 10:09:26 ok=7 falhas=0. Saida especial: 'CREDENCIADOS!AR1 8 -> 8 (sources: CREDENCIADOS=4)' - AR1 estava em 8 (cadastros realizados entre ondas), mas a coluna A so tem 4 IDs validos (CRED_IDs 005-008 foram deletados em sessoes anteriores). A guarda monotonica preservou AR1=8 em vez de regredir para 4. Sem a guarda, proximo cadastro reusaria CRED_IDs 005, 006, 007, 008. F5 do ERP 0106 RESOLVIDO definitivamente. Logs adicionais: EMPRESAS 0->3, ENTIDADE 0->3 (saneamento normal pos-restore), ATIVIDADES 1332->1332 (no-op), CAD_SERV 0->1, PRE_OS 0->0, CAD_OS 0->0."
+    },
+    "cadastro_empresa_sequencial": {
+      "status": "pass",
+      "evidencia": "Cadastros 'empresa 6' (ID 004) e 'empresa 7' (ID 005) realizados com IDs sequenciais. Tabela EMPRESAS final: ID 1-3 fixture E2E + ID 4 empresa 6 + ID 5 empresa 7. Comportamento correto F1 resolvido com persistencia."
+    },
+    "cadastro_entidade_sequencial": {
+      "status": "pass_com_finding",
+      "evidencia": "Cadastros 'Local 4' (ID 004) e 'Local 5' (ID 5) realizados com IDs sequenciais. Tabela ENTIDADE final: 001 Local 1 E2E + 002 Local 2 E2E + 003 Local 3 E2E + 004 Local 4 + 5 Local 5. Finding F-NEW3: ID 005 ficou exibido como '5' (sem zero-padding) na celula. IDs 001-004 estao corretos. Funcionalmente OK (Util_Planilha.IdsIguais trata '005'=5)."
+    },
+    "performance_cadastro": {
+      "status": "pass_parcial",
+      "evidencia": "Mauricio reporta: 'A velocidade do cadastro de entidades e empresas diminuiu pela metade.' Esperado 10-30x; obtido ~2x. Aceitavel como progresso parcial. Finding F-NEW4 (continuacao de F4): performance ainda lenta em PCs antigos; resto fica para Onda 38.2.2 (envelopamento .frm) + V207 refatoracao de fundo. Decisao Mauricio: registrar como debito tecnico V207 com validacao de criacao de cadastros via testes."
+    },
+    "rvs_trio_minimo": {
+      "status": "pass",
+      "evidencia": "VR_20260526_102200 BUILD ad5b487+ONDA38.2.1-AR1-FIX2-PERF RESULTADO APROVADO. Sintaxe: V1=171/0 + V2_Smoke=34/0 + V2_Canonica=24/0. CSV em auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseTrio_V12_0_0205_VR_20260526_102200.csv (a anexar em onda seguinte ou no fechamento desta)."
+    },
+    "decisao_mauricio": "Gate aprovado em chat 2026-05-26 ~10:58: '9) passou nos testes, veja imagem'. Mauricio aceita findings F-NEW3 (cosmetico) e F-NEW4 (performance parcial) como debitos tecnicos a tratar nas ondas seguintes."
+  },
+  "findings_pos_gate": [
+    {
+      "id": "F-NEW3",
+      "descricao": "Em ENTIDADE, ID do Local 5 ficou exibido como '5' em vez de '005'. IDs 001-004 mantiveram o zero-padding. Causa raiz isolada em Menu_Principal.frm:1622 'wsEnt.Cells(ultimaLinhaEnt, 1).Value = Format(ContCodigo, \"000\")': Format$ retorna a string '005' corretamente, mas a coluna A da aba ENTIDADE eh ListObject sem .NumberFormat=\"@\" explicito; o Excel reinterpreta a string numerica como number quando estende a tabela. Funcionalmente OK porque Util_Planilha.IdsIguais trata '005'=5 com IsNumeric+CLng(Val). Cosmetico apenas.",
+      "severidade": "cosmetic",
+      "impacto": "Visual: usuario pode confundir 5 e 005 ao olhar a tabela. Funcional: zero (rodizio, busca, relatorios usam IdsIguais e funcionam).",
+      "mitigacao_proposta": "Onda 38.2.2 (que ja vai tocar .frm) inclui 'wsEnt.Range(\"A\" & ultimaLinhaEnt).NumberFormat = \"@\"' antes da gravacao, OU usa prefixo apostrofo. Aplicar mesma correcao em todos os cadastros em .frm (Menu_Principal, Credencia_Empresa, Cadastro_Servico).",
+      "decisao_pendente": "Aguarda Onda 38.2.2."
+    },
+    {
+      "id": "F-NEW4",
+      "descricao": "Performance de cadastro de empresa/entidade caiu ~50% com o wrapper Util_Excel_Performance aplicado em Repo_Empresa - resultado positivo mas inferior a estimativa de 10-30x. Causa provavel: o gargalo em PC antigo nao eh apenas as 17 escritas em Repo_Empresa.Inserir mas tambem (a) reconstrucao do ListBox da tela apos cadastro, (b) Funcoes.NormalizarTextoPTBR em cada campo, (c) eventos UI nao envelopaveis (UserForm.Show, etc), (d) cadastros que ainda passam por Menu_Principal.frm e nao por Repo_Empresa.",
+      "severidade": "medium",
+      "impacto": "PC antigo continua lento, mas usavel. Mauricio acessou a planilha com normalidade durante o gate.",
+      "mitigacao_proposta": "Camadas adicionais a aplicar em ondas seguintes: (S2) escrita em bloco array (1x atribuicao de 17 valores em vez de 17 .Cells.Value); (S3) lazy reload de ListBox (AddItem em vez de reconstruir); (S4) envelopar cadastros em .frm na Onda 38.2.2 com PHAGOCYTOSIS antes. Decisao Mauricio: marcar como debito tecnico V207 com refatoracao de fundo + validacao via testes.",
+      "decisao_pendente": "Aguarda decisao entre incluir S2/S3 na Onda 38.2.2 ou deferir totalmente para V207."
+    },
+    {
+      "id": "F-NEW4-DT",
+      "descricao": "Mauricio levantou em chat 2026-05-26 que cadastros nao tem testes automatizados que validem criacao de empresa/entidade/credenciado e a integridade pos-cadastro. Debito tecnico para V207.",
+      "severidade": "medium",
+      "impacto": "Risco de regressao nao detectado por bateria atual (Trio/Sexteto cobrem rodizio, ordem, integridade mas nao cobrem 'cadastrei X e os dados estao corretos').",
+      "mitigacao_proposta": "Adicionar bateria de testes E2E_CADASTROS na refatoracao V207: cadastrar empresa, verificar tabela EMPRESAS, verificar AR1 incrementado, verificar formato do ID. Idem entidade/credenciado.",
+      "decisao_pendente": "V207 backlog."
+    }
+  ],
+  "next_wave": {
+    "id": "onda38-2-2-filtros-nativos-mais-perf-frm",
+    "status": "ready_to_open_apos_pre_trabalho_phagocytosis",
+    "summary": "Combinar filtros nativos do Menu_Principal (handlers TextBox16..22_Change + funcao filtro pura) com envelopamento Util_Excel_Performance dos cadastros em .frm (Menu_Principal entidade/empresa-alt + Credencia_Empresa + Cadastro_Servico). Mesma onda atende F3 + parte de F-NEW4 + corrige F-NEW3 (NumberFormat=\"@\" na coluna A). PRE-TRABALHO OBRIGATORIO Opus na proxima sessao: deep-dive PHAGOCYTOSIS-VBA-PATTERNS leitura completa de M9 + L22-L24 + M15-M17 antes do readback 0109."
+  },
+  "closed_at": "2026-05-26T11:00:00-03:00",
+  "created_at": "2026-05-26T10:58:00-03:00"
+}
