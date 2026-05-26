@@ -20,18 +20,24 @@ produziu este handoff. Bastão **permanece com você**.
 ## ⚠️ Atenção — janela de melhoria do protocolo entre sessões
 
 Entre o handoff (2026-05-26 11:18) e esta retomada, **outra sessão Opus
-pode ter executado** `/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md`
-para evoluir o protocolo HBN. Antes de seguir o roteiro do handoff
-cegamente:
+executou manualmente** `/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md`
+e evoluiu o prompt para **v1.3** (incorpora auto-evolução do protocolo a
+cada handoff — §7.3 + Passo 5 do §7 + passo F do §2 pré-flight). Antes
+de seguir o roteiro do handoff cegamente:
 
-1. Compare o estado atual de `.hbn/knowledge/` com a versão do handoff
+1. **OBRIGATÓRIO**: leia o PROMPT_ARQUITETO v1.3 (em particular §7.3) e
+   internalize que esta sessão, ao produzir SEU handoff de fim-de-sessão,
+   produzirá também `.hbn/protocol-evolutions/AAAAMMDD-HHmm-onda<N>-proposals.md`
+   no Credenciamento, com 1-3 micro-evoluções atômicas observadas durante
+   o trabalho. Sem esse arquivo, o 🔵 HBN HANDOFF READY é incompleto.
+2. Compare o estado atual de `.hbn/knowledge/` com a versão do handoff
    (`git log --oneline -- .hbn/knowledge/` desde commit `9e2fe83`).
-2. Releia AGENTS.md e knowledges 0013–0016 (e qualquer 0017+ novo).
-3. Se houver mudanças estruturais (novo formato de readback, novo
-   guard, nova convenção de scope, etc.), **ajuste o plano do item 13**
-   do handoff antes de entregar os prompts a Mauricio. Os prompts
-   13.B e 13.C podem precisar ser regenerados com a nova convenção.
-4. Se nada mudou no protocolo, prossiga normalmente.
+3. Releia AGENTS.md e knowledges 0013–0016 (e qualquer 0017+ novo).
+4. Se houver mudanças estruturais no protocolo (novo formato de readback,
+   novo guard, nova convenção de scope, etc.), **ajuste o plano do item 13**
+   do handoff antes de entregar os prompts a Mauricio. Os prompts 13.B e
+   13.C podem precisar ser regenerados com a nova convenção.
+5. Se nada mais mudou além do PROMPT_ARQUITETO v1.3, prossiga normalmente.
 
 Não há urgência em "agarrar-se" ao handoff anterior — o objetivo é
 manter coerência arquitetural com o estado atual do protocolo.
@@ -61,7 +67,9 @@ bash scripts/hbn-guards/hbn-guards-runner.sh
 ```
 
 Esperado:
-- HEAD em commit de handoff (push já feito até `067f2dc`)
+- HEAD no commit da onda **0110** (evolução manual do protocolo v1.3 +
+  knowledge 0017), sucessor do `d03de55`. Push já realizado pelo Mauricio
+  antes desta sessão começar.
 - Working tree limpo
 - 5/5 guards verdes
 
@@ -75,7 +83,17 @@ Esperado:
 - F-NEW4 (performance parcial ~2×) → Onda 38.2.2 + V207
 - F-NEW4-DT (testes E2E de cadastros) → V207
 
-## Sua primeira ação (não é implementação)
+## Passo 0 — Fechar o ERP da onda 0110 (~1 min, antes de qualquer outra coisa)
+
+A onda 0110 (evolução do protocolo v1.3 + knowledge 0017) foi commitada
+pelo Mauricio antes desta sessão começar, mas ficou sem ERP. Crie o
+arquivo `.hbn/results/0110-exec-evolucao-protocolo-v13.json` registrando:
+commit hash do push, output dos 5 guards passando, output do `git log -1`.
+Modelo: usar o `0107-exec-handoff-fim-sessao-opus.json` como referência
+de schema para ERP de fast_track doc-only. Depois confirmar `human_status`
+em chat com Mauricio (1 frase). Custo: ~1% de contexto.
+
+## Sua primeira ação (depois do Passo 0)
 
 **Entregue os 2 prompts da auditoria cruzada ao Mauricio** (textos prontos
 no item 13.B e 13.C do handoff `.hbn/messages/20260526-1118-handoff-
@@ -120,12 +138,32 @@ não V207). Filtros + .frm performance + F-NEW3 são todos V206 puro.
 
 ## Quando atingir ~40-50% de contexto
 
-Aplicar `knowledge/0014-protocolo-fim-de-sessao` — produzir novo handoff
-em `.hbn/messages/AAAAMMDD-HHmm-handoff-fim-sessao-opus.md` e novo
-prompt em `auditoria/00_status/109_PROMPT_RETOMADA_SESSAO_OPUS.md`.
+Aplicar `knowledge/0014-protocolo-fim-de-sessao` + §7 Passo 5 do
+PROMPT_ARQUITETO v1.3 — produzir TRÊS artefatos antes de assinar 🔵:
+
+1. **Handoff operacional**: `.hbn/messages/AAAAMMDD-HHmm-handoff-fim-sessao-opus.md`
+   (12 itens conforme schema knowledge 0014).
+2. **Prompt de retomada**: `auditoria/00_status/109_PROMPT_RETOMADA_SESSAO_OPUS.md`
+   (mesma estrutura deste 108, atualizado com estado novo).
+3. **Proposta de evolução do protocolo** (NOVO em v1.3 — §7.3):
+   `.hbn/protocol-evolutions/AAAAMMDD-HHmm-onda<N>-proposals.md` com 1-3
+   micro-evoluções atômicas observadas nesta sessão. Se nenhuma evolução
+   for proposta, criar o arquivo mesmo assim com `## 1. Lições novas:
+   nenhuma` e `## 2. Propostas: nenhuma` — ausência registrada é válida;
+   esquecer o arquivo é falha de protocolo.
+
+**Orçamento de contexto sugerido** (lição desta sessão arquiteta):
+
+- ~50% do contexto: trabalho substantivo (entrega prompts 13.B/13.C,
+  deep-dive PHAGOCYTOSIS, consolidação parcial se as 4 propostas
+  chegarem dentro da sessão).
+- ~30% do contexto: redação dos 3 artefatos de handoff acima.
+- ~20% do contexto: buffer para qualquer ajuste último-minuto pedido por
+  Mauricio em chat.
 
 Lição registrada por Mauricio: handoff a 50% melhora qualidade de
-análise. Não esperar fadiga.
+análise. **Não esperar fadiga.** A sessão anterior fechou a 90% e
+produziu este handoff sob pressão — repetir o mesmo padrão é regressão.
 
 ---PROMPT---
 

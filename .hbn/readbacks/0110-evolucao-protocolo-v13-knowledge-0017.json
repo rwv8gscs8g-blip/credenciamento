@@ -1,0 +1,107 @@
+{
+  "readback_id": "0110-evolucao-protocolo-v13-knowledge-0017",
+  "data": "2026-05-26",
+  "agent_id": "claude-opus-4-7",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0109-handoff-fim-sessao-opus",
+  "intent": {
+    "objective": "Evolucao manual do protocolo HBN entre sessoes Opus, autorizada por Mauricio em chat 2026-05-26 pos-handoff 0108: (1) PROMPT_ARQUITETO_USEHBN_AUTONOMO.md bump v1.2 -> v1.3 com nova secao 7.3 'Auto-evolucao do protocolo a cada handoff' + Passo 5 do par.7 + passo F do par.2 pre-flight; (2) Knowledge 0017 nova 'handoff aos 50% de contexto - orcamento obrigatorio de qualidade' formalizando licao de Mauricio + orcamento 50/30/20; (3) auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md atualizado para refletir v1.3 e exigir 3 artefatos no proximo handoff; (4) .hbn/knowledge/INDEX.md adicionada entrada 0017; (5) registro em auditoria/00_status/109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md conforme par.11 do PROMPT_ARQUITETO. Onda fast_track doc-only - nenhum codigo de dominio tocado.",
+    "non_goals": [
+      "tocar codigo de producao (src/vba, local-ai/vba_import)",
+      "abrir Onda 38.2.2",
+      "iniciar auditoria cruzada Codex + Antigravity (fica para proxima sessao Opus colando o prompt 108 atualizado)",
+      "criar schema JSON formal de protocol-evolutions (proxima evolucao do protocolo apos uso real)",
+      "implementar scheduled task de meta-protocolo M1 (cadencia 12h, fica para evolucao futura)",
+      "refresh do backlog par.4 do PROMPT_ARQUITETO (onda separada)"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/knowledge/0017-handoff-aos-50-pct-contexto.md",
+      ".hbn/knowledge/INDEX.md",
+      ".hbn/readbacks/0110-evolucao-protocolo-v13-knowledge-0017.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md",
+      "auditoria/00_status/109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "auditoria/03_ondas/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "n/a (fast_track doc-only)"
+  },
+  "decisions_preconfirmed": [
+    "Mauricio aprovou em chat 2026-05-26 pos-handoff 0108: 'temos um momento que as IAS estao gerando um novo handoff, pois o claude opus chegou em fadiga de contexto. Avalio que e o momento adequado para fazermos uma evolucao manual do PROMPT_ARQUITETO_USEHBN_AUTONOMO. todas as IAS estao paradas aguardando para comecarmos uma nova etapa de desenvolvimento no Credenciamento.'",
+    "Mauricio especificou: 'Incorpore nesta mudanca que quando uma IA preparar um handoff por limite de contexto que ela esteja preparada para rodarmos uma melhoria e atualizacao do protocolo. Assim, a cada troca de contexto por handoff podemos ter uma micro evolucao do protocolo.' Materializado como par.7.3 + arquivo .hbn/protocol-evolutions/AAAAMMDD-HHmm-onda<N>-proposals.md.",
+    "Mauricio aprovou em chat 2026-05-26 ao revisar o resumo de 4 mudancas: 'Aprovados os pontos apresentados. Encerre essa atualizacao do protocolo que ja avancamos, implemente o que disse e deixe pronto para eu copiar o prompt 108 pra o claude opus comecar em outra janela.' Hearback gravado neste readback como confirmed.",
+    "Mauricio escolheu via AskUserQuestion 'Knowledge 0017 - handoff aos 50%' como proximo ponto de evolucao apos o par.7.3.",
+    "PROMPT_ARQUITETO_USEHBN_AUTONOMO.md vive em /Users/macbookpro/Projetos/ (fora do repo Credenciamento) - par.11 do proprio prompt determina que mudancas sejam registradas em auditoria/00_status/ do Credenciamento como 'casa-mae do protocolo'. Documento 109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md cumpre esse papel."
+  ],
+  "delta_contract": {
+    "delta_name": "n/a (fast_track doc-only)",
+    "build_label": "n/a",
+    "manifest_path": "n/a",
+    "import_command": "n/a",
+    "expected_import_result": "n/a",
+    "post_import_manual_step": "n/a"
+  },
+  "invariants_preserved": [
+    "Nenhum codigo de producao tocado",
+    "Anchor V206 funcional preservado (commit ee75b30, build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio VR_20260526_102200)",
+    "Tabus V206 inalterados (Mod_Types, Importador_V3, Svc_*, .frm)",
+    "Knowledges 0001-0016 nao alteradas (apenas adicionada 0017)",
+    "Prompt 108 mantem estrutura - apenas seccoes de Atencao e Quando-50% recebem complemento sobre v1.3",
+    "Nenhum readback ou ERP anterior tocado"
+  ],
+  "ordem_de_execucao": [
+    "1. PROMPT_ARQUITETO_USEHBN_AUTONOMO.md editado em /Users/macbookpro/Projetos/ - bump v1.2 -> v1.3 (par.7.3 novo + Passo 5 + passo F + changelog)",
+    "2. .hbn/knowledge/0017-handoff-aos-50-pct-contexto.md criada",
+    "3. .hbn/knowledge/INDEX.md atualizado com linha 0017 + data 2026-05-26",
+    "4. auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md atualizado (Atencao v1.3 + Quando-50% com 3 artefatos + orcamento 50/30/20)",
+    "5. auditoria/00_status/109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md criado (registro fora do .hbn conforme par.11)",
+    "6. .hbn/relay/INDEX.md atualizado com bloco de evolucao do protocolo v1.3",
+    "7. .hbn/readbacks/0110-*.json (este arquivo) criado em estado confirmed",
+    "8. Mauricio commita do Mac: cd /Users/macbookpro/Projetos/Credenciamento && git add <arquivos do scope> && git commit -m 'docs(hbn): evolucao protocolo v13 + knowledge 0017 handoff 50pct'",
+    "9. Push para origin codex/v12-0-0206-planejamento",
+    "10. ERP 0110-exec-evolucao-protocolo-v13.json criado pela Opus (manual ou na proxima sessao) registrando resultado dos guards + push"
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "scripts/hbn-guards/hbn-guards-runner.sh passa 5/5 verdes no Mac (raiz canonica = /Users/macbookpro/Projetos/Credenciamento)",
+        "evidence_kind": "command_output",
+        "evidence_required_in": ".hbn/results/0110-exec-evolucao-protocolo-v13.json"
+      },
+      {
+        "gate": "git push origin codex/v12-0-0206-planejamento bem-sucedido",
+        "evidence_kind": "command_output",
+        "evidence_required_in": ".hbn/results/0110-exec-evolucao-protocolo-v13.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se algum guard reprovar no Mac, ajustar scope.files_allowed e re-hearback",
+      "Se push falhar, validar credenciais e retentar (sem force)",
+      "Se Mauricio decidir reverter o par.7.3: git revert do commit + criar nota em .hbn/bypasses/ + abrir onda nova para refinar abordagem",
+      "Anchor de rollback: commit d03de55 (prompt retomada 108 + INDEX alertam janela de melhoria do protocolo)"
+    ],
+    "anchor_to_restore": "Commit d03de55"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "confirmed",
+      "at": "2026-05-26T12:30:00-03:00",
+      "by": "humano",
+      "note": "Mauricio aprovou em chat 'Aprovados os pontos apresentados. Encerre essa atualizacao do protocolo que ja avancamos, implemente o que disse e deixe pronto para eu copiar o prompt 108 pra o claude opus comecar em outra janela.' Readback fast_track aberto ja confirmado conforme padrao do 0109 anterior."
+    }
+  ],
+  "created_at": "2026-05-26T12:30:00-03:00"
+}

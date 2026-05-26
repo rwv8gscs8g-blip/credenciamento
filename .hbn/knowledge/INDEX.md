@@ -1,6 +1,6 @@
 ---
 titulo: Knowledge Base do Credenciamento (HBN)
-ultima-atualizacao: 2026-05-24
+ultima-atualizacao: 2026-05-26
 ---
 
 # Knowledge Base do Credenciamento (HBN)
@@ -30,6 +30,7 @@ ultima-atualizacao: 2026-05-24
 | Funcionalidade nova exige teste correspondente | [0010-funcionalidade-nova-exige-teste.md](0010-funcionalidade-nova-exige-teste.md) | Antes de propor ou implementar qualquer nova funcionalidade, regra de negocio, fluxo de UI ou comportamento de servico |
 | Higiene documental recorrente | [0011-higiene-documental-recorrente.md](0011-higiene-documental-recorrente.md) | Antes de passar de microdelta, onda, release ou bastao |
 | Raiz canonica obrigatoria do projeto | [0012-raiz-canonica-projeto.md](0012-raiz-canonica-projeto.md) | Antes de qualquer leitura, escrita, importacao, handoff ou uso de worktree |
+| Handoff aos 50% de contexto — orçamento obrigatório de qualidade | [0017-handoff-aos-50-pct-contexto.md](0017-handoff-aos-50-pct-contexto.md) | Toda IA em sessão longa: gatilho duro aos 50% + orçamento 50/30/20; reforça §7.3 do PROMPT_ARQUITETO v1.3+ |
 
 ## Por decisao (decisoes que afetam comportamento)
 

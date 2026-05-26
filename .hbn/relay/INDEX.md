@@ -1,14 +1,43 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
-versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
-proprietario-bastao: Claude Opus 4.7 (sessao sucessora apos handoff 0107). Opus segue como arquiteto+executor ate freeze V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. Ondas 38.2.1 + 38.2.1-AR1 + 38.2.1-AR1-FIX2-PERF entregues com gates humanos APROVADOS. Anchor funcional V206 mais recente: commit ee75b30 (Onda FIX2-PERF), RVS Trio APROVADO VR_20260526_102200 V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0. Guarda monotonica validada na real: CREDENCIADOS!AR1=8 preservado apesar de coluna A=4. F5 do ERP 0106 RESOLVIDO definitivamente. Findings novos pos-gate: F-NEW3 (cosmetico - ID '5' vs '005' em ENTIDADE; fix em Onda 38.2.2 com .frm) + F-NEW4 (performance parcial ~2x, esperado 10-30x; resto V207) + F-NEW4-DT (validacao de cadastros via testes, V207). Proxima onda: 38.2.2 filtros nativos + envelopamento .frm com PHAGOCYTOSIS deep-dive como pre-trabalho obrigatorio.
-ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (cadastros corretos + filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; passagem assistida tela-a-tela com Mauricio antes do freeze; deep-dive arquitetural fica para V207. Sequencia: AR1 (entregue) -> AR1-FIX2-PERF (entregue) -> deep-dive PHAGOCYTOSIS -> 38.2.2 (filtros + perf restante .frm + fix F-NEW3) -> 39+ (PDF) -> freeze.
+versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.3 (auto-evolucao por handoff)
+proprietario-bastao: Claude Opus 4.7 (sessao sucessora apos handoff 0108 + onda 0110 de evolucao manual do protocolo). Opus segue como arquiteto+executor ate freeze V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. Ondas 38.2.1 + 38.2.1-AR1 + 38.2.1-AR1-FIX2-PERF entregues com gates humanos APROVADOS. Anchor funcional V206 mais recente: commit ee75b30 (Onda FIX2-PERF), RVS Trio APROVADO VR_20260526_102200 V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0. Guarda monotonica validada na real: CREDENCIADOS!AR1=8 preservado apesar de coluna A=4. F5 do ERP 0106 RESOLVIDO definitivamente. Findings novos pos-gate: F-NEW3 (cosmetico - ID '5' vs '005' em ENTIDADE; fix em Onda 38.2.2 com .frm) + F-NEW4 (performance parcial ~2x, esperado 10-30x; resto V207) + F-NEW4-DT (validacao de cadastros via testes, V207). Proxima onda: 38.2.2 filtros nativos + envelopamento .frm com PHAGOCYTOSIS deep-dive como pre-trabalho obrigatorio.
+ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (cadastros corretos + filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; passagem assistida tela-a-tela com Mauricio antes do freeze; deep-dive arquitetural fica para V207. Sequencia: AR1 (entregue) -> AR1-FIX2-PERF (entregue) -> evolucao protocolo v1.3 + knowledge 0017 (entregue, onda 0110) -> auditoria cruzada Codex+Antigravity -> deep-dive PHAGOCYTOSIS -> 38.2.2 (filtros + perf restante .frm + fix F-NEW3) -> 39+ (PDF) -> freeze.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF no workbook do operador, RVS Trio APROVADO em VR_20260526_102200.
-proxima-acao: 🔵 HBN HANDOFF READY — sessao Opus 2026-05-26 (sucessora) encerrada com handoff em .hbn/messages/20260526-1118-handoff-fim-sessao-opus.md. Proxima sessao Opus comeca com prompt em auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md. ATENCAO: entre o handoff e a retomada pode rodar outra sessao Opus executando /Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md (melhoria do protocolo HBN); o prompt 108 ja inclui orientacao para a IA sucessora comparar knowledges atuais com versao do handoff antes de seguir. Primeira acao da proxima sessao: entregar 2 prompts (item 13.B e 13.C do handoff) ao Mauricio para auditoria cruzada Codex + Antigravity/Gemini com 3 propostas V207 cada. Em paralelo (opcional): deep-dive PHAGOCYTOSIS antes de abrir Onda 38.2.2.
-ultima-atualizacao: 2026-05-26T11:18:00-0300 (sessao Opus encerrada; handoff completo; auditoria cruzada agendada para abertura da proxima sessao; commits ee75b30 + 067f2dc pushed para origin)
+proxima-acao: 🟢 ONDA 0110 (fast_track doc-only) PRONTA PARA COMMIT — evolucao manual do protocolo HBN entre sessoes. PROMPT_ARQUITETO_USEHBN_AUTONOMO.md bumped v1.2 -> v1.3 (par.7.3 auto-evolucao + Passo 5 + passo F pre-flight); knowledge 0017 nova (handoff aos 50pct com orcamento 50/30/20); prompt 108 atualizado para exigir 3 artefatos; doc auditoria 109 cumpre par.11. Readback 0110 fast_track confirmed por Mauricio em chat. Working tree do Mac tem 6 arquivos prontos para staged + commit; sequencia exata em auditoria/00_status/109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md. Apos commit + push, abrir nova janela Opus colando o prompt 108 atualizado para iniciar auditoria cruzada Codex + Antigravity/Gemini.
+ultima-atualizacao: 2026-05-26T12:30:00-0300 (onda 0110 fast_track pronta para commit/push pelo operador; PROMPT_ARQUITETO v1.3 + knowledge 0017 entregues; prompt 108 corrigido; proxima sessao Opus abre auditoria cruzada V206/V207)
 ---
 
-## 🔵 HBN HANDOFF READY — sessão Opus 2026-05-26 sucessora encerrada
+## 🟢 Onda 0110 PRONTA PARA COMMIT (fast_track doc-only) — Evolução manual do protocolo v1.2 → v1.3
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 PRONTA PARA COMMIT |
+| Track | fast_track (doc-only) |
+| Origem | Claude Opus (sessão Cowork de evolução manual, 2026-05-26 ~12:00 → 12:30) |
+| Readback | [`readbacks/0110-evolucao-protocolo-v13-knowledge-0017.json`](../readbacks/0110-evolucao-protocolo-v13-knowledge-0017.json) — **human_status: confirmed** |
+| Doc de auditoria (par.11 PROMPT_ARQUITETO) | [`109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md`](../../auditoria/00_status/109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md) |
+| Sequência de commit | Bloco copiável em §"Sequência de versionamento" do 109 acima |
+
+### Mudanças (4 alvos atômicos)
+
+1. **`/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md`** (fora do repo) — v1.2 → **v1.3**: §7.3 novo (auto-evolução do protocolo a cada handoff) + Passo 5 do §7 + passo F do §2 pré-flight + changelog.
+2. **`.hbn/knowledge/0017-handoff-aos-50-pct-contexto.md`** (NOVO) — formaliza a regra dos 50% com orçamento 50/30/20 e cláusula de exceção.
+3. **`auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md`** — Atenção e Quando-50% atualizadas para v1.3; exige 3 artefatos no próximo handoff.
+4. **`.hbn/knowledge/INDEX.md`** — linha 0017 + bump de data.
+
+### Próxima ação concreta
+
+Mauricio executa a sequência de commit em `auditoria/00_status/109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md` §"Sequência de versionamento" e abre nova janela Opus colando o prompt 108 atualizado. A próxima sessão Opus:
+
+1. Cria o ERP `0110-exec-evolucao-protocolo-v13.json` (registro pós-commit, ~1 min).
+2. Entrega os prompts 13.B (Codex) e 13.C (Antigravity/Gemini) do handoff 1118 para Mauricio abrir as 2 sessões paralelas.
+3. Em paralelo (opcional, ~30% contexto): deep-dive PHAGOCYTOSIS-VBA-PATTERNS M9, L22-L24, M15-M17 preparando Onda 38.2.2.
+4. **Aplica §7.3 ao próprio fim-de-sessão**: produz handoff + prompt 110 retomada + `.hbn/protocol-evolutions/AAAAMMDD-HHmm-onda<N>-proposals.md` (primeira aplicação prática do mecanismo novo).
+
+---
+
+## 🔵 HBN HANDOFF READY — sessão Opus 2026-05-26 sucessora encerrada (CONSUMIDO pela onda 0110)
 
 | Campo | Valor |
 |---|---|
