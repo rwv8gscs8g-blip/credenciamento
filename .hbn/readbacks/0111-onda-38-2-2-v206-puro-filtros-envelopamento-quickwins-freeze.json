@@ -1,0 +1,391 @@
+{
+  "readback_id": "0111-onda-38-2-2-v206-puro-filtros-envelopamento-quickwins-freeze",
+  "data": "2026-05-26",
+  "agent_id": "claude-opus-4-7",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "version_target_subwave": "ONDA38.2.2",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0110-evolucao-protocolo-v13-knowledge-0017",
+  "predecessor_onda_substantiva": "0108-onda38-2-1-ar1-fix2-perf",
+  "anchor_funcional_v206": "ee75b30 (HEAD pós-FIX2-PERF + RVS Trio APROVADO VR_20260526_102200)",
+  "estado_inicial_repo": {
+    "head": "179bac5",
+    "branch": "codex/v12-0-0206-planejamento (sincronizado com origin)",
+    "working_tree_esperado": " M local-ai/vba_import/001-modulo/AAX-App_Release.bas (knowledge 0016) + ?? auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260526_153113.csv (untracked, opcional commit adjacente)",
+    "guards_status": "5/5 verdes confirmados"
+  },
+  "intent": {
+    "objective": "Fechar a estabilização V12.0.0206 com a ONDA38.2.2 — última onda V206 puro antes do freeze. Mistura 5 alvos atômicos pré-aprovados na 2ª rodada de auditoria cruzada (Codex itens 68/69 + Findings F-NEW3 + filtros nativos + envelopamento .frm). NÃO antecipa nenhuma decisão V207 (cache in-memory, Svc_Cadastro*, ORM primitivo) — esses ficam para readbacks 0120+ pós-knowledges 0018/0019/0020. Esta onda é o último degrau antes da tag v12.0.0206 oficial.",
+    "alvos_atomicos": [
+      "AT-1 (item 68 Codex, sev. ALTO): Util_MaxIdOperacional(nomeAba As String) As Long — função pública em Util_Planilha.bas pair-aware EMPRESAS+EMPRESAS_INATIVAS / ENTIDADE+ENTIDADE_INATIVOS. Resolve risco de ProximoId gerar ID duplicado contra aba inativa (cenário: empresa deletada virou inativa, novo cadastro recebe ID já usado).",
+      "AT-2 (item 69 Codex, sev. MÉDIO): Instalar On Error GoTo ANTES de chamar Util_IniciarBlocoRapido em 5 callers — Repo_Empresa.bas (Inserir:80, Atualizar:242, GravarStatusEmpresa:319, RepoEmpresa_BackfillDtUltReativPorAuditLog:476) + Util_Sanear_Contadores.bas (SanearContadoresAR1:44). Garante restauração de TEstadoExcel mesmo em erro precoce.",
+      "AT-3 (F-NEW3 sistemático): Range(.Cells(novaLinha,1)).NumberFormat = \"@\" antes de gravar ID em coluna A nos 4 cadastros que escrevem direto em .frm — Menu_Principal.frm (entidade ~1611-1676, empresa-alt ~2239-2269), Credencia_Empresa.frm, Cadastro_Servico.frm. Resolve cosmético '5' vs '005' detectado em ENTIDADE (origem Menu_Principal.frm:1622).",
+      "AT-4 (filtros nativos): Substituir descoberta dinâmica heurística (UI_TextBoxSeExisteRecursivo + UI_PegarTextBoxBuscaDaLista) por handlers estáticos TextBox16_Change..TextBox22_Change no Menu_Principal.frm + função filtro pura em Preencher.bas. Mapeamento dos 7 ponteiros já confirmado em auditoria/03_ondas/onda_38_2_filtros_menu_principal/38_2_TECNICO.md §Mapeamento (linhas 27-35). Reverte definitivamente a regressão da Onda 38.2.1 (e9bcf42).",
+      "AT-5 (envelopamento Util_Excel_Performance em 3 .frm): Aplicar pattern Util_IniciarBlocoRapido/Util_FinalizarBlocoRapido nos blocos de cadastro de Menu_Principal.frm (entidade + empresa-alt) + Credencia_Empresa.frm (botão cadastrar credenciamento ~linha 153) + Cadastro_Servico.frm (cadastrar serviço/atividade ~linhas 112,143). Esperado: speedup ~3-8× percebido em PC antigo para cadastros UI (complementa Repo_Empresa já envelopado na FIX2-PERF)."
+    ],
+    "non_goals": [
+      "Tocar Svc_* blindados (Svc_Rodizio, Svc_Avaliacao, Svc_OS, Svc_PreOS, Svc_Entidade, Svc_Transacao)",
+      "Tocar Mod_Types.bas (intervenção planejada apenas para V207.0)",
+      "Tocar Importador_V3.bas (BUMP_NO_OP fica para V208.7 conforme refinamento Codex)",
+      "Tocar Auto_Open.bas",
+      "Tocar Repo_OS.bas, Repo_PreOS.bas, Repo_Avaliacao.bas, Repo_Credenciamento.bas (esses Repos ficam para V207.5)",
+      "Tocar PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "Implementar Svc_CadastroEmpresa, Svc_CadastroEntidade, Svc_CadastroServico, Svc_CredenciamentoCadastro (são V207.2/V207.3/V207.4)",
+      "Implementar cache in-memory de ListBox (é V207.5)",
+      "Implementar E2E_CADASTROS (é V207.1)",
+      "Implementar escrita em bloco completa (parcial em AT-5 envelopamento; ORM completo é V207.x)",
+      "Alterar comportamento de PreencherServicoFormatado, PreencherManutencaoValor, PreencherPreencheOS, PreencherAvaliarOS além do mínimo para suportar AT-4 (filtros)",
+      "Renomear controles no VBE designer (TextBox16..22 ficam como estão; rename é débito V207)",
+      "Tocar .frx binário (regra absoluta — só .code-only.txt + texto)",
+      "Importar .frm direto via 'Import File' do VBE (regra absoluta da PHAGOCYTOSIS L22)",
+      "Antecipar tag v12.0.0207-base-monolito (essa é exclusiva de pós-V207.4)"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Util_Sanear_Contadores.bas",
+      "src/vba/Repo_Empresa.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Menu_Principal.frx",
+      "src/vba/Credencia_Empresa.frm",
+      "src/vba/Credencia_Empresa.frx",
+      "src/vba/Cadastro_Servico.frm",
+      "src/vba/Cadastro_Servico.frx",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/A*-Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/A*-Util_Sanear_Contadores.bas",
+      "local-ai/vba_import/001-modulo/A*-Repo_Empresa.bas",
+      "local-ai/vba_import/001-modulo/A*-Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/002-formularios/*-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/*-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/*-Menu_Principal.frx",
+      "local-ai/vba_import/002-formularios/*-Credencia_Empresa.code-only.txt",
+      "local-ai/vba_import/002-formularios/*-Credencia_Empresa.frm",
+      "local-ai/vba_import/002-formularios/*-Credencia_Empresa.frx",
+      "local-ai/vba_import/002-formularios/*-Cadastro_Servico.code-only.txt",
+      "local-ai/vba_import/002-formularios/*-Cadastro_Servico.frm",
+      "local-ai/vba_import/002-formularios/*-Cadastro_Servico.frx",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-2-V206-FREEZE.txt",
+      "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+      ".hbn/readbacks/0111-onda-38-2-2-v206-puro-filtros-envelopamento-quickwins-freeze.json",
+      ".hbn/results/0111-exec-onda-38-2-2-v206-freeze.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_2_2_v206_freeze/**",
+      "auditoria/evidencias/V12.0.0206/csv/**",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260526_153113.csv",
+      ".hbn/messages/20260526-1730-handoff-fim-sessao-opus.md",
+      "auditoria/00_status/113_PROMPT_RETOMADA_SESSAO_OPUS.md",
+      ".hbn/protocol-evolutions/**"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Svc_Entidade.bas",
+      "src/vba/Svc_Transacao.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/Repo_OS.bas",
+      "src/vba/Repo_PreOS.bas",
+      "src/vba/Repo_Avaliacao.bas",
+      "src/vba/Repo_Credenciamento.bas",
+      "src/vba/Util_Excel_Performance.bas (apenas leitura — não alterar interface TEstadoExcel/Util_IniciarBlocoRapido/Util_FinalizarBlocoRapido criada na FIX2-PERF)",
+      "src/vba/Altera_Empresa.frm",
+      "src/vba/Altera_Empresa.frx",
+      "src/vba/Altera_Entidade.frm",
+      "src/vba/Altera_Entidade.frx",
+      "src/vba/Reativa_Empresa.frm",
+      "src/vba/Reativa_Empresa.frx",
+      "src/vba/Reativa_Entidade.frm",
+      "src/vba/Reativa_Entidade.frx",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Configuracao_Inicial.frx",
+      "src/vba/Limpar_Base.frm",
+      "src/vba/Limpar_Base.frx",
+      "src/vba/Fundo_Branco.frm",
+      "src/vba/Fundo_Branco.frx",
+      "src/vba/ProgressBar.frm",
+      "src/vba/ProgressBar.frx",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/Rel_OSEmpresa.frx",
+      "local-ai/incoming/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/",
+    "import_command_canonico": "ImportarPacoteV3_Delta \"ONDA38-2-2-V206-FREEZE\", \"<HEAD_HASH>+ONDA38.2.2-V206-FREEZE\""
+  },
+  "decisions_preconfirmed": [
+    "Mauricio aprovou em chat 2026-05-26 ~16:30 (esta sessão, após hearback da consolidação 2ª rodada V207 em 112_*): (a) decisão V207 fechada em Alternativa II-bis (commitment full V207.0-V207.8 sem cláusula de escape V207.4); (b) abrir Onda 38.2.2 AGORA e seguir todos os passos até validação e congelamento V206, incluindo validação tela a tela para correção de ajustes e validação formal dos forms 'conforme cronograma já aprovado'; (c) push origin do commit 179bac5 (consolidação 2ª rodada) — EXECUTADO antes da abertura deste readback.",
+    "Cronograma de validação tela a tela é EXATAMENTE o item de débito declarado em auditoria/03_ondas/onda_38_2_filtros_menu_principal/38_2_TECNICO.md:79 — 'Executar passagem final antes do freeze V206: tela a tela, botão a botão, validando filtros, comandos e pontos candidatos à V207'. Incorporado como GATE-HUMANO-VAL-TELA-A-TELA (gate humano final antes do freeze, não passível de skip).",
+    "Convergência unânime 2ª rodada Codex+Antigravity aprovou os itens 68 e 69 Codex como compatíveis com escopo V206 puro (auditoria/00_status/112_*.md §7 Quick wins). Não exigem decisão arquitetural — vão diretamente nesta onda.",
+    "PHAGOCYTOSIS-VBA-PATTERNS capítulos M9, L22, L23, L24, M15, M16, M17 — pré-trabalho já consolidado pela sessão Opus anterior (handoff 20260526-1526 §7 + 'Onda 38.2.2 ... pré-trabalho PHAGOCYTOSIS já consolidado'). Esta sessão fará RELEITURA pontual antes da execução de AT-3/AT-4/AT-5 (alvos .frm); ler usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md capítulos exatos M9 + L22 + L23 + L24 + M15 + M16 + M17 antes do primeiro Edit em .frm.",
+    "Estrutura .code-only.txt obrigatória para .frm conforme regra absoluta CLAUDE.md §Tabus — proibido usar 'Import File' direto que sobrescreve .frx e perde renomeações do designer. publicar_vba_import_v2.sh --apply gera o .code-only.txt automaticamente.",
+    "Knowledge 0016 (bump-build-label-anti-conflito) vigente: src/vba/App_Release.bas mantido com label antigo (atualmente 'ad5b487+ONDA38.2.1-AR1-FIX2-PERF' timestamp da FIX2-PERF); V3 fará BUMP no import da 38.2.2 para 'ONDA38.2.2-V206-FREEZE'. AAX-App_Release.bas no working tree (modificação atual visível em git status) é resultado esperado de BUMP anterior — será revertida automaticamente por --apply.",
+    "Onda mistura 2 etapas internas (E-A: .bas quick wins de baixo risco | E-B: .frm interventions de risco médio com PHAGOCYTOSIS) mas COMMIT ÚNICO mantém atomicidade do delta — facilita rollback e mantém o ERP em 1 só registro. Gates intermediários (import+compile após E-A) são opcionais mas RECOMENDADOS para isolar regressões.",
+    "Esta é a ÚLTIMA onda V206 antes do freeze. Sucesso desta onda + RVS APROVADO + gate tela-a-tela aprovado + push = tag v12.0.0206 oficial. Próxima onda substantiva (excluindo doc-only de knowledges 0018-0020) será readback 0120 V207.0."
+  ],
+  "etapas_internas": {
+    "etapa_A_bas_quick_wins": {
+      "titulo": "Quick wins .bas (low risk, sem .frm)",
+      "alvos": ["AT-1", "AT-2"],
+      "ordem_de_execucao_local": [
+        "A1. Editar src/vba/Util_Planilha.bas: adicionar Public Function Util_MaxIdOperacional(ByVal nomeAba As String) As Long. Pair-aware logic: se nomeAba == 'EMPRESAS', considera max entre EMPRESAS e EMPRESAS_INATIVAS via Util_MaxIdNaColunaA já existente. Se nomeAba == 'ENTIDADE', considera max entre ENTIDADE e ENTIDADE_INATIVOS. Caso contrário, fallback para Util_MaxIdNaColunaA(nomeAba) puro. Aba inativa inexistente retorna 0 silenciosamente (On Error GoTo). Atualizar ProximoId para chamar Util_MaxIdOperacional(nomeAba) em vez de Util_MaxIdNaColunaA(nomeAba) — substituição direta na linha alterada pela FIX2-PERF.",
+        "A2. Editar src/vba/Util_Sanear_Contadores.bas:SanearContadoresAR1 — mover linha 'On Error GoTo erro' para ANTES de 'estadoExcel = Util_IniciarBlocoRapido()'. Padrão: declarar 'Dim estadoExcel As TEstadoExcel' → 'On Error GoTo erro' → 'estadoExcel = Util_IniciarBlocoRapido()' → resto do corpo → 'Util_FinalizarBlocoRapido estadoExcel' → 'Exit Sub' → 'erro:' → 'Util_FinalizarBlocoRapido estadoExcel' → resto do handler.",
+        "A3. Editar src/vba/Repo_Empresa.bas em 4 funções (Inserir, Atualizar, GravarStatusEmpresa, RepoEmpresa_BackfillDtUltReativPorAuditLog) — mesmo padrão A2: handler ANTES da chamada Util_IniciarBlocoRapido. Cada função tem ~5 linhas alteradas; impacto líquido neutro em loc.",
+        "A4. Gate parcial OPCIONAL (recomendado): publicar_vba_import_v2.sh --apply + --check + ImportarPacoteV3_Delta com label intermediário + compile VBE. Se passar, segue para etapa B com confiança."
+      ]
+    },
+    "etapa_B_frm_interventions": {
+      "titulo": "Intervenções .frm (medium risk, requer PHAGOCYTOSIS releitura)",
+      "alvos": ["AT-3", "AT-4", "AT-5"],
+      "pre_trabalho_obrigatorio": "RELER capítulos PHAGOCYTOSIS M9 (forms smoke read-only) + L22 (validação textual .frm) + L23 (validação .code-only) + L24 (hash determinístico .frm) + M15 (forms helpers) + M16 (validação textual nova) + M17 antes do PRIMEIRO Edit em qualquer .frm. Localizar capítulos via grep usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md.",
+      "ordem_de_execucao_local": [
+        "B1. Editar src/vba/Menu_Principal.frm — AT-3 F-NEW3 sistemático: localizar bloco de cadastro de entidade (~linhas 1611-1676; foi citado origem F-NEW3 em :1622) e adicionar 'wsEnt.Range(wsEnt.Cells(novaLinha, 1), wsEnt.Cells(novaLinha, 1)).NumberFormat = \"@\"' ANTES da escrita 'wsEnt.Cells(novaLinha, 1).Value = novoId'. Idem para bloco de empresa-alt (~linhas 2239-2269).",
+        "B2. Editar src/vba/Menu_Principal.frm — AT-4 filtros nativos: substituir handler dinâmico mTxtFiltro*_Change baseado em UI_TextBoxSeExisteRecursivo por 7 handlers estáticos TextBox16_Change, TextBox17_Change, ..., TextBox22_Change cada um chamando função filtro pura em Preencher.bas. Mapeamento confirmado em 38_2_TECNICO.md §27-35. Manter UI_TextBoxSeExisteRecursivo + UI_PegarTextBoxBuscaDaLista apenas como FALLBACK (não remover na 38.2.2 — débito V207 conforme 38_2_TECNICO.md §70-78).",
+        "B3. Editar src/vba/Preencher.bas — AT-4 função filtro pura: adicionar Public Sub Preencher_FiltrarPorBoxEstatico(ByVal nomeContexto As String, ByVal termo As String) que receba 'entidade'|'empresa'|'atrib_servico'|'os'|'aval'|'cad_servico'|'atrib_empresa' e termo, e despache para o preenchimento correto (PreenchimentoEntidade, PreenchimentoEmpresa, etc.). Reaproveita assinaturas Optional filtro As String já existentes em PreencherPreencheOS / PreencherAvaliarOS.",
+        "B4. Editar src/vba/Menu_Principal.frm — AT-5 envelopamento: aplicar Util_IniciarBlocoRapido/Util_FinalizarBlocoRapido nos 2 blocos de cadastro (entidade ~1611-1676 + empresa-alt ~2239-2269) seguindo mesmo padrão handler-before-flag do A2.",
+        "B5. Editar src/vba/Credencia_Empresa.frm — AT-5 envelopamento + AT-3 NumberFormat: localizar bloco de cadastro de credenciamento (~linha 153 conforme readback 0108 §scope) e aplicar envelopamento + NumberFormat ANTES da escrita ID em coluna A.",
+        "B6. Editar src/vba/Cadastro_Servico.frm — AT-5 envelopamento + AT-3 NumberFormat: localizar 2 blocos (cadastro serviço ~linha 112 + cadastro atividade ~linha 143 conforme readback 0108 §scope) e aplicar envelopamento + NumberFormat.",
+        "B7. Confirmar src/vba/App_Release.bas INALTERADO (knowledge 0016)."
+      ]
+    }
+  },
+  "ordem_de_execucao": [
+    "0. Sync working tree: validar git status limpo (apenas AAX-App_Release.bas + CSV V205 untracked), confirmar HEAD em 179bac5, rodar scripts/hbn-guards/hbn-guards-runner.sh (5/5 verde).",
+    "1. RELEITURA OBRIGATÓRIA usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md capítulos M9 + L22 + L23 + L24 + M15 + M16 + M17 (antes de qualquer edit em .frm).",
+    "2. Executar etapa A em ordem (A1 → A2 → A3) e gate parcial opcional A4.",
+    "3. Executar etapa B em ordem (B1 → B2 → B3 → B4 → B5 → B6 → B7).",
+    "4. Confirmar src/vba/App_Release.bas inalterado (knowledge 0016).",
+    "5. Rodar local-ai/scripts/publicar_vba_import_v2.sh --apply (sync src/vba → vba_import; AAX volta para label antigo; .frm geram .code-only.txt + .frm + .frx atualizados).",
+    "6. Rodar local-ai/scripts/publicar_vba_import_v2.sh --check (validar shasum match em todos os módulos editados).",
+    "7. Atualizar local-ai/vba_import/000-MAPA-PREFIXOS.txt se necessário (deve já ter entradas para Menu_Principal/Credencia_Empresa/Cadastro_Servico de ondas anteriores).",
+    "8. Criar local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-2-V206-FREEZE.txt com 7 entradas (4 M para .bas: Util_Planilha, Util_Sanear_Contadores, Repo_Empresa, Preencher) + (3 M para .frm: Menu_Principal, Credencia_Empresa, Cadastro_Servico) + (1 M para AAX-App_Release.bas via BUMP automático).",
+    "9. Criar auditoria/03_ondas/onda_38_2_2_v206_freeze/38_2_2_TECNICO.md (estrutura idêntica ao 38_2_1_AR1_FIX2_PERF_TECNICO.md: motivação, escopo, 5 alvos detalhados, gates, anchor de rollback).",
+    "10. Rodar scripts/hbn-guards/hbn-guards-runner.sh — exigir 5/5 verdes.",
+    "11. Atualizar .hbn/relay/INDEX.md (cabeçalho proprietario-bastao + ciclo-ativo + proxima-acao + bloco da onda 38.2.2 ENTREGUE).",
+    "12. Atualizar CHANGELOG.md com bloco V12.0.0206 (entries de toda a sequência 38.1 → 38.2 → 38.2.1 → 38.2.1-AR1 → 38.2.1-AR1-FIX2-PERF → 38.2.2).",
+    "13. Commit 1 primário (escopo completo da onda 38.2.2 + 38_2_2_TECNICO.md + manifesto).",
+    "14. Apresentar à Mauricio para gates humanos pós-commit (sequência GATE-IMPORT → GATE-COMPILE → GATE-AT-1 → GATE-AT-2 → GATE-AT-3 → GATE-AT-4 → GATE-AT-5 → GATE-RVS → GATE-VAL-TELA-A-TELA).",
+    "15. Após aprovação tela-a-tela: tag v12.0.0206 (anotada), criar ERP .hbn/results/0111-*.json, atualizar relay/INDEX.md para 🟢 V12.0.0206 FREEZE + atualizar âncora-estável-atual.",
+    "16. Push origin (commit primário + tag) somente sob aprovação explícita Mauricio."
+  ],
+  "human_gates_pos_commit": [
+    {
+      "gate": "GATE-IMPORT — ImportarPacoteV3_Delta \"ONDA38-2-2-V206-FREEZE\", \"<HEAD>+ONDA38.2.2-V206-FREEZE\"",
+      "expected": "M=7 | F=0 | err=0 | skip=0 | BUMP de label e timestamp em AAX-App_Release.bas",
+      "responsavel": "Mauricio (operador VBE)"
+    },
+    {
+      "gate": "GATE-COMPILE — Depurar > Compilar VBAProject",
+      "expected": "Compile limpo, sem warnings de TEstadoExcel/Util_IniciarBlocoRapido/Util_MaxIdOperacional/handlers Change",
+      "responsavel": "Mauricio"
+    },
+    {
+      "gate": "GATE-AT-1 — Cadastrar nova empresa com EMPRESAS_INATIVAS contendo IDs maiores que EMPRESAS ativos",
+      "expected": "Novo ID = max(EMPRESAS, EMPRESAS_INATIVAS) + 1 (não recebe ID já usado por empresa inativa)",
+      "responsavel": "Mauricio (teste assistido com base de teste)"
+    },
+    {
+      "gate": "GATE-AT-2 — Simular erro precoce em Repo_Empresa.Inserir (ex: aba EMPRESAS protegida sem senha)",
+      "expected": "Erro tratado pelo handler + TEstadoExcel restaurado (ScreenUpdating volta True automaticamente)",
+      "responsavel": "Mauricio (teste assistido opcional — gate pode ser dispensado se Mauricio considerar muito invasivo; alternativa é code review do diff)"
+    },
+    {
+      "gate": "GATE-AT-3 — Cadastrar nova entidade pelo Menu_Principal e inspecionar célula da coluna A",
+      "expected": "ID exibido como texto padronizado '005' (3 dígitos com leading zeros), não '5' literal",
+      "responsavel": "Mauricio"
+    },
+    {
+      "gate": "GATE-AT-4 — Digitar termo nos 7 filtros TextBox16..22 do Menu_Principal",
+      "expected": "Cada filtro responde imediatamente (sem necessidade de F5 ou refresh manual); lista correspondente filtra em tempo real",
+      "responsavel": "Mauricio"
+    },
+    {
+      "gate": "GATE-AT-5 — Cadastrar nova entidade + nova empresa-alt + novo credenciamento + novo serviço em PC antigo (de referência)",
+      "expected": "Speedup perceptível ~3-8× vs baseline V206 anterior (tempo de cadastro UI). Empresa-alt deve confirmar ganho similar ao já obtido em Repo_Empresa direto da FIX2-PERF.",
+      "responsavel": "Mauricio"
+    },
+    {
+      "gate": "GATE-RVS — CT_ValidarRelease_TrioMinimo OU Sexteto OU Trio (RVS APROVADO)",
+      "expected": "V1=171/0 + V2_Smoke=34/0 + V2_Canonica=24/0 mantidos. Sem regressão nos 229 testes do Trio.",
+      "responsavel": "Mauricio (executa CT_ValidarRelease_*)"
+    },
+    {
+      "gate": "GATE-VAL-TELA-A-TELA — Passagem formal tela a tela botão a botão antes do freeze V206 (cronograma aprovado 38_2_TECNICO.md:79)",
+      "expected": "Mauricio percorre os 13 forms (Menu_Principal, Credencia_Empresa, Cadastro_Servico, Altera_Empresa, Altera_Entidade, Reativa_Empresa, Reativa_Entidade, Configuracao_Inicial, Limpar_Base, Fundo_Branco, ProgressBar, Rel_Emp_Serv, Rel_OSEmpresa) validando filtros, comandos, gravação, listas. Findings menores aceitos para fechamento (registrar em ERP). Findings críticos abrem onda 38.2.2-FIX.",
+      "responsavel": "Mauricio (gate humano final, não passível de skip)"
+    },
+    {
+      "gate": "GATE-FREEZE — Tag v12.0.0206 (anotada) + push origin (sob aprovação)",
+      "expected": "Tag criada apontando para HEAD do commit primário da 38.2.2 (ou commit pós-fixes menores se algum finding emergir). v12.0.0205 permanece intocada.",
+      "responsavel": "Opus + Mauricio aprova push"
+    }
+  ],
+  "invariants_preserved": [
+    "RN-01 a RN-17 inalteradas",
+    "Contadores RVS preservados V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0",
+    "Assinatura pública Util_Planilha.ProximoId(nomeAba) inalterada",
+    "Assinatura pública SanearContadoresAR1() inalterada",
+    "Assinatura pública Repo_Empresa.{Inserir,Atualizar,GravarStatusEmpresa,RepoEmpresa_BackfillDtUltReativPorAuditLog} inalterada",
+    "Nenhum dado de empresa/entidade/atividade/serviço/OS/PreOS/credenciamento será modificado",
+    "Nenhum Svc_* blindado tocado",
+    "Mod_Types, Importador_V3, Auto_Open NÃO tocados",
+    "Repos OS/PreOS/Avaliacao/Credenciamento NÃO tocados",
+    "Util_Excel_Performance.bas (interface TEstadoExcel + Util_IniciarBlocoRapido + Util_FinalizarBlocoRapido) NÃO alterada — apenas reutilizada",
+    "UI_TextBoxSeExisteRecursivo + UI_PegarTextBoxBuscaDaLista mantidos como FALLBACK em Menu_Principal.frm (rename é débito V207)",
+    "Controles TextBox16..22 NÃO renomeados no designer (rename é débito V207)",
+    ".frx binários NÃO tocados (atualização via publicar_vba_import_v2.sh --apply gera .code-only.txt + .frm + .frx delta automaticamente)",
+    "Importação operacional somente via ImportarPacoteV3_Delta",
+    "App_Release.bas em src/vba/ deixado intocado conforme Knowledge 0016 — V3 fará BUMP no import"
+  ],
+  "risks": [
+    {
+      "risk": "Edição em Menu_Principal.frm (>3700 linhas) introduz drift no .frx via publicar_vba_import_v2.sh --apply",
+      "mitigation": "PHAGOCYTOSIS L24 (hash determinístico): após --apply, validar .frx delta com diff e shasum. Se drift inesperado, reverter edit e refazer via .code-only.txt manualmente.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Handlers estáticos TextBox16..22_Change conflitam com handler dinâmico mTxtFiltro*_Change existente (double-call)",
+      "mitigation": "Padrão da Onda 38.2 (38_2_TECNICO.md:48) — manter handler legado TextBox17_Change apenas como fallback E evitar double-call quando mTxtFiltroEmpresa já está vinculado. Aplicar mesmo padrão aos 7 ponteiros.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Util_MaxIdOperacional pair-aware retorna 0 silenciosamente se aba inativa não existir e bug regredir ProximoId",
+      "mitigation": "Função preserva fallback: se aba inativa inexistente, retorna max apenas da aba ativa via Util_MaxIdNaColunaA (que já é monotônica). Cobertura via teste manual GATE-AT-1 com base de teste contendo IDs em inativa > IDs em ativa.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Cadastro_Servico.frm tem 2 blocos diferentes (serviço linha ~112 + atividade linha ~143) e podem ter ListObjects diferentes — risco de aplicar NumberFormat em coluna errada",
+      "mitigation": "RELEITURA cuidadosa antes de B6 + inspeção do bloco completo (Read com offset). Aplicar NumberFormat dentro do contexto Worksheet certo (SHEET_CAD_SERV vs SHEET_ATIVIDADES).",
+      "severity": "medium"
+    },
+    {
+      "risk": "Credencia_Empresa.frm tem CR_Lista filhote do Menu_Principal que pode duplicar instância (relato histórico em comentário Menu_Principal:632)",
+      "mitigation": "Não tocar lógica de UserForms.Add em Credencia_Empresa; apenas adicionar envelopamento + NumberFormat em bloco isolado do botão de cadastrar credenciamento.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Onda mistura .bas + .frm + Forms — manifest 7 módulos pode estourar limite de M=N esperado do V3",
+      "mitigation": "V3 já lidou com manifestos de 5+ módulos na FIX2-PERF (M=4 OK). 7 módulos está dentro do envelope. Se falhar, dividir em 2 imports (E-A primeiro, E-B depois) usando manifesto intermediário.",
+      "severity": "low"
+    },
+    {
+      "risk": "GATE-VAL-TELA-A-TELA revela findings menores que adiam tag v12.0.0206",
+      "mitigation": "Aceitável e esperado — é a função do gate. Findings menores podem ser fechados em onda 38.2.2-FIX (microdelta) sem reabrir 38.2.2. Findings críticos exigem reabertura. Anchor seguro: HEAD pré-38.2.2 = 179bac5.",
+      "severity": "low"
+    },
+    {
+      "risk": "Conflito BUMP_NO_CHANGE no import (Knowledge 0016)",
+      "mitigation": "src/vba/App_Release.bas deixado intocado; publicar_vba_import_v2.sh --apply sincroniza AAX com src/vba; V3 detecta diferença ao import (target ad5b487 != HEAD novo) e faz BUMP corretamente. Padrão confirmado nas últimas 4 ondas.",
+      "severity": "low"
+    },
+    {
+      "risk": "Compile falha por TEstadoExcel não visível em .frm (escopo de módulo padrão)",
+      "mitigation": "TEstadoExcel é Public em Util_Excel_Performance.bas (criado na FIX2-PERF). Forms têm acesso a tipos Public de módulos padrão. Confirmado pela FIX2-PERF onde Repo_Empresa usa TEstadoExcel sem problema. .frm pode declarar 'Dim estadoExcel As TEstadoExcel' diretamente.",
+      "severity": "low"
+    },
+    {
+      "risk": "Push origin de tag v12.0.0206 antes de aprovação Mauricio",
+      "mitigation": "Passo 16 do ordem_de_execucao é EXPLICITAMENTE 'sob aprovação explícita Mauricio'. Sem push sem hearback.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates_pre_commit": [
+      {
+        "gate": "git diff limitado a scope.files_allowed (assert-scope-lock)",
+        "evidence_kind": "git_diff",
+        "evidence_required_in": ".hbn/results/0111-exec-onda-38-2-2-v206-freeze.json"
+      },
+      {
+        "gate": "publicar_vba_import_v2.sh --apply + --check (shasum match para 4 .bas + 3 .frm + AAX)",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0111-exec-onda-38-2-2-v206-freeze.json"
+      },
+      {
+        "gate": "hbn-guards-runner.sh 5/5 verde",
+        "evidence_kind": "command_output",
+        "evidence_required_in": ".hbn/results/0111-exec-onda-38-2-2-v206-freeze.json"
+      }
+    ],
+    "gates_humanos": "vide human_gates_pos_commit (10 gates: IMPORT + COMPILE + AT-1..AT-5 + RVS + VAL-TELA-A-TELA + FREEZE)"
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se --apply/--check falhar, abortar antes do commit e refazer até sync.",
+      "Se hbn-guards reprovar, ajustar scope.files_allowed ou conteúdo staged.",
+      "Se GATE-IMPORT falhar com BUMP_NO_CHANGE, validar Knowledge 0016 e refazer --apply.",
+      "Se GATE-IMPORT falhar por outro motivo, abrir Onda 38.2.2-IMPORT-FIX.",
+      "Se GATE-COMPILE falhar, restaurar workbook pelo backup do V3 e abrir investigação.",
+      "Se GATE-AT-1..AT-5 falharem isoladamente, fechar findings em onda 38.2.2-FIX (microdelta).",
+      "Se GATE-RVS reprovar, anchor de rollback = commit 179bac5 (estado pós-consolidação 2ª rodada V207).",
+      "Se GATE-VAL-TELA-A-TELA revelar finding crítico em form blindado por NÃO-tocado (Altera_*, Reativa_*, Rel_*), abrir onda 38.2.3 dedicada e adiar tag v12.0.0206.",
+      "Se GATE-VAL-TELA-A-TELA revelar finding menor em form tocado (Menu/Credencia/Cadastro_Servico), Opus avalia se cabe correção dentro do escopo desta onda OU se exige onda 38.2.2-FIX.",
+      "Tag v12.0.0206 só é cravada após TODOS os gates verdes (ou findings menores aceitos explicitamente por Mauricio em hearback formal)."
+    ],
+    "anchor_to_restore": "Commit 179bac5 (HEAD pós-consolidação 2ª rodada V207, branch sincronizado com origin)"
+  },
+  "expected_files_to_create_or_edit": {
+    "criar": [
+      "src/vba/Util_Planilha.bas (edit: nova função Util_MaxIdOperacional + ProximoId atualizado)",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-2-V206-FREEZE.txt",
+      "auditoria/03_ondas/onda_38_2_2_v206_freeze/38_2_2_TECNICO.md"
+    ],
+    "editar": [
+      "src/vba/Util_Sanear_Contadores.bas (handler-before-flag)",
+      "src/vba/Repo_Empresa.bas (handler-before-flag em 4 funções)",
+      "src/vba/Preencher.bas (função filtro pura)",
+      "src/vba/Menu_Principal.frm (filtros estáticos TextBox16..22 + envelopamento entidade/empresa-alt + NumberFormat)",
+      "src/vba/Credencia_Empresa.frm (envelopamento + NumberFormat)",
+      "src/vba/Cadastro_Servico.frm (envelopamento + NumberFormat)",
+      "local-ai/vba_import/001-modulo/A*-Util_Planilha.bas (auto via --apply)",
+      "local-ai/vba_import/001-modulo/A*-Util_Sanear_Contadores.bas (auto)",
+      "local-ai/vba_import/001-modulo/A*-Repo_Empresa.bas (auto)",
+      "local-ai/vba_import/001-modulo/A*-Preencher.bas (auto)",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas (auto via BUMP)",
+      "local-ai/vba_import/002-formularios/*-Menu_Principal.code-only.txt + .frm + .frx (auto)",
+      "local-ai/vba_import/002-formularios/*-Credencia_Empresa.code-only.txt + .frm + .frx (auto)",
+      "local-ai/vba_import/002-formularios/*-Cadastro_Servico.code-only.txt + .frm + .frx (auto)",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md"
+    ],
+    "nao_tocar": [
+      "src/vba/App_Release.bas (Knowledge 0016)",
+      "src/vba/Util_Excel_Performance.bas (interface estável da FIX2-PERF)",
+      "Todos os Svc_* + Mod_Types + Importador_V3 + Auto_Open + Repos não-Empresa + 10 forms blindados"
+    ]
+  },
+  "comentarios_adicionais": [
+    "OPCIONAL — incluir no commit primário o CSV V205 untracked (auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260526_153113.csv) como housekeeping adjacente. Se Mauricio preferir, fica como commit separado.",
+    "OPCIONAL — onda safe_track doc-only para criar knowledges 0018 (Doc-Delta) + 0019 (Limites Hibridismo) + 0020 (Invalidação Stateless) pode rodar IMEDIATAMENTE APÓS o freeze v12.0.0206 e ANTES do readback 0120 V207.0 — esse é o pre-trabalho convergente recomendado pela 2ª rodada Codex+Antigravity.",
+    "Aproveitamento contexto Opus: esta sessão começou ~30% consumido pós-consolidação 2ª rodada. Construção do readback + execução etapa A (.bas) provavelmente cabem nesta sessão. Etapa B (.frm) pode exigir handoff conforme regra 50% (knowledge 0017) — Opus avaliará após GATE-IMPORT-PARCIAL da etapa A.",
+    "Se contexto chegar a 50%+ durante execução, aplicar protocolo handoff knowledge 0014+0017 §7 Passo 5 PROMPT_ARQUITETO v1.3 com 3 artefatos (handoff + prompt retomada + protocol-evolutions se houver lição) e passar bastão para próxima Opus dentro da MESMA onda 38.2.2 sem reabrir readback."
+  ],
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "pending",
+      "at": "2026-05-26T16:30:00-03:00",
+      "by": "claude-opus-4-7",
+      "note": "Readback aberto para ONDA38.2.2 — última onda V206 puro antes do freeze. 5 alvos atômicos (AT-1..AT-5) cobrindo quick wins Codex itens 68/69 + F-NEW3 sistemático + filtros nativos + envelopamento .frm. Estruturado em 2 etapas internas (E-A: .bas quick wins low risk | E-B: .frm interventions medium risk com PHAGOCYTOSIS releitura obrigatória) mas commit único para atomicidade. Gate humano final = GATE-VAL-TELA-A-TELA conforme cronograma aprovado em 38_2_TECNICO.md:79. Aguardando hearback explícito de Mauricio para iniciar execução."
+    },
+    {
+      "status": "confirmed",
+      "at": "2026-05-26T16:45:00-03:00",
+      "by": "humano",
+      "note": "Mauricio confirmou em chat: 'confirmo'. Opus prossegue com a execução dos passos 0-16 do ordem_de_execucao, começando pela etapa A (.bas quick wins) e seguindo para etapa B (.frm) após gate parcial opcional A4."
+    }
+  ],
+  "created_at": "2026-05-26T16:30:00-03:00"
+}

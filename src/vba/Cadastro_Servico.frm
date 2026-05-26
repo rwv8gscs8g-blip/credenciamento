@@ -50,6 +50,7 @@ End Function
 
 Private Sub S_Cadastrar_SV_Click()
 On Error GoTo erro_carregamento:
+    ' Onda 38.2.2 (AT-3+AT-5): envelopamento Util_Excel_Performance + NumberFormat textual.
 
 Dim wsServ As Worksheet
 Dim wsAtiv As Worksheet
@@ -64,6 +65,10 @@ Dim senhaProtServ As String
 Dim estavaProtAtiv As Boolean
 Dim senhaProtAtiv As String
 Dim msgSave As String
+Dim estadoExcel As TEstadoExcel
+Dim blocoRapidoIniciado As Boolean
+
+blocoRapidoIniciado = False
 
 Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
 Set wsAtiv = ThisWorkbook.Sheets(SHEET_ATIVIDADES)
@@ -77,6 +82,10 @@ If descServ = "" Then
     Exit Sub
 End If
 
+' Onda 38.2.2 AT-5: bloco rapido envelopa cadastro de atividade (se necessario) + cadastro de servico.
+estadoExcel = Util_IniciarBlocoRapido()
+blocoRapidoIniciado = True
+
 ' 1) Atividade selecionada na lista (fluxo normal)
 If SV_Lista.ListIndex >= 0 Then
     ativId = Pad3(SV_Lista.Column(0))
@@ -88,6 +97,8 @@ If ativId = "" Then
     If ativDesc = "" Then
         MsgBox "Selecione uma atividade na lista ou preencha 'Descri" & ChrW(231) & ChrW(227) & "o Atividade'.", _
                vbExclamation, "Cadastro de serviço"
+        Util_FinalizarBlocoRapido estadoExcel
+        blocoRapidoIniciado = False
         Exit Sub
     End If
 
@@ -101,17 +112,23 @@ If ativId = "" Then
                              "Novo CNAE / Atividade"))
         If CNAE = "" Then
             MsgBox "Cadastro cancelado: CNAE é obrigatório para nova atividade.", vbExclamation, "Cadastro de serviço"
+            Util_FinalizarBlocoRapido estadoExcel
+            blocoRapidoIniciado = False
             Exit Sub
         End If
 
         If Not Util_PrepararAbaParaEscrita(wsAtiv, estavaProtAtiv, senhaProtAtiv) Then
             MsgBox "Não foi possível cadastrar nova atividade: aba ATIVIDADES protegida.", vbCritical, "Cadastro de serviço"
+            Util_FinalizarBlocoRapido estadoExcel
+            blocoRapidoIniciado = False
             Exit Sub
         End If
 
         ativId = ProximoId(SHEET_ATIVIDADES)
         linhaNova = UltimaLinhaAba(SHEET_ATIVIDADES) + 1
         If linhaNova < LINHA_DADOS Then linhaNova = LINHA_DADOS
+        ' Onda 38.2.2 AT-3 (F-NEW3): garante formato textual na coluna A da aba ATIVIDADES.
+        wsAtiv.Cells(linhaNova, 1).NumberFormat = "@"
         wsAtiv.Cells(linhaNova, 1).Value = ativId
         wsAtiv.Cells(linhaNova, 2).Value = Funcoes.NormalizarTextoPTBR(CNAE)
         wsAtiv.Cells(linhaNova, 3).Value = Funcoes.NormalizarTextoPTBR(ativDesc)
@@ -128,18 +145,24 @@ If ServicoJaExiste(wsServ, ativId, descServ) Then
            "Serviço: " & descServ & vbCrLf & _
            "Se necessário, atualize apenas o valor na tela principal.", _
            vbExclamation, "Cadastro de serviço"
+    Util_FinalizarBlocoRapido estadoExcel
+    blocoRapidoIniciado = False
     Exit Sub
 End If
 
 ' Grava novo servico
 If Not Util_PrepararAbaParaEscrita(wsServ, estavaProtServ, senhaProtServ) Then
     MsgBox "Não foi possível cadastrar serviço: aba CAD_SERV protegida.", vbCritical, "Cadastro de serviço"
+    Util_FinalizarBlocoRapido estadoExcel
+    blocoRapidoIniciado = False
     Exit Sub
 End If
 
 linhaNova = UltimaLinhaAba(SHEET_CAD_SERV) + 1
 If linhaNova < LINHA_DADOS Then linhaNova = LINHA_DADOS
 
+' Onda 38.2.2 AT-3 (F-NEW3): garante formato textual na coluna A (COL_SERV_ID) da aba CAD_SERV.
+wsServ.Cells(linhaNova, COL_SERV_ID).NumberFormat = "@"
 wsServ.Cells(linhaNova, COL_SERV_ID).Value = ProximoId(SHEET_CAD_SERV)
 wsServ.Cells(linhaNova, COL_SERV_ATIV_ID).Value = ativId
 wsServ.Cells(linhaNova, COL_SERV_ATIV_DESC).Value = Funcoes.NormalizarTextoPTBR(ativDesc)
@@ -162,6 +185,10 @@ If Not Util_SalvarWorkbookSeguro(msgSave) Then
            vbExclamation, "Cadastro de serviço"
 End If
 
+' Onda 38.2.2 AT-5: finaliza bloco rapido antes do MsgBox final.
+Util_FinalizarBlocoRapido estadoExcel
+blocoRapidoIniciado = False
+
     MsgBox msgCriacaoAtiv & "Servi" & ChrW(231) & "o cadastrado com sucesso." & vbCrLf & _
        "Defina o valor do servi" & ChrW(231) & "o na tela de manuten" & ChrW(231) & ChrW(227) & "o de valores.", _
        vbInformation, "Cadastro de serviço"
@@ -173,6 +200,8 @@ On Error Resume Next
 If Not wsServ Is Nothing Then Call Util_RestaurarProtecaoAba(wsServ, estavaProtServ, senhaProtServ)
 If Not wsAtiv Is Nothing Then Call Util_RestaurarProtecaoAba(wsAtiv, estavaProtAtiv, senhaProtAtiv)
 On Error GoTo 0
+' Onda 38.2.2 AT-5: finaliza bloco rapido se foi iniciado (evita restaurar TEstadoExcel zerada).
+If blocoRapidoIniciado Then Util_FinalizarBlocoRapido estadoExcel
 MsgBox "Erro ao cadastrar servi" & ChrW(231) & "o: " & Err.Description, vbCritical, "Cadastro de serviço"
 End Sub
 
@@ -276,7 +305,5 @@ Private Function Pad3(ByVal v As Variant) As String
         Pad3 = s
     End If
 End Function
-
-                           
 
 

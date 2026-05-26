@@ -3,9 +3,51 @@
 Este projeto adota o espírito do Keep a Changelog. As mudanças aqui registradas
 tratam apenas da linha pública oficial.
 
-## [v12.0.0206] — em planejamento
+## [v12.0.0206] — em freeze (aguardando gates humanos pós-Onda 38.2.2)
 
 ### Adicionado
+
+- **Onda 38.2.2 — V206 puro freeze (esta onda, última antes do freeze V206)** —
+  5 alvos atômicos pré-aprovados na 2ª rodada auditoria cruzada V207
+  (`auditoria/00_status/112_*.md`):
+  - **AT-1** (item 68 Codex, sev. ALTO): nova `Util_Planilha.Util_MaxIdOperacional(nomeAba)`
+    pair-aware EMPRESAS+EMPRESAS_INATIVAS / ENTIDADE+ENTIDADE_INATIVOS;
+    `ProximoId` redirecionado. Resolve risco de cadastro novo receber ID já
+    usado por entrada INATIVA.
+  - **AT-2** (item 69 Codex, sev. MÉDIO): `On Error GoTo` movido para ANTES
+    de `Util_IniciarBlocoRapido()` em `SanearContadoresAR1` + 4 funções
+    `Repo_Empresa` (Inserir/Atualizar/GravarStatusEmpresa/Backfill). Garante
+    restauração de `TEstadoExcel` mesmo em erro precoce.
+  - **AT-3** (F-NEW3 sistemático): `NumberFormat = "@"` na coluna A antes da
+    gravação do ID em 5 cadastros — `Menu_Principal.C_Cadastrar_Click`
+    (entidade), `Menu_Principal.M_Cadastrar_Empresa_Click` (empresa-alt),
+    `Credencia_Empresa.CR_Credenciar_Click` (loop credenciamento, dentro do
+    For), `Cadastro_Servico.S_Cadastrar_SV_Click` (atividade + serviço).
+    Resolve cosmético `5` vs `005`.
+  - **AT-4** (filtros nativos): 7 handlers estáticos `TextBox16..22_Change` no
+    `Menu_Principal.frm` substituem a descoberta heurística via
+    `UI_TextBoxSeExisteRecursivo + UI_PegarTextBoxBuscaDaLista`. Despacho
+    centralizado via nova `Public Sub Preencher_FiltrarPorBoxEstatico(nomeContexto, termo)`
+    em `Preencher.bas`. Cada handler estático evita double-call via guard
+    `If mTxtFiltro... Is TextBoxN`. Handlers dinâmicos `mTxtFiltro*_Change`
+    mantidos como **fallback** (débito V207: rename canônico no designer +
+    `Optional filtro` em `PreencherPreencheOS`/`PreencherAvaliarOS`).
+    Reverte definitivamente a regressão da Onda 38.2.1
+    (`e9bcf42 revert filtros menu principal`).
+  - **AT-5** (envelopamento `Util_Excel_Performance` em 3 `.frm`):
+    `Util_IniciarBlocoRapido`/`Util_FinalizarBlocoRapido` aplicado aos 4 subs
+    de cadastro UI restantes (Menu_Principal entidade + empresa-alt;
+    Credencia_Empresa CR_Credenciar_Click envolvendo loop For; Cadastro_Servico
+    S_Cadastrar_SV_Click envolvendo atividade + serviço). Padrão emergente:
+    flag `blocoRapidoIniciado As Boolean` defensiva no handler de erro
+    (evita restaurar `TEstadoExcel` zerada se erro ocorreu antes de Iniciar).
+    Speedup esperado: 3-8× em PC antigo para cadastros UI.
+  - Manifesto V3: `000-MANIFESTO-V3-DELTA-ONDA38-2-2-V206-FREEZE.txt` (8 módulos M).
+  - Build label esperado pós-import: `<HEAD>+ONDA38.2.2-V206-FREEZE`.
+  - Anchor de rollback: commit `179bac5`. Anchor V206 funcional: `ee75b30`.
+  - 10 gates humanos pós-commit (IMPORT → COMPILE → AT-1..AT-5 → RVS →
+    VAL-TELA-A-TELA conforme cronograma `38_2_TECNICO.md:79` → FREEZE).
+  - Documentado em [`auditoria/03_ondas/onda_38_2_2_v206_freeze/38_2_2_TECNICO.md`](auditoria/03_ondas/onda_38_2_2_v206_freeze/38_2_2_TECNICO.md).
 
 - **Onda 37** — reconciliação V5 vs `src/vba/` com manifesto SHA-256 e matriz
   de classificação em

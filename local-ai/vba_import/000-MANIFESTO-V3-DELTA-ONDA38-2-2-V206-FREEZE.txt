@@ -1,0 +1,159 @@
+# Manifesto V3 DELTA ONDA38-2-2-V206-FREEZE - V12.0.0206
+# Tema: Ultima onda V206 puro antes do freeze. 5 alvos atomicos (AT-1..AT-5)
+#       cobrindo quick wins Codex (itens 68/69) + F-NEW3 sistematico +
+#       filtros nativos + envelopamento .frm.
+#
+# Contexto:
+#   - Onda predecessora 38.2.1-AR1-FIX2-PERF (commit ee75b30) fechou com
+#     RVS Trio APROVADO VR_20260526_102200 e ancora V206 funcional.
+#   - 2a rodada auditoria cruzada Codex+Antigravity (commit 179bac5)
+#     convergiu unanime para Alternativa II-bis V207 (commitment full
+#     V207.0-V207.8 sem clausula de escape). Itens 68/69 Codex aprovados
+#     como compativeis com escopo V206 puro.
+#   - Mauricio aprovou em chat 2026-05-26 ~16:30 BRT: abertura imediata
+#     da Onda 38.2.2 + todos os passos ate validacao tela-a-tela e
+#     congelamento V206 (cronograma 38_2_TECNICO.md:79).
+#   - Readback 0111 confirmed pelo Mauricio em ~16:45 BRT.
+#
+# Alvos atomicos:
+#
+# AT-1 (item 68 Codex, sev. ALTO) - Util_MaxIdOperacional pair-aware:
+#   AAE-Util_Planilha.bas:
+#     - Nova Public Function Util_MaxIdOperacional(ByVal nomeAba As String) As Long.
+#       Pair-aware logic: EMPRESAS considera max entre EMPRESAS e
+#       EMPRESAS_INATIVAS; ENTIDADE considera max entre ENTIDADE e
+#       ENTIDADE_INATIVOS; outras abas fallback para Util_MaxIdNaColunaA puro.
+#       Aba inativa inexistente retorna 0 silenciosamente (On Error GoTo).
+#     - ProximoId atualizado para chamar Util_MaxIdOperacional(nomeAba) em
+#       vez de Util_MaxIdNaColunaA(nomeAba) diretamente. Resolve risco de
+#       cadastro novo receber ID ja usado por empresa/entidade INATIVA.
+#
+# AT-2 (item 69 Codex, sev. MEDIO) - Handler-before-flag:
+#   ABN-Util_Sanear_Contadores.bas:
+#     - SanearContadoresAR1: 'On Error GoTo erro' movido para ANTES de
+#       'estadoExcel = Util_IniciarBlocoRapido()'. Garante restauracao
+#       de TEstadoExcel mesmo em erro precoce.
+#   AAO-Repo_Empresa.bas:
+#     - Mesmo padrao handler-before-flag aplicado em 4 funcoes:
+#       Inserir, Atualizar, GravarStatusEmpresa,
+#       RepoEmpresa_BackfillDtUltReativPorAuditLog.
+#
+# AT-3 (F-NEW3 sistematico) - NumberFormat="@" em coluna A:
+#   AAM-Menu_Principal.frm:
+#     - Sub C_Cadastrar_Click (entidade ~linha 1592): NumberFormat="@"
+#       antes da gravacao do ID.
+#     - Sub M_Cadastrar_Empresa_Click (empresa-alt ~linha 2199):
+#       NumberFormat="@" antes da gravacao do novoID em COL_EMP_ID.
+#   AAI-Credencia_Empresa.frm:
+#     - Sub CR_Credenciar_Click (loop ~linha 74-227): NumberFormat="@"
+#       em COL_CRED_ID dentro do loop, antes de cada gravacao credId.
+#   AAD-Cadastro_Servico.frm:
+#     - Sub S_Cadastrar_SV_Click (linha 51): NumberFormat="@" em 2 pontos:
+#       (a) wsAtiv.Cells(linhaNova, 1) ao criar nova atividade;
+#       (b) wsServ.Cells(linhaNova, COL_SERV_ID) ao gravar novo servico.
+#     Resolve cosmetico '5' vs '005' (origem F-NEW3 detectada em ENTIDADE).
+#
+# AT-4 (filtros nativos) - Handlers estaticos TextBox16..22_Change:
+#   AAM-Menu_Principal.frm:
+#     - 7 handlers estaticos adicionados (substitui descoberta heuristica
+#       via UI_TextBoxSeExisteRecursivo + UI_PegarTextBoxBuscaDaLista):
+#       TextBox16_Change -> filtro Entidade
+#       TextBox17_Change -> filtro Empresa (substitui versao sem guard)
+#       TextBox18_Change -> filtro Atrib Servico
+#       TextBox19_Change -> filtro OS (Preencher Solicitacao)
+#       TextBox20_Change -> filtro Avaliacao/Encerramento
+#       TextBox21_Change -> filtro Cad Servico
+#       TextBox22_Change -> filtro Atrib Empresa (Rodizio)
+#     - Cada handler evita double-call quando mTxtFiltro* dinamico
+#       ja aponta para o mesmo TextBox (`If mTxtFiltro... Is TextBoxN`).
+#     - Handlers dinamicos mTxtFiltro*_Change MANTIDOS como FALLBACK.
+#       Rename do designer e remocao de UI_TextBoxSeExisteRecursivo +
+#       UI_PegarTextBoxBuscaDaLista sao debito V207
+#       (38_2_TECNICO.md §70-78).
+#     - Reverte definitivamente a regressao introduzida na Onda 38.2.1
+#       (e9bcf42 'revert filtros menu principal').
+#   AAU-Preencher.bas:
+#     - Nova Public Sub Preencher_FiltrarPorBoxEstatico(nomeContexto, termo).
+#       Despacho centralizado para 7 contextos (entidade, empresa,
+#       atrib_servico, os, aval, cad_servico, atrib_empresa).
+#     - Espelha o vinculo dos handlers mTxtFiltro*_Change historicamente
+#       vigentes; renomeacao canonica e debito V207.
+#     - "os" e "aval" disparam PreencherPreencheOS / PreencherAvaliarOS
+#       SEM parametro (filtro real e debito V207 -- requer Optional filtro
+#       nessas funcoes + implementacao do filtro de lista; nao incluido
+#       nesta onda por estar no non_goal do readback 0111).
+#
+# AT-5 (envelopamento Util_Excel_Performance em 3 .frm):
+#   AAM-Menu_Principal.frm:
+#     - Sub C_Cadastrar_Click: Util_IniciarBlocoRapido/Util_FinalizarBlocoRapido
+#       envelopam todo o cadastro de entidade. Padrao handler-before-flag
+#       com 'Dim blocoRapidoIniciado As Boolean' defensivo no handler
+#       'erro_carregamento'.
+#     - Sub M_Cadastrar_Empresa_Click: mesmo padrao para cadastro
+#       de empresa via Menu Principal (empresa-alt).
+#   AAI-Credencia_Empresa.frm:
+#     - Sub CR_Credenciar_Click: envelopa o loop For que credencia em
+#       TODOS servicos da atividade (potencialmente dezenas de gravacoes).
+#       Finalizacao em 3 caminhos pos-Iniciar (totalServ=0, validacao
+#       falhou, sucesso) + handler defensivo.
+#   AAD-Cadastro_Servico.frm:
+#     - Sub S_Cadastrar_SV_Click: envelopa cadastro de atividade
+#       (se necessario) + cadastro de servico. Finalizacao em 5 Exit Sub
+#       intermediarios + 1 final + handler defensivo.
+#
+# Fora de escopo desta onda (vide non_goals readback 0111):
+#   - Svc_* blindados (Svc_Rodizio, Svc_Avaliacao, Svc_OS, Svc_PreOS,
+#     Svc_Entidade, Svc_Transacao).
+#   - Mod_Types.bas (intervencao planejada apenas para V207.0).
+#   - Importador_V3.bas (BUMP_NO_OP fica para V208.7).
+#   - Auto_Open.bas.
+#   - Repo_OS.bas, Repo_PreOS.bas, Repo_Avaliacao.bas, Repo_Credenciamento.bas
+#     (V207.5).
+#   - 10 forms blindados (Altera_*/Reativa_*/Configuracao_Inicial/Limpar_Base/
+#     Fundo_Branco/ProgressBar/Rel_Emp_Serv/Rel_OSEmpresa).
+#   - Implementacao Svc_CadastroEmpresa/Entidade/Servico/Credenciamento
+#     (V207.2/V207.3/V207.4).
+#   - Cache in-memory ListBox (V207.5).
+#   - Rename de TextBox16..22 no designer (debito V207).
+#   - PreencherPreencheOS / PreencherAvaliarOS ganharem Optional filtro
+#     (debito V207).
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38-2-2-V206-FREEZE", "<HEAD_HASH>+ONDA38.2.2-V206-FREEZE"
+#
+# Pos-import esperado:
+#   - Importador V3: M=8 | F=0 | err=0 | skip=0.
+#   - BUMP de APP_BUILD_IMPORTADO e APP_BUILD_GERADO_EM em AAX-App_Release.bas
+#     (Knowledge 0016 OK: src/vba/App_Release.bas mantem label antigo
+#     7bca168+ONDA38.2.1-revert-filtros-menu / 2026-05-26 15:00; o V3
+#     detecta diferenca e faz BUMP no AAX em disco).
+#   - Compile manual passa limpo (TEstadoExcel visivel em forms, novos
+#     handlers TextBox16..22_Change validos, Util_MaxIdOperacional
+#     resoluto, Preencher_FiltrarPorBoxEstatico publico).
+#
+# Gates funcionais explicitos (vide readback 0111 §human_gates_pos_commit):
+#   GATE-IMPORT          ImportarPacoteV3_Delta retorna M=8 F=0 err=0
+#   GATE-COMPILE         Depurar > Compilar VBAProject limpo
+#   GATE-AT-1            EMPRESAS_INATIVAS com IDs maiores nao causa colisao
+#   GATE-AT-2            Erro precoce em Repo_Empresa.Inserir restaura estado
+#   GATE-AT-3            Cadastro de entidade grava '005' textual em coluna A
+#   GATE-AT-4            7 filtros TextBox16..22 respondem em tempo real
+#   GATE-AT-5            Speedup 3-8x em PC antigo para cadastros UI
+#   GATE-RVS             CT_ValidarRelease_TrioMinimo (ou Sexteto/Trio) APROVADO
+#                        V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0
+#   GATE-VAL-TELA-A-TELA Mauricio percorre 13 forms validando filtros,
+#                        comandos, gravacao, listas (38_2_TECNICO.md:79)
+#   GATE-FREEZE          Tag v12.0.0206 anotada + push origin sob aprovacao
+#
+# Anchor de rollback: commit 179bac5 (HEAD pos-consolidacao 2a rodada V207).
+# Anchor V206 funcional: ee75b30 (FIX2-PERF + RVS Trio VR_20260526_102200).
+#
+# GRUPO_DELTA_ONDA38_2_2_V206_FREEZE
+M|001-modulo/AAE-Util_Planilha.bas
+M|001-modulo/ABN-Util_Sanear_Contadores.bas
+M|001-modulo/AAO-Repo_Empresa.bas
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/AAX-App_Release.bas
+M|002-formularios/AAM-Menu_Principal.frm
+M|002-formularios/AAI-Credencia_Empresa.frm
+M|002-formularios/AAD-Cadastro_Servico.frm

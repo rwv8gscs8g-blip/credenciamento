@@ -73,6 +73,7 @@ End Sub
 
 Private Sub CR_Credenciar_Click()
 On Error GoTo erro_carregamento:
+    ' Onda 38.2.2 (AT-3+AT-5): envelopamento Util_Excel_Performance + NumberFormat textual.
 
 Dim wsCred As Worksheet
 Dim wsServ As Worksheet
@@ -94,6 +95,10 @@ Dim faltantes As String
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
     Dim msgSave As String
+    Dim estadoExcel As TEstadoExcel
+    Dim blocoRapidoIniciado As Boolean
+
+blocoRapidoIniciado = False
 
 Set wsCred = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
 Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
@@ -138,6 +143,10 @@ If Not Util_PrepararAbaParaEscrita(wsCred, estavaProtegida, senhaProtecao) Then
     Exit Sub
 End If
 
+' Onda 38.2.2 AT-5: bloco rapido envelopa o loop de credenciamento (potencialmente dezenas de gravacoes).
+estadoExcel = Util_IniciarBlocoRapido()
+blocoRapidoIniciado = True
+
 ' Credencia a empresa em TODOS os servicos da atividade (regra de negocio).
 For i = LINHA_DADOS To UltimaLinhaAba(SHEET_CAD_SERV)
     If IdsIguaisCred(wsServ.Cells(i, COL_SERV_ATIV_ID).Value, ativId) Then
@@ -152,6 +161,8 @@ For i = LINHA_DADOS To UltimaLinhaAba(SHEET_CAD_SERV)
             posNova = ProximaPosicaoAtividade(wsCred, ativId)
             credId = ProximoId(SHEET_CREDENCIADOS)
 
+            ' Onda 38.2.2 AT-3 (F-NEW3): garante formato textual na coluna A antes da gravacao do ID.
+            wsCred.Cells(linhaNova, COL_CRED_ID).NumberFormat = "@"
             wsCred.Cells(linhaNova, COL_CRED_ID).Value = credId
             wsCred.Cells(linhaNova, COL_CRED_COD_ATIV_SERV).Value = codAtivServ
             wsCred.Cells(linhaNova, COL_CRED_EMP_ID).Value = empId
@@ -182,6 +193,8 @@ Next i
 
 If totalServ = 0 Then
     Call Util_RestaurarProtecaoAba(wsCred, estavaProtegida, senhaProtecao)
+    Util_FinalizarBlocoRapido estadoExcel
+    blocoRapidoIniciado = False
     MsgBox "Não há serviços cadastrados para esta atividade. Cadastre serviços primeiro.", vbExclamation, "Credenciamento"
     Exit Sub
 End If
@@ -191,6 +204,8 @@ Call AtualizarListaEmpresaMenuAtual
 
 If Not ValidarPersistenciaCredenciamento(wsCred, wsServ, empId, ativId, faltantes) Then
     Call Util_RestaurarProtecaoAba(wsCred, estavaProtegida, senhaProtecao)
+    Util_FinalizarBlocoRapido estadoExcel
+    blocoRapidoIniciado = False
     MsgBox "Falha de persistência no credenciamento da atividade " & ativId & "." & vbCrLf & _
            "Serviços sem registro para a empresa: " & faltantes, vbCritical, "Credenciamento"
     Exit Sub
@@ -204,6 +219,10 @@ If Not Util_SalvarWorkbookSeguro(msgSave) Then
            "Use Ctrl+S para salvar manualmente antes de continuar.", _
            vbExclamation, "Credenciamento"
 End If
+
+' Onda 38.2.2 AT-5: finaliza bloco rapido antes dos MsgBox finais.
+Util_FinalizarBlocoRapido estadoExcel
+blocoRapidoIniciado = False
 
 If adicionados > 0 Then
     MsgBox "Credenciamento realizado por atividade." & vbCrLf & _
@@ -230,6 +249,8 @@ erro_carregamento:
 On Error Resume Next
 If Not wsCred Is Nothing Then Call Util_RestaurarProtecaoAba(wsCred, estavaProtegida, senhaProtecao)
 On Error GoTo 0
+' Onda 38.2.2 AT-5: finaliza bloco rapido se foi iniciado (evita restaurar TEstadoExcel zerada).
+If blocoRapidoIniciado Then Util_FinalizarBlocoRapido estadoExcel
 MsgBox "Erro ao credenciar empresa: " & Err.Description, vbCritical, "Credenciamento"
 End Sub
 
@@ -390,7 +411,5 @@ Private Function Pad3(ByVal v As Variant) As String
         Pad3 = s
     End If
 End Function
-
-                 
 
 

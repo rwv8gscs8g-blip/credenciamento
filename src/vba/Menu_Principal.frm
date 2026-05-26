@@ -1593,11 +1593,16 @@ Private Sub C_Cadastrar_Click()
 On Error GoTo erro_carregamento:
     ' V12: eliminado .Select + Application.GoTo + Selection + ActiveCell (proibidos; formulario modal).
     ' Usa ProximoId(SHEET_ENTIDADE) para gerar ID e escreve direto na ultima linha + 1.
+    ' Onda 38.2.2 (AT-3+AT-5): envelopamento Util_Excel_Performance + NumberFormat textual.
     Dim msgSave As String
     Dim wsEnt As Worksheet
     Dim ultimaLinhaEnt As Long
     Dim estEntProt As Boolean
     Dim senhaEntProt As String
+    Dim estadoExcel As TEstadoExcel
+    Dim blocoRapidoIniciado As Boolean
+
+    blocoRapidoIniciado = False
 
     If C_Entidade = Empty Then
         MsgBox "Informe o nome da Entidade!", vbExclamation, "Cadastro"
@@ -1608,6 +1613,10 @@ On Error GoTo erro_carregamento:
 
     If MsgBox("Deseja realmente continuar?", vbQuestion + vbYesNo, "Cadastro") <> vbYes Then Exit Sub
 
+    ' Onda 38.2.2 AT-5: bloco rapido envelopa todo o cadastro de entidade.
+    estadoExcel = Util_IniciarBlocoRapido()
+    blocoRapidoIniciado = True
+
     Set wsEnt = ThisWorkbook.Sheets(SHEET_ENTIDADE)
     ultimaLinhaEnt = wsEnt.Cells(wsEnt.Rows.count, 1).End(xlUp).row + 1
 
@@ -1617,8 +1626,12 @@ On Error GoTo erro_carregamento:
     ' Lancar dados diretamente por referencia de celula
     If Not Util_PrepararAbaParaEscrita(wsEnt, estEntProt, senhaEntProt) Then
         MsgBox "N" & ChrW(227) & "o foi poss" & ChrW(237) & "vel acessar a aba ENTIDADE para escrita.", vbCritical, "Cadastro"
+        Util_FinalizarBlocoRapido estadoExcel
+        blocoRapidoIniciado = False
         Exit Sub
     End If
+    ' Onda 38.2.2 AT-3 (F-NEW3): garante formato textual na coluna A antes da gravacao do ID.
+    wsEnt.Cells(ultimaLinhaEnt, 1).NumberFormat = "@"
     wsEnt.Cells(ultimaLinhaEnt, 1).Value = Format(ContCodigo, "000")
     wsEnt.Cells(ultimaLinhaEnt, 2).Value = C_CNPJ
     wsEnt.Cells(ultimaLinhaEnt, 3).Value = Funcoes.NormalizarTextoPTBR(C_Entidade.Value)
@@ -1672,6 +1685,9 @@ On Error GoTo erro_carregamento:
                "Detalhe: " & msgSave & vbCrLf & _
                "Use Ctrl+S para salvar manualmente antes de continuar.", vbExclamation, "Cadastro"
     End If
+    ' Onda 38.2.2 AT-5: finaliza bloco rapido antes de ProgressBar/MsgBox finais.
+    Util_FinalizarBlocoRapido estadoExcel
+    blocoRapidoIniciado = False
     ProgressBar.Show
     MsgBox "Cadastro realizado com sucesso!", vbInformation, "Cadastro"
 
@@ -1680,6 +1696,8 @@ erro_carregamento:
     On Error Resume Next
     Call Util_RestaurarProtecaoAba(wsEnt, estEntProt, senhaEntProt)
     On Error GoTo 0
+    ' Onda 38.2.2 AT-5: finaliza bloco rapido se foi iniciado (evita restaurar TEstadoExcel zerada se erro ocorreu antes do iniciar).
+    If blocoRapidoIniciado Then Util_FinalizarBlocoRapido estadoExcel
 End Sub
 
 Private Sub C_CNPJ_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
@@ -2180,6 +2198,7 @@ End Sub
 
 Private Sub M_Cadastrar_Empresa_Click()
 On Error GoTo erro_carregamento:
+    ' Onda 38.2.2 (AT-3+AT-5): envelopamento Util_Excel_Performance + NumberFormat textual.
 Dim wsEmpCad As Worksheet
 Dim linhaNovaEmp As Long
 Dim ultimo As Long
@@ -2193,6 +2212,10 @@ Dim errNum As Long
 Dim errDesc As String
 Dim msgSave As String
 Dim primeiraLinhaEmp As Long
+Dim estadoExcel As TEstadoExcel
+Dim blocoRapidoIniciado As Boolean
+
+blocoRapidoIniciado = False
 
 cnpjDigitado = Trim$(CStr(M_CNPJ.Value))
 
@@ -2229,9 +2252,15 @@ If MsgBox("Deseja realmente continuar o cadastramento?", vbQuestion + vbYesNo, "
     Exit Sub
 End If
 
+' Onda 38.2.2 AT-5: bloco rapido envelopa todo o cadastro de empresa.
+estadoExcel = Util_IniciarBlocoRapido()
+blocoRapidoIniciado = True
+
 If Not PrepararAbaParaEscrita(wsEmpCad, estavaProtegida, senhaProtecao) Then
     MsgBox "A aba EMPRESAS está protegida e não foi possível liberar escrita pelo VBA." & vbCrLf & _
            "Verifique a senha de proteção da planilha.", vbCritical, "Cadastro de Empresa"
+    Util_FinalizarBlocoRapido estadoExcel
+    blocoRapidoIniciado = False
     Exit Sub
 End If
 
@@ -2240,6 +2269,9 @@ linhaNovaEmp = UltimaLinhaAba(SHEET_EMPRESAS) + 1
 If linhaNovaEmp < primeiraLinhaEmp Then linhaNovaEmp = primeiraLinhaEmp
 
 novoID = ProximoId(SHEET_EMPRESAS)
+
+' Onda 38.2.2 AT-3 (F-NEW3): garante formato textual na coluna A antes da gravacao do ID.
+wsEmpCad.Cells(linhaNovaEmp, COL_EMP_ID).NumberFormat = "@"
 
 ' Gravacao robusta de cadastro na aba EMPRESAS.
 With wsEmpCad
@@ -2274,6 +2306,10 @@ If Not Util_SalvarWorkbookSeguro(msgSave) Then
     avisoPosCadastro = avisoPosCadastro & "Falha ao salvar automaticamente (" & msgSave & ")."
 End If
 
+' Onda 38.2.2 AT-5: finaliza bloco rapido antes dos MsgBox finais.
+Util_FinalizarBlocoRapido estadoExcel
+blocoRapidoIniciado = False
+
 If avisoPosCadastro = "" Then
     MsgBox "Cadastro realizado com sucesso! ID: " & novoID, vbInformation, "Cadastro de Empresa"
 Else
@@ -2289,6 +2325,9 @@ errDesc = Err.Description
 On Error Resume Next
 If Not wsEmpCad Is Nothing Then Call RestaurarProtecaoAba(wsEmpCad, estavaProtegida, senhaProtecao)
 On Error GoTo 0
+
+' Onda 38.2.2 AT-5: finaliza bloco rapido se foi iniciado (evita restaurar TEstadoExcel zerada se erro ocorreu antes do iniciar).
+If blocoRapidoIniciado Then Util_FinalizarBlocoRapido estadoExcel
 
 If Trim$(errDesc) = "" Then
     errDesc = "Erro sem descrição (código " & CStr(errNum) & ")."
@@ -3794,9 +3833,73 @@ Private Sub mTxtFiltroCadServ_Change()
     Call PreencherManutencaoValor(mTxtFiltroCadServ.Text)
 End Sub
 
-Private Sub TextBox17_Change()
+' Onda 38.2.2 AT-4: handlers estaticos canonicos para os 7 filtros do Menu Principal.
+' Substitui a descoberta heuristica via UI_TextBoxSeExisteRecursivo + UI_PegarTextBoxBuscaDaLista
+' (handlers mTxtFiltro*_Change mantidos como FALLBACK; debito V207 conforme 38_2_TECNICO.md §70-78).
+' Cada handler estatico evita double-call quando o handler dinamico ja esta vinculado ao mesmo TextBox.
+' Despacho centralizado via Preencher.Preencher_FiltrarPorBoxEstatico(nomeContexto, termo).
+
+Private Sub TextBox16_Change()   ' Cadastro de Entidades
+    If mInicializando Then Exit Sub
+    If Not mTxtFiltroEntidade Is Nothing Then
+        If mTxtFiltroEntidade Is TextBox16 Then Exit Sub
+    End If
     On Error Resume Next
-    Call PreenchimentoEmpresa(TextBox17.Text)
+    Call Preencher.Preencher_FiltrarPorBoxEstatico("entidade", CStr(TextBox16.Text))
+    On Error GoTo 0
+End Sub
+
+Private Sub TextBox17_Change()   ' Cadastro de Empresas
+    If mInicializando Then Exit Sub
+    If Not mTxtFiltroEmpresa Is Nothing Then
+        If mTxtFiltroEmpresa Is TextBox17 Then Exit Sub
+    End If
+    On Error Resume Next
+    Call Preencher.Preencher_FiltrarPorBoxEstatico("empresa", CStr(TextBox17.Text))
+    On Error GoTo 0
+End Sub
+
+Private Sub TextBox18_Change()   ' Atribuicao de Servico
+    If mInicializando Then Exit Sub
+    If Not mTxtFiltroServico Is Nothing Then
+        If mTxtFiltroServico Is TextBox18 Then Exit Sub
+    End If
+    On Error Resume Next
+    Call Preencher.Preencher_FiltrarPorBoxEstatico("atrib_servico", CStr(TextBox18.Text))
+    On Error GoTo 0
+End Sub
+
+Private Sub TextBox19_Change()   ' Emite Solicitacao de Servico (OS)
+    If mInicializando Then Exit Sub
+    On Error Resume Next
+    Call Preencher.Preencher_FiltrarPorBoxEstatico("os", CStr(TextBox19.Text))
+    On Error GoTo 0
+End Sub
+
+Private Sub TextBox20_Change()   ' Avaliacao / Encerramento
+    If mInicializando Then Exit Sub
+    On Error Resume Next
+    Call Preencher.Preencher_FiltrarPorBoxEstatico("aval", CStr(TextBox20.Text))
+    On Error GoTo 0
+End Sub
+
+Private Sub TextBox21_Change()   ' Cadastro e Alteracao de Servico
+    If mInicializando Then Exit Sub
+    If Not mTxtFiltroCadServ Is Nothing Then
+        If mTxtFiltroCadServ Is TextBox21 Then Exit Sub
+    End If
+    On Error Resume Next
+    Call Preencher.Preencher_FiltrarPorBoxEstatico("cad_servico", CStr(TextBox21.Text))
+    On Error GoTo 0
+End Sub
+
+Private Sub TextBox22_Change()   ' Atribuicao de Empresa (Rodizio)
+    If mInicializando Then Exit Sub
+    If Not mTxtFiltroRodizio Is Nothing Then
+        If mTxtFiltroRodizio Is TextBox22 Then Exit Sub
+    End If
+    On Error Resume Next
+    Call Preencher.Preencher_FiltrarPorBoxEstatico("atrib_empresa", CStr(TextBox22.Text))
     On Error GoTo 0
 End Sub
 

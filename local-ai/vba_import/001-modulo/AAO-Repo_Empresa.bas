@@ -77,8 +77,10 @@ Public Function GravarStatusEmpresa( _
     Dim erroMensagem As String
     Dim estadoExcel As Variant
 
-    estadoExcel = Util_IniciarBlocoRapido()
+    ' Onda 38.2.2 (Codex item 69): handler ANTES do flag para garantir
+    ' restauracao mesmo se Util_IniciarBlocoRapido falhar.
     On Error GoTo erro
+    estadoExcel = Util_IniciarBlocoRapido()
 
     Set ws = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     If linhaEmp < PrimeiraLinhaDadosEmpresas() Or linhaEmp > UltimaLinhaAba(SHEET_EMPRESAS) Then
@@ -239,8 +241,10 @@ Public Function Inserir( _
     Dim senhaProtecao As String
     Dim estadoExcel As Variant
 
-    estadoExcel = Util_IniciarBlocoRapido()
+    ' Onda 38.2.2 (Codex item 69): handler ANTES do flag para garantir
+    ' restauracao mesmo se Util_IniciarBlocoRapido falhar.
     On Error GoTo erro
+    estadoExcel = Util_IniciarBlocoRapido()
 
     Set ws = ThisWorkbook.Sheets(SHEET_EMPRESAS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
@@ -316,8 +320,10 @@ Public Function Atualizar( _
     Dim senhaProtecao As String
     Dim estadoExcel As Variant
 
-    estadoExcel = Util_IniciarBlocoRapido()
+    ' Onda 38.2.2 (Codex item 69): handler ANTES do flag para garantir
+    ' restauracao mesmo se Util_IniciarBlocoRapido falhar.
     On Error GoTo erro
+    estadoExcel = Util_IniciarBlocoRapido()
 
     If linhaEmp < LINHA_DADOS Then
         res.sucesso = False
@@ -473,8 +479,10 @@ Public Function RepoEmpresa_BackfillDtUltReativPorAuditLog( _
     Dim erroMensagem As String
     Dim estadoExcel As Variant
 
-    estadoExcel = Util_IniciarBlocoRapido()
+    ' Onda 38.2.2 (Codex item 69): handler ANTES do flag para garantir
+    ' restauracao mesmo se Util_IniciarBlocoRapido falhar.
     On Error GoTo erro
+    estadoExcel = Util_IniciarBlocoRapido()
 
     qtdAtualizadas = 0
     relatorio = ""

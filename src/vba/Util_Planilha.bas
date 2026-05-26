@@ -560,11 +560,50 @@ aba_indisponivel:
     Util_MaxIdNaColunaA = 0
 End Function
 
+' Retorna max(coluna A) considerando aba pareada inativa quando
+' aplicavel. Pares conhecidos:
+'   EMPRESAS  <-> EMPRESAS_INATIVAS
+'   ENTIDADE  <-> ENTIDADE_INATIVOS
+' Demais abas: fallback para Util_MaxIdNaColunaA puro.
+' Aba inativa inexistente retorna 0 silenciosamente.
+' Onda 38.2.2: resolve risco de ProximoId gerar ID duplicado contra
+' aba inativa (cenario: empresa deletada virou inativa, novo cadastro
+' recebe ID ja usado na inativa).
+Public Function Util_MaxIdOperacional(ByVal nomeAba As String) As Long
+    Dim maxAtiva As Long
+    Dim maxInativa As Long
+    Dim abaInativa As String
+
+    maxAtiva = Util_MaxIdNaColunaA(nomeAba)
+    abaInativa = ""
+
+    Select Case UCase$(Trim$(nomeAba))
+        Case "EMPRESAS"
+            abaInativa = "EMPRESAS_INATIVAS"
+        Case "ENTIDADE"
+            abaInativa = "ENTIDADE_INATIVOS"
+    End Select
+
+    If abaInativa = "" Then
+        Util_MaxIdOperacional = maxAtiva
+        Exit Function
+    End If
+
+    maxInativa = Util_MaxIdNaColunaA(abaInativa)
+    If maxInativa > maxAtiva Then
+        Util_MaxIdOperacional = maxInativa
+    Else
+        Util_MaxIdOperacional = maxAtiva
+    End If
+End Function
+
 ' Gera proximo ID sequencial (formato "001", "002", ...).
 ' Le e incrementa o contador em AR1 da aba; defesa em profundidade
 ' (Onda 38.2.1-AR1-FIX2-PERF): se max(coluna_A) > AR1, salta para
 ' max+1 antes de incrementar - cobre backup pre-38.2 com AR1=0 e
 ' edicao manual da celula AR1 que desincronize do dado real.
+' Onda 38.2.2: usa Util_MaxIdOperacional para considerar aba inativa
+' pareada (EMPRESAS_INATIVAS / ENTIDADE_INATIVOS) e evitar reuso de ID.
 Public Function ProximoId(ByVal nomeAba As String) As String
     Dim ws As Worksheet
     Dim atual As Long
@@ -584,7 +623,7 @@ Public Function ProximoId(ByVal nomeAba As String) As String
     abaPreparada = True
 
     atual = CLng(Val(ws.Cells(1, COL_CONTADOR_AR).Value))
-    maxIdReal = Util_MaxIdNaColunaA(nomeAba)
+    maxIdReal = Util_MaxIdOperacional(nomeAba)
     If maxIdReal > atual Then atual = maxIdReal
     atual = atual + 1
     ws.Cells(1, COL_CONTADOR_AR).Value = atual

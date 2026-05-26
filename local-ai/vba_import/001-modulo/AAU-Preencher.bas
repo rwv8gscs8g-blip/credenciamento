@@ -4037,4 +4037,33 @@ falha:
     CnaeConfirmarPodaSnapshots = -1
 End Function
 
+' =========================================================================
+' Onda 38.2.2 AT-4: despacho centralizado de filtros estaticos do Menu Principal.
+' Chamado pelos handlers Menu_Principal.TextBox16..22_Change apos a Onda 38.2.2
+' restaurar a regressao de filtros introduzida na Onda 38.2.1 (e9bcf42).
+'
+' Mapeamento (espelha o vinculo dos handlers dinamicos mTxtFiltro*_Change
+' historicamente vigentes; renomeacao de controles e ajuste fino de qual
+' funcao popula cada lista sao debitos V207 conforme 38_2_TECNICO.md §70-78):
+'   "entidade"      -> PreenchimentoEntidade(termo)              [TextBox16]
+'   "empresa"       -> PreenchimentoEmpresa(termo)               [TextBox17]
+'   "atrib_servico" -> PreenchimentoServico(termo)               [TextBox18]
+'   "os"            -> PreencherPreencheOS                       [TextBox19, termo ignorado - debito V207]
+'   "aval"          -> PreencherAvaliarOS                        [TextBox20, termo ignorado - debito V207]
+'   "cad_servico"   -> PreencherManutencaoValor(termo)           [TextBox21]
+'   "atrib_empresa" -> PreenchimentoEntidadeRodizio(termo)       [TextBox22]
+' =========================================================================
+Public Sub Preencher_FiltrarPorBoxEstatico(ByVal nomeContexto As String, ByVal termo As String)
+    On Error Resume Next   ' tolerante a falha em handler de UI; nao deve quebrar digitacao
+    Select Case LCase$(Trim$(nomeContexto))
+        Case "entidade":      Call PreenchimentoEntidade(termo)
+        Case "empresa":       Call PreenchimentoEmpresa(termo)
+        Case "atrib_servico": Call PreenchimentoServico(termo)
+        Case "os":            Call PreencherPreencheOS
+        Case "aval":          Call PreencherAvaliarOS
+        Case "cad_servico":   Call PreencherManutencaoValor(termo)
+        Case "atrib_empresa": Call PreenchimentoEntidadeRodizio(termo)
+    End Select
+End Sub
+
 

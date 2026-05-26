@@ -41,8 +41,13 @@ Public Sub SanearContadoresAR1()
     totalOk = 0
     totalFalhas = 0
 
-    estadoExcel = Util_IniciarBlocoRapido()
+    ' Onda 38.2.2 (Codex item 69): handler ANTES de Util_IniciarBlocoRapido
+    ' garante restauracao de TEstadoExcel mesmo se a chamada de inicio falhar
+    ' (cenario teorico mas defensivo). estadoExcel comeca vazio; o handler
+    ' ainda assim chama Util_FinalizarBlocoRapido que e tolerante a estado
+    ' vazio/parcial (TEstadoExcel inicializado por VBA como zerado).
     On Error GoTo handler
+    estadoExcel = Util_IniciarBlocoRapido()
 
     Debug.Print "[SanearContadoresAR1] INICIO " & Format$(Now, "yyyy-mm-dd hh:nn:ss")
 

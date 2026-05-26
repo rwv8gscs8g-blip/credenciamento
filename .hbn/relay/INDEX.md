@@ -1,14 +1,42 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.3 (auto-evolucao por handoff)
-proprietario-bastao: Claude Opus 4.7 (sessao ativa 2026-05-26 ~16:00 BRT pos consolidacao 2a rodada auditoria cruzada). Opus segue como arquiteto+executor ate freeze V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. Ondas 38.2.1 + 38.2.1-AR1 + 38.2.1-AR1-FIX2-PERF entregues com gates humanos APROVADOS. Onda 0110 (fast_track doc-only) entregue commit 91037f1. Auditoria cruzada V207 1a rodada consolidada em 111. **2a RODADA AUDITORIA CRUZADA V207 CONSOLIDADA**: 4 arquivos .hbn/proposals/0005-0008-* (commits Codex 039b2ec + Antigravity 32e1bad) - sintese em auditoria/00_status/112_ANALISE_AUDITORIA_CRUZADA_V207_2A_RODADA.md. **CONVERGENCIA UNANIME Codex+Antigravity: Alternativa II (Opcao 4 hibrida) com 3 guard-rails sistemicos (Fase-Lock + Invalidacao Stateless + Callback Explicito)**. Opus 4.7 endossa com clausula de escape V207.4 (sub-versao da III-G Codex). DECISAO FINAL aguarda hearback explicito Mauricio entre II (com escape) e II-bis (sem escape). Anchor funcional V206 inalterado: commit ee75b30, RVS Trio APROVADO VR_20260526_102200. Findings ativos: F-NEW3 + F-NEW4 + F-NEW4-DT — todos enderecaveis na Alternativa II.
-ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar V206 primeiro + aproveitar contexto Opus limpo. Sequencia: AR1 (entregue) -> AR1-FIX2-PERF (entregue) -> evolucao protocolo v1.3 (entregue, onda 0110) -> auditoria cruzada 1a rodada (consolidada em 111) -> 2a rodada de auditoria cruzada (CONSOLIDADA em 112, AGUARDANDO HEARBACK) -> decisao Mauricio II vs II-bis -> Onda 38.2.2 V206 puro EM PARALELO (independente) -> V207.0+ em 9 ondas refinadas (0120-0129) apos hearback.
-ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF no workbook do operador, RVS Trio APROVADO em VR_20260526_102200 (CSV anexado em commit f4d1884).
-proxima-acao: 🔵 HBN PENDING HEARBACK MAURICIO — decisao final entre (II) Alternativa II com clausula escape V207.4 [RECOMENDADO] e (II-bis) Alternativa II sem escape [commitment full V207.0-V207.8]. Apos hearback: (a) Onda 38.2.2 V206 puro pode abrir imediatamente com readback 0111 (escopo independente, aproveita contexto Opus limpo); (b) onda safe_track doc-only knowledges 0018+0019+0020 ANTES de V207.0; (c) readback 0120-rb-v207-0-foundation-idperf abre V207 substantiva.
-ultima-atualizacao: 2026-05-26T16:00:00-0300 (consolidacao 2a rodada auditoria cruzada V207 - convergencia unanime Codex+Antigravity em Alternativa II)
+proprietario-bastao: Claude Opus 4.7 (sessao ativa 2026-05-26 ~17:30 BRT pos handoff + retomada da Onda 38.2.2). Opus segue como arquiteto+executor ate freeze V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. **Onda 38.2.2 V206 puro ENTREGUE** (esta sessao): AT-1 Util_MaxIdOperacional pair-aware + AT-2 handler-before-flag + AT-3 NumberFormat sistematico + AT-4 7 handlers estaticos TextBox16..22_Change + AT-5 envelopamento Util_Excel_Performance em 3 .frm. Readback 0111 executado. Aguardando gates humanos (10 gates: IMPORT, COMPILE, AT-1..AT-5, RVS, VAL-TELA-A-TELA, FREEZE). DECISAO V207 fechada por Mauricio em chat 2026-05-26 ~16:30 BRT: **Alternativa II-bis** (commitment full V207.0-V207.8 sem clausula de escape). Anchor funcional V206 inalterado: commit ee75b30, RVS Trio APROVADO VR_20260526_102200.
+ciclo-ativo: V12.0.0206 EM FREEZE — gates humanos pos-commit da Onda 38.2.2 + freeze tag v12.0.0206. V12.0.0205 permanece congelada como release oficial. Sequencia ENTREGUE: AR1 -> AR1-FIX2-PERF -> evolucao protocolo v1.3 (0110) -> auditoria cruzada 1a rodada (111) -> 2a rodada (112) -> **Onda 38.2.2 (esta)**. Proximo: gates humanos + tag v12.0.0206 + onda safe_track doc-only knowledges 0018+0019+0020 -> V207.0+ em 9 ondas (0120-0129).
+ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF no workbook do operador, RVS Trio APROVADO em VR_20260526_102200 (CSV anexado em commit f4d1884). **Anchor de rollback Onda 38.2.2: commit 179bac5 (HEAD pos-consolidacao 2a rodada V207)**.
+proxima-acao: 🟢 ONDA 38.2.2 ENTREGUE — apresentar gates humanos pos-commit a Mauricio: (1) GATE-IMPORT ImportarPacoteV3_Delta "ONDA38-2-2-V206-FREEZE" -> M=8 F=0; (2) GATE-COMPILE; (3) GATE-AT-1..AT-5; (4) GATE-RVS CT_ValidarRelease_TrioMinimo; (5) GATE-VAL-TELA-A-TELA (cronograma 38_2_TECNICO.md:79); (6) GATE-FREEZE tag v12.0.0206 anotada + push sob aprovacao.
+ultima-atualizacao: 2026-05-26T17:30:00-0300 (Onda 38.2.2 V206 puro ENTREGUE - aguardando gates humanos + freeze)
 ---
 
-## 🔵 HBN HANDOFF READY — sessão Opus 2026-05-26 ~12:30 → 15:26 encerrada (NOVO)
+## 🟢 ONDA 38.2.2 V206 PURO ENTREGUE — última onda antes do freeze (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 HBN ENTREGUE |
+| Onda | ONDA38.2.2 — V206 puro freeze |
+| Agente | Claude Opus 4.7 (sessão 2026-05-26 ~17:30 BRT, sucessora pós-handoff 1730) |
+| Readback | [`0111-onda-38-2-2-v206-puro-filtros-envelopamento-quickwins-freeze.json`](../readbacks/0111-onda-38-2-2-v206-puro-filtros-envelopamento-quickwins-freeze.json) — confirmed (chat 2026-05-26 ~16:45 BRT) |
+| Técnico | [`auditoria/03_ondas/onda_38_2_2_v206_freeze/38_2_2_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_2_v206_freeze/38_2_2_TECNICO.md) |
+| Manifesto | [`local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-2-V206-FREEZE.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-2-V206-FREEZE.txt) — 8 módulos M |
+| Anchor de rollback | commit `179bac5` (HEAD pós-consolidação 2ª rodada V207) |
+| Anchor V206 funcional | `ee75b30` (FIX2-PERF + RVS Trio APROVADO `VR_20260526_102200`) |
+
+### 5 alvos atômicos entregues
+
+- **AT-1** (item 68 Codex, sev. ALTO) — `Util_Planilha.Util_MaxIdOperacional(nomeAba)` pair-aware EMPRESAS+INATIVAS / ENTIDADE+INATIVOS; `ProximoId` redirecionado.
+- **AT-2** (item 69 Codex, sev. MÉDIO) — handler-before-flag em `Util_Sanear_Contadores.SanearContadoresAR1` + 4 funções `Repo_Empresa` (Inserir, Atualizar, GravarStatusEmpresa, RepoEmpresa_BackfillDtUltReativPorAuditLog).
+- **AT-3** (F-NEW3 sistemático) — `NumberFormat = "@"` em coluna A antes de gravar ID em 5 pontos: Menu_Principal entidade + empresa-alt, Credencia_Empresa (dentro do loop), Cadastro_Servico (atividade + serviço).
+- **AT-4** (filtros nativos) — 7 handlers estáticos `TextBox16..22_Change` no `Menu_Principal.frm` despachando para `Preencher.Preencher_FiltrarPorBoxEstatico(nomeContexto, termo)`. Reverte definitivamente a regressão da Onda 38.2.1 (`e9bcf42`). Handlers dinâmicos `mTxtFiltro*_Change` mantidos como fallback. Débito V207: rename canônico de TextBox16..22 no designer + `Optional filtro` em `PreencherPreencheOS`/`PreencherAvaliarOS`.
+- **AT-5** (envelopamento) — `Util_Excel_Performance` aplicado em 4 subs `.frm`: Menu_Principal (entidade + empresa-alt), Credencia_Empresa (loop credenciamento), Cadastro_Servico (atividade + serviço). Padrão emergente: `blocoRapidoIniciado As Boolean` defensiva no handler de erro (candidato a knowledge 002X).
+
+### Próxima ação
+
+Apresentar a Mauricio para os **10 gates humanos pós-commit**:
+GATE-IMPORT → GATE-COMPILE → GATE-AT-1..AT-5 → GATE-RVS → GATE-VAL-TELA-A-TELA (cronograma [`38_2_TECNICO.md:79`](../../auditoria/03_ondas/onda_38_2_filtros_menu_principal/38_2_TECNICO.md#L79)) → GATE-FREEZE (tag `v12.0.0206` anotada + push origin sob aprovação).
+
+---
+
+## 🟢 HBN HANDOFF READY FECHADO — sessão Opus 2026-05-26 ~12:30 → 15:26 (resolvido)
 
 | Campo | Valor |
 |---|---|
@@ -41,7 +69,11 @@ Pode abrir readback 0111 se Mauricio aprovar — escopo independente da decisão
 
 ---
 
-## 🔵 HBN PENDING HEARBACK — 2ª rodada auditoria cruzada V207 CONSOLIDADA (NOVO)
+## 🟢 HBN PENDING HEARBACK V207 FECHADO — Alternativa II-bis confirmada por Mauricio (2026-05-26 ~16:30 BRT)
+
+> Mauricio confirmou em chat **Alternativa II-bis (commitment full V207.0-V207.8 sem cláusula de escape)**. Decisão documentada em `decisions_preconfirmed[0]` do readback 0111 + executada nesta onda 38.2.2. Bloco abaixo preservado como histórico do consenso 2ª rodada.
+
+## 🔵 HBN PENDING HEARBACK — 2ª rodada auditoria cruzada V207 CONSOLIDADA (HISTÓRICO)
 
 | Campo | Valor |
 |---|---|
