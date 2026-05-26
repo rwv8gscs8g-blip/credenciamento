@@ -1,11 +1,11 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.3 (auto-evolucao por handoff)
-proprietario-bastao: Claude Opus 4.7 (sessao sucessora encerrada 15:26 BRT pos auditoria cruzada 1a rodada consolidada). Opus segue como arquiteto+executor ate freeze V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. Ondas 38.2.1 + 38.2.1-AR1 + 38.2.1-AR1-FIX2-PERF entregues com gates humanos APROVADOS. Onda 0110 (fast_track doc-only) entregue 2026-05-26 ~12:55 commit 91037f1 + adjacente f4d1884 (anexa CSV RVS Trio V206) + fechamento ERP/relay 8c03e34. Auditoria cruzada V207 1a rodada ENTREGUE: 4 arquivos .hbn/proposals/0001-0004-* (commits Codex b33d904 + Antigravity 2d49259 ambos sem push) - consolidada por Opus em auditoria/00_status/111_ANALISE_AUDITORIA_CRUZADA_V207.md. Decisao preliminar Mauricio (chat ~15:00): vai escolher entre Alternativa I (Caminho 1 -> Caminho 2 puro) ou Alternativa II (Opcao 4 hibrida = Caminho 1 + in-memory parcial nas listas) MAS so apos 2a rodada de auditoria cruzada. Anchor funcional V206 inalterado: commit ee75b30 (Onda FIX2-PERF), RVS Trio APROVADO VR_20260526_102200. Findings ativos: F-NEW3 (cosmetico, Onda 38.2.2 ou V207.x) + F-NEW4 (medio, arquitetural, resolucao depende do caminho V207 escolhido) + F-NEW4-DT (medio, testes E2E V207).
-ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (cadastros corretos + filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; deep-dive arquitetural fica para V207. Sequencia: AR1 (entregue) -> AR1-FIX2-PERF (entregue) -> evolucao protocolo v1.3 + knowledge 0017 (entregue, onda 0110, commit 91037f1) -> auditoria cruzada 1a rodada (entregue + consolidada em 111) -> 2a rodada de auditoria cruzada (PENDENTE - prompts prontos em 110) -> decisao Alternativa I vs II vs III -> V207.0+ em ondas refinadas. Onda 38.2.2 (V206 puro) pode rodar em paralelo a 2a rodada se aprovado pelo operador.
+proprietario-bastao: Claude Opus 4.7 (sessao ativa 2026-05-26 ~16:00 BRT pos consolidacao 2a rodada auditoria cruzada). Opus segue como arquiteto+executor ate freeze V12.0.0206; Codex retorna como auditor adversarial pos-implementacao. Ondas 38.2.1 + 38.2.1-AR1 + 38.2.1-AR1-FIX2-PERF entregues com gates humanos APROVADOS. Onda 0110 (fast_track doc-only) entregue commit 91037f1. Auditoria cruzada V207 1a rodada consolidada em 111. **2a RODADA AUDITORIA CRUZADA V207 CONSOLIDADA**: 4 arquivos .hbn/proposals/0005-0008-* (commits Codex 039b2ec + Antigravity 32e1bad) - sintese em auditoria/00_status/112_ANALISE_AUDITORIA_CRUZADA_V207_2A_RODADA.md. **CONVERGENCIA UNANIME Codex+Antigravity: Alternativa II (Opcao 4 hibrida) com 3 guard-rails sistemicos (Fase-Lock + Invalidacao Stateless + Callback Explicito)**. Opus 4.7 endossa com clausula de escape V207.4 (sub-versao da III-G Codex). DECISAO FINAL aguarda hearback explicito Mauricio entre II (com escape) e II-bis (sem escape). Anchor funcional V206 inalterado: commit ee75b30, RVS Trio APROVADO VR_20260526_102200. Findings ativos: F-NEW3 + F-NEW4 + F-NEW4-DT — todos enderecaveis na Alternativa II.
+ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar V206 primeiro + aproveitar contexto Opus limpo. Sequencia: AR1 (entregue) -> AR1-FIX2-PERF (entregue) -> evolucao protocolo v1.3 (entregue, onda 0110) -> auditoria cruzada 1a rodada (consolidada em 111) -> 2a rodada de auditoria cruzada (CONSOLIDADA em 112, AGUARDANDO HEARBACK) -> decisao Mauricio II vs II-bis -> Onda 38.2.2 V206 puro EM PARALELO (independente) -> V207.0+ em 9 ondas refinadas (0120-0129) apos hearback.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF no workbook do operador, RVS Trio APROVADO em VR_20260526_102200 (CSV anexado em commit f4d1884).
-proxima-acao: 🔵 HBN HANDOFF READY — sessao 12:30->15:26 BRT encerrada com 4 artefatos (analise 111 + prompt retomada 110 + handoff 20260526-1526 + protocol-evolutions 20260526-1526). Proxima Opus cola prompt 110, faz pre-flight, entrega prompts 2a rodada (em 110 §"Prompts 2a rodada") para Mauricio abrir 2 sessoes paralelas. Output esperado: 4 arquivos .hbn/proposals/0005-0008-*.md. Opus consolida + Mauricio decide. Em paralelo opcional (nao bloqueia): Onda 38.2.2 (V206 puro - PHAGOCYTOSIS deep-dive ja sintetizada + 2 quick wins Codex item 68/69 incorporados).
-ultima-atualizacao: 2026-05-26T15:26:00-0300 (sessao Opus encerrada apos consolidacao auditoria cruzada 1a rodada + 4 artefatos handoff §7.3 PROMPT_ARQUITETO v1.3 + 1a aplicacao pratica do mecanismo de protocol-evolutions; bastao mantido com Opus 4.7)
+proxima-acao: 🔵 HBN PENDING HEARBACK MAURICIO — decisao final entre (II) Alternativa II com clausula escape V207.4 [RECOMENDADO] e (II-bis) Alternativa II sem escape [commitment full V207.0-V207.8]. Apos hearback: (a) Onda 38.2.2 V206 puro pode abrir imediatamente com readback 0111 (escopo independente, aproveita contexto Opus limpo); (b) onda safe_track doc-only knowledges 0018+0019+0020 ANTES de V207.0; (c) readback 0120-rb-v207-0-foundation-idperf abre V207 substantiva.
+ultima-atualizacao: 2026-05-26T16:00:00-0300 (consolidacao 2a rodada auditoria cruzada V207 - convergencia unanime Codex+Antigravity em Alternativa II)
 ---
 
 ## 🔵 HBN HANDOFF READY — sessão Opus 2026-05-26 ~12:30 → 15:26 encerrada (NOVO)
@@ -38,6 +38,40 @@ Output esperado: 4 arquivos `.md` em `.hbn/proposals/0005-0008-*`. Opus consolid
 - Item 69 (severidade médio): instalar `On Error GoTo` ANTES de chamar `Util_IniciarBlocoRapido` em 5 callers
 
 Pode abrir readback 0111 se Mauricio aprovar — escopo independente da decisão V207.
+
+---
+
+## 🔵 HBN PENDING HEARBACK — 2ª rodada auditoria cruzada V207 CONSOLIDADA (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🔵 PENDING HEARBACK MAURICIO |
+| Track | meta (ato cognitivo sem readback safe_track) |
+| Inputs | [`0005-codex-refinamento-arquitetural-v207.md`](../proposals/0005-codex-refinamento-arquitetural-v207.md) (~35KB) + [`0006-codex-recomendacao-alternativa-i-ou-ii.md`](../proposals/0006-codex-recomendacao-alternativa-i-ou-ii.md) (~7.5KB) + [`0007-antigravity-refinamento-arquitetural-v207.md`](../proposals/0007-antigravity-refinamento-arquitetural-v207.md) (~16KB) + [`0008-antigravity-recomendacao-alternativa-i-ou-ii.md`](../proposals/0008-antigravity-recomendacao-alternativa-i-ou-ii.md) (~6KB) |
+| Commits originais | Codex `039b2ec` + Antigravity `32e1bad` |
+| Output consolidado | [`auditoria/00_status/112_ANALISE_AUDITORIA_CRUZADA_V207_2A_RODADA.md`](../../auditoria/00_status/112_ANALISE_AUDITORIA_CRUZADA_V207_2A_RODADA.md) |
+| Veredito | **Convergência unânime Codex+Antigravity: Alternativa II com 3 guard-rails sistêmicos invioláveis** |
+| Recomendação Opus 4.7 | Alternativa II com cláusula de escape V207.4 (sub-versão da III-G Codex) |
+
+### Os 3 Guard-rails Sistêmicos (contratos invioláveis Alternativa II)
+
+1. **Fase-Lock**: V207.5+ só após RVS+E2E_CADASTROS verdes e tag `v12.0.0207-base-monolito` cravada. Proibido branches/commits cache em paralelo.
+2. **Invalidação Stateless**: cache reconstrói coleção inteira ao invalidar; nunca atualiza item isolado.
+3. **Callback Explícito**: toda gravação `Repo_*.bas` invoca `Menu_Principal.InvalidarCache(tipoAba)` sob pena de gate mecânico.
+
+### Decisão pendente Mauricio (3 hipóteses)
+
+- ✅ **(II) Alternativa II com cláusula de escape V207.4 — RECOMENDADA Opus**
+- ⚠ (II-bis) Alternativa II sem escape (commitment full V207.0-V207.8)
+- ❌ (I) Alternativa I — rejeitada por ambas IAs auxiliares
+- ❌ (III) EDRA — rejeitada
+
+### Próximos passos pós-hearback
+
+1. **Onda 38.2.2 V206 puro EM PARALELO** (independente da decisão V207): readback `0111-rb-onda-38-2-2-v206-puro-quick-wins-filtros-envelopamento-fnew3` aproveita contexto Opus limpo
+2. **Onda safe_track doc-only** consolidando knowledges 0018 (Doc-Delta) + 0019 (Limites Hibridismo) + 0020 (Invalidação Stateless) ANTES de V207.0
+3. **Readback `0120-rb-v207-0-foundation-idperf`** abre primeira onda V207 substantiva (quick wins + base defensiva)
+4. Sequência V207 prosseguindo pelos IDs `0121-0129` (9 ondas em release única)
 
 ---
 
