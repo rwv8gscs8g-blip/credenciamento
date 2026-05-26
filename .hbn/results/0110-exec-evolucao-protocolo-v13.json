@@ -1,0 +1,96 @@
+{
+  "result_id": "0110-exec-evolucao-protocolo-v13",
+  "execution_id": "0110-exec-evolucao-protocolo-v13",
+  "readback_id": "0110-evolucao-protocolo-v13-knowledge-0017",
+  "data": "2026-05-26",
+  "agent_id": "claude-opus-4-7 (sessao sucessora pos-handoff 0108, abertura 2026-05-26 ~12:40-13:00)",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "executed",
+  "outcome": "executed",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Onda fast_track doc-only de evolucao manual do protocolo HBN entre sessoes Opus: (1) PROMPT_ARQUITETO_USEHBN_AUTONOMO.md (fora do repo, em /Users/macbookpro/Projetos/) bumped v1.2 -> v1.3 com par.7.3 novo (auto-evolucao do protocolo a cada handoff) + Passo 5 do par.7 + passo F do par.2 pre-flight + changelog; (2) Knowledge 0017 nova 'handoff aos 50pct de contexto - orcamento obrigatorio de qualidade' formalizando licao de Mauricio + orcamento 50/30/20; (3) Prompt de retomada 108 atualizado para refletir v1.3 e exigir 3 artefatos no proximo handoff; (4) .hbn/knowledge/INDEX.md adicionada entrada 0017; (5) Doc 109 fora do .hbn (par.11 do PROMPT_ARQUITETO) cumpre auditoria do registro de evolucao manual. Esta sessao Opus sucessora apenas executou o commit + push prescritos no doc 109 (que a sessao Cowork de evolucao manual nao pode fazer porque o guard assert-canonical-root bloqueia ambiente sandbox - L30 candidata).",
+  "summary": "Onda 0110 entregue como prescrito. 6 arquivos commitados no hash 91037f1 (sequencia exata do doc 109). Mesmo dia, em commit separado f4d1884, anexado CSV RVS Trio VR_20260526_102200 (evidencia aprovada da Onda 38.2.1-AR1-FIX2-PERF que estava untracked desde o gate) - ato adjacente conforme feedback memory scope_extension_custo_marginal_zero. 5/5 guards verdes em ambos os commits; pre-commit hook OK; push para origin codex/v12-0-0206-planejamento sucesso em ambos.",
+  "commits": {
+    "primario_onda_0110": {
+      "hash": "91037f1",
+      "subject": "docs(hbn): evolucao protocolo v13 + knowledge 0017 handoff 50pct",
+      "files_changed": 6,
+      "linhas": "+498 / -24"
+    },
+    "adjacente_csv_v206": {
+      "hash": "f4d1884",
+      "subject": "docs(evidencias): anexa CSV RVS Trio VR_20260526_102200 V206 (Onda 38.2.1-AR1-FIX2-PERF)",
+      "files_changed": 1,
+      "linhas": "+5 / -0",
+      "racional": "Evidencia aprovada do gate da Onda 38.2.1-AR1-FIX2-PERF que o ERP 0108 deixou marcada como 'a anexar em onda seguinte ou no fechamento desta'. Versionar imediato evita perda; ato adjacente sem onda propria justificavel por feedback memory scope_extension_custo_marginal_zero (autorizado por Mauricio na opcao 3 deste turno)."
+    }
+  },
+  "files_changed": [
+    ".hbn/knowledge/0017-handoff-aos-50-pct-contexto.md",
+    ".hbn/knowledge/INDEX.md",
+    ".hbn/readbacks/0110-evolucao-protocolo-v13-knowledge-0017.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md",
+    "auditoria/00_status/109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md"
+  ],
+  "files_changed_adjacente": [
+    "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseTrio_V12_0_0205_VR_20260526_102200.csv"
+  ],
+  "files_unstaged_intencional": [
+    {
+      "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "estado": "modificado (APP_BUILD_IMPORTADO 7bca168+ONDA38.2.1-revert-filtros-menu -> ad5b487+ONDA38.2.1-AR1-FIX2-PERF; APP_BUILD_GERADO_EM 2026-05-26 15:00 -> 2026-05-26 10:08)",
+      "racional": "Knowledge 0016 vigente: deixar App_Release.bas no estado da onda anterior. Esta mudanca eh o reflexo do BUMP automatico que o Importador V3 fez durante o gate da Onda 38.2.1-AR1-FIX2-PERF e nao deve ser commitada na onda 0110 (que eh doc-only e tem scope.files_forbidden=local-ai/vba_import/**). Ressincronizacao acontece na proxima publicar_vba_import_v2.sh --apply."
+    }
+  ],
+  "delta_contract": {
+    "delta_name": "n/a (fast_track doc-only)",
+    "build_label": "n/a",
+    "manifest_path": "n/a",
+    "import_command": "n/a"
+  },
+  "validation_gates": [
+    {
+      "gate": "scripts/hbn-guards/hbn-guards-runner.sh 5/5 verdes no Mac (raiz canonica = /Users/macbookpro/Projetos/Credenciamento)",
+      "status": "pass",
+      "evidencia": "Antes do commit 91037f1: 5/5 OK (assert-canonical-root, forbid-tmp-worktree, forbid-env-files, forbid-legacy-paths, assert-scope-lock reconhecendo readback 0110 fast_track confirmed). Re-validado antes do commit adjacente f4d1884: 5/5 OK. Pre-commit hook ('Todas as fases passaram') executado em ambos."
+    },
+    {
+      "gate": "git push origin codex/v12-0-0206-planejamento bem-sucedido",
+      "status": "pass",
+      "evidencia": "Push 1: d03de55..91037f1 OK (commit primario da onda 0110). Push 2: 91037f1..f4d1884 OK (commit adjacente do CSV V206). Origin = https://github.com/rwv8gscs8g-blip/credenciamento.git."
+    },
+    {
+      "gate": "Working tree consistente apos push (apenas unstaged previsto pela knowledge 0016)",
+      "status": "pass",
+      "evidencia": "Pos-push final: 1 arquivo modificado nao staged (local-ai/vba_import/001-modulo/AAX-App_Release.bas) - estado esperado por knowledge 0016. Sem arquivos untracked remanescentes (CSV V206 absorvido pelo commit adjacente)."
+    }
+  ],
+  "decisao_humana": {
+    "data": "2026-05-26 (chat com Mauricio na abertura desta sessao)",
+    "conteudo": "Mauricio escolheu opcao 3 do plano: commit da onda 0110 (escopo readback) + commit separado do CSV V206 (evidencia adjacente do gate da onda 38.2.1-AR1-FIX2-PERF). 'opcao 3 que e a mais segura. Pontos adicionais aprovados. Vamos comecar com as acoes previstas no prompt 108.'"
+  },
+  "next_wave": {
+    "id": "auditoria-cruzada-codex-antigravity-pre-v207",
+    "summary": "Entrega imediata dos prompts 13.B (Codex auditoria de codigo V206 + 3 propostas V207) e 13.C (Antigravity/Gemini auditoria sistemica V206 + 3 propostas V207) ao Mauricio para que ele abra 2 sessoes paralelas. Output esperado: 4 arquivos em .hbn/proposals/0001-0004-*. Opus consolida quando voltarem. Em paralelo opcional: deep-dive PHAGOCYTOSIS preparando Onda 38.2.2.",
+    "status": "ready_to_open"
+  },
+  "licoes_para_protocol_evolutions": [
+    {
+      "id": "L29-candidata",
+      "rule": "Toda evolucao manual do PROMPT_ARQUITETO (fora do repo) deve produzir documento espelho em auditoria/00_status/NNN_EVOLUCAO_* no Credenciamento conforme par.11. Esta onda 0110 cumpriu manualmente - formalizar como gate no par.7.3 quando alvo for prompt_arquiteto.",
+      "origem": "Ja registrada no doc 109 secao 'Licoes novas'."
+    },
+    {
+      "id": "L30-candidata",
+      "rule": "Guard assert-canonical-root.sh bloqueia commits de sessoes Cowork que rodam em sandbox com path montado diferente. Modelo 'IA propoe, humano commita' eh coerente com HBN mas vale registrar como caracteristica conhecida. Esta sessao validou: Opus sucessora (mesma raiz canonica) pode commit+push, Opus Cowork (sandbox) nao pode.",
+      "origem": "Ja registrada no doc 109 secao 'Licoes novas'."
+    }
+  ],
+  "closed_at": "2026-05-26T12:55:00-03:00",
+  "created_at": "2026-05-26T12:55:00-03:00"
+}
