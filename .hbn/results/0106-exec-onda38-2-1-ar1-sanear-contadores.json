@@ -38,8 +38,8 @@
     },
     {
       "gate": "App_Release.bas atualizado apenas em build label e timestamp",
-      "status": "pass",
-      "evidence": "APP_BUILD_IMPORTADO = e9bcf42+ONDA38.2.1-AR1-sanear-contadores; APP_BUILD_GERADO_EM = 2026-05-26 03:30"
+      "status": "fail_hotfix_applied",
+      "evidence": "Primeira tentativa: APP_BUILD_IMPORTADO = e9bcf42+ONDA38.2.1-AR1-sanear-contadores (igual ao target) e APP_BUILD_GERADO_EM = 2026-05-26 03:30 (coincidiu com hora do import). Importador V3 reportou [V3 FALHA] BUMP_NO_CHANGE Constantes nao encontradas ou ja iguais. Hotfix: revertido src/vba/App_Release.bas para estado do commit e9bcf42 (build label 7bca168+ONDA38.2.1-revert-filtros-menu, timestamp 2026-05-26 15:00) - Importador V3 fara o BUMP corretamente no proximo import. Knowledge 0016 (.hbn/knowledge/0016-bump-build-label-anti-conflito.md) registra a licao."
     },
     {
       "gate": "Entrada ABN-Util_Sanear_Contadores.bas adicionada em 000-MAPA-PREFIXOS.txt",

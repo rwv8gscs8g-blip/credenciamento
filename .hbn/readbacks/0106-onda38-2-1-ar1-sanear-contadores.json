@@ -30,6 +30,7 @@
       "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
       "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-SANEAR-CONTADORES.txt",
       "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+      ".hbn/knowledge/0016-bump-build-label-anti-conflito.md",
       ".hbn/readbacks/0106-onda38-2-1-ar1-sanear-contadores.json",
       ".hbn/results/0106-exec-onda38-2-1-ar1-sanear-contadores.json",
       ".hbn/results/0105-exec-onda38-2-1-revert-filtros-menu.json",
@@ -214,6 +215,12 @@
       "at": "2026-05-26T03:25:00-03:00",
       "by": "humano",
       "note": "Mauricio confirmou em chat: 'confirmado. pode avancar.' + pediu para verificar no proximo ciclo se inabilitar empresa/entidade sofre do mesmo problema. Decisao tomada: expandir o calculo de max(ID) para incluir EMPRESAS_INATIVAS e ENTIDADE_INATIVOS como sources ja nesta onda (custo marginal nulo, robustez maxima)."
+    },
+    {
+      "status": "hotfix_aplicado",
+      "at": "2026-05-26T03:35:00-03:00",
+      "by": "claude-opus-4-7",
+      "note": "Primeiro import falhou com [V3 FALHA] BUMP_NO_CHANGE - Constantes nao encontradas ou ja iguais. Causa raiz isolada em src/vba/Importador_V3.bas:1280-1325 (IV3_AtualizarConstantesAppRelease): o V3 faz substituicao textual de APP_BUILD_IMPORTADO e APP_BUILD_GERADO_EM e se o novoConteudo == conteudo (ambos ja iguais ao target), reporta NO_CHANGE como FALHA e aborta o delta antes de qualquer import de modulo. Eu pre-setei o build label IGUAL ao target e o timestamp coincidiu com o minuto do import (~03:30) - duas substituicoes no-op. Hotfix: reverter src/vba/App_Release.bas para o estado do commit e9bcf42 (Onda 38.2.1, build label 7bca168+ONDA38.2.1-revert-filtros-menu, timestamp 2026-05-26 15:00); o Importador V3 detecta diferenca e faz o BUMP corretamente durante o import. Knowledge 0016 criada para incorporar a regra no protocolo HBN. Workbook do Mauricio NAO foi alterado pelo import falho (fase BUMP roda antes da fase de import de modulos)."
     }
   ],
   "created_at": "2026-05-26T03:10:00-03:00"

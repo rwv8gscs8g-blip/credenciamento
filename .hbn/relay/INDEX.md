@@ -4,20 +4,25 @@ versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis)
 proprietario-bastao: Claude Opus 4.7 (bastao transferido provisoriamente Codex -> Opus em 2026-05-26 apos reprovacao da Onda 38.2). Opus segue como arquiteto+executor para estabilizacao da V12.0.0206 ate freeze; Codex retorna como auditor adversarial pos-implementacao. Onda 38.2.1 ENTREGUE no gate humano em 2026-05-26 03:00 com human_gate_passed_with_findings (RVS APROVADO + revert OK + sem erro 424; F1 ID 001 cadastro empresa e F2 ordenacao entidade NAO sao regressao do 38.2 mas bugs de contador AR1 mascarados pela instabilidade anterior). Onda 38.2.1-AR1 ABERTA (readback 0106 PENDING) - saneamento de contadores AR1.
 ciclo-ativo: V12.0.0206 em estabilizacao. V12.0.0205 permanece congelada como release oficial. Diretriz Mauricio 2026-05-26: estabilizar primeiro (cadastros corretos + filtros voltando + PDF impresso + testes de PDF) antes de qualquer evolucao de arquitetura; passagem assistida tela-a-tela com Mauricio antes do freeze; deep-dive arquitetural fica para V207. Caminho A aprovado: AR1 (contadores) -> [AR2 condicional se F2 persistir] -> 38.2.2 (filtros nativos) -> 39+ (PDF) -> freeze.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD e9bcf42 (Onda 38.2.1 entregue), build 7bca168+ONDA38.2.1-revert-filtros-menu, RVS Trio APROVADO em VR_20260526_024718 V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0.
-proxima-acao: Mauricio dar hearback ao readback 0106 (Onda 38.2.1-AR1 saneamento contadores). Apos confirmed, Opus implementa Util_Sanear_Contadores.SanearContadoresAR1() que recalcula AR1 = max(coluna_ID) em todas as abas com ProximoId, carimba novo build label e entrega para gate humano (testar cadastro empresa nova com ID sequencial correto).
-ultima-atualizacao: 2026-05-26T03:10:00-0300 (Onda 38.2.1 fechada com findings; readback 0106 Onda 38.2.1-AR1 sera aberto PENDING)
+proxima-acao: Mauricio reimporta o delta ONDA38-2-1-AR1-SANEAR-CONTADORES apos o hotfix do BUMP (commit a aplicar nesta sessao). Esperado: M=2|F=0|err=0|skip=0; compile limpo; rodar SanearContadoresAR1 no Imediato; testar cadastro empresa nova com ID sequencial correto; CT_ValidarRelease_TrioMinimo APROVADO.
+ultima-atualizacao: 2026-05-26T03:40:00-0300 (Onda 38.2.1-AR1 commit ffc8e8a + hotfix BUMP_BUILD_LABEL preparado para segundo commit; knowledge 0016 documenta a licao do anti-conflito)
 ---
 
-## Onda 38.2.1-AR1 ABERTA — Saneamento contadores AR1 (Opus) — readback 0106 PENDING
+## Onda 38.2.1-AR1 — Saneamento contadores AR1 (Opus) — hotfix BUMP aplicado, aguarda reimport
 
 | Campo | Valor |
 |---|---|
 | Track | safe_track |
-| Readback | [readbacks/0106-onda38-2-1-ar1-sanear-contadores.json](../readbacks/0106-onda38-2-1-ar1-sanear-contadores.json) — **human_status: pending** (aguarda hearback Mauricio) |
-| Hearback | PENDENTE — Opus apresentando plano apos analise tecnica do F1 (causa raiz em Util_Planilha.ProximoId, contador AR1 dessincronizado pelo restore de workbook pre-38.2) |
-| Predecessor | [0105-onda38-2-1-revert-filtros-menu.json](../readbacks/0105-onda38-2-1-revert-filtros-menu.json) (CONFIRMED + ERP fechado com findings) |
-| Build label | `e9bcf42+ONDA38.2.1-AR1-sanear-contadores` |
+| Readback | [readbacks/0106-onda38-2-1-ar1-sanear-contadores.json](../readbacks/0106-onda38-2-1-ar1-sanear-contadores.json) — **human_status: confirmed** |
+| Hearback | confirmed — Mauricio aprovou Caminho A em chat 2026-05-26 |
+| ERP | [results/0106-exec-onda38-2-1-ar1-sanear-contadores.json](../results/0106-exec-onda38-2-1-ar1-sanear-contadores.json) — `delivered_for_human_gate` com gate `App_Release.bas` flipado para `fail_hotfix_applied` |
+| Doc tecnico | [38_2_1_AR1_TECNICO.md](../../auditoria/03_ondas/onda_38_2_1_ar1_sanear_contadores/38_2_1_AR1_TECNICO.md) |
+| Manifesto delta | [000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-SANEAR-CONTADORES.txt](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38-2-1-AR1-SANEAR-CONTADORES.txt) |
+| Build label (target) | `e9bcf42+ONDA38.2.1-AR1-sanear-contadores` |
+| Predecessor | [0105-onda38-2-1-revert-filtros-menu.json](../readbacks/0105-onda38-2-1-revert-filtros-menu.json) (CONFIRMED + ERP `human_gate_passed_with_findings`) |
 | Origem | F1 + F2 do ERP 0105 (cadastro empresa ID 001 + cadastro entidade no topo) |
+| Commit primario | `ffc8e8a` (modulo + readback + ERP + doc + manifesto + 7 abas alvo, EMPRESAS_INATIVAS/ENTIDADE_INATIVOS como sources) |
+| Hotfix BUMP | primeiro import abortou com `[V3 FALHA] BUMP_NO_CHANGE - Constantes nao encontradas ou ja iguais`. Causa: pre-setei `APP_BUILD_IMPORTADO` no `.bas` igual ao target E `APP_BUILD_GERADO_EM` coincidiu com hora do import. Fix: reverter `src/vba/App_Release.bas` ao estado do commit e9bcf42 (build label 7bca168+...) para que o Importador V3 detecte diferenca e faca o BUMP corretamente. Knowledge nova: [`.hbn/knowledge/0016-bump-build-label-anti-conflito.md`](../knowledge/0016-bump-build-label-anti-conflito.md). |
 
 ### Resumo da onda 38.2.1-AR1
 

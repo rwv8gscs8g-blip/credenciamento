@@ -17,6 +17,16 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.2.1-AR1 hotfix BUMP** — reverte `src/vba/App_Release.bas` ao
+  estado do commit `e9bcf42` (Onda 38.2.1) após primeiro
+  `ImportarPacoteV3_Delta` abortar com `[V3 FALHA] BUMP_NO_CHANGE`. Causa:
+  pré-setar `APP_BUILD_IMPORTADO` no `.bas` igual ao target combinado com
+  `APP_BUILD_GERADO_EM` coincidindo com o minuto do import faz a
+  substituição textual do `IV3_AtualizarConstantesAppRelease` ser no-op
+  duplo, e o Importador V3 trata como falha. Knowledge HBN 0016
+  documenta a regra: deixar o `App_Release.bas` no estado da onda
+  anterior para que o Importador V3 faça o BUMP corretamente durante a
+  fase `5b_BUMP_BUILD_LABEL`.
 - **Onda 38.2.1-AR1** — saneamento idempotente dos contadores `AR1`
   das 7 abas que usam `Util_Planilha.ProximoId` (EMPRESAS, ENTIDADE,
   ATIVIDADES, CAD_SERV, PRE_OS, CAD_OS, CREDENCIADOS), corrigindo a
