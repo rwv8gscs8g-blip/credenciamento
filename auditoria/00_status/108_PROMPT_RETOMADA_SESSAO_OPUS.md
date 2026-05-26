@@ -17,6 +17,25 @@ produziu este handoff. Bastão **permanece com você**.
 **Anchor funcional V206:** commit `ee75b30` + workbook em build
 `ad5b487+ONDA38.2.1-AR1-FIX2-PERF` + RVS Trio APROVADO `VR_20260526_102200`
 
+## ⚠️ Atenção — janela de melhoria do protocolo entre sessões
+
+Entre o handoff (2026-05-26 11:18) e esta retomada, **outra sessão Opus
+pode ter executado** `/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md`
+para evoluir o protocolo HBN. Antes de seguir o roteiro do handoff
+cegamente:
+
+1. Compare o estado atual de `.hbn/knowledge/` com a versão do handoff
+   (`git log --oneline -- .hbn/knowledge/` desde commit `9e2fe83`).
+2. Releia AGENTS.md e knowledges 0013–0016 (e qualquer 0017+ novo).
+3. Se houver mudanças estruturais (novo formato de readback, novo
+   guard, nova convenção de scope, etc.), **ajuste o plano do item 13**
+   do handoff antes de entregar os prompts a Mauricio. Os prompts
+   13.B e 13.C podem precisar ser regenerados com a nova convenção.
+4. Se nada mudou no protocolo, prossiga normalmente.
+
+Não há urgência em "agarrar-se" ao handoff anterior — o objetivo é
+manter coerência arquitetural com o estado atual do protocolo.
+
 ## Leitura obrigatória inicial (na ordem)
 
 1. `.hbn/relay/INDEX.md` — estado vivo
