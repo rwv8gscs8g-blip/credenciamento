@@ -5,7 +5,7 @@
   "agent_id": "codex",
   "track": "safe_track",
   "version_target": "V12.0.0206",
-  "status": "delivered_for_human_gate",
+  "status": "human_gate_passed",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "summary": "Onda 38.1.5 reaplica Rel_Emp_Serv.frm corrigido em workbook restaurado de base anterior a 38.1, sem tocar Rel_OSEmpresa.",
@@ -62,16 +62,37 @@
       "evidence": "5/5 guards verdes; assert-scope-lock usou readback ativo 0102 e confirmou todos os arquivos staged dentro do scope."
     }
   ],
-  "human_gates_pending": [
-    "ImportarPacoteV3_Delta ONDA38-1-5-REL-EMP-SERV-PROTECAO e confirmar M=1 | F=1 | err=0 | skip=0",
-    "Depurar > Compilar VBAProject passa limpo",
-    "Empresas por Servico gera/imprime sem erro de planilha protegida",
-    "CT_ValidarRelease_TrioMinimo permanece APROVADO com V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0"
+  "human_gates_pending": [],
+  "human_gate_evidence": [
+    {
+      "gate": "ImportarPacoteV3_Delta ONDA38-1-5-REL-EMP-SERV-PROTECAO",
+      "status": "pass",
+      "evidence": "Mauricio reportou janela imediata: modo=Estabilizado | dryRun=Falso | M=1 | F=1 | err=0 | skip=0; Rel_Emp_Serv importado como FORM_ESTAB_OK (161 linhas, 1x DeleteLines); App_Release importado como MODULO_OK (406 linhas). Backup V3: backups/vba/20260525_203813-V3-FULL."
+    },
+    {
+      "gate": "Compile VBE",
+      "status": "pass",
+      "evidence": "Mauricio reportou que o projeto compilou apos a importacao da Onda 38.1.5."
+    },
+    {
+      "gate": "Relatorios funcionais",
+      "status": "pass",
+      "evidence": "Mauricio reportou que os relatorios foram impressos corretamente apos a Onda 38.1.5, incluindo Empresas por Servico sem retorno do erro de planilha protegida."
+    },
+    {
+      "gate": "CT_ValidarRelease_TrioMinimo/RVS completo",
+      "status": "pass",
+      "evidence": "VR_20260525_204559 APROVADO. Sintaxe reportada: V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0."
+    },
+    {
+      "gate": "Evidencias PDF anexadas",
+      "status": "pass",
+      "evidence": "Mauricio anexou fff.pdf, fff2.pdf, fff7.pdf e fff8.pdf como relatorios impressos no gate funcional."
+    }
   ],
-  "human_gate_evidence": [],
   "next_wave": {
     "id": "onda39-util-pdf",
-    "status": "ready_after_0102_human_gate",
+    "status": "ready",
     "summary": "Retomar roadmap de PDF automatico apos confirmar que os dois relatorios da Onda 38 permanecem funcionais."
   },
   "created_at": "2026-05-25T20:17:19-03:00"

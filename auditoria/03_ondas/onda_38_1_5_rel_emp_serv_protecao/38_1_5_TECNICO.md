@@ -68,14 +68,17 @@ M=1 | F=1 | err=0 | skip=0
 
 ## Gates humanos
 
-1. Importar o delta acima.
-2. Compilar no VBE com `Depurar > Compilar VBAProject`.
-3. Abrir `Relatórios > Relatório de Empresas Credenciadas por Serviço`.
-4. Selecionar um serviço com empresas cadastradas.
-5. Clicar para gerar/imprimir e confirmar que não aparece erro de planilha
-   protegida.
-6. Rodar `CT_ValidarRelease_TrioMinimo` e confirmar
-   `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0`.
+Gate fechado por Mauricio em 2026-05-25:
+
+1. Importacao delta: `M=1 | F=1 | err=0 | skip=0`.
+2. Compile VBE: aprovado.
+3. Relatorios: impressos corretamente, sem retorno do erro de planilha
+   protegida em Empresas por Servico.
+4. RVS completo: `VR_20260525_204559` APROVADO.
+5. Sintaxe preservada:
+   `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0`.
+
+Evidencias anexadas no chat: `fff.pdf`, `fff2.pdf`, `fff7.pdf`, `fff8.pdf`.
 
 ## Rollback
 
