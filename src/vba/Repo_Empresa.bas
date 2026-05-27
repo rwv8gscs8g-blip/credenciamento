@@ -258,6 +258,8 @@ Public Function Inserir( _
     novoID = ProximoId(SHEET_EMPRESAS)
     novaLinha = UltimaLinhaAba(SHEET_EMPRESAS) + 1
 
+    ' Onda 38.2.2 AT-3 (F-NEW3): garante formato textual na coluna A antes da gravacao do ID.
+    ws.Cells(novaLinha, COL_EMP_ID).NumberFormat = "@"
     ws.Cells(novaLinha, COL_EMP_ID).Value = novoID
     ws.Cells(novaLinha, COL_EMP_CNPJ).Value = cnpjVal
     ws.Cells(novaLinha, COL_EMP_RAZAO).Value = Funcoes.NormalizarTextoPTBR(razaoVal)
