@@ -1,0 +1,156 @@
+{
+  "readback_id": "0114-rb-onda-38-2-3-at1-gerador-codeonly",
+  "data": "2026-05-27",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0113-operacionalizar-passagem-bastao",
+  "intent": {
+    "objective": "Abrir a Onda 38.2.3 em escopo inicial restrito ao GATE-A1/AT-1: corrigir o gerador publicar_vba_import_v2.py para preservar declaracoes module-level e WithEvents no code-only de Cadastro_Servico, rodar o publish V2 e zerar o drift de AAD-Cadastro_Servico.code-only.txt antes de qualquer diagnostico F-NEW5 ou fix PreOS.",
+    "non_goals": [
+      "Nao implementar AT-2 diagnostico F-NEW5 neste readback",
+      "Nao tocar Svc_PreOS.bas, Repo_PreOS.bas ou qualquer src/vba neste readback",
+      "Nao criar helpers GravarIdTextual/LerIdTextual neste readback",
+      "Nao criar manifestos L41 ou procedimento de import de duas fases neste readback",
+      "Nao executar importacao no Excel nem rodar RVS diretamente"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "local-ai/scripts/publicar_vba_import_v2.py",
+      "local-ai/vba_import/002-formularios/AAD-Cadastro_Servico.code-only.txt",
+      "auditoria/03_ondas/onda_38_2_3/**",
+      ".hbn/proposals/0013-codex-at1-gerador-codeonly.md",
+      ".hbn/readbacks/0114-rb-onda-38-2-3-at1-gerador-codeonly.json"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/001-modulo/**",
+      "local-ai/vba_import/002-formularios/*.frm",
+      "local-ai/vba_import/002-formularios/*.frx",
+      "local-ai/vba_import/000-MANIFESTO*",
+      "local-ai/vba_import/000-BUILD-IMPORTAR-SEMPRE.txt",
+      "local-ai/scripts/publicar_vba_import.sh",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "Nenhum codigo de dominio em src/vba sera alterado no AT-1",
+    "Nenhum form .frm/.frx sera reimportado ou modificado; apenas o espelho code-only de Cadastro_Servico pode mudar",
+    "Tabus Mod_Types, Importador_V3, Auto_Open e forms blindados permanecem intocados",
+    "Cadencia D Estendida permanece ativa: GATE-A1 exige entrega para auditoria Opus + Antigravity em chats novos",
+    "Sem push para origin",
+    "Sem sufixo FREEZE em build label antes do GATE-FREEZE aprovado"
+  ],
+  "decisions_preconfirmed": [
+    "Hipotese C confirmada: git preservado em 621ebfa+; workbook refreshed via re-import L41 em duas fases; GATE-USO-PROLONGADO L43 obrigatorio.",
+    "Sub-decisao H-C-i alfa aprovada para fase futura AT-3: excecao minima ao tabu Svc_PreOS apenas para NumberFormat=\"@\" em EmitirPreOS linhas 192-205; nao usada neste readback AT-1.",
+    "Codex implementa; Opus + Antigravity auditam cruzado em chats novos a cada gate; Mauricio da hearback final.",
+    "Workbook atual/incoming V206-Rollback-a51b191-onda38-2-2-freeze e a referencia operacional; nao buscar workbook mais antigo.",
+    "Sem decisoes V207 neste ciclo V206.",
+    "RVS Trio definido como TV2_RunSmoke + TV2_RunIntegridadeBase (+ Estendida na 38.2.5) + TV2_RunRodizioStrikesEndToEnd, deterministico em duas execucoes consecutivas para gates finais.",
+    "P0-1 da auditoria Codex 0012 e BLOQUEADOR: AT-1 nao e apenas --apply; o gerador atual perde declaracoes module-level quando encontra Attribute mTxtBuscaTopo.VB_VarHelpID = -1.",
+    "Head esperado no prompt 119 era ce5879e; bootstrap Codex observou head real 27237e4, commit doc-only posterior. Esta divergencia esta registrada e nao altera codigo de dominio."
+  ],
+  "gates": [
+    "GATE-A1: corrigir gerador code-only, rodar --apply, zerar drift Cadastro_Servico.code-only.txt, produzir proposta 0013 e parar para auditoria cruzada Opus + Antigravity"
+  ],
+  "guards_runner": {
+    "command": "bash scripts/hbn-guards/hbn-guards-runner.sh",
+    "status_before_readback": "passed",
+    "status_before_readback_observed_at": "2026-05-27T14:08:31-03:00",
+    "note": "Apos a abertura deste readback safe_track, o runner deve bloquear commits enquanto human_status=pending. Isso e esperado ate hearback Mauricio."
+  },
+  "bootstrap_observed_state": {
+    "pwd": "/Users/macbookpro/Projetos/Credenciamento",
+    "git_toplevel": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "head": "27237e4",
+    "expected_head_from_prompt": "ce5879e",
+    "working_tree_summary": [
+      "M local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "untracked .hbn/messages/20260527-0930-handoff-fim-sessao-opus.md",
+      "untracked .hbn/proposals/0009-codex-auditoria-integridade-idempotencia-v206.md",
+      "untracked .hbn/protocol-evolutions/20260527-0930-onda-38-2-2-final-proposals.md",
+      "untracked auditoria/00_status/115-119*.md",
+      "untracked CSVs de falhas RVS/TV2 herdados"
+    ]
+  },
+  "risks": [
+    {
+      "risk": "O gerador pode corrigir Cadastro_Servico.code-only.txt mas alterar outros code-only inesperadamente ao rodar --apply.",
+      "mitigation": "Rodar publish, inspecionar git diff e parar se qualquer arquivo fora de scope mudar; se necessario abrir novo readback ou pedir hearback antes de prosseguir.",
+      "severity": "high"
+    },
+    {
+      "risk": "Fix do parser de code-only pode preservar atributos VB indevidos dentro do artefato e causar falha de AddFromString no VBE.",
+      "mitigation": "Implementar teste offline no proprio script/fixture real: code-only deve preservar Private/WithEvents module-level e remover atributos de form/controle que nao sao codigo injetavel; GATE-A1 inclui auditoria cruzada antes de import.",
+      "severity": "high"
+    },
+    {
+      "risk": "Head real 27237e4 diverge do head esperado ce5879e do prompt de bastao.",
+      "mitigation": "Registrar a divergencia no relay/readback/mensagem; confirmar por git log que 27237e4 e doc-only e nao muda dominio antes de qualquer codigo.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Readback safe_track pendente bloqueara commits ate hearback, inclusive housekeeping util.",
+      "mitigation": "Manter estado pending e aguardar Mauricio; se housekeeping for necessario, usar readback separado ou bypass documentado conforme protocolo.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Schema do readback 0114 valido",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/readbacks/0114-rb-onda-38-2-3-at1-gerador-codeonly.json"
+      },
+      {
+        "gate": "Bootstrap inicial com guards runner verde antes de abrir readback safe_track",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/readbacks/0114-rb-onda-38-2-3-at1-gerador-codeonly.json"
+      },
+      {
+        "gate": "Apos hearback, diff limitado aos files_allowed e drift Cadastro_Servico.code-only zerado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/"
+      },
+      {
+        "gate": "GATE-A1 auditoria cruzada Opus + Antigravity em chats novos",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/proposals/"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o gerador produzir diff fora do scope, interromper antes de commit e restaurar somente os arquivos gerados fora do scope, preservando diagnostico em proposta 0013.",
+      "Se a correcao do gerador falhar em preservar WithEvents, reverter o patch do script e registrar BLOQUEADOR em .hbn/proposals/0013-codex-at1-gerador-codeonly.md.",
+      "Se GATE-A1 for bloqueado por Opus ou Antigravity, nao avancar para AT-2; abrir novo readback de remediacao com escopo explicitamente aprovado.",
+      "Anchor logico de rollback: commit ce5879e para protocolo META e commit 621ebfa como predecessor de codigo V206, observando que HEAD local atual tem 27237e4 doc-only posterior."
+    ],
+    "anchor_to_restore": "ce5879e/621ebfa conforme natureza do rollback (protocolo doc-only vs codigo de dominio)"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "pending",
+      "at": "2026-05-27T14:08:31-03:00",
+      "by": "codex",
+      "note": "Readback aberto em safe_track pending apos bootstrap e leitura obrigatoria."
+    },
+    {
+      "status": "confirmed",
+      "at": "2026-05-27T14:14:07-03:00",
+      "by": "mauricio-zanin",
+      "note": "Mauricio autorizou em chat: 'ok autorizo'. Escopo confirmado conforme sintese Codex: somente GATE-A1/AT-1, sem AT-2, AT-3, manifestos L41, importacao Excel, RVS ou edicao em src/vba."
+    }
+  ],
+  "created_at": "2026-05-27T14:08:31-03:00"
+}

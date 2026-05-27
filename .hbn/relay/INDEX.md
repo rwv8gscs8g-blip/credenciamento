@@ -1,12 +1,29 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.5 (§12 Cadencia D Estendida + §12.B por papel + registro de bastao fundido no handoff 0014)
-proprietario-bastao: Claude Opus 4.7 (sessao ativa 2026-05-27 ~04:30 -> ~09:30 BRT, ~5h, ~60% contexto). **INCIDENTE CRITICO 2026-05-27 ~09:00**: workbook 38.2.2 corrompeu durante uso operacional, rollback executado para copia que ainda abre (mesma versao a51b191+ONDA38.2.2-V206-FREEZE, build 2026-05-27 04:09). **RVS REPROVADO determinisitco em 2 execucoes consecutivas** (VR_20260527_060519 + VR_20260527_085514): V2_SMOKE drift Cadastro_Servico.frm (9307 vs 9179) + V2_E2E_STRIKES DIAG_PREOS_INTEGRITY (EMP_PRESEL=001 vs EMP_PREOS=1). **F-NEW6 sistemico levantado**: Repo_PreOS/Repo_OS/Repo_Avaliacao gravam EMP_ID sem NumberFormat='@' nem Pad3. **2 AUDITORIAS CRUZADAS ENTREGUES**: .hbn/proposals/0009-codex-* (24KB, staged) + 0010-antigravity-* (16KB, commit 8fbdf26). Proxima Opus consolida em 117_ANALISE_AUDITORIA_INTEGRIDADE_IDEMPOTENCIA.md e decide caminho A (seguir 38.2.2) vs B (rollback FIX2-PERF) com hearback Mauricio.
-ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — ondas 38.2.3, 38.2.4, 38.2.5 (e quantas forem necessarias) ate validar tela-a-tela. V12.0.0205 permanece como release oficial. Sequencia ENTREGUE: AR1 -> AR1-FIX2-PERF -> evolucao protocolo v1.3 (0110) -> auditorias cruzadas V207 1a/2a rodadas (111/112) -> Onda 38.2.2 (entregue parcial, 5 findings abertos + corrupcao workbook) -> auditorias cruzadas integridade/idempotencia (115 prompt + 0009/0010 outputs). Proximo: consolidacao auditorias em 117 + decisao A vs B + Onda 38.2.3 com escopo refinado. Convencao: build label `<HEAD>+ONDA<N>` ou `<HEAD>+ONDA<N>.fix<NN>` SEM sufixo "FREEZE".
+proprietario-bastao: Codex (implementador principal V206, sessao iniciada 2026-05-27 ~14:08 BRT) assumiu a Onda 38.2.3 sob Cadencia D Estendida. Head real observado no bootstrap: `27237e4` (commit doc-only posterior a `ce5879e`; predecessor de codigo `621ebfa` intacto conforme prompt 119). Estado inicial validado: raiz canonica OK, guards verdes antes da abertura do readback 0114, working tree com artefatos nao staged herdados (AAX modificado, 115-119/0009/protocol-evolutions/CSVs untracked).
+ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — ondas 38.2.3, 38.2.4, 38.2.5 (e quantas forem necessarias) ate validar tela-a-tela. V12.0.0205 permanece como release oficial. Sequencia ENTREGUE: AR1 -> AR1-FIX2-PERF -> evolucao protocolo v1.3 (0110) -> auditorias cruzadas V207 1a/2a rodadas (111/112) -> Onda 38.2.2 (entregue parcial, 5 findings abertos + corrupcao workbook) -> auditorias cruzadas integridade/idempotencia (115 prompt + 0009/0010 outputs) -> ondas META 0112/0113 Cadencia D -> Codex assumiu bootstrap 38.2.3. Proximo: hearback Mauricio no readback 0114 antes de qualquer edicao de codigo; depois GATE-A1 AT-1 gerador code-only. Convencao: build label `<HEAD>+ONDA<N>` ou `<HEAD>+ONDA<N>.fix<NN>` SEM sufixo "FREEZE".
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio APROVADO em VR_20260526_102200. **Anchor de rollback Onda 38.2.2: commit 179bac5**. **Caminho B (rollback) tecnicamente valido se Mauricio escolher**.
-proxima-acao: 🟠 PROXIMA OPUS — (1) ler outputs 0009 Codex + 0010 Antigravity; (2) consolidar em auditoria/00_status/117_ANALISE_AUDITORIA_INTEGRIDADE_IDEMPOTENCIA.md; (3) apresentar caminho A vs B com recomendacao + hearback Mauricio; (4) abrir readback da Onda 38.2.3 com escopo refinado. NOTA DE NUMERACAO: os IDs 0112 e 0113 foram consumidos por ondas META de evolucao do protocolo (passagem de bastao) — a Onda 38.2.3 de dominio toma o proximo ID livre (0114). Detalhes em auditoria/00_status/116_PROMPT_RETOMADA_SESSAO_OPUS.md.
-ultima-atualizacao: 2026-05-27T13:55:00-0300 (Ondas META 0112 + 0113 aplicadas — PROMPT_ARQUITETO v1.5: §12 Cadencia D Estendida + §12.B por papel + registro de bastao fundido no handoff 0014 + knowledge 0019/0020; criterio P9 aprovado. Pendente commit unico no Mac. Linha de dominio V206 38.2.2/38.2.3 inalterada — bastao continua Opus 4.7 pos-handoff)
+proxima-acao: 🟡 HBN PENDING AUDITORIA CRUZADA — GATE-A1/AT-1 entregue em `.hbn/proposals/0013-codex-at1-gerador-codeonly.md`. Mauricio deve levar para Opus + Antigravity em chats novos. Codex aguarda retorno consolidado antes de AT-2.
+ultima-atualizacao: 2026-05-27T14:14:07-0300 (Mauricio confirmou readback 0114; Codex corrigiu gerador code-only com `--only`, regenerou `AAD-Cadastro_Servico.code-only.txt`, validou paridade gamma 9307/9307 e entregou proposal 0013 para auditoria cruzada)
 ---
+
+## ✅ HBN ACTIVE — CODEX ASSUMIU BASTÃO V206 / ONDA 38.2.3 (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟡 HBN PENDING AUDITORIA CRUZADA |
+| Papel | Codex implementador principal |
+| Onda | 38.2.3 — bootstrap / AT-1 gerador code-only |
+| Readback | [`0114-rb-onda-38-2-3-at1-gerador-codeonly.json`](../readbacks/0114-rb-onda-38-2-3-at1-gerador-codeonly.json) — **human_status: confirmed** |
+| Mensagem | [`.hbn/messages/20260527-1408-codex-assumiu-bastao-v206.md`](../messages/20260527-1408-codex-assumiu-bastao-v206.md) |
+| Entrega GATE-A1 | [`.hbn/proposals/0013-codex-at1-gerador-codeonly.md`](../proposals/0013-codex-at1-gerador-codeonly.md) |
+| Head observado | `27237e4` — doc-only posterior a `ce5879e`; predecessor de codigo V206 preservado |
+| Proxima acao | Mauricio aciona auditoria cruzada Opus + Antigravity; Codex aguarda |
+
+### Escopo inicial AT-1
+
+Sub-AT BLOQUEADOR P0-1: corrigir `local-ai/scripts/publicar_vba_import_v2.py` para preservar declaracoes module-level/`WithEvents` em `.code-only.txt`, depois rodar `--apply` e zerar o drift de `AAD-Cadastro_Servico.code-only.txt`.
 
 ## 🟣 ONDA 0113 META APLICADA (fast_track doc-only) — Operacionalizar a passagem de bastão (NOVO)
 

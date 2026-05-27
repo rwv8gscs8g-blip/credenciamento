@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0114-rb-onda-38-2-3-at1-gerador-codeonly-confirmed",
+  "readback_id": "0114-rb-onda-38-2-3-at1-gerador-codeonly",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-05-27T14:14:07-03:00",
+  "notes": "Mauricio autorizou em chat: 'ok autorizo'. Escopo confirmado: Codex pode executar somente GATE-A1/AT-1 da Onda 38.2.3, corrigindo o gerador publicar_vba_import_v2.py, rodando o publish V2, atualizando apenas AAD-Cadastro_Servico.code-only.txt se necessario, produzindo 0013-codex-at1-gerador-codeonly.md e parando para auditoria cruzada. Nao autoriza ainda AT-2, AT-3, manifestos L41, importacao Excel, RVS ou qualquer edicao em src/vba."
+}
