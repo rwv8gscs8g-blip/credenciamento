@@ -1,8 +1,10 @@
-# Onda 38.2.2 — Última V206 puro antes do freeze
+# Onda 38.2.2 — Quick wins + filtros nativos + envelopamento .frm (V206 em validação)
 
-**Versão alvo:** V12.0.0206 (FREEZE)
+> **2026-05-27 04:30 BRT — Diretiva Mauricio:** removida palavra "FREEZE" do título. A onda 38.2.2 está **ENTREGUE PARCIAL** com findings abertos. **NÃO faremos freeze** até a Onda 38.2.3+ corrigir todos os pontos identificados em validação tela-a-tela. "FREEZE" só entrará no nome quando a release for homologada (tag `v12.0.0206`). Convenção a partir de agora: build label = `<HEAD>+ONDA<N>` ou `<HEAD>+ONDA<N>.fix<NN>`, **sem sufixo "FREEZE"** até homologação. Ver seção §10 "Findings abertos" + §11 "Roadmap até freeze V206".
+
+**Versão alvo:** V12.0.0206 (em validação iterativa via ondas 38.2.N)
 **Branch:** `codex/v12-0-0206-planejamento`
-**Build label esperado:** `<HEAD>+ONDA38.2.2-V206-FREEZE`
+**Build label histórico (5 hotfixes):** `c9bcd41` → `f855d0b` → `88b347b` → `854c392` → `255d3bc` → `a51b191` (HEAD pós-onda 38.2.2)
 **Agente:** Claude Opus 4.7 (sessão sucessora pós-handoff `20260526-1730`)
 **Readback:** [`.hbn/readbacks/0111-onda-38-2-2-v206-puro-filtros-envelopamento-quickwins-freeze.json`](../../../.hbn/readbacks/0111-onda-38-2-2-v206-puro-filtros-envelopamento-quickwins-freeze.json)
 **ERP esperado:** `.hbn/results/0111-exec-onda-38-2-2-v206-freeze.json`
@@ -323,12 +325,109 @@ menores aceitos explicitamente por Mauricio em hearback formal).
 
 ## 8. Próxima onda
 
-**V207.0** (readback 0120+) — abertura da Alternativa II-bis V207 (commitment
-full V207.0-V207.8 sem cláusula de escape). Pré-trabalho recomendado:
+**V207.0** fica adiada até a versão V206 estar **homologada com testes E2E completos** (vide §11 Roadmap atualizado pela diretiva Mauricio em 2026-05-27 04:30 BRT).
 
-1. Knowledge 0018 (Doc-Delta)
-2. Knowledge 0019 (Limites Hibridismo)
-3. Knowledge 0020 (Invalidação Stateless)
+---
 
-A onda 38.2.2 fecha o capítulo V206 puro. A partir daqui, todo trabalho
-substantivo move para V207.
+## 9. Hotfixes desta onda — timeline real
+
+| Commit | Falha que motivou | Causa raiz |
+|---|---|---|
+| `c9bcd41` | commit primário | — |
+| `f855d0b` | GATE-IMPORT VALIDACAO_LINHAS | manifesto declarou `M\|` para .frm (devia ser `F\|`) |
+| `88b347b` | GATE-COMPILE TEstadoExcel | tipo TEstadoExcel não existe (FIX2-PERF migrou para Variant) |
+| `854c392` | GATE-COMPILE Preencher.X | L10 PHAGOCYTOSIS — qualificação `Modulo.Funcao` falha em standard module |
+| `255d3bc` | GATE-AT-4 erro 424 | `mTxtFiltro*` não declaradas + sem Option Explicit → Variant Empty no `Is Nothing` |
+| `a51b191` | GATE-AT-3 EMPRESAS falhou | `Repo_Empresa.Inserir` (Service path real) não tinha NumberFormat — só caminho UI alternativo recebeu |
+
+Cada hotfix está documentado em commit individual + protocol-evolutions. Lições L33-L38 destiladas em [`.hbn/protocol-evolutions/20260526-1810-onda-38-2-2-proposals.md`](../../../.hbn/protocol-evolutions/20260526-1810-onda-38-2-2-proposals.md).
+
+---
+
+## 10. Findings abertos (a corrigir antes do freeze)
+
+### F-NEW5 — BUG CRÍTICO: rodízio reporta "sem empresas disponíveis" apesar de credenciamento existir
+
+**Cenário** (reportado por Mauricio 2026-05-27 04:30):
+- Criou atividade "CULTIVO DE ALGODÃO HERBÁCEO" (ATIV_ID novo) ;
+- Credenciou Empresa 5 nessa atividade via `Credencia_Empresa.frm` ;
+- Relatório `Relatório de Empresas Credenciadas` confirma: Empresa 5 / posição 1 ;
+- Tela "Atribuição de Empresa para Serviço" + Emite Pré-OS retornou: **"Não foi possível emitir a Pre-OS: não há empresas disponíveis para esta atividade."**
+
+**Hipótese principal**: relatório mostra `STATUS_CRED` **VAZIO** para credenciamentos novos (CULTIVO DE TRIGO + CULTIVO DE ALGODÃO HERBÁCEO) mas mostra "ATIVO" para credenciamentos de fixture ("Atividade E2E Strikes"). Sugere que a gravação de `COL_CRED_STATUS = STATUS_CRED_ATIVO` em `Credencia_Empresa.CR_Credenciar_Click:178` está sendo **sobrescrita ou ignorada** após o loop For.
+
+**Suspeito**: `Call ClassificaCredenciadoOrdem` (linha 189) ou outra sub que roda após o loop pode estar resetando STATUS_CRED. **Investigar na 38.2.3.**
+
+**Severidade**: CRÍTICA — rodízio é a funcionalidade central do sistema. Sem isso, nenhuma Pre-OS é emitida.
+
+**Validação rápida proposta** (Imediato):
+```vba
+? Sheets("CREDENCIADOS").Cells(<linha_da_emp5_em_algodao>, COL_CRED_STATUS).Value
+' Esperado: "ATIVO"
+' Real (a confirmar): provavelmente "" ou Empty
+```
+
+### F-FILTRO-1 — TextBox19 (OS) e TextBox20 (Avaliação) disparam mas não filtram
+
+**Causa**: `PreencherPreencheOS()` e `PreencherAvaliarOS()` não têm parâmetro `Optional filtro` nem implementação de filtro de lista (vide [`Preencher.bas:861`](../../../src/vba/Preencher.bas#L861) e [`Preencher.bas:1306`](../../../src/vba/Preencher.bas#L1306)). Despacho `Preencher_FiltrarPorBoxEstatico` ignora termo nesses 2 contextos.
+
+**Fix proposto**: adicionar `Optional ByVal filtro As String = ""` nas 2 funções + filtrar a lista por substring case-insensitive sobre campos relevantes (OS_ID, EMP_ID, ATIV_DESC, SERV_DESC). Espelhar padrão de `PreenchimentoEmpresa`.
+
+### F-FILTRO-2 — Filtro de Empresas não busca telefone (inconsistente com Entidades)
+
+**Causa**: `TextoEmpresaParaFiltro` ([`Preencher.bas:93`](../../../src/vba/Preencher.bas#L93)) concatena apenas ID + CNPJ + Razão + Responsável. **`TextoEntidadeParaFiltro` inclui** Tel.Celular + Contato1 Fone.
+
+**Decisão de design pendente**: incluir telefone em empresas? Mauricio decide.
+
+### F-FILTRO-3 — Filtros internos de forms modais ainda heurísticos
+
+`Cadastro_Servico.frm.mTxtBuscaTopo` ([:267](../../../src/vba/Cadastro_Servico.frm#L267)) e outros forms modais (`Credencia_Empresa`, `Reativa_*`) ainda usam descoberta via `UI_TextBoxSeExiste`. **Onda 38.2.2 só corrigiu o Menu_Principal.**
+
+### F-FILTRO-4 — `TextBox22` (Atrib Empresa Rodízio) não auditado nesta sessão
+
+Despacho para `PreenchimentoEntidadeRodizio` — comportamento não verificado em código nesta sessão. Auditar na 38.2.3.
+
+---
+
+## 11. Roadmap até freeze V206 (atualizado por diretiva Mauricio 2026-05-27)
+
+> **Princípio orientador (Mauricio)**: "Não temos pressa em congelar a versão, temos pressa em ter uma versão estável, testada e funcional que possa ser congelada para o público final. Precisamos validar inclusive se os testes estão corretos e são suficientes antes de validarmos e congelarmos a versão."
+
+### Onda 38.2.3 — Bug crítico do rodízio + filtros OS/Aval (TextBox19/20)
+
+**Escopo**:
+- Resolver F-NEW5 (rodízio retornando "sem empresas") — investigação + fix
+- Resolver F-FILTRO-1 (adicionar `Optional filtro` em `PreencherPreencheOS`/`PreencherAvaliarOS` + implementação)
+- Cria teste E2E que valida ciclo completo: cadastrar atividade nova → credenciar empresa → emitir Pré-OS → confirmar empresa selecionada
+- Padrão dos testes: **prevenir regressão por "trilha já validada"** (vide diretiva Mauricio §3) — testes devem cobrir fluxos NOVOS (atividade não-fixture, empresa não-fixture), não apenas reutilizar fixtures pré-existentes
+
+### Onda 38.2.4 — Filtros completos (F-FILTRO-2/3/4)
+
+**Escopo**:
+- F-FILTRO-2: decisão design + implementação (telefone em empresas)
+- F-FILTRO-3: padronizar filtros de `Cadastro_Servico`, `Credencia_Empresa`, `Reativa_*` para o pattern estático (espelhar Menu_Principal)
+- F-FILTRO-4: auditar TextBox22 + qualquer filtro restante
+- Suite de teste para CADA filtro: digitar termo conhecido, verificar resultado esperado (subset da lista)
+
+### Onda 38.2.5 — Suite de testes E2E para validação tela-a-tela + meta-validação
+
+**Escopo**:
+- **Meta-validação dos testes**: revisar se `CT_ValidarRelease_TrioMinimo`, `V1`, `V2_Smoke`, `V2_Canonica`, `E2E_Strikes` cobrem fluxos NOVOS (não apenas fixture pré-existente). Se não, expandir.
+- Suite E2E nova que exercita cada uma das 13 telas (Menu_Principal, Credencia_Empresa, Cadastro_Servico, Altera_*, Reativa_*, Configuracao_Inicial, Limpar_Base, Fundo_Branco, ProgressBar, Rel_Emp_Serv, Rel_OSEmpresa) com cenários reais
+- Critério para freeze: **TODOS** os fluxos validados + testes correspondentes verdes + sem findings abertos
+
+### Onda 38.2.N (até N necessárias) — Findings que aparecerem em validação tela-a-tela
+
+Conforme cronograma de validação aprovado em [`38_2_TECNICO.md:79`](../onda_38_2_filtros_menu_principal/38_2_TECNICO.md#L79). Cada finding abre uma sub-onda dedicada.
+
+### GATE-FREEZE — Tag `v12.0.0206`
+
+Só quando:
+- F-NEW5 + F-FILTRO-1/2/3/4 resolvidos
+- Suite E2E validada por Mauricio em validação tela-a-tela formal
+- RVS APROVADO `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0` mantido
+- Mauricio aprova explicitamente via hearback
+
+### V207 — Adiada até freeze V206
+
+Conforme diretiva Mauricio: V207 não inicia até V206 ter caminho seguro testado.
