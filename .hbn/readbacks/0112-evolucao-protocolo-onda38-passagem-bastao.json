@@ -1,0 +1,147 @@
+{
+  "readback_id": "0112-evolucao-protocolo-onda38-passagem-bastao",
+  "data": "2026-05-27",
+  "agent_id": "claude-opus-4-7",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0110-evolucao-protocolo-v13-knowledge-0017",
+  "intent": {
+    "objective": "Onda fast_track doc-only de evolucao do protocolo HBN focada em FORMALIZAR A PASSAGEM DE BASTAO ENTRE IAs, consumindo o doc 120 (10 propostas P1-P10 da Opus). Apos hearback de Mauricio, aplicar: (1) nova secao 12 + anexos 12.A/12.B no PROMPT_ARQUITETO_USEHBN_AUTONOMO.md com Cadencia D Estendida (P1 modificada), auditoria em chat novo (P2), gates intra-onda recomendados (P3), checklist anti-vies de bastao (P4), severidade de auditoria BLOQUEADOR/FORTE/MARGINAL + veto (P7), numeracao de proposals (P6), template de output de auditoria (P8) e clausula P9 em teste; (2) knowledge 0019 canonico formalizando as regras Tier 1; (3) knowledge 0020 com a licao L44 (P5 - Explore diff cosmetico suspeito); (4) ponteiros de 1 linha em AGENTS.md (0019) e CLAUDE.md (0020); (5) bump do PROMPT_ARQUITETO v1.3 -> v1.4 + changelog; (6) registro em auditoria/00_status/121; (7) marcar doc 120 e protocol-evolutions consumidos como consolidados; (8) atualizar relay/INDEX e knowledge/INDEX. Decisao por proposta documentada em .hbn/protocol-evolutions/20260527-1300-decisao-evolucoes-onda-38-passagem-bastao.md.",
+    "non_goals": [
+      "Editar o protocolo neste turno (so apos hearback confirmed de Mauricio)",
+      "Tocar codigo de dominio (src/vba, local-ai/vba_import)",
+      "Consolidar a decisao A vs B da Onda 38.2.2 ou abrir a Onda 38.2.3 (linha separada)",
+      "Promover a proposta P9 (fica REFINAR, testar empiricamente em 38.2.3)",
+      "Aplicar a P10 (lições V206 em PHAGOCYTOSIS - adiada para onda documental pos-GATE-FREEZE)",
+      "Migrar a cadencia para usehbn/ canonico (Trilha E - so apos >=2 ondas de uso real)",
+      "Gravar a cadencia inter-IA dentro do AGENTS.md como dono (meta-protocolo vive no PROMPT_ARQUITETO + knowledge 0019; AGENTS.md so aponta)"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md",
+      ".hbn/knowledge/0019-cadencia-d-estendida-passagem-bastao.md",
+      ".hbn/knowledge/0020-explore-diff-cosmetico-suspeito.md",
+      ".hbn/knowledge/INDEX.md",
+      ".hbn/protocol-evolutions/20260527-1300-decisao-evolucoes-onda-38-passagem-bastao.md",
+      ".hbn/readbacks/0112-evolucao-protocolo-onda38-passagem-bastao.json",
+      ".hbn/results/0112-exec-evolucao-protocolo-onda38-passagem-bastao.json",
+      ".hbn/relay/INDEX.md",
+      "AGENTS.md",
+      "CLAUDE.md",
+      "auditoria/00_status/120_SUGESTOES_EVOLUCAO_PROTOCOLO_HBN.md",
+      "auditoria/00_status/121_EVOLUCAO_PROTOCOLO_ONDA38_PASSAGEM_BASTAO.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "auditoria/03_ondas/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "Nenhum codigo de producao tocado (onda fast_track doc-only)",
+    "Anchor V206 funcional preservado (commit ee75b30, build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio VR_20260526_102200)",
+    "Tabus V206 inalterados (Mod_Types, Importador_V3, Svc_*, .frm)",
+    "Knowledges 0001-0018 nao alteradas (apenas adicionadas 0019 e 0020 + linhas no INDEX)",
+    "Decisao A vs B da Onda 38.2.2 e abertura da 38.2.3 nao sao tocadas por esta onda",
+    "Nenhum readback ou ERP anterior sobrescrito",
+    "Vocabulario de severidade de auditoria nao colide com os P0/P1/P2/P3 ja existentes (usa BLOQUEADOR/FORTE/MARGINAL)"
+  ],
+  "decisions_preconfirmed": [
+    "Mauricio pediu em chat 2026-05-27 nova onda do PROMPT_ARQUITETO com acoes ligadas a melhoria da passagem de bastao entre as IAs, podendo repetir mais ondas antes de devolver o bastao as IAs.",
+    "Mauricio escolheu via AskUserQuestion: (1) modo 'Readback + decisao, depois pauso' - canonico; (2) escopo 'Todas as 10 nesta onda' - decidir as 10 agora; (3) destino Tier 1 'Voce decide e me explica' - arquiteto roteia com justificativa."
+  ],
+  "delta_contract": {
+    "delta_name": "n/a (fast_track doc-only)",
+    "build_label": "n/a",
+    "manifest_path": "n/a",
+    "import_command": "n/a",
+    "expected_import_result": "n/a",
+    "post_import_manual_step": "n/a"
+  },
+  "risks": [
+    {
+      "risk": "Concordancia excessiva com o doc 120 (mesma familia de modelo Opus) pode mascarar furos tecnicos - 🔍 GROUPTHINK ALARM",
+      "mitigation": "Arquiteto registrou divergencias explicitas: P1 modificada (rejeita implementador unico por ciclo inteiro), P7 renomeada (colisao de nomenclatura P0), P2 com mitigacao de custo, P6 com comando corrigido, P5 reroteada. Convergencias sinalizadas no doc de decisao.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Vocabulario novo de severidade (BLOQUEADOR/FORTE/MARGINAL) diverge do que outras IAs ja usaram informalmente (P0/P1/P2), causando atrito na primeira auditoria pos-adocao",
+      "mitigation": "knowledge 0019 inclui tabela de equivalencia P0->BLOQUEADOR / P1->FORTE / P2->MARGINAL; template §12.A ja usa o vocabulario novo; comunicar na primeira auditoria 38.2.3.",
+      "severity": "low"
+    },
+    {
+      "risk": "Cadencia D Estendida (mais ciclos, chat novo por gate) aumenta elapsed time e custo de re-aquisicao de contexto dos auditores",
+      "mitigation": "P9 (auditoria curta para gates de severidade maxima MARGINAL) fica disponivel para teste em 38.2.3; prompt de entrada de auditoria (§12.B) padroniza re-aquisicao por Read em vez de despejo de contexto.",
+      "severity": "low"
+    },
+    {
+      "risk": "Editar o PROMPT_ARQUITETO (fora do repo Credenciamento) e knowledge no repo na mesma onda pode confundir o que o pre-commit valida",
+      "mitigation": "PROMPT_ARQUITETO vive em /Users/macbookpro/Projetos/ (fora do repo) - nao passa pelo pre-commit; §11 do proprio prompt exige registro em auditoria/00_status/121 dentro do Credenciamento, que e o que o guard ve. scope.files_allowed lista ambos explicitamente.",
+      "severity": "low"
+    }
+  ],
+  "ordem_de_execucao": [
+    "0. (FEITO neste turno) .hbn/protocol-evolutions/20260527-1300-decisao-*.md + este readback 0112 (human_status: pending)",
+    "1. AGUARDAR hearback de Mauricio (confirmar/ajustar as 3 perguntas abertas do doc de decisao)",
+    "2. PROMPT_ARQUITETO_USEHBN_AUTONOMO.md: adicionar §12 + anexos §12.A/§12.B; bump v1.3 -> v1.4 + linha no changelog",
+    "3. .hbn/knowledge/0019-cadencia-d-estendida-passagem-bastao.md criada (P1 mod, P2, P4, P6, P7 + tabela de equivalencia de severidade)",
+    "4. .hbn/knowledge/0020-explore-diff-cosmetico-suspeito.md criada (L44 / P5)",
+    "5. .hbn/knowledge/INDEX.md: linhas 0019 e 0020 + bump de data",
+    "6. AGENTS.md: ponteiro de 1 linha para knowledge 0019; CLAUDE.md: ponteiro de 1 linha para knowledge 0020",
+    "7. auditoria/00_status/121_EVOLUCAO_PROTOCOLO_ONDA38_PASSAGEM_BASTAO.md criado (registro §11 do PROMPT_ARQUITETO)",
+    "8. Marcar doc 120 e protocol-evolutions consumidos como consolidados (nota inline status)",
+    "9. .hbn/relay/INDEX.md atualizado com bloco desta onda + estado do bastao",
+    "10. Mauricio commita do Mac os arquivos do scope; pre-commit valida guards (fast_track)",
+    "11. ERP 0112-exec-*.json criado registrando guards verdes + push"
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "scripts/hbn-guards/hbn-guards-runner.sh passa verde no Mac (raiz canonica = /Users/macbookpro/Projetos/Credenciamento, fast_track)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0112-exec-evolucao-protocolo-onda38-passagem-bastao.json"
+      },
+      {
+        "gate": "Revisao humana das 3 perguntas abertas (P1 modificada, P7 renomeada, roteamento meta-protocolo) com hearback confirmed",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/readbacks/0112-evolucao-protocolo-onda38-passagem-bastao.json"
+      },
+      {
+        "gate": "git push origin codex/v12-0-0206-planejamento bem-sucedido apos commit",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0112-exec-evolucao-protocolo-onda38-passagem-bastao.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se Mauricio rejeitar uma proposta especifica, ajustar o doc de decisao e re-emitir o trecho correspondente sem tocar o resto",
+      "Se algum guard reprovar no Mac, ajustar scope.files_allowed e re-hearback antes de commitar",
+      "Se Mauricio decidir reverter a §12 inteira: git revert do commit + nota em .hbn/bypasses/ + onda nova de refinamento",
+      "Anchor de rollback: HEAD atual 621ebfa (antes de qualquer edicao desta onda)"
+    ],
+    "anchor_to_restore": "Commit 621ebfa"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "pending",
+      "at": "2026-05-27T13:00:00-03:00",
+      "by": "claude-opus-4-7",
+      "note": "Readback aberto em estado pending conforme escolha de Mauricio (modo 'Readback + decisao, depois pauso'). Aguardando hearback explicito antes de qualquer edicao do protocolo."
+    },
+    {
+      "status": "confirmed",
+      "at": "2026-05-27T13:20:00-03:00",
+      "by": "humano",
+      "note": "Mauricio confirmou em chat as 3 perguntas abertas (P1 modificada, P7 renomeada BLOQUEADOR/FORTE/MARGINAL, roteamento meta-protocolo no PROMPT_ARQUITETO + knowledge 0019). Autorizou aplicar a onda 0112 e abrir mais uma onda de bastao (0113) antes de devolver o bastao as IAs."
+    }
+  ],
+  "created_at": "2026-05-27T13:00:00-03:00"
+}

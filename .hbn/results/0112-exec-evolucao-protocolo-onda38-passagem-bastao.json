@@ -1,0 +1,62 @@
+{
+  "result_id": "0112-exec-evolucao-protocolo-onda38-passagem-bastao",
+  "execution_id": "0112-exec-evolucao-protocolo-onda38-passagem-bastao",
+  "readback_id": "0112-evolucao-protocolo-onda38-passagem-bastao",
+  "data": "2026-05-27",
+  "agent_id": "claude-opus-4-7 (modo ARQUITETO — sessao Cowork 2026-05-27 ~13:00-13:30 BRT)",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "executed_local_pending_human_commit",
+  "outcome": "executed_local_pending_human_commit",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Onda fast_track doc-only de evolucao do protocolo HBN focada na passagem de bastao entre IAs, consolidando o doc 120 (10 propostas Opus) apos hearback de Mauricio. Aplicado: (1) PROMPT_ARQUITETO_USEHBN_AUTONOMO.md (fora do repo) v1.3 -> v1.4 com nova secao 12 (Cadencia D Estendida) + anexos 12.A (template de output de auditoria) e 12.B (prompt de entrada de auditoria em chat novo) + changelog + bump do header; (2) knowledge 0019 canonico (Tier 1) materializando P1 modificada, P2, P3, P4, P6, P7 com severidade BLOQUEADOR/FORTE/MARGINAL; (3) knowledge 0020 com a licao L44 (P5 - Explore diff cosmetico suspeito); (4) knowledge/INDEX.md com linhas 0019 e 0020 + bump de data; (5) ponteiro 9b no AGENTS.md -> 0019; (6) ponteiro item 6 no CLAUDE.md -> 0020; (7) doc 120 status -> CONSOLIDADO; (8) registro auditoria/00_status/121 conforme par.11 do PROMPT_ARQUITETO; (9) relay/INDEX.md com bloco da onda 0112; (10) readback 0112 human_status -> confirmed.",
+  "summary": "Onda 0112 aplicada localmente nos arquivos do scope. As 3 modificacoes do arquiteto sobre o doc 120 foram confirmadas por Mauricio: P1 sem implementador unico por ciclo, P7 renomeada BLOQUEADOR/FORTE/MARGINAL, meta-protocolo no PROMPT_ARQUITETO + knowledge 0019 (AGENTS.md so aponta). Commit + push sao passo de Mauricio no Mac (modelo 'IA edita, humano commita' - guard assert-canonical-root bloqueia commit a partir do sandbox Cowork, L30). Nenhum codigo de dominio tocado.",
+  "files_changed": [
+    "/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md",
+    ".hbn/knowledge/0019-cadencia-d-estendida-passagem-bastao.md",
+    ".hbn/knowledge/0020-explore-diff-cosmetico-suspeito.md",
+    ".hbn/knowledge/INDEX.md",
+    ".hbn/protocol-evolutions/20260527-1300-decisao-evolucoes-onda-38-passagem-bastao.md",
+    ".hbn/readbacks/0112-evolucao-protocolo-onda38-passagem-bastao.json",
+    ".hbn/relay/INDEX.md",
+    "AGENTS.md",
+    "CLAUDE.md",
+    "auditoria/00_status/120_SUGESTOES_EVOLUCAO_PROTOCOLO_HBN.md",
+    "auditoria/00_status/121_EVOLUCAO_PROTOCOLO_ONDA38_PASSAGEM_BASTAO.md"
+  ],
+  "delta_contract": {
+    "delta_name": "n/a (fast_track doc-only)",
+    "build_label": "n/a",
+    "manifest_path": "n/a",
+    "import_command": "n/a"
+  },
+  "validation_gates": [
+    {
+      "gate": "scripts/hbn-guards/hbn-guards-runner.sh verde no Mac (fast_track, raiz canonica)",
+      "status": "pending_human",
+      "evidencia": "A rodar no Mac por Mauricio antes do commit. PROMPT_ARQUITETO vive fora do repo e nao passa pelo pre-commit; registro 121 dentro do repo cobre a §11."
+    },
+    {
+      "gate": "Hearback Mauricio das 3 perguntas abertas",
+      "status": "pass",
+      "evidencia": "Mauricio confirmou as 3 perguntas em chat 2026-05-27 (P1 modificada, P7 renomeada, roteamento meta-protocolo). Registrado em human_status_history do readback 0112."
+    },
+    {
+      "gate": "git push origin codex/v12-0-0206-planejamento",
+      "status": "pending_human",
+      "evidencia": "Commit + push a executar por Mauricio no Mac."
+    }
+  ],
+  "comando_commit_sugerido": "cd /Users/macbookpro/Projetos/Credenciamento && git add .hbn/ AGENTS.md CLAUDE.md auditoria/00_status/120_SUGESTOES_EVOLUCAO_PROTOCOLO_HBN.md auditoria/00_status/121_EVOLUCAO_PROTOCOLO_ONDA38_PASSAGEM_BASTAO.md && git commit -m \"docs(hbn): onda 0112 - cadencia D estendida / passagem de bastao (PROMPT_ARQUITETO v1.4 + knowledge 0019/0020)\"",
+  "nota_prompt_arquiteto": "O PROMPT_ARQUITETO_USEHBN_AUTONOMO.md fica em /Users/macbookpro/Projetos/ (fora do repo) — versionar separadamente se desejado; o registro auditavel dentro do repo e o doc 121.",
+  "next_wave": {
+    "id": "0113-operacionalizar-passagem-bastao",
+    "summary": "Onda aberta na mesma sessao (readback 0113 pending). Operacionaliza a passagem de bastao: prompt de entrada §12.B por papel, template de registro de transferencia de bastao, plano de teste empirico da P9 na Onda 38.2.3. Pausa para hearback.",
+    "status": "open_pending_hearback"
+  },
+  "closed_at": "2026-05-27T13:30:00-03:00",
+  "created_at": "2026-05-27T13:30:00-03:00"
+}

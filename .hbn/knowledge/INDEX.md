@@ -1,6 +1,6 @@
 ---
 titulo: Knowledge Base do Credenciamento (HBN)
-ultima-atualizacao: 2026-05-26
+ultima-atualizacao: 2026-05-27
 ---
 
 # Knowledge Base do Credenciamento (HBN)
@@ -31,6 +31,9 @@ ultima-atualizacao: 2026-05-26
 | Higiene documental recorrente | [0011-higiene-documental-recorrente.md](0011-higiene-documental-recorrente.md) | Antes de passar de microdelta, onda, release ou bastao |
 | Raiz canonica obrigatoria do projeto | [0012-raiz-canonica-projeto.md](0012-raiz-canonica-projeto.md) | Antes de qualquer leitura, escrita, importacao, handoff ou uso de worktree |
 | Handoff aos 50% de contexto — orçamento obrigatório de qualidade | [0017-handoff-aos-50-pct-contexto.md](0017-handoff-aos-50-pct-contexto.md) | Toda IA em sessão longa: gatilho duro aos 50% + orçamento 50/30/20; reforça §7.3 do PROMPT_ARQUITETO v1.3+ |
+| Protocolo de fim-de-sessão + registro de transferência de bastão | [0014-protocolo-fim-de-sessao.md](0014-protocolo-fim-de-sessao.md) | Handoff obrigatório a 50% / fim de onda / **transferência de bastão** (itens 13-16 + checklist anti-viés §12.4, fundidos na onda 0113) |
+| Cadência D Estendida — passagem de bastão entre IAs | [0019-cadencia-d-estendida-passagem-bastao.md](0019-cadencia-d-estendida-passagem-bastao.md) | Toda IA que implementa, audita ou recomenda bastão: papéis, auditoria em chat novo, severidade BLOQUEADOR/FORTE/MARGINAL + veto, checklist anti-viés. Materializa §12 do PROMPT_ARQUITETO v1.4+ |
+| L44 — diff "cosmético" de sub-agente é suspeito | [0020-explore-diff-cosmetico-suspeito.md](0020-explore-diff-cosmetico-suspeito.md) | Antes de aceitar diff "cosmético" de Explore/Task em .frm/.code-only.txt: inspecionar o pipeline gerador |
 
 ## Por decisao (decisoes que afetam comportamento)
 

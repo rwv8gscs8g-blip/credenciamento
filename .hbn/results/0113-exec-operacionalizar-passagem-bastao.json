@@ -1,0 +1,56 @@
+{
+  "result_id": "0113-exec-operacionalizar-passagem-bastao",
+  "execution_id": "0113-exec-operacionalizar-passagem-bastao",
+  "readback_id": "0113-operacionalizar-passagem-bastao",
+  "data": "2026-05-27",
+  "agent_id": "claude-opus-4-7 (modo ARQUITETO — sessao Cowork 2026-05-27 ~13:55 BRT)",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "executed_local_pending_human_commit",
+  "outcome": "executed_local_pending_human_commit",
+  "human_status": "confirmed",
+  "intent_risk_profile": "low",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Onda fast_track doc-only que operacionaliza a passagem de bastao. Aplicado apos hearback de Mauricio: (E1) PROMPT_ARQUITETO v1.4 -> v1.5 com §12.B expandido por papel (§12.B1 implementador que retoma, §12.B2 auditor cruzado, §12.B3 consolidador/arbitro) + changelog + bump header; (E2 com FUSAO) registro de transferencia de bastao fundido no knowledge 0014 (itens 13-16 + checklist anti-vies §12.4 quando gatilho=bastao) em vez de criar knowledge 0021 — decisao de Mauricio; (E3) criterio objetivo de promocao da P9 registrado em auditoria/00_status/122 (promover so se zero BLOQUEADOR/FORTE perdidos pela curta em >= 2 gates da Onda 38.2.3, senao rejeitar) — aprovado por Mauricio; + knowledge/INDEX atualizado, relay/INDEX com bloco 0113, readback 0113 confirmed.",
+  "summary": "Onda 0113 aplicada localmente. Fusao do registro de bastao no 0014 conforme escolha de Mauricio (1 artefato, retrocompativel). §12.B por papel pronto para devolver o bastao as IAs. Commit + push sao passo de Mauricio no Mac (guard assert-canonical-root bloqueia commit do sandbox). Nenhum codigo de dominio tocado.",
+  "files_changed": [
+    "/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md",
+    ".hbn/knowledge/0014-protocolo-fim-de-sessao.md",
+    ".hbn/knowledge/INDEX.md",
+    ".hbn/protocol-evolutions/20260527-1340-onda-0113-operacionalizar-bastao-spec.md",
+    ".hbn/readbacks/0113-operacionalizar-passagem-bastao.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/00_status/122_OPERACIONALIZAR_PASSAGEM_BASTAO.md"
+  ],
+  "delta_contract": {
+    "delta_name": "n/a (fast_track doc-only)",
+    "build_label": "n/a",
+    "manifest_path": "n/a",
+    "import_command": "n/a"
+  },
+  "validation_gates": [
+    {
+      "gate": "Hearback Mauricio das 2 perguntas (fundir vs separar; criterio P9)",
+      "status": "pass",
+      "evidencia": "Mauricio respondeu: (1) fundir no 0014; (2) concorda com criterio P9. Registrado em human_status_history do readback 0113."
+    },
+    {
+      "gate": "scripts/hbn-guards/hbn-guards-runner.sh verde no Mac (fast_track)",
+      "status": "pending_human",
+      "evidencia": "A rodar no Mac por Mauricio antes do commit."
+    },
+    {
+      "gate": "git push origin codex/v12-0-0206-planejamento",
+      "status": "pending_human",
+      "evidencia": "Commit + push a executar por Mauricio (comandos entregues no chat)."
+    }
+  ],
+  "next_wave": {
+    "id": "devolver-bastao-as-ias",
+    "summary": "Com 0112 + 0113 aplicadas, o protocolo de passagem de bastao esta estruturado. Proximo passo de dominio (linha separada): consolidar auditorias 0009/0010 em 117, decidir caminho A vs B da Onda 38.2.2, abrir Onda 38.2.3 (proximo ID livre 0114) ja usando a Cadencia D Estendida e testando a P9.",
+    "status": "ready_to_handoff"
+  },
+  "closed_at": "2026-05-27T13:55:00-03:00",
+  "created_at": "2026-05-27T13:55:00-03:00"
+}

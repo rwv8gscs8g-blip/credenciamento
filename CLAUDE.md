@@ -17,6 +17,9 @@
    capitulo correspondente em
    [`usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md`](usehbn/docs/PHAGOCYTOSIS-VBA-PATTERNS.md)
    (ver tabela abaixo).
+6. **Never delegate understanding**: ao delegar comparacao de versoes a um
+   sub-agente (Explore/Task), um diff "cosmetico" e suspeito ate inspecionar o
+   pipeline gerador — ver [`.hbn/knowledge/0020-explore-diff-cosmetico-suspeito.md`](.hbn/knowledge/0020-explore-diff-cosmetico-suspeito.md) (L44).
 
 ## READ-FIRST por dominio (PHAGOCYTOSIS-VBA-PATTERNS)
 

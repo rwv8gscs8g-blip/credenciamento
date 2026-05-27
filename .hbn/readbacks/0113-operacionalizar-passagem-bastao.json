@@ -1,0 +1,121 @@
+{
+  "readback_id": "0113-operacionalizar-passagem-bastao",
+  "data": "2026-05-27",
+  "agent_id": "claude-opus-4-7",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0112-evolucao-protocolo-onda38-passagem-bastao",
+  "intent": {
+    "objective": "Onda fast_track doc-only que OPERACIONALIZA a passagem de bastao definida na 0112, para que o processo esteja pronto quando o bastao voltar as IAs. Apos hearback, aplicar: (E1) §12.B expandido por papel no PROMPT_ARQUITETO (B1 implementador que retoma, B2 auditor cruzado, B3 consolidador/arbitro), cada um apontando paths canonicos a ler por Read; (E2 — APLICADA COM FUSAO) registro de transferencia de bastao FUNDIDO no handoff de fim-de-sessao knowledge 0014 (itens 13-16 + checklist anti-vies §12.4 quando gatilho=bastao), por decisao de Mauricio, em vez de criar knowledge 0021 separado; (E3) plano de teste empirico da P9 (auditoria curta) com criterio objetivo de promocao, a registrar no readback da Onda 38.2.3. Especificacao completa em .hbn/protocol-evolutions/20260527-1340-onda-0113-operacionalizar-bastao-spec.md.",
+    "non_goals": [
+      "Editar o protocolo neste turno (so apos hearback confirmed)",
+      "Tocar codigo de dominio (src/vba, local-ai/vba_import)",
+      "Abrir a Onda 38.2.3 ou decidir caminho A vs B (linha separada)",
+      "Promover a P9 (esta onda apenas instrumenta o teste dela)",
+      "Fundir/remover o handoff de fim-de-sessao 0014 sem decisao de Mauricio (pergunta aberta 1)"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md",
+      ".hbn/knowledge/0014-protocolo-fim-de-sessao.md",
+      ".hbn/knowledge/INDEX.md",
+      ".hbn/protocol-evolutions/20260527-1340-onda-0113-operacionalizar-bastao-spec.md",
+      ".hbn/readbacks/0113-operacionalizar-passagem-bastao.json",
+      ".hbn/results/0113-exec-operacionalizar-passagem-bastao.json",
+      ".hbn/relay/INDEX.md",
+      "AGENTS.md",
+      "auditoria/00_status/122_OPERACIONALIZAR_PASSAGEM_BASTAO.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "auditoria/03_ondas/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "Nenhum codigo de producao tocado (onda fast_track doc-only)",
+    "Anchor V206 funcional preservado (commit ee75b30)",
+    "Cadencia D Estendida da onda 0112 (§12 + knowledge 0019) nao alterada — apenas detalhada (§12.B) e instrumentada (knowledge 0021)",
+    "Handoff de fim-de-sessao (knowledge 0014) preservado ate decisao de Mauricio na pergunta aberta 1",
+    "Knowledges 0001-0020 inalteradas (apenas adicionada 0021 + linha no INDEX)",
+    "Decisao A vs B da Onda 38.2.2 e abertura da 38.2.3 nao tocadas"
+  ],
+  "decisions_preconfirmed": [
+    "Mauricio autorizou em chat 2026-05-27: 'Confirmo as tres perguntas, pode abrir mais uma onda de bastao antes de devolver para as ias.' Esta onda 0113 e a 'mais uma onda de bastao' antes da devolucao."
+  ],
+  "delta_contract": {
+    "delta_name": "n/a (fast_track doc-only)",
+    "build_label": "n/a",
+    "manifest_path": "n/a",
+    "import_command": "n/a",
+    "expected_import_result": "n/a",
+    "post_import_manual_step": "n/a"
+  },
+  "risks": [
+    {
+      "risk": "Proliferacao de artefatos de handoff: registro de bastao (0021) sobreposto ao handoff de fim-de-sessao (0014) confunde as IAs sobre qual usar quando",
+      "mitigation": "knowledge 0021 declara o criterio de uso explicito (0014 = minha sessao acabou; 0021 = o papel/IA muda). Pergunta aberta 1 no spec deixa Mauricio decidir fundir vs separar antes de aplicar.",
+      "severity": "medium"
+    },
+    {
+      "risk": "§12.B por papel pode ficar verboso e ninguem usar (mesma fricca dos .md de 53 linhas que a L28 combate)",
+      "mitigation": "Cada prompt de entrada e curto e copiavel (regra L27/L28); aponta paths a ler por Read em vez de despejar contexto. Revisao na primeira auditoria 38.2.3.",
+      "severity": "low"
+    },
+    {
+      "risk": "Criterio de promocao da P9 (zero BLOQUEADOR/FORTE perdidos) pode nunca ser atingido, deixando P9 em limbo indefinido",
+      "mitigation": "Plano E3 fixa >= 2 gates testados como amostra minima; se em 38.2.3 a curta perder achados, P9 e REJEITADA (decisao limpa, nao limbo).",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Hearback Mauricio das 2 perguntas abertas (artefato separado vs fundido; criterio P9)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/readbacks/0113-operacionalizar-passagem-bastao.json"
+      },
+      {
+        "gate": "scripts/hbn-guards/hbn-guards-runner.sh verde no Mac (fast_track) apos aplicar edicoes",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0113-exec-operacionalizar-passagem-bastao.json"
+      },
+      {
+        "gate": "git push origin codex/v12-0-0206-planejamento apos commit",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0113-exec-operacionalizar-passagem-bastao.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se Mauricio preferir fundir 0021 com 0014, ajustar E2 para editar 0014 em vez de criar 0021, e re-hearback",
+      "Se algum guard reprovar no Mac, ajustar scope.files_allowed e re-hearback antes de commitar",
+      "Se Mauricio reverter a §12.B por papel: git revert do commit + nota em .hbn/bypasses/",
+      "Anchor de rollback: o commit que fechar a onda 0112 (a registrar no ERP 0112 apos o commit no Mac)"
+    ],
+    "anchor_to_restore": "commit de fechamento da onda 0112 (pos-commit no Mac)"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "pending",
+      "at": "2026-05-27T13:40:00-03:00",
+      "by": "claude-opus-4-7",
+      "note": "Onda 0113 aberta em estado pending, consistente com o modo escolhido por Mauricio na onda 0112 (readback + decisao, depois pausa). Aguardando hearback das 2 perguntas abertas antes de aplicar E1/E2."
+    },
+    {
+      "status": "confirmed",
+      "at": "2026-05-27T13:55:00-03:00",
+      "by": "humano",
+      "note": "Mauricio respondeu as 2 perguntas: (1) FUNDIR o registro de transferencia de bastao no handoff de fim-de-sessao 0014 (em vez de criar knowledge 0021) — scope.files_allowed ajustado de 0021 para 0014; (2) CONCORDA com o criterio objetivo de promocao da P9 (zero BLOQUEADOR/FORTE perdidos pela curta em >= 2 gates). Tambem pediu comandos diretos de commit para o terminal."
+    }
+  ],
+  "created_at": "2026-05-27T13:40:00-03:00"
+}

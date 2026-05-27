@@ -1,11 +1,51 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
-versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.3 (auto-evolucao por handoff)
-proprietario-bastao: Claude Opus 4.7 (sessao ativa 2026-05-26 ~17:30 -> 2026-05-27 ~04:30 BRT, ~11h, ~95% contexto). **DIRETIVA MAURICIO 2026-05-27 04:30**: NAO faremos freeze V206 nesta onda — ondas 38.2.3+ ate validar tela-a-tela com testes E2E que cubram fluxos novos (nao apenas fixture). "FREEZE" retirado do nome da onda. **Onda 38.2.2 ENTREGUE PARCIAL** (5 hotfixes consecutivos: c9bcd41 -> f855d0b -> 88b347b -> 854c392 -> 255d3bc -> a51b191): AT-1..AT-5 funcionais, mas **F-NEW5 BUG CRITICO ABERTO** (rodizio reporta 'sem empresas disponiveis' apesar de credenciamento existir — STATUS_CRED vazio em relatorio) + 4 F-FILTRO findings menores. V207 ADIADA ate V206 homologada com suite E2E completa. Bastao permanece com Opus 4.7 ate validacao tela-a-tela. Anchor funcional V206 inalterado: commit ee75b30, RVS Trio APROVADO VR_20260526_102200.
-ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — ondas 38.2.3, 38.2.4, 38.2.5 (e ate quantas forem necessarias) ate validar tela-a-tela. V12.0.0205 permanece como release oficial. Sequencia ENTREGUE: AR1 -> AR1-FIX2-PERF -> evolucao protocolo v1.3 (0110) -> auditoria cruzada 1a rodada (111) -> 2a rodada (112) -> Onda 38.2.2 (entregue parcial, 5 findings abertos). Proximo: Onda 38.2.3 (bug critico rodizio F-NEW5 + filtros OS/Aval F-FILTRO-1). Convencao a partir de agora: build label `<HEAD>+ONDA<N>` ou `<HEAD>+ONDA<N>.fix<NN>` SEM sufixo "FREEZE".
-ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF no workbook do operador, RVS Trio APROVADO em VR_20260526_102200 (CSV anexado em commit f4d1884). **Anchor de rollback Onda 38.2.2: commit 179bac5 (HEAD pos-consolidacao 2a rodada V207)**.
-proxima-acao: 🟠 ONDA 38.2.3 — abrir readback 0112 focado em (a) F-NEW5 bug critico rodizio (Pre-OS 'sem empresas' apesar de credenciamento existir, hipotese: STATUS_CRED sendo sobrescrito por ClassificaCredenciadoOrdem ou similar pos-loop em Credencia_Empresa.CR_Credenciar_Click); (b) F-FILTRO-1 (adicionar Optional filtro em PreencherPreencheOS/PreencherAvaliarOS); (c) teste E2E novo cobrindo ciclo completo cadastro->credenciamento->Pre-OS->rodizio com atividade/empresa NAO-fixture. Roadmap completo em auditoria/03_ondas/onda_38_2_2/38_2_2_TECNICO.md §11.
-ultima-atualizacao: 2026-05-27T04:30:00-0300 (Onda 38.2.2 ENTREGUE PARCIAL - 5 findings abertos, sem freeze - bastao continua Opus 4.7)
+versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.5 (§12 Cadencia D Estendida + §12.B por papel + registro de bastao fundido no handoff 0014)
+proprietario-bastao: Claude Opus 4.7 (sessao ativa 2026-05-27 ~04:30 -> ~09:30 BRT, ~5h, ~60% contexto). **INCIDENTE CRITICO 2026-05-27 ~09:00**: workbook 38.2.2 corrompeu durante uso operacional, rollback executado para copia que ainda abre (mesma versao a51b191+ONDA38.2.2-V206-FREEZE, build 2026-05-27 04:09). **RVS REPROVADO determinisitco em 2 execucoes consecutivas** (VR_20260527_060519 + VR_20260527_085514): V2_SMOKE drift Cadastro_Servico.frm (9307 vs 9179) + V2_E2E_STRIKES DIAG_PREOS_INTEGRITY (EMP_PRESEL=001 vs EMP_PREOS=1). **F-NEW6 sistemico levantado**: Repo_PreOS/Repo_OS/Repo_Avaliacao gravam EMP_ID sem NumberFormat='@' nem Pad3. **2 AUDITORIAS CRUZADAS ENTREGUES**: .hbn/proposals/0009-codex-* (24KB, staged) + 0010-antigravity-* (16KB, commit 8fbdf26). Proxima Opus consolida em 117_ANALISE_AUDITORIA_INTEGRIDADE_IDEMPOTENCIA.md e decide caminho A (seguir 38.2.2) vs B (rollback FIX2-PERF) com hearback Mauricio.
+ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — ondas 38.2.3, 38.2.4, 38.2.5 (e quantas forem necessarias) ate validar tela-a-tela. V12.0.0205 permanece como release oficial. Sequencia ENTREGUE: AR1 -> AR1-FIX2-PERF -> evolucao protocolo v1.3 (0110) -> auditorias cruzadas V207 1a/2a rodadas (111/112) -> Onda 38.2.2 (entregue parcial, 5 findings abertos + corrupcao workbook) -> auditorias cruzadas integridade/idempotencia (115 prompt + 0009/0010 outputs). Proximo: consolidacao auditorias em 117 + decisao A vs B + Onda 38.2.3 com escopo refinado. Convencao: build label `<HEAD>+ONDA<N>` ou `<HEAD>+ONDA<N>.fix<NN>` SEM sufixo "FREEZE".
+ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio APROVADO em VR_20260526_102200. **Anchor de rollback Onda 38.2.2: commit 179bac5**. **Caminho B (rollback) tecnicamente valido se Mauricio escolher**.
+proxima-acao: 🟠 PROXIMA OPUS — (1) ler outputs 0009 Codex + 0010 Antigravity; (2) consolidar em auditoria/00_status/117_ANALISE_AUDITORIA_INTEGRIDADE_IDEMPOTENCIA.md; (3) apresentar caminho A vs B com recomendacao + hearback Mauricio; (4) abrir readback da Onda 38.2.3 com escopo refinado. NOTA DE NUMERACAO: os IDs 0112 e 0113 foram consumidos por ondas META de evolucao do protocolo (passagem de bastao) — a Onda 38.2.3 de dominio toma o proximo ID livre (0114). Detalhes em auditoria/00_status/116_PROMPT_RETOMADA_SESSAO_OPUS.md.
+ultima-atualizacao: 2026-05-27T13:55:00-0300 (Ondas META 0112 + 0113 aplicadas — PROMPT_ARQUITETO v1.5: §12 Cadencia D Estendida + §12.B por papel + registro de bastao fundido no handoff 0014 + knowledge 0019/0020; criterio P9 aprovado. Pendente commit unico no Mac. Linha de dominio V206 38.2.2/38.2.3 inalterada — bastao continua Opus 4.7 pos-handoff)
+---
+
+## 🟣 ONDA 0113 META APLICADA (fast_track doc-only) — Operacionalizar a passagem de bastão (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟣 META APLICADA (pendente commit no Mac) |
+| Track | fast_track (doc-only — meta-protocolo) |
+| Origem | Claude Opus 4.7 (modo ARQUITETO, sessão Cowork 2026-05-27 ~13:55), sucessora da 0112 |
+| Readback | [`0113-operacionalizar-passagem-bastao.json`](../readbacks/0113-operacionalizar-passagem-bastao.json) — **human_status: confirmed** |
+| Spec | [`.hbn/protocol-evolutions/20260527-1340-onda-0113-operacionalizar-bastao-spec.md`](../protocol-evolutions/20260527-1340-onda-0113-operacionalizar-bastao-spec.md) |
+| Registro §11 | [`auditoria/00_status/122_OPERACIONALIZAR_PASSAGEM_BASTAO.md`](../../auditoria/00_status/122_OPERACIONALIZAR_PASSAGEM_BASTAO.md) |
+| ERP | [`0113-exec-operacionalizar-passagem-bastao.json`](../results/0113-exec-operacionalizar-passagem-bastao.json) — executed_local_pending_human_commit |
+
+### Mudanças
+
+PROMPT_ARQUITETO v1.4 → **v1.5**: §12.B expandido por papel (B1 implementador / B2 auditor / B3 consolidador). Registro de transferência de bastão **fundido** no handoff de fim-de-sessão (knowledge 0014, itens 13-16) por decisão de Mauricio. Critério objetivo de promoção da P9 aprovado (registrado no 122). **Protocolo de passagem de bastão pronto para devolver às IAs.**
+
+---
+
+## 🟣 ONDA 0112 META APLICADA (fast_track doc-only) — Cadência D Estendida / passagem de bastão (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟣 META APLICADA (pendente commit no Mac) |
+| Track | fast_track (doc-only — meta-protocolo) |
+| Origem | Claude Opus 4.7 (modo ARQUITETO, sessão Cowork 2026-05-27 ~13:00) consumindo doc 120 (10 propostas) |
+| Readback | [`0112-evolucao-protocolo-onda38-passagem-bastao.json`](../readbacks/0112-evolucao-protocolo-onda38-passagem-bastao.json) — **human_status: confirmed** |
+| Decisão por proposta | [`.hbn/protocol-evolutions/20260527-1300-decisao-evolucoes-onda-38-passagem-bastao.md`](../protocol-evolutions/20260527-1300-decisao-evolucoes-onda-38-passagem-bastao.md) |
+| Registro §11 | [`auditoria/00_status/121_EVOLUCAO_PROTOCOLO_ONDA38_PASSAGEM_BASTAO.md`](../../auditoria/00_status/121_EVOLUCAO_PROTOCOLO_ONDA38_PASSAGEM_BASTAO.md) |
+| ERP | [`0112-exec-evolucao-protocolo-onda38-passagem-bastao.json`](../results/0112-exec-evolucao-protocolo-onda38-passagem-bastao.json) — executed_local_pending_human_commit |
+
+### Mudanças (Tier 1 = PROMPT_ARQUITETO §12 + knowledge 0019; Tier 2 recomendado; L44 = knowledge 0020)
+
+PROMPT_ARQUITETO v1.3 → **v1.4** (§12 Cadência D Estendida + §12.A template auditoria + §12.B prompt de entrada chat novo). 3 modificações do arquiteto sobre o doc 120, confirmadas por Mauricio: P1 sem implementador único por ciclo; P7 renomeada **BLOQUEADOR/FORTE/MARGINAL**; meta-protocolo no PROMPT_ARQUITETO + knowledge 0019 (AGENTS.md só aponta). P9 fica EM TESTE (38.2.3); P10 adiada pós-freeze.
+
+### Próxima ação
+
+Mauricio commita do Mac (comando sugerido no ERP 0112). Onda **0113** (META, pending hearback) operacionaliza a passagem de bastão antes de devolvê-lo às IAs.
+
 ---
 
 ## 🟢 ONDA 38.2.2 V206 PURO ENTREGUE — última onda antes do freeze (NOVO)

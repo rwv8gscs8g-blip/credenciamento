@@ -51,6 +51,30 @@ gatilho: operador_pediu | turnos_30 | contexto_50 | bastao | erp_fechado
 ## 12. Sinal 🔵 HBN HANDOFF READY
 ```
 
+## Itens adicionais 13-16 — quando o gatilho é transferência de bastão (gatilho 4)
+
+> Adicionado na Onda 0113 (PROMPT_ARQUITETO v1.5). Por decisão de Mauricio
+> (2026-05-27), o **registro de transferência de bastão** é o MESMO artefato do
+> handoff de fim-de-sessão — não um arquivo separado. Quando o `gatilho` for
+> `bastao` (o papel/IA muda: implementador → auditor, Codex → Opus, etc.), o
+> handoff ganha os itens abaixo, alinhados à Cadência D Estendida (§12 +
+> knowledge 0019).
+
+```yaml
+## 13. Papel transferido: implementador | auditor cruzado | consolidador
+## 14. Para qual agente vai o bastão (e por quê — evidência objetiva, não opinião)
+## 15. Checklist anti-viés de bastão (§12.4) — OBRIGATÓRIO
+#     [ ] Esta recomendação inclui auto-indicação? (sim/não — qual)
+#     [ ] Evidência objetiva que sustenta a escolha de quem recebe: <…>
+#     [ ] Viés natural reconhecido: <…>
+#     [ ] Mitigação sugerida (preferir 3 recomendadores; Mauricio pesa evidência): <…>
+## 16. Prompt de entrada do sucessor: §12.B1/B2/B3 do PROMPT_ARQUITETO conforme o papel
+```
+
+Nome do arquivo permanece `.hbn/messages/AAAAMMDD-HHmm-handoff-fim-sessao-<agente>.md`;
+opcionalmente, quando for transferência inter-IA, usar o sufixo
+`-bastao-<de>-para-<para>` para facilitar a busca.
+
 ## Aplicação inicial
 
 Esta knowledge nasce na Onda 36.1. **Gate 4 do readback 0095 exige que a
