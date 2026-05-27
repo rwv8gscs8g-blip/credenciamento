@@ -3840,10 +3840,10 @@ End Sub
 ' Despacho centralizado via Preencher.Preencher_FiltrarPorBoxEstatico(nomeContexto, termo).
 
 Private Sub TextBox16_Change()   ' Cadastro de Entidades
+    ' Onda 38.2.2 hotfix L10b: mTxtFiltroEntidade nao e declarado explicitamente
+    ' no .frm (sem Option Explicit). Removido guard Is Nothing que disparava
+    ' erro 424. Handler estatico sempre dispara.
     If mInicializando Then Exit Sub
-    If Not mTxtFiltroEntidade Is Nothing Then
-        If mTxtFiltroEntidade Is TextBox16 Then Exit Sub
-    End If
     On Error Resume Next
     Call Preencher_FiltrarPorBoxEstatico("entidade", CStr(TextBox16.Text))
     On Error GoTo 0
@@ -3851,9 +3851,6 @@ End Sub
 
 Private Sub TextBox17_Change()   ' Cadastro de Empresas
     If mInicializando Then Exit Sub
-    If Not mTxtFiltroEmpresa Is Nothing Then
-        If mTxtFiltroEmpresa Is TextBox17 Then Exit Sub
-    End If
     On Error Resume Next
     Call Preencher_FiltrarPorBoxEstatico("empresa", CStr(TextBox17.Text))
     On Error GoTo 0
@@ -3861,9 +3858,6 @@ End Sub
 
 Private Sub TextBox18_Change()   ' Atribuicao de Servico
     If mInicializando Then Exit Sub
-    If Not mTxtFiltroServico Is Nothing Then
-        If mTxtFiltroServico Is TextBox18 Then Exit Sub
-    End If
     On Error Resume Next
     Call Preencher_FiltrarPorBoxEstatico("atrib_servico", CStr(TextBox18.Text))
     On Error GoTo 0
@@ -3885,9 +3879,6 @@ End Sub
 
 Private Sub TextBox21_Change()   ' Cadastro e Alteracao de Servico
     If mInicializando Then Exit Sub
-    If Not mTxtFiltroCadServ Is Nothing Then
-        If mTxtFiltroCadServ Is TextBox21 Then Exit Sub
-    End If
     On Error Resume Next
     Call Preencher_FiltrarPorBoxEstatico("cad_servico", CStr(TextBox21.Text))
     On Error GoTo 0
@@ -3895,9 +3886,6 @@ End Sub
 
 Private Sub TextBox22_Change()   ' Atribuicao de Empresa (Rodizio)
     If mInicializando Then Exit Sub
-    If Not mTxtFiltroRodizio Is Nothing Then
-        If mTxtFiltroRodizio Is TextBox22 Then Exit Sub
-    End If
     On Error Resume Next
     Call Preencher_FiltrarPorBoxEstatico("atrib_empresa", CStr(TextBox22.Text))
     On Error GoTo 0
