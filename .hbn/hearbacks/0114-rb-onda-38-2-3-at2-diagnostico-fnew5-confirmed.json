@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0114-rb-onda-38-2-3-at2-diagnostico-fnew5-confirmed",
+  "readback_id": "0114-rb-onda-38-2-3-at2-diagnostico-fnew5",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-05-27T15:04:22-03:00",
+  "notes": "Mauricio confirmou em chat: 'confirmado -- seguir AT-2 conforme recomendacao'. Escopo confirmado: Codex pode implementar AT-2 diagnostico F-NEW5 em Credencia_Empresa, ressincronizar AAI-Credencia_Empresa.code-only.txt como remediacao do BLOQ-1 Opus antes de import, registrar auditorias 0014/0015 e manter ProgressBar intocado por ser form blindado."
+}

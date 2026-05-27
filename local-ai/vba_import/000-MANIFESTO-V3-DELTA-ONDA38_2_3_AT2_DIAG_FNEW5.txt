@@ -1,0 +1,13 @@
+# Manifesto V3 DELTA ONDA38_2_3_AT2_DIAG_FNEW5 - V12.0.0206 Onda 38.2.3 AT-2
+# Tema: diagnostico empirico F-NEW5 em Credencia_Empresa.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_3_AT2_DIAG_FNEW5", "<sha>+ONDA38.2.3-AT2-DIAG"
+#
+# Pos-import esperado:
+#   - Importador V3: M=0 | F=1 | err=0.
+#   - VBE > Debug > Compile VBAProject passa limpo.
+#   - Reproduzir F-NEW5 gera auditoria/evidencias/V12.0.0206/csv/DIAG_FNEW5_<timestamp>.csv.
+#
+# GRUPO_FORMS
+F|002-formularios/AAI-Credencia_Empresa.frm

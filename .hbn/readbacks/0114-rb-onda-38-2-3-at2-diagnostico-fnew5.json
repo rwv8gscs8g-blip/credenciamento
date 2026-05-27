@@ -1,0 +1,182 @@
+{
+  "readback_id": "0114-rb-onda-38-2-3-at2-diagnostico-fnew5",
+  "data": "2026-05-27",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0114-rb-onda-38-2-3-at1-gerador-codeonly",
+  "intent": {
+    "objective": "Executar AT-2 da Onda 38.2.3: implementar diagnostico temporario F-NEW5 em Credencia_Empresa com gate ATIVAR_DIAG_FNEW5, garantir CSV canonico DIAG_FNEW5_<timestamp>.csv por credenciamento gravado, e ressincronizar Credencia_Empresa code-only para fechar o BLOQ-1 diferido apontado pelo Opus antes de qualquer import.",
+    "non_goals": [
+      "Nao executar importacao no Excel neste readback sem instrucao operacional posterior ao pacote AT-2",
+      "Nao rodar RVS diretamente; Mauricio executara no workbook quando solicitado",
+      "Nao tocar ProgressBar neste readback por ser form blindado",
+      "Nao editar Svc_PreOS.bas, Repo_PreOS.bas ou qualquer AT-3 neste readback",
+      "Nao alterar Importador_V3.bas, Mod_Types.bas, Auto_Open.bas ou publicar_vba_import.sh",
+      "Nao implementar helpers V206 de Onda 38.2.4 neste readback",
+      "Nao alterar manifestos L41 de duas fases nem build label versionado neste readback"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Credencia_Empresa.frm",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_AT2_DIAG_FNEW5.txt",
+      "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.frm",
+      "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.code-only.txt",
+      "local-ai/vba_import/002-formularios/Credencia_Empresa.frx",
+      "auditoria/03_ondas/onda_38_2_3/**",
+      "auditoria/evidencias/V12.0.0206/csv/**",
+      ".hbn/proposals/0014-opus-auditoria-gate-a1-onda-38-2-3.md",
+      ".hbn/proposals/0015-antigravity-auditoria-gate-a1-onda-38-2-3.md",
+      ".hbn/proposals/0016-codex-at2-diagnostico-fnew5.md",
+      ".hbn/readbacks/0114-rb-onda-38-2-3-at2-diagnostico-fnew5.json",
+      ".hbn/hearbacks/0114-rb-onda-38-2-3-at2-diagnostico-fnew5-confirmed.json",
+      ".hbn/hearbacks/0114-rb-onda-38-2-3-at2-diagnostico-fnew5-confirmed.md",
+      ".hbn/messages/20260527-1504-codex-gate-a1-consolidado-at2.md",
+      ".hbn/bypasses/20260527-151725-onda-38-2-3-at2-g7-aax-preexistente.md",
+      ".hbn/relay/INDEX.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Repo_PreOS.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ProgressBar.frm",
+      "local-ai/vba_import/002-formularios/AAB-ProgressBar.frm",
+      "local-ai/vba_import/002-formularios/AAB-ProgressBar.code-only.txt",
+      "local-ai/vba_import/002-formularios/ProgressBar.frx",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_FASE*.txt",
+      "local-ai/vba_import/000-BUILD-IMPORTAR-SEMPRE.txt",
+      "local-ai/scripts/publicar_vba_import.sh"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "GATE-A1 esta aprovado por Opus e Antigravity; BLOQ-1 do Opus fica incorporado como pre-condicao de import para Credencia_Empresa.",
+    "AT-2 e diagnostico temporario: qualquer instrumentacao deve ficar protegida por gate ATIVAR_DIAG_FNEW5 e ser removivel sem afetar fluxo normal.",
+    "O diagnostico deve registrar uma linha por credenciamento gravado, nao apenas por clique.",
+    "O CSV deve usar caminho canonico auditoria/evidencias/V12.0.0206/csv/DIAG_FNEW5_<timestamp>.csv.",
+    "ProgressBar permanece intocado nesta fase por estar na lista de forms blindados.",
+    "Sem push para origin.",
+    "Sem sufixo FREEZE em build label antes do GATE-FREEZE aprovado."
+  ],
+  "decisions_preconfirmed": [
+    "Mauricio confirmou em chat: 'confirmado -- seguir AT-2 conforme recomendacao'.",
+    "GATE-A1/AT-1 aprovado pelas auditorias cruzadas: Opus em .hbn/proposals/0014-opus-auditoria-gate-a1-onda-38-2-3.md e Antigravity em .hbn/proposals/0015-antigravity-auditoria-gate-a1-onda-38-2-3.md.",
+    "BLOQ-1 Opus: AAI-Credencia_Empresa.code-only.txt esta stale pelo mesmo bug P0-1; veto se aplica ao import/GATE-A4, nao a AT-2/AT-3. A remediacao sera feita dentro do AT-2, pois Credencia_Empresa e o alvo natural da macro diagnostica.",
+    "ProgressBar nao sera ressincronizado neste readback, apesar de citado marginalmente, porque e form blindado na sequencia V206.",
+    "Apos inspecao do Importador_V3 e knowledge 0005/0009, AT-2 precisa de um manifesto delta proprio para import seguro via V3; colagem manual do code-only nao e recomendada porque o arquivo preserva Attribute per-symbol para paridade, e o V3 faz a limpeza em memoria antes de AddFromString.",
+    "FORTE-1/FORTE-2/FORTE-3 do Opus permanecem registrados como pendencias de confiabilidade do pipeline antes do GATE-A4/import.",
+    "Antigravity aprovou AT-1 sem bloqueadores e apontou somente risco forte de sincronia manual por local-ai gitignored.",
+    "Sem decisoes V207 neste ciclo V206.",
+    "RVS Trio permanece definido como TV2_RunSmoke + TV2_RunIntegridadeBase (+ Estendida na 38.2.5) + TV2_RunRodizioStrikesEndToEnd, deterministico em duas execucoes consecutivas para gates finais."
+  ],
+  "gates": [
+    "GATE-A2: implementar macro temporaria com gate ATIVAR_DIAG_FNEW5 em Credencia_Empresa, gerar pacote importavel alvo, Mauricio importar e reproduzir F-NEW5 para produzir CSV DIAG_FNEW5.",
+    "GATE-A2 auditoria cruzada: apos CSV real, Codex produz .hbn/proposals/0016-codex-at2-diagnostico-fnew5.md com interpretacao tecnica; Opus + Antigravity auditam a interpretacao antes da proxima acao."
+  ],
+  "guards_runner": {
+    "command": "bash scripts/hbn-guards/hbn-guards-runner.sh",
+    "status_before_readback": "passed_after_gate_a1_commit",
+    "status_before_readback_observed_at": "2026-05-27T15:04:22-03:00",
+    "note": "Com base no hearback em chat, este readback nasce confirmado para permitir a execucao do AT-2 sem nova rodada de autorizacao textual."
+  },
+  "bootstrap_observed_state": {
+    "pwd": "/Users/macbookpro/Projetos/Credenciamento",
+    "git_toplevel": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "head": "ad14aa3",
+    "working_tree_summary": [
+      "M local-ai/vba_import/001-modulo/AAX-App_Release.bas herdado e mantido unstaged",
+      "untracked artefatos herdados 115-119/0009/protocol-evolutions/CSVs preservados",
+      "untracked auditorias GATE-A1 0014/0015 recebidas de Mauricio e incluidas neste readback"
+    ]
+  },
+  "risks": [
+    {
+      "risk": "Instrumentacao diagnostica alterar comportamento normal de credenciamento.",
+      "mitigation": "Proteger toda escrita CSV por constante/gate ATIVAR_DIAG_FNEW5 desativavel e manter fluxo de negocio sem dependencia do diagnostico.",
+      "severity": "high"
+    },
+    {
+      "risk": "CR_Credenciar_Click pode gravar multiplos servicos por clique e gerar evidencia incompleta.",
+      "mitigation": "Registrar uma linha CSV por gravacao efetiva de credenciamento dentro do loop de servicos.",
+      "severity": "high"
+    },
+    {
+      "risk": "Code-only de Credencia_Empresa permanecer stale e quebrar import estabilizado.",
+      "mitigation": "Regenerar AAI-Credencia_Empresa.code-only.txt via publicador V2 --only apos a edicao do form e validar presenca de Option Explicit, Private WithEvents mTxtFiltroCredLista e atributos preservados.",
+      "severity": "high"
+    },
+    {
+      "risk": "local-ai/ e gitignored; arquivos importaveis podem ficar fora do commit se nao forem adicionados explicitamente.",
+      "mitigation": "Usar git add -f para os artefatos local-ai permitidos no escopo e verificar git status antes do commit.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Schema do readback AT-2 valido",
+        "evidence_kind": "schema_validation",
+        "evidence_required_in": ".hbn/readbacks/0114-rb-onda-38-2-3-at2-diagnostico-fnew5.json"
+      },
+      {
+        "gate": "Credencia_Empresa code-only ressincronizado e com declaracoes module-level preservadas",
+        "evidence_kind": "text_assertion",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/"
+      },
+      {
+        "gate": "Pacote AT-2 importavel sem tocar manifestos/build label",
+        "evidence_kind": "git_diff_review",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/"
+      },
+      {
+        "gate": "CSV DIAG_FNEW5 real capturado por Mauricio no workbook",
+        "evidence_kind": "csv",
+        "evidence_required_in": "auditoria/evidencias/V12.0.0206/csv/"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o diagnostico produzir diff fora do scope, interromper antes de commit e pedir nova decisao.",
+      "Se o gerador alterar ProgressBar ou qualquer form blindado, restaurar esse arquivo, registrar BLOQUEADOR e nao prosseguir.",
+      "Se o code-only de Credencia_Empresa nao preservar WithEvents, reabrir o bug do gerador antes de qualquer import.",
+      "Se o CSV real nao for produzido no workbook, registrar a falha em 0016 e pedir nova auditoria antes de AT-3."
+    ],
+    "anchor_to_restore": "ad14aa3"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "pending",
+      "at": "2026-05-27T15:04:22-03:00",
+      "by": "codex",
+      "note": "Readback AT-2 preparado a partir da consolidacao GATE-A1."
+    },
+    {
+      "status": "confirmed",
+      "at": "2026-05-27T15:04:22-03:00",
+      "by": "mauricio-zanin",
+      "note": "Mauricio confirmou em chat: 'confirmado -- seguir AT-2 conforme recomendacao'."
+    },
+    {
+      "status": "scope_amended",
+      "at": "2026-05-27T15:12:00-03:00",
+      "by": "codex",
+      "note": "Incluido somente o manifesto delta AT-2 ONDA38_2_3_AT2_DIAG_FNEW5 para permitir import seguro via Importador V3; manifestos L41/FASE1/FASE2 continuam fora de escopo."
+    },
+    {
+      "status": "scope_amended",
+      "at": "2026-05-27T15:17:25-03:00",
+      "by": "codex",
+      "note": "Incluido bypass documentado para o bloqueio G7 causado pelo drift herdado e unstaged em AAX-App_Release.bas; o arquivo AAX permanece fora do stage e fora do escopo AT-2."
+    }
+  ],
+  "created_at": "2026-05-27T15:04:22-03:00"
+}

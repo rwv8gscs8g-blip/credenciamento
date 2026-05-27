@@ -4,26 +4,28 @@ versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQ
 proprietario-bastao: Codex (implementador principal V206, sessao iniciada 2026-05-27 ~14:08 BRT) assumiu a Onda 38.2.3 sob Cadencia D Estendida. Head real observado no bootstrap: `27237e4` (commit doc-only posterior a `ce5879e`; predecessor de codigo `621ebfa` intacto conforme prompt 119). Estado inicial validado: raiz canonica OK, guards verdes antes da abertura do readback 0114, working tree com artefatos nao staged herdados (AAX modificado, 115-119/0009/protocol-evolutions/CSVs untracked).
 ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — ondas 38.2.3, 38.2.4, 38.2.5 (e quantas forem necessarias) ate validar tela-a-tela. V12.0.0205 permanece como release oficial. Sequencia ENTREGUE: AR1 -> AR1-FIX2-PERF -> evolucao protocolo v1.3 (0110) -> auditorias cruzadas V207 1a/2a rodadas (111/112) -> Onda 38.2.2 (entregue parcial, 5 findings abertos + corrupcao workbook) -> auditorias cruzadas integridade/idempotencia (115 prompt + 0009/0010 outputs) -> ondas META 0112/0113 Cadencia D -> Codex assumiu bootstrap 38.2.3. Proximo: hearback Mauricio no readback 0114 antes de qualquer edicao de codigo; depois GATE-A1 AT-1 gerador code-only. Convencao: build label `<HEAD>+ONDA<N>` ou `<HEAD>+ONDA<N>.fix<NN>` SEM sufixo "FREEZE".
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio APROVADO em VR_20260526_102200. **Anchor de rollback Onda 38.2.2: commit 179bac5**. **Caminho B (rollback) tecnicamente valido se Mauricio escolher**.
-proxima-acao: 🟡 HBN PENDING AUDITORIA CRUZADA — GATE-A1/AT-1 entregue em `.hbn/proposals/0013-codex-at1-gerador-codeonly.md`. Mauricio deve levar para Opus + Antigravity em chats novos. Codex aguarda retorno consolidado antes de AT-2.
-ultima-atualizacao: 2026-05-27T14:14:07-0300 (Mauricio confirmou readback 0114; Codex corrigiu gerador code-only com `--only`, regenerou `AAD-Cadastro_Servico.code-only.txt`, validou paridade gamma 9307/9307 e entregou proposal 0013 para auditoria cruzada)
+proxima-acao: ✅ HBN ACTIVE — GATE-A1 aprovado por Opus + Antigravity. Mauricio confirmou seguir AT-2 conforme recomendacao Codex. Codex abriu readback `0114-rb-onda-38-2-3-at2-diagnostico-fnew5` para instrumentar `Credencia_Empresa`, ressincronizar `AAI-Credencia_Empresa.code-only.txt` (BLOQ-1 Opus) e manter `ProgressBar` fora de escopo por ser form blindado.
+ultima-atualizacao: 2026-05-27T15:04:22-0300 (GATE-A1 consolidado; auditorias 0014/0015 recebidas; Mauricio confirmou AT-2; readback/hearback AT-2 materializados)
 ---
 
 ## ✅ HBN ACTIVE — CODEX ASSUMIU BASTÃO V206 / ONDA 38.2.3 (NOVO)
 
 | Campo | Valor |
 |---|---|
-| Sinal | 🟡 HBN PENDING AUDITORIA CRUZADA |
+| Sinal | ✅ HBN ACTIVE |
 | Papel | Codex implementador principal |
-| Onda | 38.2.3 — bootstrap / AT-1 gerador code-only |
+| Onda | 38.2.3 — AT-2 diagnostico F-NEW5 |
 | Readback | [`0114-rb-onda-38-2-3-at1-gerador-codeonly.json`](../readbacks/0114-rb-onda-38-2-3-at1-gerador-codeonly.json) — **human_status: confirmed** |
+| Readback AT-2 | [`0114-rb-onda-38-2-3-at2-diagnostico-fnew5.json`](../readbacks/0114-rb-onda-38-2-3-at2-diagnostico-fnew5.json) — **human_status: confirmed** |
 | Mensagem | [`.hbn/messages/20260527-1408-codex-assumiu-bastao-v206.md`](../messages/20260527-1408-codex-assumiu-bastao-v206.md) |
 | Entrega GATE-A1 | [`.hbn/proposals/0013-codex-at1-gerador-codeonly.md`](../proposals/0013-codex-at1-gerador-codeonly.md) |
+| Auditorias GATE-A1 | [Opus 0014](../proposals/0014-opus-auditoria-gate-a1-onda-38-2-3.md) + [Antigravity 0015](../proposals/0015-antigravity-auditoria-gate-a1-onda-38-2-3.md) — aprovadas |
 | Head observado | `27237e4` — doc-only posterior a `ce5879e`; predecessor de codigo V206 preservado |
-| Proxima acao | Mauricio aciona auditoria cruzada Opus + Antigravity; Codex aguarda |
+| Proxima acao | Codex implementa AT-2 e para para Mauricio importar/reproduzir F-NEW5 e gerar CSV |
 
 ### Escopo inicial AT-1
 
-Sub-AT BLOQUEADOR P0-1: corrigir `local-ai/scripts/publicar_vba_import_v2.py` para preservar declaracoes module-level/`WithEvents` em `.code-only.txt`, depois rodar `--apply` e zerar o drift de `AAD-Cadastro_Servico.code-only.txt`.
+Sub-AT BLOQUEADOR P0-1: corrigido no commit `ad14aa3`. Achado novo Opus: `AAI-Credencia_Empresa.code-only.txt` tambem estava stale; sera ressincronizado dentro do AT-2 antes de qualquer import. `ProgressBar` permanece intocado nesta fase por tabu de form blindado.
 
 ## 🟣 ONDA 0113 META APLICADA (fast_track doc-only) — Operacionalizar a passagem de bastão (NOVO)
 
