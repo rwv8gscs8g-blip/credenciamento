@@ -1,0 +1,21 @@
+# Manifesto V3 DELTA ONDA38_2_3_AT3_FIX2_PREOS_INTEGRITY_ASSERT - V12.0.0206 Onda 38.2.3 AT-3 Fix2
+# Tema: ajustar DIAG_PREOS_INTEGRITY para comparar expectativa canonica com celula bruta PRE_OS.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_3_AT3_FIX2_PREOS_INTEGRITY_ASSERT", "<sha>+ONDA38.2.3-AT3.fix2-PREOS-INTEGRITY"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=0 | err=0.
+#   - VBE > Debug > Compile VBAProject passa limpo.
+#   - TV2_RunRodizioStrikesEndToEnd nao reprova DIAG_PREOS_INTEGRITY quando
+#     EMP_PRESEL cru for 2/3 e PRE_OS persistida estiver em 002/003 textual.
+#   - A sentinela continua falhando se PRE_OS.COL_PREOS_EMP_ID voltar a ser
+#     gravada como numero bruto 1/2/3.
+#
+# Artefatos:
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=228700
+#     sha256=1e9158f6ed8b2bbf46d453444ad8e6c1265f7ae05eb400b3dd0f3743dbc3c563
+#
+# GRUPO_DELTA_ONDA38_2_3_AT3_FIX2_PREOS_INTEGRITY_ASSERT
+M|001-modulo/ABG-Teste_V2_Roteiros.bas

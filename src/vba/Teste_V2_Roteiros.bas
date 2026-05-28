@@ -2834,11 +2834,86 @@ fim:
 End Function
 
 Private Function TV2_FormatEmpId(ByVal valor As String) As String
-    If Trim$(valor) = "" Then
-        TV2_FormatEmpId = ""
-    Else
-        TV2_FormatEmpId = Format$(CLng(Val(valor)), "000")
+    TV2_FormatEmpId = TV2_NormalizarIdMin3(valor)
+End Function
+
+Private Function TV2_NormalizarIdMin3(ByVal valor As Variant) As String
+    Dim s As String
+    Dim i As Long
+
+    On Error GoTo falha
+
+    If IsError(valor) Or IsNull(valor) Or IsEmpty(valor) Then
+        TV2_NormalizarIdMin3 = ""
+        Exit Function
     End If
+
+    s = Trim$(CStr(valor))
+    If s = "" Then
+        TV2_NormalizarIdMin3 = ""
+        Exit Function
+    End If
+
+    For i = 1 To Len(s)
+        If Mid$(s, i, 1) < "0" Or Mid$(s, i, 1) > "9" Then
+            TV2_NormalizarIdMin3 = s
+            Exit Function
+        End If
+    Next i
+
+    If Len(s) < 3 Then
+        TV2_NormalizarIdMin3 = Right$("000" & s, 3)
+    Else
+        TV2_NormalizarIdMin3 = s
+    End If
+    Exit Function
+
+falha:
+    TV2_NormalizarIdMin3 = ""
+End Function
+
+Private Function TV2_EmpIdPreOSBruto(ByVal preosId As String) As String
+    Dim ws As Worksheet
+    Dim linha As Long
+    Dim valor As Variant
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
+    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_PREOS)
+        If IdsIguais(ws.Cells(linha, COL_PREOS_ID).Value, preosId) Then
+            valor = ws.Cells(linha, COL_PREOS_EMP_ID).Value
+            If IsError(valor) Or IsNull(valor) Or IsEmpty(valor) Then
+                TV2_EmpIdPreOSBruto = ""
+            Else
+                TV2_EmpIdPreOSBruto = Trim$(CStr(valor))
+            End If
+            Exit Function
+        End If
+    Next linha
+    Exit Function
+
+falha:
+    TV2_EmpIdPreOSBruto = ""
+End Function
+
+Private Function TV2_EmpIdPreOSNumberFormat(ByVal preosId As String) As String
+    Dim ws As Worksheet
+    Dim linha As Long
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
+    For linha = LINHA_DADOS To UltimaLinhaAba(SHEET_PREOS)
+        If IdsIguais(ws.Cells(linha, COL_PREOS_ID).Value, preosId) Then
+            TV2_EmpIdPreOSNumberFormat = CStr(ws.Cells(linha, COL_PREOS_EMP_ID).NumberFormat)
+            Exit Function
+        End If
+    Next linha
+    Exit Function
+
+falha:
+    TV2_EmpIdPreOSNumberFormat = ""
 End Function
 
 Private Sub TV2_CS_PrepararEstadoAteCS04(ByRef preosIdA As String, ByRef osIdA As String)
@@ -3657,6 +3732,9 @@ Private Function TV2_E2E_AtenderProximaEmpresa(ByVal notaE1 As Integer, _
     Dim resAval As TResult
     Dim notas(1 To 10) As Integer
     Dim empPresel As String
+    Dim empPreselCanon As String
+    Dim empPreOSBruto As String
+    Dim empPreOSNumberFormat As String
     Dim pre As TPreOS
     Dim osReg As TOS
     Dim notaMin As Double
@@ -3673,9 +3751,10 @@ Private Function TV2_E2E_AtenderProximaEmpresa(ByVal notaE1 As Integer, _
     End If
 
     empPresel = sel.Empresa.EMP_ID
+    empPreselCanon = TV2_NormalizarIdMin3(empPresel)
     TV2_LogInfo "STRIKES_E2E", "DIAG_PRESEL", _
         "Pre-selecionada antes de EmitirPreOS (observador externo)", _
-        "EMP_PRESEL=" & empPresel
+        "EMP_PRESEL=" & empPresel & " EMP_PRESEL_CANON=" & empPreselCanon
 
     ' V12.0.0203 ONDA 11 / MD-2 (Fix A) - Select Case tolerante a padding.
     ' EMP_ID em EMPRESAS e armazenado como Long (1, 2, 3) porque Excel
@@ -3703,15 +3782,21 @@ Private Function TV2_E2E_AtenderProximaEmpresa(ByVal notaE1 As Integer, _
     End If
 
     pre = RepoPreOS_BuscarPorId(resPre.IdGerado)
+    empPreOSBruto = TV2_EmpIdPreOSBruto(resPre.IdGerado)
+    empPreOSNumberFormat = TV2_EmpIdPreOSNumberFormat(resPre.IdGerado)
     TV2_LogInfo "STRIKES_E2E", "DIAG_PREOS", _
         "PreOS persistida apos EmitirPreOS", _
-        "PREOS_ID=" & pre.PREOS_ID & " EMP_REAL=" & pre.EMP_ID & " STATUS=" & pre.STATUS_PREOS & " EMP_PRESEL=" & empPresel
+        "PREOS_ID=" & pre.PREOS_ID & " EMP_REAL=" & pre.EMP_ID & _
+        " EMP_BRUTO=" & empPreOSBruto & " NF=" & empPreOSNumberFormat & _
+        " STATUS=" & pre.STATUS_PREOS & " EMP_PRESEL=" & empPresel
     TV2_LogAssert "STRIKES_E2E", "DIAG_PREOS_INTEGRITY", "AUTO", _
         "EMP preselecionada deve coincidir com EMP gravada em PRE_OS", _
-        "EMP=" & empPresel, _
-        "EMP_PRESEL=" & empPresel & " EMP_PREOS=" & pre.EMP_ID, _
-        "Detecta dupla selecao divergente entre observador e EmitirPreOS interno", _
-        pre.EMP_ID = empPresel
+        "EMP=" & empPreselCanon, _
+        "EMP_PRESEL=" & empPresel & " EMP_PRESEL_CANON=" & empPreselCanon & _
+        " EMP_PREOS_BRUTO=" & empPreOSBruto & " EMP_PREOS_REPO=" & pre.EMP_ID & _
+        " NF=" & empPreOSNumberFormat, _
+        "Detecta dupla selecao divergente e coercao numerica na celula bruta de PRE_OS", _
+        (empPreOSBruto = empPreselCanon And pre.EMP_ID = empPreselCanon)
 
     resOs = EmitirOS(resPre.IdGerado, Date + 7, "E2E-" & empPresel)
     If Not resOs.sucesso Then

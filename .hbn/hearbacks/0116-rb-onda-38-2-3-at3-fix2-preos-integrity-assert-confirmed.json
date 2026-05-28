@@ -1,0 +1,9 @@
+{
+  "hearback_id": "0116-rb-onda-38-2-3-at3-fix2-preos-integrity-assert-confirmed",
+  "readback_id": "0116-rb-onda-38-2-3-at3-fix2-preos-integrity-assert",
+  "status": "confirmed",
+  "by": "mauricio-zanin",
+  "data": "2026-05-27",
+  "received_at": "2026-05-27T21:50:00-03:00",
+  "summary": "Compile do fix1 passou; TV2_RunRodizioStrikesEndToEnd gerou 37 falhas DIAG_PREOS_INTEGRITY. Codex autorizado a executar micro-fix de assercao preservando sentinela de valor bruto em PRE_OS."
+}
