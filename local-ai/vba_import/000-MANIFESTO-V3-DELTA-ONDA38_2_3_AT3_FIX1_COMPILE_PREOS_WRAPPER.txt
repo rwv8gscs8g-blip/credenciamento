@@ -1,0 +1,22 @@
+# Manifesto V3 DELTA ONDA38_2_3_AT3_FIX1_COMPILE_PREOS_WRAPPER - V12.0.0206 Onda 38.2.3 AT-3 Fix1
+# Tema: reparo de compile apos AT-3; substituir chamada qualificada fragil Repo_PreOS.BuscarPorId por wrapper publico.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_3_AT3_FIX1_COMPILE_PREOS_WRAPPER", "<sha>+ONDA38.2.3-AT3.fix1-COMPILE"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=0 | err=0.
+#   - VBE > Debug > Compile VBAProject passa limpo.
+#   - Depois do compile verde, rodar TV2_RunRodizioStrikesEndToEnd.
+#
+# Artefatos:
+#   M|001-modulo/AAL-Repo_PreOS.bas
+#     bytes=10076
+#     sha256=5934837e2e46600a96b245d02bf8524cbd6c025210472328ba4342bd99d0379e
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=226066
+#     sha256=01f447a957113948fbcbd97b4748711fe53a06267e78d76caa61099b6ba4904c
+#
+# GRUPO_DELTA_ONDA38_2_3_AT3_FIX1_COMPILE_PREOS_WRAPPER
+M|001-modulo/AAL-Repo_PreOS.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas

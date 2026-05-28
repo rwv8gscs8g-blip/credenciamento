@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0115-rb-onda-38-2-3-at3-fix1-compile-preos-wrapper-confirmed",
+  "readback_id": "0115-rb-onda-38-2-3-at3-fix1-compile-preos-wrapper",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-05-27T21:24:00-03:00",
+  "notes": "Mauricio reportou erro de compilacao bloqueante apos import AT-3, com destaque em Repo_PreOS.BuscarPorId dentro de Teste_V2_Roteiros. Compile gate P1 exige reparo antes de RVS. Escopo corretivo minimo: wrapper publico em Repo_PreOS e substituicao mecanica das chamadas no Teste_V2_Roteiros."
+}

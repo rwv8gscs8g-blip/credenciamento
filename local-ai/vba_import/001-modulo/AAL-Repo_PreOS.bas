@@ -97,6 +97,10 @@ fim:
     BuscarPorId = p
 End Function
 
+Public Function RepoPreOS_BuscarPorId(ByVal PREOS_ID As String) As TPreOS
+    RepoPreOS_BuscarPorId = BuscarPorId(PREOS_ID)
+End Function
+
 Private Sub AplicarFormatoTextoIdsPreOS(ByVal ws As Worksheet, ByVal linha As Long)
     ws.Cells(linha, COL_PREOS_ID).NumberFormat = "@"
     ws.Cells(linha, COL_PREOS_ENT_ID).NumberFormat = "@"

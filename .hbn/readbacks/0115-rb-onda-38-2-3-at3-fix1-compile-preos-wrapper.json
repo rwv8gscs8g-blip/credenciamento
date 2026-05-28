@@ -1,0 +1,133 @@
+{
+  "readback_id": "0115-rb-onda-38-2-3-at3-fix1-compile-preos-wrapper",
+  "data": "2026-05-27",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0114-rb-onda-38-2-3-at3-svc-preos",
+  "intent": {
+    "objective": "Corrigir bloqueador de compilacao apos import AT-3: substituir chamadas frageis Repo_PreOS.BuscarPorId em Teste_V2_Roteiros por wrapper publico estavel RepoPreOS_BuscarPorId, mantendo o fix de IDs textuais em PRE_OS.",
+    "non_goals": [
+      "Nao alterar logica de negocio de Pre-OS alem do wrapper publico em Repo_PreOS",
+      "Nao alterar assercoes, cenarios ou contadores do RVS",
+      "Nao tocar Teste_V2_Engine.bas nem Teste_Bateria_Oficial.bas",
+      "Nao ampliar largura global de IDs nem alterar Util_Planilha/Funcoes",
+      "Nao fazer backfill de dados legados"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Repo_PreOS.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAL-Repo_PreOS.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_AT3_FIX1_COMPILE_PREOS_WRAPPER.txt",
+      "auditoria/03_ondas/onda_38_2_3/**",
+      ".hbn/readbacks/0115-rb-onda-38-2-3-at3-fix1-compile-preos-wrapper.json",
+      ".hbn/hearbacks/0115-rb-onda-38-2-3-at3-fix1-compile-preos-wrapper-confirmed.json",
+      ".hbn/hearbacks/0115-rb-onda-38-2-3-at3-fix1-compile-preos-wrapper-confirmed.md",
+      ".hbn/bypasses/20260527-*-onda-38-2-3-at3-fix1*.md",
+      ".hbn/relay/INDEX.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Funcoes.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Repo_OS.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_Bateria_Oficial.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ProgressBar.frm",
+      "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABA-Teste_Bateria_Oficial.bas",
+      "local-ai/vba_import/000-BUILD-IMPORTAR-SEMPRE.txt",
+      "local-ai/scripts/publicar_vba_import.sh"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "Compile gate P1 e bloqueante; AT-3 nao pode seguir para RVS enquanto o VBE aponta Metodo ou membro de dados nao encontrado",
+    "Repo_OS ja usa padrao de wrapper publico RepoOS_BuscarPorId; Repo_PreOS deve ganhar wrapper equivalente",
+    "As chamadas de teste continuam buscando a mesma Pre-OS por ID e retornando TPreOS",
+    "Nao ha alteracao de contadores, cenarios ou expectativa dos testes",
+    "Sem push para origin"
+  ],
+  "decisions_preconfirmed": [
+    "Mauricio importou AT-3 com sucesso: M=2 | F=0 | err=0 | skip=0.",
+    "Mauricio executou Compile e reportou erro de compilacao no VBE: Metodo ou membro de dados nao encontrado, com destaque em Repo_PreOS.BuscarPorId no Teste_V2_Roteiros.",
+    "Compile gate P1 bloqueia progresso para RVS; e necessario micro-fix antes de qualquer teste.",
+    "A correcao deve ser minima e padronizada: wrapper publico em Repo_PreOS e substituicao das chamadas qualificadas no modulo de roteiros."
+  ],
+  "gates": [
+    "GATE-A3-FIX1: pacote compila no VBE apos import delta com Repo_PreOS + Teste_V2_Roteiros",
+    "Depois do compile verde, Mauricio roda TV2_RunRodizioStrikesEndToEnd"
+  ],
+  "guards_runner": {
+    "command": "bash scripts/hbn-guards/hbn-guards-runner.sh",
+    "status_before_readback": "passed",
+    "status_before_readback_observed_at": "2026-05-27T21:24:00-03:00",
+    "note": "Readback de reparo de compile aberto apos bloqueador real no VBE reportado por Mauricio."
+  },
+  "risks": [
+    {
+      "risk": "Editar Teste_V2_Roteiros pode alterar comportamento do RVS se a substituicao nao for mecanica.",
+      "mitigation": "Substituir somente Repo_PreOS.BuscarPorId por RepoPreOS_BuscarPorId nas 4 ocorrencias existentes.",
+      "severity": "high"
+    },
+    {
+      "risk": "Wrapper publico pode duplicar logica e divergir de BuscarPorId.",
+      "mitigation": "Implementar wrapper como chamada direta a BuscarPorId sem logica propria.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Importar somente Repo_PreOS sem Teste_V2_Roteiros manteria o compile quebrado no workbook.",
+      "mitigation": "Manifesto fix1 deve importar os dois modulos: AAL-Repo_PreOS.bas e ABG-Teste_V2_Roteiros.bas.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Diff do teste limitado a 4 substituicoes mecanicas",
+        "evidence_kind": "git_diff_review",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/"
+      },
+      {
+        "gate": "Espelhos importaveis sincronizados por publicador V2 --only",
+        "evidence_kind": "publish_check",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/"
+      },
+      {
+        "gate": "Compile VBE passa apos import fix1",
+        "evidence_kind": "manual_excel_compile",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se compile continuar falhando no mesmo ponto, confirmar no VBE se Repo_PreOS contem Public Function RepoPreOS_BuscarPorId.",
+      "Se novo erro surgir fora de Repo_PreOS/Teste_V2_Roteiros, parar e abrir novo diagnostico antes de ampliar escopo.",
+      "Anchor logico de rollback: f4e6736."
+    ],
+    "anchor_to_restore": "f4e6736"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "confirmed",
+      "at": "2026-05-27T21:24:00-03:00",
+      "by": "mauricio-zanin",
+      "note": "Mauricio reportou bloqueador de compile imediatamente apos import AT-3; Codex abriu micro-readback corretivo para destravar GATE-A3."
+    }
+  ],
+  "created_at": "2026-05-27T21:24:00-03:00"
+}
