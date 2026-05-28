@@ -1,0 +1,185 @@
+{
+  "readback_id": "0114-rb-onda-38-2-3-at3-svc-preos",
+  "data": "2026-05-27",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0114-rb-onda-38-2-3-at2-diagnostico-fnew5",
+  "intent": {
+    "objective": "Executar AT-3 da Onda 38.2.3: corrigir F-NEW6 em Pre-OS preservando IDs textuais na escrita de Svc_PreOS.EmitirPreOS, blindando o gemeo dormente Repo_PreOS.Inserir e adicionando normalizador type-aware em Repo_PreOS.BuscarPorId sem Pad3 direto sobre Variant.",
+    "non_goals": [
+      "Nao fazer backfill de linhas PRE_OS legadas ja gravadas como 1, pois Mauricio confirmou que os dados atuais do workbook sao base de testes e podem ser descartados",
+      "Nao aumentar globalmente a largura minima de IDs de 3 para 4 ou mais digitos neste AT-3",
+      "Nao alterar ProximoId, Funcoes.Pad3, Util_Planilha ou helpers globais da Onda 38.2.4 neste readback",
+      "Nao tocar Repo_OS.bas, Svc_OS.bas, Svc_Rodizio.bas ou Teste_V2_Roteiros.bas neste readback",
+      "Nao corrigir CREDENCIADOS.COL_CRED_ATIV_ID neste AT-3; esse achado fica para a Onda 38.2.4/38.2.5",
+      "Nao mexer em ProgressBar ou qualquer form blindado",
+      "Nao executar importacao no Excel nem rodar RVS diretamente; Mauricio opera workbook, compile gate e RVS"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Repo_PreOS.bas",
+      "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+      "local-ai/vba_import/001-modulo/AAL-Repo_PreOS.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_AT3_PREOS_IDS.txt",
+      "auditoria/03_ondas/onda_38_2_3/**",
+      ".hbn/proposals/0017-opus-auditoria-gate-a2-onda-38-2-3.md",
+      ".hbn/proposals/0018-antigravity-auditoria-gate-a2-onda-38-2-3.md",
+      ".hbn/proposals/0019-opus-reauditoria-gate-a2-onda-38-2-3.md",
+      ".hbn/protocol-evolutions/20260527-2104-l45-auditoria-cross-output-lock.md",
+      ".hbn/readbacks/0114-rb-onda-38-2-3-at3-svc-preos.json",
+      ".hbn/hearbacks/0114-rb-onda-38-2-3-at3-svc-preos-confirmed.json",
+      ".hbn/hearbacks/0114-rb-onda-38-2-3-at3-svc-preos-confirmed.md",
+      ".hbn/bypasses/20260527-*-onda-38-2-3-at3-svc-preos*.md",
+      ".hbn/relay/INDEX.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Funcoes.bas",
+      "src/vba/Repo_OS.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ProgressBar.frm",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAB-ProgressBar.bas",
+      "local-ai/vba_import/002-formularios/AAB-ProgressBar.frm",
+      "local-ai/vba_import/002-formularios/AAB-ProgressBar.code-only.txt",
+      "local-ai/vba_import/002-formularios/ProgressBar.frx",
+      "local-ai/vba_import/000-BUILD-IMPORTAR-SEMPRE.txt",
+      "local-ai/scripts/publicar_vba_import.sh"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "GATE-A2 foi aprovado por Opus e Antigravity sem BLOQUEADOR; 0019 adiciona FORTES que condicionam o recorte AT-3",
+    "A excecao alfa em Svc_PreOS permanece minima: somente NumberFormat=\"@\" antes das gravacoes de IDs textuais na linha nova de PRE_OS",
+    "Tres digitos continuam sendo largura minima, nao maxima: valores >=1000 devem permanecer '1000', nunca truncar para '000'",
+    "Normalizacao deve ser type-aware e nao pode chamar Pad3 diretamente sobre Variant",
+    "Strings nao numericas como 'X' permanecem textuais; notacao cientifica/decimal nao pode ser aceita como ID numerico por IsNumeric",
+    "Dados legados do workbook atual nao serao migrados neste AT-3 por decisao operacional de Mauricio",
+    "Sem push para origin e sem sufixo FREEZE em build label"
+  ],
+  "decisions_preconfirmed": [
+    "Mauricio confirmou em chat: 'confirmado -- abrir readback AT-3 incorporando os FORTES do 0019 como restricoes de escopo'.",
+    "Mauricio confirmou que todos os dados da planilha atual podem ser descartados por serem base de testes; portanto nao ha necessidade de backfill de PRE_OS legado neste AT-3.",
+    "GATE-A2 aprovado: 0017 Opus, 0018 Antigravity e 0019 Opus reauditoria convergem que F-NEW5 nao reproduziu e que a falha residual e F-NEW6 em PRE_OS/Repo_PreOS.",
+    "FORTE-1 do 0019 incorporado: o fix primario deve ser write-side em Svc_PreOS.EmitirPreOS; o normalizador de leitura e defesa em profundidade.",
+    "FORTE-2 do 0019 incorporado: Repo_PreOS.Inserir, embora dormente, deve ser blindado no mesmo passe para nao reintroduzir F-NEW6.",
+    "FORTE-3 do 0019 resolvido por decisao operacional: nao fazer backfill agora, pois a base atual e descartavel; dados novos devem nascer corretos.",
+    "Decisao tecnica sobre IDs >999: nao ampliar a largura minima global agora; adotar contrato de largura minima 3 nao truncante no normalizador local AT-3, preservando '1000' como '1000'.",
+    "P0-2 continua vigente: proibido Pad3 direto sobre Variant; usar normalizador local que testa somente digitos puros em strings.",
+    "Melhoria de protocolo L45 sera registrada como proposta: prompts de auditoria cruzada precisam de caminho unico por auditor e politica explicita de colisao para nao sobrescrever outputs."
+  ],
+  "gates": [
+    "GATE-A3: implementar Svc_PreOS + Repo_PreOS, publicar espelho importavel, documentar excecao alfa em bypass e parar para import/compile/RVS por Mauricio",
+    "GATE-A3 auditoria cruzada: apos commit e evidencias de Mauricio, Opus + Antigravity validam escopo minimo, normalizador type-aware e cobertura de bordas X/Null/Error/>=1000"
+  ],
+  "guards_runner": {
+    "command": "bash scripts/hbn-guards/hbn-guards-runner.sh",
+    "status_before_readback": "passed",
+    "status_before_readback_observed_at": "2026-05-27T20:30:00-03:00",
+    "note": "AT-3 nasce confirmado porque Mauricio autorizou explicitamente em chat a abertura do readback AT-3 com os FORTES do 0019."
+  },
+  "bootstrap_observed_state": {
+    "pwd": "/Users/macbookpro/Projetos/Credenciamento",
+    "git_toplevel": "/Users/macbookpro/Projetos/Credenciamento",
+    "branch": "codex/v12-0-0206-planejamento",
+    "head": "db54ffc",
+    "working_tree_summary": [
+      "M local-ai/vba_import/001-modulo/AAX-App_Release.bas herdado e mantido unstaged",
+      "untracked auditorias GATE-A2 0017/0018/0019 recebidas de Mauricio",
+      "untracked artefatos herdados 115-119/0009/protocol-evolutions/CSVs preservados",
+      "untracked CSV de falhas RVS na raiz preservado como artefato recebido; copia canonica ja commitada em auditoria/evidencias/V12.0.0206/csv/"
+    ]
+  },
+  "risks": [
+    {
+      "risk": "Fix read-side sozinho poderia deixar leitores crus exibindo EMP_ID como 1 na UI e em relatorios.",
+      "mitigation": "Priorizar NumberFormat=\"@\" antes da gravacao em Svc_PreOS.EmitirPreOS e blindar tambem Repo_PreOS.Inserir.",
+      "severity": "high"
+    },
+    {
+      "risk": "Normalizador local pode aceitar decimal, notacao cientifica ou Error/Null de forma insegura se usar IsNumeric.",
+      "mitigation": "Implementar normalizacao type-aware: strings so sao canonizadas se todos os caracteres forem 0-9; Error/Null/Empty retornam vazio; >=1000 nao trunca.",
+      "severity": "high"
+    },
+    {
+      "risk": "Tratar a pergunta de IDs >999 ampliando largura global agora causaria blast radius em repos, forms, relatorios e testes.",
+      "mitigation": "Nao mudar largura global neste AT-3; tratar 3 digitos como largura minima e registrar a decisao para helpers globais da Onda 38.2.4.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Repo_PreOS.Inserir nao tem chamadores hoje, mas pode reintroduzir F-NEW6 se religado no futuro.",
+      "mitigation": "Blindar o write path dormente no mesmo patch, sem refatorar assinatura nem fluxo.",
+      "severity": "medium"
+    },
+    {
+      "risk": "BLOQ-1 GATE-A1 sobre code-only de Credencia_Empresa pode ser reaberto antes do import se a paridade nao for confirmada.",
+      "mitigation": "Manter BLOQ-1 como check de GATE-A4; AT-3 nao importa Credencia_Empresa, mas o pacote final deve confirmar paridade antes de import L41.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Schema do readback AT-3 valido",
+        "evidence_kind": "schema_validation",
+        "evidence_required_in": ".hbn/readbacks/0114-rb-onda-38-2-3-at3-svc-preos.json"
+      },
+      {
+        "gate": "Diff limitado a Svc_PreOS, Repo_PreOS, espelhos importaveis e documentacao AT-3",
+        "evidence_kind": "git_diff_review",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/"
+      },
+      {
+        "gate": "Normalizador cobre X, Null, Error, Empty, 0, 001, 1000, 005001, espacos e notacao cientifica como texto nao numerico",
+        "evidence_kind": "static_review",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/"
+      },
+      {
+        "gate": "Espelhos AAQ-Svc_PreOS.bas e AAL-Repo_PreOS.bas sincronizados via publicador V2",
+        "evidence_kind": "publish_check",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/"
+      },
+      {
+        "gate": "Compile VBE apos import AT-3",
+        "evidence_kind": "manual_excel_compile",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/"
+      },
+      {
+        "gate": "TV2_RunRodizioStrikesEndToEnd deixa de falhar em DIAG_PREOS_INTEGRITY",
+        "evidence_kind": "rvs_csv",
+        "evidence_required_in": "auditoria/evidencias/V12.0.0206/csv/"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o normalizador exigir alteracao global em Util_Planilha/Funcoes, interromper e pedir novo readback; nao ampliar escopo silenciosamente.",
+      "Se o publicador V2 alterar modulos fora de AAQ-Svc_PreOS.bas e AAL-Repo_PreOS.bas, restaurar esses artefatos e registrar BLOQUEADOR.",
+      "Se compile VBE falhar apos import AT-3, Mauricio retorna mensagem/erro; Codex corrige sob o mesmo readback se o path estiver no scope.",
+      "Se RVS ainda falhar em DIAG_PREOS_INTEGRITY, analisar CSV antes de qualquer nova edicao e decidir se o erro migrou para Svc_OS/Repo_OS fora de escopo.",
+      "Anchor logico de rollback: commit db54ffc, que fecha AT-2 diagnostico antes de qualquer patch Pre-OS."
+    ],
+    "anchor_to_restore": "db54ffc"
+  },
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "confirmed",
+      "at": "2026-05-27T21:04:03-03:00",
+      "by": "mauricio-zanin",
+      "note": "Mauricio confirmou em chat a abertura do readback AT-3 com FORTES do 0019; tambem decidiu que dados atuais sao descartaveis e nao exigem backfill legado."
+    }
+  ],
+  "created_at": "2026-05-27T21:04:03-03:00"
+}

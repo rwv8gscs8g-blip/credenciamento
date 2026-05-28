@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0114-rb-onda-38-2-3-at3-svc-preos-confirmed",
+  "readback_id": "0114-rb-onda-38-2-3-at3-svc-preos",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-05-27T21:04:03-03:00",
+  "notes": "Mauricio confirmou em chat: 'confirmado -- abrir readback AT-3 incorporando os FORTES do 0019 como restricoes de escopo'. Tambem confirmou que os dados atuais do workbook sao descartaveis, entao AT-3 nao deve fazer backfill de PRE_OS legado. Decisao tecnica proposta pelo Codex: tratar 3 digitos como largura minima, nao maxima; preservar IDs >=1000 sem truncamento e nao ampliar globalmente a largura de IDs neste AT-3."
+}
