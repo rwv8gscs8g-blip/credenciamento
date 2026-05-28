@@ -1,0 +1,23 @@
+# Manifesto V3 DELTA ONDA38_2_3_AT3_PREOS_IDS - V12.0.0206 Onda 38.2.3 AT-3
+# Tema: fix F-NEW6 em PRE_OS/Repo_PreOS preservando IDs textuais.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_3_AT3_PREOS_IDS", "<sha>+ONDA38.2.3-AT3-PREOS-IDS"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=0 | err=0.
+#   - VBE > Debug > Compile VBAProject passa limpo.
+#   - TV2_RunRodizioStrikesEndToEnd nao reprova mais em DIAG_PREOS_INTEGRITY
+#     por EMP_PRESEL=001 vs EMP_PREOS=1.
+#
+# Artefatos:
+#   M|001-modulo/AAL-Repo_PreOS.bas
+#     bytes=9934
+#     sha256=784760f78825dfc06038412e0341c90eba2e3f55e1dcf3ca7e4044ad662daa4e
+#   M|001-modulo/AAQ-Svc_PreOS.bas
+#     bytes=17862
+#     sha256=19b86ad453e5d87af7e3301bc5e99e1d3135f5396f9fe47d8d593d603285a8fb
+#
+# GRUPO_DELTA_ONDA38_2_3_AT3_PREOS_IDS
+M|001-modulo/AAL-Repo_PreOS.bas
+M|001-modulo/AAQ-Svc_PreOS.bas
