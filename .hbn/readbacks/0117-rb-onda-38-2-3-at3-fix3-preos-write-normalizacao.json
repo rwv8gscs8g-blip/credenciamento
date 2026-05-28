@@ -1,0 +1,112 @@
+{
+  "readback_id": "0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao",
+  "data": "2026-05-27",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0116-rb-onda-38-2-3-at3-fix2-preos-integrity-assert",
+  "intent": {
+    "objective": "Corrigir a escrita de IDs textuais em Svc_PreOS.EmitirPreOS: alem de aplicar NumberFormat texto, gravar EMP_ID/ENT_ID/ATIV_ID/SERV_ID ja normalizados com largura minima de 3 digitos, sem truncar IDs maiores.",
+    "non_goals": [
+      "Nao alterar regra de rodizio, fila, avaliacao, OS ou contadores de strike",
+      "Nao alterar Repo_PreOS nem Teste_V2_Roteiros neste micro-fix",
+      "Nao tocar Teste_V2_Engine.bas nem Teste_Bateria_Oficial.bas",
+      "Nao fazer backfill de dados legados",
+      "Nao criar helper compartilhado antes do GATE-B1 da Onda 38.2.4"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Svc_PreOS.bas",
+      "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_AT3_FIX3_PREOS_WRITE_NORMALIZACAO.txt",
+      "auditoria/03_ondas/onda_38_2_3/**",
+      "auditoria/evidencias/V12.0.0206/csv/TesteV2_STRIKES_E2E_Falhas_TV2_20260527_220557.csv",
+      ".hbn/readbacks/0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao.json",
+      ".hbn/hearbacks/0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao-confirmed.json",
+      ".hbn/hearbacks/0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao-confirmed.md",
+      ".hbn/bypasses/20260527-*-onda-38-2-3-at3-fix3*.md",
+      ".hbn/relay/INDEX.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Funcoes.bas",
+      "src/vba/Repo_PreOS.bas",
+      "src/vba/Repo_OS.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_Bateria_Oficial.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ProgressBar.frm",
+      "local-ai/vba_import/001-modulo/AAL-Repo_PreOS.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABA-Teste_Bateria_Oficial.bas",
+      "local-ai/vba_import/000-BUILD-IMPORTAR-SEMPRE.txt",
+      "local-ai/scripts/publicar_vba_import.sh"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "Tres digitos sao largura minima, nao limite maximo; 1000 permanece 1000",
+    "Somente strings compostas por digitos recebem zero-padding; X e demais tokens textuais sao preservados",
+    "A sentinela DIAG_PREOS_INTEGRITY deve passar apenas quando a celula bruta de PRE_OS guarda 001/002/003",
+    "Sem mudanca de fluxo de negocio; apenas normalizacao de valor escrito apos NumberFormat texto",
+    "Sem push para origin"
+  ],
+  "decisions_preconfirmed": [
+    "Mauricio importou AT-3 Fix2, compilou limpo e anexou CSV com 37 falhas DIAG_PREOS_INTEGRITY.",
+    "O CSV mostra NF=@ e EMP_PREOS_BRUTO=2/3, enquanto Repo_PreOS devolve 002/003 por normalizacao de leitura.",
+    "O problema residual esta na escrita de Svc_PreOS.EmitirPreOS, que grava rodizio.Empresa.EMP_ID cru apesar do formato texto.",
+    "A base atual e descartavel; nao ha necessidade de backfill de PRE_OS legado."
+  ],
+  "gates": [
+    "GATE-A3-FIX3: importar Svc_PreOS, compilar e rerodar TV2_RunRodizioStrikesEndToEnd",
+    "Se STRIKES_E2E passar, consolidar AT-3 para auditoria cruzada GATE-A3"
+  ],
+  "guards_runner": {
+    "command": "bash scripts/hbn-guards/hbn-guards-runner.sh",
+    "status_before_readback": "not_run_for_microfix",
+    "note": "Micro-fix aberto a partir de falha empirica reportada no workbook; guards serao executados antes do commit."
+  },
+  "risks": [
+    {
+      "id": "R1",
+      "description": "Normalizar valor em Svc_PreOS pode alterar mensagens/audit log de EMP_ID cru para canonico.",
+      "mitigation": "Usar variaveis locais normalizadas apenas para campos persistidos e mensagens relacionadas a Pre-OS emitida."
+    },
+    {
+      "id": "R2",
+      "description": "Duplicar helper de normalizacao antes da Onda 38.2.4 cria debito temporario.",
+      "mitigation": "Manter helper privado e pequeno; a convergencia para Util_Planilha fica no GATE-B1/B2."
+    }
+  ],
+  "validation_plan": [
+    "Preservar CSV de falhas em auditoria/evidencias/V12.0.0206/csv/",
+    "Publicar delta V3 com apenas AAQ-Svc_PreOS.bas",
+    "Mauricio importa, executa Debug > Compile VBAProject e roda TV2_RunRodizioStrikesEndToEnd",
+    "Resultado esperado: DIAG_PREOS_INTEGRITY registra EMP_PREOS_BRUTO=001/002/003 e nao falha"
+  ],
+  "rollback_plan": [
+    "Nao salvar workbook se compile falhar apos import",
+    "Restaurar backup V3 gerado pelo Importador",
+    "Reverter este micro-fix para o anchor e5b3582 se necessario"
+  ],
+  "human_status": "confirmed",
+  "human_status_history": [
+    {
+      "status": "confirmed",
+      "at": "2026-05-27T22:19:09-03:00",
+      "by": "mauricio-zanin",
+      "note": "Mauricio reportou compile verde e 37 falhas restantes apos fix2; Codex abriu micro-fix de escrita em Svc_PreOS."
+    }
+  ],
+  "created_at": "2026-05-27T22:19:09-03:00"
+}

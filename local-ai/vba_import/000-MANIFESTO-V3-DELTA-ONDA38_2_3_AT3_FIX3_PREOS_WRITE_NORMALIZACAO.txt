@@ -1,0 +1,19 @@
+# Manifesto V3 DELTA ONDA38_2_3_AT3_FIX3_PREOS_WRITE_NORMALIZACAO - V12.0.0206 Onda 38.2.3 AT-3 Fix3
+# Tema: normalizar IDs antes da gravacao textual em Svc_PreOS.EmitirPreOS.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_3_AT3_FIX3_PREOS_WRITE_NORMALIZACAO", "<sha>+ONDA38.2.3-AT3.fix3-PREOS-WRITE"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=0 | err=0.
+#   - VBE > Debug > Compile VBAProject passa limpo.
+#   - TV2_RunRodizioStrikesEndToEnd nao reprova DIAG_PREOS_INTEGRITY por
+#     EMP_PREOS_BRUTO=2/3; a celula bruta deve guardar 001/002/003.
+#
+# Artefatos:
+#   M|001-modulo/AAQ-Svc_PreOS.bas
+#     bytes=19273
+#     sha256=887e8556d151aac0ccf98baca9bf5b01fc05e71d0dfbe58e264306347c65f9ea
+#
+# GRUPO_DELTA_ONDA38_2_3_AT3_FIX3_PREOS_WRITE_NORMALIZACAO
+M|001-modulo/AAQ-Svc_PreOS.bas

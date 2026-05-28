@@ -19,6 +19,51 @@ Private Const STATUS_RECUSADA   As String = "RECUSADA"
 Private Const STATUS_EXPIRADA   As String = "EXPIRADA"
 Private Const STATUS_CONVERTIDA As String = "CONVERTIDA_OS"
 
+Private Function NormalizarIdTextualPreOS(ByVal valor As Variant) As String
+    Dim s As String
+    Dim i As Long
+
+    On Error GoTo falha
+
+    If IsError(valor) Then
+        NormalizarIdTextualPreOS = ""
+        Exit Function
+    End If
+
+    If IsNull(valor) Then
+        NormalizarIdTextualPreOS = ""
+        Exit Function
+    End If
+
+    If IsEmpty(valor) Then
+        NormalizarIdTextualPreOS = ""
+        Exit Function
+    End If
+
+    s = Trim$(CStr(valor))
+    If s = "" Then
+        NormalizarIdTextualPreOS = ""
+        Exit Function
+    End If
+
+    For i = 1 To Len(s)
+        If Mid$(s, i, 1) < "0" Or Mid$(s, i, 1) > "9" Then
+            NormalizarIdTextualPreOS = s
+            Exit Function
+        End If
+    Next i
+
+    If Len(s) < 3 Then
+        NormalizarIdTextualPreOS = Right$("000" & s, 3)
+    Else
+        NormalizarIdTextualPreOS = s
+    End If
+    Exit Function
+
+falha:
+    NormalizarIdTextualPreOS = ""
+End Function
+
 ' ============================================================
 ' SEÇÃO 0: PREPARAÇÃO DE EMISSÃO
 ' ============================================================
@@ -123,6 +168,11 @@ Public Function EmitirPreOS( _
     Dim dtLimite As Date
     Dim estavaProtegida As Boolean
     Dim senhaProtecao As String
+    Dim entIdTexto As String
+    Dim ativIdTexto As String
+    Dim servIdTexto As String
+    Dim empIdTexto As String
+    Dim codServTexto As String
 
     On Error GoTo erro
 
@@ -177,6 +227,11 @@ Public Function EmitirPreOS( _
     cfg = GetConfig()
     dtLimite = DateAdd("d", cfg.DIAS_DECISAO, Date)
     valorEst = valorUnit * QT_ESTIMADA
+    entIdTexto = NormalizarIdTextualPreOS(ENT_ID)
+    ativIdTexto = NormalizarIdTextualPreOS(ATIV_ID)
+    servIdTexto = NormalizarIdTextualPreOS(SERV_ID)
+    empIdTexto = NormalizarIdTextualPreOS(rodizio.Empresa.EMP_ID)
+    codServTexto = ativIdTexto & "|" & servIdTexto
 
     ' 5. Gravar linha PRE_OS (critérios 4-8)
     Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
@@ -197,13 +252,13 @@ Public Function EmitirPreOS( _
     ws.Cells(linha, COL_PREOS_ATIV_ID).NumberFormat = "@"
     ws.Cells(linha, COL_PREOS_OS_ID).NumberFormat = "@"
 
-    ws.Cells(linha, COL_PREOS_ID).Value = preosId
-    ws.Cells(linha, COL_PREOS_ENT_ID).Value = ENT_ID
-    ws.Cells(linha, COL_PREOS_COD_SERV).Value = ATIV_ID & "|" & SERV_ID
-    ws.Cells(linha, COL_PREOS_EMP_ID).Value = rodizio.Empresa.EMP_ID
+    ws.Cells(linha, COL_PREOS_ID).Value = NormalizarIdTextualPreOS(preosId)
+    ws.Cells(linha, COL_PREOS_ENT_ID).Value = entIdTexto
+    ws.Cells(linha, COL_PREOS_COD_SERV).Value = codServTexto
+    ws.Cells(linha, COL_PREOS_EMP_ID).Value = empIdTexto
     ws.Cells(linha, COL_PREOS_DT_EMISSAO).Value = Now
     ws.Cells(linha, COL_PREOS_DT_LIMITE).Value = dtLimite
-    ws.Cells(linha, COL_PREOS_ATIV_ID).Value = ATIV_ID
+    ws.Cells(linha, COL_PREOS_ATIV_ID).Value = ativIdTexto
     ws.Cells(linha, COL_PREOS_DT_EM_OS).Value = ""
     ws.Cells(linha, COL_PREOS_QT_EST).Value = QT_ESTIMADA
     ws.Cells(linha, COL_PREOS_VL_EST).Value = valorEst
@@ -216,15 +271,15 @@ Public Function EmitirPreOS( _
     RegistrarEvento _
         EVT_PREOS_EMITIDA, ENT_PREOS, preosId, _
         "", _
-        "STATUS=AGUARDANDO_ACEITE; EMP_ID=" & rodizio.Empresa.EMP_ID & _
-        "; ATIV_ID=" & ATIV_ID & "; ENT_ID=" & ENT_ID & _
+        "STATUS=AGUARDANDO_ACEITE; EMP_ID=" & empIdTexto & _
+        "; ATIV_ID=" & ativIdTexto & "; ENT_ID=" & entIdTexto & _
         "; QT=" & CStr(QT_ESTIMADA) & "; VL_EST=" & CStr(valorEst) & _
         "; DT_LIMITE=" & Format$(dtLimite, "DD/MM/YYYY"), _
         "Svc_PreOS"
 
     res.sucesso = True
     res.mensagem = "Pre-OS emitida. PREOS_ID=" & preosId & _
-                   "; EMP_ID=" & rodizio.Empresa.EMP_ID & _
+                   "; EMP_ID=" & empIdTexto & _
                    "; DT_LIMITE=" & Format$(dtLimite, "DD/MM/YYYY")
     res.IdGerado = preosId   ' critério 10
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao

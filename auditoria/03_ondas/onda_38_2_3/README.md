@@ -22,7 +22,8 @@ GATE-A1 e GATE-A2 aprovados por auditoria cruzada. AT-3 em validacao iterativa p
 | A2 | Instrumentar `Credencia_Empresa` com `ATIVAR_DIAG_FNEW5`, ressincronizar `AAI-Credencia_Empresa.code-only.txt` e interpretar CSV real | aprovado |
 | A3 | Preservar IDs textuais na escrita/leitura de `PRE_OS` em `Svc_PreOS` e `Repo_PreOS` | importado; compile bloqueado no primeiro delta |
 | A3 Fix1 | Wrapper público `RepoPreOS_BuscarPorId` para destravar compile em `Teste_V2_Roteiros` | importado; compile aprovado |
-| A3 Fix2 | Ajustar `DIAG_PREOS_INTEGRITY` para comparar expectativa canonica contra celula bruta de `PRE_OS` | pacote pronto para import |
+| A3 Fix2 | Ajustar `DIAG_PREOS_INTEGRITY` para comparar expectativa canonica contra celula bruta de `PRE_OS` | importado; compile aprovado; revelou `EMP_PREOS_BRUTO=2/3` |
+| A3 Fix3 | Normalizar IDs antes da gravacao textual em `Svc_PreOS.EmitirPreOS` | pacote pronto para import |
 
 ## Evidências AT-1
 
@@ -65,6 +66,14 @@ GATE-A1 e GATE-A2 aprovados por auditoria cruzada. AT-3 em validacao iterativa p
 - Técnico: `auditoria/03_ondas/onda_38_2_3/AT3_FIX2_PREOS_INTEGRITY_ASSERT.md`
 - CSV de falha preservado: `auditoria/evidencias/V12.0.0206/csv/TesteV2_STRIKES_E2E_Falhas_TV2_20260527_213936.csv`
 
+## Evidências AT-3 Fix3
+
+- Readback: `.hbn/readbacks/0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao.json`
+- Hearback: `.hbn/hearbacks/0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao-confirmed.json`
+- Manifesto delta: `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_AT3_FIX3_PREOS_WRITE_NORMALIZACAO.txt`
+- Técnico: `auditoria/03_ondas/onda_38_2_3/AT3_FIX3_PREOS_WRITE_NORMALIZACAO.md`
+- CSV de falha preservado: `auditoria/evidencias/V12.0.0206/csv/TesteV2_STRIKES_E2E_Falhas_TV2_20260527_220557.csv`
+
 ## Próxima ação
 
-Mauricio importa o pacote AT-3 Fix2 pelo V3, compila o projeto no VBE e roda `TV2_RunRodizioStrikesEndToEnd`. Se passar, Codex consolida o readback parcial AT-3 para auditoria cruzada GATE-A3.
+Mauricio importa o pacote AT-3 Fix3 pelo V3, compila o projeto no VBE e roda `TV2_RunRodizioStrikesEndToEnd`. Se passar, Codex consolida o readback parcial AT-3 para auditoria cruzada GATE-A3.

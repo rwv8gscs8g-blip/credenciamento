@@ -1,0 +1,9 @@
+{
+  "hearback_id": "0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao-confirmed",
+  "readback_id": "0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao",
+  "status": "confirmed",
+  "by": "mauricio-zanin",
+  "data": "2026-05-27",
+  "received_at": "2026-05-27T22:19:09-03:00",
+  "summary": "Compile do fix2 passou; TV2_RunRodizioStrikesEndToEnd mostrou NF=@ mas EMP_PREOS_BRUTO=2/3. Codex autorizado a executar micro-fix de escrita em Svc_PreOS."
+}
