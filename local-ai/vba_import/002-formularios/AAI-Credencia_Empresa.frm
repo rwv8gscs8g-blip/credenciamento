@@ -15,7 +15,7 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Const STATUS_CRED_ATIVO As String = "ATIVO"
-Private Const ATIVAR_DIAG_FNEW5 As Boolean = True
+Private Const ATIVAR_DIAG_FNEW5 As Boolean = False
 
 Private mEmpIdSelecionado As String
 Private mCnpjSelecionado As String

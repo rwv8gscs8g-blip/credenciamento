@@ -1,0 +1,57 @@
+{
+  "result_id": "0117-exec-onda-38-2-3-at3-fix3-preos-write-normalizacao",
+  "execution_id": "0117-exec-onda-38-2-3-at3-fix3-preos-write-normalizacao",
+  "readback_id": "0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao",
+  "data": "2026-05-27",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "executed",
+  "outcome": "gate_a3_approved",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "AT-3 Fix3 normalizou ENT_ID, ATIV_ID, SERV_ID e EMP_ID antes da gravacao textual em Svc_PreOS.EmitirPreOS. Mauricio importou o delta V3, compilou limpo e executou TV2_RunRodizioStrikesEndToEnd sem falhas.",
+  "summary": "F-NEW6 eliminado na origem. A celula bruta de PRE_OS passa a preservar 001/002/003, e a sentinela DIAG_PREOS_INTEGRITY nao mascara regressao.",
+  "files_changed": [
+    "src/vba/Svc_PreOS.bas",
+    "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_AT3_FIX3_PREOS_WRITE_NORMALIZACAO.txt",
+    "auditoria/03_ondas/onda_38_2_3/AT3_FIX3_PREOS_WRITE_NORMALIZACAO.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38_2_3_AT3_FIX3_PREOS_WRITE_NORMALIZACAO",
+    "build_label": "92e3062+ONDA38.2.3-AT3.fix3-PREOS-WRITE",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_AT3_FIX3_PREOS_WRITE_NORMALIZACAO.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_3_AT3_FIX3_PREOS_WRITE_NORMALIZACAO\", \"92e3062+ONDA38.2.3-AT3.fix3-PREOS-WRITE\""
+  },
+  "validation_gates": [
+    {
+      "gate": "Importador V3",
+      "status": "pass",
+      "evidencia": "Mauricio reportou M=1 | F=0 | err=0 | skip=0"
+    },
+    {
+      "gate": "Debug > Compile VBAProject",
+      "status": "pass",
+      "evidencia": "Mauricio reportou compile limpo"
+    },
+    {
+      "gate": "TV2_RunRodizioStrikesEndToEnd",
+      "status": "pass",
+      "evidencia": "OK=76 | FALHA=0 | MANUAL=0; sem CSV exportado"
+    },
+    {
+      "gate": "Auditoria cruzada GATE-A3",
+      "status": "pass",
+      "evidencia": "Opus 0020 e Antigravity 0021 aprovaram GATE-A3 sem BLOQUEADORES"
+    }
+  ],
+  "next_wave": {
+    "id": "0118-rb-onda-38-2-3-gate-a4-import-uso-prolongado",
+    "summary": "Abrir GATE-A4: desligar diagnostico temporario F-NEW5, preparar manifestos L41 em duas fases, executar compile/RVS entre fases e uso prolongado L43.",
+    "status": "opened"
+  },
+  "closed_at": "2026-05-27T23:43:22-03:00",
+  "created_at": "2026-05-27T23:43:22-03:00"
+}

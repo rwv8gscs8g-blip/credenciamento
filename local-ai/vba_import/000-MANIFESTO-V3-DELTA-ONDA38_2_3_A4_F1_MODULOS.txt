@@ -1,0 +1,34 @@
+# Manifesto V3 DELTA ONDA38_2_3_A4_F1_MODULOS - V12.0.0206 Onda 38.2.3 GATE-A4
+# Tema: Fase 1 L41 - reimportar apenas modulos da Onda 38.2.3 antes dos forms.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_3_A4_F1_MODULOS", "<sha_gate_a4>+ONDA38.2.3-A4-F1-MODULOS"
+#
+# Pos-import esperado:
+#   - Importador V3: M=4 | F=0 | err=0.
+#   - VBE > Debug > Compile VBAProject passa limpo.
+#   - RVS Trio intermediario: TV2_RunSmoke + TV2_RunIntegridadeBase +
+#     TV2_RunRodizioStrikesEndToEnd.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAL-Repo_PreOS.bas
+#     bytes=10076
+#     sha256=5934837e2e46600a96b245d02bf8524cbd6c025210472328ba4342bd99d0379e
+#   M|001-modulo/AAQ-Svc_PreOS.bas
+#     bytes=19273
+#     sha256=887e8556d151aac0ccf98baca9bf5b01fc05e71d0dfbe58e264306347c65f9ea
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=228700
+#     sha256=1e9158f6ed8b2bbf46d453444ad8e6c1265f7ae05eb400b3dd0f3743dbc3c563
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. Por isso AAX fica como ultimo item, mas
+#   seu hash pre-import nao e contrato estavel do manifesto.
+#
+# GRUPO_A4_F1_MODULOS
+M|001-modulo/AAL-Repo_PreOS.bas
+M|001-modulo/AAQ-Svc_PreOS.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

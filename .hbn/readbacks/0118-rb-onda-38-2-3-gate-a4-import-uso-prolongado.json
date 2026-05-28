@@ -1,0 +1,140 @@
+{
+  "readback_id": "0118-rb-onda-38-2-3-gate-a4-import-uso-prolongado",
+  "data": "2026-05-27",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao",
+  "intent": {
+    "objective": "Abrir o GATE-A4 da Onda 38.2.3 com consolidacao do GATE-A3, desligamento do diagnostico temporario F-NEW5, manifestos reais de importacao em duas fases L41 e procedimento de uso prolongado L43.",
+    "non_goals": [
+      "Nao alterar regra de negocio, rodizio, Pre-OS, OS, avaliacao ou contadores",
+      "Nao criar helpers compartilhados antes da Onda 38.2.4",
+      "Nao executar Excel, VBE, importacao, compile ou RVS no lugar do operador",
+      "Nao tocar Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou fixtures blindadas",
+      "Nao abrir decisoes V207, cache, ORM ou migracao legado"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Credencia_Empresa.frm",
+      "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.frm",
+      "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.code-only.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_A4_F1_MODULOS.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_A4_F2_FORMS.txt",
+      "auditoria/03_ondas/onda_38_2_3/**",
+      "auditoria/evidencias/V12.0.0206/csv/**",
+      ".hbn/readbacks/0118-rb-onda-38-2-3-gate-a4-import-uso-prolongado.json",
+      ".hbn/hearbacks/0118-rb-onda-38-2-3-gate-a4-import-uso-prolongado-confirmed.json",
+      ".hbn/hearbacks/0118-rb-onda-38-2-3-gate-a4-import-uso-prolongado-confirmed.md",
+      ".hbn/results/0117-exec-onda-38-2-3-at3-fix3-preos-write-normalizacao.json",
+      ".hbn/audits/20260527-2345-gate-a4-output-lock.md",
+      ".hbn/proposals/0020-opus-auditoria-gate-a3-onda-38-2-3.md",
+      ".hbn/proposals/0021-antigravity-auditoria-gate-a3-onda-38-2-3.md",
+      ".hbn/protocol-evolutions/20260527-2245-l45-cross-audit-output-lock-formalizacao.md",
+      ".hbn/bypasses/20260527-*-onda-38-2-3-gate-a4*.md",
+      ".hbn/relay/INDEX.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_Bateria_Oficial.bas",
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Funcoes.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABA-Teste_Bateria_Oficial.bas",
+      "local-ai/scripts/publicar_vba_import.sh",
+      "auditoria/03_ondas/onda_QA_V3/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "GATE-A3 permanece aprovado: Fix3 importado, compile verde e TV2_RunRodizioStrikesEndToEnd sem falhas",
+    "ATIVAR_DIAG_FNEW5 deve ficar desligado por padrao antes de qualquer import de release",
+    "Manifestos L41 usam formato real do parser V3: linhas M| e F| relativas a local-ai/vba_import/",
+    "RVS Trio da Onda 38.2.3 continua definido como TV2_RunSmoke, TV2_RunIntegridadeBase e TV2_RunRodizioStrikesEndToEnd",
+    "AAX-App_Release.bas pode sofrer drift operacional pelo V3, mas nao sera staged neste readback",
+    "Sem push para origin"
+  ],
+  "risks": [
+    {
+      "risk": "O diagnostico F-NEW5 ficar ativo em release e gerar CSVs durante uso normal.",
+      "mitigation": "Alterar somente a constante ATIVAR_DIAG_FNEW5 para False e manter o restante do codigo diagnostico intacto para auditabilidade.",
+      "severity": "high"
+    },
+    {
+      "risk": "Manifesto de duas fases mal montado reintroduzir fragilidade de import ou deixar componente fora do workbook.",
+      "mitigation": "Gerar dois manifestos V3 reais, com caminhos prefixados existentes, hash/bytes dos payloads e compile manual obrigatorio apos cada fase.",
+      "severity": "high"
+    },
+    {
+      "risk": "O workbook parecer estavel imediatamente apos import mas corromper depois de uso prolongado.",
+      "mitigation": "Aplicar L43: 30 minutos de uso operacional guiado antes de considerar a Onda 38.2.3 entregue.",
+      "severity": "high"
+    },
+    {
+      "risk": "O code-only de Credencia_Empresa voltar a divergir depois do ajuste do gate diagnostico.",
+      "mitigation": "Editar src, .frm importavel e .code-only.txt de forma consistente e validar por diff/paridade textual.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "GATE-A4-H1 diagnostico F-NEW5 desligado",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/GATE_A4_H1_DIAG_FNEW5_OFF.md"
+      },
+      {
+        "gate": "GATE-A4-F1 import modulo em duas fases L41",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/GATE_A4_IMPORT_PROCEDURE_2_FASES.md"
+      },
+      {
+        "gate": "GATE-A4-F2 compile manual apos cada fase",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/GATE_A4_IMPORT_PROCEDURE_2_FASES.md"
+      },
+      {
+        "gate": "RVS Trio entre fases e final",
+        "evidence_kind": "csv_hash",
+        "evidence_required_in": "auditoria/evidencias/V12.0.0206/csv/"
+      },
+      {
+        "gate": "GATE-USO-PROLONGADO L43",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/GATE_USO_PROLONGADO_REPORT.md"
+      },
+      {
+        "gate": "Auditoria cruzada GATE-A4",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/proposals/"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, nao salvar o workbook e restaurar o backup informado pelo proprio Importador V3.",
+      "Se o compile manual falhar apos qualquer fase, fechar sem salvar e reportar modulo/linha destacada.",
+      "Se o RVS Trio reprovar, preservar CSVs de falha e nao avancar para uso prolongado.",
+      "Se o uso prolongado apresentar erro ou travamento, registrar incidente em GATE_USO_PROLONGADO_REPORT.md e bloquear auditoria A4."
+    ],
+    "anchor_to_restore": "Workbook operacional antes do GATE-A4 + backup V3 gerado no inicio de cada import"
+  },
+  "human_status": "confirmed",
+  "decisions_preconfirmed": [
+    "Mauricio confirmou GATE-A3 aprovado e pediu abertura do GATE-A4.",
+    "Opus 0020 e Antigravity 0021 aprovaram GATE-A3 sem BLOQUEADORES.",
+    "FORTES de 0020 sobre cobertura >=1000/alfa e duplicacao de normalizador ficam no backlog da Onda 38.2.4/QA V3, nao bloqueiam A4.",
+    "L41 import em duas fases e L43 uso prolongado sao vinculantes para Onda 38.2.3."
+  ],
+  "created_at": "2026-05-27T23:43:22-03:00"
+}

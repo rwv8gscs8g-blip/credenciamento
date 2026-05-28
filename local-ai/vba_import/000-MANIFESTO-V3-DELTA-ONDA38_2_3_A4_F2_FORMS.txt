@@ -1,0 +1,35 @@
+# Manifesto V3 DELTA ONDA38_2_3_A4_F2_FORMS - V12.0.0206 Onda 38.2.3 GATE-A4
+# Tema: Fase 2 L41 - reimportar forms/code-only apos Fase 1 verde.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_3_A4_F2_FORMS", "<sha_gate_a4>+ONDA38.2.3-A4-F2-FORMS"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=2 | err=0.
+#   - VBE > Debug > Compile VBAProject passa limpo.
+#   - RVS Trio final: TV2_RunSmoke + TV2_RunIntegridadeBase +
+#     TV2_RunRodizioStrikesEndToEnd.
+#   - ATIVAR_DIAG_FNEW5 permanece False no workbook importado.
+#
+# Artefatos hash-pinados:
+#   F|002-formularios/AAD-Cadastro_Servico.frm
+#     frm_bytes=11146
+#     frm_sha256=09ad1ca3c25bea1ad35e640a770a338cd97db12e9ea57636956828f9d7eb4145
+#     code_only_bytes=10636
+#     code_only_sha256=dfe80a1e44af4a2cbda6d8a43c7ee9137f2714b70360181cb46b651b3048c6fd
+#   F|002-formularios/AAI-Credencia_Empresa.frm
+#     frm_bytes=25192
+#     frm_sha256=0ba23f1ac5897ac867d7dbe041ade52eacb5f522a470cb5c7a9307b88bcd82ab
+#     code_only_bytes=24724
+#     code_only_sha256=f040b40101f7f4dc7f178eba6b5f6ff2af7d98148032b5282998baa48be8ff64
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build
+#   final no workbook.
+#
+# GRUPO_A4_F2_FORMS
+F|002-formularios/AAD-Cadastro_Servico.frm
+F|002-formularios/AAI-Credencia_Empresa.frm
+M|001-modulo/AAX-App_Release.bas

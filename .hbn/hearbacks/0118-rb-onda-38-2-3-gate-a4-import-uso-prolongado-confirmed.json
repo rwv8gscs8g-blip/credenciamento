@@ -1,0 +1,9 @@
+{
+  "hearback_id": "0118-rb-onda-38-2-3-gate-a4-import-uso-prolongado-confirmed",
+  "readback_id": "0118-rb-onda-38-2-3-gate-a4-import-uso-prolongado",
+  "status": "confirmed",
+  "by": "mauricio-zanin",
+  "data": "2026-05-27",
+  "received_at": "2026-05-27T23:43:22-03:00",
+  "summary": "Mauricio confirmou GATE-A3 aprovado e autorizou abrir GATE-A4. O readback incorpora o desligamento do diagnostico temporario F-NEW5, manifestos L41 em duas fases e GATE-USO-PROLONGADO L43."
+}
