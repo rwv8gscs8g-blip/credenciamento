@@ -1,0 +1,99 @@
+{
+  "readback_id": "0119-rb-onda-38-2-3-gate-a4-rvs-evidencias",
+  "data": "2026-05-28",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0118-rb-onda-38-2-3-gate-a4-import-uso-prolongado",
+  "intent": {
+    "objective": "Registrar as evidencias reais do GATE-A4 Fase 1 e Fase 2 reportadas por Mauricio: import V3, compile manual e RVS completo aprovado nas duas fases.",
+    "non_goals": [
+      "Nao alterar codigo VBA",
+      "Nao alterar manifestos de import",
+      "Nao executar Excel ou RVS no lugar do operador",
+      "Nao declarar GATE-A4 entregue antes do uso prolongado L43",
+      "Nao tocar a pasta paralela auditoria/03_ondas/onda_QA_V3"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0119-rb-onda-38-2-3-gate-a4-rvs-evidencias.json",
+      ".hbn/hearbacks/0119-rb-onda-38-2-3-gate-a4-rvs-evidencias-confirmed.json",
+      ".hbn/hearbacks/0119-rb-onda-38-2-3-gate-a4-rvs-evidencias-confirmed.md",
+      ".hbn/bypasses/20260528-*-onda-38-2-3-gate-a4-rvs-evidencias*.md",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_3/**",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260528_063131.csv",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260528_090314.csv"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "auditoria/03_ondas/onda_QA_V3/**",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260527_060519.csv",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260527_085514.csv",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260527_201159.csv"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "GATE-A4 ainda nao esta entregue enquanto o uso prolongado L43 nao for executado",
+    "Fase 1 e Fase 2 ficam registradas como aprovadas por CSV real do RVS",
+    "Os CSVs permanecem no caminho gerado pelo workbook, ainda V12.0.0205, sem mover ou renomear",
+    "Sem alteracao de codigo, manifestos ou build label neste readback"
+  ],
+  "risks": [
+    {
+      "risk": "Confundir RVS aprovado das fases com fechamento completo do GATE-A4.",
+      "mitigation": "Documentar explicitamente que falta GATE-USO-PROLONGADO L43 e RVS final pos-uso.",
+      "severity": "medium"
+    },
+    {
+      "risk": "CSV do workbook cair em V12.0.0205 e ficar fora do escopo V206 esperado.",
+      "mitigation": "Preservar no caminho original gerado pelo RVS e referenciar hashes no relatorio da Onda 38.2.3.",
+      "severity": "medium"
+    },
+    {
+      "risk": "AAX-App_Release.bas continuar modificado por BUMP operacional e contaminar commit documental.",
+      "mitigation": "Nao stagear AAX; se necessario, usar bypass documentado para commit apenas documental/evidencia.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "CSV Fase 1 preservado e hash calculado",
+        "evidence_kind": "csv_hash",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/GATE_A4_FASES12_RESULTADO.md"
+      },
+      {
+        "gate": "CSV Fase 2 preservado e hash calculado",
+        "evidence_kind": "csv_hash",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/GATE_A4_FASES12_RESULTADO.md"
+      },
+      {
+        "gate": "Proxima acao L43 registrada",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_3/GATE_USO_PROLONGADO_REPORT.md"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se algum CSV estiver corrompido, nao commitar evidencia e pedir novo export/novo RVS.",
+      "Se o status do CSV nao for APROVADO, bloquear GATE-A4 e preservar falha.",
+      "Se o commit tentar incluir codigo ou AAX, remover do staging antes de commitar."
+    ],
+    "anchor_to_restore": "35217c0"
+  },
+  "human_status": "confirmed",
+  "decisions_preconfirmed": [
+    "Mauricio reportou Fase 1 importada, compilada e RVS completo aprovado.",
+    "Mauricio reportou Fase 2 importada, compilada e RVS completo aprovado.",
+    "As imagens anexadas mostram VR_20260528_063131 e VR_20260528_090314 como APROVADO."
+  ],
+  "created_at": "2026-05-28T09:50:00-03:00"
+}

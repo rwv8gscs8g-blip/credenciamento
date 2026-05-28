@@ -12,7 +12,7 @@ data: 2026-05-27
 
 ## Estado
 
-GATE-A1, GATE-A2 e GATE-A3 aprovados por auditoria cruzada. GATE-A4 aberto para import L41 em duas fases, RVS Trio entre fases e GATE-USO-PROLONGADO L43.
+GATE-A1, GATE-A2 e GATE-A3 aprovados por auditoria cruzada. GATE-A4 Fase 1 e Fase 2 importaram, compilaram e passaram RVS completo. Pendente GATE-USO-PROLONGADO L43 e RVS final pos-uso.
 
 ## Entregas
 
@@ -25,8 +25,8 @@ GATE-A1, GATE-A2 e GATE-A3 aprovados por auditoria cruzada. GATE-A4 aberto para 
 | A3 Fix2 | Ajustar `DIAG_PREOS_INTEGRITY` para comparar expectativa canonica contra celula bruta de `PRE_OS` | importado; compile aprovado; revelou `EMP_PREOS_BRUTO=2/3` |
 | A3 Fix3 | Normalizar IDs antes da gravacao textual em `Svc_PreOS.EmitirPreOS` | importado; compile aprovado; `TV2_RunRodizioStrikesEndToEnd` OK=76/FALHA=0 |
 | A4 H1 | Desligar diagnostico temporario F-NEW5 antes de import de release | entregue no pacote A4 |
-| A4 F1 | Manifesto L41 fase 1 — modulos | pronto para import |
-| A4 F2 | Manifesto L41 fase 2 — forms/code-only | pronto para import apos F1 verde |
+| A4 F1 | Manifesto L41 fase 1 — modulos | importado; compile aprovado; RVS `VR_20260528_063131` aprovado |
+| A4 F2 | Manifesto L41 fase 2 — forms/code-only | importado; compile aprovado; RVS `VR_20260528_090314` aprovado |
 | A4 L43 | Uso prolongado 30 min | pendente operador |
 
 ## Evidências AT-1
@@ -91,8 +91,11 @@ GATE-A1, GATE-A2 e GATE-A3 aprovados por auditoria cruzada. GATE-A4 aberto para 
 - Uso prolongado L43: `auditoria/03_ondas/onda_38_2_3/GATE_USO_PROLONGADO_REPORT.md`
 - Manifesto F1: `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_A4_F1_MODULOS.txt`
 - Manifesto F2: `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_3_A4_F2_FORMS.txt`
+- Resultado F1/F2: `auditoria/03_ondas/onda_38_2_3/GATE_A4_FASES12_RESULTADO.md`
+- CSV F1: `auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260528_063131.csv`
+- CSV F2: `auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260528_090314.csv`
 - Output lock L45 para auditoria A4: `.hbn/audits/20260527-2345-gate-a4-output-lock.md`
 
 ## Próxima ação
 
-Mauricio aguarda o commit de abertura A4 para usar o hash final nos dois comandos de import. Depois executa Fase 1, compile manual, RVS Trio, Fase 2, compile manual, RVS Trio, uso prolongado de 30 minutos e RVS Trio final.
+Mauricio executa uso operacional por pelo menos 30 minutos, registra incidentes ou sucesso, e roda RVS completo final pos-uso. Se passar, Codex consolida GATE-A4 para auditoria cruzada Opus + Antigravity usando output lock L45.

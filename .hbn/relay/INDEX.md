@@ -1,11 +1,11 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.5 (§12 Cadencia D Estendida + §12.B por papel + registro de bastao fundido no handoff 0014)
-proprietario-bastao: Codex (implementador principal V206, sessao iniciada 2026-05-27 ~14:08 BRT) mantem a Onda 38.2.3 sob Cadencia D Estendida. Head atual de codigo observado: `92e3062` (AT-3 Fix3). Estado validado: raiz canonica OK; GATE-A3 aprovado por Opus 0020 + Antigravity 0021; AAX permanece drift operacional nao staged por BUMP do Importador V3.
-ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — ondas 38.2.3, 38.2.4, 38.2.5 (e quantas forem necessarias) ate validar tela-a-tela. V12.0.0205 permanece como release oficial. Sequencia ENTREGUE: AR1 -> AR1-FIX2-PERF -> evolucao protocolo v1.3 (0110) -> auditorias cruzadas V207 1a/2a rodadas (111/112) -> Onda 38.2.2 (entregue parcial, 5 findings abertos + corrupcao workbook) -> auditorias cruzadas integridade/idempotencia (115 prompt + 0009/0010 outputs) -> ondas META 0112/0113 Cadencia D -> Codex assumiu bootstrap 38.2.3 -> GATE-A1 aprovado -> GATE-A2 aprovado por 0017/0018/0019 -> GATE-A3 aprovado por 0020/0021. Proximo: GATE-A4 import L41 em duas fases + GATE-USO-PROLONGADO L43. Convencao: build label `<HEAD>+ONDA<N>` ou `<HEAD>+ONDA<N>.fix<NN>` SEM sufixo "FREEZE".
+proprietario-bastao: Codex (implementador principal V206, sessao iniciada 2026-05-27 ~14:08 BRT) mantem a Onda 38.2.3 sob Cadencia D Estendida. Head atual de codigo observado: `35217c0` (GATE-A4 aberto). Estado validado: raiz canonica OK; GATE-A3 aprovado por Opus 0020 + Antigravity 0021; GATE-A4 Fase 1 e Fase 2 importaram, compilaram e passaram RVS completo; AAX permanece drift operacional nao staged por BUMP do Importador V3.
+ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — ondas 38.2.3, 38.2.4, 38.2.5 (e quantas forem necessarias) ate validar tela-a-tela. V12.0.0205 permanece como release oficial. Sequencia ENTREGUE: AR1 -> AR1-FIX2-PERF -> evolucao protocolo v1.3 (0110) -> auditorias cruzadas V207 1a/2a rodadas (111/112) -> Onda 38.2.2 (entregue parcial, 5 findings abertos + corrupcao workbook) -> auditorias cruzadas integridade/idempotencia (115 prompt + 0009/0010 outputs) -> ondas META 0112/0113 Cadencia D -> Codex assumiu bootstrap 38.2.3 -> GATE-A1 aprovado -> GATE-A2 aprovado por 0017/0018/0019 -> GATE-A3 aprovado por 0020/0021 -> GATE-A4 F1/F2 aprovados (`VR_20260528_063131`, `VR_20260528_090314`). Proximo: GATE-USO-PROLONGADO L43 + RVS final pos-uso. Convencao: build label `<HEAD>+ONDA<N>` ou `<HEAD>+ONDA<N>.fix<NN>` SEM sufixo "FREEZE".
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio APROVADO em VR_20260526_102200. **Anchor de rollback Onda 38.2.2: commit 179bac5**. **Caminho B (rollback) tecnicamente valido se Mauricio escolher**.
-proxima-acao: ✅ HBN ACTIVE — GATE-A4 aberto no readback `0118-rb-onda-38-2-3-gate-a4-import-uso-prolongado`: Codex desligou o diagnostico temporario F-NEW5 e preparou manifestos L41 F1/F2; Mauricio aguardara o hash final do commit para executar import, compile e RVS Trio.
-ultima-atualizacao: 2026-05-27T23:43:22-0300 (GATE-A3 aprovado; GATE-A4 aberto com L41/L43)
+proxima-acao: ✅ HBN ACTIVE — GATE-A4 F1/F2 verdes. Mauricio executa uso operacional por pelo menos 30 minutos, registra resultado em `GATE_USO_PROLONGADO_REPORT.md` via chat e roda RVS completo final pos-uso. Sem auditoria cruzada A4 antes disso.
+ultima-atualizacao: 2026-05-28T09:50:00-0300 (GATE-A4 F1/F2 import+compile+RVS aprovados; L43 pendente)
 ---
 
 ## ✅ HBN ACTIVE — CODEX ASSUMIU BASTÃO V206 / ONDA 38.2.3 (NOVO)
@@ -22,13 +22,14 @@ ultima-atualizacao: 2026-05-27T23:43:22-0300 (GATE-A3 aprovado; GATE-A4 aberto c
 | Readback AT-3 Fix2 | [`0116-rb-onda-38-2-3-at3-fix2-preos-integrity-assert.json`](../readbacks/0116-rb-onda-38-2-3-at3-fix2-preos-integrity-assert.json) — **human_status: confirmed** |
 | Readback AT-3 Fix3 | [`0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao.json`](../readbacks/0117-rb-onda-38-2-3-at3-fix3-preos-write-normalizacao.json) — **human_status: confirmed** |
 | Readback GATE-A4 | [`0118-rb-onda-38-2-3-gate-a4-import-uso-prolongado.json`](../readbacks/0118-rb-onda-38-2-3-gate-a4-import-uso-prolongado.json) — **human_status: confirmed** |
+| Readback evidencias A4 | [`0119-rb-onda-38-2-3-gate-a4-rvs-evidencias.json`](../readbacks/0119-rb-onda-38-2-3-gate-a4-rvs-evidencias.json) — **human_status: confirmed** |
 | Mensagem | [`.hbn/messages/20260527-1408-codex-assumiu-bastao-v206.md`](../messages/20260527-1408-codex-assumiu-bastao-v206.md) |
 | Entrega GATE-A1 | [`.hbn/proposals/0013-codex-at1-gerador-codeonly.md`](../proposals/0013-codex-at1-gerador-codeonly.md) |
 | Auditorias GATE-A1 | [Opus 0014](../proposals/0014-opus-auditoria-gate-a1-onda-38-2-3.md) + [Antigravity 0015](../proposals/0015-antigravity-auditoria-gate-a1-onda-38-2-3.md) — aprovadas |
 | Entrega GATE-A2 | [Codex 0016](../proposals/0016-codex-at2-diagnostico-fnew5.md) + [Opus 0017](../proposals/0017-opus-auditoria-gate-a2-onda-38-2-3.md) + [Antigravity 0018](../proposals/0018-antigravity-auditoria-gate-a2-onda-38-2-3.md) + [Opus reauditoria 0019](../proposals/0019-opus-reauditoria-gate-a2-onda-38-2-3.md) — aprovadas |
 | Entrega GATE-A3 | [Opus 0020](../proposals/0020-opus-auditoria-gate-a3-onda-38-2-3.md) + [Antigravity 0021](../proposals/0021-antigravity-auditoria-gate-a3-onda-38-2-3.md) — aprovadas sem BLOQUEADORES |
 | Head observado | `27237e4` — doc-only posterior a `ce5879e`; predecessor de codigo V206 preservado |
-| Proxima acao | Mauricio aguarda commit GATE-A4 para executar Fase 1, compile, RVS Trio, Fase 2, compile, RVS Trio, uso prolongado L43 e RVS Trio final |
+| Proxima acao | Mauricio executa uso prolongado L43 por pelo menos 30 min e depois RVS completo final pos-uso |
 
 ### Escopo AT-3 ativo
 
@@ -49,6 +50,10 @@ Fix2 importou e compilou. O CSV `TesteV2_STRIKES_E2E_Falhas_TV2_20260527_220557.
 ### GATE-A4 aberto
 
 Mauricio importou o Fix3, compilou e executou `TV2_RunRodizioStrikesEndToEnd` com `OK=76 | FALHA=0 | MANUAL=0`. Opus 0020 e Antigravity 0021 aprovaram GATE-A3 sem BLOQUEADORES. GATE-A4 abriu com micro-higiene obrigatoria: `ATIVAR_DIAG_FNEW5=False` em `Credencia_Empresa`, manifestos reais `ONDA38_2_3_A4_F1_MODULOS` e `ONDA38_2_3_A4_F2_FORMS`, procedimento `IMPORT_PROCEDURE_2_FASES.md` e template `GATE_USO_PROLONGADO_REPORT.md`.
+
+### GATE-A4 F1/F2 verdes
+
+Mauricio executou Fase 1: import `M=4 | F=0 | err=0 | skip=0`, compile limpo e RVS `VR_20260528_063131` APROVADO. Executou Fase 2: import `M=1 | F=2 | err=0 | skip=0`, compile limpo e RVS `VR_20260528_090314` APROVADO. Evidencias registradas em `GATE_A4_FASES12_RESULTADO.md`; falta L43 uso prolongado + RVS final pos-uso antes de auditoria cruzada A4.
 
 ## 🟣 ONDA 0113 META APLICADA (fast_track doc-only) — Operacionalizar a passagem de bastão (NOVO)
 
