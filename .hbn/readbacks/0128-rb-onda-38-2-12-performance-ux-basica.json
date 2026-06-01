@@ -1,0 +1,126 @@
+{
+  "readback_id": "0128-rb-onda-38-2-12-performance-ux-basica",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0127-rb-onda-38-2-11-sync-hbn-pos-commit",
+  "intent": {
+    "objective": "Implementar micro-onda de Performance/UX basica do parecer 0024 com baixo risco: remover save/busy-wait do ProgressBar, priorizar abertura de URL pelo Shell no Mac e criar rotina unica para limpar campos de cadastro de entidade.",
+    "non_goals": [
+      "Nao otimizar credenciamento em lote nem alterar alocacao de CRED_ID nesta onda",
+      "Nao tocar Credencia_Empresa.frm nesta onda",
+      "Nao tocar Auto_Open.bas, Mod_Types.bas ou Importador_V3.bas",
+      "Nao alterar regras de rodizio, impressao, CONFIG, Pre-OS ou OS",
+      "Nao alterar arquivos .frx ou layout de designer",
+      "Nao declarar freeze V206"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0128-rb-onda-38-2-12-performance-ux-basica.json",
+      ".hbn/hearbacks/0128-rb-onda-38-2-12-performance-ux-basica-confirmed.json",
+      ".hbn/hearbacks/0128-rb-onda-38-2-12-performance-ux-basica-confirmed.md",
+      ".hbn/results/0128-exec-onda-38-2-12-performance-ux-basica.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_12/0128_TECNICO.md",
+      "CHANGELOG.md",
+      "src/vba/ProgressBar.frm",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAB-ProgressBar.frm",
+      "local-ai/vba_import/002-formularios/AAB-ProgressBar.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_12_PERFORMANCE_UX_BASICA.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Credencia_Empresa.frm",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.frm",
+      "local-ai/vba_import/002-formularios/ProgressBar.frx",
+      "local-ai/vba_import/002-formularios/Menu_Principal.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Sequencia de IDs de CREDENCIADOS nao sera alterada nesta onda",
+    "Arquivos .frx nao serao alterados",
+    "Onda nao altera regra de negocio nem persistencia de dados"
+  ],
+  "risks": [
+    {
+      "risk": "Remover o save embutido do ProgressBar pode mudar expectativa de salvamento implicito.",
+      "mitigation": "Manter salvamentos nos fluxos reais via Util_SalvarWorkbookSeguro; o ProgressBar deixa de salvar por conta propria.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Priorizar Shell open no Mac pode falhar em ambiente Windows se nao houver fallback.",
+      "mitigation": "Implementar ordem por sistema operacional com fallback para FollowHyperlink quando Shell falhar.",
+      "severity": "low"
+    },
+    {
+      "risk": "Extrair limpeza de campos de entidade pode omitir algum controle hoje limpo inline.",
+      "mitigation": "Mover a lista atual de campos para uma rotina unica e adicionar teste V2 dirigido por inspeção de codigo.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Teste automatizado pode ser estatico demais para UX.",
+      "mitigation": "Usar teste V2 dirigido para invariantes de codigo e manter gate humano de compile/import como requisito.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Importador V3 delta 38.2.12",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0128-exec-onda-38-2-12-performance-ux-basica.json"
+      },
+      {
+        "gate": "Debug > Compile VBAProject",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0128-exec-onda-38-2-12-performance-ux-basica.json"
+      },
+      {
+        "gate": "TV2_RunPerformanceUXBasica",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0128-exec-onda-38-2-12-performance-ux-basica.json"
+      },
+      {
+        "gate": "Glasswing G7/G8 local",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0128-exec-onda-38-2-12-performance-ux-basica.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se compile falhar, restaurar do backup V3 criado pelo Importador antes de salvar o workbook.",
+      "Se o teste V2 falhar, nao salvar workbook e retornar o CSV/erro para nova micro-onda fix.",
+      "Se o publicador detectar drift fora do escopo, parar e abrir readback especifico.",
+      "Se houver necessidade de tocar Credencia_Empresa.frm, encerrar esta onda e abrir onda propria para FT-4."
+    ],
+    "anchor_to_restore": "Commit d2d7ac5 e backup V3 do Importador imediatamente anterior ao delta 38.2.12."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Usuario aprovou em 2026-06-01: ok, aprovado, vamos avancar para as proximas ondas de estabilizacao.",
+    "parecer_base": ".hbn/proposals/0024-Opus3-4-MAX-auditoria-gate-a4-l43-v206.md",
+    "scope_cut": "FT-3 parcial, FT-2 parcial e MG-1; FT-4 credenciamento em lote fica fora por risco de ID."
+  },
+  "created_at": "2026-06-01T00:14:22-03:00"
+}

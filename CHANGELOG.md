@@ -59,6 +59,17 @@ tratam apenas da linha pública oficial.
 
 ### Corrigido
 
+- **Onda 38.2.12 — Performance/UX basica (FT-3 parcial, FT-2 parcial e MG-1)** —
+  remove do `ProgressBar` o `ThisWorkbook.Save` embutido e o busy-wait
+  `timedelay`, mantendo apenas feedback visual leve; extrai a limpeza dos
+  campos de cadastro de entidade para `LimparCamposCadastroEntidade`; e passa
+  `AbrirURLExterna` a tentar `Shell open` primeiro no Mac antes dos fallbacks
+  `FollowHyperlink`. Inclui a suite dirigida `TV2_RunPerformanceUXBasica`
+  (validada por Mauricio com `OK=5 | FALHA=0 | MANUAL=0`) e manifesto V3
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_12_PERFORMANCE_UX_BASICA.txt`.
+  FT-4/credenciamento em lote permanece fora desta onda por risco de sequencia
+  de IDs. Sem freeze V206 declarado.
+
 - **Onda 38.2.10 — higiene estrutural do repositório e commit de consolidação** —
   adiciona `.gitattributes`, `.editorconfig` e scripts read-only de higiene
   para impedir falsos positivos de `git diff --check` em exportáveis VBA

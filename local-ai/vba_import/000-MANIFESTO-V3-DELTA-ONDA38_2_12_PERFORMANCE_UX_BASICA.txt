@@ -1,0 +1,41 @@
+# Manifesto V3 DELTA ONDA38_2_12_PERFORMANCE_UX_BASICA - V12.0.0206 Onda 38.2.12
+# Tema: Performance/UX basica - ProgressBar sem save/busy-wait, URL Mac-first e limpeza de entidade.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_12_PERFORMANCE_UX_BASICA", "d2d7ac5+ONDA38.2.12-PERFORMANCE-UX-BASICA"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=2 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunPerformanceUXBasica deve concluir OK=5 | FALHA=0 | MANUAL=0.
+#   - Sem freeze V206; FT-4 credenciamento em lote fica para onda propria.
+#
+# Artefatos hash-pinados:
+#   F|002-formularios/AAB-ProgressBar.frm
+#     bytes=1820
+#     sha256=b5fe01e1ed142c8ff70c6dc846d1ab1cfa7843d6db2f70dae291da3c19deea99
+#   F|002-formularios/AAB-ProgressBar.code-only.txt
+#     bytes=1333
+#     sha256=330b384858e4d5dda505569e3a3fca9f52c6a425b960c2f0a2c42397b42c2919
+#   F|002-formularios/AAM-Menu_Principal.frm
+#     bytes=142275
+#     sha256=45cf26e6998edd57054e974fc364ae96b6c538642c25c5d9e3c103f0f9447918
+#   F|002-formularios/AAM-Menu_Principal.code-only.txt
+#     bytes=141812
+#     sha256=f7bcab37de497b665171b9eaf5a7957adaf051fdddde3ccac7156614b00a1c3d
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=264718
+#     sha256=9c31a81dd9a553cc1803647f0fda75991d08ee20182d7bdff367732b947db56f
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   bytes=23083
+#   sha256=5fec76d9ddb854f7a9e55f83d92d92f4f7c3500e98400514cd2cf7ac8a1baa46
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build 38.2.12.
+#
+# GRUPO_ONDA38_2_12_PERFORMANCE_UX_BASICA
+F|002-formularios/AAB-ProgressBar.frm
+F|002-formularios/AAM-Menu_Principal.frm
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

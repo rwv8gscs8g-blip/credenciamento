@@ -1271,6 +1271,81 @@ falha:
     TV2_FinalizarExecucao suite, silencioso
 End Sub
 
+Public Sub TV2_RunPerformanceUXBasica(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "PERFORMANCE_UX_BASICA"
+    Dim repoRoot As String
+    Dim codigoMenu As String
+    Dim codigoProgress As String
+    Dim origemMenu As String
+    Dim origemProgress As String
+    Dim posMac As Long
+    Dim posOpen As Long
+    Dim posFollow As Long
+    Dim macFirstOk As Boolean
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+    repoRoot = TV2_UI_RepoRoot()
+
+    TV2_EST_LogComponenteNaoContemTokens suite, "CS_PUX_01_PROGRESS_SEM_SAVE_BUSY_WAIT", repoRoot, _
+        "ProgressBar", "ProgressBar.frm", _
+        "Application.ThisWorkbook.Save|timedelay|While DateTime.Timer", _
+        "ProgressBar nao salva workbook nem faz busy-wait de CPU", _
+        "Sem save embutido, sem timedelay e sem loop While baseado em Timer", _
+        "FT-3: barra de progresso nao deve travar o Excel nem salvar dentro do render"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_PUX_02_PROGRESS_MANTEM_FEEDBACK", repoRoot, _
+        "ProgressBar", "ProgressBar.frm", _
+        "Percent_Label.caption = ""Processando: ""|Percent_Label.caption = ""Finalizando: ""|DoEvents", _
+        "ProgressBar mantem feedback visual leve", _
+        "Caption de progresso continua sendo atualizada e DoEvents preserva resposta da UI", _
+        "Remove espera artificial sem deixar a tela sem indicacao de andamento"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_PUX_03_LIMPA_ENTIDADE_HELPER", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub LimparCamposCadastroEntidade()|Call LimparCamposCadastroEntidade|C_Entidade.Value = Empty|C_InfoAD.Value = Empty", _
+        "Cadastro de entidade usa rotina unica de limpeza", _
+        "Limpeza inline foi extraida para helper com campos principais e informacao adicional", _
+        "FT-2: evita divergencia entre fluxo de novo cadastro e limpeza pos-cadastro"
+
+    codigoMenu = TV2_EST_LerCodigoComponenteOuArquivo(repoRoot, "Menu_Principal", "Menu_Principal.frm", origemMenu)
+    posMac = InStr(1, codigoMenu, "Application.OperatingSystem, ""Mac""", vbTextCompare)
+    posOpen = InStr(1, codigoMenu, "Shell ""open", vbTextCompare)
+    posFollow = InStr(1, codigoMenu, "Application.FollowHyperlink url", vbTextCompare)
+    macFirstOk = (origemMenu <> "AUSENTE" And posMac > 0 And posOpen > 0 And posFollow > 0 And posOpen < posFollow)
+    TV2_LogAssert suite, "CS_PUX_04_URL_MAC_FIRST", "AUTO", _
+                  "AbrirURLExterna tenta Shell open antes de FollowHyperlink no Mac", _
+                  "No Mac, Shell open aparece antes do fallback Application.FollowHyperlink", _
+                  "ORIGEM=" & origemMenu & "; POS_MAC=" & CStr(posMac) & _
+                  "; POS_OPEN=" & CStr(posOpen) & "; POS_FOLLOW=" & CStr(posFollow), _
+                  "MG-1: evita travamento de 1-2 min ao abrir GitHub no Mac", _
+                  macFirstOk
+
+    codigoProgress = TV2_EST_LerCodigoComponenteOuArquivo(repoRoot, "ProgressBar", "ProgressBar.frm", origemProgress)
+    TV2_LogAssert suite, "CS_PUX_05_PROGRESS_SEM_SAVE_LITERAL", "AUTO", _
+                  "ProgressBar nao contem literal Save residual", _
+                  "Codigo do ProgressBar nao contem Application.ThisWorkbook.Save", _
+                  "ORIGEM=" & origemProgress & "; TEM_SAVE=" & CStr(InStr(1, codigoProgress, "Application.ThisWorkbook.Save", vbTextCompare) > 0), _
+                  "Evita que comentario residual ou caminho alternativo volte a salvar dentro da barra", _
+                  (origemProgress <> "AUSENTE" And InStr(1, codigoProgress, "Application.ThisWorkbook.Save", vbTextCompare) = 0)
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite PerformanceUXBasica sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
 Private Function TV2_FormControleExiste(ByVal frm As Object, ByVal nomeControle As String) As Boolean
     Dim ctl As Object
 

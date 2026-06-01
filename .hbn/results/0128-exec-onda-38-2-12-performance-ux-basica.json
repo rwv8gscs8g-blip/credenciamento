@@ -1,0 +1,103 @@
+{
+  "result_id": "0128-exec-onda-38-2-12-performance-ux-basica",
+  "execution_id": "0128-exec-onda-38-2-12-performance-ux-basica",
+  "readback_id": "0128-rb-onda-38-2-12-performance-ux-basica",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "human_gate_passed_import_compile_tv2",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Preparar Onda 38.2.12 para Performance/UX basica: ProgressBar sem save/busy-wait, URL Mac-first e limpeza canonica de cadastro de entidade.",
+  "summary": "O delta remove salvamento e busy-wait do ProgressBar, extrai limpeza de campos de entidade para helper dedicado, prioriza Shell open no Mac em AbrirURLExterna e adiciona TV2_RunPerformanceUXBasica com 5 asserts estaticos. FT-4 credenciamento em lote foi explicitamente diferido por risco de sequencia de CRED_ID.",
+  "files_changed": [
+    "src/vba/ProgressBar.frm",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/002-formularios/AAB-ProgressBar.frm",
+    "local-ai/vba_import/002-formularios/AAB-ProgressBar.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_12_PERFORMANCE_UX_BASICA.txt",
+    ".hbn/readbacks/0128-rb-onda-38-2-12-performance-ux-basica.json",
+    ".hbn/hearbacks/0128-rb-onda-38-2-12-performance-ux-basica-confirmed.json",
+    ".hbn/hearbacks/0128-rb-onda-38-2-12-performance-ux-basica-confirmed.md",
+    ".hbn/results/0128-exec-onda-38-2-12-performance-ux-basica.json",
+    "auditoria/03_ondas/onda_38_2_12/0128_TECNICO.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38_2_12_PERFORMANCE_UX_BASICA",
+    "build_label": "d2d7ac5+ONDA38.2.12-PERFORMANCE-UX-BASICA",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_12_PERFORMANCE_UX_BASICA.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_12_PERFORMANCE_UX_BASICA\", \"d2d7ac5+ONDA38.2.12-PERFORMANCE-UX-BASICA\""
+  },
+  "artifact_hashes": {
+    "local-ai/vba_import/002-formularios/AAB-ProgressBar.frm": "b5fe01e1ed142c8ff70c6dc846d1ab1cfa7843d6db2f70dae291da3c19deea99",
+    "local-ai/vba_import/002-formularios/AAB-ProgressBar.code-only.txt": "330b384858e4d5dda505569e3a3fca9f52c6a425b960c2f0a2c42397b42c2919",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm": "45cf26e6998edd57054e974fc364ae96b6c538642c25c5d9e3c103f0f9447918",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt": "f7bcab37de497b665171b9eaf5a7957adaf051fdddde3ccac7156614b00a1c3d",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas": "9c31a81dd9a553cc1803647f0fda75991d08ee20182d7bdff367732b947db56f",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas": "5fec76d9ddb854f7a9e55f83d92d92f4f7c3500e98400514cd2cf7ac8a1baa46"
+  },
+  "validation_gates": [
+    {
+      "gate": "Readback 0128",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/validate-readback.sh passou para .hbn/readbacks/0128-rb-onda-38-2-12-performance-ux-basica.json."
+    },
+    {
+      "gate": "Publicador V2 escopo fechado",
+      "status": "pass_local",
+      "evidencia": "python3 local-ai/scripts/publicar_vba_import_v2.py apply --only ProgressBar.frm --only Menu_Principal.frm --only Teste_V2_Roteiros.bas --only App_Release.bas aplicou 3 arquivos e deixou AAX in_sync."
+    },
+    {
+      "gate": "Glasswing G7/G8",
+      "status": "pass_local",
+      "evidencia": "python3 local-ai/scripts/publicar_vba_import_v2.py check retornou 53 in_sync e G8 OK."
+    },
+    {
+      "gate": "Arquivos fora de escopo",
+      "status": "pass_local",
+      "evidencia": "Credencia_Empresa.frm, Auto_Open.bas, Mod_Types.bas, Importador_V3.bas e .frx nao receberam diff."
+    },
+    {
+      "gate": "Importador V3",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou em 2026-06-01 00:42 BRT: delta importou no workbook."
+    },
+    {
+      "gate": "Debug > Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou em 2026-06-01 00:42 BRT: VBE > Depurar > Compilar VBAProject passou limpo."
+    },
+    {
+      "gate": "TV2_RunPerformanceUXBasica",
+      "status": "pass_human",
+      "evidencia": "Suite V2 concluida. Execucao: TV2_20260601_004135. Resultado: OK=5 | FALHA=0 | MANUAL=0. CSV de falhas nao exportado."
+    },
+    {
+      "gate": "AAX drift operacional",
+      "status": "pass_local",
+      "evidencia": "Apos o gate humano, local-ai/vba_import/001-modulo/AAX-App_Release.bas sofreu drift esperado do BUMP do Importador V3. Foi ressincronizado com python3 local-ai/scripts/publicar_vba_import_v2.py apply --only App_Release.bas, conforme knowledge 0016, sem edicao manual de whitespace."
+    }
+  ],
+  "scope_notes": {
+    "auto_open": "src/vba/Auto_Open.bas permaneceu fora do escopo e nao foi tocado.",
+    "mod_types": "src/vba/Mod_Types.bas permaneceu fora do escopo e nao foi tocado.",
+    "importador_v3": "src/vba/Importador_V3.bas permaneceu fora do escopo e nao foi tocado.",
+    "credenciamento_lote": "FT-4 foi diferido para onda propria por risco de CRED_ID/AR1.",
+    "frx": "Nenhum .frx recebeu diff.",
+    "freeze": "Este ERP entrega pacote para gate humano; nao declara freeze V206."
+  },
+  "next_action": {
+    "summary": "Onda 38.2.12 validada. Proxima micro-onda deve abrir novo readback safe_track; recomendacao: tratar FT-4/credenciamento em lote separadamente ou fazer handoff curto se o contexto cair.",
+    "status": "ready_for_next_readback"
+  },
+  "created_at": "2026-06-01T00:14:22-03:00",
+  "completed_at": "2026-06-01T00:42:00-03:00"
+}

@@ -1662,26 +1662,7 @@ On Error GoTo erro_carregamento:
     wsEnt.Cells(ultimaLinhaEnt, 22).Value = CDate(Now)
     Call Util_RestaurarProtecaoAba(wsEnt, estEntProt, senhaEntProt)
 
-    C_CNPJ = Empty
-    C_Entidade = Empty
-    C_Tel_Fixo = Empty
-    C_Tel_Cel = Empty
-    C_Email = Empty
-    C_Endereco = Empty
-    C_Bairro = Empty
-    C_Municipio = Empty
-    C_CEP = Empty
-    C_UF = Empty
-    C_Contato1 = Empty
-    C_Fone_Cont1 = Empty
-    C_Func_Cont1 = Empty
-    C_Contato2 = Empty
-    C_Fone_Cont2 = Empty
-    C_Func_Cont2 = Empty
-    C_Contato3 = Empty
-    C_Fone_Cont3 = Empty
-    C_Func_Cont3 = Empty
-    C_InfoAD = Empty
+    Call LimparCamposCadastroEntidade
 
     Call ClassificaEntidade
     Call AtualizarListaEntidadeMenuAtual
@@ -1704,6 +1685,29 @@ erro_carregamento:
     On Error GoTo 0
     ' Onda 38.2.2 AT-5: finaliza bloco rapido se foi iniciado (evita restaurar TEstadoExcel zerada se erro ocorreu antes do iniciar).
     If blocoRapidoIniciado Then Util_FinalizarBlocoRapido estadoExcel
+End Sub
+
+Private Sub LimparCamposCadastroEntidade()
+    C_CNPJ.Value = Empty
+    C_Entidade.Value = Empty
+    C_Tel_Fixo.Value = Empty
+    C_Tel_Cel.Value = Empty
+    C_Email.Value = Empty
+    C_Endereco.Value = Empty
+    C_Bairro.Value = Empty
+    C_Municipio.Value = Empty
+    C_CEP.Value = Empty
+    C_UF.Value = Empty
+    C_Contato1.Value = Empty
+    C_Fone_Cont1.Value = Empty
+    C_Func_Cont1.Value = Empty
+    C_Contato2.Value = Empty
+    C_Fone_Cont2.Value = Empty
+    C_Func_Cont2.Value = Empty
+    C_Contato3.Value = Empty
+    C_Fone_Cont3.Value = Empty
+    C_Func_Cont3.Value = Empty
+    C_InfoAD.Value = Empty
 End Sub
 
 Private Sub C_CNPJ_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
@@ -3516,6 +3520,22 @@ End Function
 Private Function AbrirURLExterna(ByVal url As String) As Boolean
     On Error Resume Next
 
+    If InStr(1, Application.OperatingSystem, "Mac", vbTextCompare) > 0 Then
+        Shell "open """ & url & """", vbNormalFocus
+        If Err.Number = 0 Then
+            AbrirURLExterna = True
+            Exit Function
+        End If
+        Err.Clear
+    ElseIf InStr(1, Application.OperatingSystem, "Windows", vbTextCompare) > 0 Then
+        Shell "cmd.exe /c start """" """ & url & """", vbNormalFocus
+        If Err.Number = 0 Then
+            AbrirURLExterna = True
+            Exit Function
+        End If
+        Err.Clear
+    End If
+
     Application.FollowHyperlink url
     If Err.Number = 0 Then
         AbrirURLExterna = True
@@ -3530,13 +3550,7 @@ Private Function AbrirURLExterna(ByVal url As String) As Boolean
     End If
 
     Err.Clear
-    If InStr(1, Application.OperatingSystem, "Windows", vbTextCompare) > 0 Then
-        Shell "cmd.exe /c start """" """ & url & """", vbNormalFocus
-    ElseIf InStr(1, Application.OperatingSystem, "Mac", vbTextCompare) > 0 Then
-        Shell "open """ & url & """", vbNormalFocus
-    End If
-
-    AbrirURLExterna = (Err.Number = 0)
+    AbrirURLExterna = False
     Err.Clear
     On Error GoTo 0
 End Function

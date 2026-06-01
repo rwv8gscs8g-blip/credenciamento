@@ -1,11 +1,11 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.5 (§12 Cadencia D Estendida + §12.B por papel + registro de bastao fundido no handoff 0014)
-proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b` (`chore: consolidar ondas 38.2.4 a 38.2.10`) em 2026-06-01 00:10 BRT. Estado validado: raiz canonica OK; worktree limpo antes da Onda 38.2.11; GATE-A4 segue sem liberar freeze; ondas 38.2.4 a 38.2.9 importadas, compiladas e testadas por Mauricio; Onda 38.2.10 higienizou repositorio e commitou sem tocar Auto_Open, Mod_Types ou Importador_V3.
-ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE: 38.2.4 Integridade de Estado -> 38.2.5 UI regras de negocio -> 38.2.6 Integridade de impressao -> 38.2.7 Leitura/exibicao -> 38.2.8 CONFIG baseline seguro -> 38.2.9 snapshot CONFIG V2 -> 38.2.10 higiene/commit -> 38.2.11 sincronizacao HBN pos-commit. Convencao: build label `<HEAD>+ONDA<N>` ou `<HEAD>+ONDA<N>.fix<NN>` SEM sufixo "FREEZE".
+proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b` (`chore: consolidar ondas 38.2.4 a 38.2.10`) em 2026-06-01 00:10 BRT e sincronizou HBN no commit `d2d7ac5` (`docs: sincronizar hbn apos ondas 38.2.10`). Estado validado: raiz canonica OK; GATE-A4 segue sem liberar freeze; ondas 38.2.4 a 38.2.9 importadas, compiladas e testadas por Mauricio; Onda 38.2.10 higienizou repositorio e commitou sem tocar Auto_Open, Mod_Types ou Importador_V3.
+ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE: 38.2.4 Integridade de Estado -> 38.2.5 UI regras de negocio -> 38.2.6 Integridade de impressao -> 38.2.7 Leitura/exibicao -> 38.2.8 CONFIG baseline seguro -> 38.2.9 snapshot CONFIG V2 -> 38.2.10 higiene/commit -> 38.2.11 sincronizacao HBN pos-commit -> 38.2.12 Performance/UX basica validada por import/compile/TV2. Convencao: build label `<HEAD>+ONDA<N>` ou `<HEAD>+ONDA<N>.fix<NN>` SEM sufixo "FREEZE".
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio APROVADO em VR_20260526_102200. **Anchor de rollback Onda 38.2.2: commit 179bac5**. **Caminho B (rollback) tecnicamente valido se Mauricio escolher**.
-proxima-acao: abrir readback safe_track para a proxima onda de estabilizacao residual do parecer 0024, recomendada como 38.2.12 Performance/UX: ProgressBar sem save/busy-wait, credenciamento em lote, limpeza de cadastro de entidade e URL Mac-first. Freeze V206 continua bloqueado.
-ultima-atualizacao: 2026-06-01T00:14:22-0300 (Onda 38.2.11 sincronizou HBN com commit 882cd2b; freeze V206 ainda bloqueado)
+proxima-acao: fechar commit da Onda 38.2.12 e abrir novo readback safe_track para a proxima micro-onda. FT-4 credenciamento em lote permanece fora da 38.2.12 e deve ser tratado separadamente. Freeze V206 continua bloqueado.
+ultima-atualizacao: 2026-06-01T00:42:00-0300 (Onda 38.2.12 importada, compilada e testada por Mauricio: TV2_20260601_004135 OK=5/FALHA=0/MANUAL=0; freeze V206 ainda bloqueado)
 ---
 
 ## ✅ HBN ACTIVE — CODEX ASSUMIU BASTÃO V206 / ONDA 38.2.3 (NOVO)
@@ -31,6 +31,7 @@ ultima-atualizacao: 2026-06-01T00:14:22-0300 (Onda 38.2.11 sincronizou HBN com c
 | Readback 38.2.9 | [`0125-rb-onda-38-2-9-config-snapshot-v2.json`](../readbacks/0125-rb-onda-38-2-9-config-snapshot-v2.json) — **human_status: confirmed** |
 | Readback 38.2.10 | [`0126-rb-onda-38-2-10-higiene-repositorio.json`](../readbacks/0126-rb-onda-38-2-10-higiene-repositorio.json) — **human_status: confirmed** |
 | Readback 38.2.11 | [`0127-rb-onda-38-2-11-sync-hbn-pos-commit.json`](../readbacks/0127-rb-onda-38-2-11-sync-hbn-pos-commit.json) — **human_status: confirmed** |
+| Readback 38.2.12 | [`0128-rb-onda-38-2-12-performance-ux-basica.json`](../readbacks/0128-rb-onda-38-2-12-performance-ux-basica.json) — **human_status: confirmed** |
 | Mensagem | [`.hbn/messages/20260527-1408-codex-assumiu-bastao-v206.md`](../messages/20260527-1408-codex-assumiu-bastao-v206.md) |
 | Entrega GATE-A1 | [`.hbn/proposals/0013-codex-at1-gerador-codeonly.md`](../proposals/0013-codex-at1-gerador-codeonly.md) |
 | Auditorias GATE-A1 | [Opus 0014](../proposals/0014-opus-auditoria-gate-a1-onda-38-2-3.md) + [Antigravity 0015](../proposals/0015-antigravity-auditoria-gate-a1-onda-38-2-3.md) — aprovadas |
