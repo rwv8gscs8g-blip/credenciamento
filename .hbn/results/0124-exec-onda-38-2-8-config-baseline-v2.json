@@ -1,0 +1,108 @@
+{
+  "result_id": "0124-exec-onda-38-2-8-config-baseline-v2",
+  "execution_id": "0124-exec-onda-38-2-8-config-baseline-v2",
+  "readback_id": "0124-rb-onda-38-2-8-config-baseline-v2",
+  "data": "2026-05-31",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "human_gate_passed",
+  "outcome": "import_compile_tv2_directed_passed",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Preparar Onda 38.2.8 para FT-11/CONFIG: impedir que o baseline V2 sobrescreva municipio e gestor operacionais com valores de teste.",
+  "summary": "O delta altera TV2_SetConfigCanonica para preservar COL_CFG_GESTOR e COL_CFG_MUNICIPIO quando ja possuem valores salvos pelo operador. Gestor Testes V2 e Municipio de Testes V2 permanecem como fallback apenas para CONFIG vazia. A suite dirigida TV2_RunConfigBaselineSeguro valida de forma nao destrutiva a presenca do helper e a ausencia das atribuicoes diretas antigas. Mauricio importou o pacote V3, compilou o VBAProject e executou TV2_RunConfigBaselineSeguro com OK=3 | FALHA=0 | MANUAL=0 na execucao TV2_20260531_230900.",
+  "files_changed": [
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_8_CONFIG_BASELINE_V2.txt",
+    ".hbn/readbacks/0124-rb-onda-38-2-8-config-baseline-v2.json",
+    ".hbn/hearbacks/0124-rb-onda-38-2-8-config-baseline-v2-confirmed.json",
+    ".hbn/hearbacks/0124-rb-onda-38-2-8-config-baseline-v2-confirmed.md",
+    ".hbn/results/0124-exec-onda-38-2-8-config-baseline-v2.json",
+    ".hbn/proposals/0030-codex-auditoria-cruzada-curta-config-baseline-v206.md",
+    "auditoria/03_ondas/onda_38_2_8/0124_TECNICO.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38_2_8_CONFIG_BASELINE_V2",
+    "build_label": "fd45a5d+ONDA38.2.8-CONFIG-BASELINE-V2",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_8_CONFIG_BASELINE_V2.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_8_CONFIG_BASELINE_V2\", \"fd45a5d+ONDA38.2.8-CONFIG-BASELINE-V2\""
+  },
+  "artifact_hashes": {
+    "src/vba/Teste_V2_Engine.bas": "f1203745aaa9944234f9b8e963797552911b1ecab1fd0500f16ba01a82f7a949",
+    "src/vba/Teste_V2_Roteiros.bas": "c4bbffbe9fce51d566718adabb4f565882ada6ff4b9d0f42e7b8069083ed527f",
+    "src/vba/App_Release.bas": "ddf112c169675310d4ab8915cca429416bb211d34f1e786254b887f3623abdc4",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_8_CONFIG_BASELINE_V2.txt": "00fd3e648f8eae9120c5c2e2919443d571eac7d4a1e5a3f8850c8648d9003f29",
+    "auditoria/03_ondas/onda_38_2_8/0124_TECNICO.md": "e318d6561e2f973a31832cfcadbf26e2878b74a266c79afdf7b7a35ab87b687b",
+    ".hbn/proposals/0030-codex-auditoria-cruzada-curta-config-baseline-v206.md": "d95b9e7f9ec3b953b46f292774889c96f8a016c7cb3f269b59b82ebed9cf0b7e"
+  },
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass",
+      "evidencia": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Hearback 0124",
+      "status": "pass",
+      "evidencia": "Mauricio confirmou em chat: aprovado, pode seguir. Readback 0124 esta com human_status=confirmed e hearback JSON/MD criado."
+    },
+    {
+      "gate": "Sincronia src/vba x local-ai/vba_import",
+      "status": "pass_local",
+      "evidencia": "cmp -s sem divergencia para Teste_V2_Engine, Teste_V2_Roteiros e App_Release."
+    },
+    {
+      "gate": "Manifesto V3",
+      "status": "pass_local",
+      "evidencia": "Manifesto ONDA38_2_8_CONFIG_BASELINE_V2 criado com M=3, F=0 e hashes SHA-256 dos artefatos."
+    },
+    {
+      "gate": "Auditoria cruzada curta",
+      "status": "pass_local",
+      "evidencia": ".hbn/proposals/0030-codex-auditoria-cruzada-curta-config-baseline-v206.md registra veredito sem bloqueador local condicionado ao gate humano."
+    },
+    {
+      "gate": "git diff --check",
+      "status": "known_residual",
+      "evidencia": "Falhou por trailing whitespace/CRLF em Teste_V2_Roteiros.bas ja presente no diff amplo das ondas anteriores; nao foi higienizado para evitar refatoracao fora do microdelta."
+    },
+    {
+      "gate": "Importador V3",
+      "status": "pass_human",
+      "evidencia": "Mauricio importou o delta V3 em 2026-05-31; log V3: modo=Estabilizado | dryRun=Falso | M=3 | F=0 | err=0 | skip=0; backup V3 em \\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260531_230806-V3-FULL."
+    },
+    {
+      "gate": "Debug > Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio relatou compile limpo apos o import."
+    },
+    {
+      "gate": "D2 TV2_RunConfigBaselineSeguro",
+      "status": "pass_human",
+      "evidencia": "Mauricio executou TV2_RunConfigBaselineSeguro; execucao TV2_20260531_230900; resultado OK=3 | FALHA=0 | MANUAL=0; CSV de falhas nao exportado."
+    }
+  ],
+  "scope_notes": {
+    "auto_open": "src/vba/Auto_Open.bas permaneceu fora do escopo e nao foi tocado.",
+    "mod_types": "src/vba/Mod_Types.bas permaneceu fora do escopo e nao foi tocado.",
+    "importador_v3": "src/vba/Importador_V3.bas permaneceu fora do escopo e nao foi tocado.",
+    "configuracao_inicial": "Configuracao_Inicial.frm e .frx nao foram tocados.",
+    "preencher_menu": "Preencher.bas e Menu_Principal.frm nao foram tocados nesta onda.",
+    "svc_repo": "Svc_* e Repo_* nao foram alterados.",
+    "freeze": "Este ERP prepara o pacote 38.2.8, mas nao declara freeze V206."
+  },
+  "next_action": {
+    "summary": "Onda 38.2.8 fechada. Proxima acao: abrir micro-onda para mapa/snapshot dos campos operacionais de CONFIG ainda afetados por testes, antes da onda de layout dos PDFs.",
+    "status": "ready_for_next_readback"
+  },
+  "closed_at": "2026-05-31T23:15:59-03:00",
+  "created_at": "2026-05-31T22:55:13-03:00"
+}

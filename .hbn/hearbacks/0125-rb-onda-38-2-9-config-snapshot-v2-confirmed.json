@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0125-rb-onda-38-2-9-config-snapshot-v2-confirmed",
+  "readback_id": "0125-rb-onda-38-2-9-config-snapshot-v2",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-05-31T23:17:51-03:00",
+  "notes": "Usuario confirmou apos gate 0124: 'Vamos seguir com as novas ondas' e pediu considerar configuracoes em termos de persistencia nos testes."
+}

@@ -41,6 +41,121 @@ Public Sub Util_DesprotegerAbaComTentativas(ByVal ws As Worksheet)
     On Error GoTo 0
 End Sub
 
+Private Function Util_NomesAbasCriticas() As Variant
+    Util_NomesAbasCriticas = Array(SHEET_EMPRESAS, SHEET_EMPRESAS_INATIVAS, SHEET_ENTIDADE, _
+                                   SHEET_ENTIDADE_INATIVOS, SHEET_ATIVIDADES, SHEET_CAD_SERV, _
+                                   SHEET_CREDENCIADOS, SHEET_PREOS, SHEET_CAD_OS, SHEET_AUDIT)
+End Function
+
+Private Function Util_AbaEhCritica(ByVal nomeAba As String) As Boolean
+    Dim nomes As Variant
+    Dim nome As Variant
+
+    nomes = Util_NomesAbasCriticas()
+    For Each nome In nomes
+        If StrComp(CStr(nome), Trim$(nomeAba), vbTextCompare) = 0 Then
+            Util_AbaEhCritica = True
+            Exit Function
+        End If
+    Next nome
+End Function
+
+Private Function Util_CelulasTodasBloqueadas(ByVal ws As Worksheet) As Boolean
+    Dim estadoBloqueio As Variant
+
+    On Error GoTo falha
+    If ws Is Nothing Then Exit Function
+
+    estadoBloqueio = ws.Cells.Locked
+    If IsNull(estadoBloqueio) Then Exit Function
+
+    Util_CelulasTodasBloqueadas = CBool(estadoBloqueio)
+    Exit Function
+
+falha:
+    Util_CelulasTodasBloqueadas = False
+End Function
+
+Private Function Util_ContarObjetosAbaCritica(ByVal ws As Worksheet, ByRef qtdObjetos As Long, ByRef detalheErro As String) As Boolean
+    On Error GoTo falha
+
+    qtdObjetos = 0
+    detalheErro = ""
+    If ws Is Nothing Then
+        detalheErro = "ABA_NULA"
+        Exit Function
+    End If
+
+    qtdObjetos = ws.Shapes.count
+    Util_ContarObjetosAbaCritica = True
+    Exit Function
+
+falha:
+    detalheErro = "ERRO_" & CStr(Err.Number) & ":" & Err.Description
+End Function
+
+Private Function Util_LimparObjetosAbaCritica(ByVal ws As Worksheet, ByRef removidos As Long, ByRef detalheErro As String) As Boolean
+    Dim i As Long
+
+    On Error GoTo falha
+
+    removidos = 0
+    detalheErro = ""
+    If ws Is Nothing Then
+        detalheErro = "ABA_NULA"
+        Exit Function
+    End If
+
+    Util_DesprotegerAbaComTentativas ws
+
+    For i = ws.Shapes.count To 1 Step -1
+        ws.Shapes(i).Delete
+        removidos = removidos + 1
+    Next i
+
+    Util_LimparObjetosAbaCritica = True
+    Exit Function
+
+falha:
+    detalheErro = "ERRO_" & CStr(Err.Number) & ":" & Err.Description
+End Function
+
+Private Function Util_AplicarProtecaoCriticaAba(ByVal ws As Worksheet, ByRef detalheErro As String) As Boolean
+    On Error GoTo falha
+
+    detalheErro = ""
+    If ws Is Nothing Then
+        detalheErro = "ABA_NULA"
+        Exit Function
+    End If
+
+    Util_DesprotegerAbaComTentativas ws
+    ws.Cells.Locked = True
+    ws.Protect Password:=Util_SenhaProtecaoPadrao(), DrawingObjects:=True, Contents:=True, _
+               Scenarios:=True, UserInterfaceOnly:=True, AllowFiltering:=True, AllowSorting:=True
+
+    If Not ws.ProtectContents Then
+        detalheErro = "NAO_PROTEGIDA"
+        Exit Function
+    End If
+
+    If Not ws.ProtectDrawingObjects Then
+        detalheErro = "OBJETOS_NAO_PROTEGIDOS"
+        Exit Function
+    End If
+
+    If Not Util_CelulasTodasBloqueadas(ws) Then
+        detalheErro = "CELULAS_DESBLOQUEADAS"
+        Exit Function
+    End If
+
+    Util_AplicarProtecaoCriticaAba = True
+    Exit Function
+
+falha:
+    detalheErro = "ERRO_" & CStr(Err.Number) & ":" & Err.Description
+End Function
+
 ' Remove protecao de uma aba para escrita via VBA.
 ' Retorna True quando a aba esta pronta para escrita.
 Public Function Util_PrepararAbaParaEscrita( _
@@ -81,10 +196,20 @@ Public Sub Util_RestaurarProtecaoAba( _
     ByVal estavaProtegida As Boolean, _
     ByVal senhaUsada As String _
 )
+    Dim detalheErro As String
+
+    If ws Is Nothing Then Exit Sub
+
+    If Util_AbaEhCritica(ws.Name) Then
+        Call Util_AplicarProtecaoCriticaAba(ws, detalheErro)
+        Exit Sub
+    End If
+
     If Not estavaProtegida Then Exit Sub
 
     On Error Resume Next
-    ws.Protect Password:=senhaUsada, UserInterfaceOnly:=True
+    ws.Protect Password:=senhaUsada, DrawingObjects:=True, Contents:=True, _
+               Scenarios:=True, UserInterfaceOnly:=True
     On Error GoTo 0
 End Sub
 
@@ -103,7 +228,11 @@ Public Function Util_ExcluirLinhaSegura(ByVal ws As Worksheet, ByVal linha As Lo
             If Not Intersect(ws.Rows(linha), lo.DataBodyRange) Is Nothing Then
                 idxListRow = linha - lo.DataBodyRange.row + 1
                 If idxListRow >= 1 And idxListRow <= lo.ListRows.count Then
-                    lo.ListRows(idxListRow).Delete
+                    If lo.ListRows.count <= 1 Then
+                        Intersect(ws.Rows(linha), lo.DataBodyRange).ClearContents
+                    Else
+                        lo.ListRows(idxListRow).Delete
+                    End If
                     Util_ExcluirLinhaSegura = True
                     Exit Function
                 End If
@@ -460,25 +589,142 @@ End Sub
 
 ' Protege abas críticas no Workbook_Open sem depender de módulos extras removidos.
 Public Sub ProtegerAbasCriticas()
+    Dim detalhes As String
+
+    Call Util_ProtegerAbasCriticasVerificado(detalhes)
+End Sub
+
+Public Function Util_ProtegerAbasCriticasVerificado(ByRef detalhes As String) As Boolean
     Dim nomes As Variant
     Dim nomeAba As Variant
     Dim ws As Worksheet
+    Dim ok As Boolean
+    Dim detalheProtecao As String
 
-    nomes = Array(SHEET_EMPRESAS, SHEET_EMPRESAS_INATIVAS, SHEET_ENTIDADE, _
-                  SHEET_ENTIDADE_INATIVOS, SHEET_ATIVIDADES, SHEET_CAD_SERV, _
-                  SHEET_CREDENCIADOS, SHEET_PREOS, SHEET_CAD_OS, SHEET_AUDIT)
+    nomes = Util_NomesAbasCriticas()
+    detalhes = ""
+    ok = True
 
     For Each nomeAba In nomes
         Set ws = Nothing
         If Util_TentarObterWorksheet(CStr(nomeAba), ws) Then
-            Util_DesprotegerAbaComTentativas ws
-            On Error Resume Next
-            ws.Protect Password:=Util_SenhaProtecaoPadrao(), DrawingObjects:=True, Contents:=True, _
-                       Scenarios:=True, UserInterfaceOnly:=True
-            On Error GoTo 0
+            detalheProtecao = ""
+            If Not Util_AplicarProtecaoCriticaAba(ws, detalheProtecao) Then
+                ok = False
+                detalhes = detalhes & CStr(nomeAba) & ":" & detalheProtecao & ";"
+            End If
+        Else
+            ok = False
+            detalhes = detalhes & CStr(nomeAba) & ":AUSENTE;"
         End If
     Next nomeAba
-End Sub
+
+    Util_ProtegerAbasCriticasVerificado = ok
+End Function
+
+Public Function Util_LimparObjetosAbasCriticas(ByRef detalhes As String) As Boolean
+    Dim nomes As Variant
+    Dim nomeAba As Variant
+    Dim ws As Worksheet
+    Dim ok As Boolean
+    Dim removidos As Long
+    Dim detalheLimpeza As String
+    Dim detalheProtecao As String
+
+    nomes = Util_NomesAbasCriticas()
+    detalhes = ""
+    ok = True
+
+    For Each nomeAba In nomes
+        Set ws = Nothing
+        If Util_TentarObterWorksheet(CStr(nomeAba), ws) Then
+            removidos = 0
+            detalheLimpeza = ""
+            detalheProtecao = ""
+            If Not Util_LimparObjetosAbaCritica(ws, removidos, detalheLimpeza) Then
+                ok = False
+                detalhes = detalhes & CStr(nomeAba) & ":LIMPEZA_" & detalheLimpeza & ";"
+            ElseIf removidos > 0 Then
+                detalhes = detalhes & CStr(nomeAba) & ":REMOVIDOS=" & CStr(removidos) & ";"
+            End If
+
+            If Not Util_AplicarProtecaoCriticaAba(ws, detalheProtecao) Then
+                ok = False
+                detalhes = detalhes & CStr(nomeAba) & ":PROTECAO_" & detalheProtecao & ";"
+            End If
+        Else
+            ok = False
+            detalhes = detalhes & CStr(nomeAba) & ":AUSENTE;"
+        End If
+    Next nomeAba
+
+    Util_LimparObjetosAbasCriticas = ok
+End Function
+
+Public Function Util_VerificarObjetosAbasCriticas(ByRef detalhes As String) As Boolean
+    Dim nomes As Variant
+    Dim nomeAba As Variant
+    Dim ws As Worksheet
+    Dim ok As Boolean
+    Dim qtdObjetos As Long
+    Dim detalheContagem As String
+
+    nomes = Util_NomesAbasCriticas()
+    detalhes = ""
+    ok = True
+
+    For Each nomeAba In nomes
+        Set ws = Nothing
+        If Util_TentarObterWorksheet(CStr(nomeAba), ws) Then
+            qtdObjetos = 0
+            detalheContagem = ""
+            If Not Util_ContarObjetosAbaCritica(ws, qtdObjetos, detalheContagem) Then
+                ok = False
+                detalhes = detalhes & CStr(nomeAba) & ":CONTAGEM_" & detalheContagem & ";"
+            ElseIf qtdObjetos > 0 Then
+                ok = False
+                detalhes = detalhes & CStr(nomeAba) & ":OBJETOS=" & CStr(qtdObjetos) & ";"
+            End If
+        Else
+            ok = False
+            detalhes = detalhes & CStr(nomeAba) & ":AUSENTE;"
+        End If
+    Next nomeAba
+
+    Util_VerificarObjetosAbasCriticas = ok
+End Function
+
+Public Function Util_VerificarProtecaoAbasCriticas(ByRef detalhes As String) As Boolean
+    Dim nomes As Variant
+    Dim nomeAba As Variant
+    Dim ws As Worksheet
+    Dim ok As Boolean
+
+    nomes = Util_NomesAbasCriticas()
+    detalhes = ""
+    ok = True
+
+    For Each nomeAba In nomes
+        Set ws = Nothing
+        If Util_TentarObterWorksheet(CStr(nomeAba), ws) Then
+            If Not ws.ProtectContents Then
+                ok = False
+                detalhes = detalhes & CStr(nomeAba) & ":NAO_PROTEGIDA;"
+            ElseIf Not ws.ProtectDrawingObjects Then
+                ok = False
+                detalhes = detalhes & CStr(nomeAba) & ":OBJETOS_NAO_PROTEGIDOS;"
+            ElseIf Not Util_CelulasTodasBloqueadas(ws) Then
+                ok = False
+                detalhes = detalhes & CStr(nomeAba) & ":CELULAS_DESBLOQUEADAS;"
+            End If
+        Else
+            ok = False
+            detalhes = detalhes & CStr(nomeAba) & ":AUSENTE;"
+        End If
+    Next nomeAba
+
+    Util_VerificarProtecaoAbasCriticas = ok
+End Function
 
 Private Function Util_TentarObterWorksheet(ByVal nomeAba As String, ByRef wsOut As Worksheet) As Boolean
     Dim ws As Worksheet

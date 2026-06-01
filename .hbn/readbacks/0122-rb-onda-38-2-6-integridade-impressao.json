@@ -1,0 +1,179 @@
+{
+  "readback_id": "0122-rb-onda-38-2-6-integridade-impressao",
+  "data": "2026-05-31",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0121-rb-onda-38-2-5-ui-regras-negocio",
+  "intent": {
+    "objective": "Abrir a Onda 38.2.6 para resolver a integridade de impressao do parecer 0024: BL-5 clamp de notas na impressao, BL-6 local da OS, BL-7 dados da Pre-OS impressa e FT-7 empenho na OS.",
+    "non_goals": [
+      "Nao implementar antes de hearback humano confirmado",
+      "Nao tocar Auto_Open.bas sem excecao explicita",
+      "Nao iniciar propagacao do padrao de seguranca de Entidades para outros formularios ou abas",
+      "Nao alterar regra de rodizio, regra de strikes, regra de recusas ou estado de suspensao",
+      "Nao corrigir performance, filtros, selecao de listas, GitHub, designer residual ou UX fora do caminho de impressao",
+      "Nao declarar freeze V206, tag, release candidate ou build final",
+      "Nao reimportar Mod_Types.bas nem alterar Importador_V3.bas"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Preencher.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_6_IMPRESSAO_INTEGRIDADE.txt",
+      ".hbn/readbacks/0122-rb-onda-38-2-6-integridade-impressao.json",
+      ".hbn/hearbacks/0122-rb-onda-38-2-6-integridade-impressao-confirmed.json",
+      ".hbn/hearbacks/0122-rb-onda-38-2-6-integridade-impressao-confirmed.md",
+      ".hbn/results/0122-exec-onda-38-2-6-integridade-impressao.json",
+      ".hbn/proposals/0028-*impressao*.md",
+      ".hbn/proposals/0029-*impressao*.md",
+      "auditoria/03_ondas/onda_38_2_6/**",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260531*.csv",
+      "TesteV2_*_TV2_20260531*.csv",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Classificar.bas",
+      "src/vba/Altera_Entidade.frm",
+      "src/vba/Altera_Entidade.frx",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Configuracao_Inicial.frx",
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Svc_*.bas",
+      "src/vba/Repo_*.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAT-Classificar.bas",
+      "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+      "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+      "local-ai/vba_import/001-modulo/AAR-Svc_OS.bas",
+      "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/ABM-Svc_Entidade.bas",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+      "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+      "local-ai/vba_import/002-formularios/AAE-Altera_Entidade.frm",
+      "local-ai/vba_import/002-formularios/AAE-Altera_Entidade.code-only.txt",
+      "local-ai/vba_import/002-formularios/Altera_Entidade.frx",
+      "local-ai/vba_import/002-formularios/Menu_Principal.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece a release oficial validada",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "O parecer 0024 segue como arbitro principal dos BLOQUEADORES L43/GATE-A4",
+    "Onda 38.2.5 BL-1 permanece fechada pelo ERP 0121 sem reabrir Configuracao_Inicial",
+    "Auto_Open.bas permanece fora do escopo sem excecao explicita",
+    "Mod_Types.bas, Svc_* e Repo_* permanecem fora do escopo",
+    "A onda corrige apenas dados de impressao e testes dirigidos; nao muda regras de selecao, suspensao, rodizio ou persistencia de avaliacao",
+    "Importacao no workbook deve usar apenas pacote V3 em local-ai/vba_import/"
+  ],
+  "risks": [
+    {
+      "risk": "Preencher campos de impressao pode depender de variaveis globais e fluxo UI com estado implicito.",
+      "mitigation": "Ler o caminho atual antes de editar, manter mudancas pontuais em Preencher/Menu_Principal e criar teste V2 dirigido que valide celulas de impressao antes de PrintOut.",
+      "severity": "high"
+    },
+    {
+      "risk": "Corrigir clamp de nota no caminho de impressao pode divergir da regra de persistencia de avaliacao.",
+      "mitigation": "Reutilizar a mesma semantica defensiva de nota segura sem alterar Svc_Avaliacao; o teste deve cobrir nota acima de 10 e limitar a saida impressa.",
+      "severity": "high"
+    },
+    {
+      "risk": "A Pre-OS impressa usa identificador com prefixo PROVISORIA e pode falhar se a correcao mexer no ID operacional errado.",
+      "mitigation": "Normalizar somente o identificador de entrada do caminho de impressao, preservar o ID exibido ao usuario e validar busca por ID numerico/canonico.",
+      "severity": "high"
+    },
+    {
+      "risk": "Importar Menu_Principal completo pode arriscar layout .frx ou handlers fora do escopo.",
+      "mitigation": "Usar import estabilizado/code-only para Menu_Principal; nao tocar Menu_Principal.frx; conferir diff entre src e code-only.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Misturar integridade de impressao com performance, filtros ou leitura de listas pode ampliar a regressao.",
+      "mitigation": "Manter files_forbidden e nao aceitar mudancas em Classificar, Altera_Entidade, Util_Planilha, Configuracao_Inicial, Svc_* ou Repo_* nesta onda.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "H0 hearback humano confirmado antes de qualquer implementacao",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0122-rb-onda-38-2-6-integridade-impressao-confirmed.json"
+      },
+      {
+        "gate": "D1 diff de escopo confirma apenas Preencher, Menu_Principal code-only, Teste_V2_Roteiros, App_Release, espelhos V3 e docs da onda",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_6/README.md"
+      },
+      {
+        "gate": "D2 V2_IMPRESSAO_INTEGRIDADE valida clamp de nota impressa, local de OS, dados de Pre-OS e empenho antes do PrintOut",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_6/GATE_D2_V2_IMPRESSAO_INTEGRIDADE.md"
+      },
+      {
+        "gate": "Importador V3 delta ONDA38_2_6_IMPRESSAO_INTEGRIDADE executado a partir de local-ai/vba_import",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_6/IMPORT_PROCEDURE.md"
+      },
+      {
+        "gate": "Debug > Compile VBAProject limpo apos import",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_6/IMPORT_PROCEDURE.md"
+      },
+      {
+        "gate": "RVS ou suite dirigida final nao regride apos o delta",
+        "evidence_kind": "csv_hash",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_6/RVS_OU_DIRIGIDO_FINAL.md"
+      },
+      {
+        "gate": "Auditoria cruzada curta pos-38.2.6 revisa BL-5, BL-6, BL-7 e FT-7",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/proposals/"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o hearback 0122 nao for confirmado, nao alterar codigo, importaveis, docs de onda ou CHANGELOG.",
+      "Se a analise mostrar que a correcao exige Svc_* ou Repo_*, parar e abrir novo readback com escopo explicito.",
+      "Se o Importador V3 falhar, nao salvar o workbook e restaurar o backup criado no inicio do import.",
+      "Se o compile manual falhar, fechar sem salvar, registrar modulo/linha e bloquear execucao de testes.",
+      "Se V2_IMPRESSAO_INTEGRIDADE falhar, preservar CSV/evidencia e nao declarar BL-5/BL-6/BL-7 resolvidos.",
+      "Se RVS ou suite dirigida reprovar, preservar CSVs de falha e nao declarar freeze V206."
+    ],
+    "anchor_to_restore": "Workbook operacional pos-Onda 38.2.5, build fd45a5d+ONDA38.2.5-UI-REGRAS-NEGOCIO, mais backup V3 gerado no inicio do import 38.2.6"
+  },
+  "human_status": "confirmed",
+  "implementation_hold": "A IA nao deve implementar, editar codigo VBA, gerar manifesto, atualizar docs de onda ou tocar CHANGELOG antes de hearback confirmed para este readback.",
+  "import_contract_planned": {
+    "delta_name": "ONDA38_2_6_IMPRESSAO_INTEGRIDADE",
+    "build_label_pattern": "<HEAD>+ONDA38.2.6-IMPRESSAO-INTEGRIDADE",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_6_IMPRESSAO_INTEGRIDADE.txt",
+    "command_pattern": "ImportarPacoteV3_Delta \"ONDA38_2_6_IMPRESSAO_INTEGRIDADE\", \"<HEAD>+ONDA38.2.6-IMPRESSAO-INTEGRIDADE\""
+  },
+  "source_context": {
+    "previous_erp": ".hbn/results/0121-exec-onda-38-2-5-ui-regras-negocio.json",
+    "arbiter_proposal": ".hbn/proposals/0024-Opus3-4-MAX-auditoria-gate-a4-l43-v206.md",
+    "target_findings": "BL-5, BL-6, BL-7, FT-7"
+  },
+  "created_at": "2026-05-31T17:00:57-03:00"
+}

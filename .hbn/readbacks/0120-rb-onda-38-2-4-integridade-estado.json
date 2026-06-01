@@ -1,0 +1,172 @@
+{
+  "readback_id": "0120-rb-onda-38-2-4-integridade-estado",
+  "data": "2026-05-30",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0119-rb-onda-38-2-3-gate-a4-rvs-evidencias",
+  "intent": {
+    "objective": "Abrir a Onda 38.2.4 de Integridade de Estado para resolver os BLOQUEADORES estruturais do L43 priorizados pelo parecer 0024: ordenacao deterministica, inativacao atomica de entidade e protecao efetiva de abas criticas sem tocar Auto_Open.bas no escopo inicial.",
+    "non_goals": [
+      "Nao declarar freeze V206 enquanto os BLOQUEADORES do L43 nao forem resolvidos e revalidados",
+      "Nao tocar Auto_Open.bas nesta primeira micro-onda",
+      "Nao corrigir Configuracao_Inicial, impressao Pre-OS/OS/Avaliacao, designer visual ou performance nesta micro-onda",
+      "Nao alterar regras de negocio de rodizio, strikes, avaliacao ou credenciamento",
+      "Nao abrir decisoes V207, cache, ORM ou refatoracoes estruturais amplas"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Classificar.bas",
+      "src/vba/Altera_Entidade.frm",
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAT-Classificar.bas",
+      "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAE-Altera_Entidade.frm",
+      "local-ai/vba_import/002-formularios/AAE-Altera_Entidade.code-only.txt",
+      "local-ai/vba_import/002-formularios/Altera_Entidade.frx",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_INTEGRIDADE_ESTADO_F1_MODULOS.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_INTEGRIDADE_ESTADO_F2_FORMS.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_ESTADO_FIX1_ENTIDADE.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_ESTADO_FIX2_TV2_TOKEN.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_ESTADO_FIX3_LAST_ROW_TABLE.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_ESTADO_FIX4_PROTECAO_ABAS.txt",
+      ".hbn/readbacks/0120-rb-onda-38-2-4-integridade-estado.json",
+      ".hbn/hearbacks/0120-rb-onda-38-2-4-integridade-estado-confirmed.json",
+      ".hbn/hearbacks/0120-rb-onda-38-2-4-integridade-estado-confirmed.md",
+      ".hbn/results/0120-exec-onda-38-2-4-integridade-estado.json",
+      ".hbn/relay/INDEX.md",
+      ".hbn/proposals/0022-opus-auditoria-gate-a4-l43-v206.md",
+      ".hbn/proposals/0023-antigravity-auditoria-gate-a4-l43-v206.md",
+      ".hbn/proposals/0024-Opus3-4-MAX-auditoria-gate-a4-l43-v206.md",
+      ".hbn/bypasses/20260530-*-onda-38-2-4-integridade-estado*.md",
+      "auditoria/03_ondas/onda_38_2_4/**",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_2026053*.csv",
+      "auditoria/evidencias/V12.0.0206/csv/**",
+      "TesteV2_*_TV2_2026053*.csv"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_Bateria_Oficial.bas",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Svc_PreOS.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABA-Teste_Bateria_Oficial.bas",
+      "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+      "local-ai/vba_import/001-modulo/AAU-Svc_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/AAS-Svc_OS.bas",
+      "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.frm",
+      "local-ai/scripts/publicar_vba_import.sh",
+      "auditoria/03_ondas/onda_QA_V3/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "O parecer 0024 fica adotado como arbitro principal da priorizacao L43/GATE-A4",
+    "GATE-A4 nao libera freeze enquanto os BLOQUEADORES L43 nao forem resolvidos",
+    "Auto_Open.bas permanece fora do escopo inicial; qualquer necessidade de edicao exigira nova excecao explicita",
+    "Altera_Entidade.frm recebe excecao limitada ao fluxo de inativacao atomica de entidade",
+    "RVS continua necessario, mas nao suficiente, para freeze V206",
+    "Sem push para origin"
+  ],
+  "risks": [
+    {
+      "risk": "Corrigir ordenacao com xlNo alterar a ordem visual esperada em bases com cabecalho ou intervalos sujos.",
+      "mitigation": "Limitar a mudanca aos dois pontos xlGuess identificados pelos auditores e validar com roteiro V2 dirigido em base zerada e base populada.",
+      "severity": "high"
+    },
+    {
+      "risk": "A inativacao atomica de entidade tocar um formulario historicamente blindado e introduzir regressao de UI.",
+      "mitigation": "Restringir a excecao a Altera_Entidade.frm, preservar layout/controles e adicionar teste dirigido para conflito ativa+inativa.",
+      "severity": "high"
+    },
+    {
+      "risk": "A protecao de abas depender de comportamento volátil de UserInterfaceOnly e continuar falhando apos reabertura do workbook.",
+      "mitigation": "Implementar e testar apenas o que couber sem Auto_Open.bas; se a correcao exigir Auto_Open, bloquear subgate e pedir excecao nova.",
+      "severity": "high"
+    },
+    {
+      "risk": "Misturar correcoes de impressao, Config UI e designer visual com integridade de estado e perder causalidade.",
+      "mitigation": "Registrar esses itens como ondas seguintes e manter files_forbidden para os modulos correspondentes.",
+      "severity": "medium"
+    },
+    {
+      "risk": "CSV de evidencia continuar sendo emitido em V12.0.0205 apesar da linha V206.",
+      "mitigation": "Preservar o caminho real gerado pelo workbook e registrar a build label/import label no relatorio da onda.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "D1 diff de escopo confirma apenas Classificar, Altera_Entidade, Util_Planilha, Teste_V2_Roteiros e espelhos autorizados",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_4/README.md"
+      },
+      {
+        "gate": "D2 teste dirigido de ordenacao entidade/servico em base populada",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_4/GATE_D2_ORDENACAO.md"
+      },
+      {
+        "gate": "D3 teste dirigido de entidade ativa+inativa e rollback de falha",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_4/GATE_D3_ENTIDADE_ATOMICA.md"
+      },
+      {
+        "gate": "D4 teste dirigido de protecao de abas sem Auto_Open",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_4/GATE_D4_PROTECAO_ABAS.md"
+      },
+      {
+        "gate": "VBE Compile Project apos cada fase de import",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_4/IMPORT_PROCEDURE_2_FASES.md"
+      },
+      {
+        "gate": "RVS completo aprovado apos import",
+        "evidence_kind": "csv_hash",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_4/RVS_FINAL.md"
+      },
+      {
+        "gate": "Auditoria cruzada pos-38.2.4",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/proposals/"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se import V3 falhar, nao salvar o workbook e restaurar o backup indicado pelo Importador V3.",
+      "Se compile manual falhar, fechar sem salvar, registrar modulo/linha e bloquear execucao de RVS.",
+      "Se testes dirigidos de entidade criarem duplicidade ativa+inativa, preservar evidencias e reverter workbook pelo backup.",
+      "Se protecao de abas exigir Auto_Open.bas, parar a micro-onda e pedir novo hearback de excecao.",
+      "Se RVS reprovar, preservar CSVs de falha e nao avancar para auditoria cruzada."
+    ],
+    "anchor_to_restore": "Workbook operacional pos-GATE-A4 F2 + backup V3 gerado no inicio de cada import"
+  },
+  "human_status": "confirmed",
+  "decisions_preconfirmed": [
+    "Mauricio aprovou adotar 0024 como arbitro principal.",
+    "Mauricio confirmou que GATE-A4 nao libera freeze.",
+    "Mauricio autorizou abrir readback 0120 para Onda 38.2.4 Integridade de Estado.",
+    "Mauricio autorizou escopo inicial em Classificar.bas, Altera_Entidade.frm, Util_Planilha.bas, Teste_V2_Roteiros.bas, espelhos de importacao e documentacao.",
+    "Mauricio confirmou Auto_Open.bas fora do escopo inicial salvo nova excecao explicita."
+  ],
+  "created_at": "2026-05-30T01:30:40-03:00"
+}

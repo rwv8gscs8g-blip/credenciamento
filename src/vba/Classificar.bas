@@ -15,7 +15,7 @@ Sub ClassificaEntidade()
          SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
     With ws.Sort
         .SetRange ws.Range("A2:V" & ultimaLinha)
-        .Header = xlGuess
+        .Header = xlNo
         .MatchCase = False
         .Orientation = xlTopToBottom
         .SortMethod = xlPinYin
@@ -245,7 +245,7 @@ Sub ClassificaServico()
 
     With ws.Sort
         .SetRange ws.Range("A2:I" & ultimaLinha)
-        .Header = xlGuess
+        .Header = xlNo
         .MatchCase = False
         .Orientation = xlTopToBottom
         .SortMethod = xlPinYin

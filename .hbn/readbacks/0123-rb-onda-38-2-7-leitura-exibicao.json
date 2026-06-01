@@ -1,0 +1,187 @@
+{
+  "readback_id": "0123-rb-onda-38-2-7-leitura-exibicao",
+  "data": "2026-05-31",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0122-rb-onda-38-2-6-integridade-impressao",
+  "intent": {
+    "objective": "Abrir a Onda 38.2.7 para resolver leitura e exibicao do parecer 0024: FT-1 selecao na lista principal, FT-5 exibicao no rodizio, FT-6 filtros de Imprime Solicitacao de Servicos e FT-8 codigo/ID visivel antes de CNPJ/credenciamento.",
+    "non_goals": [
+      "Nao implementar antes de hearback humano confirmado",
+      "Nao tocar Auto_Open.bas sem excecao explicita",
+      "Nao reimportar Mod_Types.bas nem alterar Importador_V3.bas",
+      "Nao iniciar propagacao do padrao de seguranca de Entidades para outros formularios ou abas",
+      "Nao alterar regra de rodizio, regra de strikes, regra de recusas ou calculo de suspensao",
+      "Nao corrigir performance, GitHub Mac, designer residual, sobreposicao de controles ou persistencia CONFIG desta vez",
+      "Nao tocar Svc_*.bas ou Repo_*.bas; se a correcao exigir servico/repositorio, parar e abrir novo readback",
+      "Nao tocar arquivos .frx ou layout de formulario nesta onda",
+      "Nao declarar freeze V206, tag, release candidate ou build final"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_7_LEITURA_EXIBICAO.txt",
+      ".hbn/readbacks/0123-rb-onda-38-2-7-leitura-exibicao.json",
+      ".hbn/hearbacks/0123-rb-onda-38-2-7-leitura-exibicao-confirmed.json",
+      ".hbn/hearbacks/0123-rb-onda-38-2-7-leitura-exibicao-confirmed.md",
+      ".hbn/results/0123-exec-onda-38-2-7-leitura-exibicao.json",
+      ".hbn/proposals/0029-*leitura*.md",
+      ".hbn/proposals/0030-*leitura*.md",
+      "auditoria/03_ondas/onda_38_2_7/**",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260531*.csv",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260601*.csv",
+      "TesteV2_*_TV2_20260531*.csv",
+      "TesteV2_*_TV2_20260601*.csv",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Classificar.bas",
+      "src/vba/Altera_Entidade.frm",
+      "src/vba/Altera_Entidade.frx",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Configuracao_Inicial.frx",
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Svc_*.bas",
+      "src/vba/Repo_*.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAT-Classificar.bas",
+      "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+      "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+      "local-ai/vba_import/001-modulo/AAR-Svc_OS.bas",
+      "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/ABM-Svc_Entidade.bas",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+      "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+      "local-ai/vba_import/002-formularios/AAE-Altera_Entidade.frm",
+      "local-ai/vba_import/002-formularios/AAE-Altera_Entidade.code-only.txt",
+      "local-ai/vba_import/002-formularios/Altera_Entidade.frx",
+      "local-ai/vba_import/002-formularios/Menu_Principal.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece a release oficial validada",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "O parecer 0024 segue como arbitro principal dos BLOQUEADORES L43/GATE-A4",
+    "Onda 38.2.5 BL-1 permanece fechada pelo ERP 0121 sem reabrir Configuracao_Inicial",
+    "Onda 38.2.6 integridade de impressao permanece fechada pelo ERP 0122 sem reabrir Preencher fora do alvo de leitura/exibicao",
+    "Auto_Open.bas permanece fora do escopo sem excecao explicita",
+    "Mod_Types.bas, Importador_V3.bas, Svc_* e Repo_* permanecem fora do escopo",
+    "A onda corrige apenas leitura, populacao visual e filtros de exibicao; nao muda regras de negocio ou persistencia de estado",
+    "Arquivos .frx e designer residual permanecem fora da onda 38.2.7",
+    "Importacao no workbook deve usar apenas pacote V3 em local-ai/vba_import/"
+  ],
+  "risks": [
+    {
+      "risk": "C_Lista_Click e selecoes do Menu_Principal podem depender de estado implicito e controles com nomes historicos.",
+      "mitigation": "Ler handlers antes de editar, manter alteracoes pontuais e validar por teste V2 dirigido de presenca/populacao de campos visiveis.",
+      "severity": "high"
+    },
+    {
+      "risk": "FT-5 mistura sintoma de UI com regra de suspensao do rodizio, podendo tentar puxar alteracao para Svc_Rodizio.",
+      "mitigation": "Tratar apenas exibicao/listagem no formulario; se for necessario alterar regra de disponibilidade, parar e abrir readback novo.",
+      "severity": "high"
+    },
+    {
+      "risk": "FT-6 pode exigir reuso de filtro estatico em painel diferente e quebrar listas ja estabilizadas nas ondas 38.2.1 a 38.2.6.",
+      "mitigation": "Aplicar filtro no menor ponto de UI possivel e criar teste V2 que confirme wiring sem tocar Classificar.bas ou Util_Planilha.bas.",
+      "severity": "medium"
+    },
+    {
+      "risk": "FT-8 exige mostrar codigo/ID antes de CNPJ/credenciamento sem alterar largura/layout .frx.",
+      "mitigation": "Preferir texto/lista ja existente ou coluna/listitem preenchida por codigo, sem edicao de .frx; se layout for indispensavel, mover para 38.2.9.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Menu_Principal esta grande e ja possui alteracoes nao relacionadas no worktree.",
+      "mitigation": "Inspecionar diff antes de editar, preservar alteracoes existentes do usuario/ondas anteriores e limitar o manifesto V3 ao delta code-only.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "H0 hearback humano confirmado antes de qualquer implementacao",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0123-rb-onda-38-2-7-leitura-exibicao-confirmed.json"
+      },
+      {
+        "gate": "D1 diff de escopo confirma apenas Menu_Principal code-only, Preencher, Teste_V2_Roteiros, App_Release, espelhos V3 e docs da onda",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_7/README.md"
+      },
+      {
+        "gate": "D2 teste V2 dirigido valida FT-1, FT-5, FT-6 e FT-8 sem falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_7/GATE_D2_V2_LEITURA_EXIBICAO.md"
+      },
+      {
+        "gate": "Importador V3 delta ONDA38_2_7_LEITURA_EXIBICAO executado a partir de local-ai/vba_import",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_7/IMPORT_PROCEDURE.md"
+      },
+      {
+        "gate": "Debug > Compile VBAProject limpo apos import",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_7/IMPORT_PROCEDURE.md"
+      },
+      {
+        "gate": "RVS ou suite dirigida final nao regride apos o delta",
+        "evidence_kind": "csv_hash",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_7/RVS_OU_DIRIGIDO_FINAL.md"
+      },
+      {
+        "gate": "Auditoria cruzada curta pos-38.2.7 revisa FT-1, FT-5, FT-6 e FT-8",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/proposals/"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o hearback 0123 nao for confirmado, nao alterar codigo, importaveis, docs de onda ou CHANGELOG.",
+      "Se a analise mostrar que a correcao exige Svc_* ou Repo_*, parar e abrir novo readback com escopo explicito.",
+      "Se a correcao exigir .frx ou reposicionamento visual, parar e mover o item para 38.2.9.",
+      "Se o Importador V3 falhar, nao salvar o workbook e restaurar o backup criado no inicio do import.",
+      "Se o compile manual falhar, fechar sem salvar, registrar modulo/linha e bloquear execucao de testes.",
+      "Se o teste V2_LEITURA_EXIBICAO falhar, preservar CSV/evidencia e nao declarar FT-1/FT-5/FT-6/FT-8 resolvidos.",
+      "Se RVS ou suite dirigida reprovar, preservar CSVs de falha e nao declarar freeze V206."
+    ],
+    "anchor_to_restore": "Workbook operacional pos-Onda 38.2.6, build fd45a5d+ONDA38.2.6-IMPRESSAO-INTEGRIDADE, mais backup V3 gerado no inicio do import 38.2.7"
+  },
+  "human_status": "confirmed",
+  "implementation_hold": "A IA nao deve implementar, editar codigo VBA, gerar manifesto, atualizar docs de onda ou tocar CHANGELOG antes de hearback confirmed para este readback.",
+  "import_contract_planned": {
+    "delta_name": "ONDA38_2_7_LEITURA_EXIBICAO",
+    "build_label_pattern": "<HEAD>+ONDA38.2.7-LEITURA-EXIBICAO",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_7_LEITURA_EXIBICAO.txt",
+    "command_pattern": "ImportarPacoteV3_Delta \"ONDA38_2_7_LEITURA_EXIBICAO\", \"<HEAD>+ONDA38.2.7-LEITURA-EXIBICAO\""
+  },
+  "source_context": {
+    "previous_erp": ".hbn/results/0122-exec-onda-38-2-6-integridade-impressao.json",
+    "arbiter_proposal": ".hbn/proposals/0024-Opus3-4-MAX-auditoria-gate-a4-l43-v206.md",
+    "target_findings": "FT-1, FT-5, FT-6, FT-8",
+    "deferred_findings": "FT-2, FT-3, FT-4 e MG-1 ficam para 38.2.8; FT-10, FT-11 e higiene de freeze ficam para 38.2.9"
+  },
+  "created_at": "2026-05-31T22:07:23-03:00"
+}

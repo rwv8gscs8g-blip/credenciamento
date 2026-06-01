@@ -1,0 +1,11 @@
+{
+  "hearback_id": "0122-rb-onda-38-2-6-integridade-impressao-confirmed",
+  "readback_id": "0122-rb-onda-38-2-6-integridade-impressao",
+  "status": "confirmed",
+  "confirmed_by": "mauricio",
+  "agent_id": "codex",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "message": "ok pode avancar.",
+  "confirmed_at": "2026-05-31T17:03:52-03:00"
+}

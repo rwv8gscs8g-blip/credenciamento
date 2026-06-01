@@ -1,0 +1,37 @@
+# Manifesto V3 DELTA ONDA38_2_5_UI_REGRAS_NEGOCIO - V12.0.0206 Onda 38.2.5
+# Tema: BL-1 parecer 0024 - UI de regras de negocio em Configuracao_Inicial.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_5_UI_REGRAS_NEGOCIO", "fd45a5d+ONDA38.2.5-UI-REGRAS-NEGOCIO"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=1 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunPersistenciaPainel deve concluir OK=2 | FALHA=0 | MANUAL=0.
+#   - Inventario do form Configuracao_Inicial contem TxtNotaCorte, TxtMaxStrikes,
+#     TxtDiasSuspensao, PR_Val_OS, TP_Valor e TxtMesesSuspensao.
+#   - Sem freeze V206; esta onda apenas fecha o pacote dirigido de BL-1.
+#
+# Artefatos hash-pinados:
+#   F|002-formularios/AAC-Configuracao_Inicial.frm
+#     frm_bytes=22569
+#     frm_sha256=5716839a7a60b30051c125ec4dbcba94d272674d5fa9c60842b884c7b7631ce3
+#     code_only_bytes=22046
+#     code_only_sha256=4dd2f97b503caf4783eeadd0968c773b1a965f18837b92a5be6ca25336aa8a80
+#     frx_bytes=354840
+#     frx_sha256=a7f1760d1b21f98b74954d70065ea8310a8f0783ab38eb1194062e486d67f025
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=245486
+#     sha256=05e6acbffc4f0699ba5f0abd4cbd8b084c043dd563ccfbeac8c3c4d117ee1dad
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   bytes=23079
+#   sha256=dda36d87451a68164216f5089ec554e62a25e89a2fb2d66b7abf32946afdbdaf
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build 38.2.5.
+#
+# GRUPO_ONDA38_2_5_UI_REGRAS_NEGOCIO
+F|002-formularios/AAC-Configuracao_Inicial.frm
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

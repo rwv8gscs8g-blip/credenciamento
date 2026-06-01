@@ -1,0 +1,40 @@
+# Manifesto V3 DELTA ONDA38_2_6_IMPRESSAO_INTEGRIDADE - V12.0.0206 Onda 38.2.6
+# Tema: parecer 0024 - integridade de impressao (BL-5, BL-6, BL-7, FT-7).
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_6_IMPRESSAO_INTEGRIDADE", "fd45a5d+ONDA38.2.6-IMPRESSAO-INTEGRIDADE"
+#
+# Pos-import esperado:
+#   - Importador V3: M=3 | F=1 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunImpressaoIntegridade deve concluir OK=6 | FALHA=0 | MANUAL=0.
+#   - OS impressa recebe local da entidade em EMITE_OS!F18 e empenho em EMITE_OS!D84.
+#   - Pre-OS impressa aceita N_OS exibido como "PROVISORIA - <id>" sem perder dados de base.
+#   - Avaliacao impressa limita notas em 0..10 antes de escrever N27:N36.
+#   - Sem freeze V206; esta onda apenas fecha pacote dirigido de impressao.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAU-Preencher.bas
+#     bytes=148017
+#     sha256=db16925e0dc8647b92e5357eea16e40c05ff102e0f42d16ff8f75d2013ff4642
+#   F|002-formularios/AAM-Menu_Principal.frm
+#     frm_bytes=140979
+#     frm_sha256=25f6f15e30c37f4d88db6282290a20320fa0c4a6df9a17f6e5f6657f3d80a6f2
+#     code_only_bytes=140516
+#     code_only_sha256=fea3071487081e66cbed37593c6924d0a378ec6b78b39c0cdeaa1ac55a68510e
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=250567
+#     sha256=9ffa6424e0f5bdd1f6e5681552ec1166639088146df97e2a89b5fd33f4c5ffae
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   bytes=23086
+#   sha256=0630c17befcf54bc83471ba156a5c2619afa442018cd39b20221f74c1474792b
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build 38.2.6.
+#
+# GRUPO_ONDA38_2_6_IMPRESSAO_INTEGRIDADE
+M|001-modulo/AAU-Preencher.bas
+F|002-formularios/AAM-Menu_Principal.frm
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

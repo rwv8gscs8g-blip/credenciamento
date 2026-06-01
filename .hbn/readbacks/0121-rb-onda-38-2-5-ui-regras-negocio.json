@@ -1,0 +1,183 @@
+{
+  "readback_id": "0121-rb-onda-38-2-5-ui-regras-negocio",
+  "data": "2026-05-31",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0120-rb-onda-38-2-4-integridade-estado",
+  "intent": {
+    "objective": "Abrir a Onda 38.2.5 para resolver BL-1 do parecer 0024: restaurar e validar a UI de regras de negocio em Configuracao_Inicial, garantindo controles de strikes e parametros essenciais com persistencia verificavel.",
+    "non_goals": [
+      "Nao implementar antes de hearback humano confirmado",
+      "Nao tocar Auto_Open.bas sem excecao explicita",
+      "Nao iniciar propagacao do padrao de seguranca de Entidades para outros formularios ou abas",
+      "Nao corrigir impressao OS/Pre-OS/Avaliacao, clamp de notas, local de prestacao ou empenho nesta onda",
+      "Nao declarar freeze V206, tag, release candidate ou build final",
+      "Nao reimportar Mod_Types.bas nem alterar Importador_V3.bas"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Configuracao_Inicial.frx",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+      "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_5_UI_REGRAS_NEGOCIO.txt",
+      ".hbn/readbacks/0121-rb-onda-38-2-5-ui-regras-negocio.json",
+      ".hbn/hearbacks/0121-rb-onda-38-2-5-ui-regras-negocio-confirmed.json",
+      ".hbn/hearbacks/0121-rb-onda-38-2-5-ui-regras-negocio-confirmed.md",
+      ".hbn/results/0121-exec-onda-38-2-5-ui-regras-negocio.json",
+      ".hbn/proposals/0027-*ui-regras*.md",
+      ".hbn/proposals/0028-*ui-regras*.md",
+      "auditoria/03_ondas/onda_38_2_5/**",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260531*.csv",
+      "TesteV2_*_TV2_20260531*.csv",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Classificar.bas",
+      "src/vba/Altera_Entidade.frm",
+      "src/vba/Altera_Entidade.frx",
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Menu_Principal.frx",
+      "src/vba/Svc_*.bas",
+      "src/vba/Repo_*.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAT-Classificar.bas",
+      "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+      "local-ai/vba_import/001-modulo/AAR-Svc_OS.bas",
+      "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+      "local-ai/vba_import/001-modulo/ABM-Svc_Entidade.bas",
+      "local-ai/vba_import/002-formularios/AAE-Altera_Entidade.frm",
+      "local-ai/vba_import/002-formularios/AAE-Altera_Entidade.code-only.txt",
+      "local-ai/vba_import/002-formularios/Altera_Entidade.frx",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/Menu_Principal.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece a release oficial validada",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "O parecer 0024 segue como arbitro principal dos BLOQUEADORES L43/GATE-A4",
+    "Onda 38.2.4 permanece fechada pelo ERP 0120 sem reabrir seus arquivos de integridade de estado",
+    "Auto_Open.bas permanece fora do escopo sem excecao explicita",
+    "Nenhuma regra RN-01 a RN-17 deve mudar; a onda apenas restaura UI/persistencia de parametros existentes",
+    "Importacao no workbook deve usar apenas pacote V3 em local-ai/vba_import/"
+  ],
+  "risks": [
+    {
+      "risk": "Reconstruir controles de Configuracao_Inicial pode exigir alteracao de .frx binario e divergir do workbook real.",
+      "mitigation": "Antes de implementar, confirmar inventario atual dos controles e manter .frm, .frx e code-only sincronizados; se o designer exigir intervencao nao reproduzivel, parar e pedir novo hearback.",
+      "severity": "high"
+    },
+    {
+      "risk": "Usar Import File completo em formulario estabilizado pode sobrescrever layout e perder estado de designer.",
+      "mitigation": "Preferir atualizacao code-only quando o delta for apenas codigo; se controles reais forem criados, importar .frm/.frx casados via procedimento V3 documentado e com backup do Importador V3.",
+      "severity": "high"
+    },
+    {
+      "risk": "O On Error Resume Next atual em Configuracao_Inicial pode mascarar ausencia de controles e fazer teste falso-verde.",
+      "mitigation": "Criar roteiro V2_PERSISTENCIA_PAINEL que falhe explicitamente quando TxtNotaCorte, TxtMaxStrikes ou TxtDiasSuspensao nao existirem.",
+      "severity": "high"
+    },
+    {
+      "risk": "Misturar BL-1 com impressao, Entidades ou performance pode perder causalidade e ampliar regressao.",
+      "mitigation": "Manter files_forbidden para Auto_Open, Entidades, Preencher, Menu_Principal, Svc_* e Repo_*; qualquer necessidade fora do escopo exige novo readback.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Alterar defaults de CONFIG pode mudar comportamento legado dos testes V1/V2.",
+      "mitigation": "Preservar GetNotaMinimaAvaliacao, GetMaxStrikes e GetDiasSuspensaoStrike como fonte de verdade e validar leitura/escrita sem alterar seus defaults.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "H0 hearback humano confirmado antes de qualquer implementacao",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0121-rb-onda-38-2-5-ui-regras-negocio-confirmed.json"
+      },
+      {
+        "gate": "D1 diff de escopo confirma apenas Configuracao_Inicial, Teste_V2_Roteiros, App_Release, espelhos V3 e docs da onda",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_5/README.md"
+      },
+      {
+        "gate": "D2 inventario de controles da UI confirma TxtNotaCorte, TxtMaxStrikes e TxtDiasSuspensao presentes",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_5/GATE_D2_CONTROLES_UI.md"
+      },
+      {
+        "gate": "D3 V2_PERSISTENCIA_PAINEL valida existencia dos controles e persistencia leitura/escrita em CONFIG",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_5/GATE_D3_V2_PERSISTENCIA_PAINEL.md"
+      },
+      {
+        "gate": "Importador V3 delta ONDA38_2_5_UI_REGRAS_NEGOCIO executado a partir de local-ai/vba_import",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_5/IMPORT_PROCEDURE.md"
+      },
+      {
+        "gate": "Debug > Compile VBAProject limpo apos import",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_5/IMPORT_PROCEDURE.md"
+      },
+      {
+        "gate": "RVS ou suite dirigida definida no procedimento nao regride apos o delta",
+        "evidence_kind": "csv_hash",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_5/RVS_OU_DIRIGIDO_FINAL.md"
+      },
+      {
+        "gate": "Auditoria cruzada curta pos-38.2.5 revisa BL-1, teste e risco de .frx",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/proposals/"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o hearback 0121 nao for confirmado, nao alterar codigo, importaveis, docs de onda ou CHANGELOG.",
+      "Se a edicao de Configuracao_Inicial.frx nao for reproduzivel, parar antes do import e pedir decisao humana.",
+      "Se o Importador V3 falhar, nao salvar o workbook e restaurar o backup criado no inicio do import.",
+      "Se o compile manual falhar, fechar sem salvar, registrar modulo/linha e bloquear execucao de testes.",
+      "Se V2_PERSISTENCIA_PAINEL falhar por ausencia de controle ou persistencia incorreta, preservar evidencia e reverter pelo backup V3.",
+      "Se RVS ou suite dirigida reprovar, preservar CSVs de falha e nao declarar BL-1 resolvido."
+    ],
+    "anchor_to_restore": "Workbook operacional pos-Onda 38.2.4 Fix5, build fd45a5d+ONDA38.2.4-ESTADO-FIX5-OBJETOS-ABAS, mais backup V3 gerado no inicio do import 38.2.5"
+  },
+  "human_status": "confirmed",
+  "implementation_hold": "A IA nao deve implementar, editar codigo VBA, gerar manifesto, atualizar docs de onda ou tocar CHANGELOG antes de hearback confirmed para este readback.",
+  "import_contract_planned": {
+    "delta_name": "ONDA38_2_5_UI_REGRAS_NEGOCIO",
+    "build_label_pattern": "<HEAD>+ONDA38.2.5-UI-REGRAS-NEGOCIO",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_5_UI_REGRAS_NEGOCIO.txt",
+    "command_pattern": "ImportarPacoteV3_Delta \"ONDA38_2_5_UI_REGRAS_NEGOCIO\", \"<HEAD>+ONDA38.2.5-UI-REGRAS-NEGOCIO\""
+  },
+  "source_context": {
+    "handoff": ".hbn/messages/20260531-1240-handoff-fim-sessao-codex-bastao-codex-para-codex.md",
+    "previous_erp": ".hbn/results/0120-exec-onda-38-2-4-integridade-estado.json",
+    "arbiter_proposal": ".hbn/proposals/0024-Opus3-4-MAX-auditoria-gate-a4-l43-v206.md"
+  },
+  "created_at": "2026-05-31T12:55:32-03:00"
+}

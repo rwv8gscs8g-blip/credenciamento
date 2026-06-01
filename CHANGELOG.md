@@ -3,7 +3,7 @@
 Este projeto adota o espírito do Keep a Changelog. As mudanças aqui registradas
 tratam apenas da linha pública oficial.
 
-## [v12.0.0206] — em freeze (aguardando gates humanos pós-Onda 38.2.2)
+## [v12.0.0206] — em validação pós-GATE-A4, sem freeze declarado
 
 ### Adicionado
 
@@ -58,6 +58,74 @@ tratam apenas da linha pública oficial.
   `Importador_V2.bas` e `Emergencia_CNAE.bas`, sem tocar VBA.
 
 ### Corrigido
+
+- **Onda 38.2.10 — higiene estrutural do repositório e commit de consolidação** —
+  adiciona `.gitattributes`, `.editorconfig` e scripts read-only de higiene
+  para impedir falsos positivos de `git diff --check` em exportáveis VBA
+  (`.bas`, `.frm`, `.cls` e `code-only.txt`) sem normalização física em massa.
+  `.frx` passa a ser tratado como binário. Artefatos grandes soltos na raiz
+  foram movidos para `local-ai/incoming/artefatos-avulsos/20260531/`, e o CSV
+  de falha V2 solto foi movido para `auditoria/evidencias/V12.0.0205/csv/`.
+  Inclui documentação em `docs/reference/governanca/HIGIENE_REPOSITORIO_V206.md`.
+  Sem freeze V206 declarado.
+
+- **Onda 38.2.9 — snapshot de CONFIG nas suites V2 (FT-11 expandido)** —
+  `TV2_InitExecucao` passa a capturar `CONFIG!A:N` antes de cada suite V2 e
+  `TV2_FinalizarExecucao` restaura a mesma faixa no encerramento normal e no
+  handler fatal. Isso permite que os testes usem baseline canonica sem deixar
+  valores de teste em gestor, municipio, logo, prazo de Pre-OS, recusas,
+  meses/dias de suspensao, nota minima, strikes ou threshold de teste lento.
+  Inclui a suite dirigida nao destrutiva `TV2_RunConfigSnapshotV2` (`OK=4`
+  esperado) e manifesto V3
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_9_CONFIG_SNAPSHOT_V2.txt`.
+  Sem freeze V206 declarado.
+
+- **Onda 38.2.8 — baseline V2 preserva CONFIG operacional (FT-11)** —
+  `TV2_SetConfigCanonica` deixa de sobrescrever diretamente `COL_CFG_GESTOR`
+  e `COL_CFG_MUNICIPIO` com `Gestor Testes V2` / `Municipio de Testes V2`.
+  Quando esses campos ja possuem valor salvo pelo operador, o baseline V2
+  preserva o texto operacional; os valores de teste passam a ser fallback
+  apenas para CONFIG vazia. Inclui a suite dirigida nao destrutiva
+  `TV2_RunConfigBaselineSeguro` (`OK=3` esperado) e manifesto V3
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_8_CONFIG_BASELINE_V2.txt`.
+  Sem freeze V206 declarado.
+
+- **Onda 38.2.7 — leitura e exibicao (FT-1, FT-5, FT-6 e FT-8 do
+  parecer 0024)** — amplia a selecao simples de entidade no `Menu_Principal`
+  para preencher todos os campos visiveis com a mesma paridade do duplo clique,
+  exibe o ID antes do CNPJ nas listas de entidades/empresas, preserva no
+  rodizio os dados de entidade usados pela emissao de OS, e passa o filtro
+  `TextBox19` para a lista de Pre-OS pendentes em `PreencherPreencheOS`.
+  Inclui a suite dirigida `TV2_RunLeituraExibicao` (`OK=5` esperado) e manifesto
+  V3 `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_7_LEITURA_EXIBICAO.txt`.
+  A auditoria dos PDFs anexos identificou bordas/formato irregulares nos
+  templates de impressao, e a auditoria de municipio identificou risco de
+  reset por baseline V2 (`Municipio de Testes V2`); ambos ficam registrados
+  para onda propria, sem freeze V206 declarado.
+
+- **Onda 38.2.6 — integridade de impressão (BL-5, BL-6, BL-7 e FT-7 do
+  parecer 0024)** — adiciona normalização de ID de Pré-OS para o texto
+  exibido como `PROVISORIA - <id>`, carrega `END_ENTIDADE` da aba
+  `ENTIDADE` antes de `PreencherOS`, passa o empenho de OS por
+  `N_Empenho.Value`, e limita notas impressas da avaliação em `0..10`
+  antes de gravar `IMP_AVALIA!N27:N36`. Inclui a suite dirigida
+  `TV2_RunImpressaoIntegridade` (`OK=6` esperado) e manifesto V3
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_6_IMPRESSAO_INTEGRIDADE.txt`.
+  Sem freeze V206 declarado.
+
+- **Onda 38.2.5 — pacote UI de regras de negócio (BL-1 do parecer 0024)** —
+  restaura no pacote importável de `Configuracao_Inicial` os controles
+  `TxtNotaCorte`, `TxtMaxStrikes`, `TxtDiasSuspensao`, `PR_Val_OS`,
+  `TP_Valor` e `TxtMesesSuspensao`, promove o `.frx` exportado pelo operador, remove
+  mascaramento da ausência de controles no code-behind, persiste
+  `COL_CFG_PRAZO_PREOS`, `COL_CFG_MAX_RECUSAS` e
+  `COL_CFG_MESES_SUSPENSAO` pela UI sem alterar `Svc_Rodizio`, e adiciona
+  a suite dirigida `TV2_RunPersistenciaPainel`. Gate humano aprovado:
+  Importador V3 `M=2 | F=1 | err=0 | skip=0`, compile limpo e
+  `TV2_RunPersistenciaPainel` `OK=2 | FALHA=0 | MANUAL=0`.
+  Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_5_UI_REGRAS_NEGOCIO.txt`.
+  Sem freeze V206 declarado.
 
 - **Onda 38.2.1-AR1-FIX2-PERF gate humano APROVADO com findings** —
   Import V3 `M=5 | F=0 | err=0 | skip=0`; compile limpo;

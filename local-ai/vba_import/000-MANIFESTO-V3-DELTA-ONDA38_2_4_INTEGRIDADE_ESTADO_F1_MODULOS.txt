@@ -1,0 +1,34 @@
+# Manifesto V3 DELTA ONDA38_2_4_INTEGRIDADE_ESTADO_F1_MODULOS - V12.0.0206 Onda 38.2.4
+# Tema: Fase 1 L41 - modulos de integridade de estado (ordenacao, protecao e testes).
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_4_INTEGRIDADE_ESTADO_F1_MODULOS", "<sha_onda_38_2_4>+ONDA38.2.4-ESTADO-F1-MODULOS"
+#
+# Pos-import esperado:
+#   - Importador V3: M=4 | F=0 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - TV2_RunIntegridadeEstado deve ser executado apos a Fase 2, pois valida
+#     tambem o componente Altera_Entidade importado no VBE.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAT-Classificar.bas
+#     bytes=9837
+#     sha256=2c6ac08b00bd794926f975658f1f8553f0e2126daafe64631a32d085fd6b07ff
+#   M|001-modulo/AAE-Util_Planilha.bas
+#     bytes=23832
+#     sha256=aad5c079087c8914eecf0757e26022dc8f250669a634da4760d82e50f2c8d555
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=235176
+#     sha256=da23f7fab793130e5fbf23edda62c14921e6eeacc2858743ac4e2e28d1f83194
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build
+#   intermediario no workbook.
+#
+# GRUPO_ONDA38_2_4_ESTADO_F1_MODULOS
+M|001-modulo/AAT-Classificar.bas
+M|001-modulo/AAE-Util_Planilha.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

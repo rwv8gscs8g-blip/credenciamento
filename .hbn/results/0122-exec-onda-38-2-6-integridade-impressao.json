@@ -1,0 +1,109 @@
+{
+  "result_id": "0122-exec-onda-38-2-6-integridade-impressao",
+  "execution_id": "0122-exec-onda-38-2-6-integridade-impressao",
+  "readback_id": "0122-rb-onda-38-2-6-integridade-impressao",
+  "data": "2026-05-31",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "human_gate_passed",
+  "outcome": "import_compile_tv2_directed_passed",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Preparar Onda 38.2.6 para integridade de impressao: BL-5 clamp de notas, BL-6 local da OS, BL-7 dados da Pre-OS impressa e FT-7 empenho na OS.",
+  "summary": "O pacote corrige a ponte de dados para impressao sem alterar regras de rodizio, suspensao ou avaliacao persistida. A OS impressa passa a receber END_ENTIDADE da aba ENTIDADE e NR_Empenho de N_Empenho.Value antes de PreencherOS. A Pre-OS impressa normaliza N_OS exibido como PROVISORIA - <id> apenas para lookup em PRE_OS. A avaliacao impressa passa a limitar notas em 0..10 antes de gravar IMP_AVALIA!N27:N36. Foi adicionada a suite dirigida TV2_RunImpressaoIntegridade com 6 asserts. Mauricio importou o delta V3, compilou o VBAProject e executou TV2_RunImpressaoIntegridade com OK=6 | FALHA=0 | MANUAL=0.",
+  "files_changed": [
+    "src/vba/Preencher.bas",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_6_IMPRESSAO_INTEGRIDADE.txt",
+    ".hbn/readbacks/0122-rb-onda-38-2-6-integridade-impressao.json",
+    ".hbn/hearbacks/0122-rb-onda-38-2-6-integridade-impressao-confirmed.json",
+    ".hbn/hearbacks/0122-rb-onda-38-2-6-integridade-impressao-confirmed.md",
+    ".hbn/results/0122-exec-onda-38-2-6-integridade-impressao.json",
+    ".hbn/proposals/0028-codex-auditoria-cruzada-curta-impressao-v206.md",
+    "auditoria/03_ondas/onda_38_2_6/**",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38_2_6_IMPRESSAO_INTEGRIDADE",
+    "build_label": "fd45a5d+ONDA38.2.6-IMPRESSAO-INTEGRIDADE",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_6_IMPRESSAO_INTEGRIDADE.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_6_IMPRESSAO_INTEGRIDADE\", \"fd45a5d+ONDA38.2.6-IMPRESSAO-INTEGRIDADE\""
+  },
+  "artifact_hashes": {
+    "src/vba/Preencher.bas": "db16925e0dc8647b92e5357eea16e40c05ff102e0f42d16ff8f75d2013ff4642",
+    "src/vba/Menu_Principal.frm": "25f6f15e30c37f4d88db6282290a20320fa0c4a6df9a17f6e5f6657f3d80a6f2",
+    "src/vba/Teste_V2_Roteiros.bas": "9ffa6424e0f5bdd1f6e5681552ec1166639088146df97e2a89b5fd33f4c5ffae",
+    "src/vba/App_Release.bas": "0630c17befcf54bc83471ba156a5c2619afa442018cd39b20221f74c1474792b",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt": "fea3071487081e66cbed37593c6924d0a378ec6b78b39c0cdeaa1ac55a68510e"
+  },
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass",
+      "evidencia": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Hearback 0122",
+      "status": "pass",
+      "evidencia": "Mauricio confirmou em chat: ok pode avancar. Readback 0122 esta com human_status=confirmed e hearback JSON/MD criado."
+    },
+    {
+      "gate": "Sincronia src/vba x local-ai/vba_import",
+      "status": "pass_local",
+      "evidencia": "cmp -s sem divergencia para Preencher, Menu_Principal.frm, Teste_V2_Roteiros e App_Release; code-only de Menu_Principal gerado por tail -n +15."
+    },
+    {
+      "gate": "Manifesto V3",
+      "status": "pass_local",
+      "evidencia": "Manifesto ONDA38_2_6_IMPRESSAO_INTEGRIDADE criado com M=3, F=1 e hashes SHA-256 dos artefatos."
+    },
+    {
+      "gate": "Importador V3",
+      "status": "pass_human",
+      "evidencia": "Mauricio executou ImportarPacoteV3_Delta em 2026-05-31 21:58; log V3: modo=Estabilizado | dryRun=Falso | M=3 | F=1 | err=0 | skip=0; backup V3 em \\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260531_215848-V3-FULL."
+    },
+    {
+      "gate": "Debug > Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio relatou compile limpo apos o import V3."
+    },
+    {
+      "gate": "D2 TV2_RunImpressaoIntegridade",
+      "status": "pass_human",
+      "evidencia": "Mauricio executou TV2_RunImpressaoIntegridade em 2026-05-31 21:59; execucao TV2_20260531_215928; resultado OK=6 | FALHA=0 | MANUAL=0; CSV de falhas nao exportado."
+    },
+    {
+      "gate": "Auditoria cruzada curta",
+      "status": "pass_local",
+      "evidencia": ".hbn/proposals/0028-codex-auditoria-cruzada-curta-impressao-v206.md registra veredito sem bloqueador local condicionado ao gate humano."
+    },
+    {
+      "gate": "git diff --check",
+      "status": "known_residual",
+      "evidencia": "Ainda acusa trailing whitespace/CRLF em linhas VBA adicionadas e em blocos sujos anteriores de Teste_V2_Roteiros.bas; a Onda 38.2.6 preserva CRLF importavel e nao higieniza blocos antigos para evitar diff fora do microdelta."
+    }
+  ],
+  "scope_notes": {
+    "auto_open": "src/vba/Auto_Open.bas permaneceu fora do escopo e nao foi tocado.",
+    "mod_types": "src/vba/Mod_Types.bas permaneceu fora do escopo e nao foi tocado.",
+    "entidades": "Nao houve propagacao do padrao de Entidades.",
+    "svc_repo": "Svc_* e Repo_* nao foram alterados.",
+    "freeze": "Este ERP prepara o pacote 38.2.6, mas nao declara freeze V206.",
+    "menu_principal_frx": "Menu_Principal.frx nao foi tocado; import previsto e estabilizado/code-only."
+  },
+  "next_action": {
+    "summary": "Onda 38.2.6 fechada no gate dirigido. Proxima acao: avaliar parecer 0024 remanescente e abrir novo readback seguro antes de qualquer nova implementacao.",
+    "status": "ready_for_next_readback"
+  },
+  "closed_at": "2026-05-31T21:59:28-03:00",
+  "created_at": "2026-05-31T17:18:39-03:00"
+}

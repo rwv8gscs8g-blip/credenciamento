@@ -1,0 +1,119 @@
+{
+  "result_id": "0125-exec-onda-38-2-9-config-snapshot-v2",
+  "execution_id": "0125-exec-onda-38-2-9-config-snapshot-v2",
+  "readback_id": "0125-rb-onda-38-2-9-config-snapshot-v2",
+  "data": "2026-05-31",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "human_gate_passed",
+  "outcome": "import_compile_tv2_directed_passed",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Preparar Onda 38.2.9 para snapshot/restauracao de CONFIG!A:N durante suites V2.",
+  "summary": "O delta adiciona captura de CONFIG!A:N em TV2_InitExecucao e restauracao em TV2_FinalizarExecucao, tanto no fluxo normal quanto no handler fatal. A suite dirigida TV2_RunConfigSnapshotV2 valida o wiring por leitura estatica do motor V2. Mauricio importou o pacote V3, compilou o VBAProject e executou TV2_RunConfigSnapshotV2 com OK=4 | FALHA=0 | MANUAL=0 na execucao TV2_20260531_234126.",
+  "files_changed": [
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_9_CONFIG_SNAPSHOT_V2.txt",
+    ".hbn/readbacks/0125-rb-onda-38-2-9-config-snapshot-v2.json",
+    ".hbn/hearbacks/0125-rb-onda-38-2-9-config-snapshot-v2-confirmed.json",
+    ".hbn/hearbacks/0125-rb-onda-38-2-9-config-snapshot-v2-confirmed.md",
+    ".hbn/results/0125-exec-onda-38-2-9-config-snapshot-v2.json",
+    ".hbn/proposals/0031-codex-auditoria-cruzada-curta-config-snapshot-v206.md",
+    "auditoria/03_ondas/onda_38_2_9/0125_TECNICO.md",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38_2_9_CONFIG_SNAPSHOT_V2",
+    "build_label": "fd45a5d+ONDA38.2.9-CONFIG-SNAPSHOT-V2",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_9_CONFIG_SNAPSHOT_V2.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_9_CONFIG_SNAPSHOT_V2\", \"fd45a5d+ONDA38.2.9-CONFIG-SNAPSHOT-V2\""
+  },
+  "artifact_hashes": {
+    "src/vba/Teste_V2_Engine.bas": "82293bb7586895c41e304908aa588ce9f806fead3fdb7b50661bcc298672c193",
+    "src/vba/Teste_V2_Roteiros.bas": "f75289c05a0df15561f7d1a01974c9324e5d04efd55895455c9293c3fbf7210d",
+    "src/vba/App_Release.bas": "ae73654763877dc5988ca36f5ce047ad5b7ab08da947df3b1d0a1f69b32177e5",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_9_CONFIG_SNAPSHOT_V2.txt": "f523aeeebd6e2887f07863148073b6345064db655cbf57b3376c75fc81cd8130",
+    "auditoria/03_ondas/onda_38_2_9/0125_TECNICO.md": "c285c59c19824c278a7f083f3ec8dd9d0f92b9e19a61aabaedcdacb8abae1730",
+    ".hbn/proposals/0031-codex-auditoria-cruzada-curta-config-snapshot-v206.md": "54fe7047675c827657f03a272ad0c9f739eb4ebaa64cc1cd5da8dd0712e01551",
+    "CHANGELOG.md": "478fc6bd4c987c2974c3e0cd25f5d08e59e92ce52f729c31dfa3759fb4101c56"
+  },
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass",
+      "evidencia": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Hearback 0125",
+      "status": "pass",
+      "evidencia": "Usuario pediu seguir com novas ondas apos gate 0124. Readback 0125 esta com human_status=confirmed e hearback JSON/MD criado."
+    },
+    {
+      "gate": "Readback schema",
+      "status": "pass_local",
+      "evidencia": "python3 -m json.tool e scripts/hbn-guards/validate-readback.sh passaram para .hbn/readbacks/0125-rb-onda-38-2-9-config-snapshot-v2.json."
+    },
+    {
+      "gate": "Sincronia src/vba x local-ai/vba_import",
+      "status": "pass_local",
+      "evidencia": "cmp -s sem divergencia para Teste_V2_Engine, Teste_V2_Roteiros e App_Release."
+    },
+    {
+      "gate": "Tokens de snapshot",
+      "status": "pass_local",
+      "evidencia": "rg confirmou TV2_CONFIG_SNAPSHOT_COLS, TV2_ConfigSnapshotCapturar, TV2_ConfigSnapshotRestaurar e TV2_RunConfigSnapshotV2 em src e espelhos."
+    },
+    {
+      "gate": "Manifesto V3",
+      "status": "pass_local",
+      "evidencia": "Manifesto ONDA38_2_9_CONFIG_SNAPSHOT_V2 criado com M=3, F=0 e hashes SHA-256 dos artefatos."
+    },
+    {
+      "gate": "Auditoria cruzada curta",
+      "status": "pass_local",
+      "evidencia": ".hbn/proposals/0031-codex-auditoria-cruzada-curta-config-snapshot-v206.md registra veredito sem bloqueador local condicionado ao gate humano."
+    },
+    {
+      "gate": "git diff --check",
+      "status": "known_residual",
+      "evidencia": "Falhou por trailing whitespace/CRLF em arquivos ja sujos das ondas anteriores e espelhos VBA; nao foi higienizado para evitar refatoracao fora do microdelta."
+    },
+    {
+      "gate": "Importador V3",
+      "status": "pass_human",
+      "evidencia": "Mauricio importou o delta V3 em 2026-05-31; log V3: modo=Estabilizado | dryRun=Falso | M=3 | F=0 | err=0 | skip=0; backup V3 em \\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260531_234049-V3-FULL."
+    },
+    {
+      "gate": "Debug > Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio relatou compile limpo apos o import."
+    },
+    {
+      "gate": "D2 TV2_RunConfigSnapshotV2",
+      "status": "pass_human",
+      "evidencia": "Mauricio executou TV2_RunConfigSnapshotV2; execucao TV2_20260531_234126; resultado OK=4 | FALHA=0 | MANUAL=0; CSV de falhas nao exportado."
+    }
+  ],
+  "scope_notes": {
+    "auto_open": "src/vba/Auto_Open.bas permaneceu fora do escopo e nao foi tocado.",
+    "mod_types": "src/vba/Mod_Types.bas permaneceu fora do escopo e nao foi tocado.",
+    "importador_v3": "src/vba/Importador_V3.bas permaneceu fora do escopo e nao foi tocado.",
+    "configuracao_inicial": "Configuracao_Inicial.frm e .frx nao foram tocados.",
+    "preencher_menu": "Preencher.bas e Menu_Principal.frm nao foram tocados nesta onda.",
+    "svc_repo": "Svc_* e Repo_* nao foram alterados.",
+    "freeze": "Este ERP prepara o pacote 38.2.9, mas nao declara freeze V206."
+  },
+  "next_action": {
+    "summary": "Onda 38.2.9 fechada. Proxima acao: abrir Onda 38.2.10 para higiene estrutural do repositorio, inicialmente com escopo diagnostico e plano de saneamento controlado.",
+    "status": "ready_for_next_readback"
+  },
+  "created_at": "2026-05-31T23:29:08-03:00",
+  "closed_at": "2026-05-31T23:45:00-03:00"
+}

@@ -830,6 +830,592 @@ falha:
     TV2_FinalizarExecucao suite, silencioso
 End Sub
 
+Public Sub TV2_RunIntegridadeEstado(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "INTEGRIDADE_ESTADO"
+    Dim repoRoot As String
+    Dim detalhesProtecaoAplicada As String
+    Dim detalhesProtecaoVerificada As String
+    Dim detalhesObjetosLimpeza As String
+    Dim detalhesObjetosVerificados As String
+    Dim okProtecaoAplicada As Boolean
+    Dim okProtecaoVerificada As Boolean
+    Dim okObjetosLimpos As Boolean
+    Dim okObjetosVerificados As Boolean
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+    repoRoot = TV2_UI_RepoRoot()
+
+    TV2_EST_LogComponenteNaoContemTokens suite, "CS_EST_01_CLASSIFICAR_SEM_XLGUESS", repoRoot, "Classificar", "Classificar.bas", _
+                                         ".Header = xlGuess|Header:=xlGuess", _
+                                         "Classificar nao pode usar xlGuess em ranges sem cabecalho", _
+                                         "xlGuess ausente no componente importado Classificar", _
+                                         "Evita ordenacao data-dependent que muda conforme base populada"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_EST_02_ENTIDADE_INATIVACAO_ATOMICA", repoRoot, "Altera_Entidade", "Altera_Entidade.frm", _
+                                      "copiaInativaCriada|ativaExcluida|If copiaInativaCriada And Not ativaExcluida|Entidade_RemoverInativasDuplicadas|Util_PrepararAbaParaEscrita(wsEnt, estEntProt, senhaEntProt)|erroMensagem = Err.Description", _
+                                      "Inativacao de entidade deve reverter copia se remocao ativa falhar", _
+                                      "Flags de rollback, helper de saneamento, preparo separado das abas e erro preservado presentes no componente importado", _
+                                      "Evita entidade ativa e inativa simultaneamente apos falha parcial"
+
+    TV2_EST_LogComponenteNaoContemTokens suite, "CS_EST_04_ENTIDADE_INATIVACAO_SEM_ENTIREROW_COPY", repoRoot, "Altera_Entidade", "Altera_Entidade.frm", _
+                                         ".EntireRow.Copy|Selection.Copy|ActiveCell", _
+                                         "Inativacao de entidade nao deve depender de clipboard nem linha inteira", _
+                                         "Fluxo usa copia de faixa A:V por valor/formato", _
+                                         "Reduz falha de borda no primeiro item e evita efeitos colaterais de tabela/formato"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_EST_05_EXCLUIR_LINHA_UNICA_TABELA", repoRoot, "Util_Planilha", "Util_Planilha.bas", _
+                                      "lo.ListRows.count <= 1|DataBodyRange|ClearContents", _
+                                      "Exclusao segura deve tratar ultima linha de dados de tabela Excel", _
+                                      "Helper preserva a tabela e limpa conteudo quando resta uma unica linha", _
+                                      "Evita erro de cabecalho/insercao ao inativar a ultima entidade ativa"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_EST_06_PROTECAO_CRITICA_BLOQUEIA_CELULAS", repoRoot, "Util_Planilha", "Util_Planilha.bas", _
+                                      "Util_AbaEhCritica|Util_AplicarProtecaoCriticaAba|ws.Cells.Locked = True|Util_CelulasTodasBloqueadas|Not estavaProtegida Then Exit Sub", _
+                                      "Protecao de aba critica deve bloquear edicao direta mesmo se a aba iniciou desprotegida", _
+                                      "Helper identifica abas criticas, bloqueia todas as celulas e reaplica protecao no restore", _
+                                      "Evita RVS verde com workbook editavel diretamente pelo operador"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_EST_07_OBJETOS_ABAS_CRITICAS", repoRoot, "Util_Planilha", "Util_Planilha.bas", _
+                                      "Util_LimparObjetosAbasCriticas|Util_VerificarObjetosAbasCriticas|ws.Shapes.count|ws.Shapes(i).Delete|ProtectDrawingObjects", _
+                                      "Abas criticas nao devem manter imagens ou objetos soltos editaveis", _
+                                      "Helper remove shapes residuais e verifica que DrawingObjects estao protegidos", _
+                                      "Evita artefatos colados em abas operacionais protegidas"
+
+    okObjetosLimpos = Util_LimparObjetosAbasCriticas(detalhesObjetosLimpeza)
+    okProtecaoAplicada = Util_ProtegerAbasCriticasVerificado(detalhesProtecaoAplicada)
+    okProtecaoVerificada = Util_VerificarProtecaoAbasCriticas(detalhesProtecaoVerificada)
+    okObjetosVerificados = Util_VerificarObjetosAbasCriticas(detalhesObjetosVerificados)
+    TV2_LogAssert suite, "CS_EST_03_PROTECAO_ABAS_CRITICAS", "AUTO", _
+                  "Proteger e verificar abas criticas sem Auto_Open", _
+                  "Todas as abas criticas com ProtectContents=True, DrawingObjects=True e celulas bloqueadas", _
+                  IIf(okProtecaoAplicada And okProtecaoVerificada, "OK", "APLICAR=" & detalhesProtecaoAplicada & "; VERIFICAR=" & detalhesProtecaoVerificada), _
+                  "RVS nao pode considerar freeze se abas operacionais ficam editaveis ao operador", _
+                  (okProtecaoAplicada And okProtecaoVerificada)
+
+    TV2_LogAssert suite, "CS_EST_08_OBJETOS_ABAS_CRITICAS_ZERO", "AUTO", _
+                  "Limpar e verificar objetos residuais nas abas criticas", _
+                  "Nenhum shape/imagem residual nas abas criticas", _
+                  IIf(okObjetosLimpos And okObjetosVerificados, "OK", "LIMPEZA=" & detalhesObjetosLimpeza & "; VERIFICAR=" & detalhesObjetosVerificados), _
+                  "Abas de dados nao devem conter imagens ou objetos soltos apos protecao", _
+                  (okObjetosLimpos And okObjetosVerificados)
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite IntegridadeEstado sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Public Sub TV2_RunPersistenciaPainel(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "PERSISTENCIA_PAINEL"
+    Dim wsCfg As Worksheet
+    Dim valorNotaAntes As Variant
+    Dim valorMaxAntes As Variant
+    Dim valorDiasAntes As Variant
+    Dim valorPrazoAntes As Variant
+    Dim valorMaxRecusasAntes As Variant
+    Dim valorMesesAntes As Variant
+    Dim frm As Configuracao_Inicial
+    Dim controlesOk As Boolean
+    Dim persistiuOk As Boolean
+    Dim detalhes As String
+    Dim notaDepois As Double
+    Dim maxDepois As Long
+    Dim diasDepois As Long
+    Dim prazoDepois As Long
+    Dim maxRecusasDepois As Long
+    Dim mesesDepois As Long
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+
+    Set wsCfg = ThisWorkbook.Sheets(SHEET_CONFIG)
+    valorNotaAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value
+    valorMaxAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value
+    valorDiasAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value
+    valorPrazoAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value
+    valorMaxRecusasAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value
+    valorMesesAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MESES_SUSPENSAO).Value
+
+    Set frm = New Configuracao_Inicial
+    controlesOk = TV2_FormControleExiste(frm, "TxtNotaCorte")
+    controlesOk = controlesOk And TV2_FormControleExiste(frm, "TxtMaxStrikes")
+    controlesOk = controlesOk And TV2_FormControleExiste(frm, "TxtDiasSuspensao")
+    controlesOk = controlesOk And TV2_FormControleExiste(frm, "PR_Val_OS")
+    controlesOk = controlesOk And TV2_FormControleExiste(frm, "TP_Valor")
+    controlesOk = controlesOk And TV2_FormControleExiste(frm, "TxtMesesSuspensao")
+    TV2_LogAssert suite, "CS_PAINEL_01_CONTROLES_CANONICOS", "AUTO", _
+                  "Configuracao_Inicial expoe controles canonicos de regra de negocio", _
+                  "TxtNotaCorte, TxtMaxStrikes, TxtDiasSuspensao, PR_Val_OS, TP_Valor e TxtMesesSuspensao existem em runtime", _
+                  "TxtNotaCorte=" & CStr(TV2_FormControleExiste(frm, "TxtNotaCorte")) & _
+                  "; TxtMaxStrikes=" & CStr(TV2_FormControleExiste(frm, "TxtMaxStrikes")) & _
+                  "; TxtDiasSuspensao=" & CStr(TV2_FormControleExiste(frm, "TxtDiasSuspensao")) & _
+                  "; PR_Val_OS=" & CStr(TV2_FormControleExiste(frm, "PR_Val_OS")) & _
+                  "; TP_Valor=" & CStr(TV2_FormControleExiste(frm, "TP_Valor")) & _
+                  "; TxtMesesSuspensao=" & CStr(TV2_FormControleExiste(frm, "TxtMesesSuspensao")), _
+                  "BL-1 nao pode passar se o designer/runtime mascarar ausencia de controle", _
+                  controlesOk
+
+    If controlesOk Then
+        persistiuOk = frm.CI_TestarPersistenciaPainel("6", "4", "120", detalhes, "5", "2", "8")
+    Else
+        detalhes = "Controles canonicos ausentes"
+        persistiuOk = False
+    End If
+
+    notaDepois = CDbl(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value))
+    maxDepois = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value))
+    diasDepois = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value))
+    prazoDepois = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value))
+    maxRecusasDepois = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value))
+    mesesDepois = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MESES_SUSPENSAO).Value))
+    TV2_LogAssert suite, "CS_PAINEL_02_PERSISTE_CONFIG", "AUTO", _
+                  "Salvar painel de regras de negocio persiste valores em CONFIG", _
+                  "NOTA_MINIMA=6; MAX_STRIKES=4; DIAS_SUSPENSAO_STRIKE=120; PRAZO_PREOS=8; MAX_RECUSAS=5; MESES_SUSPENSAO=2", _
+                  "PERSISTIU=" & CStr(persistiuOk) & "; DETALHES=" & detalhes & _
+                  "; NOTA=" & CStr(notaDepois) & "; MAX=" & CStr(maxDepois) & _
+                  "; DIAS=" & CStr(diasDepois) & "; PRAZO_PREOS=" & CStr(prazoDepois) & _
+                  "; MAX_RECUSAS=" & CStr(maxRecusasDepois) & _
+                  "; MESES_SUSPENSAO=" & CStr(mesesDepois), _
+                  "Garante que a UI nao apenas exibe campos, mas grava regras consumidas por Svc_Avaliacao/Svc_Rodizio", _
+                  (persistiuOk And Abs(notaDepois - 6#) < 0.001 And maxDepois = 4 And diasDepois = 120 And _
+                   prazoDepois = 8 And maxRecusasDepois = 5 And mesesDepois = 2)
+
+    TV2_RestaurarConfigPainel valorNotaAntes, valorMaxAntes, valorDiasAntes, valorPrazoAntes, valorMaxRecusasAntes, valorMesesAntes
+    Unload frm
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    On Error Resume Next
+    TV2_RestaurarConfigPainel valorNotaAntes, valorMaxAntes, valorDiasAntes, valorPrazoAntes, valorMaxRecusasAntes, valorMesesAntes
+    If Not frm Is Nothing Then Unload frm
+    On Error GoTo 0
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite PersistenciaPainel sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Public Sub TV2_RunImpressaoIntegridade(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "IMPRESSAO_INTEGRIDADE"
+    Dim repoRoot As String
+    Dim notasOk As Boolean
+    Dim normalizado As String
+    Dim preosOk As Boolean
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+    repoRoot = TV2_UI_RepoRoot()
+
+    notasOk = (Preencher_NotaAvaliacaoImpressaSegura("11") = 10)
+    notasOk = notasOk And (Preencher_NotaAvaliacaoImpressaSegura("10") = 10)
+    notasOk = notasOk And (Preencher_NotaAvaliacaoImpressaSegura("7") = 7)
+    notasOk = notasOk And (Preencher_NotaAvaliacaoImpressaSegura("-1") = 0)
+    notasOk = notasOk And (Preencher_NotaAvaliacaoImpressaSegura("") = 0)
+    TV2_LogAssert suite, "CS_IMP_01_NOTAS_CLAMP", "AUTO", _
+                  "Notas impressas da avaliacao ficam limitadas a 0..10", _
+                  "11=>10; 10=>10; 7=>7; -1=>0; vazio=>0", _
+                  "11=>" & CStr(Preencher_NotaAvaliacaoImpressaSegura("11")) & _
+                  "; 10=>" & CStr(Preencher_NotaAvaliacaoImpressaSegura("10")) & _
+                  "; 7=>" & CStr(Preencher_NotaAvaliacaoImpressaSegura("7")) & _
+                  "; -1=>" & CStr(Preencher_NotaAvaliacaoImpressaSegura("-1")) & _
+                  "; vazio=>" & CStr(Preencher_NotaAvaliacaoImpressaSegura("")), _
+                  "BL-5: a impressao nao pode expor nota maior que 10 mesmo se a UI trouxer texto cru", _
+                  notasOk
+
+    normalizado = Preencher_NormalizarPreOSIdImpressao("PROVIS" & ChrW(211) & "RIA - 003")
+    preosOk = (normalizado = "003")
+    preosOk = preosOk And (Preencher_NormalizarPreOSIdImpressao("004") = "004")
+    TV2_LogAssert suite, "CS_IMP_02_PREOS_ID_PREFIXO", "AUTO", _
+                  "ID de Pre-OS impresso aceita prefixo operacional PROVISORIA", _
+                  "PROVISORIA - 003 normaliza para 003 e ID cru permanece igual", _
+                  "prefixado=>" & normalizado & "; cru=>" & Preencher_NormalizarPreOSIdImpressao("004"), _
+                  "BL-7: dados da Pre-OS precisam ser encontrados mesmo quando N_OS contem texto de exibicao", _
+                  preosOk
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_IMP_03_OS_GLOBAIS_FORM", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "NR_Empenho = SafeListVal(N_Empenho.Value)|END_ENTIDADE = SafeListVal(wsEnt.Cells(idxEnt, COL_ENT_ENDERECO).Value)|Call PreencherOS", _
+        "Formulario de emissao de OS alimenta globais usados pelo template", _
+        "Empenho vem do valor do controle e endereco da entidade vem de ENTIDADE antes de PreencherOS", _
+        "BL-6/FT-7: evita OS impressa sem local da entidade ou empenho ambiguo"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_IMP_04_OS_TEMPLATE", repoRoot, _
+        "Preencher", "Preencher.bas", _
+        "ws.Range(""F18"").Value = END_ENTIDADE|ws.Range(""D84"").Value = NR_Empenho", _
+        "Template de OS grava local da entidade e empenho nos campos finais", _
+        "EMITE_OS!F18 recebe END_ENTIDADE e EMITE_OS!D84 recebe NR_Empenho", _
+        "BL-6/FT-7: confirma a ponte ate a aba de impressao"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_IMP_05_PREOS_DADOS_TEMPLATE", repoRoot, _
+        "Preencher", "Preencher.bas", _
+        "preId = Preencher_NormalizarPreOSIdImpressao(preosId)|Call GarantirDadosPreOSParaImpressao(N_OS)|END_ENTIDADE = SafeListVal(wsEnt.Cells(linhaEnt, COL_ENT_ENDERECO).Value)", _
+        "Pre-OS impressa normaliza o identificador e recarrega dados da base", _
+        "N_OS prefixado nao impede lookup em PRE_OS, EMPRESAS, ENTIDADE e CAD_SERV", _
+        "BL-7: campos da Pre-OS impressa nao dependem apenas de estado residual da UI"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_IMP_06_AVALIACAO_TEMPLATE", repoRoot, _
+        "Preencher", "Preencher.bas", _
+        "Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range(""N27""), AvN01)|Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range(""N36""), AvN10)", _
+        "Template de avaliacao usa helper de nota segura em todos os pontos de nota", _
+        "N27 e N36 passam pelo mesmo clamp 0..10 das demais notas", _
+        "BL-5: evita regressao para Format(texto cru) nas notas impressas"
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite ImpressaoIntegridade sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Public Sub TV2_RunLeituraExibicao(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "LEITURA_EXIBICAO"
+    Dim repoRoot As String
+    Dim widthsEnt As String
+    Dim widthsEmp As String
+    Dim colsEnt() As String
+    Dim colsEmp() As String
+    Dim idVisivelOk As Boolean
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+    repoRoot = TV2_UI_RepoRoot()
+
+    widthsEnt = EntidadeLista_MontarColumnWidths(620)
+    widthsEmp = EmpresaLista_MontarColumnWidths(620)
+    colsEnt = Split(widthsEnt, ";")
+    colsEmp = Split(widthsEmp, ";")
+    idVisivelOk = (UBound(colsEnt) >= 12 And UBound(colsEmp) >= 12)
+    If idVisivelOk Then
+        idVisivelOk = (CLng(Val(colsEnt(0))) > 0 And CLng(Val(colsEnt(1))) > 0 And _
+                       CLng(Val(colsEmp(0))) > 0 And CLng(Val(colsEmp(1))) > 0)
+    End If
+
+    TV2_LogAssert suite, "CS_LEIT_01_ID_VISIVEL", "AUTO", _
+                  "Listas principais exibem ID antes de CNPJ", _
+                  "Entidade e Empresa com coluna 0 visivel e coluna 1 CNPJ visivel", _
+                  "ENT=" & widthsEnt & "; EMP=" & widthsEmp, _
+                  "FT-8: codigo/ID deve aparecer antes do CNPJ/credenciamento", _
+                  idVisivelOk
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_LEIT_02_C_LISTA_PARIDADE", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "C_Bairro.Value = SafeListVal(C_Lista.List(idx, 7))|C_Contato1.Value = SafeListVal(C_Lista.List(idx, 11))|C_Fone_Cont3.Value = SafeListVal(C_Lista.List(idx, 18))|C_InfoAD.Value = SafeListVal(C_Lista.List(idx, 20))", _
+        "Selecao em C_Lista popula os campos completos da entidade", _
+        "Bairro, contatos 1..3 e informacoes adicionais lidos da mesma linha selecionada", _
+        "FT-1: a selecao principal nao deve mostrar subconjunto menor que o form de edicao"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_LEIT_03_RODIZIO_NOME_TELEFONE", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Desc_entidade = SafeListVal(C_ListaRodizio.List(C_ListaRodizio.ListIndex, 2))|cont_entidade = SafeListVal(C_ListaRodizio.List(C_ListaRodizio.ListIndex, 11))|telcont_entidade = SafeListVal(C_ListaRodizio.List(C_ListaRodizio.ListIndex, 12))", _
+        "Selecao do rodizio preserva nome e telefone de contato", _
+        "Nome, contato e telefone saem das colunas visiveis/canonicas do ListBox", _
+        "FT-5: a atribuicao de empresa nao pode depender de entidade selecionada sem nome/telefone"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_LEIT_04_FILTRO_OS", repoRoot, _
+        "Preencher", "Preencher.bas", _
+        "Sub PreencherPreencheOS(Optional ByVal filtro As String = """")|If UtilFiltro_LinhaAtende(textoBusca, filtroU) Then|Case ""os"":            Call PreencherPreencheOS(termo)", _
+        "Filtro de Imprime Solicitacao de Servicos usa termo digitado", _
+        "TextBox19 chama PreencherPreencheOS com filtro e a lista so recebe linhas que atendem ao termo", _
+        "FT-6: o painel de emissao de OS nao pode ignorar o campo de busca"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_LEIT_05_LISTAS_ID_PRE_CNPJ", repoRoot, _
+        "Preencher", "Preencher.bas", _
+        "EntidadeLista_MontarColumnWidths = CStr(W_ID) & "";"" & CStr(w1)|EmpresaLista_MontarColumnWidths = CStr(W_ID) & "";"" & CStr(w1)", _
+        "Construtores de ListBox mantem ID antes do CNPJ", _
+        "As duas listas montam a primeira largura com W_ID em vez de ocultar coluna 0", _
+        "FT-8: a exibicao do identificador fica centralizada nos construtores de lista"
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite LeituraExibicao sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Public Sub TV2_RunConfigBaselineSeguro(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "CONFIG_BASELINE_V2"
+    Dim repoRoot As String
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+    repoRoot = TV2_UI_RepoRoot()
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_CFG_01_HELPER_PRESERVA_OPERADOR", repoRoot, _
+        "Teste_V2_Engine", "Teste_V2_Engine.bas", _
+        "Private Function TV2_ConfigValorOperadorOuCanonico|If texto <> """" Then|TV2_ConfigValorOperadorOuCanonico = texto|TV2_ConfigValorOperadorOuCanonico = valorCanonico", _
+        "Helper do baseline preserva valor operacional quando ja existe texto", _
+        "Valor nao vazio retorna ele mesmo; valor vazio cai para canonico de teste", _
+        "FT-11: baseline V2 nao deve substituir municipio/gestor reais por dados de teste"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_CFG_02_SETCONFIG_USA_HELPER", repoRoot, _
+        "Teste_V2_Engine", "Teste_V2_Engine.bas", _
+        "COL_CFG_GESTOR).Value = TV2_ConfigValorOperadorOuCanonico|COL_CFG_MUNICIPIO).Value = TV2_ConfigValorOperadorOuCanonico|""Gestor Testes V2""|""Municipio de Testes V2""", _
+        "TV2_SetConfigCanonica usa fallback seguro para gestor e municipio", _
+        "Gestor e municipio passam pelo helper antes de aceitar texto canonico de teste", _
+        "Mantem fallback para CONFIG vazia sem clobber de CONFIG operacional"
+
+    TV2_EST_LogComponenteNaoContemTokens suite, "CS_CFG_03_SEM_OVERWRITE_DIRETO", repoRoot, _
+        "Teste_V2_Engine", "Teste_V2_Engine.bas", _
+        "COL_CFG_GESTOR).Value = ""Gestor Testes V2""|COL_CFG_MUNICIPIO).Value = ""Municipio de Testes V2""", _
+        "Baseline V2 nao faz overwrite direto de gestor/municipio", _
+        "Atribuicoes diretas antigas aos campos operacionais nao existem mais", _
+        "Evita que execucoes V2 facam a CONFIG voltar para valores de teste"
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite ConfigBaselineSeguro sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Public Sub TV2_RunConfigSnapshotV2(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "CONFIG_SNAPSHOT_V2"
+    Dim repoRoot As String
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+    repoRoot = TV2_UI_RepoRoot()
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_CFGSNAP_01_SNAPSHOT_A_N", repoRoot, _
+        "Teste_V2_Engine", "Teste_V2_Engine.bas", _
+        "Private Const TV2_CONFIG_SNAPSHOT_COLS As Long = 14|Private gTV2ConfigSnapshot As Variant|Private gTV2ConfigSnapshotAtivo As Boolean", _
+        "Motor V2 declara snapshot completo da linha CONFIG A:N", _
+        "Snapshot cobre 14 colunas de CONFIG conforme Const_Colunas", _
+        "Protege parametros operacionais de CONFIG contra vazamento dos testes"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_CFGSNAP_02_CAPTURA_NO_INIT", repoRoot, _
+        "Teste_V2_Engine", "Teste_V2_Engine.bas", _
+        "Call TV2_ConfigSnapshotCapturar|gTV2ConfigSnapshot = ws.Range(ws.Cells(LINHA_CFG_VALORES, 1), ws.Cells(LINHA_CFG_VALORES, TV2_CONFIG_SNAPSHOT_COLS)).Value|gTV2ConfigSnapshotAtivo", _
+        "TV2_InitExecucao captura CONFIG antes da suite modificar valores", _
+        "Captura ocorre no inicio da execucao e cobre A:N", _
+        "Permite restaurar CONFIG operacional depois da suite"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_CFGSNAP_03_RESTAURA_NO_FINAL", repoRoot, _
+        "Teste_V2_Engine", "Teste_V2_Engine.bas", _
+        "Call TV2_ConfigSnapshotRestaurar|ws.Range(ws.Cells(LINHA_CFG_VALORES, 1), ws.Cells(LINHA_CFG_VALORES, TV2_CONFIG_SNAPSHOT_COLS)).Value = gTV2ConfigSnapshot|gTV2ConfigSnapshotAtivo = False", _
+        "TV2_FinalizarExecucao restaura CONFIG operacional ao fim", _
+        "Restore devolve A:N e desarma snapshot para evitar reaplicacao", _
+        "Testes podem usar CONFIG canonica sem deixar lixo operacional"
+
+    TV2_EST_LogComponenteContemTokens suite, "CS_CFGSNAP_04_RESTAURA_EM_ERRO_FATAL", repoRoot, _
+        "Teste_V2_Engine", "Teste_V2_Engine.bas", _
+        "erro_fatal_handler:|Call TV2_ConfigSnapshotRestaurar|Call TV2_PerfModeRestore", _
+        "Handler fatal tambem restaura CONFIG antes de devolver Excel ao operador", _
+        "Erro na finalizacao nao deixa CONFIG canonica vazada", _
+        "Protege workbook mesmo em falha da rotina de finalizacao"
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite ConfigSnapshotV2 sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Private Function TV2_FormControleExiste(ByVal frm As Object, ByVal nomeControle As String) As Boolean
+    Dim ctl As Object
+
+    On Error Resume Next
+    Err.Clear
+    Set ctl = frm.Controls(nomeControle)
+    TV2_FormControleExiste = (Err.Number = 0 And Not ctl Is Nothing)
+    Err.Clear
+    On Error GoTo 0
+End Function
+
+Private Sub TV2_RestaurarConfigPainel( _
+    ByVal valorNota As Variant, _
+    ByVal valorMax As Variant, _
+    ByVal valorDias As Variant, _
+    ByVal valorPrazo As Variant, _
+    ByVal valorMaxRecusas As Variant, _
+    ByVal valorMeses As Variant _
+)
+    Dim wsCfg As Worksheet
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+
+    On Error Resume Next
+    Set wsCfg = ThisWorkbook.Sheets(SHEET_CONFIG)
+    If wsCfg Is Nothing Then Exit Sub
+    If Util_PrepararAbaParaEscrita(wsCfg, estavaProtegida, senhaProtecao) Then
+        wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = valorNota
+        wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = valorMax
+        wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = valorDias
+        wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value = valorPrazo
+        wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value = valorMaxRecusas
+        wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MESES_SUSPENSAO).Value = valorMeses
+        Call Util_RestaurarProtecaoAba(wsCfg, estavaProtegida, senhaProtecao)
+    End If
+    On Error GoTo 0
+End Sub
+
+Private Function TV2_EST_LerCodigoComponenteOuArquivo( _
+    ByVal repoRoot As String, _
+    ByVal componenteNome As String, _
+    ByVal arquivo As String, _
+    ByRef origem As String _
+) As String
+    Dim vbp As Object
+    Dim comp As Object
+    Dim cm As Object
+    Dim path As String
+
+    On Error Resume Next
+    Set vbp = Application.VBE.ActiveVBProject
+    Set comp = vbp.VBComponents(componenteNome)
+    Set cm = comp.CodeModule
+    If Err.Number = 0 And Not cm Is Nothing Then
+        TV2_EST_LerCodigoComponenteOuArquivo = cm.Lines(1, cm.CountOfLines)
+        origem = "VBE"
+        On Error GoTo 0
+        Exit Function
+    End If
+    On Error GoTo 0
+
+    path = repoRoot & "\src\vba\" & arquivo
+    If Dir(path) <> "" Then
+        origem = "FS"
+        TV2_EST_LerCodigoComponenteOuArquivo = TV2_UI_LerArquivoTexto(path)
+    Else
+        origem = "AUSENTE"
+        TV2_EST_LerCodigoComponenteOuArquivo = ""
+    End If
+End Function
+
+Private Sub TV2_EST_LogComponenteContemTokens( _
+    ByVal suite As String, _
+    ByVal cenarioId As String, _
+    ByVal repoRoot As String, _
+    ByVal componenteNome As String, _
+    ByVal arquivo As String, _
+    ByVal tokensPipe As String, _
+    ByVal objetivo As String, _
+    ByVal esperado As String, _
+    ByVal significado As String _
+)
+    Dim codigo As String
+    Dim origem As String
+    Dim tokens() As String
+    Dim i As Long
+    Dim token As String
+    Dim faltantes As String
+    Dim ok As Boolean
+
+    codigo = TV2_EST_LerCodigoComponenteOuArquivo(repoRoot, componenteNome, arquivo, origem)
+    tokens = Split(tokensPipe, "|")
+    For i = LBound(tokens) To UBound(tokens)
+        token = Trim$(tokens(i))
+        If token <> "" Then
+            If InStr(1, codigo, token, vbTextCompare) = 0 Then
+                faltantes = faltantes & token & ";"
+            End If
+        End If
+    Next i
+
+    ok = (origem <> "AUSENTE" And faltantes = "")
+    TV2_LogAssert suite, cenarioId, "AUTO", _
+                  objetivo, esperado, _
+                  IIf(ok, "OK; ORIGEM=" & origem, "ORIGEM=" & origem & "; FALTANTES=" & faltantes), _
+                  significado, ok
+End Sub
+
+Private Sub TV2_EST_LogComponenteNaoContemTokens( _
+    ByVal suite As String, _
+    ByVal cenarioId As String, _
+    ByVal repoRoot As String, _
+    ByVal componenteNome As String, _
+    ByVal arquivo As String, _
+    ByVal tokensPipe As String, _
+    ByVal objetivo As String, _
+    ByVal esperado As String, _
+    ByVal significado As String _
+)
+    Dim codigo As String
+    Dim origem As String
+    Dim tokens() As String
+    Dim i As Long
+    Dim token As String
+    Dim presentes As String
+    Dim ok As Boolean
+
+    codigo = TV2_EST_LerCodigoComponenteOuArquivo(repoRoot, componenteNome, arquivo, origem)
+    tokens = Split(tokensPipe, "|")
+    For i = LBound(tokens) To UBound(tokens)
+        token = Trim$(tokens(i))
+        If token <> "" Then
+            If InStr(1, codigo, token, vbTextCompare) > 0 Then
+                presentes = presentes & token & ";"
+            End If
+        End If
+    Next i
+
+    ok = (origem <> "AUSENTE" And presentes = "")
+    TV2_LogAssert suite, cenarioId, "AUTO", _
+                  objetivo, esperado, _
+                  IIf(ok, "OK; ORIGEM=" & origem, "ORIGEM=" & origem & "; PRESENTES=" & presentes), _
+                  significado, ok
+End Sub
+
 Public Sub TV2_RunTransaction_Interrupt(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
     Const suite As String = "TRANSACAO_INTERRUPT"
     Const TX_ROW As Long = 1

@@ -1,0 +1,40 @@
+# Manifesto V3 DELTA ONDA38_2_7_LEITURA_EXIBICAO - V12.0.0206 Onda 38.2.7
+# Tema: parecer 0024 - leitura e exibicao (FT-1, FT-5, FT-6, FT-8).
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_7_LEITURA_EXIBICAO", "fd45a5d+ONDA38.2.7-LEITURA-EXIBICAO"
+#
+# Pos-import esperado:
+#   - Importador V3: M=3 | F=1 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunLeituraExibicao deve concluir OK=5 | FALHA=0 | MANUAL=0.
+#   - C_Lista_Click preenche campos visiveis de entidade com paridade do duplo clique.
+#   - Listas de entidade/empresa exibem ID antes do CNPJ.
+#   - TextBox19 filtra a lista de Pre-OS pendentes no contexto "os".
+#   - Sem freeze V206; esta onda fecha pacote dirigido de leitura/exibicao.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAU-Preencher.bas
+#     bytes=149576
+#     sha256=c686a9481f8e258f822de0b60a228038cbb44a4173f4d2e166d9d52d84a5a602
+#   F|002-formularios/AAM-Menu_Principal.frm
+#     frm_bytes=141773
+#     frm_sha256=74a1841cd4def0bf4b5949b73f9275953aaa810690ff50b49f99a0501145fda4
+#     code_only_bytes=141310
+#     code_only_sha256=34dc9add7107a27e853faf7d5cc173efbbd9f1ccb48e60f5b6db8d43d9e4cf8e
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=254740
+#     sha256=df44344a6ec104d7c162ae761689e7d298e4ce6f204a76cf28334646fe91a5e4
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   bytes=23078
+#   sha256=a3e4a83760a655bfc89f84c7db31d8fcc3673a8827fe0ed383f4acd81938fbae
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build 38.2.7.
+#
+# GRUPO_ONDA38_2_7_LEITURA_EXIBICAO
+M|001-modulo/AAU-Preencher.bas
+F|002-formularios/AAM-Menu_Principal.frm
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

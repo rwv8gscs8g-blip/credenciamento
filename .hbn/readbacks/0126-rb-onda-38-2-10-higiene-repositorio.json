@@ -1,0 +1,203 @@
+{
+  "readback_id": "0126-rb-onda-38-2-10-higiene-repositorio",
+  "data": "2026-05-31",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0125-rb-onda-38-2-9-config-snapshot-v2",
+  "intent": {
+    "objective": "Abrir a Onda 38.2.10 para higiene estrutural e consolidacao de commit do repositorio: inventariar as causas dos erros recorrentes de git diff --check, EOL/whitespace e sujeira de ondas, aplicar politica executavel de saneamento sem alterar comportamento VBA e commitar os avancos validados das ondas acumuladas.",
+    "non_goals": [
+      "Nao tocar Auto_Open.bas sem excecao explicita",
+      "Nao reimportar Mod_Types.bas nem alterar Importador_V3.bas",
+      "Nao alterar regras de negocio, rodizio, Pre-OS, OS, avaliacao, CONFIG ou suspensao",
+      "Nao editar .frx nesta onda; apenas permitir staging dos .frx ja alterados e validados em ondas anteriores",
+      "Nao normalizar em massa todos os arquivos VBA sem inventario; a mitigacao primaria deve ser politica de atributos/relatorio",
+      "Nao fazer commit, tag, freeze V206, release candidate ou build final",
+      "Nao reverter alteracoes historicas ou sujas que nao forem escopo explicito desta onda",
+      "Nao iniciar propagacao do padrao de Entidades"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0126-rb-onda-38-2-10-higiene-repositorio.json",
+      ".hbn/hearbacks/0126-rb-onda-38-2-10-higiene-repositorio-confirmed.json",
+      ".hbn/hearbacks/0126-rb-onda-38-2-10-higiene-repositorio-confirmed.md",
+      ".hbn/results/0126-exec-onda-38-2-10-higiene-repositorio.json",
+      ".hbn/hearbacks/0120-*.json",
+      ".hbn/hearbacks/0120-*.md",
+      ".hbn/hearbacks/0121-*.json",
+      ".hbn/hearbacks/0121-*.md",
+      ".hbn/hearbacks/0122-*.json",
+      ".hbn/hearbacks/0122-*.md",
+      ".hbn/hearbacks/0123-*.json",
+      ".hbn/hearbacks/0123-*.md",
+      ".hbn/hearbacks/0124-*.json",
+      ".hbn/hearbacks/0124-*.md",
+      ".hbn/hearbacks/0125-*.json",
+      ".hbn/hearbacks/0125-*.md",
+      ".hbn/messages/**",
+      ".hbn/proposals/0032-*higiene*.md",
+      ".hbn/proposals/0009-*.md",
+      ".hbn/proposals/0022-*.md",
+      ".hbn/proposals/0023-*.md",
+      ".hbn/proposals/0024-*.md",
+      ".hbn/proposals/0025-*.md",
+      ".hbn/proposals/0026-*.md",
+      ".hbn/proposals/0027-*.md",
+      ".hbn/proposals/0028-*.md",
+      ".hbn/proposals/0029-*.md",
+      ".hbn/proposals/0030-*.md",
+      ".hbn/proposals/0031-*.md",
+      ".hbn/protocol-evolutions/**",
+      ".hbn/readbacks/0120-*.json",
+      ".hbn/readbacks/0121-*.json",
+      ".hbn/readbacks/0122-*.json",
+      ".hbn/readbacks/0123-*.json",
+      ".hbn/readbacks/0124-*.json",
+      ".hbn/readbacks/0125-*.json",
+      ".hbn/results/0120-*.json",
+      ".hbn/results/0121-*.json",
+      ".hbn/results/0122-*.json",
+      ".hbn/results/0123-*.json",
+      ".hbn/results/0124-*.json",
+      ".hbn/results/0125-*.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_10/**",
+      "auditoria/00_status/115_*.md",
+      "auditoria/00_status/116_*.md",
+      "auditoria/00_status/117_*.md",
+      "auditoria/00_status/118_*.md",
+      "auditoria/00_status/119_*.md",
+      "auditoria/03_ondas/onda_38_2_4/**",
+      "auditoria/03_ondas/onda_38_2_5/**",
+      "auditoria/03_ondas/onda_38_2_6/**",
+      "auditoria/03_ondas/onda_38_2_7/**",
+      "auditoria/03_ondas/onda_38_2_8/**",
+      "auditoria/03_ondas/onda_38_2_9/**",
+      "auditoria/03_ondas/onda_QA_V3/**",
+      "auditoria/evidencias/V12.0.0205/csv/**",
+      "docs/reference/governanca/HIGIENE_REPOSITORIO_V206.md",
+      ".gitattributes",
+      ".editorconfig",
+      ".gitignore",
+      "scripts/hbn-guards/check-repo-hygiene.sh",
+      "scripts/hbn-guards/report-vba-eol-whitespace.sh",
+      "src/vba/Altera_Entidade.frm",
+      "src/vba/App_Release.bas",
+      "src/vba/Classificar.bas",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Configuracao_Inicial.frx",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+      "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_*.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_5_*.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_6_*.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_7_*.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_8_*.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_9_*.txt",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece a release oficial validada",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Onda 38.2.9 esta fechada por gate humano: import, compile e TV2_RunConfigSnapshotV2 OK=4",
+    "Nenhum arquivo VBA de producao sera reescrito apenas por higiene nesta fase",
+    "Nenhum pacote importavel sera reescrito apenas por higiene nesta fase",
+    "As alteracoes VBA/importaveis ja presentes vieram das ondas 38.2.4 a 38.2.9 e foram validadas por gates humanos",
+    "A normalizacao fisica de VBA, se necessaria, devera ser uma micro-onda propria com lista fechada de arquivos e teste/import correspondente"
+  ],
+  "risks": [
+    {
+      "risk": "Uma limpeza ampla de EOL/whitespace pode gerar diff enorme e mascarar mudancas funcionais.",
+      "mitigation": "Fazer primeiro inventario e politica executavel; qualquer normalizacao de VBA fica para micro-onda propria com lista fechada e comparacao src/import.",
+      "severity": "high"
+    },
+    {
+      "risk": "Alterar .gitattributes ou .editorconfig sem cuidado pode afetar export/import VBA e gerar drift com o workbook.",
+      "mitigation": "Limitar a primeira alteracao a politica documentada e checks de relatorio; se .gitattributes for alterado, validar com git ls-files --eol e sem tocar .frx.",
+      "severity": "medium"
+    },
+    {
+      "risk": "O worktree contem muitas alteracoes de ondas anteriores e arquivos nao rastreados, o que pode confundir a higiene.",
+      "mitigation": "Separar inventario por origem: tracked modified, untracked HBN, evidencia operacional, artefato avulso e arquivo VBA/importavel.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Scripts novos de higiene podem virar burocracia se nao forem acionaveis no fluxo do projeto.",
+      "mitigation": "Entregar comandos curtos e relatorios objetivos, sem bloquear importacao nem exigir ferramentas externas alem de git, rg e shell.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "H0 hearback humano confirma escopo 0126",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0126-rb-onda-38-2-10-higiene-repositorio-confirmed.json"
+      },
+      {
+        "gate": "Inventario de higiene identifica causas e classes de arquivos",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_10/0126_TECNICO.md"
+      },
+      {
+        "gate": "Scripts de relatorio executam localmente sem alterar arquivos",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0126-exec-onda-38-2-10-higiene-repositorio.json"
+      },
+      {
+        "gate": "Nenhum arquivo proibido recebe diff novo nesta fase",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0126-exec-onda-38-2-10-higiene-repositorio.json"
+      },
+      {
+        "gate": "Plano de micro-ondas futuras separa EOL/whitespace, untracked HBN e estrutura importavel",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/proposals/0032-codex-auditoria-higiene-repositorio-v206.md"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o inventario apontar risco alto de alterar importaveis, parar sem editar arquivos de codigo e registrar bloqueio no ERP.",
+      "Se um script novo falhar, remover apenas o script da onda e manter o relatorio de diagnostico.",
+      "Se .gitattributes ou .editorconfig causar efeito inesperado em git ls-files --eol, reverter apenas esses arquivos antes do ERP.",
+      "Se aparecer necessidade de tocar VBA, abrir novo readback especifico com manifesto V3 e teste dirigido."
+    ],
+    "anchor_to_restore": "Estado pos-Onda 38.2.9 validada por import, compile e TV2_RunConfigSnapshotV2 OK=4"
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "previous_erp": ".hbn/results/0125-exec-onda-38-2-9-config-snapshot-v2.json",
+    "trigger": "Usuario aprovou a onda 0126 e pediu deixar tudo limpo, organizado e commitado com os avancos alcancados.",
+    "known_symptom": "git diff --check falha por trailing whitespace/CRLF em arquivos VBA e espelhos importaveis ja sujos no diff amplo."
+  },
+  "created_at": "2026-05-31T23:45:06-03:00"
+}

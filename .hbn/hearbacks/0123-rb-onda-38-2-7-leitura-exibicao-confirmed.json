@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0123-rb-onda-38-2-7-leitura-exibicao-confirmed",
+  "readback_id": "0123-rb-onda-38-2-7-leitura-exibicao",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-05-31T22:15:01-03:00",
+  "notes": "Usuario confirmou: 'aprovado avance'. Tambem pediu avaliar PDFs 001/002/003 e suspeita de persistencia do municipio voltando para 'v2'. Analise permitida; implementacao permanece limitada ao scope 0123."
+}

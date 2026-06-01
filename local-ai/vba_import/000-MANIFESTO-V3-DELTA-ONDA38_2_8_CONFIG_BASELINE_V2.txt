@@ -1,0 +1,32 @@
+# Manifesto V3 DELTA ONDA38_2_8_CONFIG_BASELINE_V2 - V12.0.0206 Onda 38.2.8
+# Tema: FT-11/CONFIG - baseline V2 preserva municipio e gestor operacionais.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_8_CONFIG_BASELINE_V2", "fd45a5d+ONDA38.2.8-CONFIG-BASELINE-V2"
+#
+# Pos-import esperado:
+#   - Importador V3: M=3 | F=0 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunConfigBaselineSeguro deve concluir OK=3 | FALHA=0 | MANUAL=0.
+#   - Baseline V2 preserva COL_CFG_GESTOR e COL_CFG_MUNICIPIO quando ja existem valores salvos.
+#   - Sem freeze V206; esta onda fecha pacote dirigido de CONFIG/testes.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=181396
+#     sha256=f1203745aaa9944234f9b8e963797552911b1ecab1fd0500f16ba01a82f7a949
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=257255
+#     sha256=c4bbffbe9fce51d566718adabb4f565882ada6ff4b9d0f42e7b8069083ed527f
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   bytes=23080
+#   sha256=ddf112c169675310d4ab8915cca429416bb211d34f1e786254b887f3623abdc4
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build 38.2.8.
+#
+# GRUPO_ONDA38_2_8_CONFIG_BASELINE_V2
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

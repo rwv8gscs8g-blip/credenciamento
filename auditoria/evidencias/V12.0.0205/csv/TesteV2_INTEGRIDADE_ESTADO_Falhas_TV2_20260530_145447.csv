@@ -1,0 +1,2 @@
+EXECUCAO_ID;SUITE;CENARIO_ID;AUTOMACAO;DOMINIO;CENARIO;CONTEXTO;OBJETIVO;RESULTADO_ESPERADO;RESULTADO_OBTIDO;STATUS;SIGNIFICADO;OBSERVACAO;DATA_HORA
+TV2_20260530_145447;INTEGRIDADE_ESTADO;CS_EST_04_ENTIDADE_INATIVACAO_SEM_ENTIREROW_COPY;AUTO;;;;Inativacao de entidade nao deve depender de clipboard nem linha inteira;Fluxo usa copia de faixa A:V por valor/formato;"ORIGEM=VBE; PRESENTES=ActiveCell;";FALHA;Reduz falha de borda no primeiro item e evita efeitos colaterais de tabela/formato;;30/05/2026 14:54:49

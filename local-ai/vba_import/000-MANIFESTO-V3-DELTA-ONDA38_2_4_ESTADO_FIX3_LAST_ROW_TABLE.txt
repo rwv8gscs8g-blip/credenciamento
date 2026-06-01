@@ -1,0 +1,29 @@
+# Manifesto V3 DELTA ONDA38_2_4_ESTADO_FIX3_LAST_ROW_TABLE - V12.0.0206 Onda 38.2.4
+# Tema: Fix3 pos-validacao manual - inativacao da ultima linha de dados em tabela Excel.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_4_ESTADO_FIX3_LAST_ROW_TABLE", "fd45a5d+ONDA38.2.4-ESTADO-FIX3-LAST-ROW-TABLE"
+#
+# Pos-import esperado:
+#   - Importador V3: M=3 | F=0 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunIntegridadeEstado deve concluir OK=5 | FALHA=0.
+#   - Reteste manual dirigido: inativar a ultima entidade ativa sem erro de cabecalho/insercao de tabela.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAE-Util_Planilha.bas
+#     bytes=24025
+#     sha256=8a376788bccc4b1840c9f603537ce472611ad4e8c5c681a996acbbd24354bc94
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=236378
+#     sha256=0b4f936dd8372ed4a4dfe3e8ee7e7bb25c2761de02fdcfb5a52ff6936b2f4462
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build fix3.
+#
+# GRUPO_ONDA38_2_4_ESTADO_FIX3_LAST_ROW_TABLE
+M|001-modulo/AAE-Util_Planilha.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

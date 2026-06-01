@@ -1,0 +1,27 @@
+# Manifesto V3 DELTA ONDA38_2_4_INTEGRIDADE_ESTADO_F2_FORMS - V12.0.0206 Onda 38.2.4
+# Tema: Fase 2 L41 - form Altera_Entidade com inativacao atomica.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_4_INTEGRIDADE_ESTADO_F2_FORMS", "<sha_onda_38_2_4>+ONDA38.2.4-ESTADO-F2-FORMS"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=1 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunIntegridadeEstado deve concluir OK=3 | FALHA=0.
+#   - RVS completo apos Fase 2 deve permanecer APROVADO.
+#
+# Artefatos hash-pinados:
+#   F|002-formularios/AAE-Altera_Entidade.frm
+#     frm_bytes=14197
+#     frm_sha256=ff44a30af8980368882ac46bd3ac983c0aeed4552a6ec1982ffafd1f6244a096
+#     code_only_bytes=13683
+#     code_only_sha256=1e273843c3179c945dda9501bab093da3af7ab8f529a14157ae579be7aa6b06d
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build final.
+#
+# GRUPO_ONDA38_2_4_ESTADO_F2_FORMS
+F|002-formularios/AAE-Altera_Entidade.frm
+M|001-modulo/AAX-App_Release.bas

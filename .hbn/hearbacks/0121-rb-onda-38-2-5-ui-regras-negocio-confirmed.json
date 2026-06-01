@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0121-rb-onda-38-2-5-ui-regras-negocio-confirmed",
+  "readback_id": "0121-rb-onda-38-2-5-ui-regras-negocio",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-05-31T13:00:59-03:00",
+  "notes": "Mauricio confirmou em chat: pode avancar. Autorizada a execucao da Onda 38.2.5 exatamente dentro do scope do readback 0121: UI de regras de negocio BL-1, sem Auto_Open.bas, sem propagacao do padrao de Entidades e sem freeze V206."
+}

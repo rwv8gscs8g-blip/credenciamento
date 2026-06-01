@@ -1,0 +1,31 @@
+# Manifesto V3 DELTA ONDA38_2_4_ESTADO_FIX2_TV2_TOKEN - V12.0.0206 Onda 38.2.4
+# Tema: Fix2 pos-import - remover token textual ActiveCell de comentarios do form.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_4_ESTADO_FIX2_TV2_TOKEN", "fd45a5d+ONDA38.2.4-ESTADO-FIX2-TV2-TOKEN"
+#
+# Pos-import esperado:
+#   - Importador V3: M=1 | F=1 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunIntegridadeEstado deve concluir OK=4 | FALHA=0.
+#
+# Contexto:
+#   TV2_RunIntegridadeEstado falhou em CS_EST_04 com PRESENTES=ActiveCell.
+#   A falha era textual: comentarios antigos do form continham ActiveCell, embora
+#   o fluxo runtime ja estivesse sem ActiveCell, Selection.Copy e EntireRow.Copy.
+#
+# Artefatos hash-pinados:
+#   F|002-formularios/AAE-Altera_Entidade.frm
+#     frm_bytes=14779
+#     frm_sha256=f2e03c64d244ad51e68f30c548dd4651486910bb6cc24a9464244147dd956ce5
+#     code_only_bytes=14265
+#     code_only_sha256=a5352973ec462b80022900b7fcbcc8417562be0d984ee7594a8701317c386007
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build fix2.
+#
+# GRUPO_ONDA38_2_4_ESTADO_FIX2_TV2_TOKEN
+F|002-formularios/AAE-Altera_Entidade.frm
+M|001-modulo/AAX-App_Release.bas

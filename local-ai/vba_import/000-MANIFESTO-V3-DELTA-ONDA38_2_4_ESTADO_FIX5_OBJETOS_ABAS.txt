@@ -1,0 +1,34 @@
+# Manifesto V3 DELTA ONDA38_2_4_ESTADO_FIX5_OBJETOS_ABAS - V12.0.0206 Onda 38.2.4
+# Tema: Fix5 pos-RVS - limpeza de objetos residuais e verificacao de DrawingObjects em abas criticas.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_4_ESTADO_FIX5_OBJETOS_ABAS", "fd45a5d+ONDA38.2.4-ESTADO-FIX5-OBJETOS-ABAS"
+#
+# Pos-import esperado:
+#   - Importador V3: M=3 | F=0 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunIntegridadeEstado deve concluir OK=8 | FALHA=0 | MANUAL=0.
+#   - O TV2_RunIntegridadeEstado executa a limpeza das abas criticas e reaplica a protecao.
+#   - Reteste manual D4/Fix5: ENTIDADE_INATIVOS nao mantem imagem residual.
+#   - Reteste manual D4/Fix5: ENTIDADE, ENTIDADE_INATIVOS, EMPRESAS, PRE_OS e CAD_OS bloqueiam edicao direta.
+#   - Reteste manual D4/Fix5: tentativa de colar/inserir/mover objeto em aba critica permanece bloqueada.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAE-Util_Planilha.bas
+#     bytes=29533
+#     sha256=03d4ff5840e0bf858c5fda4d33ff9bec0616c796c95440b4b2b61e19c3040b0d
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=238577
+#     sha256=dfe1c13ad1f229a504f147d5b178c08dcb5b53ae7ba8bb85ccabe5ac699f11d0
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   bytes=23089
+#   sha256=be7ac7852d2b1d6258bdf28b923e406814b083c81e08b3189f2e2ce30b5ee165
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build fix5.
+#
+# GRUPO_ONDA38_2_4_ESTADO_FIX5_OBJETOS_ABAS
+M|001-modulo/AAE-Util_Planilha.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

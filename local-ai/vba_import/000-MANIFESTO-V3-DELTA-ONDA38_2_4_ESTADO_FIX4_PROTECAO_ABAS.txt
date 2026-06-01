@@ -1,0 +1,30 @@
+# Manifesto V3 DELTA ONDA38_2_4_ESTADO_FIX4_PROTECAO_ABAS - V12.0.0206 Onda 38.2.4
+# Tema: Fix4 pos-RVS - protecao efetiva de abas criticas e bloqueio de edicao direta.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_4_ESTADO_FIX4_PROTECAO_ABAS", "fd45a5d+ONDA38.2.4-ESTADO-FIX4-PROTECAO-ABAS"
+#
+# Pos-import esperado:
+#   - Importador V3: M=3 | F=0 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunIntegridadeEstado deve concluir OK=6 | FALHA=0 | MANUAL=0.
+#   - Reteste manual D4 imediato: ENTIDADE, ENTIDADE_INATIVOS e PRE_OS bloqueiam edicao direta sem desbloqueio.
+#   - Reteste manual D4 pos-RVS: as mesmas abas seguem bloqueadas.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAE-Util_Planilha.bas
+#     bytes=25839
+#     sha256=3ba2215e5969f425a18100534e16e29209048f43c428af4235f28c9c7284d671
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=237093
+#     sha256=a4b4f576344c5dfee70405d0eca16c52e21f84b286e333235435875a6e5d930b
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build fix4.
+#
+# GRUPO_ONDA38_2_4_ESTADO_FIX4_PROTECAO_ABAS
+M|001-modulo/AAE-Util_Planilha.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

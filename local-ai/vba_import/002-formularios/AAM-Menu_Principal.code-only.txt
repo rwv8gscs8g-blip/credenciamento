@@ -439,7 +439,7 @@ Private Sub BE_ImprimeOS_Click()
     QT_ESTIMADA = Util_Conversao.ToDouble(CStr(OS_QT_Estimada.Value))
     If QT_ESTIMADA <= 0 Then QT_ESTIMADA = 1
     Vl_estimado = CDbl(QT_ESTIMADA * VL_Pagto)
-    NR_Empenho = N_Empenho
+    NR_Empenho = SafeListVal(N_Empenho.Value)
 
     ' Buscar contato da entidade (mantem logica original sem Sheets.Select)
     Dim wsEnt As Worksheet
@@ -449,6 +449,7 @@ Private Sub BE_ImprimeOS_Click()
         If IdsIguais(SafeListVal(wsEnt.Cells(idxEnt, COL_ENT_ID).Value), OSListaCol(6)) Then
             cont_entidade = SafeListVal(wsEnt.Cells(idxEnt, COL_ENT_CONT1_NOME).Value)
             telcont_entidade = SafeListVal(wsEnt.Cells(idxEnt, COL_ENT_CONT1_FONE).Value)
+            END_ENTIDADE = SafeListVal(wsEnt.Cells(idxEnt, COL_ENT_ENDERECO).Value)
             Exit For
         End If
     Next idxEnt
@@ -1443,20 +1444,39 @@ End Sub
 
 Private Sub C_Lista_Click()
 On Error GoTo erro_carregamento:
-    If C_Lista.ListIndex < 0 Then Exit Sub
-    C_Cad = CInt(Val(SafeListVal(C_Lista.Column(0))))
+    Dim idx As Long
 
-    ' V12.0.0009: popular controles visiveis ao selecionar entidade (espelha M_Lista_Click).
+    If C_Lista.ListIndex < 0 Then Exit Sub
+    idx = C_Lista.ListIndex
+    C_Cad = CInt(Val(SafeListVal(C_Lista.List(idx, 0))))
+    entidade = SafeListVal(C_Lista.List(idx, 0))
+    Desc_entidade = SafeListVal(C_Lista.List(idx, 2))
+    cont_entidade = SafeListVal(C_Lista.List(idx, 11))
+    telcont_entidade = SafeListVal(C_Lista.List(idx, 12))
+    END_ENTIDADE = SafeListVal(C_Lista.List(idx, 6))
+
+    ' Onda 38.2.7: selecao deve ter paridade com o form de edicao.
     ' Colunas do C_Lista (0-based) = colunas da aba ENTIDADE (1-based) deslocadas em -1.
-    C_CNPJ.Value = SafeListVal(C_Lista.List(C_Lista.ListIndex, 1))
-    C_Entidade.Value = SafeListVal(C_Lista.List(C_Lista.ListIndex, 2))
-    C_Tel_Fixo.Value = SafeListVal(C_Lista.List(C_Lista.ListIndex, 3))
-    C_Tel_Cel.Value = SafeListVal(C_Lista.List(C_Lista.ListIndex, 4))
-    C_Email.Value = SafeListVal(C_Lista.List(C_Lista.ListIndex, 5))
-    C_Endereco.Value = SafeListVal(C_Lista.List(C_Lista.ListIndex, 6))
-    C_Municipio.Value = SafeListVal(C_Lista.List(C_Lista.ListIndex, 8))
-    C_CEP.Value = SafeListVal(C_Lista.List(C_Lista.ListIndex, 9))
-    C_UF.Value = SafeListVal(C_Lista.List(C_Lista.ListIndex, 10))
+    C_CNPJ.Value = SafeListVal(C_Lista.List(idx, 1))
+    C_Entidade.Value = SafeListVal(C_Lista.List(idx, 2))
+    C_Tel_Fixo.Value = SafeListVal(C_Lista.List(idx, 3))
+    C_Tel_Cel.Value = SafeListVal(C_Lista.List(idx, 4))
+    C_Email.Value = SafeListVal(C_Lista.List(idx, 5))
+    C_Endereco.Value = SafeListVal(C_Lista.List(idx, 6))
+    C_Bairro.Value = SafeListVal(C_Lista.List(idx, 7))
+    C_Municipio.Value = SafeListVal(C_Lista.List(idx, 8))
+    C_CEP.Value = SafeListVal(C_Lista.List(idx, 9))
+    C_UF.Value = SafeListVal(C_Lista.List(idx, 10))
+    C_Contato1.Value = SafeListVal(C_Lista.List(idx, 11))
+    C_Fone_Cont1.Value = SafeListVal(C_Lista.List(idx, 12))
+    C_Func_Cont1.Value = SafeListVal(C_Lista.List(idx, 13))
+    C_Contato2.Value = SafeListVal(C_Lista.List(idx, 14))
+    C_Fone_Cont2.Value = SafeListVal(C_Lista.List(idx, 15))
+    C_Func_Cont2.Value = SafeListVal(C_Lista.List(idx, 16))
+    C_Contato3.Value = SafeListVal(C_Lista.List(idx, 17))
+    C_Fone_Cont3.Value = SafeListVal(C_Lista.List(idx, 18))
+    C_Func_Cont3.Value = SafeListVal(C_Lista.List(idx, 19))
+    C_InfoAD.Value = SafeListVal(C_Lista.List(idx, 20))
 
 Exit Sub
 erro_carregamento:

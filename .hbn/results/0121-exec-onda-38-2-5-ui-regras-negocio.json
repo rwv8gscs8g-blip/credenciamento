@@ -1,0 +1,99 @@
+{
+  "result_id": "0121-exec-onda-38-2-5-ui-regras-negocio",
+  "execution_id": "0121-exec-onda-38-2-5-ui-regras-negocio",
+  "readback_id": "0121-rb-onda-38-2-5-ui-regras-negocio",
+  "data": "2026-05-31",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "human_gate_passed",
+  "outcome": "import_compile_tv2_directed_passed",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Preparar a Onda 38.2.5 para BL-1 do parecer 0024: UI de regras de negocio em Configuracao_Inicial, manifesto V3 e teste dirigido de persistencia do painel.",
+  "summary": "O pacote restaura os controles canonicos de regras de negocio no .frx de Configuracao_Inicial, preserva o code-behind atual, passa a falhar explicitamente se algum controle sumir e adiciona TV2_RunPersistenciaPainel para validar existencia dos controles e persistencia em CONFIG. Alem da regra de strikes, a UI passa a persistir PR_Val_OS em COL_CFG_PRAZO_PREOS, TP_Valor em COL_CFG_MAX_RECUSAS e TxtMesesSuspensao em COL_CFG_MESES_SUSPENSAO, mantendo a logica existente de Svc_Rodizio em meses. Mauricio importou o delta V3, compilou o VBAProject e executou TV2_RunPersistenciaPainel com OK=2 | FALHA=0 | MANUAL=0.",
+  "files_changed": [
+    "src/vba/Configuracao_Inicial.frm",
+    "src/vba/Configuracao_Inicial.frx",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+    "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_5_UI_REGRAS_NEGOCIO.txt",
+    ".hbn/readbacks/0121-rb-onda-38-2-5-ui-regras-negocio.json",
+    ".hbn/hearbacks/0121-rb-onda-38-2-5-ui-regras-negocio-confirmed.json",
+    ".hbn/results/0121-exec-onda-38-2-5-ui-regras-negocio.json",
+    ".hbn/proposals/0027-codex-auditoria-cruzada-curta-ui-regras-v206.md",
+    "auditoria/03_ondas/onda_38_2_5/**",
+    "CHANGELOG.md"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38_2_5_UI_REGRAS_NEGOCIO",
+    "build_label": "fd45a5d+ONDA38.2.5-UI-REGRAS-NEGOCIO",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_5_UI_REGRAS_NEGOCIO.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_5_UI_REGRAS_NEGOCIO\", \"fd45a5d+ONDA38.2.5-UI-REGRAS-NEGOCIO\""
+  },
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass",
+      "evidencia": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Hearback 0121",
+      "status": "pass",
+      "evidencia": "Mauricio confirmou em chat: pode avancar. Readback 0121 esta com human_status=confirmed e hearback JSON criado."
+    },
+    {
+      "gate": "D2 inventario controles UI",
+      "status": "pass_pre_import",
+      "evidencia": "strings local-ai/vba_import/002-formularios/Configuracao_Inicial.frx encontrou TxtNotaCorte, TxtMaxStrikes, TxtDiasSuspensao, PR_Val_OS, TP_Valor e TxtMesesSuspensao; SHA-256 a7f1760d1b21f98b74954d70065ea8310a8f0783ab38eb1194062e486d67f025."
+    },
+    {
+      "gate": "Sincronia src/vba x local-ai/vba_import",
+      "status": "pass",
+      "evidencia": "diff -q sem divergencia para Configuracao_Inicial.frm, Configuracao_Inicial.frx, Teste_V2_Roteiros.bas, App_Release.bas e code-only gerado por tail -n +16."
+    },
+    {
+      "gate": "Importador V3",
+      "status": "pass_human",
+      "evidencia": "Mauricio executou ImportarPacoteV3_Delta em 2026-05-31 16:48; log V3: M=2 | F=1 | err=0 | skip=0."
+    },
+    {
+      "gate": "Debug > Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio relatou compile limpo apos o import V3."
+    },
+    {
+      "gate": "D3 TV2_RunPersistenciaPainel",
+      "status": "pass_human",
+      "evidencia": "Mauricio executou TV2_RunPersistenciaPainel em 2026-05-31 16:49; resultado: OK=2 | FALHA=0 | MANUAL=0; CSV de falhas nao exportado."
+    },
+    {
+      "gate": "RVS ou dirigido final",
+      "status": "optional_pending",
+      "evidencia": "Dirigido principal passou. RVS completo permanece recomendado antes de freeze, mas esta onda nao declara freeze V206."
+    },
+    {
+      "gate": "Auditoria cruzada curta",
+      "status": "pass_local",
+      "evidencia": ".hbn/proposals/0027-codex-auditoria-cruzada-curta-ui-regras-v206.md registra veredito local sem bloqueador para enviar ao operador."
+    }
+  ],
+  "scope_notes": {
+    "auto_open": "src/vba/Auto_Open.bas permaneceu fora do escopo e nao foi tocado.",
+    "entidades": "Nao houve propagacao do padrao de Entidades.",
+    "freeze": "Este ERP prepara a Onda 38.2.5, mas nao declara freeze V206.",
+    "incoming_form": "O .frm exportado pelo VBE foi usado apenas como contexto; o code-behind dele nao foi promovido porque estava anterior ao delta. O .frx corrigido foi promovido."
+  },
+  "next_action": {
+    "summary": "Abrir readback 0122 para Onda 38.2.6 Integridade de Impressao (BL-5, BL-6, BL-7, FT-7 do parecer 0024), sem implementar antes do hearback.",
+    "status": "ready_for_next_readback"
+  },
+  "closed_at": "2026-05-31T16:58:48-03:00",
+  "created_at": "2026-05-31T15:07:02-03:00"
+}

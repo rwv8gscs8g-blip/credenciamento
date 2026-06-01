@@ -23,7 +23,7 @@ End Sub
 
 Private Sub B_Altera_Entidade_Click()
 On Error GoTo erro_carregamento:
-    ' V12: eliminado .Select + Application.GoTo + ActiveCell (proibidos; formulario modal).
+    ' V12: eliminado acoplamento ao cursor/selecao do Excel (proibido em formulario modal).
     ' Usa busca direta por ID persistido no proprio formulario.
     Dim wsEnt As Worksheet
     Dim linhaAtual As Long
@@ -108,24 +108,26 @@ End Sub
 
 Private Sub C_Inativa_Entidade_Click()
 On Error GoTo erro_carregamento:
-    ' V12: eliminado .Select + ActiveCell + Selection (proibidos; formulario modal).
+    ' V12: eliminado acoplamento ao cursor/selecao do Excel (proibido em formulario modal).
     ' Opera por ID persistido no proprio formulario para evitar instancias erradas do menu.
     Dim wsEnt As Worksheet
     Dim wsEntInativas As Worksheet
     Dim linhaEntInativa As Long
     Dim linhaAtual As Long
     Dim linhaFinal As Long
+    Dim estEntProt As Boolean
+    Dim senhaEntProt As String
     Dim estEntInativProt As Boolean
-    Dim senhaEntInativ As String
-    Dim linhasMesmaChave As Variant
-    Dim qtdLinhasMesmaChave As Long
-    Dim baseLinhas As Long
+    Dim senhaEntInativProt As String
     Dim cnpjEntidade As String
-    Dim linhasDel() As Long
-    Dim nDel As Long
-    Dim k As Long
-    Dim j As Long
-    Dim tmp As Long
+    Dim entIdOriginal As String
+    Dim linhaOrigemAtiva As Long
+    Dim copiaInativaCriada As Boolean
+    Dim ativaExcluida As Boolean
+    Dim origemDados As Range
+    Dim destinoDados As Range
+    Dim erroNumero As Long
+    Dim erroMensagem As String
 
     If m_entidadeId = "" Then
         MsgBox "ID da entidade n" & ChrW(227) & "o identificado. Feche e reabra o formul" & ChrW(225) & "rio.", _
@@ -161,63 +163,100 @@ On Error GoTo erro_carregamento:
         Exit Sub
     End If
 
+    entIdOriginal = Trim$(CStr(EncontrarID.Value))
     cnpjEntidade = Trim$(CStr(EncontrarID.Offset(0, 1).Value))
-    linhasMesmaChave = Util_EntidadeInativos_ColetarLinhasMesmaChave(wsEntInativas, LINHA_DADOS, CStr(EncontrarID.Value), cnpjEntidade)
-    If IsArray(linhasMesmaChave) Then
-        baseLinhas = LBound(linhasMesmaChave)
-        qtdLinhasMesmaChave = UBound(linhasMesmaChave) - baseLinhas + 1
-        nDel = qtdLinhasMesmaChave
-        If nDel > 0 Then
-            ReDim linhasDel(1 To nDel)
-            For k = 1 To nDel
-                linhasDel(k) = CLng(linhasMesmaChave(baseLinhas + k - 1))
-            Next k
-            For k = 1 To nDel - 1
-                For j = k + 1 To nDel
-                    If linhasDel(k) < linhasDel(j) Then
-                        tmp = linhasDel(k)
-                        linhasDel(k) = linhasDel(j)
-                        linhasDel(j) = tmp
-                    End If
-                Next j
-            Next k
+    linhaOrigemAtiva = EncontrarID.row
 
-            Call Util_PrepararAbaParaEscrita(wsEntInativas, estEntInativProt, senhaEntInativ)
-            For k = 1 To nDel
-                If Not Util_ExcluirLinhaSegura(wsEntInativas, linhasDel(k)) Then
-                    Err.Raise 1004, "Entidade_InativarSelecionada", "Nao foi possivel excluir linha " & CStr(linhasDel(k)) & " em ENTIDADE_INATIVOS."
-                End If
-            Next k
-            Call Util_RestaurarProtecaoAba(wsEntInativas, estEntInativProt, senhaEntInativ)
-        End If
+    If Not Util_PrepararAbaParaEscrita(wsEntInativas, estEntInativProt, senhaEntInativProt) Then
+        Err.Raise 1004, "Entidade_InativarSelecionada", "Nao foi possivel preparar ENTIDADE_INATIVOS para escrita."
+    End If
+    If Not Util_PrepararAbaParaEscrita(wsEnt, estEntProt, senhaEntProt) Then
+        Err.Raise 1004, "Entidade_InativarSelecionada", "Nao foi possivel preparar ENTIDADE para escrita."
     End If
 
-    ' Copiar linha para aba de inativas (sem .Select)
+    ' Copiar somente os dados da entidade antes de remover a ativa; se a remocao falhar, a copia e revertida.
     linhaEntInativa = wsEntInativas.Cells(wsEntInativas.Rows.count, 1).End(xlUp).row + 1
-    Call Util_PrepararAbaParaEscrita(wsEntInativas, estEntInativProt, senhaEntInativ)
-    EncontrarID.EntireRow.Copy Destination:=wsEntInativas.Cells(linhaEntInativa, 1)
-    Call Util_RestaurarProtecaoAba(wsEntInativas, estEntInativProt, senhaEntInativ)
+    Set origemDados = wsEnt.Range(wsEnt.Cells(linhaOrigemAtiva, 1), wsEnt.Cells(linhaOrigemAtiva, COL_ENT_DT_CAD))
+    Set destinoDados = wsEntInativas.Range(wsEntInativas.Cells(linhaEntInativa, 1), wsEntInativas.Cells(linhaEntInativa, COL_ENT_DT_CAD))
+    destinoDados.NumberFormat = origemDados.NumberFormat
+    destinoDados.Value = origemDados.Value
+    copiaInativaCriada = True
     Application.CutCopyMode = False
 
     ' Remover linha da aba ativa
-    Call Util_PrepararAbaParaEscrita(wsEnt, estEntInativProt, senhaEntInativ)
-    If Not Util_ExcluirLinhaSegura(wsEnt, EncontrarID.row) Then
+    If Not Util_ExcluirLinhaSegura(wsEnt, linhaOrigemAtiva) Then
         Err.Raise 1004, "Entidade_InativarSelecionada", "Nao foi possivel excluir a linha da entidade na aba ENTIDADE."
     End If
-    Call Util_RestaurarProtecaoAba(wsEnt, estEntInativProt, senhaEntInativ)
+    ativaExcluida = True
 
+    Call Entidade_RemoverInativasDuplicadas(wsEntInativas, entIdOriginal, cnpjEntidade, linhaEntInativa)
     Call ClassificaEntidade
+    Call Util_RestaurarProtecaoAba(wsEntInativas, estEntInativProt, senhaEntInativProt)
+    Call Util_RestaurarProtecaoAba(wsEnt, estEntProt, senhaEntProt)
+
     MsgBox "Entidade Inativada com sucesso!", vbExclamation, "Inativa" & ChrW(231) & ChrW(227) & "o"
     mInativacaoEmAndamento = False
     Unload Me
 Exit Sub
 erro_carregamento:
+    erroNumero = Err.Number
+    erroMensagem = Err.Description
+    If Len(Trim$(erroMensagem)) = 0 Then erroMensagem = "Erro VBA " & CStr(erroNumero) & " sem descricao retornada."
     On Error Resume Next
-    Call Util_RestaurarProtecaoAba(wsEntInativas, estEntInativProt, senhaEntInativ)
-    Call Util_RestaurarProtecaoAba(wsEnt, estEntInativProt, senhaEntInativ)
+    If copiaInativaCriada And Not ativaExcluida Then
+        Call Util_ExcluirLinhaSegura(wsEntInativas, linhaEntInativa)
+    End If
+    Application.CutCopyMode = False
+    Call Util_RestaurarProtecaoAba(wsEntInativas, estEntInativProt, senhaEntInativProt)
+    Call Util_RestaurarProtecaoAba(wsEnt, estEntProt, senhaEntProt)
     On Error GoTo 0
     mInativacaoEmAndamento = False
-    MsgBox "Erro ao inativar entidade: " & Err.Description, vbCritical, "Erro"
+    MsgBox "Erro ao inativar entidade: " & erroMensagem, vbCritical, "Erro"
+End Sub
+
+Private Sub Entidade_RemoverInativasDuplicadas( _
+    ByVal wsEntInativas As Worksheet, _
+    ByVal entId As String, _
+    ByVal cnpjEntidade As String, _
+    ByVal linhaPreservar As Long _
+)
+    Dim linhasMesmaChave As Variant
+    Dim linhasDel() As Long
+    Dim nDel As Long
+    Dim k As Long
+    Dim j As Long
+    Dim tmp As Long
+
+    linhasMesmaChave = Util_EntidadeInativos_ColetarLinhasMesmaChave(wsEntInativas, LINHA_DADOS, entId, cnpjEntidade)
+    If Not IsArray(linhasMesmaChave) Then Exit Sub
+
+    For k = LBound(linhasMesmaChave) To UBound(linhasMesmaChave)
+        If CLng(linhasMesmaChave(k)) <> linhaPreservar Then nDel = nDel + 1
+    Next k
+    If nDel = 0 Then Exit Sub
+
+    ReDim linhasDel(1 To nDel)
+    nDel = 0
+    For k = LBound(linhasMesmaChave) To UBound(linhasMesmaChave)
+        If CLng(linhasMesmaChave(k)) <> linhaPreservar Then
+            nDel = nDel + 1
+            linhasDel(nDel) = CLng(linhasMesmaChave(k))
+        End If
+    Next k
+
+    For k = 1 To nDel - 1
+        For j = k + 1 To nDel
+            If linhasDel(k) < linhasDel(j) Then
+                tmp = linhasDel(k)
+                linhasDel(k) = linhasDel(j)
+                linhasDel(j) = tmp
+            End If
+        Next j
+    Next k
+
+    For k = 1 To nDel
+        Call Util_ExcluirLinhaSegura(wsEntInativas, linhasDel(k))
+    Next k
 End Sub
 
 Private Sub C_Contato1_KeyPress(ByVal KeyAscii As MSForms.ReturnInteger)
@@ -375,8 +414,5 @@ On Error GoTo erro_carregamento:
 C_CEP.Text = Funcoes.cep(KeyAscii, C_CEP.Text)
 erro_carregamento:
 End Sub
-
-
-  
 
 

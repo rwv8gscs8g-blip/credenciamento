@@ -1,0 +1,31 @@
+# Manifesto V3 DELTA ONDA38_2_4_ESTADO_FIX1_ENTIDADE - V12.0.0206 Onda 38.2.4
+# Tema: Fix1 pos-validacao manual - inativacao do primeiro item de entidade.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_4_ESTADO_FIX1_ENTIDADE", "fd45a5d+ONDA38.2.4-ESTADO-FIX1-ENTIDADE"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=1 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunIntegridadeEstado deve concluir OK=4 | FALHA=0.
+#   - Reteste manual dirigido: inativar o primeiro item ativo de ENTIDADE sem erro.
+#
+# Artefatos hash-pinados:
+#   F|002-formularios/AAE-Altera_Entidade.frm
+#     frm_bytes=14772
+#     frm_sha256=192f476c8c541e2ce29b6413e1067c6d33d54426b026a7b585c2788f71319124
+#     code_only_bytes=14258
+#     code_only_sha256=ec3a93acf2509f45fc8ac4390205747c3b21376ae89aacf68a98f9cbf2729835
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=235810
+#     sha256=e4119340f5dab74f0d87a9ba5e7b5be47144fd6a96fbdacb3e8bb4a230fe8627
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build fix1.
+#
+# GRUPO_ONDA38_2_4_ESTADO_FIX1_ENTIDADE
+F|002-formularios/AAE-Altera_Entidade.frm
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

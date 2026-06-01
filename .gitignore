@@ -32,6 +32,11 @@ V12-093/
 # Artefatos de bateria
 BateriaOficial_*.csv
 backup_bateria_oficial/
+/TesteV2_*_Falhas_*.csv
+
+# Artefatos avulsos na raiz devem ir para auditoria/ ou local-ai/incoming/
+/*.pdf
+/*.docx
 
 # Backups
 *.bak

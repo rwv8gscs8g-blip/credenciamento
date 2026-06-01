@@ -1,0 +1,14 @@
+# Credenciamento - atributos de repositorio
+#
+# VBA exportado pelo VBE pode usar CRLF e conteudo binario nos .frx. O projeto
+# controla esses arquivos por importacao/compile no Excel, nao por normalizacao
+# automatica de fim de linha. Sem esta regra, `git diff --check` acusa falsos
+# positivos em cada linha adicionada de arquivos VBA exportados.
+
+*.bas -whitespace
+*.cls -whitespace
+*.frm -whitespace
+local-ai/vba_import/**/*.code-only.txt -whitespace
+*.csv -whitespace
+
+*.frx binary -diff -merge

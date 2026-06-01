@@ -1,0 +1,113 @@
+{
+  "result_id": "0126-exec-onda-38-2-10-higiene-repositorio",
+  "execution_id": "0126-exec-onda-38-2-10-higiene-repositorio",
+  "readback_id": "0126-rb-onda-38-2-10-higiene-repositorio",
+  "data": "2026-05-31",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "implemented_validated_pending_commit",
+  "outcome": "repo_hygiene_stage_validated_pending_commit",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Aplicar higiene estrutural do repositorio, organizar artefatos avulsos e preparar commit consolidado das ondas 38.2.4 a 38.2.10.",
+  "summary": "A onda adicionou politica de atributos para exportaveis VBA, editorconfig, scripts read-only de higiene, documentacao de governanca e auditoria. git diff --check e git diff --cached --check passaram limpos sem normalizar fisicamente VBA; .gitattributes preserva VBA, code-only, CSV e .frx fora do gate generico de whitespace. Artefatos grandes soltos na raiz foram movidos para local-ai/incoming/artefatos-avulsos/20260531, e o CSV de falha V2 foi movido para auditoria/evidencias/V12.0.0205/csv. O commit consolidado ainda sera criado apos este ERP.",
+  "files_changed_key": [
+    ".gitattributes",
+    ".editorconfig",
+    ".gitignore",
+    "scripts/hbn-guards/check-repo-hygiene.sh",
+    "scripts/hbn-guards/report-vba-eol-whitespace.sh",
+    "docs/reference/governanca/HIGIENE_REPOSITORIO_V206.md",
+    "auditoria/03_ondas/onda_38_2_10/0126_TECNICO.md",
+    ".hbn/proposals/0032-codex-auditoria-higiene-repositorio-v206.md",
+    ".hbn/readbacks/0126-rb-onda-38-2-10-higiene-repositorio.json",
+    ".hbn/hearbacks/0126-rb-onda-38-2-10-higiene-repositorio-confirmed.json",
+    ".hbn/hearbacks/0126-rb-onda-38-2-10-higiene-repositorio-confirmed.md",
+    ".hbn/results/0126-exec-onda-38-2-10-higiene-repositorio.json",
+    "CHANGELOG.md"
+  ],
+  "artifact_hashes": {
+    ".gitattributes": "6636711ce141e8ca72873359b78a06f4765bb1ce97acc0d34551ab91b9dcbea5",
+    ".editorconfig": "2f2c77341ba3eb1df47e9929e5a3d2cbe509c930cf41b6b8d113c9a834430035",
+    ".gitignore": "f61e840270205d97b668020ae5bc5ca8c7e2e85fb1bcf807c79479466b5c2e4a",
+    "docs/reference/governanca/HIGIENE_REPOSITORIO_V206.md": "a41954eedebab7fa0c8e349ee7562ef4b52be6e6515ddb20ac42ac45f28c3fb1",
+    "auditoria/03_ondas/onda_38_2_10/0126_TECNICO.md": "f0d636d57622e015de0cd3d995f5e36afbb658783cacac758883ed4d3bd957a8",
+    ".hbn/proposals/0032-codex-auditoria-higiene-repositorio-v206.md": "e89ade1cfcd209ac258d31799b9a54babdbf3af9bda474cd446c1fa050eafb2e",
+    "scripts/hbn-guards/check-repo-hygiene.sh": "dc40f955e2488ae75a6e0a7d94b659b8e37758b389cee9a2435b217aeb095fbd",
+    "scripts/hbn-guards/report-vba-eol-whitespace.sh": "b59fceae7a60bcdb949fcbfcec1713c6a4bf8798d86b4077c648ce4449ee7c4d",
+    "CHANGELOG.md": "31b78ac7c30e595950e83d71b4e431f2999e8857ab185702fb3adefb0ece050b",
+    ".hbn/readbacks/0126-rb-onda-38-2-10-higiene-repositorio.json": "546bc31e2c7fa74db3b376b3a0c5ea81c6e1a1bf1d601dba6fa6b8792e26beca",
+    ".hbn/hearbacks/0126-rb-onda-38-2-10-higiene-repositorio-confirmed.json": "e4b923a7407106f4ba9ac36e2aac2f21517e00d46fdfd0eeb900cfd2ae093f49",
+    ".hbn/proposals/0023-antigravity-auditoria-gate-a4-l43-v206.md": "a610b90adeab9d1069705bacf2ca7ab3218ad432b58d780cfd1c143e97230fdc",
+    ".hbn/proposals/0025-antigravity-gemini-auditoria-entidades-padrao-seguranca-v206.md": "25dcfc1db00dbdca306f4656a48372a1b1a8810d90dbe957cbed49a9faa1744e",
+    "auditoria/03_ondas/onda_QA_V3/GUIA_DEFINITIVO_TESTES_V3_DRAFT.md": "3adae4171c78c9881439079dfae193dda8d95977a0d4b70e2d1e46f17e148d24",
+    "auditoria/03_ondas/onda_38_2_4/V207_NOTA_ARQUITETURA_STATUS_CANONICO.md": "e50b1ce2f0a0885a6507047df720d08afdb1b9976a2b9ad40e543f7d032f742f",
+    "auditoria/03_ondas/onda_38_2_5/RVS_OU_DIRIGIDO_FINAL.md": "cfce4fbf6916d939e105517f80cdaa59e1b91e8185c4fde3e5dcd910ad66bd39",
+    "auditoria/03_ondas/onda_38_2_6/IMPORT_PROCEDURE.md": "3e2ed5f73fbec6ac42945a0de401260ce9550a830bc9e9725fc1163ecd6731d5",
+    "auditoria/03_ondas/onda_38_2_6/README.md": "cf45491901ae3d99ffa88e3f4cf43fcb85621b2d8e880f2447d07be8c4b23269"
+  },
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass",
+      "evidencia": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Hearback 0126",
+      "status": "pass",
+      "evidencia": "Usuario confirmou: sim aprovado, vamos deixar tudo limpo, organizado e commitado com os avancos alcancados."
+    },
+    {
+      "gate": "Readback schema",
+      "status": "pass_local",
+      "evidencia": "python3 -m json.tool e scripts/hbn-guards/validate-readback.sh passaram para .hbn/readbacks/0126-rb-onda-38-2-10-higiene-repositorio.json."
+    },
+    {
+      "gate": "git diff --check",
+      "status": "pass_local",
+      "evidencia": "git diff --check e git diff --cached --check passaram limpos apos .gitattributes; VBA e code-only nao foram normalizados fisicamente."
+    },
+    {
+      "gate": "report-vba-eol-whitespace",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/report-vba-eol-whitespace.sh executou e terminou com [hbn-hygiene] OK."
+    },
+    {
+      "gate": "check-repo-hygiene",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/check-repo-hygiene.sh executou sem alterar arquivos e validou readback ativo."
+    },
+    {
+      "gate": "Forbidden core files",
+      "status": "pass_local",
+      "evidencia": "git diff --name-only para Auto_Open.bas, Mod_Types.bas, Importador_V3.bas e espelhos proibidos retornou vazio."
+    },
+    {
+      "gate": "Commit consolidado",
+      "status": "pending_local",
+      "evidencia": "Stage validado e aguardando git commit consolidado."
+    }
+  ],
+  "organization": {
+    "moved_to_local_ai_incoming": [
+      "local-ai/incoming/artefatos-avulsos/20260531/Primeiro GATE-USO-PROLONGADO L43.pdf",
+      "local-ai/incoming/artefatos-avulsos/20260531/TESTES.docx"
+    ],
+    "moved_to_evidence": [
+      "auditoria/evidencias/V12.0.0205/csv/TesteV2_INTEGRIDADE_ESTADO_Falhas_TV2_20260530_145447.csv"
+    ]
+  },
+  "scope_notes": {
+    "auto_open": "src/vba/Auto_Open.bas permaneceu fora do escopo e nao foi tocado.",
+    "mod_types": "src/vba/Mod_Types.bas permaneceu fora do escopo e nao foi tocado.",
+    "importador_v3": "src/vba/Importador_V3.bas permaneceu fora do escopo e nao foi tocado.",
+    "freeze": "Nao foi declarado freeze V206."
+  },
+  "next_action": {
+    "summary": "Staging, pre-commit HBN e commit consolidado.",
+    "status": "pending_commit"
+  },
+  "created_at": "2026-05-31T23:57:33-03:00"
+}

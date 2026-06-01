@@ -72,22 +72,26 @@ Private Function ListaEntEmp_LimUtilLista(Optional ByVal largListaPts As Double 
     ListaEntEmp_LimUtilLista = lim
 End Function
 
-' C_Lista / C_ListaRodizio / R_Lista: colunas visiveis 1=CNPJ, 2=Nome, 11=Contato, 12=Celular.
+' C_Lista / C_ListaRodizio / R_Lista: colunas visiveis 0=ID, 1=CNPJ, 2=Nome, 11=Contato, 12=Celular.
 Public Function EntidadeLista_MontarColumnWidths(Optional ByVal largListaPts As Double = 0) As String
+    Const W_ID As Long = 42
     Dim lim As Long
     Dim w1 As Long, w2 As Long, w3 As Long, w4 As Long
-    lim = ListaEntEmp_LimUtilLista(largListaPts)
+    lim = ListaEntEmp_LimUtilLista(largListaPts) - W_ID
+    If lim < 340 Then lim = 340
     Call ListaEntEmp_CalcularQuatroLarguras(lim, w1, w2, w3, w4)
-    EntidadeLista_MontarColumnWidths = "0;" & CStr(w1) & ";" & CStr(w2) & ";0;0;0;0;0;0;0;0;" & CStr(w3) & ";" & CStr(w4) & ";0;0;0;0;0;0;0;0;0;0"
+    EntidadeLista_MontarColumnWidths = CStr(W_ID) & ";" & CStr(w1) & ";" & CStr(w2) & ";0;0;0;0;0;0;0;0;" & CStr(w3) & ";" & CStr(w4) & ";0;0;0;0;0;0;0;0;0;0"
 End Function
 
-' EMP_Lista / RM_Lista: 1=CNPJ, 2=Razao, 4=Nome empresario, 12=Tel. celular (mesma proporcao que Entidade).
+' EMP_Lista / RM_Lista: 0=ID, 1=CNPJ, 2=Razao, 4=Nome empresario, 12=Tel. celular.
 Public Function EmpresaLista_MontarColumnWidths(Optional ByVal largListaPts As Double = 0) As String
+    Const W_ID As Long = 42
     Dim lim As Long
     Dim w1 As Long, w2 As Long, w3 As Long, w4 As Long
-    lim = ListaEntEmp_LimUtilLista(largListaPts)
+    lim = ListaEntEmp_LimUtilLista(largListaPts) - W_ID
+    If lim < 340 Then lim = 340
     Call ListaEntEmp_CalcularQuatroLarguras(lim, w1, w2, w3, w4)
-    EmpresaLista_MontarColumnWidths = "0;" & CStr(w1) & ";" & CStr(w2) & ";0;" & CStr(w3) & ";0;0;0;0;0;0;0;" & CStr(w4) & ";0;0;0;0;0;0"
+    EmpresaLista_MontarColumnWidths = CStr(W_ID) & ";" & CStr(w1) & ";" & CStr(w2) & ";0;" & CStr(w3) & ";0;0;0;0;0;0;0;" & CStr(w4) & ";0;0;0;0;0;0"
 End Function
 
 Private Function TextoEmpresaParaFiltro(ByVal wsEmp As Worksheet, ByVal linha As Long) As String
@@ -858,7 +862,7 @@ Exit Sub
 carregamento:
 End Sub
 
-Sub PreencherPreencheOS()
+Sub PreencherPreencheOS(Optional ByVal filtro As String = "")
     ' Refatorado: sem Select/ActiveCell, uso de Range.Find seguro e filtro claro de Pré-OS pendentes.
     Dim Linhalistbox As Integer
     Dim linha As Long
@@ -869,7 +873,25 @@ Sub PreencherPreencheOS()
     Dim wsEmp As Worksheet
     Dim rngResult As Range
     Dim lst As Object
+    Dim filtroU As String
+    Dim preId As String
+    Dim entId As String
+    Dim entNome As String
+    Dim codServ As String
+    Dim ativIDBusca As String
+    Dim servIDBusca As String
+    Dim ativDesc As String
+    Dim servDesc As String
+    Dim empId As String
+    Dim empRazao As String
+    Dim empTelCel As String
+    Dim empCnpj As String
+    Dim textoBusca As String
+    Dim linhaEnt As Long
+    Dim linhaEmp As Long
+    Dim jServ As Long
 
+    filtroU = UCase$(Trim$(filtro))
     Set wsPreOS = ThisWorkbook.Sheets(SHEET_PREOS)
     Set wsEntidade = ThisWorkbook.Sheets(SHEET_ENTIDADE)
     Set wsCadServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
@@ -892,28 +914,24 @@ Sub PreencherPreencheOS()
             If Trim(CStr(.Cells(linha, COL_PREOS_ID).Value)) <> "" And _
                Trim$(UCase$(CStr(.Cells(linha, COL_PREOS_STATUS).Value))) = STATUS_PREOS_AGUARDANDO_ACEITE Then
 
-                lst.AddItem
-
-                SafeSetList lst, Linhalistbox, 0, .Cells(linha, 1).Value
-                SafeSetList lst, Linhalistbox, 10, .Cells(linha, 3).Value
-                SafeSetList lst, Linhalistbox, 11, .Cells(linha, 9).Value
-                SafeSetList lst, Linhalistbox, 12, .Cells(linha, 10).Value
-
-                Dim linhaEnt As Long
-                linhaEnt = BuscarLinhaPorId(wsEntidade, LINHA_DADOS, UltimaLinhaAba(SHEET_ENTIDADE), COL_ENT_ID, SafeListVal(.Cells(linha, COL_PREOS_ENT_ID).Value))
-                If linhaEnt > 0 Then
-                    SafeSetList lst, Linhalistbox, 1, wsEntidade.Cells(linhaEnt, COL_ENT_NOME).Value
-                    SafeSetList lst, Linhalistbox, 6, wsEntidade.Cells(linhaEnt, COL_ENT_ID).Value
-                End If
-
-                Dim codServ As String
-                Dim ativIDBusca As String
-                Dim servIDBusca As String
-                Dim jServ As Long
-
+                preId = SafeListVal(.Cells(linha, COL_PREOS_ID).Value)
+                entId = SafeListVal(.Cells(linha, COL_PREOS_ENT_ID).Value)
                 codServ = SafeListVal(.Cells(linha, COL_PREOS_COD_SERV).Value)
                 ativIDBusca = SafeListVal(.Cells(linha, COL_PREOS_ATIV_ID).Value)
                 servIDBusca = ExtrairServId(codServ, ativIDBusca)
+                empId = SafeListVal(.Cells(linha, COL_PREOS_EMP_ID).Value)
+                entNome = ""
+                ativDesc = ""
+                servDesc = ""
+                empRazao = ""
+                empTelCel = ""
+                empCnpj = ""
+
+                linhaEnt = BuscarLinhaPorId(wsEntidade, LINHA_DADOS, UltimaLinhaAba(SHEET_ENTIDADE), COL_ENT_ID, entId)
+                If linhaEnt > 0 Then
+                    entNome = SafeListVal(wsEntidade.Cells(linhaEnt, COL_ENT_NOME).Value)
+                End If
+
                 Set rngResult = Nothing
 
                 If servIDBusca <> "" Then
@@ -926,21 +944,44 @@ Sub PreencherPreencheOS()
                     Next jServ
                 End If
                 If Not rngResult Is Nothing Then
-                    SafeSetList lst, Linhalistbox, 5, rngResult.Offset(0, 2).Value
-                    SafeSetList lst, Linhalistbox, 2, rngResult.Offset(0, 3).Value
-                    SafeSetList lst, Linhalistbox, 8, rngResult.Value
+                    ativDesc = SafeListVal(rngResult.Offset(0, 2).Value)
+                    servDesc = SafeListVal(rngResult.Offset(0, 3).Value)
                 End If
 
-                Dim linhaEmp As Long
-                linhaEmp = BuscarLinhaPorId(wsEmp, PrimeiraLinhaDadosEmpresas(), UltimaLinhaAba(SHEET_EMPRESAS), COL_EMP_ID, SafeListVal(.Cells(linha, COL_PREOS_EMP_ID).Value))
+                linhaEmp = BuscarLinhaPorId(wsEmp, PrimeiraLinhaDadosEmpresas(), UltimaLinhaAba(SHEET_EMPRESAS), COL_EMP_ID, empId)
                 If linhaEmp > 0 Then
-                    SafeSetList lst, Linhalistbox, 3, wsEmp.Cells(linhaEmp, COL_EMP_RAZAO).Value
-                    SafeSetList lst, Linhalistbox, 4, wsEmp.Cells(linhaEmp, COL_EMP_TEL_CEL).Value
-                    SafeSetList lst, Linhalistbox, 7, wsEmp.Cells(linhaEmp, COL_EMP_CNPJ).Value
-                    SafeSetList lst, Linhalistbox, 9, wsEmp.Cells(linhaEmp, COL_EMP_ID).Value
+                    empRazao = SafeListVal(wsEmp.Cells(linhaEmp, COL_EMP_RAZAO).Value)
+                    empTelCel = SafeListVal(wsEmp.Cells(linhaEmp, COL_EMP_TEL_CEL).Value)
+                    empCnpj = SafeListVal(wsEmp.Cells(linhaEmp, COL_EMP_CNPJ).Value)
                 End If
 
-                Linhalistbox = Linhalistbox + 1
+                textoBusca = preId & " " & entId & " " & entNome & " " & _
+                            codServ & " " & ativIDBusca & " " & servIDBusca & " " & _
+                            ativDesc & " " & servDesc & " " & empId & " " & _
+                            empRazao & " " & empTelCel & " " & empCnpj & " " & _
+                            SafeListVal(.Cells(linha, COL_PREOS_DT_EMISSAO).Value) & " " & _
+                            SafeListVal(.Cells(linha, COL_PREOS_QT_EST).Value) & " " & _
+                            SafeListVal(.Cells(linha, COL_PREOS_VL_EST).Value)
+
+                If UtilFiltro_LinhaAtende(textoBusca, filtroU) Then
+                    lst.AddItem
+
+                    SafeSetList lst, Linhalistbox, 0, preId
+                    SafeSetList lst, Linhalistbox, 1, entNome
+                    SafeSetList lst, Linhalistbox, 2, servDesc
+                    SafeSetList lst, Linhalistbox, 3, empRazao
+                    SafeSetList lst, Linhalistbox, 4, empTelCel
+                    SafeSetList lst, Linhalistbox, 5, ativDesc
+                    SafeSetList lst, Linhalistbox, 6, entId
+                    SafeSetList lst, Linhalistbox, 7, empCnpj
+                    SafeSetList lst, Linhalistbox, 8, servIDBusca
+                    SafeSetList lst, Linhalistbox, 9, empId
+                    SafeSetList lst, Linhalistbox, 10, codServ
+                    SafeSetList lst, Linhalistbox, 11, .Cells(linha, COL_PREOS_QT_EST).Value
+                    SafeSetList lst, Linhalistbox, 12, .Cells(linha, COL_PREOS_VL_EST).Value
+
+                    Linhalistbox = Linhalistbox + 1
+                End If
             End If
         Next linha
     End With
@@ -1561,6 +1602,54 @@ Private Sub AplicarFormatoMoedaBR(ByVal alvo As Range)
     On Error GoTo 0
 End Sub
 
+Public Function Preencher_NotaAvaliacaoImpressaSegura(ByVal valor As Variant) As Integer
+    Dim texto As String
+    Dim numero As Long
+
+    On Error Resume Next
+    texto = Trim$(CStr(valor))
+    If Err.Number <> 0 Then
+        Err.Clear
+        texto = ""
+    End If
+    On Error GoTo 0
+
+    If texto = "" Then Exit Function
+
+    numero = CLng(Val(texto))
+    If numero < 0 Then numero = 0
+    If numero > 10 Then numero = 10
+    Preencher_NotaAvaliacaoImpressaSegura = CInt(numero)
+End Function
+
+Public Function Preencher_NormalizarPreOSIdImpressao(ByVal preosId As Variant) As String
+    Dim texto As String
+    Dim p As Long
+
+    On Error Resume Next
+    texto = Trim$(CStr(preosId))
+    If Err.Number <> 0 Then
+        Err.Clear
+        texto = ""
+    End If
+    On Error GoTo 0
+
+    If texto = "" Then Exit Function
+
+    p = InStrRev(texto, "-")
+    If p > 0 And InStr(1, texto, "PROVIS", vbTextCompare) > 0 Then
+        texto = Trim$(Mid$(texto, p + 1))
+    End If
+
+    Preencher_NormalizarPreOSIdImpressao = texto
+End Function
+
+Private Sub Preencher_EscreverNotaAvaliacaoImpressa(ByVal alvo As Range, ByVal valor As Variant)
+    alvo.Value = Preencher_NotaAvaliacaoImpressaSegura(valor)
+    alvo.NumberFormat = "0"
+    alvo.ShrinkToFit = True
+End Sub
+
 Private Function IdsIguais(ByVal a As String, ByVal b As String) As Boolean
     Dim sA As String
     Dim sB As String
@@ -1595,7 +1684,7 @@ Private Sub GarantirDadosPreOSParaImpressao(ByVal preosId As Variant)
 
     On Error GoTo erro_carregamento
 
-    preId = Trim$(CStr(preosId))
+    preId = Preencher_NormalizarPreOSIdImpressao(preosId)
     If preId = "" Then Exit Sub
 
     Set wsPre = ThisWorkbook.Sheets(SHEET_PREOS)
@@ -3256,16 +3345,16 @@ ws.Range("L23").Value = Util_Conversao.ToDouble(AvQtH)
 Call AplicarFormatoQuantidade(ws.Range("L23"))
 ws.Range("M23").Value = Util_Conversao.ToDouble(CStr(AvVlOs))
 Call AplicarFormatoMoedaBR(ws.Range("M23"))
-ws.Range("N27").Value = Format(AvN01, "##,#")
-ws.Range("N28").Value = Format(Avn02, "##,#")
-ws.Range("N29").Value = Format(AvN03, "##,#")
-ws.Range("N30").Value = Format(AvN04, "##,#")
-ws.Range("N31").Value = Format(AvN05, "##,#")
-ws.Range("N32").Value = Format(AvN06, "##,#")
-ws.Range("N33").Value = Format(AvN07, "##,#")
-ws.Range("N34").Value = Format(AvN08, "##,#")
-ws.Range("N35").Value = Format(AvN09, "##,#")
-ws.Range("N36").Value = Format(AvN10, "##,#")
+Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range("N27"), AvN01)
+Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range("N28"), Avn02)
+Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range("N29"), AvN03)
+Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range("N30"), AvN04)
+Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range("N31"), AvN05)
+Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range("N32"), AvN06)
+Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range("N33"), AvN07)
+Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range("N34"), AvN08)
+Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range("N35"), AvN09)
+Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range("N36"), AvN10)
 ws.Range("D37").Value = AvNEmp
 ws.Range("N37").Value = Util_Conversao.ToCurrency(FormatarMediaAvaliacao(media))
 ws.Range("N37").NumberFormat = "0.00"
@@ -4048,7 +4137,7 @@ End Function
 '   "entidade"      -> PreenchimentoEntidade(termo)              [TextBox16]
 '   "empresa"       -> PreenchimentoEmpresa(termo)               [TextBox17]
 '   "atrib_servico" -> PreenchimentoServico(termo)               [TextBox18]
-'   "os"            -> PreencherPreencheOS                       [TextBox19, termo ignorado - debito V207]
+'   "os"            -> PreencherPreencheOS(termo)                [TextBox19]
 '   "aval"          -> PreencherAvaliarOS                        [TextBox20, termo ignorado - debito V207]
 '   "cad_servico"   -> PreencherManutencaoValor(termo)           [TextBox21]
 '   "atrib_empresa" -> PreenchimentoEntidadeRodizio(termo)       [TextBox22]
@@ -4059,7 +4148,7 @@ Public Sub Preencher_FiltrarPorBoxEstatico(ByVal nomeContexto As String, ByVal t
         Case "entidade":      Call PreenchimentoEntidade(termo)
         Case "empresa":       Call PreenchimentoEmpresa(termo)
         Case "atrib_servico": Call PreenchimentoServico(termo)
-        Case "os":            Call PreencherPreencheOS
+        Case "os":            Call PreencherPreencheOS(termo)
         Case "aval":          Call PreencherAvaliarOS
         Case "cad_servico":   Call PreencherManutencaoValor(termo)
         Case "atrib_empresa": Call PreenchimentoEntidadeRodizio(termo)

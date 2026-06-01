@@ -1,0 +1,145 @@
+{
+  "readback_id": "0125-rb-onda-38-2-9-config-snapshot-v2",
+  "data": "2026-05-31",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0124-rb-onda-38-2-8-config-baseline-v2",
+  "intent": {
+    "objective": "Abrir a Onda 38.2.9 para proteger a persistencia de CONFIG durante testes V2: capturar CONFIG!A:N no inicio da suite e restaurar ao finalizar, evitando vazamento de valores canonicos de teste para a configuracao operacional.",
+    "non_goals": [
+      "Nao tocar Auto_Open.bas sem excecao explicita",
+      "Nao reimportar Mod_Types.bas nem alterar Importador_V3.bas",
+      "Nao alterar Configuracao_Inicial.frm ou seu .frx",
+      "Nao alterar regras de rodizio, strikes, recusas, suspensao, Pre-OS, OS ou avaliacao",
+      "Nao tocar Svc_*.bas, Repo_*.bas, Preencher.bas ou Menu_Principal.frm nesta onda",
+      "Nao corrigir layout/bordas dos PDFs nesta onda",
+      "Nao iniciar propagacao do padrao de Entidades",
+      "Nao declarar freeze V206, tag, release candidate ou build final"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_9_CONFIG_SNAPSHOT_V2.txt",
+      ".hbn/readbacks/0125-rb-onda-38-2-9-config-snapshot-v2.json",
+      ".hbn/hearbacks/0125-rb-onda-38-2-9-config-snapshot-v2-confirmed.json",
+      ".hbn/hearbacks/0125-rb-onda-38-2-9-config-snapshot-v2-confirmed.md",
+      ".hbn/results/0125-exec-onda-38-2-9-config-snapshot-v2.json",
+      ".hbn/proposals/0031-*config*.md",
+      "auditoria/03_ondas/onda_38_2_9/**",
+      "TesteV2_*_TV2_20260531*.csv",
+      "TesteV2_*_TV2_20260601*.csv",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Configuracao_Inicial.frx",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Menu_Principal.frx",
+      "src/vba/Preencher.bas",
+      "src/vba/Svc_*.bas",
+      "src/vba/Repo_*.bas",
+      "src/vba/Altera_Entidade.frm",
+      "src/vba/Classificar.bas",
+      "src/vba/Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+      "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+      "local-ai/vba_import/001-modulo/AAR-Svc_OS.bas",
+      "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+      "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/Menu_Principal.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece a release oficial validada",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Onda 38.2.8 esta fechada por gate humano: import, compile e TV2_RunConfigBaselineSeguro OK=3",
+    "Suites V2 podem usar CONFIG canonica durante a execucao, mas devem devolver CONFIG operacional ao fim",
+    "Snapshot cobre CONFIG!A:N, incluindo gestor, logo, municipio, regras de Pre-OS, recusas, strikes, UF, secretaria e threshold de teste lento",
+    "Importacao no workbook deve usar apenas pacote V3 em local-ai/vba_import/"
+  ],
+  "risks": [
+    {
+      "risk": "Restaurar CONFIG antes do registro historico poderia alterar metricas de formatacao baseadas em CONFIG.",
+      "mitigation": "Restaurar no inicio da finalizacao para que historico e workbook terminem com parametros operacionais; manter teste dirigido nao destrutivo de wiring.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Alguma suite pode depender de CONFIG canonica apos finalizar para outra suite subsequente.",
+      "mitigation": "Cada suite V2 deve preparar seu proprio baseline; se dependencia externa aparecer, registrar bug de teste em nova onda.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Worktree contem sujeira historica fora do escopo.",
+      "mitigation": "Nao reverter alteracoes existentes e validar que os arquivos proibidos da onda nao receberam diff novo.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "H0 hearback humano confirmado",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0125-rb-onda-38-2-9-config-snapshot-v2-confirmed.json"
+      },
+      {
+        "gate": "D1 compile manual apos import V3",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_9/0125_TECNICO.md"
+      },
+      {
+        "gate": "D2 teste V2 dirigido confirma wiring de snapshot/restore",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_9/0125_TECNICO.md"
+      },
+      {
+        "gate": "Importador V3 delta ONDA38_2_9_CONFIG_SNAPSHOT_V2 executado a partir de local-ai/vba_import",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0125-exec-onda-38-2-9-config-snapshot-v2.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o Importador V3 falhar, nao salvar o workbook e restaurar o backup criado no inicio do import.",
+      "Se o compile manual falhar, fechar sem salvar, registrar modulo/linha e bloquear execucao de testes.",
+      "Se TV2_RunConfigSnapshotV2 falhar, nao declarar CONFIG snapshot resolvido e preservar evidencias.",
+      "Se alguma suite V2 reprovar por depender de CONFIG canonica apos finalizar, preservar falha e abrir readback novo para ajustar contrato da suite."
+    ],
+    "anchor_to_restore": "Workbook operacional pos-Onda 38.2.8, build fd45a5d+ONDA38.2.8-CONFIG-BASELINE-V2, mais backup V3 gerado no inicio do import 38.2.9"
+  },
+  "human_status": "confirmed",
+  "import_contract_planned": {
+    "delta_name": "ONDA38_2_9_CONFIG_SNAPSHOT_V2",
+    "build_label": "fd45a5d+ONDA38.2.9-CONFIG-SNAPSHOT-V2",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_9_CONFIG_SNAPSHOT_V2.txt",
+    "command_pattern": "ImportarPacoteV3_Delta \"ONDA38_2_9_CONFIG_SNAPSHOT_V2\", \"fd45a5d+ONDA38.2.9-CONFIG-SNAPSHOT-V2\""
+  },
+  "source_context": {
+    "previous_erp": ".hbn/results/0124-exec-onda-38-2-8-config-baseline-v2.json",
+    "target_finding": "CONFIG persistencia em testes V2",
+    "config_columns": "CONFIG!A:N conforme Const_Colunas.COL_CFG_*"
+  },
+  "created_at": "2026-05-31T23:17:51-03:00"
+}

@@ -1,0 +1,9 @@
+{
+  "hearback_id": "0120-rb-onda-38-2-4-integridade-estado-confirmed",
+  "readback_id": "0120-rb-onda-38-2-4-integridade-estado",
+  "status": "confirmed",
+  "by": "mauricio-zanin",
+  "data": "2026-05-30",
+  "received_at": "2026-05-30T01:30:40-03:00",
+  "summary": "Mauricio aprovou adotar 0024 como arbitro principal, confirmou que GATE-A4 nao libera freeze e autorizou abrir o readback 0120 para a Onda 38.2.4 Integridade de Estado com escopo inicial em Classificar.bas, Altera_Entidade.frm, Util_Planilha.bas, Teste_V2_Roteiros.bas, espelhos de importacao e documentacao; Auto_Open.bas fica fora do escopo inicial salvo nova excecao explicita."
+}

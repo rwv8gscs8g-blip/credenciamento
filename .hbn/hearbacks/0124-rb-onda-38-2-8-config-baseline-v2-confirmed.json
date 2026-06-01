@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0124-rb-onda-38-2-8-config-baseline-v2-confirmed",
+  "readback_id": "0124-rb-onda-38-2-8-config-baseline-v2",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-05-31T22:55:13-03:00",
+  "notes": "Usuario confirmou apos recomendacao de abrir a proxima onda: 'aprovado, pode seguir'. Escopo: FT-11/CONFIG para impedir reset de municipio/gestor pelo baseline V2."
+}

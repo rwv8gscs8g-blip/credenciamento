@@ -1,0 +1,21 @@
+root = true
+
+[*]
+charset = utf-8
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.{md,json,sh,txt}]
+end_of_line = lf
+
+[*.{bas,cls,frm}]
+end_of_line = crlf
+trim_trailing_whitespace = false
+
+[local-ai/vba_import/**/*.code-only.txt]
+end_of_line = crlf
+trim_trailing_whitespace = false
+
+[*.frx]
+insert_final_newline = false
+trim_trailing_whitespace = false

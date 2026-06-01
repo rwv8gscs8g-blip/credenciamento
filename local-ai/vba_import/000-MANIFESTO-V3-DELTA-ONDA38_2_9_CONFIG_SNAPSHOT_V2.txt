@@ -1,0 +1,32 @@
+# Manifesto V3 DELTA ONDA38_2_9_CONFIG_SNAPSHOT_V2 - V12.0.0206 Onda 38.2.9
+# Tema: FT-11/CONFIG - snapshot e restauracao de CONFIG A:N nas suites V2.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_9_CONFIG_SNAPSHOT_V2", "fd45a5d+ONDA38.2.9-CONFIG-SNAPSHOT-V2"
+#
+# Pos-import esperado:
+#   - Importador V3: M=3 | F=0 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunConfigSnapshotV2 deve concluir OK=4 | FALHA=0 | MANUAL=0.
+#   - Suites V2 capturam CONFIG!A:N no inicio e restauram CONFIG!A:N ao finalizar.
+#   - Sem freeze V206; esta onda fecha protecao de CONFIG para testes V2.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=182771
+#     sha256=82293bb7586895c41e304908aa588ce9f806fead3fdb7b50661bcc298672c193
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=260183
+#     sha256=f75289c05a0df15561f7d1a01974c9324e5d04efd55895455c9293c3fbf7210d
+#
+# AAX-App_Release.bas:
+#   runtime_mutable_by_v3=true
+#   bytes=23080
+#   sha256=ae73654763877dc5988ca36f5ce047ad5b7ab08da947df3b1d0a1f69b32177e5
+#   Motivo: Importador V3 reescreve APP_BUILD_IMPORTADO/APP_BUILD_GERADO_EM
+#   antes de processar o manifesto. AAX fecha a fase para carimbar o build 38.2.9.
+#
+# GRUPO_ONDA38_2_9_CONFIG_SNAPSHOT_V2
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/AAX-App_Release.bas

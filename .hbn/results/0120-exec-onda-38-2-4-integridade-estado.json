@@ -1,0 +1,117 @@
+{
+  "result_id": "0120-exec-onda-38-2-4-integridade-estado",
+  "execution_id": "0120-exec-onda-38-2-4-integridade-estado",
+  "readback_id": "0120-rb-onda-38-2-4-integridade-estado",
+  "data": "2026-05-31",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "executed",
+  "outcome": "onda_38_2_4_approved_no_freeze",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Fechar a Onda 38.2.4 Integridade de Estado apos Fix5, auditoria cruzada curta e reteste ENT_MAN_23 pos-RVS confirmado por Mauricio.",
+  "summary": "A onda resolveu os bloqueadores do escopo 0120: ordenacao deterministica sem xlGuess, inativacao atomica de entidade com rollback, tratamento seguro de ultima linha de ListObject e protecao verificavel de abas criticas contra edicao e objetos. Fix5 importou, compilou, TV2_RunIntegridadeEstado passou com OK=8, RVS pos-Fix5 foi aprovado e o reteste manual pos-RVS confirmou bloqueio no build salvo.",
+  "files_changed": [
+    "src/vba/Classificar.bas",
+    "src/vba/Altera_Entidade.frm",
+    "src/vba/Util_Planilha.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAT-Classificar.bas",
+    "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAE-Altera_Entidade.frm",
+    "local-ai/vba_import/002-formularios/AAE-Altera_Entidade.code-only.txt",
+    "local-ai/vba_import/002-formularios/Altera_Entidade.frx",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_INTEGRIDADE_ESTADO_F1_MODULOS.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_INTEGRIDADE_ESTADO_F2_FORMS.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_ESTADO_FIX1_ENTIDADE.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_ESTADO_FIX2_TV2_TOKEN.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_ESTADO_FIX3_LAST_ROW_TABLE.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_ESTADO_FIX4_PROTECAO_ABAS.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_ESTADO_FIX5_OBJETOS_ABAS.txt",
+    ".hbn/readbacks/0120-rb-onda-38-2-4-integridade-estado.json",
+    ".hbn/hearbacks/0120-rb-onda-38-2-4-integridade-estado-confirmed.json",
+    ".hbn/hearbacks/0120-rb-onda-38-2-4-integridade-estado-confirmed.md",
+    ".hbn/results/0120-exec-onda-38-2-4-integridade-estado.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_4/**",
+    "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260531_092609.csv"
+  ],
+  "delta_contract": {
+    "delta_name": "ONDA38_2_4_ESTADO_FIX5_OBJETOS_ABAS",
+    "build_label": "fd45a5d+ONDA38.2.4-ESTADO-FIX5-OBJETOS-ABAS",
+    "manifest_path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_4_ESTADO_FIX5_OBJETOS_ABAS.txt",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_4_ESTADO_FIX5_OBJETOS_ABAS\", \"fd45a5d+ONDA38.2.4-ESTADO-FIX5-OBJETOS-ABAS\""
+  },
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass",
+      "evidencia": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Importador V3 Fix5",
+      "status": "pass",
+      "evidencia": "Mauricio reportou workbook path \\\\Mac\\Home\\Projetos\\Credenciamento, backup V3 em \\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260531_013500-V3-FULL e import M=3 | F=0 | err=0 | skip=0."
+    },
+    {
+      "gate": "Debug > Compile VBAProject",
+      "status": "pass",
+      "evidencia": "Mauricio reportou compile manual limpo apos import Fix5."
+    },
+    {
+      "gate": "TV2_RunIntegridadeEstado",
+      "status": "pass",
+      "evidencia": "Execucao TV2_20260531_013557 com OK=8 | FALHA=0 | MANUAL=0; nenhum CSV de falhas exportado."
+    },
+    {
+      "gate": "D5 manual objetos e abas criticas",
+      "status": "pass",
+      "evidencia": "ENTIDADE_INATIVOS limpa, edicao direta bloqueada em planilhas criticas e tentativa de colar imagem/objeto bloqueada corretamente."
+    },
+    {
+      "gate": "RVS pos-Fix5",
+      "status": "pass",
+      "evidencia": "VR_20260531_092609 APROVADO; CSV auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260531_092609.csv; SHA-256 ee0bbd9840cce362592aa856ee9224b921ff8467fdc8aea8dc1e5ee240c48056; bytes 1371."
+    },
+    {
+      "gate": "ENT_MAN_23 pos-RVS no build salvo",
+      "status": "pass",
+      "evidencia": "Em 2026-05-31 12:22:07, Mauricio confirmou ThisWorkbook.Path=\\\\Mac\\Home\\Projetos\\Credenciamento, GetBuildImportado()=fd45a5d+ONDA38.2.4-ESTADO-FIX5-OBJETOS-ABAS e bloqueio habilitado em ENTIDADE, ENTIDADE_INATIVOS, PRE_OS, CAD_OS, EMPRESAS e aba de empresas inativas."
+    },
+    {
+      "gate": "Auditoria cruzada curta",
+      "status": "pass_with_findings",
+      "evidencia": "Antigravity/Gemini 3.5 recomendou aprovar a onda e fechar ERP 0120. Opus 4.8 recomendou fechar apos confirmar ENT_MAN_23, sem liberar propagacao/freeze."
+    }
+  ],
+  "cross_audit": {
+    "inputs": [
+      ".hbn/proposals/0025-antigravity-gemini-auditoria-entidades-padrao-seguranca-v206.md",
+      ".hbn/proposals/0026-opus48-auditoria-entidades-padrao-seguranca-v206.md"
+    ],
+    "verdict": "Sem BLOQUEADOR incondicional para fechar a Onda 38.2.4. Propagacao do padrao para outros campos e freeze V206 permanecem bloqueados pelos FORTES e pelos bloqueadores remanescentes do parecer 0024.",
+    "fortes_para_antes_de_propagar": [
+      "Converter parte da suite TV2_RunIntegridadeEstado de varredura estatica para teste comportamental de ciclo de vida completo de Entidades.",
+      "Tratar campos de detalhe omitidos na tela principal e foco/scroll pos-reativacao em micro-onda propria.",
+      "Formalizar FAQ HBN como protocolo futuro, com regra de negocio, comprovacao arquitetural, evidencia de codigo e mapa de testes aprovado.",
+      "Revisar allowlist de objetos por aba antes de aplicar limpeza/protecao de shapes a outras familias do aplicativo.",
+      "Fechar higiene de versionamento/commit antes do freeze."
+    ]
+  },
+  "scope_notes": {
+    "auto_open": "src/vba/Auto_Open.bas permaneceu fora do escopo e nao foi tocado.",
+    "freeze": "Este ERP fecha a Onda 38.2.4, mas nao declara freeze V206.",
+    "propagacao": "O padrao de Entidades e candidato a gold standard, mas sua propagacao depende de testes comportamentais e FAQ HBN formalizados.",
+    "app_release_src": "local-ai/vba_import/001-modulo/AAX-App_Release.bas foi atualizado pelo Importador V3 para o build Fix5. src/vba/App_Release.bas nao foi alterado neste ERP porque nao esta em files_allowed do readback 0120."
+  },
+  "next_wave": {
+    "summary": "Abrir onda separada para os bloqueadores remanescentes do parecer 0024, especialmente UI de strikes e clamp/limites de impressao, mantendo FAQ HBN e teste comportamental de Entidades como prerequisitos antes de propagar o padrao.",
+    "status": "ready_to_open"
+  },
+  "closed_at": "2026-05-31T12:30:00-03:00",
+  "created_at": "2026-05-31T12:30:00-03:00"
+}
