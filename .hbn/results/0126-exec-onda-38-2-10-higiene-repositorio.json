@@ -6,13 +6,20 @@
   "agent_id": "codex",
   "track": "safe_track",
   "version_target": "V12.0.0206",
-  "status": "implemented_validated_pending_commit",
-  "outcome": "repo_hygiene_stage_validated_pending_commit",
+  "status": "committed",
+  "outcome": "repo_hygiene_committed",
   "human_status": "confirmed",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "action": "Aplicar higiene estrutural do repositorio, organizar artefatos avulsos e preparar commit consolidado das ondas 38.2.4 a 38.2.10.",
-  "summary": "A onda adicionou politica de atributos para exportaveis VBA, editorconfig, scripts read-only de higiene, documentacao de governanca e auditoria. git diff --check e git diff --cached --check passaram limpos sem normalizar fisicamente VBA; .gitattributes preserva VBA, code-only, CSV e .frx fora do gate generico de whitespace. Artefatos grandes soltos na raiz foram movidos para local-ai/incoming/artefatos-avulsos/20260531, e o CSV de falha V2 foi movido para auditoria/evidencias/V12.0.0205/csv. O commit consolidado ainda sera criado apos este ERP.",
+  "summary": "A onda adicionou politica de atributos para exportaveis VBA, editorconfig, scripts read-only de higiene, documentacao de governanca e auditoria. git diff --check e git diff --cached --check passaram limpos sem normalizar fisicamente VBA; .gitattributes preserva VBA, code-only, CSV e .frx fora do gate generico de whitespace. Artefatos grandes soltos na raiz foram movidos para local-ai/incoming/artefatos-avulsos/20260531, e o CSV de falha V2 foi movido para auditoria/evidencias/V12.0.0205/csv. O commit consolidado foi criado em 2026-06-01 como 882cd2b.",
+  "commit": {
+    "sha": "882cd2b7075290cf5eb5cef562885cce5f72acda",
+    "short_sha": "882cd2b",
+    "subject": "chore: consolidar ondas 38.2.4 a 38.2.10",
+    "committed_at": "2026-06-01T00:10:06-03:00",
+    "pre_commit": "HBN guards, scope-lock e Glasswing G7/G8 passaram."
+  },
   "files_changed_key": [
     ".gitattributes",
     ".editorconfig",
@@ -86,8 +93,8 @@
     },
     {
       "gate": "Commit consolidado",
-      "status": "pending_local",
-      "evidencia": "Stage validado e aguardando git commit consolidado."
+      "status": "pass_local",
+      "evidencia": "Commit 882cd2b7075290cf5eb5cef562885cce5f72acda criado com pre-commit completo: HBN guards, scope-lock e Glasswing G7/G8 passaram."
     }
   ],
   "organization": {
@@ -106,8 +113,9 @@
     "freeze": "Nao foi declarado freeze V206."
   },
   "next_action": {
-    "summary": "Staging, pre-commit HBN e commit consolidado.",
-    "status": "pending_commit"
+    "summary": "Abrir proxima onda de estabilizacao V206 com readback safe_track proprio.",
+    "status": "completed"
   },
-  "created_at": "2026-05-31T23:57:33-03:00"
+  "created_at": "2026-05-31T23:57:33-03:00",
+  "updated_at": "2026-06-01T00:14:22-03:00"
 }

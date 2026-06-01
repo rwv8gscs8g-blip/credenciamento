@@ -1,0 +1,10 @@
+{
+  "hearback_id": "0127-rb-onda-38-2-11-sync-hbn-pos-commit-confirmed",
+  "readback_id": "0127-rb-onda-38-2-11-sync-hbn-pos-commit",
+  "status": "confirmed",
+  "confirmed_by": "Mauricio Zanin",
+  "agent_id": "codex",
+  "data": "2026-06-01",
+  "evidence": "Usuario confirmou em chat: ok, aprovado, vamos avancar para as proximas ondas de estabilizacao.",
+  "created_at": "2026-06-01T00:14:22-03:00"
+}

@@ -1,0 +1,57 @@
+{
+  "result_id": "0127-exec-onda-38-2-11-sync-hbn-pos-commit",
+  "execution_id": "0127-exec-onda-38-2-11-sync-hbn-pos-commit",
+  "readback_id": "0127-rb-onda-38-2-11-sync-hbn-pos-commit",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "executed_local",
+  "outcome": "hbn_synced_post_commit",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Sincronizar HBN apos commit consolidado 882cd2b e preparar a proxima onda de estabilizacao sem tocar codigo VBA.",
+  "summary": "Relay, ERP 0126 e documento tecnico 0127 foram alinhados ao head real 882cd2b, que consolidou as ondas 38.2.4 a 38.2.10. A proxima onda recomendada e safe_track de Performance/UX residual do parecer 0024, separada desta micro-onda documental.",
+  "commit_context": {
+    "consolidated_commit": "882cd2b7075290cf5eb5cef562885cce5f72acda",
+    "commit_subject": "chore: consolidar ondas 38.2.4 a 38.2.10",
+    "commit_date": "2026-06-01T00:10:06-03:00"
+  },
+  "files_changed": [
+    ".hbn/readbacks/0127-rb-onda-38-2-11-sync-hbn-pos-commit.json",
+    ".hbn/hearbacks/0127-rb-onda-38-2-11-sync-hbn-pos-commit-confirmed.json",
+    ".hbn/hearbacks/0127-rb-onda-38-2-11-sync-hbn-pos-commit-confirmed.md",
+    ".hbn/results/0127-exec-onda-38-2-11-sync-hbn-pos-commit.json",
+    ".hbn/results/0126-exec-onda-38-2-10-higiene-repositorio.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_11/0127_TECNICO.md"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass",
+      "evidencia": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; git worktree list aponta a mesma raiz."
+    },
+    {
+      "gate": "Worktree inicial limpo",
+      "status": "pass",
+      "evidencia": "git status --short --branch retornou apenas ## codex/v12-0-0206-planejamento antes da micro-onda."
+    },
+    {
+      "gate": "Head consolidado",
+      "status": "pass",
+      "evidencia": "git rev-parse --short HEAD retornou 882cd2b; git log -1 confirmou commit 882cd2b7075290cf5eb5cef562885cce5f72acda."
+    },
+    {
+      "gate": "Escopo documental",
+      "status": "pass_local",
+      "evidencia": "Nenhuma alteracao em src/vba ou local-ai/vba_import foi feita nesta micro-onda."
+    }
+  ],
+  "next_action": {
+    "summary": "Abrir readback safe_track para Onda 38.2.12 Performance/UX residual: ProgressBar, credenciamento em lote, limpar cadastro entidade e URL Mac-first.",
+    "status": "ready_for_readback"
+  },
+  "created_at": "2026-06-01T00:14:22-03:00"
+}

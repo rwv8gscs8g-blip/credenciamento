@@ -1,0 +1,104 @@
+{
+  "readback_id": "0127-rb-onda-38-2-11-sync-hbn-pos-commit",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0126-rb-onda-38-2-10-higiene-repositorio",
+  "intent": {
+    "objective": "Sincronizar a camada HBN apos o commit consolidado 882cd2b, atualizar relay/ERP para o estado real e preparar a proxima onda de estabilizacao sem tocar codigo VBA.",
+    "non_goals": [
+      "Nao tocar arquivos src/vba nesta onda",
+      "Nao tocar local-ai/vba_import nesta onda",
+      "Nao abrir freeze V206, tag, release candidate ou build final",
+      "Nao iniciar propagacao do padrao de Entidades",
+      "Nao alterar Auto_Open.bas, Mod_Types.bas ou Importador_V3.bas",
+      "Nao implementar a proxima onda de codigo antes do readback seguro correspondente"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0127-rb-onda-38-2-11-sync-hbn-pos-commit.json",
+      ".hbn/hearbacks/0127-rb-onda-38-2-11-sync-hbn-pos-commit-confirmed.json",
+      ".hbn/hearbacks/0127-rb-onda-38-2-11-sync-hbn-pos-commit-confirmed.md",
+      ".hbn/results/0127-exec-onda-38-2-11-sync-hbn-pos-commit.json",
+      ".hbn/results/0126-exec-onda-38-2-10-higiene-repositorio.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_11/0127_TECNICO.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Commit 882cd2b consolidou as ondas 38.2.4 a 38.2.10",
+    "Nenhum arquivo VBA ou importavel sera tocado nesta onda documental",
+    "A proxima onda de codigo exigira readback safe_track proprio"
+  ],
+  "risks": [
+    {
+      "risk": "Relay desatualizado pode induzir outra IA a retomar do head fd45a5d e repetir trabalho ja commitado.",
+      "mitigation": "Atualizar topo do relay com head 882cd2b, estado das ondas 38.2.4 a 38.2.10 e proxima acao real.",
+      "severity": "medium"
+    },
+    {
+      "risk": "ERP 0126 pendente de commit pode gerar interpretacao incorreta de trabalho nao concluido.",
+      "mitigation": "Registrar hash e gate de commit no ERP 0126 sem alterar seu escopo tecnico original.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Uma onda documental pode crescer para codigo por conveniencia.",
+      "mitigation": "Declarar fast_track, files_forbidden amplo para src/vba e local-ai/vba_import, e abrir safe_track separado para codigo.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Raiz canonica e worktree limpo",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0127-exec-onda-38-2-11-sync-hbn-pos-commit.json"
+      },
+      {
+        "gate": "Readback 0127 valido contra schema",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0127-exec-onda-38-2-11-sync-hbn-pos-commit.json"
+      },
+      {
+        "gate": "HBN reflete commit 882cd2b",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0127-exec-onda-38-2-11-sync-hbn-pos-commit.json"
+      },
+      {
+        "gate": "Nenhum arquivo VBA/importavel alterado",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0127-exec-onda-38-2-11-sync-hbn-pos-commit.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se a atualizacao documental introduzir erro de schema, corrigir o JSON antes de qualquer commit.",
+      "Se algum arquivo VBA ou importavel aparecer no diff, restaurar o staging dessa alteracao e parar.",
+      "Se a proxima acao nao estiver clara, manter apenas a sincronizacao HBN e pedir novo hearback humano."
+    ],
+    "anchor_to_restore": "Commit 882cd2b7075290cf5eb5cef562885cce5f72acda"
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Usuario aprovou em 2026-06-01: ok, aprovado, vamos avancar para as proximas ondas de estabilizacao.",
+    "commit_consolidado": "882cd2b7075290cf5eb5cef562885cce5f72acda",
+    "commit_subject": "chore: consolidar ondas 38.2.4 a 38.2.10"
+  },
+  "created_at": "2026-06-01T00:14:22-03:00"
+}
