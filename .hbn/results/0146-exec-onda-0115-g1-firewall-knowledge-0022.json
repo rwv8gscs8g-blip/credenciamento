@@ -1,0 +1,51 @@
+{
+  "result_id": "0146-exec-onda-0115-g1-firewall-knowledge-0022",
+  "execution_id": "0146-exec-onda-0115-g1-firewall-knowledge-0022",
+  "readback_id": "0146-onda-0115-g1-firewall-knowledge-0022",
+  "data": "2026-06-05",
+  "agent_id": "claude-opus-4-7",
+  "agent_note": "Sessão real: Claude Opus 4.8 via Cowork (enum 1.0.0 — ver item A5).",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "executed_commit_pending_operator",
+  "outcome": "firewall_formalizado_knowledge_0022",
+  "human_status": "hearback_confirmed_commit_pending",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "5ad07fe",
+  "action": "Onda 0115 (G1): formalizar o firewall (hearback 0145, decisão 2) como .hbn/knowledge/0022-firewall-workflow-fast-track.md — fonte canônica única; registrar no INDEX; doc 124; célula G1 do prompt mestre → entregue.",
+  "summary": "Knowledge 0022 criado como fonte canônica única do firewall: orquestração automática/workflows só fast_track (leitura/análise/auditoria); escrita safe_track VBA humano-aplicada e hearback-gated, nunca em run autônomo. Consequências práticas documentadas (G2 permitido; scheduled task permitida; aplicação autônoma no Excel = ❌ SECURITY BLOCKED). Prompt mestre: G1 ✅, G2 desbloqueado.",
+  "files_written": [
+    ".hbn/readbacks/0146-rb-onda-0115-g1-firewall-knowledge-0022.json (human_status: confirmed)",
+    ".hbn/hearbacks/0146-g1-firewall-knowledge-0022.json",
+    ".hbn/knowledge/0022-firewall-workflow-fast-track.md (novo — fonte canônica)",
+    ".hbn/knowledge/INDEX.md (registra 0022)",
+    "auditoria/00_status/124_REGISTRO_ONDA_0115_G1_FIREWALL.md (novo)",
+    ".hbn/results/0146-exec-onda-0115-g1-firewall-knowledge-0022.json (este ERP)"
+  ],
+  "files_written_outside_repo": [
+    "/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md (célula G1 → ✅ entregue; G2 desbloqueado; sem bump de versão)"
+  ],
+  "invariants_check": {
+    "src_vba_untouched": true,
+    "local_ai_vba_import_untouched": true,
+    "guards_schemas_untouched": true,
+    "relay_index_untouched": true,
+    "codex_uncommitted_work_preserved": true,
+    "nenhum_git_de_escrita_no_sandbox": true
+  },
+  "human_gate_required": {
+    "steps": [
+      "git add seletivo dos 6 paths do scope (bloco atômico em chat)",
+      "git commit; pre-commit roda guards",
+      "Colar sha para fechamento do ERP (micro-commit de fechamento, padrão da onda 0114)"
+    ],
+    "status": "pending"
+  },
+  "human_gate_observed": {
+    "commit_sha": "PENDENTE",
+    "guards_runner_post": "PENDENTE",
+    "evidence_source": "Aguardando operador no Terminal da raiz canônica."
+  },
+  "created_at": "2026-06-05T18:20:00-03:00"
+}

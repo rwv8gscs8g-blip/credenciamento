@@ -1,0 +1,93 @@
+{
+  "readback_id": "0146-onda-0115-g1-firewall-knowledge-0022",
+  "data": "2026-06-05",
+  "agent_id": "claude-opus-4-7",
+  "agent_note": "Sessão real: Claude Opus 4.8 via Cowork (enum 1.0.0 — ver item A5 do backlog).",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0145-onda-0114-consolidacao-evolucoes-backlog",
+  "intent": {
+    "objective": "Onda 0115 (item G1 do backlog §4): formalizar o firewall decidido no hearback 0145 como .hbn/knowledge/0022-firewall-workflow-fast-track.md — orquestração automática/workflows somente para leitura/análise/auditoria (fast_track); escrita safe_track em VBA permanece humano-aplicada e hearback-gated, nunca em run autônomo.",
+    "non_goals": [
+      "Não implementar nenhum workflow nem piloto (G2 tem onda própria)",
+      "Não tocar código de domínio, guards, schemas ou .hbn/relay/INDEX.md",
+      "Não duplicar a regra em AGENTS.md/CLAUDE.md — apenas o knowledge é canônico; demais documentos apontam (anti-padrão da cópia divergente, §6 do prompt mestre)",
+      "Não bumpar versão do prompt mestre — apenas atualizar célula de status do G1 no backlog §4 (refresh do §3 passo 7)"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0146-rb-onda-0115-g1-firewall-knowledge-0022.json",
+      ".hbn/hearbacks/0146-g1-firewall-knowledge-0022.json",
+      ".hbn/results/0146-exec-onda-0115-g1-firewall-knowledge-0022.json",
+      ".hbn/knowledge/0022-firewall-workflow-fast-track.md",
+      ".hbn/knowledge/INDEX.md",
+      "auditoria/00_status/124_REGISTRO_ONDA_0115_G1_FIREWALL.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "scripts/hbn-guards/**",
+      ".hbn/schemas/**",
+      ".hbn/relay/INDEX.md"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "files_outside_repo": [
+    "/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md (apenas célula de status G1 no backlog §4: '⏳ próximo' → '✅ entregue'; sem bump de versão)"
+  ],
+  "invariants_preserved": [
+    "src/vba/ e local-ai/vba_import/ intocados",
+    "Trabalho não-commitado da linha Codex preservado (git add seletivo)",
+    ".hbn/relay/INDEX.md fora do commit",
+    "Nenhum git de escrita executado no sandbox (knowledge 0021 item 5)"
+  ],
+  "risks": [
+    {
+      "risk": "Doutrina duplicada divergente: a regra do firewall passaria a existir em 3 lugares (knowledge 0022, Trilha G do prompt, §13 do levantamento consolidado)",
+      "mitigation": "0022 é declarado fonte canônica única da regra; prompt e levantamento apenas referenciam o path. Campo revisar-em força reavaliação periódica",
+      "severity": "medium"
+    },
+    {
+      "risk": "Redação do firewall mais restritiva ou permissiva do que a decisão original de Mauricio (drift de intenção)",
+      "mitigation": "Texto cita o hearback 0145 e o princípio-firewall §0 do levantamento verbatim; Mauricio valida a redação no hearback 0146",
+      "severity": "medium"
+    },
+    {
+      "risk": "git add não-seletivo arrastaria trabalho não-commitado da linha Codex (working tree segue sujo)",
+      "mitigation": "Mesmo padrão da onda 0114: git add com paths explícitos do files_allowed, entregue em bloco atômico L27",
+      "severity": "high"
+    },
+    {
+      "risk": "Recorrência do index.lock estale durante o commit do operador",
+      "mitigation": "Nenhum comando git de escrita no sandbox nesta onda (lição 0021 item 5); fallback: rm .git/index.lock pelo operador",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Commit do operador passa pre-commit/guards limpo na raiz canônica",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0146-exec-onda-0115-g1-firewall-knowledge-0022.json"
+      },
+      {
+        "gate": "git diff --name-only do commit ⊆ scope.files_allowed",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0146-exec-onda-0115-g1-firewall-knowledge-0022.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "git revert <sha-do-commit-da-onda-0115> — doc-only, reversão trivial",
+      "Restaurar célula G1 do backlog §4 do prompt mestre para '⏳ próximo'"
+    ],
+    "anchor_to_restore": "commit 5ad07fe (onda 0114 fechada)"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-05T18:05:00-03:00"
+}

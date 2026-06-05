@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0146-g1-firewall-knowledge-0022-confirmed",
+  "readback_id": "0146-onda-0115-g1-firewall-knowledge-0022",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-05T18:10:00-03:00",
+  "notes": "Mauricio confirmou em chat Cowork (2026-06-05) a execução da onda 0115/G1: criar .hbn/knowledge/0022-firewall-workflow-fast-track.md formalizando o firewall já decidido no hearback 0145 (workflow/orquestração automática só fast_track leitura/análise/auditoria; escrita safe_track VBA sempre humano-aplicada e hearback-gated, nunca em run autônomo). Contexto declarado por Mauricio: amadurecer o protocolo antes da V12.0.0207 (refatoramento) para evitar regressões e processos descontrolados. Sequência aprovada: G1 + A3 neste chat antes de devolver o bastão ao Codex."
+}
