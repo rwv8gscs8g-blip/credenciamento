@@ -44,6 +44,18 @@ ultima-atualizacao: 2026-06-05
 | Bastao de implementacao Onda 6+ | [../relay/0001-onda06-consolidacao-documental.md](../relay/0001-onda06-consolidacao-documental.md) | Claude Opus tem bastao ate V12.0.0203 estavel no GitHub |
 | Adopcao Diataxis + llms.txt + AGENTS.md | [0001-regras-v203-inegociaveis.md](0001-regras-v203-inegociaveis.md) | Estrutura `docs/` e mapas para LLMs |
 
+## ⚠ Colisões de numeração conhecidas (não renumerar sem onda de higiene)
+
+Dois pares de arquivos compartilham número — ao referenciar, use o NOME
+COMPLETO do arquivo, nunca só o número:
+
+- `0005-bug-form-importado-como-modulo.md` × `0005-protocolo-markers-v2.md`
+- `0014-protocolo-fim-de-sessao.md` × `0014-protocolo-reprovacao-onda.md`
+
+Renumerar quebraria links em documentos ainda não commitados da linha Codex;
+o saneamento é o item F4 do backlog do PROMPT_ARQUITETO (onda futura dedicada).
+Registrado na onda 0117 (2026-06-05).
+
 ## Arquivamento
 
 Quando uma decisao for explicitamente revogada por release oficial,

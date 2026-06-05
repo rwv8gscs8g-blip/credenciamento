@@ -37,6 +37,16 @@ permite regressão silenciosa ou perda de contexto entre IAs.
 - Não exige instalar dependências exóticas — pode rodar em pre-commit local
   sem CI.
 
+> **Camada CI (onda 0116, 2026-06-05)**: estes schemas TAMBÉM são validados no
+> GitHub Actions (`.github/workflows/hbn-guards-ci.yml`) em modo **ratchet**:
+> contratos novos/modificados no range do push/PR devem validar estritamente
+> contra a versão 1.0.0 — em particular, `evidence_kind` só aceita o enum
+> (`VR_ID`, `screenshot`, `csv_hash`, `git_sha`, `shasum_match`,
+> `human_report`, `audit_post`) e `agent_id` só aceita os valores listados.
+> Passivo legado (80 readbacks + 11 hearbacks fora do schema) NÃO bloqueia e
+> será legitimado pelo bump 1.1.0 (item A5 do PROMPT_ARQUITETO; insumo em
+> `auditoria/00_status/125`).
+
 ## Princípio de campo obrigatório vs opcional
 
 Campo **obrigatório** = sem ele a IA executora não tem permissão de tocar

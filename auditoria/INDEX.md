@@ -44,6 +44,40 @@ versao-sistema: V12.0.0206
 - [00_status/94_PROMPT_CONSOLIDACAO_PDF_UI_V206_CODEX.md](00_status/94_PROMPT_CONSOLIDACAO_PDF_UI_V206_CODEX.md) — prompt de consolidação Codex para PDF/UI V206
 - [00_status/97_CONSOLIDACAO_PDF_UI_V206_CODEX.md](00_status/97_CONSOLIDACAO_PDF_UI_V206_CODEX.md) — consolidação PDF/UI V206 Codex para ondas 32 a 37
 - [00_status/98_DIAGNOSTICO_RAIZ_CANONICA_V206_CODEX.md](00_status/98_DIAGNOSTICO_RAIZ_CANONICA_V206_CODEX.md) — P0 raiz canonica: diagnostico e correcao antes da V206 avancar
+- [00_status/100_PAUSA_REBASE_PLANILHA_LIMPA_V206_CODEX.md](00_status/100_PAUSA_REBASE_PLANILHA_LIMPA_V206_CODEX.md) — pausa para rebase em planilha limpa (V206)
+- [00_status/101_ANCHOR_V5_REINICIO_V206_CODEX.md](00_status/101_ANCHOR_V5_REINICIO_V206_CODEX.md) — âncora V5 do reinício da V206
+- [00_status/102_HANDOFF_CLAUDE_OPUS_47_V206_V207_USEHBN_CODEX.md](00_status/102_HANDOFF_CLAUDE_OPUS_47_V206_V207_USEHBN_CODEX.md) — handoff Opus→Codex V206/V207
+- [00_status/103_PROMPT_AUDITORIA_CLAUDE_OPUS_47_HANDOFF_V206_V207_USEHBN.md](00_status/103_PROMPT_AUDITORIA_CLAUDE_OPUS_47_HANDOFF_V206_V207_USEHBN.md) — prompt da auditoria do handoff
+- [00_status/104_PROMPT_RETOMADA_CODEX_V206_NOVO_CONTEXTO.md](00_status/104_PROMPT_RETOMADA_CODEX_V206_NOVO_CONTEXTO.md) — prompt de retomada Codex (contexto novo)
+- [00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md](00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md) — auditoria-mãe do protocolo curado (Onda 36)
+- [00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md](00_status/106_DEVOLUTIVA_OPUS_PROMPT_RETOMADA_CODEX_V206.md) — devolutiva Opus ao prompt de retomada do Codex (⚠ número 106 duplicado — ver linha seguinte)
+- [00_status/106_PROMPT_RETOMADA_SESSAO_OPUS.md](00_status/106_PROMPT_RETOMADA_SESSAO_OPUS.md) — prompt de retomada de sessão Opus (⚠ duplicata de número com a devolutiva acima; não renumerar sem onda de higiene)
+- [00_status/107_SUPERPROMPT_CODEX_RETOMADA_ONDA_38_PDF.md](00_status/107_SUPERPROMPT_CODEX_RETOMADA_ONDA_38_PDF.md) — superprompt Codex retomada onda 38 (PDF)
+- [00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md](00_status/108_PROMPT_RETOMADA_SESSAO_OPUS.md) — prompt de retomada de sessão Opus
+- [00_status/109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md](00_status/109_EVOLUCAO_MANUAL_PROTOCOLO_OPUS_V13.md) — evolução manual do protocolo (PROMPT_ARQUITETO v1.3)
+- [00_status/110_PROMPT_RETOMADA_SESSAO_OPUS.md](00_status/110_PROMPT_RETOMADA_SESSAO_OPUS.md) — prompt de retomada de sessão Opus
+- [00_status/111_ANALISE_AUDITORIA_CRUZADA_V207.md](00_status/111_ANALISE_AUDITORIA_CRUZADA_V207.md) — análise da auditoria cruzada V207 (1ª rodada)
+- [00_status/112_ANALISE_AUDITORIA_CRUZADA_V207_2A_RODADA.md](00_status/112_ANALISE_AUDITORIA_CRUZADA_V207_2A_RODADA.md) — análise da auditoria cruzada V207 (2ª rodada — plano principal Alternativa II)
+- [00_status/113_PROMPT_RETOMADA_SESSAO_OPUS.md](00_status/113_PROMPT_RETOMADA_SESSAO_OPUS.md) — prompt de retomada de sessão Opus
+- [00_status/114_PROMPT_RETOMADA_SESSAO_OPUS.md](00_status/114_PROMPT_RETOMADA_SESSAO_OPUS.md) — prompt de retomada de sessão Opus
+- [00_status/115_PROMPT_AUDITORIA_CRUZADA_INTEGRIDADE_IDEMPOTENCIA.md](00_status/115_PROMPT_AUDITORIA_CRUZADA_INTEGRIDADE_IDEMPOTENCIA.md) — prompt de auditoria cruzada integridade/idempotência
+- [00_status/116_PROMPT_RETOMADA_SESSAO_OPUS.md](00_status/116_PROMPT_RETOMADA_SESSAO_OPUS.md) — prompt de retomada de sessão Opus
+- [00_status/117_ANALISE_AUDITORIA_INTEGRIDADE_IDEMPOTENCIA.md](00_status/117_ANALISE_AUDITORIA_INTEGRIDADE_IDEMPOTENCIA.md) — análise da auditoria de integridade/idempotência
+- [00_status/118_PROMPTS_AUDITORIA_CRUZADA_PLANO_ONDA38_2_3.md](00_status/118_PROMPTS_AUDITORIA_CRUZADA_PLANO_ONDA38_2_3.md) — prompts da auditoria cruzada do plano da onda 38.2.3
+- [00_status/119_PROMPT_BASTAO_CODEX_V206.md](00_status/119_PROMPT_BASTAO_CODEX_V206.md) — prompt do bastão Codex V206
+- [00_status/120_SUGESTOES_EVOLUCAO_PROTOCOLO_HBN.md](00_status/120_SUGESTOES_EVOLUCAO_PROTOCOLO_HBN.md) — 10 propostas de evolução do protocolo (Opus)
+- [00_status/121_EVOLUCAO_PROTOCOLO_ONDA38_PASSAGEM_BASTAO.md](00_status/121_EVOLUCAO_PROTOCOLO_ONDA38_PASSAGEM_BASTAO.md) — evolução do protocolo: passagem de bastão (onda 0112)
+- [00_status/122_OPERACIONALIZAR_PASSAGEM_BASTAO.md](00_status/122_OPERACIONALIZAR_PASSAGEM_BASTAO.md) — operacionalização da passagem de bastão (onda 0113)
+- [00_status/123_REGISTRO_ONDA_0114_CONSOLIDACAO_EVOLUCOES.md](00_status/123_REGISTRO_ONDA_0114_CONSOLIDACAO_EVOLUCOES.md) — onda 0114: consolidação de evoluções + knowledge 0021 (arquiteto via Cowork)
+- [00_status/124_REGISTRO_ONDA_0115_G1_FIREWALL.md](00_status/124_REGISTRO_ONDA_0115_G1_FIREWALL.md) — onda 0115: firewall workflows→knowledge 0022
+- [00_status/125_REGISTRO_ONDA_0116_A3_GUARDS_CI.md](00_status/125_REGISTRO_ONDA_0116_A3_GUARDS_CI.md) — onda 0116: CI hbn-guards (ratchet + scope-lock por commit)
+- [00_status/126_AUDITORIA_ARQUITETURAL_V207_OPUS48.md](00_status/126_AUDITORIA_ARQUITETURAL_V207_OPUS48.md) — auditoria arquitetural definitiva V207 (Opus 4.8): condições bloqueadoras + recomendações
+- [00_status/127_PROMPT_HANDOFF_CODEX_RETOMADA_V206.md](00_status/127_PROMPT_HANDOFF_CODEX_RETOMADA_V206.md) — prompt canônico de handoff do Codex (retomada V206 pós-onda-0117)
+
+> Entradas 100-127 adicionadas na onda 0117 (2026-06-05) com descrições de 1
+> linha derivadas dos títulos; refinamentos pontuais são bem-vindos em ondas
+> futuras. Doc 99 não existe (lacuna de numeração intencional — ver regra de
+> leitura abaixo).
 - [00_status/00_SUMARIO_EXECUTIVO.md](00_status/00_SUMARIO_EXECUTIVO.md) — status executivo da linha oficial
 - [00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md](00_status/22_STATUS_MICROEVOLUCOES_V12_0203.md) — checkpoint da V12.0.0203
 - [00_status/24_FECHAMENTO_V12_0203.md](00_status/24_FECHAMENTO_V12_0203.md) — fechamento candidato

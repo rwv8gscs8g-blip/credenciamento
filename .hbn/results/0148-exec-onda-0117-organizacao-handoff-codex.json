@@ -1,0 +1,50 @@
+{
+  "result_id": "0148-exec-onda-0117-organizacao-handoff-codex",
+  "execution_id": "0148-exec-onda-0117-organizacao-handoff-codex",
+  "readback_id": "0148-onda-0117-organizacao-handoff-codex",
+  "data": "2026-06-05",
+  "agent_id": "claude-opus-4-7",
+  "agent_note": "Sessão real: Claude Opus 4.8 via Cowork (enum 1.0.0 — ver item A5).",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "executed_commit_pending_operator",
+  "outcome": "repo_organizado_handoff_codex_auditoria_v207",
+  "human_status": "hearback_confirmed_commit_pending",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "8204fe9 (+ commits do operador pendentes: fecha-ERP-0146, onda 0116)",
+  "action": "Onda 0117: corrigir os 6 achados ALTOS da auditoria de higiene, publicar auditoria arquitetural V207 (doc 126), prompt canônico de handoff do Codex (doc 127) e ponte de estado (.hbn/messages/).",
+  "summary": "Auditoria de higiene (fan-out Explore) encontrou 11 achados (6 ALTOS). Corrigidos nesta onda: AGENTS.md (versões V205/V206/V207, seção Build steps com camada CI, knowledge 0021/0022 na leitura obrigatória), auditoria/INDEX.md (entradas 100-127 + desambiguação 106×106), READMEs de guards e schemas (camada CI + enum ratchet), knowledge/INDEX.md (colisões 0005/0014 sinalizadas). Adiados por desenho (viram GATE 0 do Codex, doc 127): consolidação dos 95 untracked + 21 modified da linha Codex, atualização do relay/INDEX.md, CHANGELOG, triagem de incoming/, fechamento dos ERPs 0147/0148 com shas. Auditoria V207 (doc 126): plano principal (112 + proposal 0005) APROVADO COM CONDIÇÕES C1-C5; status canônico removido do escopo V207 (vai para V208).",
+  "files_written": [
+    "AGENTS.md (3 edições)",
+    "auditoria/INDEX.md (bloco 100-127)",
+    "scripts/hbn-guards/README.md (seção CI)",
+    ".hbn/schemas/README.md (nota CI ratchet)",
+    ".hbn/knowledge/INDEX.md (colisões sinalizadas)",
+    ".hbn/messages/20260605-1950-ponte-estado-protocolo-para-codex.md (novo)",
+    "auditoria/00_status/126_AUDITORIA_ARQUITETURAL_V207_OPUS48.md (novo)",
+    "auditoria/00_status/127_PROMPT_HANDOFF_CODEX_RETOMADA_V206.md (novo)",
+    ".hbn/readbacks/0148-*.json + .hbn/hearbacks/0148-*.json + este ERP"
+  ],
+  "invariants_check": {
+    "linha_codex_intocada_95_untracked_21_modified": true,
+    "colisoes_numeracao_preservadas_fisicamente": true,
+    "src_vba_local_ai_changelog_relay_untouched": true,
+    "guards_sh_schemas_json_untouched": true
+  },
+  "incidente_de_sessao": "Lição 0021 item 5 violada 1x pelo próprio arquiteto: git status na forense do working tree recriou .git/index.lock no sandbox. Remoção delegada ao operador. Reforço: forense via ls/awk e git plumbing de leitura apenas.",
+  "human_gate_required": {
+    "steps": [
+      "rm .git/index.lock",
+      "Commits pendentes em sequência: fecha-ERP-0146 → onda 0116 → onda 0117 (blocos atômicos em chat)",
+      "Colar shas; fechamento dos ERPs 0147/0148 fica para o GATE 0 do Codex (doc 127)",
+      "Colar o bloco ===INÍCIO===/===FIM=== do doc 127 em chat novo do Codex"
+    ],
+    "status": "pending"
+  },
+  "human_gate_observed": {
+    "commit_sha": "PENDENTE — fechamento delegado ao GATE 0 do Codex (doc 127) com micro-edição deste campo",
+    "evidence_source": "Aguardando operador."
+  },
+  "created_at": "2026-06-05T20:25:00-03:00"
+}

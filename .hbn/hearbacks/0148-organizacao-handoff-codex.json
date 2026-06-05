@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0148-organizacao-handoff-codex-confirmed",
+  "readback_id": "0148-onda-0117-organizacao-handoff-codex",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-05T20:00:00-03:00",
+  "notes": "Mauricio confirmou em chat Cowork (2026-06-05) a onda 0117: organização do repo para retomada do Codex (AGENTS.md, auditoria/INDEX.md, READMEs, desambiguação de colisões nos INDEXes), auditoria arquitetural V207 (doc 126), prompt canônico de handoff (doc 127) e ponte de estado em .hbn/messages/. Pedido original de Mauricio: revisar o projeto inteiro por desorganização/pendências, analisar e melhorar o prompt de handoff do Codex (estabilização tela a tela, freeze só após iterações, funcionalidades novas sempre com testes) e auditar profundamente as propostas V207 quanto a adequação arquitetural e menor regressão. Restrição reafirmada: nada da linha Codex (95 untracked + 21 modified) é tocado — consolidação vira GATE 0 do Codex."
+}

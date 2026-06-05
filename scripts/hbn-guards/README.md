@@ -125,3 +125,18 @@ Adicionar novo guard:
 5. Testar via smoke acima.
 6. Commitar via readback novo (este guard novo deve ser citado em
    `scope.files_allowed`).
+
+## Camada CI (onda 0116, 2026-06-05)
+
+Além do pre-commit local, `.github/workflows/hbn-guards-ci.yml` roda em todo
+push (main, codex/**) e PR, usando os scripts de `ci/`:
+
+- `ci/validate-contracts.py` — contratos × schemas em modo **ratchet**
+  (estrito só nos contratos tocados no range; passivo legado reportado sem
+  bloquear; JSON-parse e coerência canonical-root sempre bloqueantes).
+- `ci/scope-lock-range.py` — scope-lock POR COMMIT com resolução histórica do
+  readback ativo. **Fonte canônica da semântica: `assert-scope-lock.sh`** —
+  qualquer mudança no guard local DEVE ser replicada no script de CI.
+
+`assert-canonical-root`/`forbid-tmp-worktree` ficam fora do CI por serem
+environment-bound (knowledge 0021). Registro: `auditoria/00_status/125`.

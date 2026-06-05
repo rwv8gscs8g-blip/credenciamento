@@ -1,0 +1,103 @@
+{
+  "readback_id": "0148-onda-0117-organizacao-handoff-codex",
+  "data": "2026-06-05",
+  "agent_id": "claude-opus-4-7",
+  "agent_note": "Sessão real: Claude Opus 4.8 via Cowork (enum 1.0.0 — ver item A5).",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0147-onda-0116-a3-guards-ci",
+  "intent": {
+    "objective": "Onda 0117: organizar o repositório para a retomada do Codex sob o protocolo evoluído (ondas 0114-0116). Corrige os 6 achados ALTOS da auditoria de higiene (AGENTS.md desatualizado/contraditório com o CI; auditoria/INDEX.md parado no doc 98; READMEs sem o CI; colisões de numeração sinalizadas), publica a auditoria arquitetural definitiva da V207 (doc 126), o prompt canônico de handoff do Codex (doc 127) e a ponte de estado do protocolo em .hbn/messages/.",
+    "non_goals": [
+      "Não tocar NENHUM arquivo modificado/untracked da linha Codex (95 untracked + 21 modified: contratos 38.2.x, src/vba, local-ai, CHANGELOG.md, .hbn/relay/INDEX.md, auditoria/03_ondas, evidencias, incoming/) — a consolidação dessa trilha é o GATE 0 do próprio Codex, com readback dele",
+      "Não renumerar as colisões 0005×0005, 0014×0014 (knowledge) e 106×106 (00_status) — renomear quebraria links nos arquivos não-commitados do Codex; apenas sinalizar desambiguação nos INDEXes",
+      "Não iniciar nem autorizar nenhuma onda V207 — doc 126 define condições bloqueadoras",
+      "Não tocar código de domínio, guards .sh, schemas, relay/INDEX.md"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "AGENTS.md",
+      "auditoria/INDEX.md",
+      "scripts/hbn-guards/README.md",
+      ".hbn/schemas/README.md",
+      ".hbn/knowledge/INDEX.md",
+      ".hbn/messages/20260605-1950-ponte-estado-protocolo-para-codex.md",
+      "auditoria/00_status/126_AUDITORIA_ARQUITETURAL_V207_OPUS48.md",
+      "auditoria/00_status/127_PROMPT_HANDOFF_CODEX_RETOMADA_V206.md",
+      ".hbn/readbacks/0148-rb-onda-0117-organizacao-handoff-codex.json",
+      ".hbn/hearbacks/0148-organizacao-handoff-codex.json",
+      ".hbn/results/0148-exec-onda-0117-organizacao-handoff-codex.json"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/**",
+      "CHANGELOG.md",
+      ".hbn/relay/INDEX.md",
+      "scripts/hbn-guards/*.sh",
+      "scripts/hbn-guards/lib/**",
+      ".hbn/schemas/*.json",
+      ".hbn/readbacks/01[0-4]*.json",
+      ".hbn/hearbacks/01[0-4]*.json",
+      ".hbn/results/01[0-4]*.json",
+      "auditoria/03_ondas/**",
+      "auditoria/evidencias/**",
+      "incoming/**"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "Zero bytes alterados em qualquer arquivo da linha Codex (committed ou não)",
+    "Colisões de numeração preservadas fisicamente (só desambiguadas nos INDEXes)",
+    "Nenhum git de escrita no sandbox (lição 0021 item 5 — violada 1x nesta sessão na forense, registrada no ERP; comandos git daqui em diante só plumbing de leitura)",
+    "V207 permanece bloqueada até as condições do doc 126 fecharem"
+  ],
+  "risks": [
+    {
+      "risk": "Editar AGENTS.md (ponto de entrada de todas as IAs) com informação errada propagaria confusão em escala",
+      "mitigation": "Edições mínimas e factuais: versões (V205 oficial / V206 em validação / V207 horizonte), seção Build steps ganha parágrafo do CI (sem remover a verdade de que a build Excel é manual), lista de leitura ganha 0021/0022; Mauricio revisa no diff do commit",
+      "severity": "high"
+    },
+    {
+      "risk": "auditoria/INDEX.md com 27 entradas novas geradas de nomes de arquivo pode descrever mal algum doc",
+      "mitigation": "Descrições de 1 linha derivadas do título do arquivo, marcadas na seção como 'preenchidas na onda 0117'; correções pontuais ficam livres para ondas futuras",
+      "severity": "low"
+    },
+    {
+      "risk": "Prompt de handoff (doc 127) conflitar com o estado real quando o Codex iniciar (ex.: commits pendentes do operador ainda não feitos, lock residual)",
+      "mitigation": "O prompt NÃO fixa HEAD; manda verificar git log e relay; GATE 0 inclui remoção de lock e consolidação do working tree; sequência de commits pendentes do operador entregue em bloco único nesta sessão",
+      "severity": "medium"
+    },
+    {
+      "risk": "Auditoria V207 (doc 126) ser tratada como autorização de início da V207",
+      "mitigation": "Doc 126 abre com 'NÃO é autorização' e lista 5 condições bloqueadoras, a primeira sendo hearback formal de Mauricio (II vs II-bis) como arquivo .hbn/hearbacks/",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Commit do operador passa guards limpo; diff do commit ⊆ files_allowed",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0148-exec-onda-0117-organizacao-handoff-codex.json"
+      },
+      {
+        "gate": "Codex inicia pelo doc 127 sem pedir esclarecimento de estado (teste real do handoff)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0148-exec-onda-0117-organizacao-handoff-codex.json (pendência fechável a posteriori)"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "git revert <sha-da-onda-0117> — doc-only, reversão trivial",
+      "Avisar Codex para ignorar doc 127 caso já tenha lido versão revertida"
+    ],
+    "anchor_to_restore": "commit 8204fe9 + commits pendentes do operador (fecha-ERP-0146 e onda 0116)"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-05T19:55:00-03:00"
+}

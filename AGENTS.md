@@ -14,7 +14,8 @@
 | Nome | Sistema de Credenciamento e Rodízio de Pequenos Reparos |
 | Linguagem principal | VBA (Excel `.xlsm`) |
 | Versão oficial vigente | V12.0.0205 |
-| Próxima linha planejada | V12.0.0206 |
+| Linha em validação iterativa | V12.0.0206 (sem freeze declarado) |
+| Horizonte planejado | V12.0.0207 — refatoração controlada; condições bloqueadoras em `auditoria/00_status/126_AUDITORIA_ARQUITETURAL_V207_OPUS48.md` |
 | Build importado no workbook validado | `e43352f+ONDA27.MD27.1-rvs-labels-csv-prefix` |
 | Branch V206 ativa | `codex/v12-0-0206-planejamento` |
 | Raiz canônica local | `/Users/macbookpro/Projetos/Credenciamento` |
@@ -110,6 +111,8 @@ Leia, em ordem:
 8. [`.hbn/knowledge/0013-contratos-executaveis.md`](.hbn/knowledge/0013-contratos-executaveis.md) — **regra permanente de contratos executáveis (Onda 36)**
 9. [`.hbn/knowledge/0014-protocolo-fim-de-sessao.md`](.hbn/knowledge/0014-protocolo-fim-de-sessao.md) — **regra permanente de handoff a 50% de contexto ou transferência de bastão (Onda 36.1)**
 9b. [`.hbn/knowledge/0019-cadencia-d-estendida-passagem-bastao.md`](.hbn/knowledge/0019-cadencia-d-estendida-passagem-bastao.md) — **regra permanente de passagem de bastão entre IAs: papéis, auditoria em chat novo, severidade BLOQUEADOR/FORTE/MARGINAL + veto, checklist anti-viés (§12 do PROMPT_ARQUITETO, onda 0112)**
+9c. [`.hbn/knowledge/0021-arquiteto-via-cowork-sandbox.md`](.hbn/knowledge/0021-arquiteto-via-cowork-sandbox.md) — guards em sandbox são informativos; validação conclusiva + commit no Terminal do operador; git de escrita proibido em sandbox (onda 0114)
+9d. [`.hbn/knowledge/0022-firewall-workflow-fast-track.md`](.hbn/knowledge/0022-firewall-workflow-fast-track.md) — **FIREWALL permanente: orquestração automática/workflows só em fast_track leitura/análise/auditoria; escrita safe_track VBA sempre humano-aplicada e hearback-gated (onda 0115)**
 10. [`auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md`](auditoria/00_status/105_AUDITORIA_HANDOFF_V206_V207_USEHBN_CLAUDE_OPUS.md) — **auditoria-mãe do protocolo curado (Opus 2026-05-24)**
 10. [`scripts/hbn-guards/README.md`](scripts/hbn-guards/README.md) — guards executáveis no pre-commit
 11. [`.hbn/schemas/README.md`](.hbn/schemas/README.md) — schemas JSON dos artefatos HBN
@@ -139,9 +142,18 @@ incremental e operar em modo auditoria/proposta até novo bastão explícito.
 
 ## Build steps
 
-Este projeto **nao** tem build automatizado em CI. A "build" e a
-importacao manual no Excel VBA Editor (VBE) seguindo
-`local-ai/vba_import/000-REGRA-OURO.md`. Cada onda entrega:
+A "build" do produto e a importacao manual no Excel VBA Editor (VBE) seguindo
+`local-ai/vba_import/000-REGRA-OURO.md` — **isso nao muda**. Desde a onda 0116
+(2026-06-05) existe, em paralelo, **CI de governanca** no GitHub Actions:
+`.github/workflows/hbn-guards-ci.yml` roda em todo push (main, codex/**) e PR,
+validando (a) contratos HBN em modo **ratchet** — contratos novos/modificados
+no range devem validar contra `.hbn/schemas/*` 1.0.0 (atencao: `evidence_kind`
+so aceita os valores do enum; passivo legado nao bloqueia) — e (b) **scope-lock
+por commit** com resolucao historica do readback ativo (espelha
+`assert-scope-lock.sh`; commits `[bypass-hbn-guards]` exigem nota em
+`.hbn/bypasses/` no range). Detalhes: `auditoria/00_status/125`. O CI nao
+substitui o pre-commit local nem o gate humano de import/compile/TV2/RVS.
+Cada onda entrega:
 
 1. Codigo em `src/vba/` (fonte de verdade).
 2. Espelho em `local-ai/vba_import/` com prefixos.
