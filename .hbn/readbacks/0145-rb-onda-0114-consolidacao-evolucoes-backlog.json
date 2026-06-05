@@ -1,0 +1,104 @@
+{
+  "readback_id": "0145-onda-0114-consolidacao-evolucoes-backlog",
+  "data": "2026-06-05",
+  "agent_id": "claude-opus-4-7",
+  "agent_note": "Sessão real: Claude Opus 4.8 via Cowork. Enum do schema readback 1.0.0 ainda não contempla 4-8 — assinado como 4-7 por conformidade; alimenta item A5 (bump schema 1.1.0).",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": null,
+  "predecessor_note": "Linha do arquiteto: última onda registrada é 0113 (doc 122). Nenhum readback da linha arquiteto existe em .hbn/readbacks/ — este é o primeiro readback formal da linha arquiteto nesta pasta. Último readback cronológico do repo: 0144 (linha Codex V206).",
+  "intent": {
+    "objective": "Onda 0114 do arquiteto: consolidar as duas protocol-evolutions pendentes (20260527-1410 ponto-execucao-vs-comunicacao e 20260601-1048 levantamento-bastao-vs-dynamic-workflows) no backlog §4 do PROMPT_ARQUITETO (v1.5 → v1.6), atualizar itens stale do backlog (A2 já entregue — knowledge 0014 existe; A3 vira próximo), e registrar knowledge 0021 sobre execução do arquiteto via Cowork sandbox (guard canonical-root compara path literal e exige validação no Terminal do operador).",
+    "non_goals": [
+      "Não executar nenhuma onda EW-n do levantamento — apenas registrá-las no backlog §4 conforme as respostas de Mauricio às 4 perguntas da §11 do levantamento",
+      "Não tocar código de domínio (src/vba/, local-ai/vba_import/) — proibição §8 do prompt mestre",
+      "Não alterar guards nem schemas nesta onda (bump 1.1.0 do readback.schema fica para o item A5 do backlog)",
+      "Não interferir na onda 38.2.23-fix1 do Codex (rerun TV2 pelo operador segue como próxima ação da linha V206)",
+      "Não commitar .hbn/relay/INDEX.md enquanto contiver 346 inserções não-commitadas da linha Codex"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0145-rb-onda-0114-consolidacao-evolucoes-backlog.json",
+      ".hbn/hearbacks/0145-consolidacao-evolucoes-backlog.json",
+      ".hbn/results/0145-exec-onda-0114-consolidacao-evolucoes-backlog.json",
+      ".hbn/protocol-evolutions/20260527-1410-backlog-ponto-execucao-vs-comunicacao.md",
+      ".hbn/protocol-evolutions/20260601-1048-levantamento-bastao-vs-dynamic-workflows.md",
+      ".hbn/knowledge/0021-arquiteto-via-cowork-sandbox.md",
+      ".hbn/knowledge/INDEX.md",
+      "auditoria/00_status/123_REGISTRO_ONDA_0114_CONSOLIDACAO_EVOLUCOES.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "scripts/hbn-guards/**",
+      ".hbn/schemas/**",
+      ".hbn/relay/INDEX.md"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "files_outside_repo": [
+    "/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md (v1.5 → v1.6: backlog §4 atualizado + changelog; vive fora do repo por desenho — registro da mudança fica em auditoria/00_status/123)"
+  ],
+  "invariants_preserved": [
+    "src/vba/ e local-ai/vba_import/ intocados (zero bytes alterados)",
+    "Trabalho não-commitado da linha Codex preservado no working tree (git add seletivo, apenas paths de files_allowed)",
+    "Onda 38.2.23-fix1 e a próxima ação do operador (rerun TV2) inalteradas",
+    "Guards e schemas inalterados",
+    ".hbn/relay/INDEX.md não entra no commit desta onda — atualização do relay adiada para após o commit da linha Codex, registrada como pendência no ERP"
+  ],
+  "risks": [
+    {
+      "risk": "Working tree sujo da linha Codex: git add não-seletivo arrastaria 346 inserções não-commitadas de INDEX.md e código de domínio para o commit desta onda",
+      "mitigation": "git add explícito arquivo-a-arquivo, restrito a files_allowed; INDEX.md movido para files_forbidden desta onda; verificação final com git diff --cached --name-only ⊆ files_allowed antes do commit",
+      "severity": "high"
+    },
+    {
+      "risk": "Consolidar as ondas EW-n no backlog §4 sem as respostas de Mauricio às 4 perguntas da §11 do levantamento produziria prioridades erradas na doutrina",
+      "mitigation": "O hearback desta onda inclui as 4 respostas (firewall; profundidade do roadmap; piloto EW-3; onde versionar). Itens EW só entram no §4 conforme as respostas; se Mauricio aprovar sem detalhar, default = caminho mínimo EW-1 → EW-3 → EW-4 (§7.1 do levantamento)",
+      "severity": "medium"
+    },
+    {
+      "risk": "Marcar A2 como entregue com evidência incompleta (existe 0014-protocolo-fim-de-sessao.md, mas também um segundo arquivo 0014-protocolo-reprovacao-onda.md — colisão de numeração na pasta knowledge)",
+      "mitigation": "Registrar a colisão 0014×0014 no doc 123 e no knowledge 0021 como fricção a sanear em onda futura (renumerar exige onda própria; não fazer nesta). A2 é marcada entregue apenas quanto ao protocolo de fim-de-sessão",
+      "severity": "low"
+    },
+    {
+      "risk": "Guard canonical-root falha estruturalmente quando o arquiteto roda via Cowork (sandbox monta o repo em /sessions/...), podendo induzir falso-bloqueio em ciclos futuros da scheduled task",
+      "mitigation": "Knowledge 0021 documenta o padrão operacional: pré-flight automatizado roda leitura/diagnóstico no sandbox; validação de guards é delegada ao Terminal do operador (1 comando, L27/L28) ou a ciclo manual; nenhuma tentativa de bypass",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "hbn-guards-runner exit 0 no Terminal do operador (raiz canônica real) após o commit da onda",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0145-exec-onda-0114-consolidacao-evolucoes-backlog.json"
+      },
+      {
+        "gate": "git diff --name-only do commit da onda ⊆ scope.files_allowed (zero arquivos de domínio, zero INDEX.md)",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0145-exec-onda-0114-consolidacao-evolucoes-backlog.json"
+      },
+      {
+        "gate": "JSON do readback/hearback/ERP validados (validate-readback.sh --active)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0145-exec-onda-0114-consolidacao-evolucoes-backlog.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "git revert <sha-do-commit-da-onda-0114> — onda é doc-only, reversão trivial e sem efeito em runtime",
+      "Restaurar status: proposed nos dois arquivos de protocol-evolutions (campo de frontmatter)",
+      "Restaurar PROMPT_ARQUITETO_USEHBN_AUTONOMO.md v1.5 a partir do backup .bak criado antes da edição (arquivo vive fora do repo)"
+    ],
+    "anchor_to_restore": "HEAD e157221 (feat: estabilizar performance ux 38.2.12)"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-05T17:10:00-03:00"
+}

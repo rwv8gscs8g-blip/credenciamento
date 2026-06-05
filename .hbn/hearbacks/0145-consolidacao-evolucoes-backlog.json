@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0145-consolidacao-evolucoes-backlog-confirmed",
+  "readback_id": "0145-onda-0114-consolidacao-evolucoes-backlog",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-05T17:20:00-03:00",
+  "notes": "Mauricio confirmou em chat Cowork (2026-06-05, validação manual do PROMPT_ARQUITETO v1.5) via seleção explícita de 4 decisões: (1) HEARBACK ONDA 0114: Confirmar — executar escopo proposto (consolidar 2 protocol-evolutions, atualizar backlog §4 do prompt v1.5→v1.6, criar knowledge 0021). (2) FIREWALL EW-1: Confirmar como princípio permanente — orquestração automática/workflows só para leitura/análise/auditoria (fast_track); escrita safe_track em VBA permanece humano-aplicada e hearback-gated. (3) ROADMAP EW: Caminho mínimo EW-1 → EW-3 → EW-4; demais (EW-2/5/6/7) ficam como sedimentação posterior. (4) PILOTO EW-3: Autorizar — 1 gate real de auditoria cruzada via workflow Claude-only (descartável), cruzada multi-modelo em paralelo como controle, critério P9 (zero achado BLOQUEADOR/FORTE perdido). Restrição reafirmada: commit desta onda só com git add seletivo, sem tocar .hbn/relay/INDEX.md nem trabalho não-commitado da linha Codex."
+}

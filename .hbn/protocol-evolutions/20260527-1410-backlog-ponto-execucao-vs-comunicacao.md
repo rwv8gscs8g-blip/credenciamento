@@ -3,8 +3,9 @@ titulo: Backlog — separar "ponto de execução do protocolo" (por projeto) do 
 data: 2026-05-27
 autoria: Mauricio (visão) + claude-opus-4-7 (registro, modo arquiteto)
 gatilho: observação de Mauricio ao revisar por que o PROMPT_ARQUITETO vive fora do repo
-status: proposed
+status: consolidated
 prioridade_sugerida: P2
+consolidada-em: onda 0114 (2026-06-05) — ver auditoria/00_status/123 e hearback 0145
 alvo: arquitetura do meta-protocolo (PROMPT_ARQUITETO §6 cross-projetos + Trilha E do §4)
 ---
 
@@ -54,3 +55,12 @@ melhorias para os próximos ciclos"). O próximo ciclo do PROMPT_ARQUITETO deve
 consumir esta proposta no pré-flight (§2 passo F) e decidir promover/refinar.
 
 🔵 HBN PROPOSTA REGISTRADA — não aplicar nesta sessão.
+
+## Consolidação (onda 0114, 2026-06-05)
+
+**CONSOLIDADA** por decisão de Mauricio (hearback 0145): a fronteira
+execução×comunicação foi absorvida pelo levantamento
+`20260601-1048-levantamento-bastao-vs-dynamic-workflows.md` (corresponde às
+ondas EW-2/EW-6 de lá). Mauricio aprovou o **caminho mínimo** (EW-1→EW-3→EW-4);
+EW-2/EW-6 ficam como **sedimentação posterior**, a revisitar com o dado do
+piloto G2/EW-3. Registro: `auditoria/00_status/123`.

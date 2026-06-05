@@ -1,6 +1,6 @@
 ---
 titulo: Knowledge Base do Credenciamento (HBN)
-ultima-atualizacao: 2026-05-27
+ultima-atualizacao: 2026-06-05
 ---
 
 # Knowledge Base do Credenciamento (HBN)
@@ -34,6 +34,7 @@ ultima-atualizacao: 2026-05-27
 | Protocolo de fim-de-sessão + registro de transferência de bastão | [0014-protocolo-fim-de-sessao.md](0014-protocolo-fim-de-sessao.md) | Handoff obrigatório a 50% / fim de onda / **transferência de bastão** (itens 13-16 + checklist anti-viés §12.4, fundidos na onda 0113) |
 | Cadência D Estendida — passagem de bastão entre IAs | [0019-cadencia-d-estendida-passagem-bastao.md](0019-cadencia-d-estendida-passagem-bastao.md) | Toda IA que implementa, audita ou recomenda bastão: papéis, auditoria em chat novo, severidade BLOQUEADOR/FORTE/MARGINAL + veto, checklist anti-viés. Materializa §12 do PROMPT_ARQUITETO v1.4+ |
 | L44 — diff "cosmético" de sub-agente é suspeito | [0020-explore-diff-cosmetico-suspeito.md](0020-explore-diff-cosmetico-suspeito.md) | Antes de aceitar diff "cosmético" de Explore/Task em .frm/.code-only.txt: inspecionar o pipeline gerador |
+| Arquiteto via Cowork — sandbox vs raiz canônica | [0021-arquiteto-via-cowork-sandbox.md](0021-arquiteto-via-cowork-sandbox.md) | Toda execução do PROMPT_ARQUITETO via Cowork: guards no sandbox são informativos; validação conclusiva + commit no Terminal do operador (L27/L28). Nunca bypass |
 
 ## Por decisao (decisoes que afetam comportamento)
 
