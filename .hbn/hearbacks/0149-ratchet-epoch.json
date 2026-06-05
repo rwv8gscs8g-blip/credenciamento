@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0149-ratchet-epoch-confirmed",
+  "readback_id": "0149-onda-0116-fix1-ratchet-epoch",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-05T20:55:00-03:00",
+  "notes": "Mauricio confirmou em chat Cowork (2026-06-05) a micro-onda 0116-fix1: época do ratchet (estrito só para contratos >= 0149 tocados no range), atualização do doc 127 e da ponte (próximo número do Codex passa de 0149 para 0150), push do fix antes da conferência do Actions. Motivo: simulação do range real do primeiro push (27237e4..7cff187) mostrou validate-contracts vermelho com 49 violações de contratos históricos (0114-0127) — passivo, não drift novo; scope-lock-range passou verde (19 commits, 5 bypasses com nota)."
+}

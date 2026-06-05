@@ -18,7 +18,9 @@ auditoria/00_status/123-127):
 | 0116 | CI hbn-guards (`.github/workflows/hbn-guards-ci.yml`) | Todo push/PR valida: contratos novos/modificados × schemas 1.0.0 (RATCHET — use evidence_kind só do enum; agent_id do enum) + scope-lock POR COMMIT com resolução histórica; bypass exige nota em .hbn/bypasses/ no range |
 | 0117 | Organização + handoff | AGENTS.md atualizado (CI + 0021/0022 + versões), auditoria/INDEX.md cobre docs 100-127, colisões 0005×0005 / 0014×0014 / 106×106 sinalizadas (NÃO renumerar), doc 126 = condições V207, doc 127 = seu prompt de entrada |
 
-Numeração em uso: readbacks 0145-0148 são da linha arquiteto. **Próximo livre: 0149.**
+Numeração em uso: readbacks 0145-0149 são da linha arquiteto (0149 = micro-onda
+0116-fix1, época do ratchet: contratos 0149+ validados estritos no CI).
+**Próximo livre para o Codex: 0150.**
 PROMPT_ARQUITETO_USEHBN_AUTONOMO.md está em v1.6 (fora do repo, em ~/Projetos).
 
 Pendências que o GATE 0 (doc 127) resolve: consolidar o working tree da linha

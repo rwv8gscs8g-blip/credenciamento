@@ -53,8 +53,10 @@ jobs:
           CHANGED=$(git diff --name-only --diff-filter=ACMR \
             "${{ steps.range.outputs.base }}" "${{ steps.range.outputs.head }}" \
             -- .hbn/readbacks/ .hbn/hearbacks/ .hbn/results/ || true)
+          # Época do ratchet: contratos < 0149 são histórico assinado (passivo
+          # legitimado pelo futuro bump 1.1.0 — item A5); só 0149+ são estritos.
           # shellcheck disable=SC2086
-          python3 scripts/hbn-guards/ci/validate-contracts.py "$GITHUB_WORKSPACE" --changed $CHANGED
+          python3 scripts/hbn-guards/ci/validate-contracts.py "$GITHUB_WORKSPACE" --epoch 0149 --changed $CHANGED
 
       - name: Scope-lock por commit (range)
         run: |

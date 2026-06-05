@@ -50,25 +50,28 @@ REGRAS DE CONTRATO (vigentes desde a onda 0116 — CI ratchet):
 - Todo readback/hearback NOVO deve validar contra .hbn/schemas/ 1.0.0.
 - evidence_kind: usar SOMENTE VR_ID | screenshot | csv_hash | git_sha |
   shasum_match | human_report | audit_post (até o bump 1.1.0 do item A5).
-- agent_id: "codex". Numeração: próximo readback livre é 0149 (0148 foi a
-  onda 0117 do arquiteto). Nome: .hbn/readbacks/NNNN-rb-onda-<X>-<tema>.json;
-  hearback espelha o número; ERP em .hbn/results/NNNN-exec-*.json.
+- agent_id: "codex". Numeração: próximo readback livre é 0150 (0148 = onda
+  0117 do arquiteto; 0149 = micro-onda 0116-fix1, época do ratchet). Nome:
+  .hbn/readbacks/NNNN-rb-onda-<X>-<tema>.json; hearback espelha o número;
+  ERP em .hbn/results/NNNN-exec-*.json. Contratos 0149+ são validados
+  ESTRITOS pelo CI (época do ratchet).
 - Cada push aciona .github/workflows/hbn-guards-ci.yml: reporte ao operador
   o resultado do run (aba Actions) no fim de cada gate.
 
 SEQUÊNCIA DE GATES (não pule; 1 onda por vez; hearback antes de toda escrita):
 
-GATE 0 — CONSOLIDAÇÃO DO WORKING TREE (sua primeira onda, 0149):
+GATE 0 — CONSOLIDAÇÃO DO WORKING TREE (sua primeira onda, 0150):
 O repo tem ~95 arquivos untracked + ~21 modificados da SUA linha (trilha HBN
 das ondas 38.2.x: readbacks/hearbacks/ERPs 01xx, src/vba, local-ai, CHANGELOG,
 relay/INDEX, auditoria/03_ondas, evidencias, incoming/). Nada disso foi
-commitado. Produza readback 0149 de consolidação (fast_track histórica:
+commitado. Produza readback 0150 de consolidação (fast_track histórica:
 codifica trabalho JÁ validado por gates humanos passados) com files_allowed
 explícito por grupos; após hearback, comite em commits temáticos separados
 (contratos HBN / código+espelho / docs+CHANGELOG / relay). Inclua no relay
-INDEX uma seção nova citando as ondas arquiteto 0114-0117 (fonte: a ponte do
-item 3). Feche também os ERPs 0147/0148 do arquiteto preenchendo os shas
-pendentes (micro-edição + mesmo commit de relay). Triagem de incoming/: liste
+INDEX uma seção nova citando as ondas arquiteto 0114-0117 + micro-onda 0149
+(fonte: a ponte do item 3). Feche também os ERPs 0147/0148/0149 do arquiteto
+preenchendo os shas pendentes (micro-edição + mesmo commit de relay; shas no
+git log: onda 0116 = 5b5b9a7, onda 0117 = 7cff187, 0149 = commit do fix). Triagem de incoming/: liste
 o conteúdo no readback e proponha destino; não delete nada sem hearback.
 Empurre (push) e reporte o PRIMEIRO run do CI.
 
@@ -79,7 +82,7 @@ TV2_RunImpressaoResidual. Esperado OK=6 | FALHA=0 | MANUAL=0. Você registra o
 resultado no ERP 0144 e atualiza o relay. Se falhar: micro-onda fix2, nunca
 ajuste manual no template.
 
-GATE 2 — ONDA 0150, impressão residual code-only (as 2 ressalvas conhecidas):
+GATE 2 — ONDA 0151, impressão residual code-only (as 2 ressalvas conhecidas):
 a) Campo Quant. imprime "1," — causa confirmada: src/vba/Preencher.bas,
    Sub AplicarFormatoQuantidade usa NumberFormatLocal "0,##". Correção
    code-only para formato inteiro "0".

@@ -1,0 +1,84 @@
+{
+  "readback_id": "0149-onda-0116-fix1-ratchet-epoch",
+  "data": "2026-06-05",
+  "agent_id": "claude-opus-4-7",
+  "agent_note": "Sessão real: Claude Opus 4.8 via Cowork (enum 1.0.0 — ver item A5).",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0148-onda-0117-organizacao-handoff-codex",
+  "intent": {
+    "objective": "Micro-onda 0116-fix1: corrigir defeito de desenho do ratchet detectado por simulação do range real do primeiro push (27237e4..7cff187): 49 contratos HISTÓRICOS (0114-0127) caem no modo estrito por terem sido tocados no range, deixando o primeiro run do CI vermelho por passivo, não por drift novo. Correção: época do ratchet — modo estrito só para contratos de número >= 0149 (RATCHET_EPOCH), tocados no range. Consequência de numeração: esta micro-onda toma o 0149; o GATE 0 do Codex passa a usar 0150 (doc 127 e ponte atualizados).",
+    "non_goals": [
+      "Não alterar scope-lock-range.py (simulação do range real passou VERDE — 19 commits, 5 bypasses com nota)",
+      "Não alterar guards locais .sh nem schemas",
+      "Não tocar linha Codex"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "scripts/hbn-guards/ci/validate-contracts.py",
+      ".github/workflows/hbn-guards-ci.yml",
+      "auditoria/00_status/127_PROMPT_HANDOFF_CODEX_RETOMADA_V206.md",
+      ".hbn/messages/20260605-1950-ponte-estado-protocolo-para-codex.md",
+      ".hbn/readbacks/0149-rb-onda-0116-fix1-ratchet-epoch.json",
+      ".hbn/hearbacks/0149-ratchet-epoch.json",
+      ".hbn/results/0149-exec-onda-0116-fix1-ratchet-epoch.json"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/**",
+      "scripts/hbn-guards/*.sh",
+      ".hbn/schemas/**",
+      ".hbn/relay/INDEX.md"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "Drift NOVO continua bloqueado: contratos 0149+ tocados em qualquer range futuro são validados estritos",
+    "Parse global, coerência canonical-root e relatório de passivo inalterados",
+    "scope-lock-range.py byte-a-byte inalterado"
+  ],
+  "risks": [
+    {
+      "risk": "Época por número permite editar contrato antigo (<0149) com drift sem o CI acusar",
+      "mitigation": "Aceito por desenho: contratos antigos são histórico assinado que NÃO deve ser editado (§8 do prompt mestre: nunca sobrescrever readback assinado); edição legítima de antigos é rara e coberta por revisão humana do diff",
+      "severity": "low"
+    },
+    {
+      "risk": "Confusão de numeração: doc 127 e ponte prometiam 0149 ao Codex",
+      "mitigation": "Ambos atualizados nesta micro-onda para 0150 com nota explícita; arquivos ainda são a fonte única que o Codex lerá",
+      "severity": "medium"
+    },
+    {
+      "risk": "Nova simulação divergir do comportamento real no runner do GitHub",
+      "mitigation": "Mesma engine (python3 + jsonschema) e mesmo range; diferença de ambiente é só o checkout — risco residual aceito, primeiro run observado por Mauricio",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Simulação local do range real 27237e4..<novo HEAD> com época 0149 retorna exit 0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0149-exec-onda-0116-fix1-ratchet-epoch.json"
+      },
+      {
+        "gate": "Primeiro run do hbn-guards-ci VERDE na aba Actions",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0149-exec-onda-0116-fix1-ratchet-epoch.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "git revert <sha-da-micro-onda> — restaura ratchet sem época",
+      "Se o CI continuar vermelho após o fix: desativar workflow pela UI do GitHub e reavaliar em onda nova — nunca bypass"
+    ],
+    "anchor_to_restore": "commit 7cff187"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-05T20:50:00-03:00"
+}

@@ -10,13 +10,18 @@
 # permanente por passivo. O ratchet impede drift NOVO sem exigir retrofit:
 #
 #   - ESTRITO (bloqueia): contratos TOCADOS no range (--changed f1 f2 ...)
-#     devem validar contra o schema.
+#     E com número >= RATCHET_EPOCH devem validar contra o schema.
+#   - ÉPOCA (onda 0116-fix1): o primeiro push real (27237e4..7cff187) provou
+#     que ranges grandes arrastam contratos históricos para o modo estrito
+#     (49 violações de passivo 0114-0127). A época corta: só contratos
+#     criados após a introdução do CI (>= 0149) são enforçados. Contratos
+#     antigos são histórico assinado que não deve ser editado (§8).
 #   - SEMPRE (bloqueia): todo contrato do repo deve ser JSON parseável;
 #     .hbn/canonical-root deve coincidir com o const do readback.schema.
 #   - RELATÓRIO (não bloqueia): contagem repo-wide de contratos fora do
 #     schema — passivo visível, insumo do item A5 (schema 1.1.0).
 #
-# Uso: python3 validate-contracts.py <repo_root> [--changed f1 f2 ...]
+# Uso: python3 validate-contracts.py <repo_root> [--epoch 0149] [--changed f1 f2 ...]
 # Requer: jsonschema (instalado pelo workflow).
 # =============================================================================
 import glob
@@ -32,10 +37,20 @@ except ImportError:
 
 args = sys.argv[1:]
 ROOT = os.path.abspath(args[0]) if args else os.getcwd()
+EPOCH = 0
+if "--epoch" in args:
+    EPOCH = int(args[args.index("--epoch") + 1])
+    args = args[: args.index("--epoch")] + args[args.index("--epoch") + 2:]
 CHANGED = []
 if "--changed" in args:
     CHANGED = [a for a in args[args.index("--changed") + 1:] if a]
 FAILS = []
+
+
+def contract_num(rel_path):
+    import re as _re
+    m = _re.search(r"/([0-9]{4})[^/]*\.json$", "/" + rel_path)
+    return int(m.group(1)) if m else -1
 
 
 def load(path):
@@ -74,9 +89,10 @@ def main():
             errs = schema_errors(validator, doc)
             if errs:
                 invalid += 1
-                if rel in CHANGED:  # ratchet: tocado no range → estrito
+                # ratchet: tocado no range E número >= época → estrito
+                if rel in CHANGED and contract_num(rel) >= EPOCH:
                     for e in errs[:6]:
-                        FAILS.append(f"{rel} (TOCADO no range): {e}")
+                        FAILS.append(f"{rel} (TOCADO no range, >= época {EPOCH:04d}): {e}")
         debt[d] = (invalid, total)
 
     for d, (invalid, total) in debt.items():
@@ -99,7 +115,9 @@ def main():
 
     if CHANGED:
         contract_changed = [c for c in CHANGED if c.startswith((".hbn/readbacks/", ".hbn/hearbacks/"))]
-        print(f"[validate-contracts] modo ratchet: {len(contract_changed)} contrato(s) tocados no range validados estritos")
+        enforced = [c for c in contract_changed if contract_num(c) >= EPOCH]
+        print(f"[validate-contracts] modo ratchet: {len(contract_changed)} contrato(s) tocados no range; "
+              f"{len(enforced)} sujeitos ao modo estrito (época >= {EPOCH:04d})")
 
     if FAILS:
         print(f"\n[validate-contracts] ✗ {len(FAILS)} violação(ões) bloqueantes:", file=sys.stderr)
