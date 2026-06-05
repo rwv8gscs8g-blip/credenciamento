@@ -7,9 +7,9 @@
   "agent_note": "Sessão real: Claude Opus 4.8 via Cowork (enum 1.0.0 — ver item A5).",
   "track": "fast_track",
   "version_target": "V12.0.0206",
-  "status": "executed_commit_pending_operator",
+  "status": "executed_closed",
   "outcome": "consolidacao_evolucoes_backlog_knowledge_0021_prompt_v16",
-  "human_status": "hearback_confirmed_commit_pending",
+  "human_status": "confirmed_executed",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "head_observed": "e157221",
@@ -42,16 +42,18 @@
       "Rodar hbn-guards-runner e reportar exit 0.",
       "Colar o sha do commit no chat para fechamento do ERP."
     ],
-    "status": "pending"
+    "status": "done"
   },
   "human_gate_expected": {
     "pre_commit": "Guards passam (canonical-root OK na raiz real; scope-lock valida staged ⊆ files_allowed do readback 0145; hearback confirmed presente)",
     "guards_runner_post": "Todos os guards passaram. (exit 0)"
   },
   "human_gate_observed": {
-    "commit_sha": "PENDENTE",
-    "guards_runner_post": "PENDENTE",
-    "evidence_source": "Aguardando operador no Terminal da raiz canônica."
+    "commit_sha": "5ad07fe",
+    "commit_stat": "8 files changed, 758 insertions(+), 2 deletions(-)",
+    "guards_runner_post": "Todos os guards passaram + [pre-commit] todas as fases passaram (canonical-root OK; scope-lock: track=fast_track, readback 0145 ativo human_status=confirmed)",
+    "incidente_durante_gate": "index.lock estale criado por git status do sandbox bloqueou git add/commit; removido pelo operador (rm .git/index.lock); lição registrada como item 5 do knowledge 0021 antes do commit",
+    "evidence_source": "Output do Terminal do operador colado em chat Cowork, 2026-06-05"
   },
   "pendencias_para_proxima_onda": [
     "Atualizar .hbn/relay/INDEX.md (seção da linha arquiteto) APÓS o commit da linha Codex — INDEX carrega 346 inserções não-commitadas de Codex e ficou fora desta onda por segurança",
