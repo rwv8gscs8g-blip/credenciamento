@@ -1,0 +1,66 @@
+{
+  "result_id": "0147-exec-onda-0116-a3-guards-ci",
+  "execution_id": "0147-exec-onda-0116-a3-guards-ci",
+  "readback_id": "0147-onda-0116-a3-guards-ci",
+  "data": "2026-06-05",
+  "agent_id": "claude-opus-4-7",
+  "agent_note": "Sessão real: Claude Opus 4.8 via Cowork (enum 1.0.0 — ver item A5).",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "executed_commit_pending_operator",
+  "outcome": "hbn_guards_ci_v1_ratchet_scope_lock_range",
+  "human_status": "hearback_confirmed_commit_pending",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "8204fe9",
+  "action": "Onda 0116 (A3): criar hbn-guards-ci.yml + scripts/hbn-guards/ci/{validate-contracts.py,scope-lock-range.py} — rede CI anti-regressão (contratos em modo ratchet + scope-lock por commit com resolução histórica), sem modificar guards locais.",
+  "summary": "CI v1 entregue e testado contra o histórico real. Achado central: 80/126 readbacks e 11/36 hearbacks fora do schema 1.0.0 (legado + drift recente de enum evidence_kind e formato de hearback) → desenho ratchet adotado (estrito só nos tocados; passivo em relatório) e insumo registrado para o A5 (bump 1.1.0). Detalhes e tabela de testes: auditoria/00_status/125.",
+  "files_written": [
+    ".github/workflows/hbn-guards-ci.yml (novo)",
+    "scripts/hbn-guards/ci/validate-contracts.py (novo)",
+    "scripts/hbn-guards/ci/scope-lock-range.py (novo)",
+    ".hbn/readbacks/0147-rb-onda-0116-a3-guards-ci.json (human_status: confirmed)",
+    ".hbn/hearbacks/0147-a3-guards-ci.json",
+    "auditoria/00_status/125_REGISTRO_ONDA_0116_A3_GUARDS_CI.md (novo)",
+    ".hbn/results/0147-exec-onda-0116-a3-guards-ci.json (este ERP)"
+  ],
+  "files_written_outside_repo": [
+    "/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md (células A3 → ✅ entregue, A4 desbloqueada, A5 enriquecida com insumo do doc 125 — refresh §3 passo 7)"
+  ],
+  "invariants_check": {
+    "guards_locais_sh_intocados": true,
+    "src_vba_untouched": true,
+    "local_ai_vba_import_untouched": true,
+    "schemas_untouched": true,
+    "relay_index_untouched": true,
+    "codex_uncommitted_work_preserved": true,
+    "git_sandbox_somente_plumbing_leitura": true
+  },
+  "test_evidence": {
+    "T0_yaml": "workflow parseado OK",
+    "T1_ratchet_repo_wide": "exit 0; passivo 80 rb + 11 hb reportado sem bloquear",
+    "T2_contratos_novos_estritos": "6 contratos das ondas 0114-0116 válidos, exit 0",
+    "T3_drift_tocado": "hearback 0141 como tocado → exit 1 com violação apontada (ratchet bloqueia drift novo)",
+    "T4a_range_arquiteto": "e157221..HEAD: 3 commits, resolução histórica por commit, fast_track skip, exit 0",
+    "T4b_range_bypass": "35217c0~1..882cd2b: bypasses pulados com warning + nota presente no range, exit 0"
+  },
+  "human_gate_required": {
+    "steps": [
+      "Commit do operador (blocos atômicos em chat)",
+      "No próximo push ao GitHub: observar primeiro run de hbn-guards-ci na aba Actions e reportar verde/vermelho"
+    ],
+    "status": "pending"
+  },
+  "human_gate_observed": {
+    "commit_sha": "PENDENTE",
+    "first_ci_run": "PENDENTE (próximo push — pode ser o push da linha Codex)",
+    "evidence_source": "Aguardando operador."
+  },
+  "pendencias_para_proxima_onda": [
+    "Observar primeiro run do hbn-guards-ci no GitHub (fechável a posteriori neste ERP)",
+    "A5 desbloqueado ao fechar V206 — insumo pronto no doc 125",
+    "A3.1 candidata: forbid-env-files/forbid-legacy-paths no CI sem cópia divergente",
+    "Fricção recorrente: micro-commit de fechamento de ERP (3× nesta sessão) — candidata a regra em ciclo futuro"
+  ],
+  "created_at": "2026-06-05T19:10:00-03:00"
+}

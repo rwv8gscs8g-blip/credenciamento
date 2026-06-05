@@ -1,0 +1,64 @@
+# =============================================================================
+# hbn-guards-ci — rede mecânica anti-regressão do protocolo HBN (onda 0116/A3)
+#
+# Roda em todo push (main, codex/**) e PR:
+#   1. validate-contracts: todos os readbacks/hearbacks × schemas + ERPs JSON
+#      + coerência .hbn/canonical-root × const do schema.
+#   2. scope-lock-range: por commit do range, arquivos alterados × scope do
+#      readback ativo HISTÓRICO daquele commit (semântica espelhada de
+#      scripts/hbn-guards/assert-scope-lock.sh — fonte canônica).
+#
+# Deliberadamente FORA do CI (environment-bound, ver .hbn/knowledge/0021):
+#   assert-canonical-root / forbid-tmp-worktree — só fazem sentido na máquina
+#   do operador; no runner o path é /home/runner/... por desenho.
+# =============================================================================
+name: hbn-guards-ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - 'codex/**'
+
+jobs:
+  hbn-guards:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout (histórico completo — necessário para resolução por commit)
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Instalar jsonschema
+        run: pip install --quiet jsonschema
+
+      - name: Determinar range de commits
+        id: range
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            echo "base=${{ github.event.pull_request.base.sha }}" >> "$GITHUB_OUTPUT"
+            echo "head=${{ github.event.pull_request.head.sha }}" >> "$GITHUB_OUTPUT"
+          else
+            BASE="${{ github.event.before }}"
+            if [ -z "$BASE" ] || ! git cat-file -e "$BASE" 2>/dev/null; then
+              BASE="$(git rev-parse 'HEAD~1' 2>/dev/null || git hash-object -t tree /dev/null)"
+            fi
+            echo "base=$BASE" >> "$GITHUB_OUTPUT"
+            echo "head=${{ github.sha }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Validar contratos HBN (ratchet — estrito nos tocados no range)
+        run: |
+          CHANGED=$(git diff --name-only --diff-filter=ACMR \
+            "${{ steps.range.outputs.base }}" "${{ steps.range.outputs.head }}" \
+            -- .hbn/readbacks/ .hbn/hearbacks/ .hbn/results/ || true)
+          # shellcheck disable=SC2086
+          python3 scripts/hbn-guards/ci/validate-contracts.py "$GITHUB_WORKSPACE" --changed $CHANGED
+
+      - name: Scope-lock por commit (range)
+        run: |
+          python3 scripts/hbn-guards/ci/scope-lock-range.py \
+            "${{ steps.range.outputs.base }}" \
+            "${{ steps.range.outputs.head }}" \
+            "$GITHUB_WORKSPACE"

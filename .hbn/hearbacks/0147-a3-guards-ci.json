@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0147-a3-guards-ci-confirmed",
+  "readback_id": "0147-onda-0116-a3-guards-ci",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-05T18:45:00-03:00",
+  "notes": "Mauricio confirmou em chat Cowork (2026-06-05) a execução da onda 0116/A3: criar .github/workflows/hbn-guards-ci.yml + scripts/hbn-guards/ci/{validate-contracts.py,scope-lock-range.py} (novos; guards locais .sh intocados), validando contratos×schemas e scope-lock por commit (resolução histórica do readback ativo) em todo push/PR. Motivação declarada: rede mecânica anti-regressão madura antes do refatoramento V12.0.0207. Guard de path canônico fica fora do CI por ser environment-bound (knowledge 0021)."
+}

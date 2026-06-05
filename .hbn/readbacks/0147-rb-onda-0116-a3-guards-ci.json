@@ -1,0 +1,102 @@
+{
+  "readback_id": "0147-onda-0116-a3-guards-ci",
+  "data": "2026-06-05",
+  "agent_id": "claude-opus-4-7",
+  "agent_note": "Sessão real: Claude Opus 4.8 via Cowork (enum 1.0.0 — ver item A5 do backlog).",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0146-onda-0115-g1-firewall-knowledge-0022",
+  "intent": {
+    "objective": "Onda 0116 (item A3 do backlog §4): criar .github/workflows/hbn-guards-ci.yml para rodar verificação de governança HBN em todo push/PR no GitHub — rede mecânica anti-regressão para o refatoramento V12.0.0207. CI v1 cobre: (1) validação de TODOS os contratos .hbn (readbacks×schema, hearbacks×schema, results JSON-parse); (2) scope-lock em modo range, por commit, resolvendo o readback ativo histórico de cada commit (espelha assert-scope-lock.sh sem modificá-lo); (3) coerência canonical-root×schema. O guard de path canônico (environment-bound) é deliberadamente fora do CI — documentado.",
+    "non_goals": [
+      "Não modificar nenhum guard existente (scripts/hbn-guards/*.sh e lib/) — os scripts de CI são NOVOS, em scripts/hbn-guards/ci/, e declaram o .sh local como fonte da semântica",
+      "Não replicar forbid-env-files/forbid-legacy-paths no CI v1 (pre-commit local já cobre; candidato a A3.1 futura para evitar cópia divergente apressada)",
+      "Não configurar branch protection/required checks (decisão de Mauricio no GitHub, fora do repo)",
+      "Não tocar código de domínio nem .hbn/relay/INDEX.md"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".github/workflows/hbn-guards-ci.yml",
+      "scripts/hbn-guards/ci/validate-contracts.py",
+      "scripts/hbn-guards/ci/scope-lock-range.py",
+      ".hbn/readbacks/0147-rb-onda-0116-a3-guards-ci.json",
+      ".hbn/hearbacks/0147-a3-guards-ci.json",
+      ".hbn/results/0147-exec-onda-0116-a3-guards-ci.json",
+      ".hbn/results/0146-exec-onda-0115-g1-firewall-knowledge-0022.json",
+      "auditoria/00_status/125_REGISTRO_ONDA_0116_A3_GUARDS_CI.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "scripts/hbn-guards/*.sh",
+      "scripts/hbn-guards/lib/**",
+      ".hbn/schemas/**",
+      ".hbn/relay/INDEX.md"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "files_outside_repo": [
+    "/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md (célula A3 do backlog §4 → ✅ entregue; sem bump de versão)"
+  ],
+  "invariants_preserved": [
+    "Guards locais (.sh, lib/) byte-a-byte inalterados",
+    "src/vba/ e local-ai/vba_import/ intocados",
+    "Trabalho não-commitado da linha Codex preservado (git add seletivo)",
+    "Nenhum git de escrita no sandbox (knowledge 0021 item 5); testes locais usam só plumbing de leitura (rev-list, diff-tree, ls-tree, show)"
+  ],
+  "risks": [
+    {
+      "risk": "CI inédito: o workflow só é validado de verdade no primeiro push ao GitHub — erro de YAML/ambiente faria o run falhar",
+      "mitigation": "YAML parseado localmente; scripts python testados no sandbox contra o histórico REAL do repo (ranges das ondas 0114/0115 e da linha Codex) antes do commit; primeiro run observado por Mauricio na aba Actions (gate no ERP); CI é informativo até Mauricio ativar branch protection",
+      "severity": "medium"
+    },
+    {
+      "risk": "Cópia divergente: scope-lock-range.py reimplementa a semântica de assert-scope-lock.sh; mudanças futuras no .sh podem divergir do CI silenciosamente",
+      "mitigation": "Cabeçalho do .py declara o .sh como fonte canônica da semântica e exige replicação em qualquer mudança; doc 125 registra o acoplamento; candidato futuro: extrair semântica comum (A3.1)",
+      "severity": "medium"
+    },
+    {
+      "risk": "Falso positivo em históricos com múltiplas ondas/bypasses: avaliar o range com um único readback 'ativo' atual condenaria commits antigos",
+      "mitigation": "Avaliação POR COMMIT com resolução histórica (readback de maior número existente na árvore daquele commit via ls-tree/show); commits com [bypass-hbn-guards] na mensagem são pulados com warning, exigindo nota em .hbn/bypasses/ no range",
+      "severity": "high"
+    },
+    {
+      "risk": "git add não-seletivo arrastaria trabalho não-commitado da linha Codex",
+      "mitigation": "Mesmo padrão das ondas 0114/0115: git add com paths explícitos do files_allowed em bloco atômico L27",
+      "severity": "high"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Scripts CI rodam limpos no sandbox contra o histórico real (validate-contracts em todos os contratos; scope-lock-range nos ranges 0114-0115 e num range safe_track da linha Codex)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0147-exec-onda-0116-a3-guards-ci.json"
+      },
+      {
+        "gate": "Commit do operador passa pre-commit/guards limpo",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0147-exec-onda-0116-a3-guards-ci.json"
+      },
+      {
+        "gate": "Primeiro run do hbn-guards-ci verde na aba Actions do GitHub (após próximo push)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0147-exec-onda-0116-a3-guards-ci.json (campo pendencias — fechável a posteriori)"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "git revert <sha-do-commit-da-onda-0116> — adiciona apenas 3 arquivos novos + contratos; reversão trivial sem efeito em runtime local",
+      "Restaurar célula A3 do backlog §4 do prompt mestre para '⏳ próximo'",
+      "Se o CI falhar com falso positivo após push: desativar o workflow pela UI do GitHub (Actions → disable) — NUNCA via HBN_GUARDS_BYPASS"
+    ],
+    "anchor_to_restore": "commit 8204fe9 (onda 0115 fechada)"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-05T18:40:00-03:00"
+}
