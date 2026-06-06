@@ -53,18 +53,19 @@ Itens:
 - `M|001-modulo/ABT-Teste_V2_Impressao_Residual.bas`
 - `M|001-modulo/AAX-App_Release.bas`
 
-## Gate humano pendente
+## Gate humano validado
 
-1. Importar o delta V3 pelo comando acima.
-2. Rodar `VBE > Depurar > Compilar VBAProject`.
-3. Executar na Janela Imediata:
+Mauricio executou o gate humano em 2026-06-06:
 
-```vb
-TV2_RunImpressaoResidual
-```
+- Importador V3 OK: `modo=Estabilizado | dryRun=Falso | M=3 | F=0 | err=0 | skip=0`.
+- Backup FULL registrado pelo importador:
+  `\\Mac\Home\Projetos\Credenciamento\backups\vba\20260606_110957-V3-FULL`.
+- `VBE > Depurar > Compilar VBAProject` passou limpo.
+- `TV2_RunImpressaoResidual` concluiu em `TV2_20260606_111039` com
+  `OK=7 | FALHA=0 | MANUAL=0`.
+- CSV de falhas: nao exportado.
 
-Esperado: `OK=7 | FALHA=0 | MANUAL=0` e nenhum CSV
-`TesteV2_IMPRESSAO_RESIDUAL_Falhas_*.csv`.
+Veredito: 38.2.24 validada por import, compile e V2 dirigido.
 
 ## Observacoes
 
@@ -72,5 +73,5 @@ Esperado: `OK=7 | FALHA=0 | MANUAL=0` e nenhum CSV
   `TV2_20260606_104057` com `OK=6 | FALHA=0 | MANUAL=0`.
 - Esta onda nao altera contratos de negocio; cobre apenas os dois residuos
   visuais conhecidos do GATE 2.
-- A validacao tela a tela da V206 continua sendo o proximo loop operacional
-  apos este microdelta, sem freeze automatico.
+- A validacao tela a tela da V206 e o proximo loop operacional, sem freeze
+  automatico.

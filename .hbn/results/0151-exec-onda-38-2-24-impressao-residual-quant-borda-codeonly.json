@@ -6,9 +6,9 @@
   "agent_id": "codex",
   "track": "safe_track",
   "version_target": "V12.0.0206",
-  "status": "package_ready_gate_pending",
-  "outcome": "impressao_residual_quant_borda_codeonly_package_ready",
-  "human_status": "hearback_confirmed_import_compile_tv2_pending",
+  "status": "completed",
+  "outcome": "impressao_residual_quant_borda_codeonly_validated",
+  "human_status": "confirmed_import_compile_tv2_pass",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "head_before": "d8ff122",
@@ -22,7 +22,7 @@
       "Executar TV2_RunImpressaoResidual pela Janela Imediata.",
       "Reportar OK/FALHA/MANUAL e anexar CSV se houver falha."
     ],
-    "status": "pending"
+    "status": "completed"
   },
   "human_gate_expected": {
     "import_result": "Importador V3 OK: M=3 | F=0 | err=0",
@@ -32,12 +32,14 @@
     "tv2_directed_failure_csv_pattern": "TesteV2_IMPRESSAO_RESIDUAL_Falhas_*.csv"
   },
   "human_gate_observed": {
-    "import_result": "PENDENTE",
-    "compile_result": "PENDENTE",
-    "tv2_directed_execution": "PENDENTE",
-    "tv2_directed_result": "PENDENTE",
-    "tv2_directed_failure_csv": "PENDENTE",
-    "evidence_source": "Aguardando operador humano no workbook."
+    "import_result": "Importador V3 OK: modo=Estabilizado | dryRun=Falso | M=3 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passou limpo, reportado por Mauricio.",
+    "tv2_directed_execution": "TV2_20260606_111039",
+    "tv2_directed_macro": "TV2_RunImpressaoResidual",
+    "tv2_directed_result": "OK=7 | FALHA=0 | MANUAL=0",
+    "tv2_directed_failure_csv": "Nao exportado; sem falhas.",
+    "backup_v3_full": "\\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260606_110957-V3-FULL",
+    "evidence_source": "Prints e relato humano de Mauricio no chat em 2026-06-06: importou, compilou e suite V2 concluiu sem falhas."
   },
   "package_v3": {
     "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_24_IMPRESSAO_RESIDUAL_QUANT_BORDA_CODEONLY.txt",
@@ -59,12 +61,12 @@
       {
         "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
         "bytes": 23684,
-        "sha256": "b81d938be51af0af520f029654aec385af9a0144afb6c83bf85593fc727cbb7e"
+        "sha256": "8c7ca1a68a6d6840ddeffd2d7d36f8b1792eeaf5a2e85b3c858fc51f759a7f25"
       },
       {
         "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_24_IMPRESSAO_RESIDUAL_QUANT_BORDA_CODEONLY.txt",
         "bytes": 1373,
-        "sha256": "e98f9f515ceb79859674463db3068fb37a67fc92d2d578d0d9572339633bbb97"
+        "sha256": "20a215c83743f41ded3c72ac3a41d17c68b30df271d59df931516c6ee7ea98c6"
       }
     ]
   },
@@ -117,22 +119,28 @@
     },
     {
       "gate": "Compile VBAProject",
-      "status": "pending_human",
-      "evidencia": "Pendente de importacao no workbook e compile manual no VBE."
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou compile limpo apos importacao do delta 0151."
     },
     {
       "gate": "TV2_RunImpressaoResidual",
-      "status": "pending_human",
-      "evidencia": "Pendente de execucao no workbook apos importacao e compile; esperado OK=7/FALHA=0/MANUAL=0."
+      "status": "pass_human",
+      "evidencia": "Print humano mostrou Suite V2 concluida em TV2_20260606_111039 com OK=7, FALHA=0, MANUAL=0; CSV de falhas nao exportado."
+    },
+    {
+      "gate": "Importador V3",
+      "status": "pass_human",
+      "evidencia": "Print humano em 2026-06-06 mostrou Importador V3 OK: modo=Estabilizado, dryRun=Falso, M=3, F=0, err=0, skip=0; backup FULL em \\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260606_110957-V3-FULL."
     }
   ],
   "next_decision": [
-    "Operador deve importar o delta 0151, compilar e executar TV2_RunImpressaoResidual.",
-    "Se TV2_RunImpressaoResidual retornar OK=7/FALHA=0/MANUAL=0, registrar evidencia humana e fechar 0151 como verde.",
-    "Se qualquer falha persistir, anexar novo CSV e nao declarar validacao.",
+    "0151 esta validada por import, compile e TV2 dirigido humano.",
+    "Prosseguir para GATE 3: iteracao tela a tela com Mauricio, abrindo readback curto por lote de defeitos da mesma tela.",
+    "Novos defeitos devem vir com evidencia e teste V2 correspondente quando houver comportamento verificavel.",
     "Nao declarar freeze V206 sem gate proprio e decisao humana explicita."
   ],
   "created_at": "2026-06-06T10:49:17-03:00",
   "package_ready_at": "2026-06-06T10:49:17-03:00",
-  "completed_at": null
+  "completed_at": "2026-06-06T11:11:00-03:00",
+  "validated_at": "2026-06-06T11:11:00-03:00"
 }

@@ -16,9 +16,10 @@ tratam apenas da linha pública oficial.
   `IR_07_QUANTIDADE_INTEIRA` e `IR_05` exigindo peso médio na borda externa.
   Manifesto V3:
   `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_24_IMPRESSAO_RESIDUAL_QUANT_BORDA_CODEONLY.txt`.
-  Gate humano pendente: importar, compilar e executar
-  `TV2_RunImpressaoResidual`, esperado `OK=7 | FALHA=0 | MANUAL=0`. Sem tocar
-  UserForms, `.frx`, `Auto_Open.bas`, `ThisWorkbook`, `Mod_Types.bas`,
+  Gate humano validado por Mauricio: importacao V3 `M=3 | F=0 | err=0 | skip=0`,
+  compile limpo e `TV2_20260606_111039` com
+  `OK=7 | FALHA=0 | MANUAL=0`, sem CSV de falhas. Sem tocar UserForms,
+  `.frx`, `Auto_Open.bas`, `ThisWorkbook`, `Mod_Types.bas`,
   `Importador_V3.bas`, `Teste_V2_Engine.bas` ou `Teste_V2_Roteiros.bas`. Sem
   freeze V206 declarado.
 

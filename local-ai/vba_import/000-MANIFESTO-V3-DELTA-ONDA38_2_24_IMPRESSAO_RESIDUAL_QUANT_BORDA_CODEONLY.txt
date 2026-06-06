@@ -23,7 +23,7 @@
 #     sha256=2536d0acb8a26a932545d34dec7e4a4ef5707808dbafe8c77c16b4a2b5415ae1
 #   M|001-modulo/AAX-App_Release.bas
 #     bytes=23684
-#     sha256=b81d938be51af0af520f029654aec385af9a0144afb6c83bf85593fc727cbb7e
+#     sha256=8c7ca1a68a6d6840ddeffd2d7d36f8b1792eeaf5a2e85b3c858fc51f759a7f25
 #
 # GRUPO_ONDA38_2_24_IMPRESSAO_RESIDUAL_QUANT_BORDA_CODEONLY
 M|001-modulo/AAU-Preencher.bas
