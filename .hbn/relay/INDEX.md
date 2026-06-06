@@ -1,11 +1,11 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.6 (§12 Cadencia D Estendida + §12.B por papel + firewall 0022 + CI ratchet 0116)
-proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b`, sincronizou HBN em `d2d7ac5`, entregou Performance/UX basica em `e157221`, consolidou a auditoria cruzada documental 38.2.13, entregou a Onda 38.2.14 behavioralizacao C1, validou a Onda 38.2.15 FT-4 em 2026-06-01, validou 38.2.16 BL-4 via fix1 0133, 0137 fix1, 0139 fix1, 0140 e 0141. Antigravity executou a auditoria cruzada de impressao 0142 apontando 2 BLOQUEADORES nos PDFs; Codex implementou 0143 e preparou 0144 fix1 test-only apos falso negativo de IR_03. Linha arquiteto 0114-0117/0149 consolidou firewall, CI ratchet e handoff do Codex; Codex iniciou GATE 0 pelo readback 0150.
-ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE/VALIDADA: 38.2.4 Integridade de Estado -> 38.2.5 UI regras de negocio -> 38.2.6 Integridade de impressao -> 38.2.7 Leitura/exibicao -> 38.2.8 CONFIG baseline seguro -> 38.2.9 snapshot CONFIG V2 -> 38.2.10 higiene/commit -> 38.2.11 sincronizacao HBN pos-commit -> 38.2.12 Performance/UX basica validada por import/compile/TV2 -> 38.2.13 auditoria cruzada consolidada doc-only -> 38.2.14 behavioralizacao C1 validada por import/compile/TV2 -> 38.2.15 FT-4 validada por import/compile/TV2 -> 38.2.16 BL-4 validada via fix1 0133 -> 38.2.18-fix1 validada por VR_20260602_112011 -> 38.2.19-fix1 validada por VR_20260602_182253 -> 38.2.20 validada por TV2_20260602_205320 -> 38.2.21 validada por TV2_20260602_234618 -> 38.2.22 auditoria cruzada de impressao concluida -> 38.2.23 import/compile limpos, TV2 falhou por falso negativo -> 38.2.23-fix1 test-only pronto para rerun.
+proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b`, sincronizou HBN em `d2d7ac5`, entregou Performance/UX basica em `e157221`, consolidou a auditoria cruzada documental 38.2.13, entregou a Onda 38.2.14 behavioralizacao C1, validou a Onda 38.2.15 FT-4 em 2026-06-01, validou 38.2.16 BL-4 via fix1 0133, 0137 fix1, 0139 fix1, 0140 e 0141. Antigravity executou a auditoria cruzada de impressao 0142 apontando 2 BLOQUEADORES nos PDFs; Codex implementou 0143 e validou 0144 fix1 test-only por import/compile/`TV2_20260606_104057`. Linha arquiteto 0114-0117/0149 consolidou firewall, CI ratchet e handoff do Codex; Codex concluiu GATE 0 pelo readback 0150.
+ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE/VALIDADA: 38.2.4 Integridade de Estado -> 38.2.5 UI regras de negocio -> 38.2.6 Integridade de impressao -> 38.2.7 Leitura/exibicao -> 38.2.8 CONFIG baseline seguro -> 38.2.9 snapshot CONFIG V2 -> 38.2.10 higiene/commit -> 38.2.11 sincronizacao HBN pos-commit -> 38.2.12 Performance/UX basica validada por import/compile/TV2 -> 38.2.13 auditoria cruzada consolidada doc-only -> 38.2.14 behavioralizacao C1 validada por import/compile/TV2 -> 38.2.15 FT-4 validada por import/compile/TV2 -> 38.2.16 BL-4 validada via fix1 0133 -> 38.2.18-fix1 validada por VR_20260602_112011 -> 38.2.19-fix1 validada por VR_20260602_182253 -> 38.2.20 validada por TV2_20260602_205320 -> 38.2.21 validada por TV2_20260602_234618 -> 38.2.22 auditoria cruzada de impressao concluida -> 38.2.23 import/compile limpos, TV2 falhou por falso negativo -> 38.2.23-fix1 validada por TV2_20260606_104057.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio APROVADO em VR_20260526_102200. **Anchor de rollback Onda 38.2.2: commit 179bac5**. **Caminho B (rollback) tecnicamente valido se Mauricio escolher**.
-proxima-acao: GATE 1 — operador importar delta 0144 fix1, compilar VBAProject e executar `TV2_RunImpressaoResidual`; esperado `OK=6 | FALHA=0 | MANUAL=0`.
-ultima-atualizacao: 2026-06-06T10:30:00-03:00 (GATE 0 0150 consolidado, push executado e primeiro hbn-guards-ci verde; 0144 fix1 test-only segue como rerun humano pendente)
+proxima-acao: GATE 2 — abrir readback 0151 para residual final de impressao code-only, com novo hearback humano antes de qualquer escrita VBA.
+ultima-atualizacao: 2026-06-06T10:41:00-03:00 (GATE 1 0144 fix1 validado: Importador V3 M=2/F=0/err=0/skip=0, compile limpo e TV2_20260606_104057 OK=6/FALHA=0/MANUAL=0)
 ---
 
 ## 🟢 GATE 0 / 0150 — consolidacao do working tree V206 e ponte arquiteto 0114-0117 (NOVO)
@@ -26,7 +26,7 @@ ultima-atualizacao: 2026-06-06T10:30:00-03:00 (GATE 0 0150 consolidado, push exe
 | Incoming | `incoming/workbook_ref_20260602_compila_bo330_v1falha/` movido para `auditoria/04_evidencias/V12.0.0206/workbook_ref_20260602_compila_bo330_v1falha/` como evidencia; nao e origem de importacao |
 | Checagem G7/G8 | `python3 local-ai/scripts/publicar_vba_import_v2.py check --verbose` retornou `OK — vba_import 100% sincronizado com src/vba` apos entrada explicita de `UX_IniciarSistema` no mapa |
 | CI | Primeiro `hbn-guards-ci` do GATE 0 verde: run `27063539868`, SHA `98308e8d4dfb2ed92c87ded2a38f4a432b91b409` |
-| Proxima acao apos GATE 0 | GATE 1: operador importar 0144 fix1, compilar e executar `TV2_RunImpressaoResidual` |
+| Proxima acao apos GATE 0 | GATE 1 executado e verde em 2026-06-06; seguir para GATE 2/0151 somente com novo readback e hearback |
 
 ## ✅ HBN ACTIVE — CODEX ASSUMIU BASTÃO V206 / ONDA 38.2.3 (NOVO)
 
@@ -67,7 +67,7 @@ ultima-atualizacao: 2026-06-06T10:30:00-03:00 (GATE 0 0150 consolidado, push exe
 | Readback 38.2.21 | [`0141-rb-onda-38-2-21-formularios-residuais-codeonly.json`](../readbacks/0141-rb-onda-38-2-21-formularios-residuais-codeonly.json) — **human_status: confirmed / validada** |
 | Readback 38.2.22 | [`0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json`](../readbacks/0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json) — **human_status: confirmed** |
 | Readback 38.2.23 | [`0143-rb-onda-38-2-23-impressao-residual-codeonly-template.json`](../readbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template.json) — **human_status: confirmed / import+compile ok, TV2 falhou por falso negativo** |
-| Readback 38.2.23-fix1 | [`0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly.json`](../readbacks/0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly.json) — **human_status: confirmed / pacote pronto, rerun pendente** |
+| Readback 38.2.23-fix1 | [`0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly.json`](../readbacks/0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly.json) — **human_status: confirmed / validada** |
 | Mensagem | [`.hbn/messages/20260527-1408-codex-assumiu-bastao-v206.md`](../messages/20260527-1408-codex-assumiu-bastao-v206.md) |
 | Entrega GATE-A1 | [`.hbn/proposals/0013-codex-at1-gerador-codeonly.md`](../proposals/0013-codex-at1-gerador-codeonly.md) |
 | Auditorias GATE-A1 | [Opus 0014](../proposals/0014-opus-auditoria-gate-a1-onda-38-2-3.md) + [Antigravity 0015](../proposals/0015-antigravity-auditoria-gate-a1-onda-38-2-3.md) — aprovadas |
@@ -75,18 +75,19 @@ ultima-atualizacao: 2026-06-06T10:30:00-03:00 (GATE 0 0150 consolidado, push exe
 | Entrega GATE-A3 | [Opus 0020](../proposals/0020-opus-auditoria-gate-a3-onda-38-2-3.md) + [Antigravity 0021](../proposals/0021-antigravity-auditoria-gate-a3-onda-38-2-3.md) — aprovadas sem BLOQUEADORES |
 | Head observado | `27237e4` — doc-only posterior a `ce5879e`; predecessor de codigo V206 preservado |
 | Head observado atual | `e157221` — Performance/UX basica 38.2.12; 38.2.13 e doc-only posterior |
-| Proxima acao | Operador importar delta 0144 fix1, compilar e executar `TV2_RunImpressaoResidual`. |
+| Proxima acao | GATE 2/0151 para residual final de impressao code-only, com novo readback e hearback. |
 
-## 🟡 ONDA 38.2.23-FIX1 PRONTA — impressao residual teste-only (NOVO)
+## 🟢 ONDA 38.2.23-FIX1 VALIDADA — impressao residual teste-only (NOVO)
 
 | Campo | Valor |
 |---|---|
-| Sinal | 🟡 RERUN HUMANO PENDENTE |
+| Sinal | 🟢 GATE HUMANO VERDE |
 | Track | safe_track |
 | Readback | [`0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly.json`](../readbacks/0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly.json) — **human_status: confirmed** |
 | Hearback | [`0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly-confirmed.json`](../hearbacks/0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly-confirmed.json) |
 | Tecnico | [`0144_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_23_fix1_impressao_residual_testeonly/0144_TECNICO.md) |
 | Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_23_FIX1_IMPRESSAO_RESIDUAL_TESTEONLY.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_23_FIX1_IMPRESSAO_RESIDUAL_TESTEONLY.txt) |
+| ERP | [`0144-exec-onda-38-2-23-fix1-impressao-residual-testeonly.json`](../results/0144-exec-onda-38-2-23-fix1-impressao-residual-testeonly.json) — `completed` |
 | Origem | 0143 importou e compilou; `TV2_RunImpressaoResidual` retornou `OK=5 | FALHA=1` em `IR_03` |
 | Diagnostico | CSV `TesteV2_IMPRESSAO_RESIDUAL_Falhas_TV2_20260603_121844.csv`: `L9_VISUAL=esperado`, `MERGE_L9=Verdadeiro`, `L8=` vazio |
 | Decisao aplicada | Fix test-only: `IR_03` valida `L9:P15` visual; `L8` permanece apenas em detalhes diagnosticos |
@@ -94,7 +95,8 @@ ultima-atualizacao: 2026-06-06T10:30:00-03:00 (GATE 0 0150 consolidado, push exe
 | Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_23_FIX1_IMPRESSAO_RESIDUAL_TESTEONLY", "e157221+ONDA38.2.23-FIX1-IMP-RES-TEST"` |
 | Nao tocar | `Preencher.bas`, `Auto_Open.bas`, `ThisWorkbook`, `Mod_Types.bas`, `Importador_V3.bas`, UserForms, `.frx`, `Teste_V2_Engine`, `Teste_V2_Roteiros` |
 | Teste dirigido | `TV2_RunImpressaoResidual` esperado `OK=6 | FALHA=0 | MANUAL=0` |
-| Veredito atual | Pacote pronto; aguardando import, compile e rerun humano no workbook |
+| Gate humano | Importador V3 OK: `modo=Estabilizado`, `dryRun=Falso`, `M=2`, `F=0`, `err=0`, `skip=0`; backup `\\Mac\Home\Projetos\Credenciamento\backups\vba\20260606_104016-V3-FULL`; compile limpo; `TV2_20260606_104057` retornou `OK=6 | FALHA=0 | MANUAL=0`; sem CSV de falhas |
+| Veredito atual | 38.2.23-fix1 validada por import, compile e V2 dirigido; proximo passo e abrir GATE 2/0151 se houver residual final de impressao a corrigir |
 
 ## 🟡 ONDA 38.2.23 IMPLEMENTADA — impressao residual code-only/template (NOVO)
 

@@ -2,13 +2,13 @@
   "result_id": "0144-exec-onda-38-2-23-fix1-impressao-residual-testeonly",
   "execution_id": "0144-exec-onda-38-2-23-fix1-impressao-residual-testeonly",
   "readback_id": "0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly",
-  "data": "2026-06-03",
+  "data": "2026-06-06",
   "agent_id": "codex",
   "track": "safe_track",
   "version_target": "V12.0.0206",
-  "status": "package_ready_gate_pending",
-  "outcome": "impressao_residual_fix1_testeonly_package_ready",
-  "human_status": "hearback_confirmed_import_compile_tv2_pending",
+  "status": "completed",
+  "outcome": "impressao_residual_fix1_testeonly_validated",
+  "human_status": "confirmed_import_compile_tv2_pass",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "head_observed": "e157221",
@@ -22,7 +22,7 @@
       "Executar TV2_RunImpressaoResidual pela Janela Imediata.",
       "Reportar OK/FALHA/MANUAL e anexar CSV se houver falha."
     ],
-    "status": "pending"
+    "status": "completed"
   },
   "human_gate_expected": {
     "import_result": "Importador V3 OK: M=2 | F=0 | err=0 | skip=0",
@@ -32,12 +32,14 @@
     "tv2_directed_failure_csv_pattern": "TesteV2_IMPRESSAO_RESIDUAL_Falhas_*.csv"
   },
   "human_gate_observed": {
-    "import_result": "PENDENTE",
-    "compile_result": "PENDENTE",
-    "tv2_directed_execution": "PENDENTE",
-    "tv2_directed_result": "PENDENTE",
-    "tv2_directed_failure_csv": "PENDENTE",
-    "evidence_source": "Aguardando operador humano no workbook."
+    "import_result": "Importador V3 OK: modo=Estabilizado | dryRun=Falso | M=2 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passou limpo, reportado por Mauricio.",
+    "tv2_directed_execution": "TV2_20260606_104057",
+    "tv2_directed_macro": "TV2_RunImpressaoResidual",
+    "tv2_directed_result": "OK=6 | FALHA=0 | MANUAL=0",
+    "tv2_directed_failure_csv": "Nao exportado; sem falhas.",
+    "backup_v3_full": "\\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260606_104016-V3-FULL",
+    "evidence_source": "Prints e relato humano de Mauricio no chat em 2026-06-06: importou, compilou e suite V2 concluiu sem falhas."
   },
   "input_failure_evidence": {
     "execution": "TV2_20260603_121844",
@@ -112,23 +114,29 @@
       "evidencia": "Manifesto contem dois itens M e nenhum item F; nao importa Preencher, UserForms, .frx, Auto_Open, ThisWorkbook, Mod_Types, Importador_V3, Teste_V2_Engine ou Teste_V2_Roteiros."
     },
     {
+      "gate": "Importador V3",
+      "status": "pass_human",
+      "evidencia": "Print humano em 2026-06-06 mostrou Importador V3 OK: modo=Estabilizado, dryRun=Falso, M=2, F=0, err=0, skip=0; backup FULL em \\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260606_104016-V3-FULL."
+    },
+    {
       "gate": "Compile VBAProject",
-      "status": "pending_human",
-      "evidencia": "Pendente de importacao no workbook e compile manual no VBE."
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou compile limpo apos importacao do delta 0144 fix1."
     },
     {
       "gate": "TV2_RunImpressaoResidual",
-      "status": "pending_human",
-      "evidencia": "Pendente de execucao no workbook apos importacao e compile."
+      "status": "pass_human",
+      "evidencia": "Print humano mostrou Suite V2 concluida em TV2_20260606_104057 com OK=6, FALHA=0, MANUAL=0; CSV de falhas nao exportado."
     }
   ],
   "next_decision": [
-    "Operador deve importar o delta 0144, compilar e executar TV2_RunImpressaoResidual.",
-    "Se TV2_RunImpressaoResidual retornar OK=6/FALHA=0/MANUAL=0, registrar evidencia humana e fechar 0144 como verde.",
-    "Se qualquer falha persistir, anexar novo CSV e nao declarar validacao.",
+    "0144 fix1 test-only esta validada por import, compile e TV2 dirigido humano.",
+    "Prosseguir para GATE 2 / 0151 somente com novo readback e hearback, mantendo escrita VBA safe_track humano-aplicada.",
+    "Escopo provavel do GATE 2: residuos finais de impressao apontados apos 0144, incluindo revisao controlada de Quant. '1,' e borda externa esquerda de A25:A45 se a regra final exigir.",
     "Nao declarar freeze V206 sem gate proprio e decisao humana explicita."
   ],
   "created_at": "2026-06-03T12:31:59-03:00",
   "package_ready_at": "2026-06-03T12:31:59-03:00",
-  "completed_at": null
+  "completed_at": "2026-06-06T10:41:00-03:00",
+  "validated_at": "2026-06-06T10:41:00-03:00"
 }
