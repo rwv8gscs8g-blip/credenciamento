@@ -1,0 +1,31 @@
+# Manifesto V3 DELTA ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL - V12.0.0206 Onda 38.2.25
+# Tema: gate completo antes da atuacao tela a tela; RVS oficial inclui TV2_RunImpressaoResidual.
+#
+# Prerequisito operacional:
+#   - GATE 2/0151 importado e validado no workbook alvo.
+#   - O workbook ja contem Teste_V2_Impressao_Residual.bas validado por TV2_20260606_111039.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL", "e157221+ONDA38.2.25-RVS-IMP-RES"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=0 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: CT_ValidarRelease_SextetoMinimo
+#   - Esperado: Gate RVS APROVADO, com ImpressaoResidual=7/0 na sintaxe final.
+#   - Sem UserForm, sem .frx, sem ThisWorkbook.
+#   - Sem Auto_Open, sem Mod_Types, sem Importador_V3.
+#   - Sem Teste_V2_Engine, Teste_V2_Roteiros ou alteracao da suite de impressao residual.
+#   - Sem freeze V206.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/ABH-Teste_Validacao_Release.bas
+#     bytes=46725
+#     sha256=ab593791cc336459c51174b3431449ac96de1f2c113ef972e4fde57648275e37
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=23744
+#     sha256=8100bb7781369bbfe13f6937a50cdb12435f3588ea9c5475ab61d0adc189f54c
+#
+# GRUPO_ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL
+M|001-modulo/ABH-Teste_Validacao_Release.bas
+M|001-modulo/AAX-App_Release.bas

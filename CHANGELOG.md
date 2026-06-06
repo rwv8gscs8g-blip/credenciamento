@@ -7,6 +7,20 @@ tratam apenas da linha pública oficial.
 
 ### Adicionado
 
+- **Onda 38.2.25 — RVS inclui impressão residual** — antes da atuação tela a
+  tela, o gate oficial `CT_ValidarRelease_SextetoMinimo` passa a executar
+  também `TV2_RunImpressaoResidual False, True` após o bloco adversarial Onda
+  23. A nova etapa `V2_IMPRESSAO_RESIDUAL` entra no status geral, na sintaxe
+  final, no bloco copiável para IA e no CSV `ValidacaoReleaseRVS_V12_0_0205_*`.
+  Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL.txt`.
+  Gate humano pendente: importar, compilar e executar
+  `CT_ValidarRelease_SextetoMinimo`, esperado `APROVADO` com
+  `ImpressaoResidual=7/0`. Sem tocar UserForms, `.frx`, `Auto_Open.bas`,
+  `ThisWorkbook`, `Mod_Types.bas`, `Importador_V3.bas`,
+  `Teste_V2_Engine.bas`, `Teste_V2_Roteiros.bas` ou
+  `Teste_V2_Impressao_Residual.bas`. Sem freeze V206 declarado.
+
 - **Onda 38.2.24 — impressão residual Quant./borda code-only** — corrige as
   duas ressalvas conhecidas do GATE 2: `AplicarFormatoQuantidade` passa a usar
   formato inteiro `"0"`, evitando `Quant.` impresso como `1,`; e

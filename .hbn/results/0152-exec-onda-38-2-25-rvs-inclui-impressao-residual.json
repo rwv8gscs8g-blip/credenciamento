@@ -1,0 +1,142 @@
+{
+  "result_id": "0152-exec-onda-38-2-25-rvs-inclui-impressao-residual",
+  "execution_id": "0152-exec-onda-38-2-25-rvs-inclui-impressao-residual",
+  "readback_id": "0152-rb-onda-38-2-25-rvs-inclui-impressao-residual",
+  "data": "2026-06-06",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "rvs_inclui_impressao_residual_package_ready",
+  "human_status": "hearback_confirmed_import_compile_rvs_pending",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "126d806",
+  "build_label": "e157221+ONDA38.2.25-RVS-IMP-RES",
+  "action": "Incorporar TV2_RunImpressaoResidual ao gate oficial de Validacao de Release RVS antes da atuacao tela a tela.",
+  "summary": "A 0152 altera Teste_Validacao_Release.bas para executar TV2_RunImpressaoResidual False, True apos o bloco V2_ONDA23_ADV do RVS oficial. A nova etapa V2_IMPRESSAO_RESIDUAL entra no status geral, sintaxe, bloco copiavel e CSV ValidacaoReleaseRVS. A superficie publica CT_ValidarRelease_SextetoMinimo e o botao RVS permanecem compativeis. O pacote V3 contem apenas Teste_Validacao_Release e App_Release.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Executar CT_ValidarRelease_SextetoMinimo pela Janela Imediata ou pela opcao 1 da Central de Testes.",
+      "Reportar o ID VR, a sintaxe final e anexar CSV se houver falha."
+    ],
+    "status": "pending"
+  },
+  "human_gate_expected": {
+    "import_result": "Importador V3 OK: M=2 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "rvs_macro": "CT_ValidarRelease_SextetoMinimo",
+    "rvs_result": "APROVADO",
+    "rvs_syntax_expected": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0+ImpressaoResidual=7/0",
+    "rvs_csv_pattern": "ValidacaoReleaseRVS_V12_0_0205_VR_*.csv"
+  },
+  "human_gate_observed": {
+    "import_result": "PENDENTE",
+    "compile_result": "PENDENTE",
+    "rvs_execution": "PENDENTE",
+    "rvs_result": "PENDENTE",
+    "rvs_csv": "PENDENTE",
+    "evidence_source": "Aguardando operador humano no workbook."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL.txt",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL\", \"e157221+ONDA38.2.25-RVS-IMP-RES\"",
+    "expected_import_result": "M=2 | F=0 | err=0 | skip=0",
+    "expected_gate": "CT_ValidarRelease_SextetoMinimo",
+    "expected_gate_result": "APROVADO com ImpressaoResidual=7/0",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas",
+        "bytes": 46725,
+        "sha256": "ab593791cc336459c51174b3431449ac96de1f2c113ef972e4fde57648275e37"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23744,
+        "sha256": "8100bb7781369bbfe13f6937a50cdb12435f3588ea9c5475ab61d0adc189f54c"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL.txt",
+        "bytes": 1382,
+        "sha256": "c7e02add15beeb6f99291cf5e0c029cf20971472439bade745640b38c21c8b95"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0152-rb-onda-38-2-25-rvs-inclui-impressao-residual.json",
+    ".hbn/hearbacks/0152-rb-onda-38-2-25-rvs-inclui-impressao-residual-confirmed.json",
+    ".hbn/hearbacks/0152-rb-onda-38-2-25-rvs-inclui-impressao-residual-confirmed.md",
+    ".hbn/results/0152-exec-onda-38-2-25-rvs-inclui-impressao-residual.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_25_rvs_inclui_impressao_residual/0152_TECNICO.md",
+    "CHANGELOG.md",
+    "src/vba/Teste_Validacao_Release.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidencia": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; worktree list aponta 126d806 em codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Readback 0152",
+      "status": "pass_local",
+      "evidencia": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0152-rb-onda-38-2-25-rvs-inclui-impressao-residual.json retornou OK."
+    },
+    {
+      "gate": "Hearback 0152",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: aprovado, pode avancar."
+    },
+    {
+      "gate": "Fonte e espelho Teste_Validacao_Release",
+      "status": "pass_local",
+      "evidencia": "cmp -s entre src/vba/Teste_Validacao_Release.bas e local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas retornou zero."
+    },
+    {
+      "gate": "Fonte e espelho App_Release",
+      "status": "pass_local",
+      "evidencia": "cmp -s entre src/vba/App_Release.bas e local-ai/vba_import/001-modulo/AAX-App_Release.bas retornou zero."
+    },
+    {
+      "gate": "G7/G8",
+      "status": "pass_local",
+      "evidencia": "python3 local-ai/scripts/publicar_vba_import_v2.py check --verbose retornou OK — vba_import 100% sincronizado com src/vba."
+    },
+    {
+      "gate": "Diff whitespace",
+      "status": "pass_local",
+      "evidencia": "git diff --check retornou zero."
+    },
+    {
+      "gate": "Manifesto V3 minimo",
+      "status": "pass_local",
+      "evidencia": "Manifesto contem dois itens M e nenhum item F; nao importa UserForms, .frx, Auto_Open, ThisWorkbook, Mod_Types, Importador_V3, Teste_V2_Engine, Teste_V2_Roteiros ou Teste_V2_Impressao_Residual."
+    },
+    {
+      "gate": "Compile VBAProject",
+      "status": "pending_human",
+      "evidencia": "Pendente de importacao no workbook e compile manual no VBE."
+    },
+    {
+      "gate": "RVS completo",
+      "status": "pending_human",
+      "evidencia": "Pendente de CT_ValidarRelease_SextetoMinimo no workbook apos importacao e compile."
+    }
+  ],
+  "next_decision": [
+    "Operador deve importar o delta 0152, compilar e executar CT_ValidarRelease_SextetoMinimo.",
+    "Se o RVS falhar, anexar CSV ValidacaoReleaseRVS_V12_0_0205_VR_*.csv e nao iniciar atuacao tela a tela.",
+    "Se o RVS passar, registrar o VR_ID e seguir para GATE 3 tela a tela com readback curto por lote de defeitos da mesma tela.",
+    "Nao declarar freeze V206 sem gate proprio e decisao humana explicita."
+  ],
+  "created_at": "2026-06-06T11:30:15-03:00",
+  "package_ready_at": "2026-06-06T11:30:15-03:00",
+  "completed_at": null
+}

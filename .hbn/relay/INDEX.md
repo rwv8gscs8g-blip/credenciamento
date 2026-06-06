@@ -1,12 +1,31 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.6 (§12 Cadencia D Estendida + §12.B por papel + firewall 0022 + CI ratchet 0116)
-proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b`, sincronizou HBN em `d2d7ac5`, entregou Performance/UX basica em `e157221`, consolidou a auditoria cruzada documental 38.2.13, entregou a Onda 38.2.14 behavioralizacao C1, validou a Onda 38.2.15 FT-4 em 2026-06-01, validou 38.2.16 BL-4 via fix1 0133, 0137 fix1, 0139 fix1, 0140 e 0141. Antigravity executou a auditoria cruzada de impressao 0142 apontando 2 BLOQUEADORES nos PDFs; Codex implementou 0143, validou 0144 fix1 test-only por import/compile/`TV2_20260606_104057` e validou 0151 GATE 2 Quant./borda por import/compile/`TV2_20260606_111039`. Linha arquiteto 0114-0117/0149 consolidou firewall, CI ratchet e handoff do Codex; Codex concluiu GATE 0 pelo readback 0150.
-ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE/VALIDADA: 38.2.4 Integridade de Estado -> 38.2.5 UI regras de negocio -> 38.2.6 Integridade de impressao -> 38.2.7 Leitura/exibicao -> 38.2.8 CONFIG baseline seguro -> 38.2.9 snapshot CONFIG V2 -> 38.2.10 higiene/commit -> 38.2.11 sincronizacao HBN pos-commit -> 38.2.12 Performance/UX basica validada por import/compile/TV2 -> 38.2.13 auditoria cruzada consolidada doc-only -> 38.2.14 behavioralizacao C1 validada por import/compile/TV2 -> 38.2.15 FT-4 validada por import/compile/TV2 -> 38.2.16 BL-4 validada via fix1 0133 -> 38.2.18-fix1 validada por VR_20260602_112011 -> 38.2.19-fix1 validada por VR_20260602_182253 -> 38.2.20 validada por TV2_20260602_205320 -> 38.2.21 validada por TV2_20260602_234618 -> 38.2.22 auditoria cruzada de impressao concluida -> 38.2.23 import/compile limpos, TV2 falhou por falso negativo -> 38.2.23-fix1 validada por TV2_20260606_104057 -> 38.2.24 validada por TV2_20260606_111039.
+proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b`, sincronizou HBN em `d2d7ac5`, entregou Performance/UX basica em `e157221`, consolidou a auditoria cruzada documental 38.2.13, entregou a Onda 38.2.14 behavioralizacao C1, validou a Onda 38.2.15 FT-4 em 2026-06-01, validou 38.2.16 BL-4 via fix1 0133, 0137 fix1, 0139 fix1, 0140 e 0141. Antigravity executou a auditoria cruzada de impressao 0142 apontando 2 BLOQUEADORES nos PDFs; Codex implementou 0143, validou 0144 fix1 test-only por import/compile/`TV2_20260606_104057`, validou 0151 GATE 2 Quant./borda por import/compile/`TV2_20260606_111039` e preparou 0152 para incluir impressao residual no RVS oficial. Linha arquiteto 0114-0117/0149 consolidou firewall, CI ratchet e handoff do Codex; Codex concluiu GATE 0 pelo readback 0150.
+ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE/VALIDADA: 38.2.4 Integridade de Estado -> 38.2.5 UI regras de negocio -> 38.2.6 Integridade de impressao -> 38.2.7 Leitura/exibicao -> 38.2.8 CONFIG baseline seguro -> 38.2.9 snapshot CONFIG V2 -> 38.2.10 higiene/commit -> 38.2.11 sincronizacao HBN pos-commit -> 38.2.12 Performance/UX basica validada por import/compile/TV2 -> 38.2.13 auditoria cruzada consolidada doc-only -> 38.2.14 behavioralizacao C1 validada por import/compile/TV2 -> 38.2.15 FT-4 validada por import/compile/TV2 -> 38.2.16 BL-4 validada via fix1 0133 -> 38.2.18-fix1 validada por VR_20260602_112011 -> 38.2.19-fix1 validada por VR_20260602_182253 -> 38.2.20 validada por TV2_20260602_205320 -> 38.2.21 validada por TV2_20260602_234618 -> 38.2.22 auditoria cruzada de impressao concluida -> 38.2.23 import/compile limpos, TV2 falhou por falso negativo -> 38.2.23-fix1 validada por TV2_20260606_104057 -> 38.2.24 validada por TV2_20260606_111039 -> 38.2.25 pacote RVS+ImpressaoResidual pronto para import/compile/RVS.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio APROVADO em VR_20260526_102200. **Anchor de rollback Onda 38.2.2: commit 179bac5**. **Caminho B (rollback) tecnicamente valido se Mauricio escolher**.
-proxima-acao: GATE 3 — iteracao tela a tela com Mauricio; abrir readback curto por lote de defeitos da mesma tela antes de qualquer nova escrita VBA.
-ultima-atualizacao: 2026-06-06T11:11:00-03:00 (GATE 2/0151 validado: Importador V3 M=3/F=0/err=0/skip=0, compile limpo e TV2_20260606_111039 OK=7/FALHA=0/MANUAL=0)
+proxima-acao: Importar 0152, compilar e executar `CT_ValidarRelease_SextetoMinimo`; somente se o RVS ampliado aprovar, iniciar GATE 3 tela a tela com readback curto por lote de defeitos da mesma tela.
+ultima-atualizacao: 2026-06-06T11:30:15-03:00 (0152 pacote pronto: RVS oficial passa a incluir `TV2_RunImpressaoResidual`; gate humano import/compile/RVS pendente)
 ---
+
+## 🟡 GATE PRE-TELA / 0152 — RVS inclui impressao residual (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟡 PACOTE PRONTO / GATE HUMANO PENDENTE |
+| Track | safe_track |
+| Readback | [`0152-rb-onda-38-2-25-rvs-inclui-impressao-residual.json`](../readbacks/0152-rb-onda-38-2-25-rvs-inclui-impressao-residual.json) — **human_status: confirmed** |
+| Hearback | [`0152-rb-onda-38-2-25-rvs-inclui-impressao-residual-confirmed.json`](../hearbacks/0152-rb-onda-38-2-25-rvs-inclui-impressao-residual-confirmed.json) |
+| Tecnico | [`0152_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_25_rvs_inclui_impressao_residual/0152_TECNICO.md) |
+| ERP | [`0152-exec-onda-38-2-25-rvs-inclui-impressao-residual.json`](../results/0152-exec-onda-38-2-25-rvs-inclui-impressao-residual.json) — `package_ready_gate_pending` |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL.txt) |
+| Motivo | Mauricio pediu um teste completo antes da atuacao tela a tela e perguntou se os novos testes deveriam entrar no RVS geral |
+| Decisao aplicada | Sim: `CT_ValidarRelease_SextetoMinimo` passa a executar `TV2_RunImpressaoResidual False, True` como etapa `V2_IMPRESSAO_RESIDUAL` |
+| Build | `e157221+ONDA38.2.25-RVS-IMP-RES` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL", "e157221+ONDA38.2.25-RVS-IMP-RES"` |
+| Nao tocar | UserForms, `.frx`, `Auto_Open.bas`, `ThisWorkbook`, `Mod_Types.bas`, `Importador_V3.bas`, `Teste_V2_Engine.bas`, `Teste_V2_Roteiros.bas`, `Teste_V2_Impressao_Residual.bas`, template workbook manual |
+| Gate humano esperado | Importador V3 `M=2 | F=0 | err=0`; compile limpo; `CT_ValidarRelease_SextetoMinimo` APROVADO com `ImpressaoResidual=7/0` |
+| Veredito atual | Pacote pronto; nao iniciar GATE 3 tela a tela ate o RVS ampliado passar |
 
 ## 🟢 GATE 2 / 0151 VALIDADO — impressao residual Quant./borda code-only (NOVO)
 

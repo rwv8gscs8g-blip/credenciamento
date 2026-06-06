@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0152-rb-onda-38-2-25-rvs-inclui-impressao-residual-confirmed",
+  "readback_id": "0152-rb-onda-38-2-25-rvs-inclui-impressao-residual",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-06T11:24:52-03:00",
+  "notes": "Mauricio confirmou em chat: aprovado, pode avancar. Tambem perguntou se seria adequado rodar teste completo antes da atuacao tela a tela e incluir os novos testes no RVS geral. Escopo confirmado: incorporar TV2_RunImpressaoResidual ao gate oficial RVS, sem UserForms, .frx, workbook/template manual, Auto_Open, Mod_Types, Importador_V3, Teste_V2_Engine, Teste_V2_Roteiros ou alteracao da suite de impressao ja validada."
+}

@@ -1,0 +1,152 @@
+{
+  "readback_id": "0152-rb-onda-38-2-25-rvs-inclui-impressao-residual",
+  "data": "2026-06-06",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0151-rb-onda-38-2-24-impressao-residual-quant-borda-codeonly",
+  "intent": {
+    "objective": "Incorporar a suite TV2_RunImpressaoResidual ao gate oficial de Validacao de Release RVS antes da atuacao tela a tela, preservando a superficie publica CT_ValidarRelease_SextetoMinimo.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao iniciar V207",
+      "Nao alterar as regras de negocio ou os fluxos tela a tela",
+      "Nao tocar Auto_Open.bas, ThisWorkbook, Mod_Types.bas ou Importador_V3.bas",
+      "Nao tocar UserForms, .frx, objetos de planilha ou template workbook manual",
+      "Nao alterar Teste_V2_Engine.bas, Teste_V2_Roteiros.bas ou a suite TV2_RunImpressaoResidual ja validada",
+      "Nao reabrir os ajustes funcionais de impressao residual validados no GATE 2/0151"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0152-rb-onda-38-2-25-rvs-inclui-impressao-residual.json",
+      ".hbn/hearbacks/0152-rb-onda-38-2-25-rvs-inclui-impressao-residual-confirmed.json",
+      ".hbn/hearbacks/0152-rb-onda-38-2-25-rvs-inclui-impressao-residual-confirmed.md",
+      ".hbn/results/0152-exec-onda-38-2-25-rvs-inclui-impressao-residual.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_25_rvs_inclui_impressao_residual/**",
+      "CHANGELOG.md",
+      "src/vba/Teste_Validacao_Release.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook.code.txt",
+      "src/vba/*.frm",
+      "src/vba/*.frx",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Teste_V2_Impressao_Residual.bas",
+      "local-ai/vba_import/002-formularios/**",
+      "local-ai/vba_import/003-objetos/**",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/ABT-Teste_V2_Impressao_Residual.bas",
+      "**/*.frm",
+      "**/*.frx",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "incoming/**",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "after_hearback": [
+      "Alterar CT_ValidarRelease_SextetoMinimo para executar TV2_RunImpressaoResidual False, True apos o bloco Onda 23 adversarial.",
+      "Registrar a nova etapa como V2_IMPRESSAO_RESIDUAL em VALIDACAO_RELEASE.",
+      "Incluir a nova etapa no status geral, sintaxe, bloco copiavel e CSV ValidacaoReleaseRVS.",
+      "Atualizar App_Release, espelhos importaveis, manifesto V3, tecnico, CHANGELOG, ERP e relay."
+    ],
+    "human_gate_expected": [
+      "ImportarPacoteV3_Delta \"ONDA38_2_25_RVS_IMPRESSAO_RESIDUAL\", \"e157221+ONDA38.2.25-RVS-IMP-RES\"",
+      "VBE Debug > Compile VBAProject limpo.",
+      "Executar CT_ValidarRelease_SextetoMinimo pela Janela Imediata ou opcao 1 da Central de Testes.",
+      "Esperado: RVS APROVADO com ImpressaoResidual=7/0 na sintaxe final."
+    ],
+    "stop_conditions": [
+      "Se a inclusao exigir alterar Teste_V2_Engine, Teste_V2_Roteiros ou a suite de impressao residual, parar e abrir novo readback.",
+      "Se o compile indicar que o workbook alvo nao contem TV2_RunImpressaoResidual, parar e confirmar se o GATE 2/0151 foi aplicado.",
+      "Se o RVS falhar, nao iniciar atuacao tela a tela; anexar CSV e corrigir a primeira falha em novo readback."
+    ]
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "0151 permanece validada por Importador V3, compile limpo e TV2_20260606_111039 OK=7/FALHA=0/MANUAL=0",
+    "A superficie publica CT_ValidarRelease_SextetoMinimo e o botao RVS permanecem compativeis",
+    "UserForms, .frx, Auto_Open, Mod_Types, Importador_V3, Teste_V2_Engine, Teste_V2_Roteiros e Teste_V2_Impressao_Residual permanecem intocados"
+  ],
+  "risks": [
+    {
+      "risk": "O RVS fica mais longo e pode expor falhas latentes antes da atuacao tela a tela.",
+      "mitigation": "Esse e o objetivo do gate completo; se falhar, parar e tratar a primeira falha antes de seguir.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Workbooks que nao receberam o GATE 2/0151 podem nao ter a macro TV2_RunImpressaoResidual disponivel.",
+      "mitigation": "Declarar prerequisito operacional: aplicar depois de 0151 validado; compile manual e a primeira barreira.",
+      "severity": "medium"
+    },
+    {
+      "risk": "A sintaxe historica do RVS muda ao adicionar ImpressaoResidual=7/0.",
+      "mitigation": "Registrar a mudanca no bloco copiavel, CSV, tecnico e CHANGELOG, mantendo o nome publico do gate.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0152 valido contra schema HBN",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0152-exec-onda-38-2-25-rvs-inclui-impressao-residual.json"
+      },
+      {
+        "gate": "Hearback 0152 confirmado por Mauricio antes de editar codigo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0152-rb-onda-38-2-25-rvs-inclui-impressao-residual-confirmed.json"
+      },
+      {
+        "gate": "Fonte e espelho VBA sincronizados para Teste_Validacao_Release e App_Release",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0152-exec-onda-38-2-25-rvs-inclui-impressao-residual.json"
+      },
+      {
+        "gate": "Manifesto V3 sem item F e sem UserForms",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0152-exec-onda-38-2-25-rvs-inclui-impressao-residual.json"
+      },
+      {
+        "gate": "CT_ValidarRelease_SextetoMinimo retorna APROVADO com ImpressaoResidual=7/0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0152-exec-onda-38-2-25-rvs-inclui-impressao-residual.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se o compile falhar, nao salvar o workbook e restaurar pelo backup V3 anterior ao delta 0152.",
+      "Se o RVS falhar, anexar CSV e parar a atuacao tela a tela ate novo readback corretivo.",
+      "Se a nova etapa for considerada pesada demais para o gate ordinario, abrir readback para criar alias RVS ampliado sem desfazer evidencia ja gerada."
+    ],
+    "anchor_to_restore": "Estado apos GATE 2/0151: commit 126d806; build e157221+ONDA38.2.24-IMP-RES-QTD-BORDA; TV2_20260606_111039 OK=7/FALHA=0/MANUAL=0."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Mauricio confirmou em chat em 2026-06-06: aprovado, pode avancar, e perguntou se e adequado rodar teste completo antes da atuacao tela a tela e incluir os novos testes no RVS geral.",
+    "gate2_result": "0151 validada por Importador V3 M=3/F=0/err=0/skip=0, compile limpo e TV2_20260606_111039 OK=7/FALHA=0/MANUAL=0.",
+    "decision": "Sim: antes do GATE 3 tela a tela, rodar RVS completo; e incluir TV2_RunImpressaoResidual no RVS oficial para nao ficar teste avulso."
+  },
+  "created_at": "2026-06-06T11:24:52-03:00"
+}

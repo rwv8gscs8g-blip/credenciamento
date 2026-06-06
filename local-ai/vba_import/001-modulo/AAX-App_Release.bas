@@ -260,9 +260,10 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0205|OFICIAL|V12.0.0206"
 ' IR_03 valida L9:P15 visual e mantem L8 apenas como diagnostico.
 ' V12.0.0206 ONDA 38.2.24 - Impressao residual quant/borda code-only:
 ' Quant. usa formato inteiro; A25:A45 recebe borda externa esquerda media.
-Public Const APP_BUILD_IMPORTADO As String = "e157221+ONDA38.2.24-IMP-RES-QTD-BORDA"
+' V12.0.0206 ONDA 38.2.25 - RVS inclui TV2_RunImpressaoResidual.
+Public Const APP_BUILD_IMPORTADO As String = "e157221+ONDA38.2.25-RVS-IMP-RES"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0206-planejamento"
-Public Const APP_BUILD_GERADO_EM As String = "2026-06-06 11:09"
+Public Const APP_BUILD_GERADO_EM As String = "2026-06-06 11:24"
 Public Const APP_RELEASE_TAG As String = "v12.0.0205"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0205"
 Public Const APP_RELEASE_TEST_KEY As String = "rvs-v205-final-2026-05-21"
