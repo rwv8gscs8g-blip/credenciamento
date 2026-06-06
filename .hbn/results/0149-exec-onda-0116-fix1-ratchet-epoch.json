@@ -7,9 +7,9 @@
   "agent_note": "Sessão real: Claude Opus 4.8 via Cowork (enum 1.0.0 — ver item A5).",
   "track": "fast_track",
   "version_target": "V12.0.0206",
-  "status": "executed_commit_pending_operator",
+  "status": "executed_commit_observed_ci_pending",
   "outcome": "ratchet_epoch_0149_ci_primeiro_run_desbloqueado",
-  "human_status": "hearback_confirmed_commit_pending",
+  "human_status": "hearback_confirmed_commit_observed",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "head_observed": "7cff187 (pushed: 27237e4..7cff187)",
@@ -28,9 +28,9 @@
     "R3_contratos_0149_estritos": "exit 0 — válidos no schema 1.0.0"
   },
   "human_gate_observed": {
-    "commit_sha": "PENDENTE — fechamento no GATE 0 do Codex (doc 127), junto com 0147/0148",
-    "first_ci_run": "PENDENTE — Mauricio confere Actions após o push do fix",
-    "evidence_source": "Aguardando operador."
+    "commit_sha": "e2b8700",
+    "first_ci_run": "PENDENTE — será conferido após o push do GATE 0",
+    "evidence_source": "git log local confirmado por Codex no GATE 0."
   },
   "created_at": "2026-06-05T21:10:00-03:00"
 }

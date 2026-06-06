@@ -1,12 +1,32 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
-versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.5 (§12 Cadencia D Estendida + §12.B por papel + registro de bastao fundido no handoff 0014)
-proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b` (`chore: consolidar ondas 38.2.4 a 38.2.10`) em 2026-06-01 00:10 BRT e sincronizou HBN no commit `d2d7ac5` (`docs: sincronizar hbn apos ondas 38.2.10`). Estado validado: raiz canonica OK; GATE-A4 segue sem liberar freeze; ondas 38.2.4 a 38.2.9 importadas, compiladas e testadas por Mauricio; Onda 38.2.10 higienizou repositorio e commitou sem tocar Auto_Open, Mod_Types ou Importador_V3.
-ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE: 38.2.4 Integridade de Estado -> 38.2.5 UI regras de negocio -> 38.2.6 Integridade de impressao -> 38.2.7 Leitura/exibicao -> 38.2.8 CONFIG baseline seguro -> 38.2.9 snapshot CONFIG V2 -> 38.2.10 higiene/commit -> 38.2.11 sincronizacao HBN pos-commit -> 38.2.12 Performance/UX basica validada por import/compile/TV2. Convencao: build label `<HEAD>+ONDA<N>` ou `<HEAD>+ONDA<N>.fix<NN>` SEM sufixo "FREEZE".
+versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.6 (§12 Cadencia D Estendida + §12.B por papel + firewall 0022 + CI ratchet 0116)
+proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b`, sincronizou HBN em `d2d7ac5`, entregou Performance/UX basica em `e157221`, consolidou a auditoria cruzada documental 38.2.13, entregou a Onda 38.2.14 behavioralizacao C1, validou a Onda 38.2.15 FT-4 em 2026-06-01, validou 38.2.16 BL-4 via fix1 0133, 0137 fix1, 0139 fix1, 0140 e 0141. Antigravity executou a auditoria cruzada de impressao 0142 apontando 2 BLOQUEADORES nos PDFs; Codex implementou 0143 e preparou 0144 fix1 test-only apos falso negativo de IR_03. Linha arquiteto 0114-0117/0149 consolidou firewall, CI ratchet e handoff do Codex; Codex iniciou GATE 0 pelo readback 0150.
+ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE/VALIDADA: 38.2.4 Integridade de Estado -> 38.2.5 UI regras de negocio -> 38.2.6 Integridade de impressao -> 38.2.7 Leitura/exibicao -> 38.2.8 CONFIG baseline seguro -> 38.2.9 snapshot CONFIG V2 -> 38.2.10 higiene/commit -> 38.2.11 sincronizacao HBN pos-commit -> 38.2.12 Performance/UX basica validada por import/compile/TV2 -> 38.2.13 auditoria cruzada consolidada doc-only -> 38.2.14 behavioralizacao C1 validada por import/compile/TV2 -> 38.2.15 FT-4 validada por import/compile/TV2 -> 38.2.16 BL-4 validada via fix1 0133 -> 38.2.18-fix1 validada por VR_20260602_112011 -> 38.2.19-fix1 validada por VR_20260602_182253 -> 38.2.20 validada por TV2_20260602_205320 -> 38.2.21 validada por TV2_20260602_234618 -> 38.2.22 auditoria cruzada de impressao concluida -> 38.2.23 import/compile limpos, TV2 falhou por falso negativo -> 38.2.23-fix1 test-only pronto para rerun.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio APROVADO em VR_20260526_102200. **Anchor de rollback Onda 38.2.2: commit 179bac5**. **Caminho B (rollback) tecnicamente valido se Mauricio escolher**.
-proxima-acao: fechar commit da Onda 38.2.12 e abrir novo readback safe_track para a proxima micro-onda. FT-4 credenciamento em lote permanece fora da 38.2.12 e deve ser tratado separadamente. Freeze V206 continua bloqueado.
-ultima-atualizacao: 2026-06-01T00:42:00-0300 (Onda 38.2.12 importada, compilada e testada por Mauricio: TV2_20260601_004135 OK=5/FALHA=0/MANUAL=0; freeze V206 ainda bloqueado)
+proxima-acao: Concluir push do GATE 0, observar primeiro run do `.github/workflows/hbn-guards-ci.yml`; em seguida operador importar delta 0144 fix1, compilar VBAProject e executar `TV2_RunImpressaoResidual`; esperado `OK=6 | FALHA=0 | MANUAL=0`.
+ultima-atualizacao: 2026-06-06T10:24:09-03:00 (GATE 0 0150 em consolidacao; 0144 fix1 test-only segue como rerun humano pendente)
 ---
+
+## 🟢 GATE 0 / 0150 — consolidacao do working tree V206 e ponte arquiteto 0114-0117 (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 GATE 0 EM CONSOLIDACAO |
+| Track | fast_track historica com codigo ja validado por gates humanos anteriores |
+| Readback | [`0150-rb-onda-gate0-consolidacao-working-tree-v206.json`](../readbacks/0150-rb-onda-gate0-consolidacao-working-tree-v206.json) — **human_status: confirmed** |
+| Hearback | [`0150-gate0-consolidacao-working-tree-v206.json`](../hearbacks/0150-gate0-consolidacao-working-tree-v206.json) |
+| Origem | Prompt canônico do doc 127 + ponte `.hbn/messages/20260605-1950-ponte-estado-protocolo-para-codex.md` |
+| Commits ja criados | `d0fccbe` contratos HBN 38.2/0150; `a27492b` codigo+espelho VBA; `b2c18ef` docs/evidencias |
+| Onda arquiteto 0114 | `5ad07fe` — knowledge 0021: guards em sandbox informativos; commit no Terminal do operador |
+| Onda arquiteto 0115 | `8204fe9` — knowledge 0022 FIREWALL: workflows automaticos so fast_track; escrita safe_track humano-aplicada |
+| Onda arquiteto 0116 | `5b5b9a7` — CI hbn-guards: contratos ratchet + scope-lock por commit |
+| Onda arquiteto 0117 | `7cff187` — organizacao, doc 126 V207, doc 127 handoff Codex |
+| Micro-onda 0149 | `e2b8700` — epoca do ratchet; contratos 0149+ estritos no CI |
+| Incoming | `incoming/workbook_ref_20260602_compila_bo330_v1falha/` movido para `auditoria/04_evidencias/V12.0.0206/workbook_ref_20260602_compila_bo330_v1falha/` como evidencia; nao e origem de importacao |
+| Checagem G7/G8 | `python3 local-ai/scripts/publicar_vba_import_v2.py check --verbose` retornou `OK — vba_import 100% sincronizado com src/vba` apos entrada explicita de `UX_IniciarSistema` no mapa |
+| Pendente | Commit final de relay/ERPs/ERP 0150, push e observacao do primeiro CI |
+| Proxima acao apos GATE 0 | GATE 1: operador importar 0144 fix1, compilar e executar `TV2_RunImpressaoResidual` |
 
 ## ✅ HBN ACTIVE — CODEX ASSUMIU BASTÃO V206 / ONDA 38.2.3 (NOVO)
 
@@ -32,13 +52,354 @@ ultima-atualizacao: 2026-06-01T00:42:00-0300 (Onda 38.2.12 importada, compilada 
 | Readback 38.2.10 | [`0126-rb-onda-38-2-10-higiene-repositorio.json`](../readbacks/0126-rb-onda-38-2-10-higiene-repositorio.json) — **human_status: confirmed** |
 | Readback 38.2.11 | [`0127-rb-onda-38-2-11-sync-hbn-pos-commit.json`](../readbacks/0127-rb-onda-38-2-11-sync-hbn-pos-commit.json) — **human_status: confirmed** |
 | Readback 38.2.12 | [`0128-rb-onda-38-2-12-performance-ux-basica.json`](../readbacks/0128-rb-onda-38-2-12-performance-ux-basica.json) — **human_status: confirmed** |
+| Readback 38.2.13 | [`0129-rb-onda-38-2-13-auditoria-cruzada-consolidada.json`](../readbacks/0129-rb-onda-38-2-13-auditoria-cruzada-consolidada.json) — **human_status: confirmed** |
+| Readback 38.2.14 | [`0130-rb-onda-38-2-14-behavioralizacao-c1.json`](../readbacks/0130-rb-onda-38-2-14-behavioralizacao-c1.json) — **human_status: confirmed** |
+| Readback 38.2.15 | [`0131-rb-onda-38-2-15-ft4-credenciamento-lote.json`](../readbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote.json) — **human_status: confirmed** |
+| Readback 38.2.16 | [`0132-rb-onda-38-2-16-bl4-protecao-persistente.json`](../readbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente.json) — **human_status: confirmed** |
+| Readback 38.2.16-fix1 | [`0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker.json`](../readbacks/0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker.json) — **human_status: confirmed** |
+| Readback 38.2.17 | [`0134-rb-onda-38-2-17-formularios-avaliacao-demandante.json`](../readbacks/0134-rb-onda-38-2-17-formularios-avaliacao-demandante.json) — **human_status: confirmed** |
+| Readback 38.2.17-fix1 | [`0135-rb-onda-38-2-17-fix1-form-avaliacao-compile-crash.json`](../readbacks/0135-rb-onda-38-2-17-fix1-form-avaliacao-compile-crash.json) — **human_status: pending / supersedido operacionalmente** |
+| Readback 38.2.18 | [`0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico.json`](../readbacks/0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico.json) — **human_status: confirmed** |
+| Readback 38.2.18-fix1 | [`0137-rb-onda-38-2-18-fix1-bo330-status-canonico.json`](../readbacks/0137-rb-onda-38-2-18-fix1-bo330-status-canonico.json) — **human_status: confirmed** |
+| Readback 38.2.19 | [`0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro.json`](../readbacks/0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro.json) — **human_status: confirmed** |
+| Readback 38.2.19-fix1 | [`0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais.json`](../readbacks/0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais.json) — **human_status: confirmed** |
+| Readback 38.2.20 | [`0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly.json`](../readbacks/0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly.json) — **human_status: confirmed / validada** |
+| Readback 38.2.21 | [`0141-rb-onda-38-2-21-formularios-residuais-codeonly.json`](../readbacks/0141-rb-onda-38-2-21-formularios-residuais-codeonly.json) — **human_status: confirmed / validada** |
+| Readback 38.2.22 | [`0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json`](../readbacks/0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json) — **human_status: confirmed** |
+| Readback 38.2.23 | [`0143-rb-onda-38-2-23-impressao-residual-codeonly-template.json`](../readbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template.json) — **human_status: confirmed / import+compile ok, TV2 falhou por falso negativo** |
+| Readback 38.2.23-fix1 | [`0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly.json`](../readbacks/0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly.json) — **human_status: confirmed / pacote pronto, rerun pendente** |
 | Mensagem | [`.hbn/messages/20260527-1408-codex-assumiu-bastao-v206.md`](../messages/20260527-1408-codex-assumiu-bastao-v206.md) |
 | Entrega GATE-A1 | [`.hbn/proposals/0013-codex-at1-gerador-codeonly.md`](../proposals/0013-codex-at1-gerador-codeonly.md) |
 | Auditorias GATE-A1 | [Opus 0014](../proposals/0014-opus-auditoria-gate-a1-onda-38-2-3.md) + [Antigravity 0015](../proposals/0015-antigravity-auditoria-gate-a1-onda-38-2-3.md) — aprovadas |
 | Entrega GATE-A2 | [Codex 0016](../proposals/0016-codex-at2-diagnostico-fnew5.md) + [Opus 0017](../proposals/0017-opus-auditoria-gate-a2-onda-38-2-3.md) + [Antigravity 0018](../proposals/0018-antigravity-auditoria-gate-a2-onda-38-2-3.md) + [Opus reauditoria 0019](../proposals/0019-opus-reauditoria-gate-a2-onda-38-2-3.md) — aprovadas |
 | Entrega GATE-A3 | [Opus 0020](../proposals/0020-opus-auditoria-gate-a3-onda-38-2-3.md) + [Antigravity 0021](../proposals/0021-antigravity-auditoria-gate-a3-onda-38-2-3.md) — aprovadas sem BLOQUEADORES |
 | Head observado | `27237e4` — doc-only posterior a `ce5879e`; predecessor de codigo V206 preservado |
-| Proxima acao | Mauricio executa uso prolongado L43 por pelo menos 30 min e depois RVS completo final pos-uso |
+| Head observado atual | `e157221` — Performance/UX basica 38.2.12; 38.2.13 e doc-only posterior |
+| Proxima acao | Operador importar delta 0144 fix1, compilar e executar `TV2_RunImpressaoResidual`. |
+
+## 🟡 ONDA 38.2.23-FIX1 PRONTA — impressao residual teste-only (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟡 RERUN HUMANO PENDENTE |
+| Track | safe_track |
+| Readback | [`0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly.json`](../readbacks/0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly.json) — **human_status: confirmed** |
+| Hearback | [`0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly-confirmed.json`](../hearbacks/0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly-confirmed.json) |
+| Tecnico | [`0144_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_23_fix1_impressao_residual_testeonly/0144_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_23_FIX1_IMPRESSAO_RESIDUAL_TESTEONLY.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_23_FIX1_IMPRESSAO_RESIDUAL_TESTEONLY.txt) |
+| Origem | 0143 importou e compilou; `TV2_RunImpressaoResidual` retornou `OK=5 | FALHA=1` em `IR_03` |
+| Diagnostico | CSV `TesteV2_IMPRESSAO_RESIDUAL_Falhas_TV2_20260603_121844.csv`: `L9_VISUAL=esperado`, `MERGE_L9=Verdadeiro`, `L8=` vazio |
+| Decisao aplicada | Fix test-only: `IR_03` valida `L9:P15` visual; `L8` permanece apenas em detalhes diagnosticos |
+| Build | `e157221+ONDA38.2.23-FIX1-IMP-RES-TEST` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_23_FIX1_IMPRESSAO_RESIDUAL_TESTEONLY", "e157221+ONDA38.2.23-FIX1-IMP-RES-TEST"` |
+| Nao tocar | `Preencher.bas`, `Auto_Open.bas`, `ThisWorkbook`, `Mod_Types.bas`, `Importador_V3.bas`, UserForms, `.frx`, `Teste_V2_Engine`, `Teste_V2_Roteiros` |
+| Teste dirigido | `TV2_RunImpressaoResidual` esperado `OK=6 | FALHA=0 | MANUAL=0` |
+| Veredito atual | Pacote pronto; aguardando import, compile e rerun humano no workbook |
+
+## 🟡 ONDA 38.2.23 IMPLEMENTADA — impressao residual code-only/template (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🔴 GATE HUMANO FALHOU NO V2 DIRIGIDO |
+| Track | safe_track |
+| Readback | [`0143-rb-onda-38-2-23-impressao-residual-codeonly-template.json`](../readbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template.json) — **human_status: confirmed** |
+| Hearback | [`0143-rb-onda-38-2-23-impressao-residual-codeonly-template-confirmed.json`](../hearbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template-confirmed.json) |
+| Tecnico | [`0143_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_23_impressao_residual_codeonly_template/0143_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_23_IMPRESSAO_RESIDUAL_CODEONLY_TEMPLATE.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_23_IMPRESSAO_RESIDUAL_CODEONLY_TEMPLATE.txt) |
+| Origem | Auditoria 0142 fechou dois bloqueadores de impressao e dois residuos visuais nos PDFs 001/002/003 |
+| Bloqueadores | `IMP_AVALIA` demandante vazio por escrita em `L8` enquanto o template visual usa `L9:P15`; `EMITE_OS` total final visual em `N63:P63` imprime `-` apesar de item com R$ 100,00 |
+| Marginais | Bordas cinza/descontinuas em `EMITE_PREOS!C9/C11`; borda esquerda ausente em `IMP_AVALIA!A25:A45` |
+| Diretriz | Code-only primeiro: `Preencher.bas`, `App_Release`, modulo V2 isolado e manifesto V3; parar se exigir edicao direta de workbook/template |
+| Nao tocar | `Auto_Open.bas`, `ThisWorkbook`, `Mod_Types.bas`, `Importador_V3.bas`, `Menu_Principal.frm`, `Credencia_Empresa.frm`, qualquer UserForm, `.frx`, `Teste_V2_Engine`, `Teste_V2_Roteiros` |
+| Build | `e157221+ONDA38.2.23-IMP-RES-CODE` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_23_IMPRESSAO_RESIDUAL_CODEONLY_TEMPLATE", "e157221+ONDA38.2.23-IMP-RES-CODE"` |
+| Teste dirigido | `TV2_RunImpressaoResidual` retornou `OK=5 | FALHA=1 | MANUAL=0` em `TV2_20260603_121844` |
+| Falha | `IR_03_AVALIACAO_DEMANDANTE_L9P15`: falso negativo test-only; `L9_VISUAL=esperado`, `MERGE_L9=Verdadeiro`, `L8=` vazio |
+| Veredito atual | Correcao funcional importou/compilou; gate V2 dirigido sera reexecutado via 0144 fix1 |
+
+## 🟡 ONDA 38.2.22 CONSOLIDADA — auditoria cruzada 0136-0141 e impressao (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟡 FREEZE BLOQUEADO |
+| Track | fast_track doc-only |
+| Readback | [`0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json`](../readbacks/0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json) — **human_status: confirmed** |
+| Hearback | [`0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao-confirmed.json`](../hearbacks/0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao-confirmed.json) |
+| Tecnico | [`0142_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_22_auditoria_cruzada_0136_0141_impressao/0142_TECNICO.md) |
+| ERP | [`0142-exec-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json`](../results/0142-exec-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json) — `completed` |
+| Motivo | Avaliar qualidade das ondas 136-141 e investigar as causas-raiz de falhas documentais nos PDFs de OS/impressao e a cegueira dos testes dirigidos. |
+| Decisao aplicada | Auditoria aponta 2 BLOQUEADORES (Demandante vazio na Avaliacao, OS com total zerado) e 2 MARGINAIS. Identificado que os testes de impressao validam apenas funcoes em memoria e tokens de codigo, e nao celulas reais. A correcao foi aberta e implementada na 38.2.23, ainda pendente de gate humano. |
+| Veredito atual | 38.2.22 consolidada; freeze V206 segue bloqueado. |
+
+## 🟢 ONDA 38.2.21 VALIDADA — formularios residuais code-only (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 GATE HUMANO VERDE |
+| Track | safe_track |
+| Readback | [`0141-rb-onda-38-2-21-formularios-residuais-codeonly.json`](../readbacks/0141-rb-onda-38-2-21-formularios-residuais-codeonly.json) — **human_status: confirmed** |
+| Hearback | [`0141-rb-onda-38-2-21-formularios-residuais-codeonly-confirmed.json`](../hearbacks/0141-rb-onda-38-2-21-formularios-residuais-codeonly-confirmed.json) |
+| Tecnico | [`0141_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_21_formularios_residuais_codeonly/0141_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_21_FORMULARIOS_RESIDUAIS_CODEONLY.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_21_FORMULARIOS_RESIDUAIS_CODEONLY.txt) |
+| ERP | [`0141-exec-onda-38-2-21-formularios-residuais-codeonly.json`](../results/0141-exec-onda-38-2-21-formularios-residuais-codeonly.json) — `completed` |
+| Motivo | Retomar estabilizacao dos formularios V206 depois de 0140 verde, sem repetir importacao de UserForm completo que causou crash em 0134/38.2.17 |
+| Decisao aplicada | `Svc_Avaliacao.AvaliarOS` resolve demandante por `OS_ID` quando avaliador vier vazio; novo modulo isolado `Teste_V2_Formularios_Residuais` cobre duas OS/demandantes, estado global obsoleto e negativo de ENT_ID inexistente |
+| Build | `e157221+ONDA38.2.21-FORM-RES-CODE` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_21_FORMULARIOS_RESIDUAIS_CODEONLY", "e157221+ONDA38.2.21-FORM-RES-CODE"` |
+| Nao importar | `Auto_Open.bas`, `ThisWorkbook`, `Menu_Principal.frm`, `Credencia_Empresa.frm`, qualquer UserForm, `.frx`, `Mod_Types`, `Importador_V3`, `Teste_V2_Engine`, `Teste_V2_Roteiros` |
+| Gate humano | Importacao executada; compile limpo; `TV2_20260602_234618` retornou `OK=6 | FALHA=0 | MANUAL=0`; sem CSV de falhas |
+| Veredito atual | 38.2.21 validada por V2 dirigido; freeze V206 segue bloqueado |
+
+## 🟢 ONDA 38.2.20 VALIDADA — UX IniciarSistema code-only (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 GATE HUMANO VERDE |
+| Track | safe_track |
+| Readback | [`0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly.json`](../readbacks/0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly.json) — **human_status: confirmed** |
+| Hearback | [`0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly-confirmed.json`](../hearbacks/0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly-confirmed.json) |
+| Tecnico | [`0140_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_20_ux_iniciar_sistema_codeonly/0140_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_20_UX_INICIAR_SISTEMA_CODEONLY.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_20_UX_INICIAR_SISTEMA_CODEONLY.txt) |
+| ERP | [`0140-exec-onda-38-2-20-ux-iniciar-sistema-codeonly.json`](../results/0140-exec-onda-38-2-20-ux-iniciar-sistema-codeonly.json) — `completed` |
+| Motivo | Pedido humano pendente: forma visual na planilha para acionar `IniciarSistema` quando o usuario esta apenas olhando dados |
+| Decisao aplicada | Modulo padrao novo `UX_IniciarSistema` para instalar/atualizar atalho visual de planilha via `Shape.OnAction`, mais modulo V2 isolado `Teste_V2_UX_IniciarSistema` |
+| Build | `e157221+ONDA38.2.20-UX-INICIAR-CODE` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_20_UX_INICIAR_SISTEMA_CODEONLY", "e157221+ONDA38.2.20-UX-INICIAR-CODE"` |
+| Nao importar | `Auto_Open.bas`, `ThisWorkbook`, `Menu_Principal.frm`, qualquer UserForm, `.frx`, `Svc_Avaliacao`, `Preencher`, `Mod_Types`, `Importador_V3`, `Teste_V2_Engine`, `Teste_V2_Roteiros` |
+| Gate humano | Importacao executada; compile limpo; `TV2_20260602_205320` retornou `OK=5 | FALHA=0 | MANUAL=0`; sem CSV de falhas |
+| Proxima acao operacional | Se a UX for retomada, ajustar instalador para ativar/selecionar o shape; por ora seguir para formularios conforme pedido humano |
+| Observacao pos-instalacao | Janela Imediata confirmou `RESULTADO_QA_V2`, `ContarAtalhos=1` e `OnAction=IniciarSistema`; Mauricio localizou o botao em `J1` e confirmou funcionamento |
+| Veredito atual | 38.2.20 validada por V2 dirigido; freeze V206 segue bloqueado |
+
+## 🟢 ONDA 38.2.19-FIX1 VALIDADA — form avaliacao IdsIguais no teste (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 GATE HUMANO VERDE |
+| Track | safe_track |
+| Readback | [`0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais.json`](../readbacks/0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais.json) — **human_status: confirmed** |
+| Hearback | [`0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais-confirmed.json`](../hearbacks/0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais-confirmed.json) |
+| Tecnico | [`0139_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_19_fix1_form_avaliacao_idsiguais/0139_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_19_FIX1_FORM_AVALIACAO_IDSIGUAIS.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FIX1_FORM_AVALIACAO_IDSIGUAIS.txt) |
+| ERP | [`0139-exec-onda-38-2-19-fix1-form-avaliacao-idsiguais.json`](../results/0139-exec-onda-38-2-19-fix1-form-avaliacao-idsiguais.json) — `completed` |
+| Motivo | 0138 importou e compilou, mas `TV2_20260602_125043` retornou `OK=3 | FALHA=2 | MANUAL=0`; CSV mostra comparacao textual estrita de `OS_ID=001` no teste isolado |
+| Diagnostico | `FAM_02` e `FAM_04` passaram; resolver de demandante e fallback de payload funcionaram. Falharam `FAM_03` e `FAM_05` porque helpers do teste buscaram `OS_ID` com comparacao textual em vez de `IdsIguais` |
+| Decisao aplicada | Fix test-only em `Teste_V2_Form_Avaliacao_Modulos`: usar `IdsIguais` em `TV2_FAM_LerDemandanteLista` e `TV2_FAM_AlterarEntIdOS`; importar apenas `App_Release` + modulo V2 isolado |
+| Build | `e157221+ONDA38.2.19-FIX1-FORM-IDS` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_19_FIX1_FORM_AVALIACAO_IDSIGUAIS", "e157221+ONDA38.2.19-FIX1-FORM-IDS"` |
+| Nao importar | `Svc_Avaliacao`, `Preencher`, `Menu_Principal.frm`, qualquer UserForm, `.frx`, `ThisWorkbook`, `Auto_Open.bas`, `Mod_Types.bas`, `Importador_V3.bas`, `Teste_V2_Engine.bas`, `Teste_V2_Roteiros.bas` |
+| Gate humano | Importacao e compile reportados por Mauricio; `TV2_20260602_181749` retornou `OK=5 | FALHA=0 | MANUAL=0`; sem CSV de falhas |
+| RVS completo | `VR_20260602_182253` APROVADO; CSV [`ValidacaoReleaseRVS_V12_0_0205_VR_20260602_182253.csv`](../../auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260602_182253.csv); SHA-256 `bc5b709ef45e54de085772137bb69456619e21fefb67ad749eb944cf905bb1e1` |
+| Veredito atual | 38.2.19-fix1 validada por V2 dirigido e RVS completo; freeze V206 segue bloqueado |
+
+## 🔴 ONDA 38.2.19 GATE V2 FALHOU — formulario avaliacao modulos primeiro (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🔴 GATE HUMANO FALHOU NO V2 DIRIGIDO |
+| Track | safe_track |
+| Readback | [`0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro.json`](../readbacks/0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro.json) — **human_status: confirmed** |
+| Hearback | [`0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro-confirmed.json`](../hearbacks/0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro-confirmed.json) |
+| Tecnico | [`0138_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_19_form_avaliacao_modulos_primeiro/0138_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_19_FORM_AVALIACAO_MODULOS_PRIMEIRO.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FORM_AVALIACAO_MODULOS_PRIMEIRO.txt) |
+| ERP | [`0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro.json`](../results/0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro.json) — `human_gate_failed` |
+| Motivo | Retomar formularios apos 0137 verde, mas evitando repetir o crash de 0134 causado pelo pacote com UserForm grande |
+| Decisao aplicada | Pacote V3 sem item F: importar apenas `Svc_Avaliacao`, `Preencher`, `App_Release` e novo modulo isolado `Teste_V2_Form_Avaliacao_Modulos` |
+| Build | `e157221+ONDA38.2.19-FORM-AVAL-MODULOS` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_19_FORM_AVALIACAO_MODULOS_PRIMEIRO", "e157221+ONDA38.2.19-FORM-AVAL-MODULOS"` |
+| Nao importar | `Menu_Principal.frm`, qualquer UserForm, `.frx`, `ThisWorkbook`, `Teste_V2_Engine.bas`, `Teste_V2_Roteiros.bas` |
+| Hipotese funcional | O form existente ja usa `AVListaCol(1)` em `EncerraOS_Click`; se `PreencherAvaliarOS` preencher essa coluna por `OS_ID -> ENT_ID -> ENTIDADE.NOME`, o demandante passa a chegar no registro/impressao sem reimportar o form |
+| Gate humano | Importador V3 `M=4 | F=0 | err=0 | skip=0`; compile limpo; `TV2_20260602_125043` retornou `OK=3 | FALHA=2 | MANUAL=0` |
+| CSV | `TesteV2_FORM_AVALIACAO_MODULOS_Falhas_TV2_20260602_125043.csv` |
+| Diagnostico | Falha no teste isolado por comparacao textual de `OS_ID`; abrir fix1 0139 test-only |
+| Veredito atual | 0138 nao validada; freeze V206 segue bloqueado |
+
+## 🟢 ONDA 38.2.18-FIX1 VALIDADA — BO330 status canonico (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 GATE HUMANO VERDE |
+| Track | safe_track |
+| Readback | [`0137-rb-onda-38-2-18-fix1-bo330-status-canonico.json`](../readbacks/0137-rb-onda-38-2-18-fix1-bo330-status-canonico.json) — **human_status: confirmed** |
+| Hearback | [`0137-rb-onda-38-2-18-fix1-bo330-status-canonico-confirmed.json`](../hearbacks/0137-rb-onda-38-2-18-fix1-bo330-status-canonico-confirmed.json) |
+| Tecnico | [`0137_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_18_fix1_bo330_status_canonico/0137_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_18_FIX1_BO330_STATUS_CANONICO.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_18_FIX1_BO330_STATUS_CANONICO.txt) |
+| ERP | [`0137-exec-onda-38-2-18-fix1-bo330-status-canonico.json`](../results/0137-exec-onda-38-2-18-fix1-bo330-status-canonico.json) — `completed` |
+| Build | `e157221+ONDA38.2.18-FIX1-BO330-STATUS` |
+| Origem | `TV2_20260602_105519` retornou `OK=18 | FALHA=6 | MANUAL=0`, mas o CSV mostrou `STATUS_EMP03=SUSPENSA_GLOBAL` e `DT_FIM_SUSP=2026-07-02`; falha era expectativa do diagnostico |
+| Mudanca | `TV2_BO330_STATUS_SUSPENSA` passa de `SUSPENSA` para `SUSPENSA_GLOBAL` no modulo diagnostico isolado |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_18_FIX1_BO330_STATUS_CANONICO", "e157221+ONDA38.2.18-FIX1-BO330-STATUS"` |
+| Gate humano | Import V3 `M=2 | F=0 | err=0`; compile limpo; `TV2_20260602_111854` retornou `OK=24 | FALHA=0 | MANUAL=0`; `CT_ValidarRelease_TrioMinimo` gerou `VR_20260602_112011` APROVADO |
+| Proibidos | Producao, UserForms, `.frx`, `Auto_Open.bas`, `Mod_Types.bas`, `Importador_V3.bas`, `ThisWorkbook.code.txt`, `Teste_V2_Engine.bas`, `Teste_V2_Roteiros.bas` |
+| Veredito atual | 38.2.18-fix1 validada; BO_330 voltou a passar no Trio minimo; freeze V206 segue bloqueado por demais pendencias |
+
+## 🟡 ONDA 38.2.18 GATE INTERPRETADO — recuperação BO330 diagnóstico (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟡 GATE HUMANO GEROU EVIDENCIA |
+| Track | safe_track |
+| Readback | [`0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico.json`](../readbacks/0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico.json) — **human_status: confirmed** |
+| Hearback | [`0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico-confirmed.json`](../hearbacks/0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico-confirmed.json) |
+| Tecnico | [`0136_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_18_recuperacao_bo330_diagnostico/0136_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_18_RECUPERACAO_BO330_DIAGNOSTICO.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_18_RECUPERACAO_BO330_DIAGNOSTICO.txt) |
+| ERP | [`0136-exec-onda-38-2-18-recuperacao-bo330-diagnostico.json`](../results/0136-exec-onda-38-2-18-recuperacao-bo330-diagnostico.json) — `human_gate_failed_diagnostic_expectation` |
+| Build | `e157221+ONDA38.2.18-RECUP-BO330-DIAG` |
+| Origem | Workbook de referencia compila em `fd45a5d+ONDA38.2.6-IMPRESSAO-INTEGRIDADE`, mas Trio minimo reprovou V1 por BO_330 (`OK=167 | FALHA=4`) |
+| Decisao tecnica | Nao importar `Teste_V2_Engine.bas`/`Teste_V2_Roteiros.bas` completos no workbook 38.2.6; usar modulo isolado `Teste_V2_BO330_Diagnostico` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_18_RECUPERACAO_BO330_DIAGNOSTICO", "e157221+ONDA38.2.18-RECUP-BO330-DIAG"` |
+| Gate humano | Import V3 `M=2 | F=0 | err=0`; compile limpo; `TV2_20260602_105519` retornou `OK=18 | FALHA=6 | MANUAL=0` |
+| Proibidos | Producao, UserForms, `.frx`, `Auto_Open.bas`, `Mod_Types.bas`, `Importador_V3.bas`, `ThisWorkbook.code.txt`, `Teste_V2_Engine.bas`, `Teste_V2_Roteiros.bas` |
+| Veredito atual | CSV mostrou `OS_EMP_ID=003`, `STATUS_EMP03=SUSPENSA_GLOBAL` e `DT_FIM_SUSP=2026-07-02`; falha era expectativa `SUSPENSA` no diagnostico. Fix1 0137 aberto; freeze V206 segue bloqueado |
+
+## 🟠 ONDA 38.2.17-FIX1 PROPOSTA — formulario avaliacao compile crash (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟠 READBACK PENDENTE DE HEARBACK |
+| Track | safe_track |
+| Readback | [`0135-rb-onda-38-2-17-fix1-form-avaliacao-compile-crash.json`](../readbacks/0135-rb-onda-38-2-17-fix1-form-avaliacao-compile-crash.json) — **human_status: pending** |
+| Motivo | 0134 importou, mas o compile travou e fechou o Excel antes de TV2 |
+| Hipotese principal | Reimportar `Menu_Principal.frm` em delta pequeno elevou risco de instabilidade do VBE/Excel |
+| Diretriz do fix1 | Pacote V3 menor, sem item `F` e sem importar `Menu_Principal.frm`; corrigir por modulos e teste dirigido |
+| Recuperacao operacional | Nao salvar workbook recuperado apos crash; partir do ultimo salvo limpo ou backup V3 anterior ao import 0134 |
+| Teste V1 com 4 erros | Registrado como alerta; diagnosticar depois de compile limpo e TV2 dirigido verde |
+| Veredito atual | Aguardando Mauricio confirmar readback 0135 |
+
+## 🔴 ONDA 38.2.17 FALHOU NO GATE HUMANO — formularios avaliacao demandante (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🔴 GATE HUMANO FALHOU |
+| Track | safe_track |
+| Readback | [`0134-rb-onda-38-2-17-formularios-avaliacao-demandante.json`](../readbacks/0134-rb-onda-38-2-17-formularios-avaliacao-demandante.json) — **human_status: confirmed** |
+| Hearback | [`0134-rb-onda-38-2-17-formularios-avaliacao-demandante-confirmed.json`](../hearbacks/0134-rb-onda-38-2-17-formularios-avaliacao-demandante-confirmed.json) |
+| Tecnico | [`0134_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_17_formularios_avaliacao_demandante/0134_TECNICO.md) |
+| ERP | [`0134-exec-onda-38-2-17-formularios-avaliacao-demandante.json`](../results/0134-exec-onda-38-2-17-formularios-avaliacao-demandante.json) — **failed_human_gate** |
+| Origem | Mauricio reportou erros residuais em formularios e caso concreto em que a avaliacao ainda nao registra/exibe o nome do demandante |
+| Conferencia previa | Marcador BL-4 0133 funciona apos `IniciarSistema` e save; TV2_20260601_120900 retornou `OK=5 | FALHA=0 | MANUAL=0` |
+| Escopo entregue | `Svc_Avaliacao.bas`, `Preencher.bas`, `Menu_Principal.frm`, testes V2, `App_Release.bas`, espelhos importaveis e manifesto V3 |
+| Objetivo | Resolver demandante da avaliacao por `OS_ID -> CAD_OS.ENT_ID -> ENTIDADE.NOME`, preencher lista/formulario, payload e variaveis de impressao, com V2 dirigido |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_17_FORMULARIOS_AVALIACAO_DEMANDANTE", "e157221+ONDA38.2.17-FORM-AVAL-DEMANDANTE"` |
+| Gate V2 | Executar `TV2_RunFormulariosAvaliacaoDemandante`; esperado `OK=7 | FALHA=0 | MANUAL=0` |
+| Resultado humano | Importou; compile travou e fechou Excel; TV2 nao executado |
+| Proibidos | `Auto_Open.bas`, `Mod_Types.bas`, `Importador_V3.bas`, `Repo_Avaliacao.bas`, `Const_Colunas.bas`, `ThisWorkbook.code.txt`, `Credencia_Empresa.frm`, `.frx` |
+| Nota fora de escopo | Botao/indicativo visual para `IniciarSistema` sera onda propria posterior; nao entra na 38.2.17 |
+| Veredito atual | Abrir fix1 0135; freeze V206 segue bloqueado |
+
+## 🟢 ONDA 38.2.16-FIX1 VALIDADA — BL-4 Auto_Open marker (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 GATE HUMANO VERDE |
+| Track | safe_track |
+| Readback | [`0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker.json`](../readbacks/0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker.json) — **human_status: confirmed** |
+| Hearback | [`0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker-confirmed.json`](../hearbacks/0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker-confirmed.json) |
+| Tecnico | [`0133_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_16_fix1_bl4_autoopen_marker/0133_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_16_FIX1_BL4_AUTOOPEN_MARKER.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_16_FIX1_BL4_AUTOOPEN_MARKER.txt) |
+| ERP | [`0133-exec-onda-38-2-16-fix1-bl4-autoopen-marker.json`](../results/0133-exec-onda-38-2-16-fix1-bl4-autoopen-marker.json) — `completed` |
+| Build | `e157221+ONDA38.2.16-FIX1-BL4-MARKER` |
+| Origem | 38.2.16 importou e compilou, mas `BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO` falhou em `TV2_20260601_105519` e `TV2_20260601_110148` |
+| Diagnostico | Os asserts concretos de protecao passaram; o sinal de abertura nao deve depender apenas de variavel VBA em memoria |
+| Escopo entregue | `Auto_Open.bas`, `Teste_V2_Engine.bas`, `Teste_V2_Roteiros.bas`, `App_Release.bas`, espelhos importaveis e manifesto V3 fix1 |
+| Mudanca | `Auto_Open` grava nomes ocultos do workbook com timestamp/status/detalhes; `BL4_01` le o marcador persistente |
+| Proibidos | `ThisWorkbook.code.txt`, `Util_Planilha.bas`, `Mod_Types.bas`, `Importador_V3.bas`, formularios, `Preencher.bas`, `Svc_*`, `Repo_*`, `.frx` |
+| Comando | `ImportarPacoteV3_Delta "ONDA38_2_16_FIX1_BL4_AUTOOPEN_MARKER", "e157221+ONDA38.2.16-FIX1-BL4-MARKER"` |
+| Gate humano | Import V3 `M=4 | F=0 | err=0`; compile limpo; diagnostico `Application.EnableEvents=True`; `IniciarSistema` criou marcador `OK`; `TV2_20260601_120900` retornou `OK=5 | FALHA=0 | MANUAL=0` |
+| Falha intermediaria | `TV2_20260601_115504` falhou por `MARCADOR_TS=nao registrado`; resolvida no diagnostico com marcador persistente criado por `IniciarSistema` |
+| Veredito atual | BL-4 validado por suite V2 apos fix1; freeze V206 segue bloqueado por demais pendencias |
+
+## 🔴 ONDA 38.2.16 GATE FALHOU — BL-4 protecao persistente (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🔴 GATE HUMANO FALHOU |
+| Track | safe_track |
+| Readback | [`0132-rb-onda-38-2-16-bl4-protecao-persistente.json`](../readbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente.json) — **human_status: confirmed** |
+| Hearback | [`0132-rb-onda-38-2-16-bl4-protecao-persistente-confirmed.json`](../hearbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente-confirmed.json) |
+| Tecnico | [`0132_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_16_bl4_protecao_persistente/0132_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_16_BL4_PROTECAO_PERSISTENTE.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_16_BL4_PROTECAO_PERSISTENTE.txt) |
+| ERP | [`0132-exec-onda-38-2-16-bl4-protecao-persistente.json`](../results/0132-exec-onda-38-2-16-bl4-protecao-persistente.json) — `human_gate_failed` |
+| Build | `e157221+ONDA38.2.16-BL4-PROT-PERSIST` |
+| Decisao explicita | Mauricio confirmou excecao estreita para tocar `Auto_Open.bas` apenas para reaplicar/instrumentar protecao critica na abertura |
+| Escopo entregue | `Auto_Open.bas`, `Util_Planilha.bas`, testes V2, `App_Release.bas`, espelhos importaveis e manifesto V3 |
+| Gate humano | Import V3 `M=5 | F=0 | err=0`; compile limpo; `TV2_20260601_105519` e `TV2_20260601_110148` retornaram `OK=4 | FALHA=1 | MANUAL=0` |
+| Falha | `BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO`: `EXECUTADA_EM=nao registrada; OK=Falso; DETALHES=` |
+| Fora do escopo | Formularios, demandante, impressao, `Preencher.bas`, `Menu_Principal.frm`, `ThisWorkbook.code.txt`, `Mod_Types.bas`, `Importador_V3.bas`, `.frx` |
+| Veredito atual | BL-4 nao fechado; micro-fix 0133 aberta/pending para marcador persistente de Auto_Open; freeze V206 segue bloqueado |
+
+### Fila registrada apos 38.2.16
+
+- Onda propria para melhoria de formularios, com prioridade para
+  avaliacao/encerramento de OS e caso em que o formulario de avaliacao nao
+  registra/exibe o nome do demandante.
+- Em handoff ou auditoria cruzada, rodar nova evolucao do protocolo useHBN com
+  `/Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md`.
+
+## 🟢 ONDA 38.2.15 VALIDADA — FT-4 credenciamento em lote (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 GATE HUMANO VERDE |
+| Track | safe_track |
+| Readback | [`0131-rb-onda-38-2-15-ft4-credenciamento-lote.json`](../readbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote.json) — **human_status: confirmed** |
+| Hearback | [`0131-rb-onda-38-2-15-ft4-credenciamento-lote-confirmed.json`](../hearbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote-confirmed.json) |
+| Tecnico | [`0131_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_15_ft4_credenciamento_lote/0131_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_15_FT4_CREDENCIAMENTO_LOTE.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_15_FT4_CREDENCIAMENTO_LOTE.txt) |
+| ERP | [`0131-exec-onda-38-2-15-ft4-credenciamento-lote.json`](../results/0131-exec-onda-38-2-15-ft4-credenciamento-lote.json) — `completed` |
+| Build | `e157221+ONDA38.2.15-FT4-CRED-LOTE` |
+| Escopo | `Credencia_Empresa.frm` + testes V2 + pacote V3, sem `.frx`, sem Auto_Open/Mod_Types/Importador_V3 |
+| Objetivo | FT-4: remover alocacao O(n^2) de `CRED_ID`/AR1 dentro do loop de credenciamento e provar sequencia/tempo por TV2 |
+| Gate humano | Importador V3 `M=3 | F=1 | err=0 | skip=0`; compile limpo; `TV2_20260601_102735` com `OK=6 | FALHA=0 | MANUAL=0` |
+| Veredito atual | FT-4 validada; freeze V206 segue bloqueado |
+
+### Desvio controlado da sequencia 0033
+
+A 0033 listava BL-4 e impressao fase 2 antes de FT-4, mas o relay pos-38.2.14
+registrou FT-4 como proxima acao porque a rede C1 inicial ficou verde no
+workbook. Esse desvio nao libera freeze: BL-4, impressao fase 2, FT-9, FT-10,
+FT-11 real, RVS sexteto e L44 continuam pendentes.
+
+## 🟢 ONDA 38.2.14 VALIDADA — behavioralizacao C1 (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 GATE HUMANO VERDE |
+| Track | safe_track |
+| Readback | [`0130-rb-onda-38-2-14-behavioralizacao-c1.json`](../readbacks/0130-rb-onda-38-2-14-behavioralizacao-c1.json) — **human_status: confirmed** |
+| Hearback | [`0130-rb-onda-38-2-14-behavioralizacao-c1-confirmed.json`](../hearbacks/0130-rb-onda-38-2-14-behavioralizacao-c1-confirmed.json) |
+| Tecnico | [`0130_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_14_behavioralizacao_c1/0130_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_14_BEHAVIORALIZACAO_C1.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_14_BEHAVIORALIZACAO_C1.txt) |
+| ERP | [`0130-exec-onda-38-2-14-behavioralizacao-c1.json`](../results/0130-exec-onda-38-2-14-behavioralizacao-c1.json) — `completed` |
+| Build | `e157221+ONDA38.2.14-BEHAVIORALIZACAO-C1` |
+| Gate humano | Importador V3 `M=3 | F=0 | err=0 | skip=0`; compile limpo; `TV2_20260601_093826` com `OK=5 | FALHA=0 | MANUAL=0` |
+| Veredito | Primeira fatia C1 validada; nenhum codigo de producao alterado; freeze V206 segue bloqueado |
+
+### Gate 38.2.14
+
+Mauricio importou o delta 38.2.14 pelo manifesto V3, compilou o VBAProject e
+executou `TV2_RunBehavioralizacaoC1`. Resultado: `TV2_20260601_093826` com
+`OK=5 | FALHA=0 | MANUAL=0`. A proxima onda recomendada passa a ser FT-4
+credenciamento em lote, ainda mediante novo readback safe_track proprio.
+
+## 🟡 ONDA 38.2.13 CONSOLIDADA — auditoria cruzada pos-38.2.12 (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟡 FREEZE BLOQUEADO |
+| Track | fast_track doc-only |
+| Readback | [`0129-rb-onda-38-2-13-auditoria-cruzada-consolidada.json`](../readbacks/0129-rb-onda-38-2-13-auditoria-cruzada-consolidada.json) — **human_status: confirmed** |
+| Consolidacao | [`0033-consolidacao-auditoria-cruzada-38-2-4-a-38-2-12.md`](../proposals/0033-consolidacao-auditoria-cruzada-38-2-4-a-38-2-12.md) |
+| Tecnico | [`0129_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_13_auditoria_cruzada/0129_TECNICO.md) |
+| Veredito | Deltas 38.2.4 a 38.2.12 aproveitaveis com ressalvas; freeze V206 bloqueado por C1/C4/C5; FT-4 nao deve abrir antes de behavioralizacao |
+
+### Decisao 38.2.13
+
+A proxima onda recomendada e **38.2.14 - behavioralizacao da bateria/C1**:
+converter asserts estaticos `TV2_EST_*` em fluxos executados onde o risco e
+comportamental, especialmente base populada, impressao, protecao save/reopen e
+sequencia `CRED_ID`/AR1. FT-4 credenciamento em lote continua pendente ate essa
+rede de seguranca existir.
 
 ### Escopo AT-3 ativo
 

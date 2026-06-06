@@ -1,0 +1,81 @@
+{
+  "result_id": "0150-exec-onda-gate0-consolidacao-working-tree-v206",
+  "execution_id": "0150-exec-onda-gate0-consolidacao-working-tree-v206",
+  "readback_id": "0150-onda-gate0-consolidacao-working-tree-v206",
+  "data": "2026-06-06",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "executed_push_ci_pending",
+  "outcome": "working_tree_v206_consolidated_in_thematic_commits",
+  "human_status": "hearback_confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "GATE 0: consolidar o working tree V206 ja validado em ondas 38.2.x, registrar hearback 0150, mover incoming para evidencia canonica, corrigir escopo G7 do mapa de prefixos e preparar push sob CI ratchet.",
+  "summary": "Readback 0150 validado, hearback confirmado por Mauricio no chat, contratos 38.2.x commitados, codigo/espelho VBA commitado com G7/G8 verde, documentacao/evidencias commitadas e incoming movido para auditoria/04_evidencias. ERPs 0147/0148/0149 foram atualizados com os SHAs reais das ondas arquiteto. Relay atualizado com ponte 0114-0117/0149 e proxima acao operacional.",
+  "commits_created": [
+    {
+      "sha": "d0fccbe",
+      "message": "docs(hbn): consolida contratos 38.2 e readback gate0",
+      "group": "contratos_hbn_38_2"
+    },
+    {
+      "sha": "a27492b",
+      "message": "feat(vba): consolida deltas v206 validados",
+      "group": "codigo_espelho_vba_v206"
+    },
+    {
+      "sha": "b2c18ef",
+      "message": "docs(auditoria): consolida evidencias e tecnicos v206",
+      "group": "docs_changelog_evidencias"
+    }
+  ],
+  "commit_pending": {
+    "group": "relay_erps_gate0",
+    "contents": [
+      ".hbn/relay/INDEX.md",
+      ".hbn/results/0147-exec-onda-0116-a3-guards-ci.json",
+      ".hbn/results/0148-exec-onda-0117-organizacao-handoff-codex.json",
+      ".hbn/results/0149-exec-onda-0116-fix1-ratchet-epoch.json",
+      ".hbn/results/0150-exec-onda-gate0-consolidacao-working-tree-v206.json",
+      ".hbn/readbacks/0150-rb-onda-gate0-consolidacao-working-tree-v206.json"
+    ],
+    "reason": "Este ERP sera commitado no bloco final de relay/ERPs."
+  },
+  "architect_commits_observed": {
+    "0114": "5ad07fe",
+    "0115": "8204fe9",
+    "0116": "5b5b9a7",
+    "0117": "7cff187",
+    "0116_fix1_0149": "e2b8700"
+  },
+  "incoming_triage_result": {
+    "source": "incoming/workbook_ref_20260602_compila_bo330_v1falha/",
+    "destination": "auditoria/04_evidencias/V12.0.0206/workbook_ref_20260602_compila_bo330_v1falha/",
+    "file_count": 69,
+    "status": "moved_as_reference_evidence_not_import_source"
+  },
+  "validation_evidence": {
+    "preflight": {
+      "pwd": "/Users/macbookpro/Projetos/Credenciamento",
+      "git_toplevel": "/Users/macbookpro/Projetos/Credenciamento",
+      "branch": "codex/v12-0-0206-planejamento",
+      "index_lock": "absent"
+    },
+    "readback_0150_schema": "OK via bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0150-rb-onda-gate0-consolidacao-working-tree-v206.json",
+    "hearback_0150_schema": "OK via jsonschema against .hbn/schemas/hearback.schema.json",
+    "g7_g8": "OK via python3 local-ai/scripts/publicar_vba_import_v2.py check --verbose",
+    "pre_commit": "All three commits created before this ERP passed hbn-guards; code commit also passed Glasswing G7/G8."
+  },
+  "known_risks_or_followups": [
+    "O mapa de prefixos agora explicita UX_IniciarSistema como AAZ-UX_IniciarSistema.bas para preservar o delta 0140 validado; AAZ tambem existe em Central_Testes, portanto uma onda futura de higiene de prefixos pode ser desejavel antes de refatoracoes maiores.",
+    "O primeiro run real do hbn-guards-ci ainda precisa ser observado apos o push do GATE 0.",
+    "GATE 1 segue sem codigo novo: operador importa 0144 fix1, compila e executa TV2_RunImpressaoResidual."
+  ],
+  "human_gate_observed": {
+    "hearback_0150": "confirmed by Mauricio in chat: aprovado, pode seguir",
+    "push": "PENDENTE",
+    "first_ci_run": "PENDENTE"
+  },
+  "created_at": "2026-06-06T10:24:09-03:00"
+}
