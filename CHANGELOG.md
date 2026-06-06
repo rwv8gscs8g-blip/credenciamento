@@ -7,6 +7,21 @@ tratam apenas da linha pública oficial.
 
 ### Adicionado
 
+- **Onda 38.2.24 — impressão residual Quant./borda code-only** — corrige as
+  duas ressalvas conhecidas do GATE 2: `AplicarFormatoQuantidade` passa a usar
+  formato inteiro `"0"`, evitando `Quant.` impresso como `1,`; e
+  `IMP_AVALIA!A25:A45` passa a receber borda externa esquerda preta contínua
+  com peso `xlMedium`, preservando as bordas internas finas. A suite isolada
+  `TV2_RunImpressaoResidual` sobe de 6 para 7 asserts com o novo
+  `IR_07_QUANTIDADE_INTEIRA` e `IR_05` exigindo peso médio na borda externa.
+  Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_24_IMPRESSAO_RESIDUAL_QUANT_BORDA_CODEONLY.txt`.
+  Gate humano pendente: importar, compilar e executar
+  `TV2_RunImpressaoResidual`, esperado `OK=7 | FALHA=0 | MANUAL=0`. Sem tocar
+  UserForms, `.frx`, `Auto_Open.bas`, `ThisWorkbook`, `Mod_Types.bas`,
+  `Importador_V3.bas`, `Teste_V2_Engine.bas` ou `Teste_V2_Roteiros.bas`. Sem
+  freeze V206 declarado.
+
 - **Onda 38.2.23-fix1 — impressão residual teste-only** — corrige falso
   negativo de `IR_03_AVALIACAO_DEMANDANTE_L9P15` em
   `Teste_V2_Impressao_Residual.bas`. O gate humano da 0143 importou e compilou

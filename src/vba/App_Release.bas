@@ -258,9 +258,11 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0205|OFICIAL|V12.0.0206"
 ' e reaplica bordas criticas de PRE-OS/AVALIACAO por VBA.
 ' V12.0.0206 ONDA 38.2.23-fix1 - Impressao residual teste-only:
 ' IR_03 valida L9:P15 visual e mantem L8 apenas como diagnostico.
-Public Const APP_BUILD_IMPORTADO As String = "e157221+ONDA38.2.23-FIX1-IMP-RES-TEST"
+' V12.0.0206 ONDA 38.2.24 - Impressao residual quant/borda code-only:
+' Quant. usa formato inteiro; A25:A45 recebe borda externa esquerda media.
+Public Const APP_BUILD_IMPORTADO As String = "e157221+ONDA38.2.24-IMP-RES-QTD-BORDA"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0206-planejamento"
-Public Const APP_BUILD_GERADO_EM As String = "2026-06-03 12:31"
+Public Const APP_BUILD_GERADO_EM As String = "2026-06-06 10:49"
 Public Const APP_RELEASE_TAG As String = "v12.0.0205"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0205"
 Public Const APP_RELEASE_TEST_KEY As String = "rvs-v205-final-2026-05-21"

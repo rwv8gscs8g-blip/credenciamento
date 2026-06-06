@@ -1582,10 +1582,10 @@ End Sub
 
 Private Sub AplicarFormatoQuantidade(ByVal alvo As Range)
     On Error Resume Next
-    If Application.International(xlDecimalSeparator) = "," Then
-        alvo.NumberFormatLocal = "0,##"
-    Else
-        alvo.NumberFormat = "0.##"
+    alvo.NumberFormat = "0"
+    If Err.Number <> 0 Then
+        Err.Clear
+        alvo.NumberFormatLocal = "0"
     End If
     alvo.ShrinkToFit = True
     On Error GoTo 0
@@ -1637,7 +1637,7 @@ End Sub
 Public Sub Preencher_AplicarBordasCriticasAvaliacao(ByVal ws As Worksheet)
     If ws Is Nothing Then Exit Sub
 
-    Call Preencher_AplicarBordaPretaContinua(ws.Range(Preencher_RangeBordaAvaliacaoVertical()).Borders(xlEdgeLeft))
+    Call Preencher_AplicarBordaPretaContinuaComPeso(ws.Range(Preencher_RangeBordaAvaliacaoVertical()).Borders(xlEdgeLeft), xlMedium)
 End Sub
 
 Private Function Preencher_TextoDemandanteImpressao() As String
@@ -1711,9 +1711,13 @@ Private Sub Preencher_EscreverTotalFinalOS(ByVal ws As Worksheet, ByVal valorFal
 End Sub
 
 Private Sub Preencher_AplicarBordaPretaContinua(ByVal borda As Border)
+    Call Preencher_AplicarBordaPretaContinuaComPeso(borda, xlThin)
+End Sub
+
+Private Sub Preencher_AplicarBordaPretaContinuaComPeso(ByVal borda As Border, ByVal peso As Long)
     With borda
         .LineStyle = xlContinuous
-        .Weight = xlThin
+        .Weight = peso
         .Color = vbBlack
     End With
 End Sub

@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0151-rb-onda-38-2-24-impressao-residual-quant-borda-codeonly-confirmed",
+  "readback_id": "0151-rb-onda-38-2-24-impressao-residual-quant-borda-codeonly",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-06T10:49:17-03:00",
+  "notes": "Mauricio confirmou em chat: aprovado, pode seguir. Escopo confirmado: GATE 2/0151 de impressao residual code-only para corrigir Quant. inteiro e borda externa esquerda de IMP_AVALIA!A25:A45, sem UserForms, .frx, template workbook manual, Auto_Open, Mod_Types, Importador_V3, Teste_V2_Engine ou Teste_V2_Roteiros."
+}

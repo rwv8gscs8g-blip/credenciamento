@@ -1,0 +1,31 @@
+# Manifesto V3 DELTA ONDA38_2_24_IMPRESSAO_RESIDUAL_QUANT_BORDA_CODEONLY - V12.0.0206 Onda 38.2.24
+# Tema: impressao residual code-only; corrige Quant. inteiro e borda externa esquerda media em IMP_AVALIA!A25:A45.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_24_IMPRESSAO_RESIDUAL_QUANT_BORDA_CODEONLY", "e157221+ONDA38.2.24-IMP-RES-QTD-BORDA"
+#
+# Pos-import esperado:
+#   - Importador V3: M=3 | F=0 | err=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunImpressaoResidual
+#   - Esperado: OK=7 | FALHA=0 | MANUAL=0.
+#   - Sem UserForm, sem .frx, sem ThisWorkbook.
+#   - Sem Auto_Open, sem Mod_Types, sem Importador_V3.
+#   - Sem Teste_V2_Engine ou Teste_V2_Roteiros completos.
+#   - Sem freeze V206.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAU-Preencher.bas
+#     bytes=153809
+#     sha256=134946c45ac8fc804b31866b82a62d64b6e305e83991de25b540e3b437a29fe9
+#   M|001-modulo/ABT-Teste_V2_Impressao_Residual.bas
+#     bytes=17583
+#     sha256=2536d0acb8a26a932545d34dec7e4a4ef5707808dbafe8c77c16b4a2b5415ae1
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=23684
+#     sha256=b81d938be51af0af520f029654aec385af9a0144afb6c83bf85593fc727cbb7e
+#
+# GRUPO_ONDA38_2_24_IMPRESSAO_RESIDUAL_QUANT_BORDA_CODEONLY
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/ABT-Teste_V2_Impressao_Residual.bas
+M|001-modulo/AAX-App_Release.bas
