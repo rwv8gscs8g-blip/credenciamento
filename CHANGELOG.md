@@ -7,6 +7,84 @@ tratam apenas da linha pública oficial.
 
 ### Adicionado
 
+- **Onda 38.2.23-fix1 — impressão residual teste-only** — corrige falso
+  negativo de `IR_03_AVALIACAO_DEMANDANTE_L9P15` em
+  `Teste_V2_Impressao_Residual.bas`. O gate humano da 0143 importou e compilou
+  com sucesso, mas `TV2_RunImpressaoResidual` retornou `OK=5 | FALHA=1` porque
+  o teste exigia `L8=esperado`; o CSV mostrou `L9_VISUAL=esperado` e
+  `MERGE_L9=Verdadeiro`, portanto o bloqueador visual estava corrigido. O
+  fix1 passa a usar `IMP_AVALIA!L9:P15` como criterio de aceite e mantem `L8`
+  apenas como detalhe diagnostico. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_23_FIX1_IMPRESSAO_RESIDUAL_TESTEONLY.txt`.
+  Gate humano pendente: importar, compilar e executar
+  `TV2_RunImpressaoResidual`, esperado `OK=6 | FALHA=0 | MANUAL=0`. Sem tocar
+  `Preencher.bas`, UserForms, `.frx`, `Auto_Open.bas`, `ThisWorkbook`,
+  `Mod_Types.bas`, `Importador_V3.bas`, `Teste_V2_Engine.bas` ou
+  `Teste_V2_Roteiros.bas`. Sem freeze V206 declarado.
+
+- **Onda 38.2.23 — impressão residual code-only/template** — corrige por
+  `Preencher.bas` quatro resíduos isolados na auditoria 0142: demandante de
+  `IMP_AVALIA` agora é gravado também no range visual real `L9:P15`; total
+  visual de `EMITE_OS` agora preenche `N63:P63`; bordas críticas de
+  `EMITE_PREOS!C9/C11` e `IMP_AVALIA!A25:A45` são reaplicadas por VBA.
+  Adiciona o módulo isolado `Teste_V2_Impressao_Residual.bas` com
+  `TV2_RunImpressaoResidual`, cobrindo células mescladas, total visual,
+  idempotência e bordas reais do workbook. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_23_IMPRESSAO_RESIDUAL_CODEONLY_TEMPLATE.txt`.
+  Gate humano executado por Mauricio: importacao e compile limpos; teste
+  dirigido retornou `OK=5 | FALHA=1` por falso negativo de `IR_03`, corrigido
+  na 38.2.23-fix1. Sem tocar
+  UserForms, `.frx`, `Auto_Open.bas`, `ThisWorkbook`, `Mod_Types.bas`,
+  `Importador_V3.bas`, `Teste_V2_Engine.bas` ou `Teste_V2_Roteiros.bas`. Sem
+  freeze V206 declarado.
+
+- **Onda 38.2.21 — formulários residuais code-only** — adiciona defesa em
+  `Svc_Avaliacao.AvaliarOS`: quando o avaliador vem vazio, o serviço resolve o
+  demandante por `OS_ID -> CAD_OS.ENT_ID -> ENTIDADE.NOME`; se não conseguir,
+  rejeita a avaliação antes de gravar dados incompletos. Adiciona o módulo
+  isolado `Teste_V2_Formularios_Residuais.bas` com
+  `TV2_RunFormulariosResiduaisCodeOnly`, cobrindo duas OS com demandantes
+  distintos, lista de avaliação multi-OS, payload com `Desc_entidade` obsoleto,
+  chamada direta a `AvaliarOS` com avaliador vazio, negativo de `ENT_ID`
+  inexistente e restauração da base. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_21_FORMULARIOS_RESIDUAIS_CODEONLY.txt`.
+  Gate humano validado por Mauricio: importacao executada, compile limpo e
+  `TV2_20260602_234618` com `OK=6 | FALHA=0 | MANUAL=0`, sem CSV de falhas.
+  Sem tocar UserForms, `.frx`, `Auto_Open.bas`, `ThisWorkbook`,
+  `Mod_Types.bas`, `Importador_V3.bas`, `Preencher.bas`,
+  `Teste_V2_Engine.bas` ou `Teste_V2_Roteiros.bas`. Sem freeze V206 declarado.
+
+- **Onda 38.2.20 — UX IniciarSistema code-only** — adiciona o modulo padrao
+  `UX_IniciarSistema.bas` para instalar/atualizar um shape visual de planilha
+  com `OnAction="IniciarSistema"`, sem depender de `Auto_Open`, `ThisWorkbook`
+  ou UserForms. O instalador evita abas criticas de dados e usa uma aba
+  operacional visivel; a macro humana para deixar o botao persistido e
+  `UX_InstalarAtalhoIniciarSistema`. Adiciona o modulo isolado
+  `Teste_V2_UX_IniciarSistema.bas` com `TV2_RunUXIniciarSistemaCodeOnly`,
+  cobrindo criacao, `OnAction`, idempotencia, preservacao de celulas sentinela
+  e limpeza/restauracao. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_20_UX_INICIAR_SISTEMA_CODEONLY.txt`.
+  Gate humano validado por Mauricio: importacao executada, compile limpo e
+  `TV2_20260602_205320` com `OK=5 | FALHA=0 | MANUAL=0`, sem CSV de falhas.
+  Para deixar o botao persistido, executar `UX_InstalarAtalhoIniciarSistema`
+  apos o teste verde. Sem tocar `Auto_Open.bas`, `ThisWorkbook`, UserForms,
+  `.frx`, `Svc_Avaliacao.bas`, `Preencher.bas`, `Mod_Types.bas`,
+  `Importador_V3.bas`, `Teste_V2_Engine.bas` ou `Teste_V2_Roteiros.bas`. Sem
+  freeze V206 declarado.
+
+- **Onda 38.2.18 — recuperação BO_330 diagnóstico** — pacote V3 mínimo para
+  o workbook de referência que compila (`fd45a5d+ONDA38.2.6-IMPRESSAO-INTEGRIDADE`),
+  sem importar `Teste_V2_Engine.bas`/`Teste_V2_Roteiros.bas` completos e sem
+  tocar produção ou UserForms. Adiciona o módulo isolado
+  `Teste_V2_BO330_Diagnostico.bas` e a macro `TV2_RunBO330Diagnostico` para
+  registrar atividade C, fila, `OS_EMP_ID`, média, strikes, status e
+  `DT_FIM_SUSP` da empresa real da OS e da `EMP03` observada pela bateria V1.
+  Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_18_RECUPERACAO_BO330_DIAGNOSTICO.txt`.
+  Gate humano pendente: importar, compilar e executar
+  `TV2_RunBO330Diagnostico`; falhas do diagnóstico são evidência para a
+  próxima correção, não regressão deste pacote. Sem freeze V206 declarado.
+
 - **Onda 38.2.2 — V206 puro freeze (esta onda, última antes do freeze V206)** —
   5 alvos atômicos pré-aprovados na 2ª rodada auditoria cruzada V207
   (`auditoria/00_status/112_*.md`):
@@ -58,6 +136,132 @@ tratam apenas da linha pública oficial.
   `Importador_V2.bas` e `Emergencia_CNAE.bas`, sem tocar VBA.
 
 ### Corrigido
+
+- **Onda 38.2.19-fix1 — formulario avaliacao IdsIguais no teste isolado** —
+  corrige somente `Teste_V2_Form_Avaliacao_Modulos.bas` para usar
+  `IdsIguais` ao localizar `OS_ID` na `AV_Lista` e em `CAD_OS`. A falha
+  `TV2_20260602_125043` da 0138 mostrou que `FAM_02` e `FAM_04` passaram,
+  mas `FAM_03`/`FAM_05` falharam por comparacao textual estrita no helper do
+  teste. Inclui manifesto V3 test-only
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FIX1_FORM_AVALIACAO_IDSIGUAIS.txt`.
+  Gate humano pendente: Importador V3 esperado `M=2 | F=0 | err=0 | skip=0`,
+  compile limpo e `TV2_RunFormAvaliacaoModulos` esperado
+  `OK=5 | FALHA=0 | MANUAL=0`. Validada por Mauricio com importacao,
+  compile limpo e `TV2_20260602_181749` retornando
+  `OK=5 | FALHA=0 | MANUAL=0`, sem CSV de falhas. Mauricio executou tambem o
+  Gate RVS completo `VR_20260602_182253`, resultado `APROVADO`, com
+  `V1_RAPIDA OK=171/FALHA=0`, `V2_SMOKE OK=34/FALHA=0/MANUAL=4`,
+  `V2_CANONICO OK=24/FALHA=0`, `E2E_STRIKES OK=76/FALHA=0`,
+  `INTEGRIDADE_BASE OK=4/FALHA=0/MANUAL=1` e
+  `ONDA23_ADV OK=27/FALHA=0`. Sem tocar `Svc_Avaliacao.bas`,
+  `Preencher.bas`, UserForms, `.frx`, `Auto_Open.bas`, `Mod_Types.bas`,
+  `Importador_V3.bas`, `Teste_V2_Engine.bas` ou `Teste_V2_Roteiros.bas`. Sem
+  freeze V206 declarado.
+
+- **Onda 38.2.19 — formulario avaliacao por modulos primeiro** — retoma a
+  melhoria dos formularios apos o crash de compile da 38.2.17, mas em pacote
+  conservador sem `Menu_Principal.frm`, sem UserForms, sem `.frx` e sem
+  `Teste_V2_Engine.bas`/`Teste_V2_Roteiros.bas` completos. `Svc_Avaliacao.bas`
+  resolve o demandante por `OS_ID -> CAD_OS.ENT_ID -> ENTIDADE.NOME`;
+  `PreencherAvaliarOS` popula `AV_Lista` coluna 1 no formulario existente; e
+  `MontarPayloadAvaliacao` faz fallback para esse demandante quando o avaliador
+  vem vazio, preservando avaliador explicito. Adiciona o modulo isolado
+  `Teste_V2_Form_Avaliacao_Modulos.bas` com a macro
+  `TV2_RunFormAvaliacaoModulos` e 5 asserts dirigidos. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FORM_AVALIACAO_MODULOS_PRIMEIRO.txt`.
+  Gate humano: Importador V3 `M=4 | F=0 | err=0 | skip=0` e compile limpo,
+  mas `TV2_20260602_125043` retornou `OK=3 | FALHA=2 | MANUAL=0`. O CSV
+  indicou falha no teste isolado por comparacao estrita de `OS_ID`; o resolver
+  de demandante e o fallback do payload passaram. Fix1 0139 recomendado como
+  test-only com `IdsIguais`, sem tocar producao nem UserForms. Sem freeze V206
+  declarado.
+
+- **Onda 38.2.18-fix1 — BO_330 status canônico no diagnóstico** — corrige
+  apenas a expectativa do módulo `Teste_V2_BO330_Diagnostico.bas` para o
+  literal canônico `SUSPENSA_GLOBAL`. O CSV `TV2_20260602_105519` mostrou que
+  a produção suspendeu a `EMP03` e gravou `DT_FIM_SUSP=2026-07-02`; a falha
+  estava no diagnóstico 0136, que esperava `SUSPENSA`. Inclui manifesto V3
+  mínimo
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_18_FIX1_BO330_STATUS_CANONICO.txt`.
+  Validada por Mauricio com Importador V3 `M=2 | F=0 | err=0 | skip=0`,
+  compile limpo, `TV2_20260602_111854` com
+  `OK=24 | FALHA=0 | MANUAL=0` e Trio mínimo `VR_20260602_112011` APROVADO
+  (`V1_RAPIDA OK=171/FALHA=0`, `V2_SMOKE OK=34/FALHA=0/MANUAL=4`,
+  `V2_CANONICO OK=24/FALHA=0`). Sem tocar produção, UserForms,
+  `Auto_Open.bas`, `Mod_Types.bas` ou `Importador_V3.bas`. Sem freeze V206
+  declarado.
+
+- **Onda 38.2.17 — formulários de avaliação/demandante** — primeira fatia de
+  melhoria dos formulários V206. Adiciona
+  `ResolverDemandanteAvaliacaoPorOS` em `Svc_Avaliacao.bas` para resolver o
+  demandante por `OS_ID -> CAD_OS.ENT_ID -> ENTIDADE.NOME`. `PreencherAvaliarOS`
+  passa a preencher `AV_Lista` por esse helper; `Menu_Principal.EncerraOS_Click`
+  deixa de depender de `AVListaCol(1)`/`Desc_entidade` obsoletos, bloqueia
+  avaliação quando o demandante não resolve, inclui o demandante na confirmação,
+  alimenta payload e impressão com o nome resolvido e preserva o registro
+  auditável via `AvaliarOS`. Adiciona a suíte dirigida
+  `TV2_RunFormulariosAvaliacaoDemandante` com 7 asserts cobrindo OS em execução,
+  resolução por OS, lista, payload, impressão, auditoria
+  `AVALIADOR=Local 1` e falha auditável para `ENT_ID` inexistente. Inclui
+  manifesto V3
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_17_FORMULARIOS_AVALIACAO_DEMANDANTE.txt`.
+  Gate humano falhou: o delta importou, mas o compile travou e fechou o Excel
+  antes da execução V2. O workbook foi recuperado para uma âncora compilável e
+  a frente de formulários ficou suspensa até a recuperação/diagnóstico BO_330.
+  Sem freeze V206 declarado.
+
+- **Onda 38.2.16 — BL-4 proteção persistente após save/reopen** — com
+  decisão explícita de Mauricio, aplica exceção estreita em `Auto_Open.bas`
+  para registrar e verificar a reaplicação da proteção crítica na abertura do
+  workbook. `Util_Planilha.bas` passa a validar não só `ProtectContents`,
+  objetos protegidos e células bloqueadas, mas também escrita VBA de mesmo
+  valor em célula bloqueada protegida, evidenciando que `UserInterfaceOnly` foi
+  reaplicado após reabrir o arquivo. Adiciona a suíte dirigida
+  `TV2_RunBL4ProtecaoPersistente` com 5 asserts e manifesto V3
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_16_BL4_PROTECAO_PERSISTENTE.txt`.
+  Gate humano inicial: Importador V3 `M=5 | F=0 | err=0 | skip=0` e compile
+  limpo, mas `TV2_20260601_105519` retornou `OK=4 | FALHA=1 | MANUAL=0` em
+  `BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO` (`EXECUTADA_EM=nao registrada`).
+  Rerun `TV2_20260601_110148` repetiu a mesma falha unica com
+  `OK=4 | FALHA=1 | MANUAL=0`. Micro-onda 38.2.16-fix1/readback 0133
+  implementa marcador persistente/auditavel de `Auto_Open` via nomes ocultos do
+  workbook, ajusta `BL4_01` para ler esse marcador em vez de depender apenas de
+  variavel VBA em memoria e publica o manifesto V3
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_16_FIX1_BL4_AUTOOPEN_MARKER.txt`.
+  Gate humano fix1: Importador V3 `M=4 | F=0 | err=0 | skip=0` e compile
+  limpo, mas `TV2_20260601_115504` retornou `OK=4 | FALHA=1 | MANUAL=0` em
+  `BL4_01`, com `MARCADOR_TS=nao registrado`. Proxima etapa: diagnosticar
+  `Application.EnableEvents` e disparo real de `Workbook_Open` antes de nova
+  implementacao. Diagnostico confirmou `Application.EnableEvents=True` e
+  `IniciarSistema` criando marcador persistente com `OK=True`; reexecucao
+  `TV2_20260601_120900` retornou `OK=5 | FALHA=0 | MANUAL=0`. Sem freeze V206
+  declarado.
+
+- **Onda 38.2.15 — FT-4 credenciamento em lote** — refatora o fluxo real de
+  `Credencia_Empresa.frm` para alocar `CRED_ID`/AR1 em lote, calculando a base
+  por `max(AR1, Util_MaxIdOperacional(CREDENCIADOS))`, incrementando IDs em
+  memoria e atualizando AR1 uma unica vez ao final. Mantem a regra existente:
+  uma atividade selecionada credencia a empresa em todos os servicos da
+  atividade e duplicidades continuam ignoradas. Adiciona a suite dirigida
+  `TV2_RunFT4CredenciamentoLote`, cobrindo base populada, sequencia continua
+  de `CRED_ID`, AR1 final, idempotencia de reexecucao e tempo <= 10 segundos.
+  Inclui manifesto V3
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_15_FT4_CREDENCIAMENTO_LOTE.txt`.
+  Validada por Mauricio com Importador V3 `M=3 | F=1 | err=0 | skip=0`,
+  compile limpo e `TV2_20260601_102735` com
+  `OK=6 | FALHA=0 | MANUAL=0`. Sem freeze V206 declarado.
+
+- **Onda 38.2.14 — behavioralizacao C1, primeira fatia** — adiciona a suite
+  dirigida `TV2_RunBehavioralizacaoC1`, com verificacoes comportamentais para
+  reduzir dependencia dos asserts estaticos `TV2_EST_*`: round-trip real de
+  `CONFIG!A:N`, ordenacao de entidade com base populada, alocacao sequencial
+  de `CRED_ID`/AR1 com contador atrasado, unicidade/canonicalidade dos
+  `CRED_ID` e integridade de fila canonica. Inclui manifesto V3
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_14_BEHAVIORALIZACAO_C1.txt`.
+  Validada por Mauricio com Importador V3 `M=3 | F=0 | err=0 | skip=0`,
+  compile limpo e `TV2_20260601_093826` com
+  `OK=5 | FALHA=0 | MANUAL=0`. FT-4/credenciamento em lote permanece fora
+  desta onda. Sem freeze V206 declarado.
 
 - **Onda 38.2.12 — Performance/UX basica (FT-3 parcial, FT-2 parcial e MG-1)** —
   remove do `ProgressBar` o `ThisWorkbook.Save` embutido e o busy-wait
