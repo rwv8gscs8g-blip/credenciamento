@@ -46,6 +46,12 @@ MODULOS (.bas):
 - ABM-Util_PDF.bas => Util_PDF.bas (V12.0.0203 ONDA 16 MD-16.4)
 - ABN-Util_Sanear_Contadores.bas => Util_Sanear_Contadores.bas (V12.0.0206 Onda 38.2.1-AR1)
 - ABO-Util_Excel_Performance.bas => Util_Excel_Performance.bas (V12.0.0206 Onda 38.2.1-AR1-FIX2-PERF)
+- AAZ-UX_IniciarSistema.bas => UX_IniciarSistema.bas (V12.0.0206 Onda 38.2.20)
+- ABP-Teste_V2_BO330_Diagnostico.bas => Teste_V2_BO330_Diagnostico.bas (V12.0.0206 Onda 38.2.18)
+- ABQ-Teste_V2_Form_Avaliacao_Modulos.bas => Teste_V2_Form_Avaliacao_Modulos.bas (V12.0.0206 Onda 38.2.19)
+- ABR-Teste_V2_UX_IniciarSistema.bas => Teste_V2_UX_IniciarSistema.bas (V12.0.0206 Onda 38.2.20)
+- ABS-Teste_V2_Formularios_Residuais.bas => Teste_V2_Formularios_Residuais.bas (V12.0.0206 Onda 38.2.21)
+- ABT-Teste_V2_Impressao_Residual.bas => Teste_V2_Impressao_Residual.bas (V12.0.0206 Onda 38.2.23)
 
 FORMULARIOS (.frm / .frx):
 - AAA-Fundo_Branco.frm => Fundo_Branco.frm

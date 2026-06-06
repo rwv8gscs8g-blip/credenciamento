@@ -58,6 +58,83 @@ Public Function MontarDefaultsAvaliacao( _
     MontarDefaultsAvaliacao = res
 End Function
 
+Public Function ResolverDemandanteAvaliacaoPorOS( _
+    ByVal OS_ID As String, _
+    ByRef entIdOut As String, _
+    ByRef nomeOut As String, _
+    ByRef detalhesOut As String _
+) As TResult
+    Dim res As TResult
+    Dim os As TOS
+    Dim wsEnt As Worksheet
+    Dim ultima As Long
+    Dim i As Long
+
+    On Error GoTo erro
+
+    entIdOut = ""
+    nomeOut = ""
+    detalhesOut = ""
+
+    If Trim$(OS_ID) = "" Then
+        res.sucesso = False
+        res.mensagem = "OS_ID obrigatorio para resolver demandante da avaliacao."
+        ResolverDemandanteAvaliacaoPorOS = res
+        Exit Function
+    End If
+
+    os = RepoOS_BuscarPorId(OS_ID)
+    If Trim$(os.OS_ID) = "" Then
+        res.sucesso = False
+        res.mensagem = "OS nao encontrada para resolver demandante: OS_ID=" & OS_ID
+        ResolverDemandanteAvaliacaoPorOS = res
+        Exit Function
+    End If
+
+    entIdOut = Trim$(SafeListVal(os.ENT_ID))
+    If entIdOut = "" Then
+        res.sucesso = False
+        res.mensagem = "OS sem ENT_ID para resolver demandante: OS_ID=" & OS_ID
+        ResolverDemandanteAvaliacaoPorOS = res
+        Exit Function
+    End If
+
+    Set wsEnt = ThisWorkbook.Sheets(SHEET_ENTIDADE)
+    ultima = UltimaLinhaAba(SHEET_ENTIDADE)
+    For i = LINHA_DADOS To ultima
+        If IdsIguais(SafeListVal(wsEnt.Cells(i, COL_ENT_ID).Value), entIdOut) Then
+            nomeOut = Trim$(SafeListVal(wsEnt.Cells(i, COL_ENT_NOME).Value))
+            If nomeOut = "" Then
+                res.sucesso = False
+                res.mensagem = "Entidade sem nome para demandante: ENT_ID=" & entIdOut
+                detalhesOut = "OS_ID=" & os.OS_ID & "; ENT_ID=" & entIdOut & "; LINHA_ENT=" & CStr(i)
+                ResolverDemandanteAvaliacaoPorOS = res
+                Exit Function
+            End If
+
+            detalhesOut = "OS_ID=" & os.OS_ID & "; ENT_ID=" & entIdOut & _
+                          "; NOME=" & nomeOut & "; LINHA_ENT=" & CStr(i)
+            res.sucesso = True
+            res.mensagem = "Demandante da avaliacao resolvido."
+            ResolverDemandanteAvaliacaoPorOS = res
+            Exit Function
+        End If
+    Next i
+
+    res.sucesso = False
+    res.mensagem = "Demandante nao encontrado em ENTIDADE: ENT_ID=" & entIdOut
+    detalhesOut = "OS_ID=" & os.OS_ID & "; ENT_ID=" & entIdOut & "; ULTIMA_ENT=" & CStr(ultima)
+    ResolverDemandanteAvaliacaoPorOS = res
+    Exit Function
+
+erro:
+    res.sucesso = False
+    res.mensagem = "Erro ao resolver demandante da avaliacao: " & Err.Description
+    res.CodigoErro = Err.Number
+    detalhesOut = "OS_ID=" & OS_ID & "; ERRO=" & CStr(Err.Number)
+    ResolverDemandanteAvaliacaoPorOS = res
+End Function
+
 Public Function DescreverMudancasAvaliacao( _
     ByVal defaultNumEmpenho As String, _
     ByVal defaultDtFechamento As String, _
@@ -177,6 +254,10 @@ Public Function MontarPayloadAvaliacao( _
     Dim res As TResult
     Dim i As Long
     Dim soma As Long
+    Dim resDemandante As TResult
+    Dim demandanteEntId As String
+    Dim demandanteNome As String
+    Dim demandanteDetalhes As String
 
     If LBound(notas) <> 1 Or UBound(notas) <> 10 Then
         res.sucesso = False
@@ -202,6 +283,18 @@ Public Function MontarPayloadAvaliacao( _
         res.mensagem = "OS_ID obrigatorio para montar payload de avaliacao."
         MontarPayloadAvaliacao = res
         Exit Function
+    End If
+
+    If payloadAvaliador = "" Then
+        resDemandante = ResolverDemandanteAvaliacaoPorOS(payloadOSID, demandanteEntId, demandanteNome, demandanteDetalhes)
+        If resDemandante.sucesso Then
+            payloadAvaliador = demandanteNome
+        Else
+            res.sucesso = False
+            res.mensagem = "Avaliador obrigatorio para montar payload de avaliacao; demandante nao resolvido por OS_ID: " & resDemandante.mensagem
+            MontarPayloadAvaliacao = res
+            Exit Function
+        End If
     End If
 
     If payloadAvaliador = "" Then
@@ -268,9 +361,14 @@ Public Function AvaliarOS( _
     Dim i As Long
     Dim resInsert As TResult
     Dim resSusp As TResult
+    Dim resDemandante As TResult
     Dim valorExecutado As Currency
     Dim haDivergencia As Boolean
     Dim justifEfetiva As String
+    Dim avaliadorEfetivo As String
+    Dim demandanteEntId As String
+    Dim demandanteNome As String
+    Dim demandanteDetalhes As String
 
     On Error GoTo erro
 
@@ -292,6 +390,25 @@ Public Function AvaliarOS( _
             "Svc_Avaliacao"
         res.sucesso = False
         res.mensagem = "OS nao pode ser avaliada. STATUS=" & os.STATUS_OS
+        AvaliarOS = res
+        Exit Function
+    End If
+
+    avaliadorEfetivo = Trim$(avaliador)
+    If avaliadorEfetivo = "" Then
+        resDemandante = ResolverDemandanteAvaliacaoPorOS(OS_ID, demandanteEntId, demandanteNome, demandanteDetalhes)
+        If Not resDemandante.sucesso Then
+            res.sucesso = False
+            res.mensagem = "Avaliador obrigatorio para avaliar OS; demandante nao resolvido por OS_ID: " & resDemandante.mensagem
+            AvaliarOS = res
+            Exit Function
+        End If
+        avaliadorEfetivo = demandanteNome
+    End If
+
+    If avaliadorEfetivo = "" Then
+        res.sucesso = False
+        res.mensagem = "Avaliador obrigatorio para avaliar OS."
         AvaliarOS = res
         Exit Function
     End If
@@ -343,7 +460,7 @@ Public Function AvaliarOS( _
 
     ' 6. Montar TAvaliacao
     aval.OS_ID = OS_ID
-    aval.avaliador = avaliador
+    aval.avaliador = avaliadorEfetivo
     For i = 1 To 10
         aval.notas(i) = notas(i)
     Next i
@@ -494,7 +611,7 @@ Public Function AvaliarOS( _
         EVT_AVALIACAO, ENT_OS, OS_ID, _
         "STATUS=EM_EXECUCAO", _
         "MEDIA=" & FormatarMediaAvaliacao(media) & _
-        "; AVALIADOR=" & avaliador & _
+        "; AVALIADOR=" & avaliadorEfetivo & _
         "; QT_EXEC=" & CStr(QtExecutada) & _
         "; NOTA_MIN=" & Format$(notaMin, "0.00"), _
         "Svc_Avaliacao"
@@ -503,7 +620,7 @@ Public Function AvaliarOS( _
         EVT_OS_FECHADA, ENT_OS, OS_ID, _
         "STATUS=EM_EXECUCAO", _
         "STATUS=CONCLUIDA; MEDIA=" & FormatarMediaAvaliacao(media) & _
-        "; AVALIADOR=" & avaliador & "; QT_EXEC=" & CStr(QtExecutada), _
+        "; AVALIADOR=" & avaliadorEfetivo & "; QT_EXEC=" & CStr(QtExecutada), _
         "Svc_Avaliacao"
 
     res.sucesso = True

@@ -62,36 +62,18 @@ Private Sub CR_Credenciar_Click()
 On Error GoTo erro_carregamento:
     ' Onda 38.2.2 (AT-3+AT-5): envelopamento Util_Excel_Performance + NumberFormat textual.
 
-Dim wsCred As Worksheet
-Dim wsServ As Worksheet
 Dim ativId As String
 Dim ativDesc As String
 Dim empId As String
 Dim cnpj As String
 Dim razao As String
-Dim i As Long
 Dim totalServ As Long
 Dim adicionados As Long
 Dim ignorados As Long
 Dim faltantes As String
-    Dim codAtivServ As String
-    Dim servId As String
-    Dim credId As String
-    Dim linhaNova As Long
-    Dim posNova As Long
-    Dim estavaProtegida As Boolean
-    Dim senhaProtecao As String
-    Dim msgSave As String
-    Dim estadoExcel As Variant
-    Dim blocoRapidoIniciado As Boolean
-    Dim diagExecId As String
-    Dim diagCsvPath As String
-    Dim diagCreds As Collection
-
-blocoRapidoIniciado = False
-
-Set wsCred = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
-Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
+Dim msgSave As String
+Dim detalheErro As String
+Dim tempoSeg As Double
 
 empId = Pad3(mEmpIdSelecionado)
 If empId = "" Then empId = Pad3(M_ID_Empresa)
@@ -128,105 +110,29 @@ If ativId = "" Then
 End If
 If ativDesc = "" Then ativDesc = "(Sem descrição)"
 
-If Not Util_PrepararAbaParaEscrita(wsCred, estavaProtegida, senhaProtecao) Then
-    MsgBox "Não foi possível credenciar: aba CREDENCIADOS protegida.", vbCritical, "Credenciamento"
+If Not CR_ExecutarCredenciamentoLote(empId, cnpj, razao, ativId, ativDesc, CR_Lista.ListIndex, _
+                                      True, True, totalServ, adicionados, ignorados, _
+                                      faltantes, msgSave, detalheErro, tempoSeg) Then
+    Select Case detalheErro
+        Case "SEM_SERVICOS"
+            MsgBox "Não há serviços cadastrados para esta atividade. Cadastre serviços primeiro.", vbExclamation, "Credenciamento"
+        Case "ABA_PROTEGIDA"
+            MsgBox "Não foi possível credenciar: aba CREDENCIADOS protegida.", vbCritical, "Credenciamento"
+        Case "FALHA_PERSISTENCIA"
+            MsgBox "Falha de persistência no credenciamento da atividade " & ativId & "." & vbCrLf & _
+                   "Serviços sem registro para a empresa: " & faltantes, vbCritical, "Credenciamento"
+        Case Else
+            MsgBox "Erro ao credenciar empresa: " & detalheErro, vbCritical, "Credenciamento"
+    End Select
     Exit Sub
 End If
 
-' Onda 38.2.2 AT-5: bloco rapido envelopa o loop de credenciamento (potencialmente dezenas de gravacoes).
-estadoExcel = Util_IniciarBlocoRapido()
-blocoRapidoIniciado = True
-
-If ATIVAR_DIAG_FNEW5 Then
-    diagExecId = Format$(Now, "yyyymmdd_hhnnss")
-    diagCsvPath = DIAG_FNEW5_PrepararCsv(diagExecId)
-    If Len(diagCsvPath) > 0 Then Set diagCreds = New Collection
-End If
-
-' Credencia a empresa em TODOS os servicos da atividade (regra de negocio).
-For i = LINHA_DADOS To UltimaLinhaAba(SHEET_CAD_SERV)
-    If IdsIguaisCred(wsServ.Cells(i, COL_SERV_ATIV_ID).Value, ativId) Then
-        totalServ = totalServ + 1
-        servId = Pad3(wsServ.Cells(i, COL_SERV_ID).Value)
-        codAtivServ = ativId & servId
-
-        If Not CredJaExiste(wsCred, codAtivServ, empId) Then
-            linhaNova = UltimaLinhaAba(SHEET_CREDENCIADOS) + 1
-            If linhaNova < LINHA_DADOS Then linhaNova = LINHA_DADOS
-
-            posNova = ProximaPosicaoAtividade(wsCred, ativId)
-            credId = ProximoId(SHEET_CREDENCIADOS)
-
-            ' Onda 38.2.2 AT-3 (F-NEW3): garante formato textual na coluna A antes da gravacao do ID.
-            wsCred.Cells(linhaNova, COL_CRED_ID).NumberFormat = "@"
-            wsCred.Cells(linhaNova, COL_CRED_ID).Value = credId
-            wsCred.Cells(linhaNova, COL_CRED_COD_ATIV_SERV).Value = codAtivServ
-            wsCred.Cells(linhaNova, COL_CRED_EMP_ID).Value = empId
-            wsCred.Cells(linhaNova, COL_CRED_CNPJ).Value = cnpj
-            wsCred.Cells(linhaNova, COL_CRED_RAZAO).Value = razao
-            wsCred.Cells(linhaNova, COL_CRED_POSICAO).Value = posNova
-            wsCred.Cells(linhaNova, COL_CRED_ULT_OS).Value = ""
-            wsCred.Cells(linhaNova, COL_CRED_DT_ULT_OS).Value = ""
-            wsCred.Cells(linhaNova, COL_CRED_INATIVO_FLAG).Value = ""
-            wsCred.Cells(linhaNova, COL_CRED_ATIV_ID).Value = ativId
-            wsCred.Cells(linhaNova, COL_CRED_RECUSAS).Value = 0
-            wsCred.Cells(linhaNova, COL_CRED_EXPIRACOES).Value = 0
-            wsCred.Cells(linhaNova, COL_CRED_STATUS).Value = STATUS_CRED_ATIVO
-            wsCred.Cells(linhaNova, COL_CRED_DT_ULT_IND).Value = ""
-            wsCred.Cells(linhaNova, COL_CRED_DT_CRED).Value = CDate(Now)
-
-            RegistrarEvento _
-                EVT_CRED_ATIV, ENT_CRED, credId, _
-                "", _
-                "EMP_ID=" & empId & "; ATIV_ID=" & ativId & "; SERV_ID=" & servId & "; POS=" & CStr(posNova), _
-                "Credencia_Empresa"
-            adicionados = adicionados + 1
-            If ATIVAR_DIAG_FNEW5 Then
-                DIAG_FNEW5_AdicionarCred diagCreds, credId, linhaNova, empId, ativId, servId, codAtivServ, posNova
-            End If
-        Else
-            ignorados = ignorados + 1
-        End If
-    End If
-Next i
-
-If totalServ = 0 Then
-    Call Util_RestaurarProtecaoAba(wsCred, estavaProtegida, senhaProtecao)
-    Util_FinalizarBlocoRapido estadoExcel
-    blocoRapidoIniciado = False
-    MsgBox "Não há serviços cadastrados para esta atividade. Cadastre serviços primeiro.", vbExclamation, "Credenciamento"
-    Exit Sub
-End If
-
-Call ClassificaCredenciadoOrdem
-Call AtualizarListaEmpresaMenuAtual
-If ATIVAR_DIAG_FNEW5 Then
-    DIAG_FNEW5_RegistrarCredenciamentos diagCsvPath, diagCreds, wsCred, empId, cnpj, razao, _
-        ativId, ativDesc, totalServ, adicionados, ignorados, CR_Lista.ListIndex, _
-        "POS_RELOAD_PRE_VALIDACAO", ""
-End If
-
-If Not ValidarPersistenciaCredenciamento(wsCred, wsServ, empId, ativId, faltantes) Then
-    Call Util_RestaurarProtecaoAba(wsCred, estavaProtegida, senhaProtecao)
-    Util_FinalizarBlocoRapido estadoExcel
-    blocoRapidoIniciado = False
-    MsgBox "Falha de persistência no credenciamento da atividade " & ativId & "." & vbCrLf & _
-           "Serviços sem registro para a empresa: " & faltantes, vbCritical, "Credenciamento"
-    Exit Sub
-End If
-
-Call Util_RestaurarProtecaoAba(wsCred, estavaProtegida, senhaProtecao)
-
-If Not Util_SalvarWorkbookSeguro(msgSave) Then
+If msgSave <> "" Then
     MsgBox "Credenciamento concluído, mas houve falha ao salvar o arquivo automaticamente." & vbCrLf & _
            "Detalhe: " & msgSave & vbCrLf & _
            "Use Ctrl+S para salvar manualmente antes de continuar.", _
            vbExclamation, "Credenciamento"
 End If
-
-' Onda 38.2.2 AT-5: finaliza bloco rapido antes dos MsgBox finais.
-Util_FinalizarBlocoRapido estadoExcel
-blocoRapidoIniciado = False
 
 If adicionados > 0 Then
     MsgBox "Credenciamento realizado por atividade." & vbCrLf & _
@@ -250,13 +156,280 @@ Unload Me
 Exit Sub
 
 erro_carregamento:
-On Error Resume Next
-If Not wsCred Is Nothing Then Call Util_RestaurarProtecaoAba(wsCred, estavaProtegida, senhaProtecao)
-On Error GoTo 0
-' Onda 38.2.2 AT-5: finaliza bloco rapido se foi iniciado (evita restaurar TEstadoExcel zerada).
-If blocoRapidoIniciado Then Util_FinalizarBlocoRapido estadoExcel
 MsgBox "Erro ao credenciar empresa: " & Err.Description, vbCritical, "Credenciamento"
 End Sub
+
+Private Function CR_ExecutarCredenciamentoLote( _
+    ByVal empId As String, _
+    ByVal cnpj As String, _
+    ByVal razao As String, _
+    ByVal ativId As String, _
+    ByVal ativDesc As String, _
+    ByVal listIndex As Long, _
+    ByVal salvarWorkbook As Boolean, _
+    ByVal atualizarMenu As Boolean, _
+    ByRef totalServ As Long, _
+    ByRef adicionados As Long, _
+    ByRef ignorados As Long, _
+    ByRef faltantes As String, _
+    ByRef msgSave As String, _
+    ByRef detalheErro As String, _
+    ByRef tempoSeg As Double _
+) As Boolean
+    Dim wsCred As Worksheet
+    Dim wsServ As Worksheet
+    Dim i As Long
+    Dim ultimaServ As Long
+    Dim ultimaCred As Long
+    Dim codAtivServ As String
+    Dim servId As String
+    Dim credId As String
+    Dim linhaNova As Long
+    Dim posNova As Long
+    Dim proximaPos As Long
+    Dim proximoCredSeq As Long
+    Dim maxCredReal As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim abaPreparada As Boolean
+    Dim estadoExcel As Variant
+    Dim blocoRapidoIniciado As Boolean
+    Dim diagExecId As String
+    Dim diagCsvPath As String
+    Dim diagCreds As Collection
+    Dim indiceCred As Object
+    Dim inicioTimer As Double
+    Dim chaveCred As String
+
+    On Error GoTo falha
+
+    inicioTimer = Timer
+    totalServ = 0
+    adicionados = 0
+    ignorados = 0
+    faltantes = ""
+    msgSave = ""
+    detalheErro = ""
+    tempoSeg = 0#
+
+    Set wsCred = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    Set wsServ = ThisWorkbook.Sheets(SHEET_CAD_SERV)
+
+    If Not Util_PrepararAbaParaEscrita(wsCred, estavaProtegida, senhaProtecao) Then
+        detalheErro = "ABA_PROTEGIDA"
+        GoTo finalizar
+    End If
+    abaPreparada = True
+
+    ' Onda 38.2.2 AT-5: bloco rapido envelopa o loop de credenciamento.
+    estadoExcel = Util_IniciarBlocoRapido()
+    blocoRapidoIniciado = True
+
+    If ATIVAR_DIAG_FNEW5 Then
+        diagExecId = Format$(Now, "yyyymmdd_hhnnss")
+        diagCsvPath = DIAG_FNEW5_PrepararCsv(diagExecId)
+        If Len(diagCsvPath) > 0 Then Set diagCreds = New Collection
+    End If
+
+    Set indiceCred = CR_CriarIndiceCredenciamentos(wsCred, empId)
+    ultimaServ = UltimaLinhaAba(SHEET_CAD_SERV)
+    ultimaCred = UltimaLinhaAba(SHEET_CREDENCIADOS)
+    If ultimaCred < LINHA_DADOS Then ultimaCred = LINHA_DADOS - 1
+    proximaPos = ProximaPosicaoAtividade(wsCred, ativId)
+    proximoCredSeq = CLng(Val(wsCred.Cells(1, COL_CONTADOR_AR).Value))
+    maxCredReal = Util_MaxIdOperacional(SHEET_CREDENCIADOS)
+    If maxCredReal > proximoCredSeq Then proximoCredSeq = maxCredReal
+
+    ' FT-4: aloca CRED_ID/linha/posicao em lote; nao chama ProximoId dentro do loop.
+    For i = LINHA_DADOS To ultimaServ
+        If IdsIguaisCred(wsServ.Cells(i, COL_SERV_ATIV_ID).Value, ativId) Then
+            totalServ = totalServ + 1
+            servId = Pad3(wsServ.Cells(i, COL_SERV_ID).Value)
+            codAtivServ = ativId & servId
+            chaveCred = CR_ChaveCred(codAtivServ, empId)
+
+            If Not CR_CredJaExisteRapido(wsCred, indiceCred, chaveCred, codAtivServ, empId) Then
+                ultimaCred = ultimaCred + 1
+                linhaNova = ultimaCred
+                posNova = proximaPos
+                proximaPos = proximaPos + 1
+                proximoCredSeq = proximoCredSeq + 1
+                credId = Format$(proximoCredSeq, "000")
+
+                ' Onda 38.2.2 AT-3 (F-NEW3): garante formato textual na coluna A antes da gravacao do ID.
+                wsCred.Cells(linhaNova, COL_CRED_ID).NumberFormat = "@"
+                wsCred.Cells(linhaNova, COL_CRED_ID).Value = credId
+                wsCred.Cells(linhaNova, COL_CRED_COD_ATIV_SERV).Value = codAtivServ
+                wsCred.Cells(linhaNova, COL_CRED_EMP_ID).Value = empId
+                wsCred.Cells(linhaNova, COL_CRED_CNPJ).Value = cnpj
+                wsCred.Cells(linhaNova, COL_CRED_RAZAO).Value = razao
+                wsCred.Cells(linhaNova, COL_CRED_POSICAO).Value = posNova
+                wsCred.Cells(linhaNova, COL_CRED_ULT_OS).Value = ""
+                wsCred.Cells(linhaNova, COL_CRED_DT_ULT_OS).Value = ""
+                wsCred.Cells(linhaNova, COL_CRED_INATIVO_FLAG).Value = ""
+                wsCred.Cells(linhaNova, COL_CRED_ATIV_ID).Value = ativId
+                wsCred.Cells(linhaNova, COL_CRED_RECUSAS).Value = 0
+                wsCred.Cells(linhaNova, COL_CRED_EXPIRACOES).Value = 0
+                wsCred.Cells(linhaNova, COL_CRED_STATUS).Value = STATUS_CRED_ATIVO
+                wsCred.Cells(linhaNova, COL_CRED_DT_ULT_IND).Value = ""
+                wsCred.Cells(linhaNova, COL_CRED_DT_CRED).Value = CDate(Now)
+
+                RegistrarEvento _
+                    EVT_CRED_ATIV, ENT_CRED, credId, _
+                    "", _
+                    "EMP_ID=" & empId & "; ATIV_ID=" & ativId & "; SERV_ID=" & servId & "; POS=" & CStr(posNova), _
+                    "Credencia_Empresa"
+                adicionados = adicionados + 1
+                CR_AdicionarIndiceCred indiceCred, chaveCred
+                If ATIVAR_DIAG_FNEW5 Then
+                    DIAG_FNEW5_AdicionarCred diagCreds, credId, linhaNova, empId, ativId, servId, codAtivServ, posNova
+                End If
+            Else
+                ignorados = ignorados + 1
+            End If
+        End If
+    Next i
+
+    If adicionados > 0 Then wsCred.Cells(1, COL_CONTADOR_AR).Value = proximoCredSeq
+
+    If totalServ = 0 Then
+        detalheErro = "SEM_SERVICOS"
+        GoTo finalizar
+    End If
+
+    Call ClassificaCredenciadoOrdem
+    If atualizarMenu Then Call AtualizarListaEmpresaMenuAtual
+    If ATIVAR_DIAG_FNEW5 Then
+        DIAG_FNEW5_RegistrarCredenciamentos diagCsvPath, diagCreds, wsCred, empId, cnpj, razao, _
+            ativId, ativDesc, totalServ, adicionados, ignorados, listIndex, _
+            "POS_RELOAD_PRE_VALIDACAO", ""
+    End If
+
+    If Not ValidarPersistenciaCredenciamento(wsCred, wsServ, empId, ativId, faltantes) Then
+        detalheErro = "FALHA_PERSISTENCIA"
+        GoTo finalizar
+    End If
+
+    Call Util_RestaurarProtecaoAba(wsCred, estavaProtegida, senhaProtecao)
+    abaPreparada = False
+
+    If salvarWorkbook Then
+        If Not Util_SalvarWorkbookSeguro(msgSave) Then
+            ' O caller exibe o alerta, mas credenciamento e persistencia ja passaram.
+        End If
+    End If
+
+    CR_ExecutarCredenciamentoLote = True
+
+finalizar:
+    On Error Resume Next
+    If abaPreparada Then Call Util_RestaurarProtecaoAba(wsCred, estavaProtegida, senhaProtecao)
+    If blocoRapidoIniciado Then Util_FinalizarBlocoRapido estadoExcel
+    tempoSeg = Timer - inicioTimer
+    If tempoSeg < 0# Then tempoSeg = tempoSeg + 86400#
+    On Error GoTo 0
+    Exit Function
+
+falha:
+    detalheErro = Err.Description
+    CR_ExecutarCredenciamentoLote = False
+    Resume finalizar
+End Function
+
+Public Function TV2_ExecutarCredenciamentoLote( _
+    ByVal empId As String, _
+    ByVal ativId As String, _
+    ByRef detalhes As String, _
+    ByRef totalServOut As Long, _
+    ByRef adicionadosOut As Long, _
+    ByRef ignoradosOut As Long, _
+    ByRef tempoSegOut As Double _
+) As Boolean
+    Dim cnpj As String
+    Dim razao As String
+    Dim faltantes As String
+    Dim msgSave As String
+    Dim detalheErro As String
+    Dim empCanon As String
+    Dim ativCanon As String
+
+    empCanon = Pad3(empId)
+    ativCanon = Pad3(ativId)
+    If empCanon = "" Or ativCanon = "" Then
+        detalhes = "EMP_ID ou ATIV_ID vazio."
+        Exit Function
+    End If
+
+    If Not CarregarDadosEmpresaSelecionada(empCanon, cnpj, razao) Then
+        detalhes = "Empresa nao encontrada: " & empCanon
+        Exit Function
+    End If
+
+    TV2_ExecutarCredenciamentoLote = CR_ExecutarCredenciamentoLote( _
+        empCanon, cnpj, razao, ativCanon, "TV2 FT4", -1, _
+        False, False, totalServOut, adicionadosOut, ignoradosOut, _
+        faltantes, msgSave, detalheErro, tempoSegOut)
+
+    detalhes = "TOTAL_SERV=" & CStr(totalServOut) & _
+               "; ADICIONADOS=" & CStr(adicionadosOut) & _
+               "; IGNORADOS=" & CStr(ignoradosOut) & _
+               "; FALTANTES=" & IIf(faltantes = "", "nenhum", faltantes) & _
+               "; ERRO=" & IIf(detalheErro = "", "nenhum", detalheErro) & _
+               "; TEMPO_SEG=" & Format$(tempoSegOut, "0.000")
+End Function
+
+Private Function CR_CriarIndiceCredenciamentos(ByVal wsCred As Worksheet, ByVal empId As String) As Object
+    Dim dic As Object
+    Dim i As Long
+    Dim chave As String
+
+    On Error GoTo falha
+    Set dic = CreateObject("Scripting.Dictionary")
+    dic.CompareMode = vbTextCompare
+
+    For i = LINHA_DADOS To UltimaLinhaAba(SHEET_CREDENCIADOS)
+        If IdsIguaisCred(wsCred.Cells(i, COL_CRED_EMP_ID).Value, empId) Then
+            chave = CR_ChaveCred(wsCred.Cells(i, COL_CRED_COD_ATIV_SERV).Value, empId)
+            If chave <> "" Then
+                If Not dic.Exists(chave) Then dic.Add chave, True
+            End If
+        End If
+    Next i
+
+    Set CR_CriarIndiceCredenciamentos = dic
+    Exit Function
+
+falha:
+    Set CR_CriarIndiceCredenciamentos = Nothing
+End Function
+
+Private Function CR_CredJaExisteRapido( _
+    ByVal wsCred As Worksheet, _
+    ByVal indiceCred As Object, _
+    ByVal chaveCred As String, _
+    ByVal codAtivServ As String, _
+    ByVal empId As String _
+) As Boolean
+    If Not indiceCred Is Nothing Then
+        CR_CredJaExisteRapido = indiceCred.Exists(chaveCred)
+    Else
+        CR_CredJaExisteRapido = CredJaExiste(wsCred, codAtivServ, empId)
+    End If
+End Function
+
+Private Sub CR_AdicionarIndiceCred(ByVal indiceCred As Object, ByVal chaveCred As String)
+    On Error Resume Next
+    If Not indiceCred Is Nothing Then
+        If chaveCred <> "" Then
+            If Not indiceCred.Exists(chaveCred) Then indiceCred.Add chaveCred, True
+        End If
+    End If
+    On Error GoTo 0
+End Sub
+
+Private Function CR_ChaveCred(ByVal codAtivServ As Variant, ByVal empId As Variant) As String
+    CR_ChaveCred = NormalizarCodAtivServ(codAtivServ) & "|" & Pad3(empId)
+End Function
 
 Private Function DIAG_FNEW5_PrepararCsv(ByVal execId As String) As String
     Dim pasta As String

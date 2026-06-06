@@ -689,6 +689,18 @@ Public Sub TV2_GerarCatalogoBase()
     TV2_AddCatalogo ws, nr, "MIG_007", "MIGRACAO", "RAPIDO", "AUTO", "Empresa", "Bloqueio de DT_ULT_REATIV invalida", "Empresa com DT_ULT_REATIV nao vazia e nao conversivel para data", "Validar que contador de strikes falha explicitamente e nao usa modo legado", "Falha explicita; qtd de strikes permanece zero; mensagem cita DT_ULT_REATIV invalida", "Impede punicao baseada em janela corrompida", "AUTOMATIZADO_0204", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "MIG_008", "MIGRACAO", "RAPIDO", "AUTO", "Config", "Configuracao invalida gera mensagem e evento", "Campos da regra de strikes com valores fora da faixa ou nao numericos", "Validar rejeicao antes de gravar CONFIG e auditoria CONFIG_INVALIDA", "Mensagem cita campos invalidos; AUDIT_LOG recebe Validacao Rejeitada", "Evita que parametro invalido seja ignorado silenciosamente", "AUTOMATIZADO_0204", "Executado no smoke"
     TV2_AddCatalogo ws, nr, "MIG_009", "MIGRACAO", "RAPIDO", "AUTO", "Limpeza", "Limpar Base zera CAD_SERV e preserva CNAE", "Base canonica com ATIVIDADES e CAD_SERV preenchidos", "Validar reset para troca de municipio sem herdar servicos antigos", "ATIVIDADES preservada; CAD_SERV sem linhas de dados; relatorio nao lista CAD_SERV como preservado", "Fecha idempotencia operacional do reset pre-publicacao", "AUTOMATIZADO_0204", "Executado no smoke"
+    TV2_AddCatalogo ws, nr, "BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO", "BL4_PROTECAO_PERSISTENTE", "RAPIDO", "AUTO", "Protecao", "Auto_Open reaplica protecao", "Workbook salvo, fechado e reaberto apos importacao", "Validar que a abertura persistiu marcador auditavel de protecao critica OK", "Marcador Auto_Open persistente com OK=True e timestamp preenchido", "Fecha a dependencia de Auto_Open apontada no parecer 0024 sem depender de variavel VBA em memoria", "AUTOMATIZADO_0206_FIX1", "Executar apos save/close/reopen"
+    TV2_AddCatalogo ws, nr, "BL4_02_ABAS_CRITICAS_PROTEGIDAS", "BL4_PROTECAO_PERSISTENTE", "RAPIDO", "AUTO", "Protecao", "Abas criticas protegidas", "Workbook reaberto apos importacao", "Validar ProtectContents, objetos protegidos e celulas bloqueadas", "Todas as abas criticas verificadas sem pendencia", "Impede edicao manual silenciosa da base operacional", "AUTOMATIZADO_0206", "Executar em TV2_RunBL4ProtecaoPersistente"
+    TV2_AddCatalogo ws, nr, "BL4_03_UIONLY_REAPLICADO_APOS_REOPEN", "BL4_PROTECAO_PERSISTENTE", "RAPIDO", "AUTO", "Protecao", "UserInterfaceOnly reaplicado", "Workbook reaberto, com abas protegidas persistidas", "Validar escrita VBA em celula bloqueada sem desproteger", "Escrita de mesmo valor passa em todas as abas criticas", "Prova o ponto que nao persiste nativamente no Excel", "AUTOMATIZADO_0206", "Executar em TV2_RunBL4ProtecaoPersistente"
+    TV2_AddCatalogo ws, nr, "BL4_04_REAPLICACAO_IDEMPOTENTE", "BL4_PROTECAO_PERSISTENTE", "RAPIDO", "AUTO", "Protecao", "Reaplicacao idempotente", "Protecao ja aplicada pela abertura", "Reaplicar protecao e verificar que o estado continua valido", "Protecao permanece verificavel apos nova chamada", "Evita regressao em chamadas repetidas de abertura ou menu", "AUTOMATIZADO_0206", "Executar em TV2_RunBL4ProtecaoPersistente"
+    TV2_AddCatalogo ws, nr, "BL4_05_PREPARAR_RESTAURAR_CRITICA", "BL4_PROTECAO_PERSISTENTE", "RAPIDO", "AUTO", "Protecao", "Preparar/restaurar aba critica", "Fluxo de escrita VBA remove e restaura protecao", "Validar que restauracao preserva protecao persistente", "EMPRESAS volta protegida e com escrita VBA permitida", "Cobre os fluxos reais que escrevem em abas criticas", "AUTOMATIZADO_0206", "Executar em TV2_RunBL4ProtecaoPersistente"
+    TV2_AddCatalogo ws, nr, "FD_AV_01_PREPARA_OS_EM_EXECUCAO", "FORM_AVALIACAO_DEMANDANTE", "RAPIDO", "AUTO", "Formulario", "Preparar OS para avaliacao", "Base canonica com OS em execucao e ENT_ID valido", "Validar pre-condicao controlada do fluxo de avaliacao", "OS em EM_EXECUCAO com demandante existente", "Abre a fatia de formulario sem depender de dados reais do operador", "AUTOMATIZADO_0206", "Executar TV2_RunFormulariosAvaliacaoDemandante"
+    TV2_AddCatalogo ws, nr, "FD_AV_02_DEMANDANTE_RESOLVIDO_POR_OS", "FORM_AVALIACAO_DEMANDANTE", "RAPIDO", "AUTO", "Formulario", "Resolver demandante por OS_ID", "OS em execucao aponta para CAD_OS.ENT_ID existente", "Validar lookup OS_ID -> ENT_ID -> ENTIDADE.NOME", "ENT_ID=001 e NOME=Local 1", "Remove dependencia de Desc_entidade ou coluna de lista obsoleta", "AUTOMATIZADO_0206", "Executar TV2_RunFormulariosAvaliacaoDemandante"
+    TV2_AddCatalogo ws, nr, "FD_AV_03_LISTA_AVALIACAO_EXIBE_DEMANDANTE", "FORM_AVALIACAO_DEMANDANTE", "RAPIDO", "AUTO", "Formulario", "AV_Lista exibe demandante", "Menu_Principal carregado com OS em execucao", "Validar que a coluna visivel do formulario mostra o demandante", "AV_Lista mostra Local 1", "Garante que o operador ve o demandante antes de avaliar", "AUTOMATIZADO_0206", "Executar TV2_RunFormulariosAvaliacaoDemandante"
+    TV2_AddCatalogo ws, nr, "FD_AV_04_PAYLOAD_REJEITA_VAZIO_ACEITA_DEMANDANTE", "FORM_AVALIACAO_DEMANDANTE", "RAPIDO", "AUTO", "Formulario", "Payload exige demandante", "Notas validas e OS em execucao", "Validar que payload vazio falha e payload com demandante resolvido passa", "Vazio rejeitado; Local 1 aceito", "Impede registrar avaliacao sem nome do demandante", "AUTOMATIZADO_0206", "Executar TV2_RunFormulariosAvaliacaoDemandante"
+    TV2_AddCatalogo ws, nr, "FD_AV_05_IMPRESSAO_USA_DEMANDANTE_RESOLVIDO", "FORM_AVALIACAO_DEMANDANTE", "RAPIDO", "AUTO", "Formulario", "Impressao usa demandante resolvido", "Valor global Desc_entidade pode estar obsoleto", "Validar que variavel de impressao recebe o demandante do OS_ID", "Desc_entidade recebe Local 1", "Fecha o caminho de impressao da avaliacao", "AUTOMATIZADO_0206", "Executar TV2_RunFormulariosAvaliacaoDemandante"
+    TV2_AddCatalogo ws, nr, "FD_AV_06_AVALIACAO_REGISTRA_DEMANDANTE", "FORM_AVALIACAO_DEMANDANTE", "RAPIDO", "AUTO", "Formulario", "Avaliacao registra demandante", "OS em execucao com demandante resolvido", "Validar que AvaliarOS registra AVALIADOR=Local 1 no AUDIT_LOG", "OS concluida e auditoria contem o demandante", "Prova que o nome chega ao registro auditavel da avaliacao", "AUTOMATIZADO_0206", "Executar TV2_RunFormulariosAvaliacaoDemandante"
+    TV2_AddCatalogo ws, nr, "FD_AV_07_ENT_ID_INVALIDO_FALHA_AUDITAVEL", "FORM_AVALIACAO_DEMANDANTE", "RAPIDO", "AUTO", "Formulario", "ENT_ID invalido falha", "CAD_OS.ENT_ID aponta para entidade inexistente", "Validar falha explicita antes de avaliacao incompleta", "Resolver demandante falha e base e restaurada", "Evita gravacao de avaliacao sem demandante quando ha inconsistencia", "AUTOMATIZADO_0206", "Executar TV2_RunFormulariosAvaliacaoDemandante"
     TV2_AddCatalogo ws, nr, "UI_ADV_001_REENTRADA_MUTADORES", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Guards de reentrada nos forms mutadores", "src/vba disponivel para leitura read-only", "Validar flags contra duplo clique em reativacao, alteracao, limpeza e avaliacao", "Todas as flags declaradas, testadas, ligadas e desligadas", "Evita duplicidade por reentrada humana", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
     TV2_AddCatalogo ws, nr, "UI_ADV_002_REATIVA_EMPRESA_INTEGRIDADE", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Reativar empresa com saneamento", "Form Reativa_Empresa no pacote fonte", "Validar conflito, duplicidade ativa, confirmacao, servicos e reset de guard", "Tokens estruturais presentes no form", "Bloqueia duplicidade ativa/inativa e bypass silencioso", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
     TV2_AddCatalogo ws, nr, "UI_ADV_003_REATIVA_ENTIDADE_SERVICO", "ADVERSARIAL_UI", "RAPIDO", "AUTO", "UI", "Reativar entidade via servico", "Form Reativa_Entidade no pacote fonte", "Validar confirmacao, guard e chamada ao servico", "Tokens estruturais presentes no form", "Evita reativacao direta sem rastro de servico", "AUTOMATIZADO_0204", "Executado na suite Adversarial UI"
@@ -1263,6 +1275,312 @@ Public Function TV2_CredenciarAtividade(ByVal empId As String, ByVal ativId As S
 
     TV2_CredenciarAtividade = "INSERIDO"
 End Function
+
+Public Function TV2_C1_ConfigSnapshotRoundTrip(ByRef detalhes As String) As Boolean
+    Dim ws As Worksheet
+    Dim original As Variant
+    Dim snapshotAnterior As Variant
+    Dim snapshotAtivoAnterior As Boolean
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim col As Long
+    Dim divergencias As String
+    Dim originalCapturado As Boolean
+    Dim ok As Boolean
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
+    original = ws.Range(ws.Cells(LINHA_CFG_VALORES, 1), ws.Cells(LINHA_CFG_VALORES, TV2_CONFIG_SNAPSHOT_COLS)).Value
+    originalCapturado = True
+    snapshotAnterior = gTV2ConfigSnapshot
+    snapshotAtivoAnterior = gTV2ConfigSnapshotAtivo
+
+    Call TV2_ConfigSnapshotCapturar
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        Err.Raise 1004, "TV2_C1_ConfigSnapshotRoundTrip", "Nao foi possivel preparar CONFIG."
+    End If
+    For col = 1 To TV2_CONFIG_SNAPSHOT_COLS
+        ws.Cells(LINHA_CFG_VALORES, col).Value = "TV2_C1_MUT_" & Format$(col, "00")
+    Next col
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+
+    Call TV2_ConfigSnapshotRestaurar
+
+    ok = True
+    For col = 1 To TV2_CONFIG_SNAPSHOT_COLS
+        If CStr(ws.Cells(LINHA_CFG_VALORES, col).Value) <> CStr(original(1, col)) Then
+            ok = False
+            divergencias = divergencias & "COL" & CStr(col) & ";"
+        End If
+    Next col
+
+    detalhes = "COLS=" & CStr(TV2_CONFIG_SNAPSHOT_COLS) & "; DIVERGENCIAS=" & IIf(divergencias = "", "nenhuma", divergencias)
+    TV2_C1_ConfigSnapshotRoundTrip = ok
+
+fim:
+    On Error Resume Next
+    If Not ws Is Nothing And originalCapturado Then
+        If Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+            ws.Range(ws.Cells(LINHA_CFG_VALORES, 1), ws.Cells(LINHA_CFG_VALORES, TV2_CONFIG_SNAPSHOT_COLS)).Value = original
+            Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+        End If
+    End If
+    gTV2ConfigSnapshot = snapshotAnterior
+    gTV2ConfigSnapshotAtivo = snapshotAtivoAnterior
+    On Error GoTo 0
+    Exit Function
+
+falha:
+    detalhes = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    TV2_C1_ConfigSnapshotRoundTrip = False
+    Resume fim
+End Function
+
+Public Function TV2_C1_ProximoIdCredenciadosSequencial(ByRef detalhes As String) As Boolean
+    Dim ws As Worksheet
+    Dim contadorAnterior As Variant
+    Dim maxAntes As Long
+    Dim id1 As String
+    Dim id2 As String
+    Dim contadorRestaurar As Long
+    Dim ok As Boolean
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    contadorAnterior = ws.Cells(1, COL_CONTADOR_AR).Value
+    maxAntes = Util_MaxIdOperacional(SHEET_CREDENCIADOS)
+    If maxAntes < 1 Then
+        detalhes = "Base de CREDENCIADOS sem linhas para testar maxId real."
+        Exit Function
+    End If
+
+    Call TV2_SetCounter(SHEET_CREDENCIADOS, 1)
+    id1 = ProximoId(SHEET_CREDENCIADOS)
+    id2 = ProximoId(SHEET_CREDENCIADOS)
+
+    ok = (CLng(Val(id1)) = maxAntes + 1)
+    ok = ok And (CLng(Val(id2)) = maxAntes + 2)
+    ok = ok And (id1 = Format$(maxAntes + 1, "000"))
+    ok = ok And (id2 = Format$(maxAntes + 2, "000"))
+    detalhes = "MAX_ANTES=" & CStr(maxAntes) & "; ID1=" & id1 & "; ID2=" & id2 & "; AR1_ANTES=" & CStr(contadorAnterior)
+    TV2_C1_ProximoIdCredenciadosSequencial = ok
+
+fim:
+    On Error Resume Next
+    contadorRestaurar = CLng(Val(contadorAnterior))
+    If contadorRestaurar < maxAntes Then contadorRestaurar = maxAntes
+    Call TV2_SetCounter(SHEET_CREDENCIADOS, contadorRestaurar)
+    On Error GoTo 0
+    Exit Function
+
+falha:
+    detalhes = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    TV2_C1_ProximoIdCredenciadosSequencial = False
+    Resume fim
+End Function
+
+Public Function TV2_C1_CredIdsCanonicosUnicos( _
+    ByVal ativId As String, _
+    ByVal qtdMinima As Long, _
+    ByRef detalhes As String _
+) As Boolean
+    Dim ws As Worksheet
+    Dim linha As Long
+    Dim ultima As Long
+    Dim credId As String
+    Dim vistos As String
+    Dim duplicados As String
+    Dim invalidos As String
+    Dim total As Long
+    Dim esperado As String
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    ultima = UltimaLinhaAba(SHEET_CREDENCIADOS)
+    For linha = LINHA_DADOS To ultima
+        If IdsIguais(ws.Cells(linha, COL_CRED_ATIV_ID).Value, ativId) Then
+            total = total + 1
+            credId = Trim$(CStr(ws.Cells(linha, COL_CRED_ID).Value))
+            If Not IsNumeric(credId) Then
+                invalidos = invalidos & "L" & CStr(linha) & "=" & credId & ";"
+            Else
+                esperado = Format$(CLng(Val(credId)), "000")
+                If credId <> esperado Then invalidos = invalidos & "L" & CStr(linha) & "=" & credId & ";"
+            End If
+            If InStr(1, vistos, "|" & credId & "|", vbTextCompare) > 0 Then
+                duplicados = duplicados & credId & ";"
+            Else
+                vistos = vistos & "|" & credId & "|"
+            End If
+        End If
+    Next linha
+
+    detalhes = "ATIV_ID=" & TV2_Pad3(ativId) & "; TOTAL=" & CStr(total) & _
+               "; DUPLICADOS=" & IIf(duplicados = "", "nenhum", duplicados) & _
+               "; INVALIDOS=" & IIf(invalidos = "", "nenhum", invalidos)
+    TV2_C1_CredIdsCanonicosUnicos = (total >= qtdMinima And duplicados = "" And invalidos = "")
+    Exit Function
+
+falha:
+    detalhes = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    TV2_C1_CredIdsCanonicosUnicos = False
+End Function
+
+Public Function TV2_FT4_PrepararCredenciamentoLote( _
+    ByVal qtdServicos As Long, _
+    ByRef empIdOut As String, _
+    ByRef ativIdOut As String, _
+    ByRef maxAntesOut As Long, _
+    ByRef ar1AntesOut As Long, _
+    ByRef detalhes As String _
+) As Boolean
+    On Error GoTo falha
+
+    If qtdServicos < 5 Then qtdServicos = 5
+
+    TV2_PrepararBaselineCanonica
+    TV2_CadastrarEntidadeCanonica "001", "Local FT4 1"
+    TV2_CadastrarEntidadeCanonica "002", "Local FT4 2"
+    TV2_CadastrarEmpresaCanonica "001", "Empresa FT4 Lote"
+    TV2_CadastrarEmpresaCanonica "002", "Empresa FT4 Base"
+
+    empIdOut = "001"
+    ativIdOut = gTV2AtivCanonA
+    TV2_FT4_GarantirServicosAtividade ativIdOut, gTV2AtivDescA, qtdServicos
+
+    ' Base populada: deixa um credenciamento existente em outra atividade e AR1 atrasado.
+    TV2_CredenciarAtividade "002", gTV2AtivCanonB, "001"
+    maxAntesOut = Util_MaxIdOperacional(SHEET_CREDENCIADOS)
+    ar1AntesOut = 0
+    TV2_SetCounter SHEET_CREDENCIADOS, ar1AntesOut
+
+    detalhes = "EMP_ID=" & empIdOut & "; ATIV_ID=" & ativIdOut & _
+               "; QTD_SERVICOS=" & CStr(qtdServicos) & _
+               "; MAX_ANTES=" & CStr(maxAntesOut) & _
+               "; AR1_ANTES=" & CStr(ar1AntesOut)
+    TV2_FT4_PrepararCredenciamentoLote = (maxAntesOut > ar1AntesOut And qtdServicos >= 5)
+    Exit Function
+
+falha:
+    detalhes = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    TV2_FT4_PrepararCredenciamentoLote = False
+End Function
+
+Public Function TV2_FT4_CredIdsSequenciais( _
+    ByVal empId As String, _
+    ByVal ativId As String, _
+    ByVal primeiroEsperado As Long, _
+    ByVal qtdEsperada As Long, _
+    ByRef detalhes As String _
+) As Boolean
+    Dim ws As Worksheet
+    Dim linha As Long
+    Dim ultima As Long
+    Dim credId As String
+    Dim numero As Long
+    Dim vistos As String
+    Dim faltantes As String
+    Dim invalidos As String
+    Dim duplicados As String
+    Dim total As Long
+    Dim i As Long
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    ultima = UltimaLinhaAba(SHEET_CREDENCIADOS)
+
+    For linha = LINHA_DADOS To ultima
+        If IdsIguais(ws.Cells(linha, COL_CRED_EMP_ID).Value, empId) And _
+           IdsIguais(ws.Cells(linha, COL_CRED_ATIV_ID).Value, ativId) Then
+            total = total + 1
+            credId = Trim$(CStr(ws.Cells(linha, COL_CRED_ID).Value))
+            If Not IsNumeric(credId) Then
+                invalidos = invalidos & "L" & CStr(linha) & "=" & credId & ";"
+            Else
+                numero = CLng(Val(credId))
+                If credId <> Format$(numero, "000") Then invalidos = invalidos & "L" & CStr(linha) & "=" & credId & ";"
+                If numero < primeiroEsperado Or numero >= primeiroEsperado + qtdEsperada Then invalidos = invalidos & "L" & CStr(linha) & "=" & credId & ";"
+                If InStr(1, vistos, "|" & CStr(numero) & "|", vbTextCompare) > 0 Then
+                    duplicados = duplicados & credId & ";"
+                Else
+                    vistos = vistos & "|" & CStr(numero) & "|"
+                End If
+            End If
+        End If
+    Next linha
+
+    For i = 0 To qtdEsperada - 1
+        If InStr(1, vistos, "|" & CStr(primeiroEsperado + i) & "|", vbTextCompare) = 0 Then
+            faltantes = faltantes & Format$(primeiroEsperado + i, "000") & ";"
+        End If
+    Next i
+
+    detalhes = "EMP_ID=" & TV2_Pad3(empId) & "; ATIV_ID=" & TV2_Pad3(ativId) & _
+               "; TOTAL=" & CStr(total) & _
+               "; ESPERADO=" & Format$(primeiroEsperado, "000") & ".." & Format$(primeiroEsperado + qtdEsperada - 1, "000") & _
+               "; FALTANTES=" & IIf(faltantes = "", "nenhum", faltantes) & _
+               "; DUPLICADOS=" & IIf(duplicados = "", "nenhum", duplicados) & _
+               "; INVALIDOS=" & IIf(invalidos = "", "nenhum", invalidos)
+    TV2_FT4_CredIdsSequenciais = (total = qtdEsperada And faltantes = "" And duplicados = "" And invalidos = "")
+    Exit Function
+
+falha:
+    detalhes = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    TV2_FT4_CredIdsSequenciais = False
+End Function
+
+Public Function TV2_FT4_AR1Credenciados() As Long
+    TV2_FT4_AR1Credenciados = CLng(Val(ThisWorkbook.Sheets(SHEET_CREDENCIADOS).Cells(1, COL_CONTADOR_AR).Value))
+End Function
+
+Private Sub TV2_FT4_GarantirServicosAtividade( _
+    ByVal ativId As String, _
+    ByVal descricaoAtiv As String, _
+    ByVal qtdServicos As Long _
+)
+    Dim ws As Worksheet
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim servNum As Long
+    Dim linha As Long
+    Dim servId As String
+    Dim numeroErro As Long
+    Dim mensagemErro As String
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_SERV)
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        Err.Raise 1004, "TV2_FT4_GarantirServicosAtividade", "Nao foi possivel preparar CAD_SERV."
+    End If
+
+    linha = TV2_NextDataRow(SHEET_CAD_SERV)
+    For servNum = 2 To qtdServicos
+        servId = Format$(servNum, "000")
+        ws.Cells(linha, COL_SERV_ID).Value = servId
+        ws.Cells(linha, COL_SERV_ATIV_ID).Value = ativId
+        ws.Cells(linha, COL_SERV_ATIV_DESC).Value = descricaoAtiv
+        ws.Cells(linha, COL_SERV_DESCRICAO).Value = descricaoAtiv & " FT4 " & servId
+        ws.Cells(linha, COL_SERV_VALOR_UNIT).Value = CCur(100 + servNum)
+        ws.Cells(linha, COL_SERV_DT_CAD).Value = Now
+        linha = linha + 1
+    Next servNum
+
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    Exit Sub
+
+falha:
+    numeroErro = Err.Number
+    mensagemErro = Err.Description
+    On Error Resume Next
+    If Not ws Is Nothing Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    Err.Raise numeroErro, "TV2_FT4_GarantirServicosAtividade", mensagemErro
+End Sub
 
 Public Function TV2_FilaCsv(ByVal ativId As String) As String
     Dim fila() As TCredenciamento
@@ -2408,6 +2726,18 @@ Private Sub TV2_GerarRoteiroAssistido()
     TV2_AddRoteiro ws, nr, "MIG_007", "AUTO", "Validar bloqueio de DT_ULT_REATIV invalida", "Apenas conferir o resultado automatizado do cenario", "Contador de strikes falha explicitamente sem cair no modo legado", "Linha do cenario MIG_007", "Evita punicao com janela de reativacao corrompida", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "MIG_008", "AUTO", "Validar configuracao invalida de strikes", "Apenas conferir o resultado automatizado do cenario", "Mensagem clara e auditoria CONFIG_INVALIDA antes de gravar CONFIG", "Linha do cenario MIG_008", "Evita parametros invalidos ignorados silenciosamente", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "MIG_009", "AUTO", "Validar Limpar Base com CAD_SERV zerado e CNAE preservado", "Apenas conferir o resultado automatizado do cenario", "ATIVIDADES preservada; CAD_SERV zerado; relatorio sem CAD_SERV em preservados", "Linha do cenario MIG_009", "Permite idempotencia real ao preparar workbook para outro municipio", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO", "AUTO", "Validar marcador persistente de protecao na abertura", "Importar, compilar, salvar, fechar/reabrir e executar TV2_RunBL4ProtecaoPersistente", "Marcador Auto_Open persistente com OK=True e timestamp", "Linha BL4_01 no resultado", "Prova que o ciclo real de abertura reacendeu a protecao critica mesmo apos reset do estado VBA", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "BL4_02_ABAS_CRITICAS_PROTEGIDAS", "AUTO", "Validar abas criticas protegidas", "Executar TV2_RunBL4ProtecaoPersistente apos reopen", "ProtectContents, objetos protegidos e celulas bloqueadas", "Linha BL4_02 no resultado", "Impede workbook reaberto editavel diretamente", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "BL4_03_UIONLY_REAPLICADO_APOS_REOPEN", "AUTO", "Validar UserInterfaceOnly apos reopen", "Executar TV2_RunBL4ProtecaoPersistente apos reopen", "Escrita VBA de mesmo valor em celula bloqueada passa sem desproteger", "Linha BL4_03 no resultado", "Cobre o estado que nao persiste nativamente no Excel", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "BL4_04_REAPLICACAO_IDEMPOTENTE", "AUTO", "Validar reaplicacao idempotente", "Executar TV2_RunBL4ProtecaoPersistente apos reopen", "Nova chamada de protecao mantem estado verificavel", "Linha BL4_04 no resultado", "Evita degradacao por chamada repetida de abertura/menu", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "BL4_05_PREPARAR_RESTAURAR_CRITICA", "AUTO", "Validar preparar/restaurar protecao", "Executar TV2_RunBL4ProtecaoPersistente apos reopen", "EMPRESAS volta protegida e com escrita VBA permitida", "Linha BL4_05 no resultado", "Cobre o ciclo usado por rotinas reais de escrita", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FD_AV_01_PREPARA_OS_EM_EXECUCAO", "AUTO", "Preparar OS para avaliacao", "Executar TV2_RunFormulariosAvaliacaoDemandante", "OS em execucao com demandante existente", "Linha FD_AV_01 no resultado", "Abre base controlada para o caso de formulario", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FD_AV_02_DEMANDANTE_RESOLVIDO_POR_OS", "AUTO", "Resolver demandante por OS_ID", "Executar TV2_RunFormulariosAvaliacaoDemandante", "ENT_ID=001 e NOME=Local 1", "Linha FD_AV_02 no resultado", "Remove dependencia de estado global obsoleto", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FD_AV_03_LISTA_AVALIACAO_EXIBE_DEMANDANTE", "AUTO", "Validar demandante na lista de avaliacao", "Executar TV2_RunFormulariosAvaliacaoDemandante", "AV_Lista mostra Local 1", "Linha FD_AV_03 no resultado", "Garante visibilidade para o operador", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FD_AV_04_PAYLOAD_REJEITA_VAZIO_ACEITA_DEMANDANTE", "AUTO", "Validar payload com demandante", "Executar TV2_RunFormulariosAvaliacaoDemandante", "Payload vazio falha e Local 1 passa", "Linha FD_AV_04 no resultado", "Impede gravacao sem demandante", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FD_AV_05_IMPRESSAO_USA_DEMANDANTE_RESOLVIDO", "AUTO", "Validar demandante na impressao", "Executar TV2_RunFormulariosAvaliacaoDemandante", "Desc_entidade recebe Local 1", "Linha FD_AV_05 no resultado", "Fecha caminho de impressao da avaliacao", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FD_AV_06_AVALIACAO_REGISTRA_DEMANDANTE", "AUTO", "Validar registro auditavel do demandante", "Executar TV2_RunFormulariosAvaliacaoDemandante", "AvaliarOS conclui a OS e AUDIT_LOG contem AVALIADOR=Local 1", "Linha FD_AV_06 no resultado", "Prova que o nome chega ao registro", "AUTOMATIZADO"
+    TV2_AddRoteiro ws, nr, "FD_AV_07_ENT_ID_INVALIDO_FALHA_AUDITAVEL", "AUTO", "Validar falha com ENT_ID invalido", "Executar TV2_RunFormulariosAvaliacaoDemandante", "Resolver demandante falha e restaura CAD_OS", "Linha FD_AV_07 no resultado", "Evita avaliacao incompleta em base inconsistente", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "UI_ADV_001_REENTRADA_MUTADORES", "AUTO", "Validar guards de reentrada nos forms mutadores", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Flags declaradas, testadas, ligadas e desligadas", "Linha UI_ADV_001 no resultado", "Impede duplo clique criando mutacao duplicada", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "UI_ADV_002_REATIVA_EMPRESA_INTEGRIDADE", "AUTO", "Validar saneamento na reativacao de empresa", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Conflito, duplicidade ativa, confirmacao, servicos e reset de guard presentes", "Linha UI_ADV_002 no resultado", "Bloqueia duplicidade ativa/inativa e bypass silencioso", "AUTOMATIZADO"
     TV2_AddRoteiro ws, nr, "UI_ADV_003_REATIVA_ENTIDADE_SERVICO", "AUTO", "Validar reativacao de entidade via servico", "Executar TV2_RunAdversarial_UI False e conferir a linha automatizada", "Confirmacao, guard e ReativarEntidadePorChave presentes", "Linha UI_ADV_003 no resultado", "Evita reativacao direta sem trilha de servico", "AUTOMATIZADO"

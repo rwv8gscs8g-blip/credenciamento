@@ -1346,6 +1346,609 @@ falha:
     TV2_FinalizarExecucao suite, silencioso
 End Sub
 
+Public Sub TV2_RunBehavioralizacaoC1(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "BEHAVIORALIZACAO_C1"
+    Dim detalhes As String
+    Dim okConfigSnapshot As Boolean
+    Dim okOrdenacaoEntidade As Boolean
+    Dim okCredSequencial As Boolean
+    Dim okCredIds As Boolean
+    Dim okFilaIntegra As Boolean
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+
+    detalhes = ""
+    okConfigSnapshot = TV2_C1_ConfigSnapshotRoundTrip(detalhes)
+    TV2_LogAssert suite, "CS_C1_01_CONFIG_SNAPSHOT_ROUNDTRIP", "AUTO", _
+                  "Snapshot CONFIG A:N restaura valores reais apos mutacao", _
+                  "CONFIG!A:N volta aos valores originais apos captura, mutacao e restore", _
+                  detalhes, _
+                  "C1/FT-11: substitui prova por token por round-trip comportamental do snapshot", _
+                  okConfigSnapshot
+
+    TV2_PrepararBaselineCanonica
+    TV2_CadastrarEntidadeCanonica "003", "Local C1 3"
+    TV2_CadastrarEntidadeCanonica "001", "Local C1 1"
+    TV2_CadastrarEntidadeCanonica "002", "Local C1 2"
+    detalhes = ""
+    okOrdenacaoEntidade = TV2_C1_ClassificarEntidadesBasePopulada(detalhes)
+    TV2_LogAssert suite, "CS_C1_02_ORDENACAO_ENTIDADE_BASE_POPULADA", "AUTO", _
+                  "Classificacao de entidade ordena dados reais sem preservar linha 2 como cabecalho", _
+                  "Apos sort, as tres entidades C1 ficam em ordem 001,002,003", _
+                  detalhes, _
+                  "BL-2/C1: cobre o comportamento data-dependent exposto pelo L43 em vez de apenas procurar xlNo", _
+                  okOrdenacaoEntidade
+
+    TV2_PrepararCenarioTriploCanonico
+    detalhes = ""
+    okCredSequencial = TV2_C1_ProximoIdCredenciadosSequencial(detalhes)
+    TV2_LogAssert suite, "CS_C1_03_CRED_ID_AR1_SEQUENCIAL", "AUTO", _
+                  "ProximoId em CREDENCIADOS usa maximo real quando AR1 esta atrasado", _
+                  "Com base populada, proximos IDs sao max+1 e max+2 sem reuso", _
+                  detalhes, _
+                  "FT-4/C1: cria rede de seguranca antes de mexer em credenciamento em lote", _
+                  okCredSequencial
+
+    detalhes = ""
+    okCredIds = TV2_C1_CredIdsCanonicosUnicos(TV2_AtivCanonA(), 3, detalhes)
+    TV2_LogAssert suite, "CS_C1_04_CRED_ID_CANONICO_UNICO", "AUTO", _
+                  "Credenciamentos canonicos mantem CRED_ID numerico unico", _
+                  "Tres linhas da atividade canonica com IDs canonicos e sem duplicidade", _
+                  detalhes, _
+                  "FT-4/C1: detecta reuso ou formato invalido antes de otimizar alocacao em lote", _
+                  okCredIds
+
+    okFilaIntegra = TV2_FilaTemOrdemIntegra(TV2_AtivCanonA(), 3)
+    TV2_LogAssert suite, "CS_C1_05_FILA_ORDEM_INTEGRA", "AUTO", _
+                  "Fila canonica segue com posicoes 1..3 depois dos testes de ID", _
+                  "BuscarFila retorna tres empresas em ordem integra", _
+                  "FILA=" & TV2_FilaComPosicoesCsv(TV2_AtivCanonA()), _
+                  "FT-4/C1: garante que teste de IDs nao quebrou a fila antes da proxima onda", _
+                  okFilaIntegra
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite BehavioralizacaoC1 sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Private Function TV2_C1_ClassificarEntidadesBasePopulada(ByRef detalhes As String) As Boolean
+    Dim ws As Worksheet
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim idsObtidos As String
+    Dim nomesObtidos As String
+    Dim ok As Boolean
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_ENTIDADE)
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        detalhes = "Nao foi possivel preparar ENTIDADE."
+        Exit Function
+    End If
+
+    Call ClassificaEntidade
+    Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+
+    idsObtidos = Trim$(CStr(ws.Cells(LINHA_DADOS, COL_ENT_ID).Value)) & "," & _
+                 Trim$(CStr(ws.Cells(LINHA_DADOS + 1, COL_ENT_ID).Value)) & "," & _
+                 Trim$(CStr(ws.Cells(LINHA_DADOS + 2, COL_ENT_ID).Value))
+    nomesObtidos = Trim$(CStr(ws.Cells(LINHA_DADOS, COL_ENT_NOME).Value)) & "|" & _
+                   Trim$(CStr(ws.Cells(LINHA_DADOS + 1, COL_ENT_NOME).Value)) & "|" & _
+                   Trim$(CStr(ws.Cells(LINHA_DADOS + 2, COL_ENT_NOME).Value))
+
+    ok = (idsObtidos = "001,002,003")
+    detalhes = "IDS=" & idsObtidos & "; NOMES=" & nomesObtidos
+    TV2_C1_ClassificarEntidadesBasePopulada = ok
+    Exit Function
+
+falha:
+    detalhes = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    On Error Resume Next
+    If Not ws Is Nothing Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    TV2_C1_ClassificarEntidadesBasePopulada = False
+End Function
+
+Public Sub TV2_RunFT4CredenciamentoLote(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "FT4_CREDENCIAMENTO_LOTE"
+    Const qtdServicosFT4 As Long = 30
+    Const limiteSegundos As Double = 10#
+    Dim empId As String
+    Dim ativId As String
+    Dim maxAntes As Long
+    Dim ar1Antes As Long
+    Dim ar1Depois As Long
+    Dim ar1Reexec As Long
+    Dim qtdAntes As Long
+    Dim qtdDepois As Long
+    Dim qtdDepoisReexec As Long
+    Dim totalServ As Long
+    Dim adicionados As Long
+    Dim ignorados As Long
+    Dim totalServReexec As Long
+    Dim adicionadosReexec As Long
+    Dim ignoradosReexec As Long
+    Dim tempoSeg As Double
+    Dim tempoReexec As Double
+    Dim detalhes As String
+    Dim detalhesLote As String
+    Dim detalhesSeq As String
+    Dim detalhesReexec As String
+    Dim okPrep As Boolean
+    Dim okLote As Boolean
+    Dim okSeq As Boolean
+    Dim okReexec As Boolean
+    Dim frm As Credencia_Empresa
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+
+    okPrep = TV2_FT4_PrepararCredenciamentoLote(qtdServicosFT4, empId, ativId, maxAntes, ar1Antes, detalhes)
+    TV2_LogAssert suite, "FT4_01_PREPARA_BASE_POPULADA", "AUTO", _
+                  "Preparar base FT-4 com AR1 atrasado e servicos multiplos", _
+                  "Base tem credenciamento previo, AR1 atrasado e 30 servicos na atividade alvo", _
+                  detalhes, _
+                  "Garante que o teste exerce o risco CRED_ID/AR1 apontado pelo parecer 0024", _
+                  okPrep
+
+    If okPrep Then
+        qtdAntes = TV2_CountRows(SHEET_CREDENCIADOS)
+        Set frm = New Credencia_Empresa
+        okLote = frm.TV2_ExecutarCredenciamentoLote(empId, ativId, detalhesLote, totalServ, adicionados, ignorados, tempoSeg)
+        Unload frm
+        Set frm = Nothing
+        qtdDepois = TV2_CountRows(SHEET_CREDENCIADOS)
+    Else
+        detalhesLote = "Preparacao falhou; lote nao executado."
+    End If
+
+    TV2_LogAssert suite, "FT4_02_LOTE_ADICIONA_TODOS_SERVICOS", "AUTO", _
+                  "Executor real de Credencia_Empresa credencia todos os servicos da atividade", _
+                  "30 novos credenciamentos, 0 ignorados e delta de linhas igual a 30", _
+                  detalhesLote & "; QTD_ANTES=" & CStr(qtdAntes) & "; QTD_DEPOIS=" & CStr(qtdDepois), _
+                  "FT-4: prova comportamento do fluxo real sem depender de token estatico", _
+                  (okLote And totalServ = qtdServicosFT4 And adicionados = qtdServicosFT4 And ignorados = 0 And _
+                   qtdDepois - qtdAntes = qtdServicosFT4)
+
+    If okLote Then okSeq = TV2_FT4_CredIdsSequenciais(empId, ativId, maxAntes + 1, adicionados, detalhesSeq)
+    TV2_LogAssert suite, "FT4_03_CRED_ID_SEQUENCIAL_CONTINUO", "AUTO", _
+                  "CRED_ID do lote segue sequencia continua apos maximo real", _
+                  "IDs novos vao de maxAntes+1 ate maxAntes+30 sem duplicados ou formato invalido", _
+                  detalhesSeq, _
+                  "Protege a otimizacao em memoria contra reuso ou salto de CRED_ID", _
+                  okSeq
+
+    ar1Depois = TV2_FT4_AR1Credenciados()
+    TV2_LogAssert suite, "FT4_04_AR1_ATUALIZADO_UMA_VEZ", "AUTO", _
+                  "AR1 de CREDENCIADOS reflete ultimo ID alocado no lote", _
+                  "AR1 final = maxAntes + adicionados", _
+                  "AR1_ANTES=" & CStr(ar1Antes) & "; MAX_ANTES=" & CStr(maxAntes) & _
+                  "; ADICIONADOS=" & CStr(adicionados) & "; AR1_DEPOIS=" & CStr(ar1Depois), _
+                  "Fecha o risco FT-4 de contador atrasado apos alocacao em lote", _
+                  (okLote And ar1Depois = maxAntes + adicionados)
+
+    TV2_LogAssert suite, "FT4_05_TEMPO_EXECUCAO_LOTE", "AUTO", _
+                  "Credenciamento em lote executa dentro do limite FT-4", _
+                  "Tempo do lote <= 10 segundos", _
+                  "TEMPO_SEG=" & Format$(tempoSeg, "0.000") & "; LIMITE=" & Format$(limiteSegundos, "0.000"), _
+                  "Cobre o cycle-time perceptivel ausente no parecer 0024", _
+                  (okLote And tempoSeg > 0# And tempoSeg <= limiteSegundos)
+
+    If okLote Then
+        Set frm = New Credencia_Empresa
+        okReexec = frm.TV2_ExecutarCredenciamentoLote(empId, ativId, detalhesReexec, totalServReexec, adicionadosReexec, ignoradosReexec, tempoReexec)
+        Unload frm
+        Set frm = Nothing
+        qtdDepoisReexec = TV2_CountRows(SHEET_CREDENCIADOS)
+        ar1Reexec = TV2_FT4_AR1Credenciados()
+    Else
+        detalhesReexec = "Lote inicial falhou; reexecucao nao realizada."
+    End If
+
+    TV2_LogAssert suite, "FT4_06_REEXECUCAO_IDEMPOTENTE", "AUTO", _
+                  "Reexecutar o lote ignora credenciamentos existentes sem criar duplicados", _
+                  "0 adicionados, 30 ignorados, mesma contagem de linhas e AR1 preservado", _
+                  detalhesReexec & "; QTD_DEPOIS=" & CStr(qtdDepois) & _
+                  "; QTD_REEXEC=" & CStr(qtdDepoisReexec) & "; AR1_REEXEC=" & CStr(ar1Reexec), _
+                  "Mantem a regra atual de duplicidades ignoradas mesmo com indice local", _
+                  (okReexec And adicionadosReexec = 0 And ignoradosReexec = qtdServicosFT4 And _
+                   qtdDepoisReexec = qtdDepois And ar1Reexec = ar1Depois)
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    On Error Resume Next
+    If Not frm Is Nothing Then Unload frm
+    On Error GoTo 0
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite FT4CredenciamentoLote sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Public Sub TV2_RunBL4ProtecaoPersistente(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "BL4_PROTECAO_PERSISTENTE"
+    Dim detalhesAuto As String
+    Dim detalhesProtecao As String
+    Dim detalhesPersistencia As String
+    Dim detalhesReaplicar As String
+    Dim detalhesPersistenciaPosReaplicar As String
+    Dim detalhesRestaurar As String
+    Dim dtAuto As Date
+    Dim okAutoOpen As Boolean
+    Dim okProtecao As Boolean
+    Dim okPersistencia As Boolean
+    Dim okReaplicar As Boolean
+    Dim okPersistenciaPosReaplicar As Boolean
+    Dim okRestaurar As Boolean
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+
+    dtAuto = AutoOpen_UltimaProtecaoMarcadorExecutadaEm()
+    okAutoOpen = AutoOpen_UltimaProtecaoMarcadorAposUltimoSave(detalhesAuto)
+    TV2_LogAssert suite, "BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO", "AUTO", _
+                  "Auto_Open persistiu marcador auditavel da reaplicacao de protecao critica na abertura", _
+                  "Marcador persistente de abertura existe, esta OK e nao e anterior ao ultimo save quando esse metadado estiver disponivel", _
+                  "EXECUTADA_EM=" & IIf(dtAuto > 0, Format$(dtAuto, "yyyy-mm-dd hh:nn:ss"), "nao registrada") & _
+                  "; " & detalhesAuto, _
+                  "BL-4: prova que o ciclo save/reopen disparou a rotina de abertura mesmo apos reset do estado VBA em memoria", _
+                  okAutoOpen
+
+    okProtecao = Util_VerificarProtecaoAbasCriticas(detalhesProtecao)
+    TV2_LogAssert suite, "BL4_02_ABAS_CRITICAS_PROTEGIDAS", "AUTO", _
+                  "Abas criticas seguem protegidas apos reopen", _
+                  "ProtectContents, DrawingObjects e celulas bloqueadas OK em todas as abas criticas", _
+                  detalhesProtecao, _
+                  "BL-4: impede workbook reaberto com base operacional editavel diretamente", _
+                  okProtecao
+
+    okPersistencia = Util_VerificarProtecaoPersistenteAposAbertura(detalhesPersistencia)
+    TV2_LogAssert suite, "BL4_03_UIONLY_REAPLICADO_APOS_REOPEN", "AUTO", _
+                  "UserInterfaceOnly foi reaplicado apos reopen", _
+                  "VBA consegue escrever o mesmo valor em celula bloqueada protegida, sem desproteger a aba", _
+                  detalhesPersistencia, _
+                  "BL-4: cobre a raiz do parecer 0024, pois UserInterfaceOnly nao persiste sem rotina de abertura", _
+                  okPersistencia
+
+    okReaplicar = Util_ProtegerAbasCriticasVerificado(detalhesReaplicar)
+    okPersistenciaPosReaplicar = Util_VerificarProtecaoPersistenteAposAbertura(detalhesPersistenciaPosReaplicar)
+    TV2_LogAssert suite, "BL4_04_REAPLICACAO_IDEMPOTENTE", "AUTO", _
+                  "Reaplicar protecao critica e idempotente", _
+                  "Nova chamada de protecao mantem abas criticas verificaveis e com escrita VBA permitida", _
+                  "REAPLICAR=" & detalhesReaplicar & "; POS=" & detalhesPersistenciaPosReaplicar, _
+                  "BL-4: evita que Auto_Open ou chamada manual degradem protecao ja aplicada", _
+                  (okReaplicar And okPersistenciaPosReaplicar)
+
+    okRestaurar = TV2_BL4_PrepararRestaurarCritica(detalhesRestaurar)
+    TV2_LogAssert suite, "BL4_05_PREPARAR_RESTAURAR_CRITICA", "AUTO", _
+                  "Preparar e restaurar aba critica preserva protecao persistente", _
+                  "Apos ciclo preparar/restaurar, a protecao critica continua verificavel", _
+                  detalhesRestaurar, _
+                  "BL-4: cobre o fluxo de escrita VBA que remove e restaura protecao durante operacoes reais", _
+                  okRestaurar
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite BL4ProtecaoPersistente sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Public Sub TV2_RunFormulariosAvaliacaoDemandante(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "FORM_AVALIACAO_DEMANDANTE"
+    Dim osId As String
+    Dim detalhesPrep As String
+    Dim detalhesResolver As String
+    Dim detalhesLista As String
+    Dim detalhesPayload As String
+    Dim detalhesPrint As String
+    Dim detalhesRegistro As String
+    Dim detalhesInvalidar As String
+    Dim detalhesInvalidarRestore As String
+    Dim detalhesInvalido As String
+    Dim entId As String
+    Dim demandanteNome As String
+    Dim demandanteLista As String
+    Dim demandantePrint As String
+    Dim payloadOSID As String
+    Dim payloadAvaliador As String
+    Dim payloadQtExecutada As Double
+    Dim payloadObservacao As String
+    Dim payloadJustif As String
+    Dim payloadMedia As Double
+    Dim notas(1 To 10) As Integer
+    Dim i As Long
+    Dim okBase As Boolean
+    Dim okResolver As Boolean
+    Dim okLista As Boolean
+    Dim okPayload As Boolean
+    Dim okPrint As Boolean
+    Dim okRegistro As Boolean
+    Dim okInvalidar As Boolean
+    Dim okInvalido As Boolean
+    Dim okRestore As Boolean
+    Dim resResolver As TResult
+    Dim resPayloadVazio As TResult
+    Dim resPayload As TResult
+    Dim resAval As TResult
+    Dim resInvalido As TResult
+    Dim frm As Menu_Principal
+    Dim auditDemandanteAntes As Long
+    Dim auditDemandanteDepois As Long
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+
+    okBase = TV2_FormAval_PrepararOS(osId, detalhesPrep)
+    TV2_LogAssert suite, "FD_AV_01_PREPARA_OS_EM_EXECUCAO", "AUTO", _
+                  "Preparar OS em execucao para avaliacao de formulario", _
+                  "OS em EM_EXECUCAO com ENT_ID canonico e demandante existente", _
+                  detalhesPrep, _
+                  "Abre uma base controlada para testar o bug real do demandante na avaliacao", _
+                  okBase
+
+    If okBase Then
+        resResolver = ResolverDemandanteAvaliacaoPorOS(osId, entId, demandanteNome, detalhesResolver)
+        okResolver = (resResolver.sucesso And IdsIguais(entId, "001") And demandanteNome = "Local 1")
+    Else
+        detalhesResolver = "Base nao preparada; resolucao nao executada."
+    End If
+    TV2_LogAssert suite, "FD_AV_02_DEMANDANTE_RESOLVIDO_POR_OS", "AUTO", _
+                  "Resolver demandante por OS_ID", _
+                  "ResolverDemandanteAvaliacaoPorOS retorna ENT_ID=001 e NOME=Local 1", _
+                  detalhesResolver, _
+                  "Remove dependencia de estado global ou valor obsoleto de Desc_entidade", _
+                  okResolver
+
+    If okBase Then
+        Set frm = New Menu_Principal
+        okLista = frm.TV2_AvaliacaoDemandanteNaLista(osId, demandanteLista, detalhesLista)
+    Else
+        detalhesLista = "Base nao preparada; lista nao verificada."
+    End If
+    TV2_LogAssert suite, "FD_AV_03_LISTA_AVALIACAO_EXIBE_DEMANDANTE", "AUTO", _
+                  "AV_Lista exibe o nome do demandante", _
+                  "Linha da OS em avaliacao traz Local 1 na coluna visivel do demandante", _
+                  detalhesLista, _
+                  "Garante que o operador ve o demandante correto antes de avaliar", _
+                  (okLista And demandanteLista = "Local 1")
+
+    If okBase Then
+        For i = 1 To 10
+            notas(i) = 8
+        Next i
+        resPayloadVazio = MontarPayloadAvaliacao(osId, "", notas, 2, "OBS FD_AV", "", _
+                                                 payloadOSID, payloadAvaliador, payloadQtExecutada, _
+                                                 payloadObservacao, payloadJustif, payloadMedia)
+        resPayload = MontarPayloadAvaliacao(osId, demandanteNome, notas, 2, "OBS FD_AV", "", _
+                                            payloadOSID, payloadAvaliador, payloadQtExecutada, _
+                                            payloadObservacao, payloadJustif, payloadMedia)
+        okPayload = (Not resPayloadVazio.sucesso And resPayload.sucesso And _
+                     payloadAvaliador = demandanteNome And payloadQtExecutada = 2)
+        detalhesPayload = "VAZIO_SUCESSO=" & CStr(resPayloadVazio.sucesso) & _
+                          "; DEMANDANTE=" & demandanteNome & _
+                          "; PAYLOAD_AVALIADOR=" & payloadAvaliador & _
+                          "; MSG_VAZIO=" & resPayloadVazio.mensagem & _
+                          "; MSG_OK=" & resPayload.mensagem
+    Else
+        detalhesPayload = "Base nao preparada; payload nao verificado."
+    End If
+    TV2_LogAssert suite, "FD_AV_04_PAYLOAD_REJEITA_VAZIO_ACEITA_DEMANDANTE", "AUTO", _
+                  "Payload da avaliacao exige demandante resolvido", _
+                  "Payload vazio falha e payload com Local 1 passa", _
+                  detalhesPayload, _
+                  "Impede registrar avaliacao sem nome do demandante", _
+                  okPayload
+
+    If okBase Then
+        If frm Is Nothing Then Set frm = New Menu_Principal
+        okPrint = frm.TV2_AvaliacaoAplicarDemandanteImpressao(osId, demandantePrint, detalhesPrint)
+    Else
+        detalhesPrint = "Base nao preparada; impressao nao verificada."
+    End If
+    TV2_LogAssert suite, "FD_AV_05_IMPRESSAO_USA_DEMANDANTE_RESOLVIDO", "AUTO", _
+                  "Variavel de impressao recebe demandante resolvido", _
+                  "Desc_entidade sai de valor obsoleto para Local 1", _
+                  detalhesPrint, _
+                  "Fecha o caminho observado pelo operador ao imprimir avaliacao", _
+                  (okPrint And demandantePrint = "Local 1")
+
+    If okBase Then
+        auditDemandanteAntes = TV2_AuditCount("OS Fechada/Avaliada", "AVALIADOR=" & demandanteNome)
+        resAval = AvaliarOS(osId, demandanteNome, notas, 2, "FD_AV demanda registrada", "", Date + 6, Date + 15)
+        auditDemandanteDepois = TV2_AuditCount("OS Fechada/Avaliada", "AVALIADOR=" & demandanteNome)
+        okRegistro = (resAval.sucesso And TV2_StatusOS(osId) = "CONCLUIDA" And _
+                      auditDemandanteDepois > auditDemandanteAntes)
+        detalhesRegistro = "SUCESSO_AVAL=" & CStr(resAval.sucesso) & _
+                           "; STATUS_OS=" & TV2_StatusOS(osId) & _
+                           "; AUDIT_ANTES=" & CStr(auditDemandanteAntes) & _
+                           "; AUDIT_DEPOIS=" & CStr(auditDemandanteDepois) & _
+                           "; MSG=" & resAval.mensagem
+    Else
+        detalhesRegistro = "Base nao preparada; registro nao verificado."
+    End If
+    TV2_LogAssert suite, "FD_AV_06_AVALIACAO_REGISTRA_DEMANDANTE", "AUTO", _
+                  "Avaliacao registra demandante resolvido", _
+                  "AvaliarOS conclui a OS e AUDIT_LOG contem AVALIADOR=Local 1", _
+                  detalhesRegistro, _
+                  "Prova que o nome resolvido chega ao registro auditavel da avaliacao", _
+                  okRegistro
+
+    If okBase Then
+        okInvalidar = TV2_FormAval_AlterarEntIdOS(osId, "999", detalhesInvalidar)
+        resInvalido = ResolverDemandanteAvaliacaoPorOS(osId, entId, demandanteNome, detalhesInvalido)
+        okRestore = TV2_FormAval_AlterarEntIdOS(osId, "001", detalhesInvalidarRestore)
+        okInvalido = (okInvalidar And Not resInvalido.sucesso And okRestore)
+    Else
+        detalhesInvalidar = "Base nao preparada; negativo nao executado."
+        detalhesInvalido = detalhesInvalidar
+    End If
+    TV2_LogAssert suite, "FD_AV_07_ENT_ID_INVALIDO_FALHA_AUDITAVEL", "AUTO", _
+                  "ENT_ID inexistente falha de modo auditavel", _
+                  "Resolver demandante falha quando CAD_OS.ENT_ID nao existe em ENTIDADE", _
+                  detalhesInvalidar & "; RES=" & resInvalido.mensagem & "; " & detalhesInvalido & _
+                  "; RESTORE=" & CStr(okRestore) & "; " & detalhesInvalidarRestore, _
+                  "Evita gravar avaliacao incompleta quando a base esta inconsistente", _
+                  okInvalido
+
+    If Not frm Is Nothing Then Unload frm
+    Set frm = Nothing
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    On Error Resume Next
+    If Not frm Is Nothing Then Unload frm
+    On Error GoTo 0
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite FormulariosAvaliacaoDemandante sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Private Function TV2_FormAval_PrepararOS(ByRef osIdOut As String, ByRef detalhes As String) As Boolean
+    Dim resPre As TResult
+    Dim resOs As TResult
+
+    On Error GoTo falha
+
+    TV2_PrepararCenarioTriploCanonico
+    resPre = EmitirPreOS("001", TV2_CodServicoA(), 2)
+    If Not resPre.sucesso Then
+        detalhes = "EmitirPreOS falhou: " & resPre.mensagem
+        Exit Function
+    End If
+
+    resOs = EmitirOS(resPre.IdGerado, Date + 5, "EMP-FD-AV")
+    osIdOut = resOs.IdGerado
+    detalhes = "PREOS_ID=" & resPre.IdGerado & "; OS_ID=" & osIdOut & _
+               "; PREOS_SUCESSO=" & CStr(resPre.sucesso) & _
+               "; OS_SUCESSO=" & CStr(resOs.sucesso) & _
+               "; STATUS_OS=" & TV2_StatusOS(osIdOut)
+    TV2_FormAval_PrepararOS = (resOs.sucesso And osIdOut <> "" And TV2_StatusOS(osIdOut) = "EM_EXECUCAO")
+    Exit Function
+
+falha:
+    detalhes = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    TV2_FormAval_PrepararOS = False
+End Function
+
+Private Function TV2_FormAval_AlterarEntIdOS( _
+    ByVal osId As String, _
+    ByVal entIdNovo As String, _
+    ByRef detalhes As String _
+) As Boolean
+    Dim ws As Worksheet
+    Dim ultima As Long
+    Dim i As Long
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CAD_OS)
+    ultima = UltimaLinhaAba(SHEET_CAD_OS)
+    For i = LINHA_DADOS To ultima
+        If IdsIguais(SafeListVal(ws.Cells(i, COL_OS_ID).Value), osId) Then
+            If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+                detalhes = "Nao foi possivel preparar CAD_OS."
+                Exit Function
+            End If
+            ws.Cells(i, COL_OS_ENT_ID).Value = entIdNovo
+            Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+            detalhes = "OS_ID=" & osId & "; ENT_ID_NOVO=" & entIdNovo & "; LINHA_OS=" & CStr(i)
+            TV2_FormAval_AlterarEntIdOS = True
+            Exit Function
+        End If
+    Next i
+
+    detalhes = "OS_ID=" & osId & "; nao encontrada em CAD_OS"
+    TV2_FormAval_AlterarEntIdOS = False
+    Exit Function
+
+falha:
+    detalhes = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    On Error Resume Next
+    If Not ws Is Nothing Then Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
+    On Error GoTo 0
+    TV2_FormAval_AlterarEntIdOS = False
+End Function
+
+Private Function TV2_BL4_PrepararRestaurarCritica(ByRef detalhes As String) As Boolean
+    Dim ws As Worksheet
+    Dim alvo As Range
+    Dim formulaOriginal As String
+    Dim estavaProtegida As Boolean
+    Dim senhaProtecao As String
+    Dim detalhesPersistencia As String
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+    Set alvo = ws.Cells(1, 1)
+    formulaOriginal = CStr(alvo.Formula)
+
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        detalhes = "Nao foi possivel preparar EMPRESAS."
+        Exit Function
+    End If
+
+    alvo.Formula = formulaOriginal
+    Call Util_RestaurarProtecaoAba(ws, estavaProtegida, senhaProtecao)
+
+    TV2_BL4_PrepararRestaurarCritica = Util_VerificarProtecaoPersistenteAposAbertura(detalhesPersistencia)
+    detalhes = "ABA=" & SHEET_EMPRESAS & "; ESTAVA_PROTEGIDA=" & CStr(estavaProtegida) & _
+               "; POS_RESTORE=" & detalhesPersistencia
+    Exit Function
+
+falha:
+    detalhes = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    On Error Resume Next
+    If Not ws Is Nothing Then Call Util_RestaurarProtecaoAba(ws, estavaProtegida, senhaProtecao)
+    On Error GoTo 0
+    TV2_BL4_PrepararRestaurarCritica = False
+End Function
+
 Private Function TV2_FormControleExiste(ByVal frm As Object, ByVal nomeControle As String) As Boolean
     Dim ctl As Object
 

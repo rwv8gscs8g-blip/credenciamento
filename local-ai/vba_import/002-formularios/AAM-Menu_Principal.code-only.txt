@@ -97,6 +97,75 @@ Private Function AV_MontarObservacaoImpressao(ByVal ObservacaoTexto As String, B
     End If
 End Function
 
+Private Sub AV_AplicarDemandanteImpressao(ByVal demandanteNome As String)
+    Desc_entidade = demandanteNome
+End Sub
+
+Public Function TV2_AvaliacaoDemandanteNaLista( _
+    ByVal osId As String, _
+    ByRef demandanteOut As String, _
+    ByRef detalhesOut As String _
+) As Boolean
+    Dim i As Long
+
+    On Error GoTo falha
+
+    demandanteOut = ""
+    detalhesOut = ""
+    Call PreencherAvaliarOS
+
+    For i = 0 To AV_Lista.ListCount - 1
+        If IdsIguais(SafeListVal(AV_Lista.List(i, 0)), osId) Then
+            demandanteOut = Trim$(SafeListVal(AV_Lista.List(i, 1)))
+            detalhesOut = "OS_ID=" & osId & "; LINHA_LISTA=" & CStr(i) & _
+                          "; DEMANDANTE_LISTA=" & demandanteOut
+            TV2_AvaliacaoDemandanteNaLista = (demandanteOut <> "")
+            Exit Function
+        End If
+    Next i
+
+    detalhesOut = "OS_ID=" & osId & "; nao encontrado em AV_Lista"
+    TV2_AvaliacaoDemandanteNaLista = False
+    Exit Function
+
+falha:
+    detalhesOut = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    TV2_AvaliacaoDemandanteNaLista = False
+End Function
+
+Public Function TV2_AvaliacaoAplicarDemandanteImpressao( _
+    ByVal osId As String, _
+    ByRef demandanteOut As String, _
+    ByRef detalhesOut As String _
+) As Boolean
+    Dim entId As String
+    Dim nome As String
+    Dim detalhesSvc As String
+    Dim res As TResult
+
+    On Error GoTo falha
+
+    demandanteOut = ""
+    detalhesOut = ""
+    res = ResolverDemandanteAvaliacaoPorOS(osId, entId, nome, detalhesSvc)
+    If Not res.sucesso Then
+        detalhesOut = res.mensagem & "; " & detalhesSvc
+        TV2_AvaliacaoAplicarDemandanteImpressao = False
+        Exit Function
+    End If
+
+    Desc_entidade = "__TV2_OBSOLETO__"
+    Call AV_AplicarDemandanteImpressao(nome)
+    demandanteOut = Trim$(SafeListVal(Desc_entidade))
+    detalhesOut = detalhesSvc & "; DESC_ENTIDADE=" & demandanteOut
+    TV2_AvaliacaoAplicarDemandanteImpressao = (demandanteOut = nome)
+    Exit Function
+
+falha:
+    detalhesOut = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    TV2_AvaliacaoAplicarDemandanteImpressao = False
+End Function
+
 Private Sub AV_Vl_OS_AfterUpdate()
 On Error GoTo erro_carregamento:
 AV_Vl_OS = Format(AV_Vl_OS, "currency")
@@ -751,6 +820,10 @@ Private Sub EncerraOS_Click()
     Dim payloadObservacao As String
     Dim payloadJustifDivergencia As String
     Dim payloadMediaNotas As Double
+    Dim demandanteEntId As String
+    Dim demandanteNome As String
+    Dim demandanteDetalhes As String
+    Dim resDemandante As TResult
 
     If mEncerraOSEmProcessamento Then
         MsgBox "Avaliacao de OS ja em andamento. Aguarde a conclusao.", vbInformation, "Avaliação"
@@ -766,6 +839,13 @@ Private Sub EncerraOS_Click()
     osId = AVListaCol(0)
     If Trim$(osId) = "" Then
         MsgBox "Selecione uma OS válida para avaliar!", vbExclamation, "Avaliação"
+        GoTo limpar
+    End If
+
+    resDemandante = ResolverDemandanteAvaliacaoPorOS(osId, demandanteEntId, demandanteNome, demandanteDetalhes)
+    If Not resDemandante.sucesso Then
+        MsgBox "Não foi possível resolver o demandante da OS " & osId & "." & vbCrLf & _
+               resDemandante.mensagem, vbExclamation, "Avaliação"
         GoTo limpar
     End If
 
@@ -785,6 +865,7 @@ Private Sub EncerraOS_Click()
     ' V12.0.0010: resumo detalhado antes de confirmar
     If MsgBox("Confirma a avaliação?" & vbCrLf & vbCrLf & _
               "OS: " & osId & vbCrLf & _
+              "Demandante: " & demandanteNome & vbCrLf & _
               "Média das notas: " & mediaTexto & vbCrLf & _
               "Notas: " & CStr(notas(1)) & "/" & CStr(notas(2)) & "/" & CStr(notas(3)) & "/" & _
               CStr(notas(4)) & "/" & CStr(notas(5)) & "/" & CStr(notas(6)) & "/" & _
@@ -876,8 +957,7 @@ Private Sub EncerraOS_Click()
         justifDiv = Funcoes.NormalizarTextoPTBR(SafeListVal(justfInput))
     End If
 
-    avaliador = Trim$(SafeListVal(AVListaCol(1)))
-    If avaliador = "" Then avaliador = Trim$(SafeListVal(Desc_entidade))
+    avaliador = demandanteNome
     resPayload = MontarPayloadAvaliacao( _
         osId, _
         avaliador, _
@@ -907,7 +987,7 @@ Private Sub EncerraOS_Click()
     MsgBox "Avaliação cadastrada com sucesso!", vbInformation, "Avaliação de serviço"
     If MsgBox("Deseja imprimir a avaliação desta empresa?", vbQuestion + vbYesNo, "Avaliação") = vbYes Then
         N_OS = AVListaCol(0)
-        Desc_entidade = AVListaCol(1)
+        Call AV_AplicarDemandanteImpressao(demandanteNome)
         Desc_Serv = AVListaCol(2)
         Empresa_CNPJ = AVCNPJ
         M_NomeEmpresa = AVEmpresa

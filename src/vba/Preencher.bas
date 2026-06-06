@@ -1004,7 +1004,7 @@ Call CarregarCabecalhoConfig
 ws.Range("D2").Value = MontarCabecalhoMunicipio(municipio)
 ws.Range("D3").Value = Gestor_Empresa
 ws.Range("L3").Value = N_OS
-ws.Range("L9").Value = Desc_entidade & " - " & cont_entidade & " - " & telcont_entidade
+ws.Range("L9").Value = Preencher_TextoDemandanteImpressao()
 ws.Range("N5").Value = Format(CDate(Now), "DD/MM/YYYY")
 ws.Range("C9").Value = M_NomeEmpresa
 ws.Range("C11").Value = Empresa_endereco
@@ -1026,6 +1026,7 @@ ws.Range("L55").Value = Util_Conversao.ToDouble(QT_ESTIMADA)
 Call AplicarFormatoQuantidade(ws.Range("L55"))
 ws.Range("M55").Value = Util_Conversao.ToDouble(CStr(Vl_estimado))
 Call AplicarFormatoMoedaBR(ws.Range("M55"))
+Call Preencher_EscreverTotalFinalOS(ws, Vl_estimado)
 ws.Range("D84").Value = NR_Empenho
 Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
 Err.Clear
@@ -1053,7 +1054,7 @@ Call CarregarCabecalhoConfig
 ws.Range("D2").Value = MontarCabecalhoMunicipio(municipio)
 ws.Range("D3").Value = Gestor_Empresa
 ws.Range("L3").Value = N_OS
-ws.Range("L9").Value = Desc_entidade & " - " & cont_entidade & " - " & telcont_entidade
+ws.Range("L9").Value = Preencher_TextoDemandanteImpressao()
 ws.Range("N5").Value = Format(CDate(Now), "DD/MM/YYYY")
 ws.Range("C9").Value = M_NomeEmpresa
 ws.Range("C11").Value = Empresa_endereco
@@ -1075,6 +1076,7 @@ ws.Range("L55").Value = Util_Conversao.ToDouble(QT_ESTIMADA)
 Call AplicarFormatoQuantidade(ws.Range("L55"))
 ws.Range("M55").Value = Util_Conversao.ToDouble(CStr(Vl_estimado))
 Call AplicarFormatoMoedaBR(ws.Range("M55"))
+Call Preencher_EscreverTotalFinalOS(ws, Vl_estimado)
 ws.Range("D84").Value = NR_Empenho
 Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
 Err.Clear
@@ -1103,7 +1105,7 @@ Call GarantirDadosPreOSParaImpressao(N_OS)
 ws.Range("D2").Value = MontarCabecalhoMunicipio(municipio)
 ws.Range("D3").Value = Gestor_Empresa
 ws.Range("L3").Value = N_OS
-ws.Range("L9").Value = Desc_entidade & " - " & cont_entidade & " - " & telcont_entidade
+ws.Range("L9").Value = Preencher_TextoDemandanteImpressao()
 ws.Range("N5").Value = Format(CDate(Now), "DD/MM/YYYY")
 ws.Range("C9").Value = M_NomeEmpresa
 ws.Range("C11").Value = Empresa_endereco
@@ -1120,6 +1122,7 @@ ws.Range("M23").Value = Util_Conversao.ToDouble(CStr(Vl_estimado))
 Call AplicarFormatoMoedaBR(ws.Range("M23"))
 ws.Range("M31").Value = Util_Conversao.ToDouble(CStr(Vl_estimado))
 Call AplicarFormatoMoedaBR(ws.Range("M31"))
+Call Preencher_AplicarBordasCriticasPreOS(ws)
 
 Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
 Err.Clear
@@ -1315,7 +1318,7 @@ If Not ws.Range("M31").HasFormula Then ws.Range("M31").Value = 0
 ws.Range("B55").Value = ""
 If Not ws.Range("L55").HasFormula Then ws.Range("L55").Value = 0
 If Not ws.Range("M55").HasFormula Then ws.Range("M55").Value = 0
-If Not ws.Range("N63").HasFormula Then ws.Range("N63").Value = 0
+If Not ws.Range("N63").HasFormula Then Call Preencher_EscreverTotalFinalOS(ws, 0)
 If Not ws.Range("D84").HasFormula Then ws.Range("D84").Value = 0
 
 End Sub
@@ -1375,20 +1378,26 @@ Sub PreencherAvaliarOS()
             lst.AddItem
             lst.List(lb, 0) = SafeListVal(wsOS.Cells(i, COL_OS_ID).Value)
 
-            Dim entId As String
-            entId = SafeListVal(wsOS.Cells(i, COL_OS_ENT_ID).Value)
-            Dim j As Long
-            For j = LINHA_DADOS To UltimaLinhaAba(SHEET_ENTIDADE)
-                If IdsIguais(SafeListVal(ThisWorkbook.Sheets(SHEET_ENTIDADE).Cells(j, COL_ENT_ID).Value), entId) Then
-                    lst.List(lb, 1) = SafeListVal(ThisWorkbook.Sheets(SHEET_ENTIDADE).Cells(j, COL_ENT_NOME).Value)
-                    Exit For
-                End If
-            Next j
+            Dim demandanteEntId As String
+            Dim demandanteNome As String
+            Dim demandanteDetalhes As String
+            Dim resDemandante As TResult
+            resDemandante = ResolverDemandanteAvaliacaoPorOS( _
+                SafeListVal(wsOS.Cells(i, COL_OS_ID).Value), _
+                demandanteEntId, _
+                demandanteNome, _
+                demandanteDetalhes)
+            If resDemandante.sucesso Then
+                lst.List(lb, 1) = demandanteNome
+            Else
+                lst.List(lb, 1) = ""
+            End If
 
             Dim codServ As String
             codServ = CStr(wsOS.Cells(i, COL_OS_COD_SERV).Value)
             Dim ativId As String
             ativId = SafeListVal(wsOS.Cells(i, COL_OS_ATIV_ID).Value)
+            Dim j As Long
             Dim servId As String
             servId = ExtrairServId(codServ, ativId)
             For j = LINHA_DADOS To UltimaLinhaAba(SHEET_CAD_SERV)
@@ -1600,6 +1609,113 @@ Private Sub AplicarFormatoMoedaBR(ByVal alvo As Range)
     End If
     alvo.ShrinkToFit = True
     On Error GoTo 0
+End Sub
+
+Public Function Preencher_RangeDemandanteAvaliacaoVisual() As String
+    Preencher_RangeDemandanteAvaliacaoVisual = "L9:P15"
+End Function
+
+Public Function Preencher_RangeTotalOSVisual() As String
+    Preencher_RangeTotalOSVisual = "N63:P63"
+End Function
+
+Public Function Preencher_RangeBordaPreOSPrestador() As String
+    Preencher_RangeBordaPreOSPrestador = "C9:C11"
+End Function
+
+Public Function Preencher_RangeBordaAvaliacaoVertical() As String
+    Preencher_RangeBordaAvaliacaoVertical = "A25:A45"
+End Function
+
+Public Sub Preencher_AplicarBordasCriticasPreOS(ByVal ws As Worksheet)
+    If ws Is Nothing Then Exit Sub
+
+    Call Preencher_AplicarBordaPretaContinua(ws.Range("C9").Borders(xlEdgeTop))
+    Call Preencher_AplicarBordaPretaContinua(ws.Range("C11").Borders(xlEdgeTop))
+End Sub
+
+Public Sub Preencher_AplicarBordasCriticasAvaliacao(ByVal ws As Worksheet)
+    If ws Is Nothing Then Exit Sub
+
+    Call Preencher_AplicarBordaPretaContinua(ws.Range(Preencher_RangeBordaAvaliacaoVertical()).Borders(xlEdgeLeft))
+End Sub
+
+Private Function Preencher_TextoDemandanteImpressao() As String
+    Preencher_TextoDemandanteImpressao = Trim$(Desc_entidade & " - " & cont_entidade & " - " & telcont_entidade)
+End Function
+
+Private Function Preencher_CelulaGravavelMerge(ByVal alvo As Range) As Range
+    If alvo.MergeCells Then
+        Set Preencher_CelulaGravavelMerge = alvo.MergeArea.Cells(1, 1)
+    Else
+        Set Preencher_CelulaGravavelMerge = alvo.Cells(1, 1)
+    End If
+End Function
+
+Private Sub Preencher_EscreverEmMerge(ByVal alvo As Range, ByVal valor As Variant)
+    Dim destino As Range
+
+    Set destino = Preencher_CelulaGravavelMerge(alvo)
+    destino.Value = valor
+End Sub
+
+Private Sub Preencher_EscreverDemandanteAvaliacao(ByVal ws As Worksheet, ByVal texto As String)
+    ws.Range("L8").Value = texto
+    Call Preencher_EscreverEmMerge(ws.Range("L9"), texto)
+
+    With ws.Range(Preencher_RangeDemandanteAvaliacaoVisual())
+        .WrapText = True
+        .ShrinkToFit = True
+        .VerticalAlignment = xlCenter
+    End With
+End Sub
+
+Private Sub Preencher_LimparDemandanteAvaliacao(ByVal ws As Worksheet)
+    ws.Range("L8").Value = ""
+    Call Preencher_EscreverEmMerge(ws.Range("L9"), "")
+End Sub
+
+Private Function Preencher_TotalFinalOSCalculado(ByVal ws As Worksheet, ByVal valorFallback As Variant) As Double
+    Dim totalFormula As Double
+    Dim totalFallback As Double
+
+    totalFallback = Util_Conversao.ToDouble(CStr(valorFallback))
+
+    On Error Resume Next
+    If ws.Range("M63").HasFormula Then
+        ws.Range("M63").Calculate
+        totalFormula = Util_Conversao.ToDouble(CStr(ws.Range("M63").Value))
+    End If
+    On Error GoTo 0
+
+    If totalFormula <> 0 Then
+        Preencher_TotalFinalOSCalculado = totalFormula
+    Else
+        Preencher_TotalFinalOSCalculado = totalFallback
+    End If
+End Function
+
+Private Sub Preencher_EscreverTotalFinalOS(ByVal ws As Worksheet, ByVal valorFallback As Variant)
+    Dim destino As Range
+    Dim areaFormato As Range
+
+    Set destino = Preencher_CelulaGravavelMerge(ws.Range("N63"))
+    If ws.Range("N63").MergeCells Then
+        Set areaFormato = ws.Range("N63").MergeArea
+    Else
+        Set areaFormato = ws.Range(Preencher_RangeTotalOSVisual())
+    End If
+
+    If Not destino.HasFormula Then destino.Value = Preencher_TotalFinalOSCalculado(ws, valorFallback)
+    Call AplicarFormatoMoedaBR(areaFormato)
+End Sub
+
+Private Sub Preencher_AplicarBordaPretaContinua(ByVal borda As Border)
+    With borda
+        .LineStyle = xlContinuous
+        .Weight = xlThin
+        .Color = vbBlack
+    End With
 End Sub
 
 Public Function Preencher_NotaAvaliacaoImpressaSegura(ByVal valor As Variant) As Integer
@@ -3330,7 +3446,7 @@ Call CarregarCabecalhoConfig
 ws.Range("D2").Value = MontarCabecalhoMunicipio(municipio)
 ws.Range("D3").Value = Gestor_Empresa
 ws.Range("L3").Value = N_OS
-ws.Range("L8").Value = Desc_entidade & " - " & cont_entidade & " - " & telcont_entidade
+Call Preencher_EscreverDemandanteAvaliacao(ws, Preencher_TextoDemandanteImpressao())
 ws.Range("N5").Value = AvDtFech
 ws.Range("C9").Value = M_NomeEmpresa
 ws.Range("C11").Value = Empresa_endereco
@@ -3359,6 +3475,7 @@ ws.Range("D37").Value = AvNEmp
 ws.Range("N37").Value = Util_Conversao.ToCurrency(FormatarMediaAvaliacao(media))
 ws.Range("N37").NumberFormat = "0.00"
 ws.Range("B40").Value = AvOb
+Call Preencher_AplicarBordasCriticasAvaliacao(ws)
 End Sub
 
 Sub Imprimir_AvaliacaoOS()
@@ -3436,7 +3553,7 @@ Set ws = ThisWorkbook.Sheets("IMP_AVALIA")
 ws.Range("D2").Value = ""
 ws.Range("D3").Value = ""
 ws.Range("L3").Value = ""
-ws.Range("L8").Value = ""
+Call Preencher_LimparDemandanteAvaliacao(ws)
 ws.Range("N5").Value = ""
 ws.Range("C9").Value = ""
 ws.Range("C11").Value = ""

@@ -156,6 +156,37 @@ falha:
     detalheErro = "ERRO_" & CStr(Err.Number) & ":" & Err.Description
 End Function
 
+Private Sub Util_AnexarDetalheProtecao(ByRef detalhes As String, ByVal nomeAba As String, ByVal detalhe As String)
+    detalhes = detalhes & nomeAba & ":" & detalhe & ";"
+End Sub
+
+Private Function Util_TestarEscritaVBAEmCelulaBloqueada(ByVal ws As Worksheet, ByRef detalheErro As String) As Boolean
+    Dim alvo As Range
+    Dim formulaOriginal As String
+
+    On Error GoTo falha
+
+    detalheErro = ""
+    If ws Is Nothing Then
+        detalheErro = "ABA_NULA"
+        Exit Function
+    End If
+
+    Set alvo = ws.Cells(1, 1)
+    If Not alvo.Locked Then
+        detalheErro = "CELULA_TESTE_DESBLOQUEADA"
+        Exit Function
+    End If
+
+    formulaOriginal = CStr(alvo.Formula)
+    alvo.Formula = formulaOriginal
+    Util_TestarEscritaVBAEmCelulaBloqueada = True
+    Exit Function
+
+falha:
+    detalheErro = "ERRO_" & CStr(Err.Number) & ":" & Err.Description
+End Function
+
 ' Remove protecao de uma aba para escrita via VBA.
 ' Retorna True quando a aba esta pronta para escrita.
 Public Function Util_PrepararAbaParaEscrita( _
@@ -724,6 +755,46 @@ Public Function Util_VerificarProtecaoAbasCriticas(ByRef detalhes As String) As 
     Next nomeAba
 
     Util_VerificarProtecaoAbasCriticas = ok
+End Function
+
+Public Function Util_VerificarProtecaoPersistenteAposAbertura(ByRef detalhes As String) As Boolean
+    Dim nomes As Variant
+    Dim nomeAba As Variant
+    Dim ws As Worksheet
+    Dim ok As Boolean
+    Dim detalheEscrita As String
+
+    nomes = Util_NomesAbasCriticas()
+    detalhes = ""
+    ok = True
+
+    For Each nomeAba In nomes
+        Set ws = Nothing
+        If Util_TentarObterWorksheet(CStr(nomeAba), ws) Then
+            If Not ws.ProtectContents Then
+                ok = False
+                Call Util_AnexarDetalheProtecao(detalhes, CStr(nomeAba), "NAO_PROTEGIDA")
+            ElseIf Not ws.ProtectDrawingObjects Then
+                ok = False
+                Call Util_AnexarDetalheProtecao(detalhes, CStr(nomeAba), "OBJETOS_NAO_PROTEGIDOS")
+            ElseIf Not Util_CelulasTodasBloqueadas(ws) Then
+                ok = False
+                Call Util_AnexarDetalheProtecao(detalhes, CStr(nomeAba), "CELULAS_DESBLOQUEADAS")
+            Else
+                detalheEscrita = ""
+                If Not Util_TestarEscritaVBAEmCelulaBloqueada(ws, detalheEscrita) Then
+                    ok = False
+                    Call Util_AnexarDetalheProtecao(detalhes, CStr(nomeAba), "UIONLY_NAO_REAPLICADO_" & detalheEscrita)
+                End If
+            End If
+        Else
+            ok = False
+            Call Util_AnexarDetalheProtecao(detalhes, CStr(nomeAba), "AUSENTE")
+        End If
+    Next nomeAba
+
+    If ok And detalhes = "" Then detalhes = "OK"
+    Util_VerificarProtecaoPersistenteAposAbertura = ok
 End Function
 
 Private Function Util_TentarObterWorksheet(ByVal nomeAba As String, ByRef wsOut As Worksheet) As Boolean
