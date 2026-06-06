@@ -7,7 +7,7 @@
   "agent_note": "Sessão real: Claude Opus 4.8 via Cowork (enum 1.0.0 — ver item A5).",
   "track": "fast_track",
   "version_target": "V12.0.0206",
-  "status": "executed_commit_observed_ci_pending",
+  "status": "completed_ci_observed",
   "outcome": "hbn_guards_ci_v1_ratchet_scope_lock_range",
   "human_status": "hearback_confirmed_commit_observed",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
@@ -53,11 +53,11 @@
   },
   "human_gate_observed": {
     "commit_sha": "5b5b9a7",
-    "first_ci_run": "PENDENTE (primeiro push da linha Codex / GATE 0)",
-    "evidence_source": "git log local confirmado por Codex no GATE 0."
+    "first_ci_run": "success — hbn-guards-ci run 27063539868 no SHA 98308e8d4dfb2ed92c87ded2a38f4a432b91b409",
+    "evidence_source": "git log local + GitHub Actions consultado por Codex no GATE 0: https://github.com/rwv8gscs8g-blip/credenciamento/actions/runs/27063539868"
   },
   "pendencias_para_proxima_onda": [
-    "Observar primeiro run do hbn-guards-ci no GitHub (fechável a posteriori neste ERP)",
+    "Primeiro run do hbn-guards-ci no GitHub observado verde no GATE 0 (run 27063539868)",
     "A5 desbloqueado ao fechar V206 — insumo pronto no doc 125",
     "A3.1 candidata: forbid-env-files/forbid-legacy-paths no CI sem cópia divergente",
     "Fricção recorrente: micro-commit de fechamento de ERP (3× nesta sessão) — candidata a regra em ciclo futuro"

@@ -7,7 +7,7 @@
   "agent_note": "Sessão real: Claude Opus 4.8 via Cowork (enum 1.0.0 — ver item A5).",
   "track": "fast_track",
   "version_target": "V12.0.0206",
-  "status": "executed_commit_observed_ci_pending",
+  "status": "completed_ci_observed",
   "outcome": "ratchet_epoch_0149_ci_primeiro_run_desbloqueado",
   "human_status": "hearback_confirmed_commit_observed",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
@@ -29,8 +29,8 @@
   },
   "human_gate_observed": {
     "commit_sha": "e2b8700",
-    "first_ci_run": "PENDENTE — será conferido após o push do GATE 0",
-    "evidence_source": "git log local confirmado por Codex no GATE 0."
+    "first_ci_run": "success — hbn-guards-ci run 27063539868 no SHA 98308e8d4dfb2ed92c87ded2a38f4a432b91b409",
+    "evidence_source": "git log local + GitHub Actions consultado por Codex no GATE 0: https://github.com/rwv8gscs8g-blip/credenciamento/actions/runs/27063539868"
   },
   "created_at": "2026-06-05T21:10:00-03:00"
 }

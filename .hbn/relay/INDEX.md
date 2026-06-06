@@ -4,20 +4,20 @@ versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQ
 proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b`, sincronizou HBN em `d2d7ac5`, entregou Performance/UX basica em `e157221`, consolidou a auditoria cruzada documental 38.2.13, entregou a Onda 38.2.14 behavioralizacao C1, validou a Onda 38.2.15 FT-4 em 2026-06-01, validou 38.2.16 BL-4 via fix1 0133, 0137 fix1, 0139 fix1, 0140 e 0141. Antigravity executou a auditoria cruzada de impressao 0142 apontando 2 BLOQUEADORES nos PDFs; Codex implementou 0143 e preparou 0144 fix1 test-only apos falso negativo de IR_03. Linha arquiteto 0114-0117/0149 consolidou firewall, CI ratchet e handoff do Codex; Codex iniciou GATE 0 pelo readback 0150.
 ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE/VALIDADA: 38.2.4 Integridade de Estado -> 38.2.5 UI regras de negocio -> 38.2.6 Integridade de impressao -> 38.2.7 Leitura/exibicao -> 38.2.8 CONFIG baseline seguro -> 38.2.9 snapshot CONFIG V2 -> 38.2.10 higiene/commit -> 38.2.11 sincronizacao HBN pos-commit -> 38.2.12 Performance/UX basica validada por import/compile/TV2 -> 38.2.13 auditoria cruzada consolidada doc-only -> 38.2.14 behavioralizacao C1 validada por import/compile/TV2 -> 38.2.15 FT-4 validada por import/compile/TV2 -> 38.2.16 BL-4 validada via fix1 0133 -> 38.2.18-fix1 validada por VR_20260602_112011 -> 38.2.19-fix1 validada por VR_20260602_182253 -> 38.2.20 validada por TV2_20260602_205320 -> 38.2.21 validada por TV2_20260602_234618 -> 38.2.22 auditoria cruzada de impressao concluida -> 38.2.23 import/compile limpos, TV2 falhou por falso negativo -> 38.2.23-fix1 test-only pronto para rerun.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio APROVADO em VR_20260526_102200. **Anchor de rollback Onda 38.2.2: commit 179bac5**. **Caminho B (rollback) tecnicamente valido se Mauricio escolher**.
-proxima-acao: Concluir push do GATE 0, observar primeiro run do `.github/workflows/hbn-guards-ci.yml`; em seguida operador importar delta 0144 fix1, compilar VBAProject e executar `TV2_RunImpressaoResidual`; esperado `OK=6 | FALHA=0 | MANUAL=0`.
-ultima-atualizacao: 2026-06-06T10:24:09-03:00 (GATE 0 0150 em consolidacao; 0144 fix1 test-only segue como rerun humano pendente)
+proxima-acao: GATE 1 — operador importar delta 0144 fix1, compilar VBAProject e executar `TV2_RunImpressaoResidual`; esperado `OK=6 | FALHA=0 | MANUAL=0`.
+ultima-atualizacao: 2026-06-06T10:30:00-03:00 (GATE 0 0150 consolidado, push executado e primeiro hbn-guards-ci verde; 0144 fix1 test-only segue como rerun humano pendente)
 ---
 
 ## 🟢 GATE 0 / 0150 — consolidacao do working tree V206 e ponte arquiteto 0114-0117 (NOVO)
 
 | Campo | Valor |
 |---|---|
-| Sinal | 🟢 GATE 0 EM CONSOLIDACAO |
+| Sinal | 🟢 GATE 0 CONSOLIDADO |
 | Track | fast_track historica com codigo ja validado por gates humanos anteriores |
 | Readback | [`0150-rb-onda-gate0-consolidacao-working-tree-v206.json`](../readbacks/0150-rb-onda-gate0-consolidacao-working-tree-v206.json) — **human_status: confirmed** |
 | Hearback | [`0150-gate0-consolidacao-working-tree-v206.json`](../hearbacks/0150-gate0-consolidacao-working-tree-v206.json) |
 | Origem | Prompt canônico do doc 127 + ponte `.hbn/messages/20260605-1950-ponte-estado-protocolo-para-codex.md` |
-| Commits ja criados | `d0fccbe` contratos HBN 38.2/0150; `a27492b` codigo+espelho VBA; `b2c18ef` docs/evidencias |
+| Commits criados | `d0fccbe` contratos HBN 38.2/0150; `a27492b` codigo+espelho VBA; `b2c18ef` docs/evidencias; `98308e8` relay/ERPs |
 | Onda arquiteto 0114 | `5ad07fe` — knowledge 0021: guards em sandbox informativos; commit no Terminal do operador |
 | Onda arquiteto 0115 | `8204fe9` — knowledge 0022 FIREWALL: workflows automaticos so fast_track; escrita safe_track humano-aplicada |
 | Onda arquiteto 0116 | `5b5b9a7` — CI hbn-guards: contratos ratchet + scope-lock por commit |
@@ -25,7 +25,7 @@ ultima-atualizacao: 2026-06-06T10:24:09-03:00 (GATE 0 0150 em consolidacao; 0144
 | Micro-onda 0149 | `e2b8700` — epoca do ratchet; contratos 0149+ estritos no CI |
 | Incoming | `incoming/workbook_ref_20260602_compila_bo330_v1falha/` movido para `auditoria/04_evidencias/V12.0.0206/workbook_ref_20260602_compila_bo330_v1falha/` como evidencia; nao e origem de importacao |
 | Checagem G7/G8 | `python3 local-ai/scripts/publicar_vba_import_v2.py check --verbose` retornou `OK — vba_import 100% sincronizado com src/vba` apos entrada explicita de `UX_IniciarSistema` no mapa |
-| Pendente | Commit final de relay/ERPs/ERP 0150, push e observacao do primeiro CI |
+| CI | Primeiro `hbn-guards-ci` do GATE 0 verde: run `27063539868`, SHA `98308e8d4dfb2ed92c87ded2a38f4a432b91b409` |
 | Proxima acao apos GATE 0 | GATE 1: operador importar 0144 fix1, compilar e executar `TV2_RunImpressaoResidual` |
 
 ## ✅ HBN ACTIVE — CODEX ASSUMIU BASTÃO V206 / ONDA 38.2.3 (NOVO)

@@ -6,8 +6,8 @@
   "agent_id": "codex",
   "track": "fast_track",
   "version_target": "V12.0.0206",
-  "status": "executed_push_ci_pending",
-  "outcome": "working_tree_v206_consolidated_in_thematic_commits",
+  "status": "completed",
+  "outcome": "working_tree_v206_consolidated_pushed_ci_green",
   "human_status": "hearback_confirmed",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
@@ -28,20 +28,14 @@
       "sha": "b2c18ef",
       "message": "docs(auditoria): consolida evidencias e tecnicos v206",
       "group": "docs_changelog_evidencias"
+    },
+    {
+      "sha": "98308e8",
+      "message": "docs(hbn): atualiza relay e fecha gate0",
+      "group": "relay_erps_gate0"
     }
   ],
-  "commit_pending": {
-    "group": "relay_erps_gate0",
-    "contents": [
-      ".hbn/relay/INDEX.md",
-      ".hbn/results/0147-exec-onda-0116-a3-guards-ci.json",
-      ".hbn/results/0148-exec-onda-0117-organizacao-handoff-codex.json",
-      ".hbn/results/0149-exec-onda-0116-fix1-ratchet-epoch.json",
-      ".hbn/results/0150-exec-onda-gate0-consolidacao-working-tree-v206.json",
-      ".hbn/readbacks/0150-rb-onda-gate0-consolidacao-working-tree-v206.json"
-    ],
-    "reason": "Este ERP sera commitado no bloco final de relay/ERPs."
-  },
+  "commit_pending": null,
   "architect_commits_observed": {
     "0114": "5ad07fe",
     "0115": "8204fe9",
@@ -69,13 +63,13 @@
   },
   "known_risks_or_followups": [
     "O mapa de prefixos agora explicita UX_IniciarSistema como AAZ-UX_IniciarSistema.bas para preservar o delta 0140 validado; AAZ tambem existe em Central_Testes, portanto uma onda futura de higiene de prefixos pode ser desejavel antes de refatoracoes maiores.",
-    "O primeiro run real do hbn-guards-ci ainda precisa ser observado apos o push do GATE 0.",
+    "O primeiro run real do hbn-guards-ci foi observado verde no run 27063539868; esta atualizacao documental tambem deve passar no push subsequente.",
     "GATE 1 segue sem codigo novo: operador importa 0144 fix1, compila e executa TV2_RunImpressaoResidual."
   ],
   "human_gate_observed": {
     "hearback_0150": "confirmed by Mauricio in chat: aprovado, pode seguir",
-    "push": "PENDENTE",
-    "first_ci_run": "PENDENTE"
+    "push": "success — e2b8700..98308e8 pushed to codex/v12-0-0206-planejamento",
+    "first_ci_run": "success — https://github.com/rwv8gscs8g-blip/credenciamento/actions/runs/27063539868"
   },
   "created_at": "2026-06-06T10:24:09-03:00"
 }
