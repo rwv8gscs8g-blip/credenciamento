@@ -1,0 +1,196 @@
+{
+  "readback_id": "0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0132-rb-onda-38-2-16-bl4-protecao-persistente",
+  "intent": {
+    "objective": "Corrigir a falha repetida BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO criando um marcador persistente e auditavel de execucao de Auto_Open, sem depender apenas de variaveis VBA em memoria, e ajustar a suite V2 dirigida para validar esse marcador apos save/close/reopen.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao corrigir formularios de avaliacao, demandante, impressao ou layout nesta micro-onda",
+      "Nao tocar Mod_Types.bas ou Importador_V3.bas",
+      "Nao alterar ThisWorkbook.code.txt nem a estrutura de eventos do objeto Workbook",
+      "Nao tocar Util_Planilha.bas salvo novo hearback explicito",
+      "Nao tocar Preencher.bas, Menu_Principal.frm, Svc_*.bas ou Repo_*.bas nesta micro-onda",
+      "Nao editar arquivos .frx nem designer de formulario",
+      "Nao evoluir o protocolo useHBN/PROMPT_ARQUITETO nesta micro-onda",
+      "Nao rodar limpeza generica de espacos finais em VBA"
+    ]
+  },
+  "explicit_decisions": {
+    "auto_open_exception": {
+      "status": "pending_human_confirmation",
+      "decision_text": "Mauricio autoriza, para a micro-onda 38.2.16-fix1, tocar src/vba/Auto_Open.bas e local-ai/vba_import/001-modulo/AAY-Auto_Open.bas somente para persistir/instrumentar marcador auditavel da execucao de Auto_Open e para a suite V2 validar esse marcador.",
+      "limits": [
+        "Nao alterar ThisWorkbook.code.txt.",
+        "Nao bloquear silenciosamente a abertura do workbook.",
+        "Nao alterar fluxo de abertura do Menu_Principal fora do necessario para registrar o marcador.",
+        "Nao tocar formularios, repositorios, servicos ou importador."
+      ]
+    }
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker.json",
+      ".hbn/hearbacks/0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker-confirmed.json",
+      ".hbn/hearbacks/0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker-confirmed.md",
+      ".hbn/results/0133-exec-onda-38-2-16-fix1-bl4-autoopen-marker.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_16_fix1_bl4_autoopen_marker/0133_TECNICO.md",
+      "CHANGELOG.md",
+      "src/vba/Auto_Open.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_16_FIX1_BL4_AUTOOPEN_MARKER.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Svc_*.bas",
+      "src/vba/Repo_*.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/003-objetos/ThisWorkbook.code.txt",
+      "local-ai/vba_import/002-formularios/**/*.frx",
+      "**/*.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "production_delta": [
+      "Em Auto_Open.bas, gravar um marcador persistente em nomes ocultos do workbook quando a reaplicacao de protecao critica roda na abertura: timestamp, status OK e detalhes.",
+      "Expor funcoes publicas minimas em Auto_Open.bas para ler o marcador persistente e fazer fallback seguro quando as variaveis em memoria estiverem vazias.",
+      "Manter as assinaturas publicas Auto_Open, IniciarSistema e AbrirMenu e preservar o fluxo atual de abertura.",
+      "Atualizar App_Release.bas para build e157221+ONDA38.2.16-FIX1-BL4-MARKER."
+    ],
+    "test_delta": [
+      "Ajustar TV2_RunBL4ProtecaoPersistente para o assert BL4_01 validar o marcador persistente de abertura, nao apenas variaveis em memoria.",
+      "Preservar os demais asserts BL4_02 a BL4_05 que ja passaram nas duas execucoes humanas.",
+      "Registrar no resultado obtido de BL4_01 o timestamp do marcador, status OK, detalhes e, se disponivel, Last Save Time do workbook para facilitar diagnostico."
+    ],
+    "package_delta": [
+      "Sincronizar os quatro modulos permitidos para local-ai/vba_import via publicador V2.",
+      "Gerar manifesto V3 delta ONDA38_2_16_FIX1_BL4_AUTOOPEN_MARKER.",
+      "Atualizar CHANGELOG, tecnico 0133, relay e ERP 0133 ao fechar a micro-onda."
+    ],
+    "human_gate_expected_sequence": [
+      "Importar o delta V3 fix1.",
+      "Compilar o VBAProject.",
+      "Salvar o workbook.",
+      "Fechar e reabrir o workbook para disparar Workbook_Open/Auto_Open no ciclo real.",
+      "Executar TV2_RunBL4ProtecaoPersistente.",
+      "Reportar execucao V2 e contagem OK/FALHA/MANUAL."
+    ]
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Auto_Open.bas so pode ser alterado dentro da excecao explicita deste readback",
+    "ThisWorkbook.code.txt permanece intocado",
+    "Mod_Types.bas, Importador_V3.bas e Util_Planilha.bas permanecem intocados",
+    "Fluxos de formularios, impressao e demandante permanecem fora desta micro-onda",
+    "Nenhum .frx sera alterado"
+  ],
+  "risks": [
+    {
+      "risk": "Persistir marcador em nomes do workbook pode conflitar com nomes existentes ou ficar visivel ao operador.",
+      "mitigation": "Usar nomes reservados com prefixo HBN/BL4, atualizar nomes existentes de forma idempotente e marcar Visible=False quando suportado.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Ajustar Auto_Open.bas pode regressar a inicializacao ou abertura do Menu_Principal.",
+      "mitigation": "Manter assinaturas publicas e fluxo atual; limitar a mudanca ao registro/leitura do marcador apos a rotina de protecao.",
+      "severity": "high"
+    },
+    {
+      "risk": "O teste pode passar com marcador antigo gravado antes do ultimo save/reopen.",
+      "mitigation": "Registrar timestamp do marcador e comparar com Last Save Time quando esse metadado estiver disponivel; se indisponivel, reportar a limitacao no detalhe do assert.",
+      "severity": "medium"
+    },
+    {
+      "risk": "O escape de texto em Names.RefersTo pode quebrar compile ou gravacao quando detalhes contiverem aspas.",
+      "mitigation": "Criar helper de escape pequeno em Auto_Open.bas e validar compile manual no gate humano.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0133 valido contra schema",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0133-exec-onda-38-2-16-fix1-bl4-autoopen-marker.json"
+      },
+      {
+        "gate": "Hearback 0133 confirmado por Mauricio antes de qualquer implementacao em VBA",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker-confirmed.json"
+      },
+      {
+        "gate": "Publicador V2 escopo fechado para Auto_Open, Teste_V2_Engine, Teste_V2_Roteiros e App_Release",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0133-exec-onda-38-2-16-fix1-bl4-autoopen-marker.json"
+      },
+      {
+        "gate": "Importador V3 delta 38.2.16-fix1",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0133-exec-onda-38-2-16-fix1-bl4-autoopen-marker.json"
+      },
+      {
+        "gate": "Debug > Compile VBAProject",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0133-exec-onda-38-2-16-fix1-bl4-autoopen-marker.json"
+      },
+      {
+        "gate": "Save/close/reopen real do workbook apos importacao",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0133-exec-onda-38-2-16-fix1-bl4-autoopen-marker.json"
+      },
+      {
+        "gate": "TV2_RunBL4ProtecaoPersistente com OK=5 | FALHA=0 | MANUAL=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0133-exec-onda-38-2-16-fix1-bl4-autoopen-marker.json"
+      },
+      {
+        "gate": "Diff sem arquivos proibidos e sem .frx",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0133-exec-onda-38-2-16-fix1-bl4-autoopen-marker.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o compile falhar, nao salvar o workbook e restaurar do backup V3 criado pelo Importador.",
+      "Se o workbook nao reabrir normalmente, restaurar o backup V3 e reportar a falha antes de nova tentativa.",
+      "Se TV2_RunBL4ProtecaoPersistente falhar novamente, nao declarar BL-4 fechado e retornar a evidencia/CSV para auditoria.",
+      "Se aparecer diff em ThisWorkbook.code.txt, .frx, Mod_Types.bas, Importador_V3.bas ou Util_Planilha.bas, parar e remover o desvio antes de qualquer entrega.",
+      "Se a correcao exigir tocar formulario, Preencher.bas, Svc_* ou Repo_*, encerrar esta micro-onda e abrir readback proprio."
+    ],
+    "anchor_to_restore": "Commit e157221, artefatos HBN 0129/0130/0131/0132 ainda nao commitados e backup V3 criado imediatamente antes do delta 38.2.16."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Mauricio reportou segunda falha de TV2_RunBL4ProtecaoPersistente em 2026-06-01, execucao TV2_20260601_110148, com OK=4 | FALHA=1 | MANUAL=0 e falha unica BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO.",
+    "failure_csv": "TesteV2_BL4_PROTECAO_PERSISTENTE_Falhas_TV2_20260601_110148.csv",
+    "previous_failure": "TV2_20260601_105519 com a mesma falha unica",
+    "diagnosis": "A protecao concreta passa nos demais asserts, mas o sinal de Auto_Open nao fica disponivel ao teste quando depende apenas do estado VBA em memoria."
+  },
+  "created_at": "2026-06-01T11:07:34-03:00",
+  "confirmed_at": "2026-06-01T11:16:48-03:00"
+}

@@ -1,0 +1,138 @@
+{
+  "result_id": "0143-exec-onda-38-2-23-impressao-residual-codeonly-template",
+  "execution_id": "0143-exec-onda-38-2-23-impressao-residual-codeonly-template",
+  "readback_id": "0143-rb-onda-38-2-23-impressao-residual-codeonly-template",
+  "data": "2026-06-03",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "impressao_residual_codeonly_template_package_ready",
+  "human_status": "hearback_confirmed_import_compile_tv2_pending",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "build_label": "e157221+ONDA38.2.23-IMP-RES-CODE",
+  "action": "Corrigir residuos de impressao isolados pela auditoria 0142 por abordagem code-only/template via VBA e adicionar teste V2 isolado que le celulas e bordas reais do workbook.",
+  "summary": "A 0143 atualiza Preencher.bas para gravar o demandante de IMP_AVALIA tambem no range visual L9:P15, preencher o total visual de EMITE_OS N63:P63, e reaplicar bordas criticas em EMITE_PREOS C9/C11 e IMP_AVALIA A25:A45. Tambem adiciona Teste_V2_Impressao_Residual.bas com TV2_RunImpressaoResidual, suite isolada de 6 asserts que le celulas mescladas e bordas reais. O pacote V3 contem apenas tres modulos M e nenhum UserForm/.frx/Auto_Open/ThisWorkbook/Mod_Types/Importador_V3/Teste_V2_Engine/Teste_V2_Roteiros.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunImpressaoResidual pela Janela Imediata.",
+      "Reportar OK/FALHA/MANUAL e anexar CSV se houver falha."
+    ],
+    "status": "pending"
+  },
+  "human_gate_expected": {
+    "import_result": "Importador V3 OK: M=3 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunImpressaoResidual",
+    "tv2_directed_result": "OK=6 | FALHA=0 | MANUAL=0",
+    "tv2_directed_failure_csv_pattern": "TesteV2_IMPRESSAO_RESIDUAL_Falhas_*.csv"
+  },
+  "human_gate_observed": {
+    "import_result": "PENDENTE",
+    "compile_result": "PENDENTE",
+    "tv2_directed_execution": "PENDENTE",
+    "tv2_directed_result": "PENDENTE",
+    "tv2_directed_failure_csv": "PENDENTE",
+    "evidence_source": "Aguardando operador humano no workbook."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_23_IMPRESSAO_RESIDUAL_CODEONLY_TEMPLATE.txt",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_23_IMPRESSAO_RESIDUAL_CODEONLY_TEMPLATE\", \"e157221+ONDA38.2.23-IMP-RES-CODE\"",
+    "expected_import_result": "M=3 | F=0 | err=0 | skip=0",
+    "expected_suite": "TV2_RunImpressaoResidual",
+    "expected_suite_result": "OK=6 | FALHA=0 | MANUAL=0",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "bytes": 153493,
+        "sha256": "914522614275e9465d0cb6547488d7e0a53782eaa87dcfd5bd5e2ec85159b472"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABT-Teste_V2_Impressao_Residual.bas",
+        "bytes": 14242,
+        "sha256": "6eb752a15de804f6d6894c780b46b34b77cff46e6fb5ffdd8cc252505a8715ce"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23387,
+        "sha256": "0d9039dc27518a45cfd84bea026408807cd6b8b5a41076cf7c0461ae28acca0c"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_23_IMPRESSAO_RESIDUAL_CODEONLY_TEMPLATE.txt",
+        "bytes": 1358,
+        "sha256": "0183d815b50a9e7501fc59c7dfe2ad1861f6558f4607a984dbccb1cf6fe082b8"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template.json",
+    ".hbn/hearbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template-confirmed.json",
+    ".hbn/hearbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template-confirmed.md",
+    ".hbn/results/0143-exec-onda-38-2-23-impressao-residual-codeonly-template.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_23_impressao_residual_codeonly_template/0143_TECNICO.md",
+    "CHANGELOG.md",
+    "src/vba/Preencher.bas",
+    "src/vba/Teste_V2_Impressao_Residual.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/ABT-Teste_V2_Impressao_Residual.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_23_IMPRESSAO_RESIDUAL_CODEONLY_TEMPLATE.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidencia": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; worktree list aponta e157221 em codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Hearback 0143",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: aprovado pode implementar."
+    },
+    {
+      "gate": "Fonte e espelho Preencher",
+      "status": "pass_local",
+      "evidencia": "cmp -s entre src/vba/Preencher.bas e local-ai/vba_import/001-modulo/AAU-Preencher.bas retornou zero."
+    },
+    {
+      "gate": "Fonte e espelho Teste_V2_Impressao_Residual",
+      "status": "pass_local",
+      "evidencia": "cmp -s entre src/vba/Teste_V2_Impressao_Residual.bas e local-ai/vba_import/001-modulo/ABT-Teste_V2_Impressao_Residual.bas retornou zero."
+    },
+    {
+      "gate": "Fonte e espelho App_Release",
+      "status": "pass_local",
+      "evidencia": "cmp -s entre src/vba/App_Release.bas e local-ai/vba_import/001-modulo/AAX-App_Release.bas retornou zero."
+    },
+    {
+      "gate": "Manifesto V3 minimo",
+      "status": "pass_local",
+      "evidencia": "Manifesto contem tres itens M e nenhum item F; nao importa UserForms, .frx, Auto_Open, ThisWorkbook, Mod_Types, Importador_V3, Teste_V2_Engine ou Teste_V2_Roteiros."
+    },
+    {
+      "gate": "Compile VBAProject",
+      "status": "pending_human",
+      "evidencia": "Pendente de importacao no workbook e compile manual no VBE."
+    },
+    {
+      "gate": "TV2_RunImpressaoResidual",
+      "status": "pending_human",
+      "evidencia": "Pendente de execucao no workbook apos importacao e compile."
+    }
+  ],
+  "next_decision": [
+    "Operador deve importar o delta 0143, compilar e executar TV2_RunImpressaoResidual.",
+    "Se TV2_RunImpressaoResidual falhar, anexar CSV TesteV2_IMPRESSAO_RESIDUAL_Falhas_*.csv e nao declarar validacao.",
+    "Se a suite passar, registrar hearback/ERP de gate humano e entao planejar a validacao completa tela a tela da V206.",
+    "Nao declarar freeze V206 sem gate proprio e decisao humana explicita."
+  ],
+  "created_at": "2026-06-03T08:38:28-03:00",
+  "package_ready_at": "2026-06-03T08:38:28-03:00",
+  "completed_at": null
+}

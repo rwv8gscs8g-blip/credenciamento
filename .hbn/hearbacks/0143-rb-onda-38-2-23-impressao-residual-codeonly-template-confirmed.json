@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0143-rb-onda-38-2-23-impressao-residual-codeonly-template-confirmed",
+  "readback_id": "0143-rb-onda-38-2-23-impressao-residual-codeonly-template",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-03T02:58:00-03:00",
+  "notes": "Mauricio confirmou em chat: aprovado pode implementar. Escopo confirmado: executar a onda 38.2.23 de impressao residual code-only/template via VBA, sem tocar Auto_Open.bas, Mod_Types.bas, Importador_V3.bas, UserForms ou .frx."
+}

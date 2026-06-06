@@ -1,0 +1,135 @@
+{
+  "result_id": "0137-exec-onda-38-2-18-fix1-bo330-status-canonico",
+  "execution_id": "0137-exec-onda-38-2-18-fix1-bo330-status-canonico",
+  "readback_id": "0137-rb-onda-38-2-18-fix1-bo330-status-canonico",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "diagnostic_expectation_corrected_and_trio_minimo_approved",
+  "human_status": "import_compile_tv2_trio_approved",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "build_label": "e157221+ONDA38.2.18-FIX1-BO330-STATUS",
+  "action": "Corrigir o teste diagnostico BO_330 para esperar SUSPENSA_GLOBAL, literal canonico gravado pelo sistema, mantendo producao e formularios intocados.",
+  "summary": "O CSV TV2_20260602_105519 mostrou que a producao suspendeu EMP03 corretamente em SUSPENSA_GLOBAL e gravou DT_FIM_SUSP. A falha 0136 era de expectativa do diagnostico, que comparava contra SUSPENSA. O fix1 altera apenas a constante do modulo diagnostico, espelha o pacote importavel e atualiza App_Release/manifesto. Mauricio importou, compilou, executou o V2 dirigido com OK=24 | FALHA=0 | MANUAL=0 e reexecutou CT_ValidarRelease_TrioMinimo com resultado APROVADO.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 38.2.18-fix1 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunBO330Diagnostico pela Janela Imediata.",
+      "Reportar execucao V2 e contagem OK/FALHA/MANUAL.",
+      "Se o diagnostico ficar verde, reexecutar CT_ValidarRelease_TrioMinimo para verificar a V1 BO_330."
+    ],
+    "status": "completed"
+  },
+  "human_gate_observed": {
+    "import_result": "Importador V3 OK: modo=Estabilizado | dryRun=Falso | M=2 | F=0 | err=0 | skip=0",
+    "backup_v3": "\\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260602_111745-V3-FULL",
+    "compile_result": "VBE Debug > Compile VBAProject passou limpo conforme reporte humano.",
+    "tv2_directed_execution": "TV2_20260602_111854",
+    "tv2_directed_result": "OK=24 | FALHA=0 | MANUAL=0",
+    "tv2_directed_failure_csv": "NAO_EXPORTADO",
+    "release_validation_id": "VR_20260602_112011",
+    "release_validation_result": "APROVADO",
+    "release_validation_csv": "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseTrio_V12_0_0205_VR_20260602_112011.csv",
+    "release_validation_csv_bytes": 715,
+    "release_validation_csv_sha256": "30619777433b39571a6cff5099b7c05f2580a28051ff6c4e114da3af548fedb6",
+    "trio_breakdown": [
+      "V1_RAPIDA BO-20260602-112011: OK=171 | FALHA=0 | MANUAL=0",
+      "V2_SMOKE TV2_20260602_112944: OK=34 | FALHA=0 | MANUAL=4",
+      "V2_CANONICO TV2_20260602_113207: OK=24 | FALHA=0 | MANUAL=0"
+    ]
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_18_FIX1_BO330_STATUS_CANONICO.txt",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_18_FIX1_BO330_STATUS_CANONICO\", \"e157221+ONDA38.2.18-FIX1-BO330-STATUS\"",
+    "expected_import_result": "M=2 | F=0 | err=0",
+    "expected_suite": "TV2_RunBO330Diagnostico",
+    "expected_suite_result": "OK=24 | FALHA=0 | MANUAL=0",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23192,
+        "sha256": "37865007a7ad8674a5c998a9932203fcaff6f514ab7789514798e58b931a6e3f"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABP-Teste_V2_BO330_Diagnostico.bas",
+        "bytes": 16162,
+        "sha256": "44468c87785e84ada68687bc959bc84318195bde7bffe8fdc553c94e10b4b3a3"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_18_FIX1_BO330_STATUS_CANONICO.txt",
+        "bytes": 1138,
+        "sha256": "611df7af152415e3ecd6855e6ad864fa0d16296ca93db810bd87fc1153e18d3d"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0137-rb-onda-38-2-18-fix1-bo330-status-canonico.json",
+    ".hbn/hearbacks/0137-rb-onda-38-2-18-fix1-bo330-status-canonico-confirmed.json",
+    ".hbn/hearbacks/0137-rb-onda-38-2-18-fix1-bo330-status-canonico-confirmed.md",
+    ".hbn/results/0137-exec-onda-38-2-18-fix1-bo330-status-canonico.json",
+    ".hbn/results/0136-exec-onda-38-2-18-recuperacao-bo330-diagnostico.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_18_fix1_bo330_status_canonico/0137_TECNICO.md",
+    "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseTrio_V12_0_0205_VR_20260602_112011.csv",
+    "CHANGELOG.md",
+    "src/vba/Teste_V2_BO330_Diagnostico.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABP-Teste_V2_BO330_Diagnostico.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_18_FIX1_BO330_STATUS_CANONICO.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0137",
+      "status": "pass_local",
+      "evidencia": "Readback confirmado por Mauricio e validado contra schema HBN."
+    },
+    {
+      "gate": "Hearback 0137",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: confirmo o readback 0137-rb-onda-38-2-18-fix1-bo330-status-canonico."
+    },
+    {
+      "gate": "Fonte e espelho do modulo diagnostico",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/Teste_V2_BO330_Diagnostico.bas e ABP-Teste_V2_BO330_Diagnostico.bas sem diferencas."
+    },
+    {
+      "gate": "Fonte e espelho App_Release",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/App_Release.bas e AAX-App_Release.bas sem diferencas."
+    },
+    {
+      "gate": "Manifesto V3 minimo",
+      "status": "pass_local",
+      "evidencia": "Manifesto contem apenas App_Release e Teste_V2_BO330_Diagnostico; nenhum modulo de producao, form, .frx, Auto_Open, Mod_Types ou Importador_V3."
+    },
+    {
+      "gate": "Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou import V3 OK e compile limpo."
+    },
+    {
+      "gate": "TV2_RunBO330Diagnostico",
+      "status": "pass_human",
+      "evidencia": "TV2_20260602_111854 retornou OK=24 | FALHA=0 | MANUAL=0; nenhum CSV de falhas exportado."
+    },
+    {
+      "gate": "CT_ValidarRelease_TrioMinimo",
+      "status": "pass_human",
+      "evidencia": "VR_20260602_112011 APROVADO; V1_RAPIDA OK=171 FALHA=0 MANUAL=0; V2_SMOKE OK=34 FALHA=0 MANUAL=4; V2_CANONICO OK=24 FALHA=0 MANUAL=0."
+    }
+  ],
+  "next_decision": [
+    "38.2.18-fix1 esta validada por V2 dirigido e Trio minimo.",
+    "A falha V1 BO_330 anterior esta resolvida no workbook validado por VR_20260602_112011.",
+    "Proxima onda recomendada: retomar formularios de avaliacao/demandante em pacote conservador sem reimportar UserForm grande, ou abrir auditoria curta para decidir a retomada."
+  ],
+  "created_at": "2026-06-02T11:12:00-03:00",
+  "completed_at": "2026-06-02T11:53:00-03:00"
+}

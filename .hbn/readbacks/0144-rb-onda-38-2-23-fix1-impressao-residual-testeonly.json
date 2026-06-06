@@ -1,0 +1,153 @@
+{
+  "readback_id": "0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly",
+  "data": "2026-06-03",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0143-rb-onda-38-2-23-impressao-residual-codeonly-template",
+  "intent": {
+    "objective": "Corrigir o falso negativo test-only da suite TV2_RunImpressaoResidual apos gate humano 0143: IR_03 deve validar o range visual real L9:P15, nao exigir L8 preenchido.",
+    "non_goals": [
+      "Nao alterar Preencher.bas nem a correcao funcional de impressao da 0143",
+      "Nao declarar freeze V206",
+      "Nao tocar Auto_Open.bas, ThisWorkbook, Mod_Types.bas ou Importador_V3.bas",
+      "Nao importar Menu_Principal.frm, Credencia_Empresa.frm, qualquer UserForm ou .frx",
+      "Nao tocar Teste_V2_Engine.bas ou Teste_V2_Roteiros.bas",
+      "Nao editar workbook/template manualmente"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly.json",
+      ".hbn/hearbacks/0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly-confirmed.json",
+      ".hbn/hearbacks/0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly-confirmed.md",
+      ".hbn/results/0144-exec-onda-38-2-23-fix1-impressao-residual-testeonly.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_23_fix1_impressao_residual_testeonly/0144_TECNICO.md",
+      "CHANGELOG.md",
+      "src/vba/Teste_V2_Impressao_Residual.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/ABT-Teste_V2_Impressao_Residual.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_23_FIX1_IMPRESSAO_RESIDUAL_TESTEONLY.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Preencher.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook.code.txt",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Credencia_Empresa.frm",
+      "src/vba/*.frm",
+      "src/vba/*.frx",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/002-formularios/**",
+      "local-ai/vba_import/003-objetos/**",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "**/*.frm",
+      "**/*.frx",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "incoming/**",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "after_hearback": [
+      "Ajustar apenas TV2_IR_DemandanteAvaliacaoVisualOk para aprovar quando L9_VISUAL for igual ao esperado.",
+      "Manter L8 nos detalhes diagnosticos, sem torna-lo criterio de reprova.",
+      "Carimbar App_Release com build fix1 test-only.",
+      "Gerar espelho ABT e AAX e manifesto V3 com dois modulos M.",
+      "Documentar que 0143 importou/compilou e falhou por falso negativo de assert."
+    ],
+    "human_gate_expected": [
+      "ImportarPacoteV3_Delta \"ONDA38_2_23_FIX1_IMPRESSAO_RESIDUAL_TESTEONLY\", \"e157221+ONDA38.2.23-FIX1-IMP-RES-TEST\"",
+      "VBE Debug > Compile VBAProject limpo.",
+      "Executar TV2_RunImpressaoResidual pela Janela Imediata.",
+      "Esperado: OK=6 | FALHA=0 | MANUAL=0."
+    ],
+    "stop_conditions": [
+      "Se a correcao exigir alterar Preencher.bas, parar e abrir novo readback proprio.",
+      "Se o rerun indicar falha funcional em L9:P15, reabrir diagnostico de producao antes de editar.",
+      "Se qualquer ajuste demandar UserForms, .frx, Teste_V2_Engine ou Teste_V2_Roteiros, parar e pedir decisao humana."
+    ]
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "0143 corrigiu os quatro residuos funcionais/visuais em Preencher.bas e esta correcao nao sera alterada",
+    "Auto_Open.bas, Mod_Types.bas, Importador_V3.bas, UserForms e .frx permanecem intocados",
+    "Teste_V2_Engine.bas e Teste_V2_Roteiros.bas permanecem intocados"
+  ],
+  "risks": [
+    {
+      "risk": "Remover L8 do criterio pode esconder regressao se algum uso futuro depender de L8.",
+      "mitigation": "Manter L8 no detalhe diagnostico e documentar que o criterio de aceite da falha 0143 e o range visual L9:P15.",
+      "severity": "medium"
+    },
+    {
+      "risk": "O rerun pode revelar uma segunda falha funcional que estava mascarada pelo IR_03.",
+      "mitigation": "Manter os demais cinco asserts sem alteracao e exigir novo CSV se qualquer falha permanecer.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Delta test-only pode ser confundido com correcao funcional nova.",
+      "mitigation": "Manifesto, App_Release, ERP e relay descrevem explicitamente que nao ha alteracao em Preencher.bas.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0144 valido contra schema HBN",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0144-exec-onda-38-2-23-fix1-impressao-residual-testeonly.json"
+      },
+      {
+        "gate": "Hearback 0144 confirmado por Mauricio antes de editar codigo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly-confirmed.json"
+      },
+      {
+        "gate": "Manifesto V3 sem item F e sem UserForms",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0144-exec-onda-38-2-23-fix1-impressao-residual-testeonly.json"
+      },
+      {
+        "gate": "TV2_RunImpressaoResidual retorna zero falhas apos fix1",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0144-exec-onda-38-2-23-fix1-impressao-residual-testeonly.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se o compile falhar, nao salvar o workbook e restaurar pelo backup V3 anterior ao delta 0144.",
+      "Se TV2_RunImpressaoResidual falhar, anexar CSV e parar sem tocar Preencher.bas ou UserForms.",
+      "Se houver qualquer suspeita de falha funcional em L9:P15, abrir novo readback de diagnostico antes de implementar."
+    ],
+    "anchor_to_restore": "Estado apos 0143 importada e compilada: Importador V3 M=3/F=0/err=0/skip=0; compile limpo; TV2_RunImpressaoResidual falhando apenas IR_03 com L9_VISUAL igual ao esperado."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Mauricio reportou import e compile limpos da 0143, mas TV2_RunImpressaoResidual falhou uma vez mesmo apos tres repeticoes.",
+    "failure_csv": {
+      "path": "TesteV2_IMPRESSAO_RESIDUAL_Falhas_TV2_20260603_121844.csv",
+      "bytes": 600,
+      "sha256": "f3dbc0ddbf55258e6f66eefd4594edb748a310da137a8fe702cd9e8606fc423a",
+      "observed": "IR_03 falhou com L8 vazio, L9_VISUAL igual ao esperado e MERGE_L9=Verdadeiro."
+    }
+  },
+  "created_at": "2026-06-03T12:31:59-03:00"
+}

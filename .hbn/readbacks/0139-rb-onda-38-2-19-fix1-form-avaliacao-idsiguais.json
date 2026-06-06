@@ -1,0 +1,181 @@
+{
+  "readback_id": "0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro",
+  "intent": {
+    "objective": "Corrigir a suite isolada TV2_RunFormAvaliacaoModulos para comparar OS_ID com IdsIguais nos helpers internos, eliminando as duas falhas de teste observadas em TV2_20260602_125043 sem tocar producao nem UserForms.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao tocar Svc_Avaliacao.bas nem Preencher.bas nesta fix1",
+      "Nao importar Menu_Principal.frm, qualquer UserForm, .frx ou ThisWorkbook nesta fix1",
+      "Nao tocar Auto_Open.bas, Mod_Types.bas ou Importador_V3.bas",
+      "Nao tocar Teste_V2_Engine.bas ou Teste_V2_Roteiros.bas completos",
+      "Nao alterar schema de planilhas nem dados de producao",
+      "Nao rodar limpeza generica de espacos finais em VBA"
+    ]
+  },
+  "explicit_decisions": {
+    "human_confirmation_required": {
+      "status": "confirmed",
+      "decision_text": "Mauricio precisa confirmar que a Onda 38.2.19-fix1 pode ser test-only: ajustar apenas Teste_V2_Form_Avaliacao_Modulos e App_Release, gerar manifesto V3 M=2/F=0 e reexecutar TV2_RunFormAvaliacaoModulos.",
+      "why_this_is_conservative": [
+        "A importacao 0138 passou com M=4/F=0 e o compile passou limpo.",
+        "FAM_02_DEMANDANTE_RESOLVIDO_POR_OS passou, provando que ResolverDemandanteAvaliacaoPorOS funcionou.",
+        "FAM_04_PAYLOAD_FALLBACK_E_PRESERVA_EXPLICITO passou, provando que o fallback de MontarPayloadAvaliacao funcionou.",
+        "As falhas FAM_03 e FAM_05 usam helpers do teste que compararam OS_ID como texto estrito; o padrao canonico do sistema e IdsIguais.",
+        "A fix1 nao precisa tocar producao nem UserForm."
+      ]
+    }
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais.json",
+      ".hbn/hearbacks/0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais-confirmed.json",
+      ".hbn/hearbacks/0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais-confirmed.md",
+      ".hbn/results/0139-exec-onda-38-2-19-fix1-form-avaliacao-idsiguais.json",
+      ".hbn/results/0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_19_form_avaliacao_modulos_primeiro/0138_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_19_fix1_form_avaliacao_idsiguais/0139_TECNICO.md",
+      "CHANGELOG.md",
+      "src/vba/Teste_V2_Form_Avaliacao_Modulos.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/ABQ-Teste_V2_Form_Avaliacao_Modulos.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FIX1_FORM_AVALIACAO_IDSIGUAIS.txt",
+      "TesteV2_FORM_AVALIACAO_MODULOS_Falhas_TV2_20260602_125043.csv",
+      "TesteV2_FORM_AVALIACAO_MODULOS_Falhas_*.csv"
+    ],
+    "files_forbidden": [
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Credencia_Empresa.frm",
+      "src/vba/*.frm",
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Repo_Avaliacao.bas",
+      "src/vba/Const_Colunas.bas",
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/002-formularios/**",
+      "local-ai/vba_import/003-objetos/**",
+      "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "**/*.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "locked_diagnosis": [
+      "Importador V3 0138 OK: M=4 | F=0 | err=0 | skip=0.",
+      "Compile do VBAProject passou limpo no workbook.",
+      "TV2_20260602_125043 retornou OK=3 | FALHA=2 | MANUAL=0.",
+      "CSV: FAM_03 nao encontrou OS_ID na AV_Lista apesar de LISTCOUNT=1.",
+      "CSV: FAM_05 nao encontrou OS_ID para alterar ENT_ID; por isso payload invalido ficou sucesso.",
+      "FAM_02 e FAM_04 passaram, indicando que resolver e payload de producao funcionaram."
+    ],
+    "production_delta_after_hearback": [
+      "Nenhum delta de producao nesta fix1."
+    ],
+    "test_delta_after_hearback": [
+      "Em TV2_FAM_LerDemandanteLista, trocar comparacao textual direta de OS_ID por IdsIguais(osLista, osId).",
+      "Em TV2_FAM_AlterarEntIdOS, trocar comparacao textual direta da coluna COL_OS_ID por IdsIguais(valorCelula, osId).",
+      "Opcionalmente enriquecer detalhes de falha com primeiro OS_ID visto na lista para diagnostico futuro.",
+      "Preservar os cinco asserts e a macro publica TV2_RunFormAvaliacaoModulos."
+    ],
+    "package_delta_after_hearback": [
+      "Gerar manifesto V3 sem item F e sem diretorio 002-formularios.",
+      "Itens esperados: AAX-App_Release.bas e ABQ-Teste_V2_Form_Avaliacao_Modulos.bas.",
+      "Gate humano: import V3, compile limpo, TV2_RunFormAvaliacaoModulos."
+    ]
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Nenhum UserForm sera importado",
+    "Svc_Avaliacao.bas e Preencher.bas permanecem como estavam no pacote 0138",
+    "Auto_Open.bas, Mod_Types.bas e Importador_V3.bas permanecem intocados",
+    "Teste_V2_Engine.bas e Teste_V2_Roteiros.bas nao serao reimportados",
+    "Nenhum schema de planilha sera alterado"
+  ],
+  "risks": [
+    {
+      "risk": "A falha pode revelar outro problema de visibilidade da AV_Lista depois que o teste usar IdsIguais.",
+      "mitigation": "Manter a fix1 test-only; se surgir nova falha, anexar CSV e abrir diagnostico proprio sem importar UserForm.",
+      "severity": "medium"
+    },
+    {
+      "risk": "A suite pode passar, mas ainda haver pendencia visual no formulario.",
+      "mitigation": "Tratar melhoria visual em onda posterior code-only/assistida, com readback proprio.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Ajustar somente o teste pode mascarar uma diferenca de exibicao que o usuario perceba no formulario real.",
+      "mitigation": "Manter o veredito restrito ao comportamento validado por modulos e abrir onda visual/manual separada se Mauricio ainda observar problema na tela.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0139 valido contra schema",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0139-exec-onda-38-2-19-fix1-form-avaliacao-idsiguais.json"
+      },
+      {
+        "gate": "Hearback 0139 confirmado por Mauricio antes de editar codigo VBA",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais-confirmed.json"
+      },
+      {
+        "gate": "Manifesto V3 sem item F, sem UserForm e sem producao",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0139-exec-onda-38-2-19-fix1-form-avaliacao-idsiguais.json"
+      },
+      {
+        "gate": "VBE Debug > Compile VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0139-exec-onda-38-2-19-fix1-form-avaliacao-idsiguais.json"
+      },
+      {
+        "gate": "TV2_RunFormAvaliacaoModulos retorna zero falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0139-exec-onda-38-2-19-fix1-form-avaliacao-idsiguais.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se o compile falhar, nao salvar o workbook e restaurar pelo backup V3 anterior ao delta 0139.",
+      "Se TV2_RunFormAvaliacaoModulos falhar, anexar CSV e parar sem importar Menu_Principal.frm.",
+      "Se aparecer necessidade de alterar producao ou UserForm, encerrar 0139 e abrir readback proprio."
+    ],
+    "anchor_to_restore": "Workbook apos 0138 importado e compilado; backup V3 de 0138: \\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260602_124949-V3-FULL."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Mauricio reportou falha de TV2_RunFormAvaliacaoModulos apos import/compile limpos.",
+    "operator_text": "importou; compilou; segue a falha da avaliacao do modulo.",
+    "failure_csv": "TesteV2_FORM_AVALIACAO_MODULOS_Falhas_TV2_20260602_125043.csv",
+    "failure_csv_sha256": "6e063ee21b44ee5c098f4f1a88c940ecf4224fcbac315357749d2715e0536b7e",
+    "last_green_gate": "VR_20260602_112011 APROVADO apos 0137.",
+    "form_recovery_constraint": "Nao importar UserForm grande; 0134 causou crash no compile."
+  },
+  "created_at": "2026-06-02T12:58:00-03:00",
+  "confirmed_at": "2026-06-02T17:53:03-03:00"
+}

@@ -1,0 +1,169 @@
+{
+  "readback_id": "0143-rb-onda-38-2-23-impressao-residual-codeonly-template",
+  "data": "2026-06-03",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao",
+  "intent": {
+    "objective": "Corrigir os residuos bloqueadores e visuais de impressao isolados pela auditoria 0142 em abordagem code-only/template por VBA, com teste V2 dirigido que leia valores e bordas reais do workbook.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao tocar Auto_Open.bas, ThisWorkbook, Mod_Types.bas ou Importador_V3.bas",
+      "Nao importar Menu_Principal.frm, Credencia_Empresa.frm, qualquer UserForm ou .frx",
+      "Nao alterar regras de rodizio, suspensao, BO_330 ou formularios fora da ponte de impressao",
+      "Nao editar o workbook/template manualmente sem decisao humana explicita",
+      "Nao tocar Teste_V2_Engine.bas ou Teste_V2_Roteiros.bas completos; usar modulo V2 isolado",
+      "Nao rodar limpeza generica de espacos finais em VBA"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template.json",
+      ".hbn/hearbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template-confirmed.json",
+      ".hbn/hearbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template-confirmed.md",
+      ".hbn/results/0143-exec-onda-38-2-23-impressao-residual-codeonly-template.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_23_impressao_residual_codeonly_template/0143_TECNICO.md",
+      "CHANGELOG.md",
+      "src/vba/Preencher.bas",
+      "src/vba/Teste_V2_Impressao_Residual.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABT-Teste_V2_Impressao_Residual.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_23_IMPRESSAO_RESIDUAL_CODEONLY_TEMPLATE.txt",
+      "TesteV2_IMPRESSAO_RESIDUAL_Falhas_*.csv"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook.code.txt",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Credencia_Empresa.frm",
+      "src/vba/*.frm",
+      "src/vba/*.frx",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/002-formularios/**",
+      "local-ai/vba_import/003-objetos/**",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "**/*.frm",
+      "**/*.frx",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "incoming/**",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "after_hearback": [
+      "Ler apenas os trechos necessarios de Preencher.bas e dos modulos V2 isolados anteriores.",
+      "Ajustar PreencherAvaliacaoOS para escrever o demandante no range visual real de IMP_AVALIA.",
+      "Ajustar a ponte do total final da OS para que EMITE_OS N63:P63 reflita o total calculado ou a formula correta.",
+      "Criar helper pequeno para reaplicar bordas criticas em EMITE_PREOS C9/C11 e IMP_AVALIA A25:A45 quando os templates forem preenchidos.",
+      "Criar Teste_V2_Impressao_Residual com asserts de valores e bordas reais do workbook.",
+      "Gerar espelhos e manifesto V3 com M=3/F=0, sem UserForms."
+    ],
+    "human_gate_expected": [
+      "ImportarPacoteV3_Delta \"ONDA38_2_23_IMPRESSAO_RESIDUAL_CODEONLY_TEMPLATE\", \"e157221+ONDA38.2.23-IMP-RES-CODE\"",
+      "VBE Debug > Compile VBAProject limpo.",
+      "Executar TV2_RunImpressaoResidual pela Janela Imediata.",
+      "Esperado inicial: zero falhas e CSV nao exportado."
+    ],
+    "stop_conditions": [
+      "Se a correcao exigir alterar o workbook/template manualmente, parar e pedir decisao humana antes de tocar o arquivo .xlsm.",
+      "Se a leitura mostrar que Menu_Principal.frm precisa mudar, parar e abrir readback proprio, pois UserForms estao fora desta onda.",
+      "Se qualquer ajuste demandar Teste_V2_Engine ou Teste_V2_Roteiros completos, parar e justificar nova estrategia."
+    ]
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "0141 permanece validada por TV2_20260602_234618 OK=6/FALHA=0/MANUAL=0",
+    "RVS completo VR_20260602_182253 permanece evidencia verde da 0139-fix1",
+    "Auto_Open.bas, Mod_Types.bas, Importador_V3.bas, UserForms e .frx permanecem intocados",
+    "Nenhum template workbook sera editado diretamente sem decisao humana explicita"
+  ],
+  "risks": [
+    {
+      "risk": "A borda residual pode estar gravada somente no template workbook e nao ser corrigivel de forma limpa por codigo.",
+      "mitigation": "Tentar helper VBA estreito; se nao bastar, parar e pedir decisao humana sobre ajuste direto do template.",
+      "severity": "medium"
+    },
+    {
+      "risk": "O total visual N63:P63 pode depender de formula mesclada ou estrutura de template diferente do valor calculado em codigo.",
+      "mitigation": "O teste V2 deve ler formula, valor e MergeArea antes de decidir a implementacao final.",
+      "severity": "high"
+    },
+    {
+      "risk": "Corrigir L9:P15 pode quebrar compatibilidade com usos antigos que ainda esperem L8.",
+      "mitigation": "Validar no V2 que o valor aparece no range visual e, se necessario, manter L8 e L9 sincronizados.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Uma onda de impressao pode tentar absorver polimento visual demais.",
+      "mitigation": "Limitar a 2 bloqueadores e 2 marginais ja isolados pela 0142; novos achados ficam para outro readback.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0143 valido contra schema HBN",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0143-exec-onda-38-2-23-impressao-residual-codeonly-template.json"
+      },
+      {
+        "gate": "Hearback 0143 confirmado por Mauricio antes de editar codigo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template-confirmed.json"
+      },
+      {
+        "gate": "Manifesto V3 sem item F e sem UserForms",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0143-exec-onda-38-2-23-impressao-residual-codeonly-template.json"
+      },
+      {
+        "gate": "VBE Debug > Compile VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0143-exec-onda-38-2-23-impressao-residual-codeonly-template.json"
+      },
+      {
+        "gate": "TV2_RunImpressaoResidual retorna zero falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0143-exec-onda-38-2-23-impressao-residual-codeonly-template.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se o compile falhar, nao salvar o workbook e restaurar pelo backup V3 anterior ao delta 0143.",
+      "Se TV2_RunImpressaoResidual falhar, anexar CSV e parar sem tocar UserForms ou template workbook.",
+      "Se for necessario editar workbook/template diretamente, cancelar a execucao code-only e abrir novo readback com decisao humana explicita."
+    ],
+    "anchor_to_restore": "Estado validado apos 0141: build e157221+ONDA38.2.21-FORM-RES-CODE; TV2_20260602_234618 OK=6/FALHA=0/MANUAL=0; V206 sem freeze."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Auditoria 0142 recomendou corrigir dois bloqueadores de impressao e dois marginais visuais observados nos PDFs 001/002/003.",
+    "blocking_findings": [
+      "IMP_AVALIA demandante vazio por escrita em L8 enquanto o template visual usa L9:P15.",
+      "EMITE_OS total final visual imprime '-' embora item tenha R$ 100,00."
+    ],
+    "visual_findings": [
+      "EMITE_PREOS C9/C11 com bordas cinza/descontinuas.",
+      "IMP_AVALIA A25:A45 sem borda esquerda efetiva."
+    ]
+  },
+  "created_at": "2026-06-03T02:22:16-03:00"
+}

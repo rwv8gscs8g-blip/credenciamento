@@ -1,0 +1,149 @@
+{
+  "result_id": "0131-exec-onda-38-2-15-ft4-credenciamento-lote",
+  "execution_id": "0131-exec-onda-38-2-15-ft4-credenciamento-lote",
+  "readback_id": "0131-rb-onda-38-2-15-ft4-credenciamento-lote",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "package_v3_imported_compiled_tv2_passed",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "build_label": "e157221+ONDA38.2.15-FT4-CRED-LOTE",
+  "action": "Implementar FT-4 credenciamento em lote no fluxo real de Credencia_Empresa e entregar teste V2 de sequencia CRED_ID/AR1 e tempo.",
+  "summary": "A Onda 38.2.15 refatorou o fluxo de credenciamento para alocar CRED_ID/AR1 em lote, preservando regra de negocio, auditoria, mensagens, persistencia e salvamento. A suite TV2_RunFT4CredenciamentoLote foi adicionada com 6 asserts automaticos sobre base populada, quantidade, sequencia de CRED_ID, AR1, tempo <= 10s e reexecucao idempotente. Mauricio importou o delta, compilou o VBAProject e executou TV2_RunFT4CredenciamentoLote com OK=6 | FALHA=0 | MANUAL=0. Nenhum .frx, Auto_Open.bas, Mod_Types.bas ou Importador_V3.bas foi alterado.",
+  "files_changed": [
+    ".hbn/readbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote.json",
+    ".hbn/hearbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote-confirmed.json",
+    ".hbn/hearbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote-confirmed.md",
+    ".hbn/results/0131-exec-onda-38-2-15-ft4-credenciamento-lote.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_15_ft4_credenciamento_lote/0131_TECNICO.md",
+    "CHANGELOG.md",
+    "src/vba/Credencia_Empresa.frm",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.frm",
+    "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.code-only.txt",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_15_FT4_CREDENCIAMENTO_LOTE.txt"
+  ],
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_15_FT4_CREDENCIAMENTO_LOTE.txt",
+    "expected_import_result": "M=3 | F=1 | err=0",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.frm",
+        "bytes": 31219,
+        "sha256": "6fcb247ef9d983070dbf8be1dd0fc800b108a14eb49ef9121c82384f4e4028ef"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.code-only.txt",
+        "bytes": 30751,
+        "sha256": "99cb5d3397dacd9b04b142d500421fbcca82c445cb047cad1a48f0a6f2fc975a"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 194564,
+        "sha256": "a1589b6b7ed5b3ebdb92f5ee94672ec50953f174125f2f045b24eae940e5051b"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 276236,
+        "sha256": "f465a4e8a60da769c9f1afc0b93f1d1ec5fa830e4a9a93615a55d5816c6daf8f"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23079,
+        "sha256": "40185fb66f476acf967e2eb4d523b966bfb8a2ab9638da562a230a25d878f61a"
+      }
+    ]
+  },
+  "human_gate_result": {
+    "reported_by": "mauricio-zanin",
+    "reported_at": "2026-06-01T10:28:37-03:00",
+    "importador_v3": "modo=Estabilizado | dryRun=False | M=3 | F=1 | err=0 | skip=0",
+    "compile_vbaproject": "passed_reported_by_human",
+    "suite": "TV2_RunFT4CredenciamentoLote",
+    "execution_id": "TV2_20260601_102735",
+    "result": "OK=6 | FALHA=0 | MANUAL=0",
+    "failure_csv": "Nao exportado; sem falhas."
+  },
+  "validation_gates": [
+    {
+      "gate": "Readback 0131",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/validate-readback.sh passou para .hbn/readbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote.json."
+    },
+    {
+      "gate": "Hearback 0131",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: confirmo o readback 0131-rb-onda-38-2-15-ft4-credenciamento-lote."
+    },
+    {
+      "gate": "Hearback schema",
+      "status": "pass_local",
+      "evidencia": "python3 -m jsonschema validou .hbn/hearbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote-confirmed.json contra .hbn/schemas/hearback.schema.json."
+    },
+    {
+      "gate": "Publicador V2",
+      "status": "pass_local",
+      "evidencia": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only Credencia_Empresa.frm --only Teste_V2_Engine.bas --only Teste_V2_Roteiros.bas --only App_Release.bas retornou in_sync para os 4 arquivos."
+    },
+    {
+      "gate": "Glasswing G7/G8",
+      "status": "pass_local",
+      "evidencia": "O publicador reportou OK para G8 Public Type apenas em Mod_Types.bas e G7 vba_import 100% sincronizado com src/vba."
+    },
+    {
+      "gate": "Whitespace diff",
+      "status": "pass_local",
+      "evidencia": "git diff --check passou limpo."
+    },
+    {
+      "gate": "HBN guards",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/hbn-guards-runner.sh passou; raiz canonica OK, nenhum worktree volatil, readback ativo 0131 confirmado e sem arquivos staged fora de escopo."
+    },
+    {
+      "gate": "Diff sem .frx",
+      "status": "pass_local",
+      "evidencia": "git diff --name-only nao listou arquivos .frx."
+    },
+    {
+      "gate": "Importador V3 delta 38.2.15",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou Importador V3 OK: modo=Estabilizado | dryRun=False | M=3 | F=1 | err=0 | skip=0."
+    },
+    {
+      "gate": "Debug > Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou que o VBAProject compilou limpo apos importacao."
+    },
+    {
+      "gate": "TV2_RunFT4CredenciamentoLote",
+      "status": "pass_human",
+      "evidencia": "Suite V2 concluida: Execucao TV2_20260601_102735 | OK=6 | FALHA=0 | MANUAL=0 | CSV de falhas nao exportado."
+    }
+  ],
+  "scope_notes": {
+    "auto_open": "src/vba/Auto_Open.bas permaneceu fora do escopo e nao foi tocado.",
+    "mod_types": "src/vba/Mod_Types.bas permaneceu fora do escopo e nao foi tocado.",
+    "importador_v3": "src/vba/Importador_V3.bas permaneceu fora do escopo e nao foi tocado.",
+    "preencher_menu_repo_svc": "Preencher.bas, Menu_Principal.frm, Svc_* e Repo_* permaneceram fora do escopo e nao foram tocados.",
+    "frx": "Nenhum .frx recebeu diff.",
+    "freeze": "Freeze V206 nao foi declarado e segue bloqueado."
+  },
+  "next_action": {
+    "summary": "Decidir e abrir novo readback safe_track para a proxima onda. Recomendacao operacional: BL-4 save/reopen se Mauricio aceitar tratar protecao persistente; alternativa: impressao fase 2 para resolver empenho/demandante/layout. Freeze V206 continua bloqueado.",
+    "status": "ready_for_next_readback"
+  },
+  "created_at": "2026-06-01T10:06:40-03:00",
+  "completed_at": "2026-06-01T10:28:37-03:00"
+}

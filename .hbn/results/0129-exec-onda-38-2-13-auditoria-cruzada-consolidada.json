@@ -1,0 +1,87 @@
+{
+  "result_id": "0129-exec-onda-38-2-13-auditoria-cruzada-consolidada",
+  "execution_id": "0129-exec-onda-38-2-13-auditoria-cruzada-consolidada",
+  "readback_id": "0129-rb-onda-38-2-13-auditoria-cruzada-consolidada",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "audit_consolidated_no_code_freeze_blocked",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "action": "Consolidar documentalmente a auditoria cruzada das ondas 38.2.4 a 38.2.12 contra o parecer 0024 e contra o parecer externo colado por Mauricio.",
+  "summary": "A Onda 38.2.13 registrou hearback confirmado, produziu a proposta 0033 e o tecnico 0129, e atualizou o relay. Veredito: deltas 38.2.4 a 38.2.12 ficam aproveitaveis com ressalvas; freeze V206 segue bloqueado por C1/C4/C5; FT-4 nao deve abrir antes da behavioralizacao da bateria.",
+  "files_changed": [
+    ".hbn/readbacks/0129-rb-onda-38-2-13-auditoria-cruzada-consolidada.json",
+    ".hbn/hearbacks/0129-rb-onda-38-2-13-auditoria-cruzada-consolidada-confirmed.json",
+    ".hbn/hearbacks/0129-rb-onda-38-2-13-auditoria-cruzada-consolidada-confirmed.md",
+    ".hbn/proposals/0033-consolidacao-auditoria-cruzada-38-2-4-a-38-2-12.md",
+    ".hbn/results/0129-exec-onda-38-2-13-auditoria-cruzada-consolidada.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_13_auditoria_cruzada/0129_TECNICO.md"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0129",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/validate-readback.sh passou para .hbn/readbacks/0129-rb-onda-38-2-13-auditoria-cruzada-consolidada.json antes da consolidacao."
+    },
+    {
+      "gate": "Hearback 0129",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: confirmo o readback 0129-rb-onda-38-2-13-auditoria-cruzada-consolidada."
+    },
+    {
+      "gate": "Mapa 0024",
+      "status": "pass_local",
+      "evidencia": ".hbn/proposals/0033-consolidacao-auditoria-cruzada-38-2-4-a-38-2-12.md contem mapa BL-1..BL-7, FT-1..FT-11, MG-1 e C1..C6."
+    },
+    {
+      "gate": "Decisao proxima onda",
+      "status": "pass_local",
+      "evidencia": "0033 e 0129_TECNICO recomendam 38.2.14 behavioralizacao/C1 antes de FT-4."
+    },
+    {
+      "gate": "Sem codigo",
+      "status": "pass_local",
+      "evidencia": "A execucao planejada e realizada e doc-only; nenhum arquivo em src/vba, local-ai/vba_import ou .frx foi editado nesta onda."
+    },
+    {
+      "gate": "Hearback schema",
+      "status": "pass_local",
+      "evidencia": "python3 -m jsonschema validou .hbn/hearbacks/0129-rb-onda-38-2-13-auditoria-cruzada-consolidada-confirmed.json contra .hbn/schemas/hearback.schema.json. O script validate-hearback.sh citado no README nao existe neste checkout."
+    },
+    {
+      "gate": "HBN guards",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/hbn-guards-runner.sh passou; raiz canonica OK, sem worktree volatil, readback ativo 0129 confirmado."
+    },
+    {
+      "gate": "Whitespace/doc diff",
+      "status": "pass_local",
+      "evidencia": "git diff --check passou limpo para o diff tracked."
+    },
+    {
+      "gate": "Glasswing G5 claims",
+      "status": "pass_local",
+      "evidencia": "rg nao encontrou claims proibidos nos artefatos 0129 e no relay atualizado."
+    }
+  ],
+  "scope_notes": {
+    "auto_open": "src/vba/Auto_Open.bas permaneceu fora do escopo e nao foi tocado.",
+    "mod_types": "src/vba/Mod_Types.bas permaneceu fora do escopo e nao foi tocado.",
+    "importador_v3": "src/vba/Importador_V3.bas permaneceu fora do escopo e nao foi tocado.",
+    "credenciamento_lote": "FT-4 foi explicitamente mantido pendente ate existir cobertura comportamental para CRED_ID/AR1.",
+    "frx": "Nenhum .frx recebeu diff.",
+    "freeze": "Esta onda reforca que freeze V206 permanece bloqueado."
+  },
+  "next_action": {
+    "summary": "Abrir readback safe_track 0130 para Onda 38.2.14 - behavioralizacao da bateria/C1, antes de qualquer implementacao de FT-4.",
+    "status": "ready_for_next_readback"
+  },
+  "created_at": "2026-06-01T08:44:43-03:00",
+  "completed_at": "2026-06-01T08:47:00-03:00"
+}

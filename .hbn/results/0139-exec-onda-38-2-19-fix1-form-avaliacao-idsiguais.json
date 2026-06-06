@@ -1,0 +1,149 @@
+{
+  "result_id": "0139-exec-onda-38-2-19-fix1-form-avaliacao-idsiguais",
+  "execution_id": "0139-exec-onda-38-2-19-fix1-form-avaliacao-idsiguais",
+  "readback_id": "0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "test_only_idsiguais_validated",
+  "human_status": "import_compile_tv2_approved",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "build_label": "e157221+ONDA38.2.19-FIX1-FORM-IDS",
+  "action": "Corrigir apenas o modulo V2 isolado de formulario avaliacao para usar IdsIguais nas comparacoes auxiliares de OS_ID, sem tocar producao nem UserForms.",
+  "summary": "A 0138 importou e compilou, mas TV2_20260602_125043 falhou em dois asserts porque os helpers do teste comparavam OS_ID como texto estrito. A 0139 ajusta somente TV2_FAM_LerDemandanteLista e TV2_FAM_AlterarEntIdOS para usar IdsIguais, atualiza App_Release e publica manifesto V3 M=2/F=0. Svc_Avaliacao, Preencher, UserForms, Auto_Open, Mod_Types, Importador_V3, Teste_V2_Engine e Teste_V2_Roteiros permanecem intocados nesta fix1.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 38.2.19-fix1 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunFormAvaliacaoModulos pela Janela Imediata.",
+      "Reportar execucao V2 e contagem OK/FALHA/MANUAL."
+    ],
+    "status": "completed"
+  },
+  "human_gate_expected": {
+    "import_result": "Importador V3 OK: M=2 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunFormAvaliacaoModulos",
+    "tv2_directed_result": "OK=5 | FALHA=0 | MANUAL=0",
+    "tv2_directed_failure_csv_pattern": "TesteV2_FORM_AVALIACAO_MODULOS_Falhas_*.csv"
+  },
+  "human_gate_observed": {
+    "import_result": "Mauricio reportou importacao executada; contagem do Importador V3 nao foi anexada nesta mensagem.",
+    "compile_result": "VBE Debug > Compile VBAProject passou limpo conforme reporte humano.",
+    "tv2_directed_execution": "TV2_20260602_181749",
+    "tv2_directed_result": "OK=5 | FALHA=0 | MANUAL=0",
+    "tv2_directed_failure_csv": "NAO_EXPORTADO",
+    "evidence_source": "Captura de tela enviada por Mauricio em 2026-06-02 mostra Suite V2 concluida, Execucao TV2_20260602_181749, OK=5, FALHA=0, MANUAL=0."
+  },
+  "release_validation_observed": {
+    "gate": "RVS completo",
+    "validation_id": "VR_20260602_182253",
+    "result": "APROVADO",
+    "build": "e157221+ONDA38.2.19-FIX1-FORM-IDS",
+    "csv_resumo": "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260602_182253.csv",
+    "csv_resumo_bytes": 1301,
+    "csv_resumo_sha256": "bc5b709ef45e54de085772137bb69456619e21fefb67ad749eb944cf905bb1e1",
+    "breakdown": [
+      "V1_RAPIDA BO-20260602-182253: OK=171 | FALHA=0 | MANUAL=0",
+      "V2_SMOKE TV2_20260602_183216: OK=34 | FALHA=0 | MANUAL=4",
+      "V2_CANONICO TV2_20260602_183439: OK=24 | FALHA=0 | MANUAL=0",
+      "V2_E2E_STRIKES TV2_20260602_184005: OK=76 | FALHA=0 | MANUAL=0",
+      "V2_INTEGRIDADE_BASE TV2_20260602_184912: OK=4 | FALHA=0 | MANUAL=1",
+      "V2_ONDA23_ADV ADVERSARIAL_UI:TV2_20260602_184952 | TRANSACAO_INTERRUPT:TV2_20260602_185147 | BOUNDARY_DATES:TV2_20260602_185252: OK=27 | FALHA=0 | MANUAL=0"
+    ],
+    "note": "Mauricio rodou RVS completo em vez do Trio minimo recomendado; a evidencia e mais abrangente."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FIX1_FORM_AVALIACAO_IDSIGUAIS.txt",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_19_FIX1_FORM_AVALIACAO_IDSIGUAIS\", \"e157221+ONDA38.2.19-FIX1-FORM-IDS\"",
+    "expected_import_result": "M=2 | F=0 | err=0 | skip=0",
+    "expected_suite": "TV2_RunFormAvaliacaoModulos",
+    "expected_suite_result": "OK=5 | FALHA=0 | MANUAL=0",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23184,
+        "sha256": "50fe9a7bde03306fdb3319aedfe36a5106ae9395c4b8e34fc58cd5253ae473fb"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABQ-Teste_V2_Form_Avaliacao_Modulos.bas",
+        "bytes": 11542,
+        "sha256": "115f797a16aebe3149f8a641bc5d79dbae1c2eafd39db1024d29bc360cdfdd42"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FIX1_FORM_AVALIACAO_IDSIGUAIS.txt",
+        "bytes": 1192,
+        "sha256": "2fbd335719d909df89f1dee6bfc11a9d1be787937727ce4275e4e469a012375f"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais.json",
+    ".hbn/hearbacks/0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais-confirmed.json",
+    ".hbn/hearbacks/0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais-confirmed.md",
+    ".hbn/results/0139-exec-onda-38-2-19-fix1-form-avaliacao-idsiguais.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_19_fix1_form_avaliacao_idsiguais/0139_TECNICO.md",
+    "CHANGELOG.md",
+    "src/vba/Teste_V2_Form_Avaliacao_Modulos.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABQ-Teste_V2_Form_Avaliacao_Modulos.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FIX1_FORM_AVALIACAO_IDSIGUAIS.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0139",
+      "status": "pass_local",
+      "evidencia": "Readback confirmado por Mauricio e validado contra schema HBN."
+    },
+    {
+      "gate": "Hearback 0139",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: confirmo o readback 0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais."
+    },
+    {
+      "gate": "Fonte e espelho App_Release",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/App_Release.bas e AAX-App_Release.bas sem diferencas."
+    },
+    {
+      "gate": "Fonte e espelho Teste_V2_Form_Avaliacao_Modulos",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/Teste_V2_Form_Avaliacao_Modulos.bas e ABQ-Teste_V2_Form_Avaliacao_Modulos.bas sem diferencas."
+    },
+    {
+      "gate": "Manifesto V3 minimo",
+      "status": "pass_local",
+      "evidencia": "Manifesto contem dois itens M e nenhum item F; nao importa producao, UserForms, .frx, Auto_Open, Mod_Types, Importador_V3, Teste_V2_Engine ou Teste_V2_Roteiros."
+    },
+    {
+      "gate": "Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou compile limpo."
+    },
+    {
+      "gate": "TV2_RunFormAvaliacaoModulos",
+      "status": "pass_human",
+      "evidencia": "TV2_20260602_181749 retornou OK=5 | FALHA=0 | MANUAL=0; nenhum CSV de falhas exportado."
+    },
+    {
+      "gate": "Gate RVS completo",
+      "status": "pass_human",
+      "evidencia": "VR_20260602_182253 APROVADO; V1_RAPIDA, V2_SMOKE, V2_CANONICO, V2_E2E_STRIKES, V2_INTEGRIDADE_BASE e V2_ONDA23_ADV com FALHA=0."
+    }
+  ],
+  "next_decision": [
+    "38.2.19-fix1 esta validada por V2 dirigido e RVS completo.",
+    "Decidir se a proxima etapa sera abrir onda visual/code-only para melhoria incremental do formulario ou uma auditoria/handoff de consolidacao.",
+    "Nao importar UserForm sem novo readback proprio."
+  ],
+  "created_at": "2026-06-02T17:53:03-03:00",
+  "package_ready_at": "2026-06-02T18:00:00-03:00",
+  "completed_at": "2026-06-02T18:20:00-03:00",
+  "rvs_approved_at": "2026-06-02T18:54:25-03:00"
+}

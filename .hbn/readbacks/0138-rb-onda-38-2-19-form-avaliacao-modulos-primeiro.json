@@ -1,0 +1,197 @@
+{
+  "readback_id": "0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0137-rb-onda-38-2-18-fix1-bo330-status-canonico",
+  "intent": {
+    "objective": "Retomar a melhoria do formulario de avaliacao/demandante em uma fatia conservadora de modulos primeiro, sem reimportar UserForm grande, para fazer o formulario existente receber o nome do demandante por AV_Lista coluna 1.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao importar Menu_Principal.frm, qualquer UserForm, .frx ou ThisWorkbook nesta onda",
+      "Nao tocar Auto_Open.bas, Mod_Types.bas ou Importador_V3.bas",
+      "Nao tocar Teste_V2_Engine.bas ou Teste_V2_Roteiros.bas completos nesta onda",
+      "Nao resolver todos os erros residuais de formularios nesta fatia; foco apenas avaliacao/demandante por modulos",
+      "Nao alterar schema de CAD_OS, ENTIDADE, CAD_SERV, EMPRESAS ou CONFIG",
+      "Nao propagar padrao de Entidades para outros fluxos sem readback proprio",
+      "Nao rodar limpeza generica de espacos finais em VBA"
+    ]
+  },
+  "explicit_decisions": {
+    "human_confirmation_required": {
+      "status": "confirmed",
+      "decision_text": "Mauricio confirma que a Onda 38.2.19 pode retomar formularios por um pacote V3 sem item F: importar apenas Svc_Avaliacao, Preencher, App_Release e um modulo V2 isolado novo. O pacote nao importara Menu_Principal.frm nem Teste_V2_Roteiros.bas; o teste abrira/inspecionara o formulario existente sem exigir metodos novos no UserForm.",
+      "why_this_is_conservative": [
+        "A Onda 0134 falhou no compile/crash apos pacote com Menu_Principal.frm.",
+        "O workbook de referencia ja usa AVListaCol(1) em EncerraOS_Click para payload e impressao.",
+        "Se PreencherAvaliarOS preencher AV_Lista coluna 1 por OS_ID -> ENT_ID -> ENTIDADE.NOME, o formulario existente pode funcionar sem reimportacao do form.",
+        "Um modulo V2 isolado evita compilar contra metodos novos que a 0134 adicionou em Menu_Principal.frm e que nao existem no workbook recuperado."
+      ]
+    }
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro.json",
+      ".hbn/hearbacks/0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro-confirmed.json",
+      ".hbn/hearbacks/0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro-confirmed.md",
+      ".hbn/results/0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_19_form_avaliacao_modulos_primeiro/0138_TECNICO.md",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseTrio_V12_0_0205_VR_20260602_*.csv",
+      "CHANGELOG.md",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Teste_V2_Form_Avaliacao_Modulos.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABQ-Teste_V2_Form_Avaliacao_Modulos.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FORM_AVALIACAO_MODULOS_PRIMEIRO.txt",
+      "TesteV2_FORM_AVALIACAO_MODULOS_Falhas_*.csv"
+    ],
+    "files_forbidden": [
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Credencia_Empresa.frm",
+      "src/vba/*.frm",
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Repo_Avaliacao.bas",
+      "src/vba/Const_Colunas.bas",
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/002-formularios/**",
+      "local-ai/vba_import/003-objetos/**",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAN-Repo_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/AAB-Const_Colunas.bas",
+      "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "**/*.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "locked_diagnosis": [
+      "0134 falhou no gate humano por travamento/fechamento do Excel no compile apos importacao que incluia Menu_Principal.frm.",
+      "0137 restaurou confianca do workbook: importou, compilou, passou TV2 dirigido e Trio minimo VR_20260602_112011 APROVADO.",
+      "No Menu_Principal.frm do workbook de referencia, EncerraOS_Click ja usa AVListaCol(1) para avaliador/demandante e para Desc_entidade na impressao.",
+      "Portanto, a primeira tentativa conservadora deve preencher AV_Lista coluna 1 de forma confiavel, sem alterar o form."
+    ],
+    "production_delta_after_hearback": [
+      "Importar Svc_Avaliacao com ResolverDemandanteAvaliacaoPorOS, resolvendo OS_ID -> CAD_OS.ENT_ID -> ENTIDADE.NOME e retornando falha auditavel se a base estiver inconsistente.",
+      "Importar Preencher com PreencherAvaliarOS usando ResolverDemandanteAvaliacaoPorOS para popular AV_Lista coluna 1.",
+      "Adicionar fallback seguro em MontarPayloadAvaliacao: se avaliador vier vazio, tentar resolver o demandante pelo OS_ID; se nao resolver, falhar com mensagem explicita.",
+      "Preservar avaliador explicito quando ele vier preenchido, para nao alterar chamadas historicas.",
+      "Atualizar App_Release para build e157221+ONDA38.2.19-FORM-AVAL-MODULOS."
+    ],
+    "test_delta_after_hearback": [
+      "Criar modulo isolado Teste_V2_Form_Avaliacao_Modulos.bas, em vez de alterar Teste_V2_Roteiros.bas.",
+      "Suite proposta: TV2_RunFormAvaliacaoModulos.",
+      "Cenario 1: preparar OS em EM_EXECUCAO com ENT_ID=001 e demandante Local 1.",
+      "Cenario 2: ResolverDemandanteAvaliacaoPorOS retorna ENT_ID=001 e NOME=Local 1.",
+      "Cenario 3: abrir/instanciar Menu_Principal existente, executar PreencherAvaliarOS e inspecionar AV_Lista sem depender de metodos novos no UserForm.",
+      "Cenario 4: MontarPayloadAvaliacao com avaliador vazio resolve Local 1 pelo OS_ID; com avaliador explicito preserva o valor informado.",
+      "Cenario 5: ENT_ID inexistente falha de modo auditavel e a base e restaurada.",
+      "Nao fechar OS real no teste se a validacao de payload/lista ja provar a correcao; isso reduz efeito colateral."
+    ],
+    "package_delta_after_hearback": [
+      "Gerar manifesto V3 sem item F e sem diretorio 002-formularios.",
+      "Itens esperados: AAX-App_Release.bas, AAS-Svc_Avaliacao.bas, AAU-Preencher.bas e ABQ-Teste_V2_Form_Avaliacao_Modulos.bas.",
+      "Gate humano: import V3, compile limpo, TV2_RunFormAvaliacaoModulos, e so depois decidir se Trio minimo sera reexecutado."
+    ]
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Menu_Principal.frm e todos os UserForms permanecem intocados nesta onda",
+    "Auto_Open.bas, Mod_Types.bas e Importador_V3.bas permanecem intocados",
+    "Teste_V2_Engine.bas e Teste_V2_Roteiros.bas nao serao reimportados nesta onda",
+    "A fonte autoritativa do demandante da avaliacao continua CAD_OS.ENT_ID",
+    "Nenhum schema de planilha sera alterado"
+  ],
+  "risks": [
+    {
+      "risk": "Sem importar Menu_Principal.frm, a confirmacao visual do modal pode continuar sem texto adicional mesmo que o registro passe a ter demandante.",
+      "mitigation": "Aceitar esta fatia como modulos primeiro: validar lista, payload e impressao existente; melhorias de confirmacao visual entram em onda posterior com decisao propria.",
+      "severity": "medium"
+    },
+    {
+      "risk": "O teste isolado pode depender do formulario existente estar instanciavel no workbook recuperado.",
+      "mitigation": "O teste nao exige metodos novos no UserForm; se a instancia falhar, registrar CSV e abrir onda de diagnostico do form sem reimportacao completa.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Fallback em MontarPayloadAvaliacao pode alterar comportamento historico para avaliador vazio.",
+      "mitigation": "Resolver apenas quando OS_ID for valido e demandante resolver de forma auditavel; se nao resolver, manter falha explicita.",
+      "severity": "medium"
+    },
+    {
+      "risk": "PreencherAvaliarOS pode continuar silencioso se AV_Lista nao estiver disponivel.",
+      "mitigation": "A suite isolada deve abrir/instanciar o Menu_Principal existente e validar a coluna; se nao houver controle, a onda falha de modo rastreavel.",
+      "severity": "high"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0138 valido contra schema",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro.json"
+      },
+      {
+        "gate": "Hearback 0138 confirmado por Mauricio antes de editar codigo VBA",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro-confirmed.json"
+      },
+      {
+        "gate": "Manifesto V3 sem item F, sem UserForm e sem Teste_V2_Roteiros completo",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro.json"
+      },
+      {
+        "gate": "VBE Debug > Compile VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro.json"
+      },
+      {
+        "gate": "TV2_RunFormAvaliacaoModulos retorna zero falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro.json"
+      },
+      {
+        "gate": "Decisao pos-gate: se verde, reexecutar Trio minimo ou abrir onda visual/code-only; se vermelho, anexar CSV e nao importar form",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se o compile falhar, nao salvar o workbook e restaurar pelo backup V3 anterior ao delta 0138.",
+      "Se TV2_RunFormAvaliacaoModulos falhar, anexar CSV e parar sem importar Menu_Principal.frm.",
+      "Se aparecer necessidade de alterar UserForm, encerrar 0138 e abrir readback proprio com decisao explicita.",
+      "Se aparecer diff em Auto_Open, Mod_Types, Importador_V3, ThisWorkbook, .frx ou Teste_V2_Roteiros, remover antes de entregar."
+    ],
+    "anchor_to_restore": "Workbook validado apos 0137, build e157221+ONDA38.2.18-FIX1-BO330-STATUS, Trio minimo VR_20260602_112011 APROVADO."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Mauricio autorizou avancar conforme decisao recomendada apos 0137 validada.",
+    "operator_text": "Podemos avancar de acordo com a sua decisao recomendada.",
+    "last_green_gate": "VR_20260602_112011 APROVADO; V1_RAPIDA OK=171/FALHA=0, V2_SMOKE OK=34/FALHA=0/MANUAL=4, V2_CANONICO OK=24/FALHA=0.",
+    "form_recovery_constraint": "0134 importou mas o compile travou/fechou Excel; 0138 evita UserForm grande e usa modulo V2 isolado."
+  },
+  "created_at": "2026-06-02T12:13:45-03:00",
+  "confirmed_at": "2026-06-02T12:20:00-03:00"
+}

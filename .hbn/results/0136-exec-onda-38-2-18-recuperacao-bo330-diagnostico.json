@@ -1,0 +1,108 @@
+{
+  "result_id": "0136-exec-onda-38-2-18-recuperacao-bo330-diagnostico",
+  "execution_id": "0136-exec-onda-38-2-18-recuperacao-bo330-diagnostico",
+  "readback_id": "0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "human_gate_failed_diagnostic_expectation",
+  "outcome": "import_compile_ok_tv2_failed_due_status_literal_expected_suspensa_but_canonical_suspensa_global",
+  "human_status": "import_compile_ok_tv2_failed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "build_label": "e157221+ONDA38.2.18-RECUP-BO330-DIAG",
+  "action": "Entregar pacote V3 minimo para diagnosticar BO_330 no workbook de referencia que compila, sem tocar producao nem importar suites V2 grandes.",
+  "summary": "A comparacao contra a exportacao de referencia mostrou que importar os Teste_V2_Engine/Teste_V2_Roteiros atuais no workbook 38.2.6 seria arriscado, pois esses arquivos ja carregam ondas posteriores. A entrega foi reduzida para um modulo isolado Teste_V2_BO330_Diagnostico, mais App_Release e manifesto. O diagnostico separa tres hipoteses: OS nao esta vinculada a EMP03; OS esta em EMP03 mas suspensao por nota nao persiste; ou EMP03 legado diverge da empresa real da OS.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 38.2.18 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunBO330Diagnostico pela Janela Imediata.",
+      "Reportar execucao V2 e contagem OK/FALHA/MANUAL.",
+      "Se houver CSV de falhas, anexar o CSV para decidir a proxima onda."
+    ],
+    "status": "completed_with_failure"
+  },
+  "human_gate_observed": {
+    "import_result": "Importador V3 OK: modo=Estabilizado | dryRun=Falso | M=2 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passou limpo conforme reporte humano.",
+    "tv2_execution": "TV2_20260602_105519",
+    "tv2_result": "OK=18 | FALHA=6 | MANUAL=0",
+    "failure_csv": "TesteV2_BO330_DIAGNOSTICO_Falhas_TV2_20260602_105519.csv",
+    "failure_csv_sha256": "e24c19ab7e84dcd21869428648437330fe614a5c87cd952e0b8aeb4ad93edb8e",
+    "diagnostic_interpretation": "As seis falhas mostram OS_EMP_ID=003, STATUS_SEL=SUSPENSA_GLOBAL, STATUS_EMP03=SUSPENSA_GLOBAL e DT_FIM_SUSP=2026-07-02. A producao suspendeu a empresa correta; o erro esta na expectativa do diagnostico 0136, que comparou contra SUSPENSA em vez do literal canonico SUSPENSA_GLOBAL."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_18_RECUPERACAO_BO330_DIAGNOSTICO.txt",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_18_RECUPERACAO_BO330_DIAGNOSTICO\", \"e157221+ONDA38.2.18-RECUP-BO330-DIAG\"",
+    "expected_import_result": "M=2 | F=0 | err=0",
+    "expected_suite": "TV2_RunBO330Diagnostico",
+    "expected_suite_result": "Diagnostico; falhas possiveis sao evidencia para a proxima correcao",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23211,
+        "sha256": "67659f8fba11df9eda11eb9bc82158ccf796cbfb60432f7ea7f9d7dd699e6598"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABP-Teste_V2_BO330_Diagnostico.bas",
+        "bytes": 16155,
+        "sha256": "cccc372476984b969b84fb219a264f4232cdc6b2bafa727763bbc9da81a140bc"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_18_RECUPERACAO_BO330_DIAGNOSTICO.txt",
+        "bytes": 1195,
+        "sha256": "dce5f7707b4723b682f72e3dfe96db6a086bad892534e4a3967599bbb6e8a11d"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico.json",
+    ".hbn/hearbacks/0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico-confirmed.json",
+    ".hbn/hearbacks/0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico-confirmed.md",
+    ".hbn/results/0136-exec-onda-38-2-18-recuperacao-bo330-diagnostico.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_18_recuperacao_bo330_diagnostico/0136_TECNICO.md",
+    "CHANGELOG.md",
+    "src/vba/Teste_V2_BO330_Diagnostico.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABP-Teste_V2_BO330_Diagnostico.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_18_RECUPERACAO_BO330_DIAGNOSTICO.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0136",
+      "status": "pass_local",
+      "evidencia": "JSON parse OK e human_status confirmado apos hearback de Mauricio."
+    },
+    {
+      "gate": "Hearback 0136",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: confirmo o readback 0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico."
+    },
+    {
+      "gate": "Manifesto V3 minimo",
+      "status": "pass_local",
+      "evidencia": "Manifesto contem apenas App_Release e Teste_V2_BO330_Diagnostico; nenhum F, nenhum .frx, nenhum modulo de producao."
+    },
+    {
+      "gate": "Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou import V3 OK e compile limpo apos o delta 0136."
+    },
+    {
+      "gate": "TV2_RunBO330Diagnostico",
+      "status": "failed_diagnostic_expectation",
+      "evidencia": "TV2_20260602_105519 retornou OK=18 | FALHA=6 | MANUAL=0; CSV mostra status obtido SUSPENSA_GLOBAL, mas esperado SUSPENSA."
+    }
+  ],
+  "next_decision": [
+    "Se OS_EMP_ID for diferente de 003, abrir onda para corrigir expectativa/cenario BO_330 ou ordenacao do rodizio do cenario.",
+    "Se OS_EMP_ID for 003 e status/DT_FIM nao suspender, abrir onda de correcao em AvaliarOS/ContarStrikes/Suspender.",
+    "Se empresa selecionada suspender mas EMP03 legado nao, ajustar bateria V1 para observar a empresa real da OS."
+  ],
+  "created_at": "2026-06-02T10:21:00-03:00"
+}

@@ -1,0 +1,114 @@
+{
+  "readback_id": "0129-rb-onda-38-2-13-auditoria-cruzada-consolidada",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0128-rb-onda-38-2-12-performance-ux-basica",
+  "intent": {
+    "objective": "Consolidar documentalmente a auditoria cruzada das ondas 38.2.4 a 38.2.12 contra o parecer 0024, sem implementar codigo e sem o Codex auditar o proprio trabalho.",
+    "non_goals": [
+      "Nao implementar FT-4 nem alterar credenciamento em lote nesta onda",
+      "Nao tocar src/vba nem local-ai/vba_import nesta onda",
+      "Nao tocar Auto_Open.bas, Mod_Types.bas ou Importador_V3.bas",
+      "Nao propagar o padrao de Entidades para outros fluxos",
+      "Nao declarar freeze V206",
+      "Nao transformar parecer externo colado em evidencia mais forte do que o proprio texto permite"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0129-rb-onda-38-2-13-auditoria-cruzada-consolidada.json",
+      ".hbn/hearbacks/0129-rb-onda-38-2-13-auditoria-cruzada-consolidada-confirmed.json",
+      ".hbn/hearbacks/0129-rb-onda-38-2-13-auditoria-cruzada-consolidada-confirmed.md",
+      ".hbn/results/0129-exec-onda-38-2-13-auditoria-cruzada-consolidada.json",
+      ".hbn/proposals/0033-consolidacao-auditoria-cruzada-38-2-4-a-38-2-12.md",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_13_auditoria_cruzada/0129_PROMPTS_AUDITORIA_HANDOFF.md",
+      "auditoria/03_ondas/onda_38_2_13_auditoria_cruzada/0129_TECNICO.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Credencia_Empresa.frm",
+      "**/*.frx"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Commit e157221 permanece como HEAD esperado de entrada",
+    "Nenhum arquivo VBA, importavel ou .frx sera alterado",
+    "Qualquer proxima implementacao exigira readback safe_track proprio e hearback confirmado"
+  ],
+  "risks": [
+    {
+      "risk": "Codex implementador pode contaminar a auditoria ao emitir julgamento sobre o proprio trabalho.",
+      "mitigation": "Limitar a onda a consolidacao de pareceres externos e evidencias ja existentes, registrando explicitamente que Codex nao substitui auditor independente.",
+      "severity": "high"
+    },
+    {
+      "risk": "O parecer colado no chat pode misturar autores ou nao representar artefato final versionado das auditorias externas.",
+      "mitigation": "Citar a origem como texto colado por Mauricio e separar evidencia local verificada de inferencia baseada no parecer.",
+      "severity": "medium"
+    },
+    {
+      "risk": "A consolidacao pode ser usada para destravar FT-4 prematuramente apesar do bloqueio de cobertura C1.",
+      "mitigation": "Registrar decisao explicita sobre FT-4 e manter freeze V206 bloqueado enquanto C1, C4 e C5 nao estiverem atendidos.",
+      "severity": "high"
+    },
+    {
+      "risk": "A onda documental pode crescer para edicao de codigo por conveniencia.",
+      "mitigation": "Declarar track fast_track, proibir src/vba e local-ai/vba_import no scope e abrir safe_track separado para qualquer codigo.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0129 valido contra schema",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0129-exec-onda-38-2-13-auditoria-cruzada-consolidada.json"
+      },
+      {
+        "gate": "Consolidacao mapeia BL-1..BL-7, FT-1..FT-11, MG-1 e C1..C6 contra 0024",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/proposals/0033-consolidacao-auditoria-cruzada-38-2-4-a-38-2-12.md"
+      },
+      {
+        "gate": "Decisao proxima onda explicita: behavioralizacao antes de FT-4 ou justificativa contraria",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_13_auditoria_cruzada/0129_TECNICO.md"
+      },
+      {
+        "gate": "Nenhum arquivo VBA, importavel ou .frx alterado",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0129-exec-onda-38-2-13-auditoria-cruzada-consolidada.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o hearback nao for confirmado, nao escrever os artefatos de consolidacao.",
+      "Se a consolidacao tocar codigo ou importaveis, parar e remover essa alteracao do diff antes de seguir.",
+      "Se as auditorias externas forem ambiguas, registrar a ambiguidade e pedir decisao humana antes de ordenar a proxima onda.",
+      "Se houver divergencia BLOQUEADOR contra BLOQUEADOR, manter freeze bloqueado e encaminhar para Mauricio decidir."
+    ],
+    "anchor_to_restore": "Commit e157221 (feat: estabilizar performance ux 38.2.12)"
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Usuario forneceu Prompt 3 de handoff e texto colado com auditoria cruzada independente em 2026-06-01.",
+    "parecer_base": ".hbn/proposals/0024-Opus3-4-MAX-auditoria-gate-a4-l43-v206.md",
+    "ultimo_gate_humano": "TV2_20260601_004135 OK=5 FALHA=0 MANUAL=0",
+    "observacao": "Texto colado recomenda APROVAR COM RESSALVAS os deltas ja testados, mas BLOQUEAR freeze e nao abrir FT-4 antes de C1/behavioralizacao."
+  },
+  "created_at": "2026-06-01T01:15:35-03:00"
+}

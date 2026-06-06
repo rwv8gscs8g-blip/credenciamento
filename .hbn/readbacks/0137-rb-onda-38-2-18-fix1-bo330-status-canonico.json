@@ -1,0 +1,170 @@
+{
+  "readback_id": "0137-rb-onda-38-2-18-fix1-bo330-status-canonico",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico",
+  "intent": {
+    "objective": "Corrigir exclusivamente a expectativa do teste diagnostico BO_330 para usar o status canonico SUSPENSA_GLOBAL, mantendo a producao intocada e confirmando se o diagnostico dirigido fica verde.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao tocar Auto_Open.bas, Mod_Types.bas ou Importador_V3.bas",
+      "Nao tocar Svc_Avaliacao.bas, Repo_Avaliacao.bas, Svc_Rodizio.bas, Svc_OS.bas ou Const_Colunas.bas",
+      "Nao tocar formularios, arquivos .frx, ThisWorkbook ou suites V2 grandes",
+      "Nao alterar regra de negocio de avaliacao, rodizio ou suspensao",
+      "Nao retomar a onda de formularios antes de fechar este diagnostico",
+      "Nao rodar limpeza generica de espacos finais em VBA"
+    ]
+  },
+  "explicit_decisions": {
+    "human_confirmation_required": {
+      "status": "confirmed",
+      "decision_text": "Mauricio confirma que a proxima micro-onda e um fix diagnostico restrito: trocar a expectativa interna de TV2_RunBO330Diagnostico de SUSPENSA para SUSPENSA_GLOBAL, gerar pacote V3 minimo e reexecutar apenas o teste dirigido BO_330 antes de voltar ao Trio minimo.",
+      "observed_evidence": [
+        "Import 0136 OK e compile limpo.",
+        "TV2_20260602_105519 retornou OK=18 | FALHA=6 | MANUAL=0.",
+        "CSV de falhas mostra OS_EMP_ID=003 e STATUS_EMP03=SUSPENSA_GLOBAL com DT_FIM_SUSP=2026-07-02.",
+        "Svc_Rodizio, Mod_Types, Teste_Bateria_Oficial e Teste_V2_Roteiros usam SUSPENSA_GLOBAL como literal canonico."
+      ]
+    }
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0137-rb-onda-38-2-18-fix1-bo330-status-canonico.json",
+      ".hbn/hearbacks/0137-rb-onda-38-2-18-fix1-bo330-status-canonico-confirmed.json",
+      ".hbn/hearbacks/0137-rb-onda-38-2-18-fix1-bo330-status-canonico-confirmed.md",
+      ".hbn/results/0137-exec-onda-38-2-18-fix1-bo330-status-canonico.json",
+      ".hbn/results/0136-exec-onda-38-2-18-recuperacao-bo330-diagnostico.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_18_fix1_bo330_status_canonico/0137_TECNICO.md",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseTrio_V12_0_0205_VR_20260602_112011.csv",
+      "CHANGELOG.md",
+      "src/vba/Teste_V2_BO330_Diagnostico.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/ABP-Teste_V2_BO330_Diagnostico.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_18_FIX1_BO330_STATUS_CANONICO.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Repo_Avaliacao.bas",
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_OS.bas",
+      "src/vba/Const_Colunas.bas",
+      "src/vba/Teste_Bateria_Oficial.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/*.frm",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/AAN-Repo_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+      "local-ai/vba_import/001-modulo/AAQ-Svc_OS.bas",
+      "local-ai/vba_import/001-modulo/AAB-Const_Colunas.bas",
+      "local-ai/vba_import/001-modulo/ABA-Teste_Bateria_Oficial.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/002-formularios/**",
+      "local-ai/vba_import/003-objetos/**",
+      "**/*.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "edits_after_hearback": [
+      "Alterar apenas TV2_BO330_STATUS_SUSPENSA de \"SUSPENSA\" para \"SUSPENSA_GLOBAL\" no modulo diagnostico fonte.",
+      "Espelhar a mesma alteracao no modulo importavel ABP-Teste_V2_BO330_Diagnostico.bas.",
+      "Atualizar App_Release para o build e157221+ONDA38.2.18-FIX1-BO330-STATUS.",
+      "Gerar manifesto V3 minimo com apenas App_Release e Teste_V2_BO330_Diagnostico.",
+      "Registrar ERP e tecnico da micro-onda."
+    ],
+    "expected_import": "M=2 | F=0 | err=0 | skip=0",
+    "expected_test": "TV2_RunBO330Diagnostico deve retornar OK=24 | FALHA=0 | MANUAL=0 se a unica divergencia era o literal de status."
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Nenhum modulo de producao sera alterado nesta micro-onda",
+    "Auto_Open.bas, Mod_Types.bas e Importador_V3.bas permanecem intocados",
+    "O diagnostico continuara observando EMP_ID real da OS e EMP03 legado separadamente",
+    "A retomada dos formularios continua bloqueada ate o BO_330 diagnostico fechar"
+  ],
+  "risks": [
+    {
+      "risk": "O teste dirigido ficar verde pode ainda nao explicar por que o Trio minimo V1 falhou antes.",
+      "mitigation": "Apos TV2 dirigido verde, executar CT_ValidarRelease_TrioMinimo novamente; se V1 BO_330 persistir, abrir readback novo e especifico para a bateria V1.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Trocar expectativa de teste poderia mascarar falha real se SUSPENSA_GLOBAL nao fosse canonico.",
+      "mitigation": "A mudanca se apoia em Svc_Rodizio, Mod_Types, Teste_Bateria_Oficial e Teste_V2_Roteiros, todos apontando SUSPENSA_GLOBAL como literal canonico.",
+      "severity": "low"
+    },
+    {
+      "risk": "O workbook pode estar em estado operacional diferente entre execucoes.",
+      "mitigation": "Manter o gate em teste dirigido e registrar execucao, CSV ou ausencia de CSV antes de decidir proxima onda.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Alterar App_Release junto do teste pode importar build label incompatível se o manifesto nao for minimo.",
+      "mitigation": "Manifesto permitido contem somente App_Release e Teste_V2_BO330_Diagnostico; nenhum modulo de producao ou formulario entra no pacote.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0137 valido contra schema",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0137-exec-onda-38-2-18-fix1-bo330-status-canonico.json"
+      },
+      {
+        "gate": "Hearback 0137 confirmado por Mauricio antes de qualquer edicao VBA",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0137-rb-onda-38-2-18-fix1-bo330-status-canonico-confirmed.json"
+      },
+      {
+        "gate": "Import V3 minimo do fix1 retorna M=2 F=0 err=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0137-exec-onda-38-2-18-fix1-bo330-status-canonico.json"
+      },
+      {
+        "gate": "VBE Debug > Compile VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0137-exec-onda-38-2-18-fix1-bo330-status-canonico.json"
+      },
+      {
+        "gate": "TV2_RunBO330Diagnostico retorna OK=24 FALHA=0 MANUAL=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0137-exec-onda-38-2-18-fix1-bo330-status-canonico.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 informado pelo Importador.",
+      "Se o compile falhar, nao salvar o workbook e restaurar pelo backup V3 do import.",
+      "Se TV2_RunBO330Diagnostico ainda falhar, anexar o CSV e parar sem executar bateria completa.",
+      "Se o diagnostico verde mas Trio minimo falhar, abrir novo readback para isolar a bateria V1 BO_330.",
+      "Se surgir necessidade de tocar producao ou formulario, encerrar 0137 e abrir readback proprio."
+    ],
+    "anchor_to_restore": "Backup V3 gerado pelo importador antes do delta 0137; fallback operacional ainda e o workbook de referencia que compilou em fd45a5d+ONDA38.2.6-IMPRESSAO-INTEGRIDADE."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Mauricio importou e compilou 0136, executou TV2_RunBO330Diagnostico e anexou CSV com seis falhas.",
+    "diagnosis": "As falhas apontam expectativa incorreta do teste diagnostico: obtido SUSPENSA_GLOBAL, esperado SUSPENSA.",
+    "csv_analyzed": "TesteV2_BO330_DIAGNOSTICO_Falhas_TV2_20260602_105519.csv",
+    "csv_sha256": "e24c19ab7e84dcd21869428648437330fe614a5c87cd952e0b8aeb4ad93edb8e"
+  },
+  "created_at": "2026-06-02T11:03:04-03:00"
+}

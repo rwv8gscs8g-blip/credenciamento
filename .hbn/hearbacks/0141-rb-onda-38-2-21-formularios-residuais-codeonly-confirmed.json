@@ -1,0 +1,17 @@
+{
+  "hearback_id": "0141-rb-onda-38-2-21-formularios-residuais-codeonly-confirmed",
+  "readback_id": "0141-rb-onda-38-2-21-formularios-residuais-codeonly",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "human_operator": "Mauricio",
+  "status": "confirmed",
+  "confirmation_text": "confirmo o readback 0141-rb-onda-38-2-21-formularios-residuais-codeonly",
+  "confirmed_at": "2026-06-02T21:25:14-03:00",
+  "scope_confirmed": [
+    "Retomar estabilizacao de formularios em fatia code-only/modulos primeiro",
+    "Ler UserForms e incoming apenas como referencia",
+    "Nao importar nem editar .frm/.frx",
+    "Nao tocar Auto_Open, ThisWorkbook, Mod_Types, Importador_V3, Teste_V2_Engine ou Teste_V2_Roteiros",
+    "Gerar pacote V3 e teste V2 dirigido se a leitura confirmar alteracao necessaria"
+  ]
+}

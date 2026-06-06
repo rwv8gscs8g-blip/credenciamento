@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0137-rb-onda-38-2-18-fix1-bo330-status-canonico-confirmed",
+  "readback_id": "0137-rb-onda-38-2-18-fix1-bo330-status-canonico",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-02T11:06:00-03:00",
+  "notes": "Mauricio confirmou em chat: confirmo o readback 0137-rb-onda-38-2-18-fix1-bo330-status-canonico. Escopo autorizado: corrigir exclusivamente a expectativa do teste diagnostico BO_330 para o literal canonico SUSPENSA_GLOBAL, sem tocar producao, formularios, Auto_Open, Mod_Types ou Importador_V3."
+}

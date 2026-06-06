@@ -1,0 +1,198 @@
+{
+  "readback_id": "0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais",
+  "intent": {
+    "objective": "Abrir a proxima fatia conservadora de UX: criar um indicativo visual/atalho persistente para o usuario acionar IniciarSistema a partir da planilha, sem depender de Auto_Open e sem importar UserForms, com teste V2 dirigido.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao alterar Auto_Open.bas nem ThisWorkbook nesta onda",
+      "Nao importar Menu_Principal.frm, qualquer UserForm, .frx ou code-only de formulario",
+      "Nao tocar Mod_Types.bas ou Importador_V3.bas",
+      "Nao tocar Teste_V2_Engine.bas ou Teste_V2_Roteiros.bas completos",
+      "Nao alterar Svc_Avaliacao.bas, Preencher.bas ou fluxos de avaliacao ja validados na 0139",
+      "Nao alterar schema de planilhas, regras de negocio ou dados reais",
+      "Nao rodar limpeza generica de espacos finais em VBA"
+    ]
+  },
+  "explicit_decisions": {
+    "human_confirmation_required": {
+      "status": "confirmed",
+      "decision_text": "Mauricio precisa confirmar que a Onda 38.2.20 pode implementar uma UX code-only para IniciarSistema: modulo novo com instalador/atualizador de atalho visual em planilha, App_Release e modulo V2 isolado. A onda nao tocara Auto_Open, ThisWorkbook, UserForms, Svc_Avaliacao, Preencher, Mod_Types, Importador_V3, Teste_V2_Engine ou Teste_V2_Roteiros.",
+      "confirmation_text": "confirmo o readback 0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly",
+      "confirmed_at": "2026-06-02T19:36:43-03:00",
+      "why_this_is_conservative": [
+        "A 0134 mostrou risco alto ao importar Menu_Principal.frm completo.",
+        "A 0139 consolidou a correcao de avaliacao por modulos e RVS completo, entao a proxima fatia deve manter UserForms intocados.",
+        "O pedido humano pendente e ter um indicador/botao visivel na planilha para acionar IniciarSistema quando o workbook esta apenas em modo leitura/observacao.",
+        "Um shape/botao de planilha com OnAction para IniciarSistema pode ser criado por modulo padrao, sem alterar eventos de abertura.",
+        "Um modulo V2 isolado valida criacao, atualizacao, idempotencia e nao alteracao de celulas, sem depender de Engine/Roteiros completos."
+      ]
+    }
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly.json",
+      ".hbn/hearbacks/0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly-confirmed.json",
+      ".hbn/hearbacks/0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly-confirmed.md",
+      ".hbn/results/0140-exec-onda-38-2-20-ux-iniciar-sistema-codeonly.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_20_ux_iniciar_sistema_codeonly/0140_TECNICO.md",
+      "CHANGELOG.md",
+      "src/vba/UX_IniciarSistema.bas",
+      "src/vba/Teste_V2_UX_IniciarSistema.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAZ-UX_IniciarSistema.bas",
+      "local-ai/vba_import/001-modulo/ABR-Teste_V2_UX_IniciarSistema.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_20_UX_INICIAR_SISTEMA_CODEONLY.txt",
+      "TesteV2_UX_INICIAR_SISTEMA_Falhas_*.csv"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook.code.txt",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Credencia_Empresa.frm",
+      "src/vba/*.frm",
+      "src/vba/*.frx",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/002-formularios/**",
+      "local-ai/vba_import/003-objetos/**",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "**/*.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "locked_context": [
+      "38.2.19-fix1 foi validada por TV2_20260602_181749 OK=5/FALHA=0/MANUAL=0.",
+      "RVS completo VR_20260602_182253 foi APROVADO no build e157221+ONDA38.2.19-FIX1-FORM-IDS.",
+      "O pedido humano anterior registrou que, se IniciarSistema for pre-requisito operacional, o usuario precisa de um caminho visual para aciona-lo ao abrir/observar a planilha.",
+      "Nao ha excecao atual para Auto_Open, entao esta onda nao deve mexer em eventos de abertura."
+    ],
+    "production_delta_after_hearback": [
+      "Criar modulo padrao UX_IniciarSistema.bas.",
+      "Adicionar macro publica para instalar/atualizar um atalho visual de planilha apontando para IniciarSistema via Shape.OnAction.",
+      "Usar nome de shape estavel e prefixado para permitir idempotencia e remocao/atualizacao sem duplicar botoes.",
+      "Evitar escrita em celulas de negocio; a UX deve atuar como shape/objeto flutuante, preservando dados e formulas.",
+      "Adicionar macro publica de remocao/restauracao do atalho apenas para teste/rollback.",
+      "Atualizar App_Release para build e157221+ONDA38.2.20-UX-INICIAR-CODE."
+    ],
+    "test_delta_after_hearback": [
+      "Criar modulo isolado Teste_V2_UX_IniciarSistema.bas.",
+      "Suite proposta: TV2_RunUXIniciarSistemaCodeOnly.",
+      "Cenario 1: instalar atalho em aba controlada e verificar que o shape existe.",
+      "Cenario 2: verificar OnAction apontando para IniciarSistema.",
+      "Cenario 3: reexecutar instalador e provar idempotencia sem duplicar shapes.",
+      "Cenario 4: verificar que a operacao nao altera valores de celulas sentinela.",
+      "Cenario 5: remover/restaurar atalho de teste e confirmar limpeza.",
+      "Nao alterar Teste_V2_Engine.bas nem Teste_V2_Roteiros.bas."
+    ],
+    "package_delta_after_hearback": [
+      "Gerar manifesto V3 sem item F e sem diretorio 002-formularios.",
+      "Itens esperados: AAX-App_Release.bas, AAZ-UX_IniciarSistema.bas e ABR-Teste_V2_UX_IniciarSistema.bas.",
+      "Gate humano: import V3, compile limpo, TV2_RunUXIniciarSistemaCodeOnly."
+    ]
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Nenhum UserForm sera importado",
+    "Auto_Open.bas e ThisWorkbook permanecem intocados",
+    "Mod_Types.bas e Importador_V3.bas permanecem intocados",
+    "Svc_Avaliacao.bas e Preencher.bas permanecem como validados na 0139",
+    "Teste_V2_Engine.bas e Teste_V2_Roteiros.bas nao serao reimportados",
+    "Nenhum schema de planilha sera alterado"
+  ],
+  "risks": [
+    {
+      "risk": "Shapes em planilha podem variar de posicionamento conforme zoom, idioma ou layout do Excel.",
+      "mitigation": "Usar posicao simples e nome estavel; validar existencia, OnAction e idempotencia por V2, sem depender de layout visual perfeito.",
+      "severity": "medium"
+    },
+    {
+      "risk": "O atalho pode ser criado em aba inadequada se o instalador usar ActiveSheet sem controle.",
+      "mitigation": "Definir alvo explicito e permitir parametro de nome da aba; o teste usa aba controlada e registra onde o shape foi instalado.",
+      "severity": "medium"
+    },
+    {
+      "risk": "A UX pode resolver o acesso manual a IniciarSistema, mas nao substituir a inicializacao automatica em abertura.",
+      "mitigation": "Declarar explicitamente que esta onda nao altera Auto_Open; se automacao de abertura for necessaria, abrir readback proprio com excecao explicita.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Shape.OnAction pode apontar para macro com nome ambiguo em ambientes com mais de um workbook aberto.",
+      "mitigation": "Gerar OnAction com referencia estavel ao workbook quando possivel e validar o literal gravado no teste dirigido.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0140 valido contra schema",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0140-exec-onda-38-2-20-ux-iniciar-sistema-codeonly.json"
+      },
+      {
+        "gate": "Hearback 0140 confirmado por Mauricio antes de editar codigo VBA",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly-confirmed.json"
+      },
+      {
+        "gate": "Manifesto V3 sem item F e sem UserForms",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0140-exec-onda-38-2-20-ux-iniciar-sistema-codeonly.json"
+      },
+      {
+        "gate": "VBE Debug > Compile VBAProject passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0140-exec-onda-38-2-20-ux-iniciar-sistema-codeonly.json"
+      },
+      {
+        "gate": "TV2_RunUXIniciarSistemaCodeOnly retorna zero falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0140-exec-onda-38-2-20-ux-iniciar-sistema-codeonly.json"
+      },
+      {
+        "gate": "Decisao pos-gate: se verde, avaliar uso manual real e proxima onda de formularios; se vermelho, anexar CSV e nao tocar Auto_Open/UserForms sem novo readback",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0140-exec-onda-38-2-20-ux-iniciar-sistema-codeonly.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se o compile falhar, nao salvar o workbook e restaurar pelo backup V3 anterior ao delta 0140.",
+      "Se TV2_RunUXIniciarSistemaCodeOnly falhar, anexar CSV e parar sem tocar Auto_Open ou UserForms.",
+      "Se o shape de teste ficar persistido indevidamente, executar a macro de remocao do modulo UX_IniciarSistema ou restaurar pelo backup V3.",
+      "Se aparecer necessidade de alterar Auto_Open, ThisWorkbook ou UserForms, encerrar 0140 e abrir readback proprio com decisao explicita."
+    ],
+    "anchor_to_restore": "Workbook validado apos 0139, build e157221+ONDA38.2.19-FIX1-FORM-IDS, RVS completo VR_20260602_182253 APROVADO."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Mauricio pediu para abrir o readback para o proximo passo apos 0139/RVS aprovado.",
+    "operator_text": "pode abrir o readback para o proximo passo.",
+    "last_green_gate": "VR_20260602_182253 APROVADO; V1_RAPIDA 171/0/0, V2_SMOKE 34/0/4, V2_CANONICO 24/0/0, E2E_STRIKES 76/0/0, INTEGRIDADE_BASE 4/0/1, ONDA23_ADV 27/0/0.",
+    "pending_human_need": "Criar forma visual na planilha para acionar IniciarSistema quando o usuario esta apenas olhando dados."
+  },
+  "created_at": "2026-06-02T19:29:14-03:00"
+}

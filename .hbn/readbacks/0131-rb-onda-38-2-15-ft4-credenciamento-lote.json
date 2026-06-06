@@ -1,0 +1,188 @@
+{
+  "readback_id": "0131-rb-onda-38-2-15-ft4-credenciamento-lote",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0130-rb-onda-38-2-14-behavioralizacao-c1",
+  "intent": {
+    "objective": "Implementar FT-4 credenciamento em lote no fluxo real de Credencia_Empresa, removendo a alocacao O(n^2) de CRED_ID/AR1 dentro do loop e entregando teste V2 comportamental que valide sequencia de IDs, AR1 e tempo de execucao.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao tocar Auto_Open.bas, Mod_Types.bas ou Importador_V3.bas",
+      "Nao alterar Preencher.bas, Menu_Principal.frm, Svc_*.bas ou Repo_*.bas nesta onda",
+      "Nao editar arquivos .frx nem layout/designer do formulario",
+      "Nao mudar regra de negocio: uma atividade selecionada continua credenciando a empresa em todos os servicos daquela atividade",
+      "Nao implementar multi-selecao visual de atividades ou fluxo novo de UI",
+      "Nao resolver BL-4 save/reopen, impressao fase 2, FT-9, FT-10 ou FT-11 real nesta onda",
+      "Nao rodar limpeza generica de espacos finais em VBA"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote.json",
+      ".hbn/hearbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote-confirmed.json",
+      ".hbn/hearbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote-confirmed.md",
+      ".hbn/results/0131-exec-onda-38-2-15-ft4-credenciamento-lote.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_15_ft4_credenciamento_lote/0131_TECNICO.md",
+      "CHANGELOG.md",
+      "src/vba/Credencia_Empresa.frm",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.frm",
+      "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.code-only.txt",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_15_FT4_CREDENCIAMENTO_LOTE.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Svc_*.bas",
+      "src/vba/Repo_*.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/**/*.frx",
+      "**/*.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "production_delta": [
+      "Refatorar o miolo de CR_Credenciar_Click em Credencia_Empresa.frm para preservar validacoes, mensagens, auditoria, persistencia e regra de negocio atuais.",
+      "Alocar o proximo CRED_ID uma unica vez por lote usando max(AR1, Util_MaxIdOperacional(CREDENCIADOS)) e incrementar em memoria para cada nova linha.",
+      "Atualizar AR1 uma unica vez ao final do lote, somente se houve novos credenciamentos.",
+      "Calcular proxima linha e proxima posicao de fila uma vez por lote e incrementar localmente durante as insercoes.",
+      "Opcionalmente montar um indice local dos credenciamentos existentes da empresa/atividade para reduzir chamadas repetidas a CredJaExiste, sem mudar criterio de duplicidade.",
+      "Criar uma superficie publica minima no formulario para teste V2 dirigido chamar o mesmo executor de lote sem exibir MsgBox e sem salvar workbook automaticamente."
+    ],
+    "test_delta": [
+      "Adicionar suite V2 dirigida TV2_RunFT4CredenciamentoLote.",
+      "Preparar base canonica com atividade de teste contendo multiplos servicos e empresa ainda nao credenciada nessa atividade.",
+      "Forcar AR1 de CREDENCIADOS para valor atrasado antes do lote.",
+      "Executar o mesmo executor de lote usado pelo formulario, com autosave desativado no teste.",
+      "Validar quantidade adicionada, sequencia continua de CRED_ID, AR1 final igual ao ultimo CRED_ID alocado, ausencia de duplicados e tempo de execucao menor ou igual a 10 segundos.",
+      "Reexecutar o lote sobre a mesma empresa/atividade e validar que duplicados sao ignorados sem criar novas linhas."
+    ],
+    "package_delta": [
+      "Sincronizar src/vba para local-ai/vba_import via publicador V2.",
+      "Gerar manifesto V3 delta ONDA38_2_15_FT4_CREDENCIAMENTO_LOTE.",
+      "Atualizar App_Release.bas com build label e157221+ONDA38.2.15-FT4-CRED-LOTE.",
+      "Atualizar CHANGELOG, tecnico 0131, relay e ERP."
+    ]
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Uma atividade selecionada continua credenciando a empresa em todos os servicos da atividade",
+    "Duplicidades existentes continuam ignoradas, nao sobrescritas",
+    "Audit_Log/RegistrarEvento continua sendo chamado para cada credenciamento novo",
+    "Importador V3 continua intocado",
+    "Auto_Open.bas e Mod_Types.bas continuam intocados",
+    "Nenhum .frx sera alterado"
+  ],
+  "risks": [
+    {
+      "risk": "Alocar CRED_ID em memoria pode divergir de ProximoId se houver maximo real maior que AR1.",
+      "mitigation": "Usar max(AR1, Util_MaxIdOperacional(CREDENCIADOS)) como base unica do lote e validar com TV2 forcando AR1 atrasado.",
+      "severity": "high"
+    },
+    {
+      "risk": "Refatorar o handler pode alterar mensagens, salvamento ou validacao de persistencia.",
+      "mitigation": "Manter CR_Credenciar_Click como wrapper de UI e preservar fluxo de mensagens/salvamento; teste V2 usa wrapper sem MsgBox/autosave apenas para automacao.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Teste de tempo pode variar conforme maquina/VM.",
+      "mitigation": "Usar limite conservador de 10 segundos alinhado ao parecer 0024, registrar tempo obtido no detalhe do assert e manter quantidade de servicos suficiente para pegar regressao O(n^2) sem tornar o gate fragil.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Credencia_Empresa.frm pode ser publicado com diferenca em .frx por acidente.",
+      "mitigation": "Escopo proibe .frx; publicador deve atualizar apenas .frm e code-only; validar git status antes de ERP.",
+      "severity": "medium"
+    },
+    {
+      "risk": "A onda mexe em formulario real de producao.",
+      "mitigation": "Escopo fica restrito ao handler de credenciamento e a uma superficie minima de teste; gate humano exige import V3, compile e suite V2 dirigida.",
+      "severity": "high"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0131 valido contra schema",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0131-exec-onda-38-2-15-ft4-credenciamento-lote.json"
+      },
+      {
+        "gate": "Hearback 0131 confirmado por Mauricio antes de qualquer implementacao",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0131-rb-onda-38-2-15-ft4-credenciamento-lote-confirmed.json"
+      },
+      {
+        "gate": "Publicador V2 escopo fechado",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0131-exec-onda-38-2-15-ft4-credenciamento-lote.json"
+      },
+      {
+        "gate": "Glasswing G7/G8 local",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0131-exec-onda-38-2-15-ft4-credenciamento-lote.json"
+      },
+      {
+        "gate": "Importador V3 delta 38.2.15",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0131-exec-onda-38-2-15-ft4-credenciamento-lote.json"
+      },
+      {
+        "gate": "Debug > Compile VBAProject",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0131-exec-onda-38-2-15-ft4-credenciamento-lote.json"
+      },
+      {
+        "gate": "TV2_RunFT4CredenciamentoLote com OK >= 5 | FALHA=0 | MANUAL=0, incluindo tempo <= 10 segundos",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0131-exec-onda-38-2-15-ft4-credenciamento-lote.json"
+      },
+      {
+        "gate": "Diff sem arquivos proibidos e sem .frx",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0131-exec-onda-38-2-15-ft4-credenciamento-lote.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se compile falhar, restaurar do backup V3 criado pelo Importador antes de salvar o workbook.",
+      "Se TV2_RunFT4CredenciamentoLote falhar, nao salvar o workbook e retornar a evidencia/CSV para micro-onda fix.",
+      "Se aparecer diff em .frx, parar e remover o .frx do pacote antes de qualquer entrega.",
+      "Se a refatoracao exigir tocar Preencher.bas, Menu_Principal.frm, Svc_* ou Repo_*, encerrar esta onda e abrir readback especifico."
+    ],
+    "anchor_to_restore": "Commit e157221, artefatos HBN 0129/0130 ainda nao commitados e backup V3 criado imediatamente antes do delta 38.2.15."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Usuario disse em 2026-06-01: Pode abrir a proxima onda e implementar. Aguardo descricao detalhada para headback.",
+    "context": "A Onda 38.2.14 behavioralizou a primeira rede C1 e foi validada por Mauricio com Importador V3 M=3 | F=0 | err=0 | skip=0, compile limpo e TV2_20260601_093826 OK=5 | FALHA=0 | MANUAL=0. A consolidacao 0033 mantinha FT-4 pendente por risco de CRED_ID/AR1; com a rede C1 inicial verde, Mauricio autorizou abrir a proxima onda de desenvolvimento.",
+    "sequence_note": "Esta onda antecipa FT-4 para 38.2.15 por decisao operacional pos-38.2.14. BL-4 save/reopen, impressao fase 2, FT-9, FT-10, FT-11 real, RVS sexteto e L44 continuam pendentes; freeze V206 segue bloqueado.",
+    "parecer_base": ".hbn/proposals/0024-Opus3-4-MAX-auditoria-gate-a4-l43-v206.md",
+    "consolidacao_base": ".hbn/proposals/0033-consolidacao-auditoria-cruzada-38-2-4-a-38-2-12.md",
+    "gate_predecessor": ".hbn/results/0130-exec-onda-38-2-14-behavioralizacao-c1.json",
+    "human_gate_predecessor": "TV2_20260601_093826 OK=5 | FALHA=0 | MANUAL=0"
+  },
+  "created_at": "2026-06-01T09:51:11-03:00"
+}

@@ -1,0 +1,136 @@
+{
+  "readback_id": "0130-rb-onda-38-2-14-behavioralizacao-c1",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0129-rb-onda-38-2-13-auditoria-cruzada-consolidada",
+  "intent": {
+    "objective": "Implementar a primeira fatia da behavioralizacao C1: adicionar uma suite V2 dirigida que execute verificacoes comportamentais sobre os riscos da 0033, reduzindo dependencia de asserts estaticos antes de FT-4.",
+    "non_goals": [
+      "Nao otimizar credenciamento em lote nem alterar alocacao de CRED_ID nesta onda",
+      "Nao tocar Credencia_Empresa.frm nesta onda",
+      "Nao tocar Auto_Open.bas, Mod_Types.bas ou Importador_V3.bas",
+      "Nao alterar regras de negocio, repositorios ou servicos de producao",
+      "Nao alterar arquivos .frx ou layout de designer",
+      "Nao declarar freeze V206",
+      "Nao tentar fechar C1 inteiro em uma unica onda se os testes comportamentais exigirem hooks novos"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0130-rb-onda-38-2-14-behavioralizacao-c1.json",
+      ".hbn/hearbacks/0130-rb-onda-38-2-14-behavioralizacao-c1-confirmed.json",
+      ".hbn/hearbacks/0130-rb-onda-38-2-14-behavioralizacao-c1-confirmed.md",
+      ".hbn/results/0130-exec-onda-38-2-14-behavioralizacao-c1.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_14_behavioralizacao_c1/0130_TECNICO.md",
+      "CHANGELOG.md",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_14_BEHAVIORALIZACAO_C1.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Credencia_Empresa.frm",
+      "src/vba/Svc_*.bas",
+      "src/vba/Repo_*.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/002-formularios/**",
+      "**/*.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "FT-4 credenciamento em lote permanece pendente ate esta rede de testes existir",
+    "Nenhum modulo de producao, form ou .frx sera alterado",
+    "A onda entrega teste V2 dirigido e pacote V3, nao alteracao funcional de produto"
+  ],
+  "risks": [
+    {
+      "risk": "Behavioralizar todos os pontos C1 de uma vez pode criar uma suite grande demais e dificil de depurar no workbook.",
+      "mitigation": "Tratar esta onda como primeira fatia: priorizar verificacoes comportamentais que protegem FT-4 e deixam pendencias explicitas no ERP.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Teste comportamental pode precisar modificar dados operacionais e deixar residuos se falhar.",
+      "mitigation": "Usar snapshot/restore existente de CONFIG, fixtures isoladas e limpeza controlada; se a limpeza nao for segura, registrar teste manual/pendencia em vez de forcar codigo.",
+      "severity": "high"
+    },
+    {
+      "risk": "A suite pode ainda conter asserts estaticos se nao houver API comportamental disponivel sem tocar producao.",
+      "mitigation": "Separar asserts reais de qualquer fallback estatico no tecnico e no ERP, sem declarar C1 fechado quando cobertura continuar parcial.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Alterar Teste_V2_Engine pode afetar todas as suites V2.",
+      "mitigation": "Manter helpers novos pequenos, idempotentes e chamados apenas pela suite 38.2.14; gate humano deve rodar a suite dirigida e compile limpo.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0130 valido contra schema",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0130-exec-onda-38-2-14-behavioralizacao-c1.json"
+      },
+      {
+        "gate": "Publicador V2 escopo fechado",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0130-exec-onda-38-2-14-behavioralizacao-c1.json"
+      },
+      {
+        "gate": "Importador V3 delta 38.2.14",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0130-exec-onda-38-2-14-behavioralizacao-c1.json"
+      },
+      {
+        "gate": "Debug > Compile VBAProject",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0130-exec-onda-38-2-14-behavioralizacao-c1.json"
+      },
+      {
+        "gate": "TV2_RunBehavioralizacaoC1",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0130-exec-onda-38-2-14-behavioralizacao-c1.json"
+      },
+      {
+        "gate": "Glasswing G7/G8 local",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0130-exec-onda-38-2-14-behavioralizacao-c1.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se compile falhar, restaurar do backup V3 criado pelo Importador antes de salvar o workbook.",
+      "Se a suite V2 falhar, nao salvar workbook e retornar o CSV/erro para nova micro-onda fix.",
+      "Se for necessario tocar modulo de producao, encerrar esta onda e abrir readback especifico.",
+      "Se a suite revelar que FT-4 precisa de hook de teste em producao, documentar pendencia e nao implementar FT-4 nesta onda."
+    ],
+    "anchor_to_restore": "Commit e157221 e backup V3 do Importador imediatamente anterior ao delta 38.2.14."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Usuario disse em 2026-06-01: Ok. Vamos seguir para as proximas ondas de desenvolvimento da v206 para estabilizacao.",
+    "parecer_base": ".hbn/proposals/0033-consolidacao-auditoria-cruzada-38-2-4-a-38-2-12.md",
+    "scope_cut": "Primeira fatia de C1/behavioralizacao em modulos de teste V2, sem FT-4 e sem codigo de producao."
+  },
+  "created_at": "2026-06-01T08:54:17-03:00"
+}

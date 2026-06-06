@@ -1,0 +1,16 @@
+{
+  "hearback_id": "0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais-confirmed",
+  "readback_id": "0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "human_operator": "Mauricio",
+  "status": "confirmed",
+  "confirmation_text": "confirmo o readback 0139-rb-onda-38-2-19-fix1-form-avaliacao-idsiguais",
+  "confirmed_at": "2026-06-02T17:53:03-03:00",
+  "scope_confirmed": [
+    "Fix test-only em Teste_V2_Form_Avaliacao_Modulos.bas",
+    "Atualizar App_Release.bas para build 0139",
+    "Gerar espelhos importaveis e manifesto V3 M=2/F=0",
+    "Nao tocar producao, UserForms, Auto_Open, Mod_Types, Importador_V3, Teste_V2_Engine ou Teste_V2_Roteiros"
+  ]
+}

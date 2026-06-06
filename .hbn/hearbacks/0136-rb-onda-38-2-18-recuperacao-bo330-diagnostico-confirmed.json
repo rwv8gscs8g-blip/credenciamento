@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico-confirmed",
+  "readback_id": "0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-02T10:05:00-03:00",
+  "notes": "Mauricio confirmou em chat: confirmo o readback 0136-rb-onda-38-2-18-recuperacao-bo330-diagnostico. Escopo autorizado: recuperar a linha a partir do workbook de referencia que compila, diagnosticar BO_330 antes de retomar formularios e usar pacote V3 minimo sem tocar producao, UserForms, Auto_Open, Mod_Types ou Importador_V3."
+}

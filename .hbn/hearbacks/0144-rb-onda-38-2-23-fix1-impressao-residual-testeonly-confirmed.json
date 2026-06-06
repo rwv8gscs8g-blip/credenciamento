@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly-confirmed",
+  "readback_id": "0144-rb-onda-38-2-23-fix1-impressao-residual-testeonly",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-03T12:31:59-03:00",
+  "notes": "Mauricio confirmou em chat: ok faça a correção do fix 1 e faremos um rerun test. Escopo confirmado: ajuste test-only do falso negativo IR_03 em TV2_RunImpressaoResidual, sem alterar Preencher.bas ou arquivos proibidos."
+}

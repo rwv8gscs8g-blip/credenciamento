@@ -1,0 +1,61 @@
+{
+  "result_id": "0142-exec-onda-38-2-22-auditoria-cruzada-0136-0141-impressao",
+  "execution_id": "0142-exec-onda-38-2-22-auditoria-cruzada-0136-0141-impressao",
+  "readback_id": "0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao",
+  "data": "2026-06-03",
+  "agent_id": "antigravity",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "auditoria_cruzada_impressao_concluida",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "action": "Executar auditoria cruzada consolidada das ondas 0136 a 0141 e investigar os residuos criticos de impressao visualizados nos PDFs 001, 002 e 003, sem implementar codigo.",
+  "summary": "Auditoria concluiu que as ondas 0136-0141 blindaram o motor de regras, mas identificou 2 BLOQUEADORES de impressao (quadro Demandante vazio em IMP_AVALIA devido a gravacao em L8 em vez de L9:P15, e total final OS zerado em EMITE_OS por formula em M63 em vez de N63:P63) e 2 MARGINAIS (bordas cinzas na Pre-OS e falta de borda esquerda na Avaliacao). Tambem foi mapeado o falso positivo dos gates de impressao, ja que os testes V2 validam apenas asserts em memoria e tokens de codigo, sem inspecionar celulas reais.",
+  "files_changed": [
+    ".hbn/readbacks/0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json",
+    ".hbn/hearbacks/0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao-confirmed.json",
+    ".hbn/hearbacks/0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao-confirmed.md",
+    ".hbn/results/0142-exec-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json",
+    "auditoria/03_ondas/onda_38_2_22_auditoria_cruzada_0136_0141_impressao/0142_TECNICO.md",
+    ".hbn/readbacks/0143-rb-onda-38-2-23-impressao-residual-codeonly-template.json",
+    ".hbn/relay/INDEX.md"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Auditoria de codigo e templates",
+      "status": "pass_local",
+      "evidencia": "Leitura e analise de Preencher.bas (sub PreencherAvaliacaoOS e LimparOS) confrontada com ranges fisicos apontados nos PDFs."
+    },
+    {
+      "gate": "Mapeamento dos testes V2",
+      "status": "pass_local",
+      "evidencia": "Inspecao de Teste_V2_Roteiros.bas (sub TV2_RunImpressaoIntegridade) comprovou que nenhum assert lê celulas fisicas do workbook."
+    },
+    {
+      "gate": "Hearback 0142",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: Confirmo o readback 0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao."
+    },
+    {
+      "gate": "Documentacao tecnica",
+      "status": "pass_local",
+      "evidencia": "Documento 0142_TECNICO.md criado com yaml de frontmatter e estruturado em Sumario, Reconciliacao, Achados, Proxima Onda e Handoff."
+    }
+  ],
+  "next_decision": [
+    "Aguardar hearback humano do readback 0143 antes de qualquer implementacao.",
+    "Abrir Onda 38.2.23 para correcoes de impressao por abordagem code-only/template via VBA, sem UserForms ou .frx.",
+    "Criar asserts de celulas reais de impressao na suite V2 para erradicar falsos positivos.",
+    "Se for necessario editar workbook/template diretamente, parar e pedir decisao humana explicita."
+  ],
+  "codex_closure": {
+    "closed_by": "codex",
+    "closed_at": "2026-06-03T02:22:16-03:00",
+    "note": "Codex preservou a auditoria materializada, registrou hearback humano 0142, atualizou human_status para confirmed e abriu readback 0143 safe_track pending para a proxima onda."
+  },
+  "created_at": "2026-06-03T02:22:00-03:00",
+  "completed_at": "2026-06-03T02:23:00-03:00"
+}

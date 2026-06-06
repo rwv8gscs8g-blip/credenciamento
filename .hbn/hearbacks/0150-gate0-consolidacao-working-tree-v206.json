@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0150-gate0-consolidacao-working-tree-v206",
+  "readback_id": "0150-onda-gate0-consolidacao-working-tree-v206",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-06T10:16:50-03:00",
+  "notes": "Mauricio confirmou no chat: aprovado, pode seguir. Autorizada a execucao do GATE 0 conforme readback 0150, incluindo consolidacao do working tree, commits tematicos, triagem/movimento de incoming para evidencia canonica e push para observar o primeiro CI."
+}

@@ -1,0 +1,202 @@
+{
+  "readback_id": "0132-rb-onda-38-2-16-bl4-protecao-persistente",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0131-rb-onda-38-2-15-ft4-credenciamento-lote",
+  "intent": {
+    "objective": "Implementar o fechamento BL-4 de protecao persistente apos save/reopen, com excecao explicita e estreita para Auto_Open.bas, e entregar teste V2 dirigido que deve ser executado depois de salvar, fechar e reabrir o workbook.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao corrigir formularios de avaliacao, demandante, impressao ou layout nesta onda",
+      "Nao tocar Mod_Types.bas ou Importador_V3.bas",
+      "Nao alterar ThisWorkbook.code.txt nem a estrutura de eventos do objeto Workbook",
+      "Nao tocar Preencher.bas, Menu_Principal.frm, Svc_*.bas ou Repo_*.bas nesta onda",
+      "Nao editar arquivos .frx nem designer de formulario",
+      "Nao evoluir o protocolo useHBN/PROMPT_ARQUITETO nesta onda",
+      "Nao rodar limpeza generica de espacos finais em VBA"
+    ]
+  },
+  "explicit_decisions": {
+    "auto_open_exception": {
+      "status": "confirmed_by_human",
+      "decision_text": "Mauricio autoriza, para a Onda 38.2.16, tocar src/vba/Auto_Open.bas e local-ai/vba_import/001-modulo/AAY-Auto_Open.bas somente para reaplicacao/instrumentacao verificavel da protecao critica na abertura do workbook.",
+      "limits": [
+        "Nao alterar abertura do Menu_Principal salvo o necessario para preservar fluxo atual apos a verificacao de protecao.",
+        "Nao tornar falha de protecao um bloqueio silencioso de abertura; a falha deve ficar rastreavel por status/detalhes/teste.",
+        "Nao alterar ThisWorkbook.code.txt."
+      ]
+    }
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente.json",
+      ".hbn/hearbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente-confirmed.json",
+      ".hbn/hearbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente-confirmed.md",
+      ".hbn/results/0132-exec-onda-38-2-16-bl4-protecao-persistente.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_16_bl4_protecao_persistente/0132_TECNICO.md",
+      "CHANGELOG.md",
+      "src/vba/Auto_Open.bas",
+      "src/vba/Util_Planilha.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_16_BL4_PROTECAO_PERSISTENTE.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Svc_*.bas",
+      "src/vba/Repo_*.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/003-objetos/ThisWorkbook.code.txt",
+      "local-ai/vba_import/002-formularios/**/*.frx",
+      "**/*.frx"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "production_delta": [
+      "Substituir a chamada silenciosa de protecao em Auto_Open por um helper interno que chama Util_ProtegerAbasCriticasVerificado, guarda ultimo status e detalhes e mantem a abertura do menu no fluxo atual.",
+      "Expor funcoes publicas minimas de leitura do ultimo status de protecao da abertura para a suite V2 dirigida.",
+      "Adicionar em Util_Planilha um verificador de protecao pos-abertura que confirma ProtectContents, ProtectDrawingObjects, celulas bloqueadas e capacidade de escrita VBA em celula bloqueada com mesmo valor, evidenciando que UserInterfaceOnly foi reaplicado apos reopen.",
+      "Manter ProtegerAbasCriticas e Util_ProtegerAbasCriticasVerificado compativeis com chamadas existentes.",
+      "Atualizar App_Release.bas para build e157221+ONDA38.2.16-BL4-PROT-PERSIST."
+    ],
+    "test_delta": [
+      "Adicionar suite V2 dirigida TV2_RunBL4ProtecaoPersistente para ser executada apos salvar, fechar e reabrir o workbook.",
+      "Validar que Auto_Open registrou protecao OK na abertura.",
+      "Validar que todas as abas criticas estao protegidas, com objetos protegidos e celulas bloqueadas.",
+      "Validar que escrita VBA de mesmo valor em celula bloqueada funciona apos reopen, o que falha quando UserInterfaceOnly nao foi reaplicado.",
+      "Validar que preparar/restaurar protecao de uma aba critica preserva estado protegido e verificavel.",
+      "Atualizar catalogo/roteiro V2 para que o gate fique visivel na Central de Testes."
+    ],
+    "package_delta": [
+      "Sincronizar src/vba para local-ai/vba_import via publicador V2.",
+      "Gerar manifesto V3 delta ONDA38_2_16_BL4_PROTECAO_PERSISTENTE.",
+      "Atualizar CHANGELOG, tecnico 0132, relay e ERP ao fechar a onda."
+    ],
+    "human_gate_expected_sequence": [
+      "Importar o delta V3 38.2.16.",
+      "Compilar o VBAProject.",
+      "Salvar o workbook.",
+      "Fechar e reabrir o workbook para disparar Workbook_Open/Auto_Open no ciclo real.",
+      "Executar TV2_RunBL4ProtecaoPersistente.",
+      "Reportar execucao V2 e contagem OK/FALHA/MANUAL."
+    ]
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Auto_Open.bas so pode ser alterado dentro da excecao explicita deste readback",
+    "ThisWorkbook.code.txt permanece intocado",
+    "Mod_Types.bas e Importador_V3.bas permanecem intocados",
+    "Fluxos de formularios, impressao e demandante permanecem fora desta onda",
+    "Nenhum .frx sera alterado"
+  ],
+  "risks": [
+    {
+      "risk": "Alterar Auto_Open.bas pode regressar a inicializacao do workbook ou abertura do Menu_Principal.",
+      "mitigation": "Manter a assinatura publica Auto_Open/IniciarSistema/AbrirMenu e isolar a mudanca em helper de protecao, preservando o fluxo de exibicao do menu.",
+      "severity": "high"
+    },
+    {
+      "risk": "O teste de save/reopen exige uma acao humana entre importacao e execucao da suite.",
+      "mitigation": "Registrar a acao como pre-condicao do gate e fazer a suite pos-reopen validar sinais objetivos da abertura real.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Escrita VBA em celula bloqueada para provar UserInterfaceOnly pode alterar dado operacional.",
+      "mitigation": "Escrever exatamente o mesmo valor lido da celula-alvo e restaurar/proteger a aba imediatamente, sem modificar conteudo semantico.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Falha de protecao na abertura pode ser silenciada e passar despercebida.",
+      "mitigation": "Guardar ultimo status/detalhes em Auto_Open e exigir assert V2 sobre esse status apos reopen.",
+      "severity": "high"
+    },
+    {
+      "risk": "A verificacao pode passar sem provar edicao manual bloqueada.",
+      "mitigation": "Combinar ProtectContents=True, ProtectDrawingObjects=True, celulas bloqueadas e escrita VBA com UIOnly; esses sinais cobrem o contrato operacional sem automatizar edicao manual no Excel.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0132 valido contra schema",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0132-exec-onda-38-2-16-bl4-protecao-persistente.json"
+      },
+      {
+        "gate": "Hearback 0132 confirmado por Mauricio antes de qualquer implementacao em VBA",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente-confirmed.json"
+      },
+      {
+        "gate": "Importador V3 delta 38.2.16",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0132-exec-onda-38-2-16-bl4-protecao-persistente.json"
+      },
+      {
+        "gate": "Debug > Compile VBAProject",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0132-exec-onda-38-2-16-bl4-protecao-persistente.json"
+      },
+      {
+        "gate": "Save/close/reopen real do workbook apos importacao",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0132-exec-onda-38-2-16-bl4-protecao-persistente.json"
+      },
+      {
+        "gate": "TV2_RunBL4ProtecaoPersistente com FALHA=0 e MANUAL=0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0132-exec-onda-38-2-16-bl4-protecao-persistente.json"
+      },
+      {
+        "gate": "Diff sem arquivos proibidos e sem .frx",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0132-exec-onda-38-2-16-bl4-protecao-persistente.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o compile falhar, nao salvar o workbook e restaurar do backup V3 criado pelo Importador.",
+      "Se o workbook nao reabrir normalmente, restaurar o backup V3 e reportar a falha antes de nova tentativa.",
+      "Se TV2_RunBL4ProtecaoPersistente falhar, nao declarar BL-4 fechado e abrir micro-onda fix com o CSV/evidencia.",
+      "Se aparecer diff em ThisWorkbook.code.txt, .frx, Mod_Types.bas ou Importador_V3.bas, parar e remover o desvio antes de qualquer entrega.",
+      "Se a correcao exigir tocar formulario ou Preencher.bas, encerrar esta onda e abrir readback proprio para formularios/impressao."
+    ],
+    "anchor_to_restore": "Commit e157221, artefatos HBN 0129/0130/0131 ainda nao commitados e backup V3 criado imediatamente antes do delta 38.2.16."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Usuario disse em 2026-06-01 que pode avancar para a decisao explicita, registrou que formularios ainda tem erros como avaliacao sem nome do demandante, e pediu deixar melhoria de protocolo useHBN/PROMPT_ARQUITETO_USEHBN_AUTONOMO para handoff ou auditoria cruzada.",
+    "parecer_base": ".hbn/proposals/0024-Opus3-4-MAX-auditoria-gate-a4-l43-v206.md",
+    "consolidacao_base": ".hbn/proposals/0033-consolidacao-auditoria-cruzada-38-2-4-a-38-2-12.md",
+    "gate_predecessor": ".hbn/results/0131-exec-onda-38-2-15-ft4-credenciamento-lote.json",
+    "human_gate_predecessor": "TV2_20260601_102735 OK=6 | FALHA=0 | MANUAL=0",
+    "next_work_queue": [
+      "Abrir onda propria para melhoria de formularios, com prioridade para avaliacao/encerramento de OS e demandante nao registrado/exibido.",
+      "Em handoff ou auditoria cruzada, rodar nova evolucao de protocolo useHBN usando /Users/macbookpro/Projetos/PROMPT_ARQUITETO_USEHBN_AUTONOMO.md."
+    ]
+  },
+  "created_at": "2026-06-01T10:36:26-03:00"
+}

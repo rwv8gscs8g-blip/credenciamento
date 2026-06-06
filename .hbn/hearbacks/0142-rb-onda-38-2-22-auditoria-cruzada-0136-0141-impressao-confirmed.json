@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao-confirmed",
+  "readback_id": "0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-03T02:22:16-03:00",
+  "notes": "Mauricio confirmou em chat: Confirmo o readback 0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao. Escopo confirmado: fechar auditoria cruzada 0142 sem implementar codigo, consolidando ondas 0136-0141 e residuos de impressao."
+}

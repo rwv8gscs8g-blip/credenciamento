@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker-confirmed",
+  "readback_id": "0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-01T11:16:48-03:00",
+  "notes": "Mauricio confirmou em chat: confirmo o readback 0133-rb-onda-38-2-16-fix1-bl4-autoopen-marker. Escopo autorizado: micro-fix BL-4 para persistir/instrumentar marcador auditavel da execucao de Auto_Open, ajustar BL4_01 na suite V2, atualizar App_Release, publicar pacote V3 e documentar ERP. Permanecem proibidos ThisWorkbook.code.txt, Util_Planilha.bas, Mod_Types.bas, Importador_V3.bas, formularios, Preencher.bas, Svc_*, Repo_*, .frx e freeze V206."
+}

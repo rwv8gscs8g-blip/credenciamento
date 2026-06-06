@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0130-rb-onda-38-2-14-behavioralizacao-c1-confirmed",
+  "readback_id": "0130-rb-onda-38-2-14-behavioralizacao-c1",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-01T08:56:04-03:00",
+  "notes": "Mauricio confirmou em chat: confirmo o readback 0130-rb-onda-38-2-14-behavioralizacao-c1. Escopo autorizado: primeira fatia safe_track de behavioralizacao C1 em testes V2, sem codigo de producao, sem FT-4 e sem freeze V206."
+}

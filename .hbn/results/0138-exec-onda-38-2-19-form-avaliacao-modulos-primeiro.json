@@ -1,0 +1,157 @@
+{
+  "result_id": "0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro",
+  "execution_id": "0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro",
+  "readback_id": "0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "human_gate_failed",
+  "outcome": "module_only_form_avaliacao_import_compile_ok_tv2_failed_by_strict_id_test",
+  "human_status": "import_compile_ok_tv2_failed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "build_label": "e157221+ONDA38.2.19-FORM-AVAL-MODULOS",
+  "action": "Retomar a correcao do formulario de avaliacao por um pacote V3 somente de modulos, sem reimportar Menu_Principal.frm, para preencher o demandante por OS_ID e validar com suite V2 isolada.",
+  "summary": "A Onda 0138 entrega Svc_Avaliacao, Preencher, App_Release e um modulo V2 isolado. O delta resolve demandante por OS_ID -> CAD_OS.ENT_ID -> ENTIDADE.NOME, popula AV_Lista coluna 1 no formulario existente e adiciona fallback seguro em MontarPayloadAvaliacao quando o avaliador vier vazio. O pacote nao importa UserForm, .frx, ThisWorkbook, Auto_Open, Mod_Types, Importador_V3, Teste_V2_Engine completo ou Teste_V2_Roteiros completo. O gate humano importou e compilou, mas a suite V2 falhou em dois asserts por comparacao estrita de OS_ID no teste isolado.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 38.2.19 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunFormAvaliacaoModulos pela Janela Imediata.",
+      "Reportar execucao V2 e contagem OK/FALHA/MANUAL.",
+      "Se o teste ficar verde, decidir se reexecuta Trio minimo ou abre a proxima onda visual/code-only."
+    ],
+    "status": "completed_failed_tv2"
+  },
+  "human_gate_expected": {
+    "import_result": "Importador V3 OK: M=4 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunFormAvaliacaoModulos",
+    "tv2_directed_result": "OK=5 | FALHA=0 | MANUAL=0",
+    "tv2_directed_failure_csv_pattern": "TesteV2_FORM_AVALIACAO_MODULOS_Falhas_*.csv"
+  },
+  "human_gate_observed": {
+    "import_result": "Importador V3 OK: modo=Estabilizado | dryRun=Falso | M=4 | F=0 | err=0 | skip=0",
+    "backup_v3": "\\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260602_124949-V3-FULL",
+    "compile_result": "VBE Debug > Compile VBAProject passou limpo conforme reporte humano.",
+    "tv2_directed_execution": "TV2_20260602_125043",
+    "tv2_directed_result": "OK=3 | FALHA=2 | MANUAL=0",
+    "tv2_directed_failure_csv": "TesteV2_FORM_AVALIACAO_MODULOS_Falhas_TV2_20260602_125043.csv",
+    "tv2_directed_failure_csv_bytes": 951,
+    "tv2_directed_failure_csv_sha256": "6e063ee21b44ee5c098f4f1a88c940ecf4224fcbac315357749d2715e0536b7e",
+    "failure_summary": [
+      "FAM_03_AV_LISTA_EXIBE_DEMANDANTE: OS_ID nao encontrada na AV_Lista; LISTCOUNT=1; OS_ID=001.",
+      "FAM_05_ENT_ID_INVALIDO_FALHA_AUDITAVEL: OS_ID nao encontrada para alterar ENT_ID: 001; payload invalido ficou sucesso porque o teste nao alterou a linha."
+    ],
+    "diagnosis": "FAM_02 e FAM_04 passaram, portanto o resolver de demandante e o fallback do payload funcionaram. As duas falhas restantes decorrem de comparacao textual estrita de OS_ID no modulo de teste isolado; a correcao recomendada e usar IdsIguais nos helpers do teste."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FORM_AVALIACAO_MODULOS_PRIMEIRO.txt",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_19_FORM_AVALIACAO_MODULOS_PRIMEIRO\", \"e157221+ONDA38.2.19-FORM-AVAL-MODULOS\"",
+    "expected_import_result": "M=4 | F=0 | err=0 | skip=0",
+    "expected_suite": "TV2_RunFormAvaliacaoModulos",
+    "expected_suite_result": "OK=5 | FALHA=0 | MANUAL=0",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23193,
+        "sha256": "081d1b50adf82fe81d2f73e1a1fd78c9b66aa9240834d034957b5fd57ebfe9b5"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+        "bytes": 22286,
+        "sha256": "e10852150c9b100e8c1e4de6ad0d66fa959b324e13346e06693f9293f7becc68"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "bytes": 149805,
+        "sha256": "e6a3e2b3ecd28bbac0e5da10688fc7ce957fd4ff62d8ac8866629267d415369d"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABQ-Teste_V2_Form_Avaliacao_Modulos.bas",
+        "bytes": 11536,
+        "sha256": "1f900a9e34d73361ca37e09a707fde31509db9d4af99a356e0849c0a247e5ef4"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FORM_AVALIACAO_MODULOS_PRIMEIRO.txt",
+        "bytes": 1506,
+        "sha256": "98598144e4005b8c9e27b509c1e466c01de1d66682e2b81fa672a1066740f572"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro.json",
+    ".hbn/hearbacks/0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro-confirmed.json",
+    ".hbn/hearbacks/0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro-confirmed.md",
+    ".hbn/results/0138-exec-onda-38-2-19-form-avaliacao-modulos-primeiro.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_19_form_avaliacao_modulos_primeiro/0138_TECNICO.md",
+    "CHANGELOG.md",
+    "src/vba/Svc_Avaliacao.bas",
+    "src/vba/Preencher.bas",
+    "src/vba/Teste_V2_Form_Avaliacao_Modulos.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/ABQ-Teste_V2_Form_Avaliacao_Modulos.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_19_FORM_AVALIACAO_MODULOS_PRIMEIRO.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0138",
+      "status": "pass_local",
+      "evidencia": "Readback confirmado por Mauricio e validado contra schema HBN."
+    },
+    {
+      "gate": "Hearback 0138",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: confirmo o readback 0138-rb-onda-38-2-19-form-avaliacao-modulos-primeiro."
+    },
+    {
+      "gate": "Fonte e espelho Svc_Avaliacao",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/Svc_Avaliacao.bas e AAS-Svc_Avaliacao.bas sem diferencas."
+    },
+    {
+      "gate": "Fonte e espelho Preencher",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/Preencher.bas e AAU-Preencher.bas sem diferencas."
+    },
+    {
+      "gate": "Fonte e espelho App_Release",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/App_Release.bas e AAX-App_Release.bas sem diferencas."
+    },
+    {
+      "gate": "Fonte e espelho Teste_V2_Form_Avaliacao_Modulos",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/Teste_V2_Form_Avaliacao_Modulos.bas e ABQ-Teste_V2_Form_Avaliacao_Modulos.bas sem diferencas."
+    },
+    {
+      "gate": "Manifesto V3 minimo",
+      "status": "pass_local",
+      "evidencia": "Manifesto contem quatro itens M e nenhum item F; nao importa UserForms, .frx, Auto_Open, Mod_Types, Importador_V3, Teste_V2_Engine ou Teste_V2_Roteiros."
+    },
+    {
+      "gate": "Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou import V3 OK e compile limpo."
+    },
+    {
+      "gate": "TV2_RunFormAvaliacaoModulos",
+      "status": "fail_human",
+      "evidencia": "TV2_20260602_125043 retornou OK=3 | FALHA=2 | MANUAL=0; CSV TesteV2_FORM_AVALIACAO_MODULOS_Falhas_TV2_20260602_125043.csv."
+    }
+  ],
+  "next_decision": [
+    "Abrir 0139 fix1 test-only para usar IdsIguais nos helpers do modulo Teste_V2_Form_Avaliacao_Modulos.",
+    "Nao tocar Svc_Avaliacao, Preencher, Menu_Principal.frm, UserForms, .frx, Auto_Open, Mod_Types, Importador_V3, Teste_V2_Engine ou Teste_V2_Roteiros.",
+    "Se 0139 for confirmado, importar apenas App_Release e Teste_V2_Form_Avaliacao_Modulos e reexecutar TV2_RunFormAvaliacaoModulos."
+  ],
+  "created_at": "2026-06-02T12:20:00-03:00",
+  "package_ready_at": "2026-06-02T12:34:00-03:00",
+  "human_gate_closed_at": "2026-06-02T12:55:00-03:00"
+}

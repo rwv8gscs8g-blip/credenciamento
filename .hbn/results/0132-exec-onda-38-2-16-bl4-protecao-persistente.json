@@ -1,0 +1,195 @@
+{
+  "result_id": "0132-exec-onda-38-2-16-bl4-protecao-persistente",
+  "execution_id": "0132-exec-onda-38-2-16-bl4-protecao-persistente",
+  "readback_id": "0132-rb-onda-38-2-16-bl4-protecao-persistente",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "human_gate_failed",
+  "outcome": "import_compile_passed_tv2_failed_bl4_01_auto_open_not_registered",
+  "human_status": "gate_failed_reported",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "build_label": "e157221+ONDA38.2.16-BL4-PROT-PERSIST",
+  "action": "Implementar BL-4 protecao persistente apos save/reopen com excecao estreita para Auto_Open.bas e suite V2 dirigida.",
+  "summary": "A Onda 38.2.16 instrumentou Auto_Open.bas para reaplicar a protecao critica na abertura e expor ultimo status/detalhes para teste. Util_Planilha.bas ganhou verificador pos-abertura que combina ProtectContents, ProtectDrawingObjects, celulas bloqueadas e escrita VBA de mesmo valor em celula bloqueada, cobrindo a reaplicacao de UserInterfaceOnly apos reopen. Mauricio importou e compilou o delta, mas a suite TV2_RunBL4ProtecaoPersistente retornou OK=4 | FALHA=1 | MANUAL=0 em duas execucoes humanas: TV2_20260601_105519 e TV2_20260601_110148. A falha unica repetida foi BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO com EXECUTADA_EM=nao registrada; OK=Falso, indicando que o sinal de abertura nao deve depender apenas de variavel em memoria. BL-4 nao esta fechado e requer micro-fix 0133 com marcador persistente/auditavel de Auto_Open. Nenhum .frx, ThisWorkbook.code.txt, Mod_Types.bas, Importador_V3.bas, Preencher.bas, Menu_Principal.frm, Svc_* ou Repo_* foi alterado.",
+  "files_changed": [
+    ".hbn/readbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente.json",
+    ".hbn/hearbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente-confirmed.json",
+    ".hbn/hearbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente-confirmed.md",
+    ".hbn/results/0132-exec-onda-38-2-16-bl4-protecao-persistente.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_16_bl4_protecao_persistente/0132_TECNICO.md",
+    "CHANGELOG.md",
+    "src/vba/Auto_Open.bas",
+    "src/vba/Util_Planilha.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+    "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_16_BL4_PROTECAO_PERSISTENTE.txt"
+  ],
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_16_BL4_PROTECAO_PERSISTENTE.txt",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_16_BL4_PROTECAO_PERSISTENTE\", \"e157221+ONDA38.2.16-BL4-PROT-PERSIST\"",
+    "expected_import_result": "M=5 | F=0 | err=0",
+    "expected_suite": "TV2_RunBL4ProtecaoPersistente",
+    "expected_suite_result": "OK=5 | FALHA=0 | MANUAL=0",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+        "bytes": 32182,
+        "sha256": "b159be7ae28e31af9ab0f548f77d9894d05cefc7ba43d98ca0f495c28faf5a84"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23082,
+        "sha256": "3a70fbe232032b08b9889ecbaa58bdf5a19f6e9eed3139953205c98c57186bb4"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+        "bytes": 2945,
+        "sha256": "ccb669970ba247cdeda54ba0af48e0d24d6d665ac64a2909afb460f06a7edaec"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 198408,
+        "sha256": "101c9ea12ab46bce91abd9b062c3ee28b03eaad5edc2d40ae7d52386ef58de5a"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 281825,
+        "sha256": "0c65609067e3dc98450bd10e49c14921307e4baf42bd8808c3fd813b967f325c"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_16_BL4_PROTECAO_PERSISTENTE.txt",
+        "bytes": 1641,
+        "sha256": "89dc682f62b8297a6429b7e136e6119517500a66ece52c0c06327f124a86b234"
+      }
+    ]
+  },
+  "human_gate_result": {
+    "reported_by": "mauricio-zanin",
+    "reported_at": "2026-06-01T10:56:49-03:00",
+    "importador_v3": "modo=Estabilizado | dryRun=False | M=5 | F=0 | err=0 | skip=0",
+    "compile_vbaproject": "passed_reported_by_human",
+    "suite": "TV2_RunBL4ProtecaoPersistente",
+    "execution_id": "TV2_20260601_105519",
+    "result": "OK=4 | FALHA=1 | MANUAL=0",
+    "failure_csv": "TesteV2_BL4_PROTECAO_PERSISTENTE_Falhas_TV2_20260601_105519.csv",
+    "failure": {
+      "cenario_id": "BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO",
+      "resultado_obtido": "EXECUTADA_EM=nao registrada; OK=Falso; DETALHES=",
+      "interpretation": "A protecao das abas passou nos demais asserts, mas o status registrado por Auto_Open nao estava presente na execucao da suite. O gate precisa ser repetido apos salvar/fechar/reabrir sem recompilar entre a abertura e o teste, ou entao abrir micro-fix se a falha se repetir."
+    }
+  },
+  "human_gate_rerun_result": {
+    "reported_by": "mauricio-zanin",
+    "reported_at": "2026-06-01T11:02:00-03:00",
+    "suite": "TV2_RunBL4ProtecaoPersistente",
+    "execution_id": "TV2_20260601_110148",
+    "result": "OK=4 | FALHA=1 | MANUAL=0",
+    "failure_csv": "TesteV2_BL4_PROTECAO_PERSISTENTE_Falhas_TV2_20260601_110148.csv",
+    "failure": {
+      "cenario_id": "BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO",
+      "resultado_obtido": "EXECUTADA_EM=nao registrada; OK=Falso; DETALHES=",
+      "interpretation": "A repeticao da mesma falha apos o rerun indica que o teste nao pode depender apenas do estado VBA em memoria. A proxima acao passa a ser micro-fix 0133 para persistir/instrumentar um marcador de abertura em metadado auditavel do workbook."
+    }
+  },
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 38.2.16 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Salvar o workbook.",
+      "Fechar e reabrir o workbook para disparar Workbook_Open/Auto_Open no ciclo real.",
+      "Executar TV2_RunBL4ProtecaoPersistente pela Janela Imediata.",
+      "Reportar execucao V2 e contagem OK/FALHA/MANUAL."
+    ],
+    "status": "failed_twice_requires_microfix"
+  },
+  "validation_gates": [
+    {
+      "gate": "Readback 0132",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/validate-readback.sh passou para .hbn/readbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente.json."
+    },
+    {
+      "gate": "Hearback 0132",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: confirmo o readback 0132-rb-onda-38-2-16-bl4-protecao-persistente."
+    },
+    {
+      "gate": "Hearback schema",
+      "status": "pass_local",
+      "evidencia": "python3 -m jsonschema validou .hbn/hearbacks/0132-rb-onda-38-2-16-bl4-protecao-persistente-confirmed.json contra .hbn/schemas/hearback.schema.json."
+    },
+    {
+      "gate": "Publicador V2",
+      "status": "pass_local",
+      "evidencia": "python3 local-ai/scripts/publicar_vba_import_v2.py apply/check --only Auto_Open.bas --only Util_Planilha.bas --only Teste_V2_Engine.bas --only Teste_V2_Roteiros.bas --only App_Release.bas retornou in_sync para 5 arquivos."
+    },
+    {
+      "gate": "Glasswing G7/G8",
+      "status": "pass_local",
+      "evidencia": "Publicador V2 reportou G8 OK e G7 vba_import 100% sincronizado com src/vba."
+    },
+    {
+      "gate": "Whitespace diff",
+      "status": "pass_local",
+      "evidencia": "git diff --check passou limpo."
+    },
+    {
+      "gate": "Diff sem proibidos",
+      "status": "pass_local",
+      "evidencia": "git diff --name-only nao listou .frx, ThisWorkbook.code.txt, Mod_Types.bas, Importador_V3.bas, Preencher.bas, Menu_Principal.frm, Svc_* ou Repo_* como alterados pela onda."
+    },
+    {
+      "gate": "HBN guards",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/hbn-guards-runner.sh passou; raiz canonica OK, nenhum worktree volatil, readback ativo 0132 confirmado e sem arquivos staged fora de escopo."
+    },
+    {
+      "gate": "Importador V3 delta 38.2.16",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou Importador V3 OK: modo=Estabilizado | dryRun=False | M=5 | F=0 | err=0 | skip=0."
+    },
+    {
+      "gate": "Debug > Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou que o VBAProject compilou limpo apos importacao."
+    },
+    {
+      "gate": "Save/close/reopen workbook",
+      "status": "not_confirmed",
+      "evidencia": "O reporte humano nao confirmou explicitamente salvar/fechar/reabrir antes da suite; a falha BL4_01 indica que Auto_Open nao registrou timestamp/status."
+    },
+    {
+      "gate": "TV2_RunBL4ProtecaoPersistente",
+      "status": "fail_human",
+      "evidencia": "TV2_20260601_105519 e TV2_20260601_110148 retornaram OK=4 | FALHA=1 | MANUAL=0. CSVs: TesteV2_BL4_PROTECAO_PERSISTENTE_Falhas_TV2_20260601_105519.csv e TesteV2_BL4_PROTECAO_PERSISTENTE_Falhas_TV2_20260601_110148.csv. Falha unica repetida: BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO."
+    }
+  ],
+  "scope_notes": {
+    "auto_open": "src/vba/Auto_Open.bas foi tocado dentro da excecao explicita confirmada por Mauricio.",
+    "thisworkbook": "local-ai/vba_import/003-objetos/ThisWorkbook.code.txt permaneceu fora do escopo e nao foi tocado.",
+    "mod_types": "src/vba/Mod_Types.bas permaneceu fora do escopo e nao foi tocado.",
+    "importador_v3": "src/vba/Importador_V3.bas permaneceu fora do escopo e nao foi tocado.",
+    "preencher_menu_repo_svc": "Preencher.bas, Menu_Principal.frm, Svc_* e Repo_* permaneceram fora do escopo e nao foram tocados.",
+    "frx": "Nenhum .frx recebeu diff.",
+    "formularios": "Melhoria de formularios/demandante foi registrada para onda propria posterior.",
+    "protocolo_usehbn": "Evolucao useHBN com PROMPT_ARQUITETO_USEHBN_AUTONOMO foi registrada para handoff/auditoria cruzada, fora desta onda.",
+    "freeze": "Freeze V206 nao foi declarado e segue bloqueado."
+  },
+  "next_action": {
+    "summary": "Nao avancar para a proxima onda ainda. Abrir micro-fix 0133 para tornar o sinal de Auto_Open persistente e auditavel, evitando dependencia exclusiva de variavel em memoria.",
+    "status": "awaiting_human_readback_0133"
+  },
+  "created_at": "2026-06-01T10:46:42-03:00",
+  "updated_at": "2026-06-01T11:07:34-03:00"
+}

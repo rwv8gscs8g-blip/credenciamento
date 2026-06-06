@@ -1,0 +1,170 @@
+{
+  "result_id": "0134-exec-onda-38-2-17-formularios-avaliacao-demandante",
+  "execution_id": "0134-exec-onda-38-2-17-formularios-avaliacao-demandante",
+  "readback_id": "0134-rb-onda-38-2-17-formularios-avaliacao-demandante",
+  "data": "2026-06-01",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "failed_human_gate",
+  "outcome": "imported_but_compile_crashed_excel_before_tv2",
+  "human_status": "failed_human_gate",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "build_label": "e157221+ONDA38.2.17-FORM-AVAL-DEMANDANTE",
+  "action": "Corrigir a primeira fatia de formularios de avaliacao para resolver e registrar o demandante por OS_ID, com pacote V3 e suite V2 dirigida.",
+  "summary": "A Onda 38.2.17 foi importada por Mauricio, mas o gate humano falhou antes da execucao V2: durante a tentativa de compile do VBAProject o Excel travou e fechou sozinho. A hipotese operacional mais segura e instabilidade/fragilidade por reimportacao de UserForm grande (Menu_Principal.frm) junto com o delta de avaliacao. A correcao deve ser feita em fix1 com pacote menor, sem importar UserForm, apos restaurar/reabrir workbook limpo a partir do ultimo estado bom ou do backup V3.",
+  "human_gate_failure_report": {
+    "reported_at": "2026-06-01T12:57:38-03:00",
+    "operator": "Mauricio",
+    "import_result": "Importou",
+    "compile_result": "Nao compilou; Excel travou e fechou sozinho",
+    "tv2_result": "Nao executado",
+    "v1_cleanup_context": "Mauricio informou que, em versao anterior, teste V1 para limpar a quantidade de abas retornou 4 erros; diagnostico sera tratado apos estabilizar compile/import."
+  },
+  "files_changed": [
+    ".hbn/readbacks/0134-rb-onda-38-2-17-formularios-avaliacao-demandante.json",
+    ".hbn/hearbacks/0134-rb-onda-38-2-17-formularios-avaliacao-demandante-confirmed.json",
+    ".hbn/hearbacks/0134-rb-onda-38-2-17-formularios-avaliacao-demandante-confirmed.md",
+    ".hbn/results/0134-exec-onda-38-2-17-formularios-avaliacao-demandante.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_17_formularios_avaliacao_demandante/0134_TECNICO.md",
+    "CHANGELOG.md",
+    "src/vba/Svc_Avaliacao.bas",
+    "src/vba/Preencher.bas",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_17_FORMULARIOS_AVALIACAO_DEMANDANTE.txt"
+  ],
+  "implementation": {
+    "svc_avaliacao": [
+      "Criado ResolverDemandanteAvaliacaoPorOS com retorno TResult, ENT_ID, nome e detalhes auditaveis.",
+      "A fonte autoritativa permanece CAD_OS.ENT_ID; sem mudanca de schema."
+    ],
+    "preencher": [
+      "PreencherAvaliarOS usa ResolverDemandanteAvaliacaoPorOS para popular AV_Lista coluna 1."
+    ],
+    "menu_principal": [
+      "EncerraOS_Click resolve demandante pelo OS_ID antes da confirmacao, payload, AvaliarOS e impressao.",
+      "A gravacao e bloqueada quando o demandante nao pode ser resolvido.",
+      "Desc_entidade para impressao recebe o demandante resolvido, nao valor obsoleto."
+    ],
+    "tests": [
+      "Adicionada TV2_RunFormulariosAvaliacaoDemandante com FD_AV_01..FD_AV_07.",
+      "Catalogo e roteiro V2 foram atualizados para a nova suite."
+    ],
+    "build": "App_Release.bas atualizado para e157221+ONDA38.2.17-FORM-AVAL-DEMANDANTE gerado em 2026-06-01 12:35."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_17_FORMULARIOS_AVALIACAO_DEMANDANTE.txt",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_17_FORMULARIOS_AVALIACAO_DEMANDANTE\", \"e157221+ONDA38.2.17-FORM-AVAL-DEMANDANTE\"",
+    "expected_import_result": "M=5 | F=1 | err=0",
+    "expected_suite": "TV2_RunFormulariosAvaliacaoDemandante",
+    "expected_suite_result": "OK=7 | FALHA=0 | MANUAL=0",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23226,
+        "sha256": "83e33999dcdb288e933921027bf07cea1a1ad20a071fbd82b41817ae47d54410"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+        "bytes": 21639,
+        "sha256": "189305f7158398fb88dd082b6988fc04de9abcb4d8cbcacff5a39328a8dceab1"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "bytes": 149805,
+        "sha256": "e6a3e2b3ecd28bbac0e5da10688fc7ce957fd4ff62d8ac8866629267d415369d"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 203709,
+        "sha256": "aa506ce818a6d3b94351e1264c96a3648bd2f16453aada8fe6d8f73fda4d796b"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 293167,
+        "sha256": "3466c543a75f79f6a2e9b763b9910fcd5b047581dcbf45a548dc57c030923da4"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+        "frm_bytes": 144940,
+        "frm_sha256": "c75b63e1dd232504d8dae7cada54c150aca4ae0bb269908c0e997ec06c6e5d1c",
+        "code_only_bytes": 144477,
+        "code_only_sha256": "68566ecb2a323e662f610ff88df759e95066f22337a533a42ef4ee8a8c6699d0"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_17_FORMULARIOS_AVALIACAO_DEMANDANTE.txt",
+        "bytes": 1900,
+        "sha256": "0c1304b46930ffa1db09b2fd688414d840aaeb96069e2adfae12d108b33d02b6"
+      }
+    ]
+  },
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 38.2.17 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Executar CT_ValidarRelease_TrioMinimo se o Importador V3 solicitar.",
+      "Executar TV2_RunFormulariosAvaliacaoDemandante pela Janela Imediata.",
+      "Reportar execucao V2 e contagem OK/FALHA/MANUAL."
+    ],
+    "status": "failed_compile_crash"
+  },
+  "validation_gates": [
+    {
+      "gate": "Readback 0134",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/validate-readback.sh passou para .hbn/readbacks/0134-rb-onda-38-2-17-formularios-avaliacao-demandante.json."
+    },
+    {
+      "gate": "Hearback 0134",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: confirmo o readback 0134-rb-onda-38-2-17-formularios-avaliacao-demandante."
+    },
+    {
+      "gate": "Publicador V2",
+      "status": "pass_local",
+      "evidencia": "bash local-ai/scripts/publicar_vba_import_v2.sh --check --only ... retornou in_sync para 6 arquivos."
+    },
+    {
+      "gate": "Glasswing G7/G8",
+      "status": "pass_local",
+      "evidencia": "Publicador V2 reportou G8 OK e G7 vba_import 100% sincronizado com src/vba para o escopo --only."
+    },
+    {
+      "gate": "Whitespace diff",
+      "status": "pass_local",
+      "evidencia": "git diff --check passou limpo."
+    },
+    {
+      "gate": "Diff sem proibidos hard-stop 0134",
+      "status": "pass_local",
+      "evidencia": "Nenhum .frx recebeu diff; Auto_Open.bas, Mod_Types.bas, Importador_V3.bas, Repo_Avaliacao.bas, Const_Colunas.bas e ThisWorkbook.code.txt nao foram tocados nesta onda."
+    }
+  ],
+  "scope_notes": {
+    "auto_open": "Fora do escopo 0134. A pergunta sobre IniciarSistema foi respondida e a proposta visual fica para onda propria posterior.",
+    "thisworkbook": "local-ai/vba_import/003-objetos/ThisWorkbook.code.txt permaneceu fora do escopo e nao foi tocado.",
+    "mod_types": "src/vba/Mod_Types.bas permaneceu fora do escopo e nao foi tocado.",
+    "importador_v3": "src/vba/Importador_V3.bas permaneceu fora do escopo e nao foi tocado.",
+    "repo_avaliacao": "src/vba/Repo_Avaliacao.bas permaneceu fora do escopo; nao houve schema novo.",
+    "frx": "Nenhum .frx recebeu diff.",
+    "freeze": "Freeze V206 nao foi declarado."
+  },
+  "next_action": {
+    "summary": "Abrir 0135 fix1 para estabilizar o delta: evitar importacao de Menu_Principal.frm, reduzir a correcao a modulos e so depois retomar V2/V1 completo.",
+    "status": "open_fix1_required"
+  },
+  "created_at": "2026-06-01T12:44:00-03:00"
+}

@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0131-rb-onda-38-2-15-ft4-credenciamento-lote-confirmed",
+  "readback_id": "0131-rb-onda-38-2-15-ft4-credenciamento-lote",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-01T09:57:22-03:00",
+  "notes": "Mauricio confirmou em chat: confirmo o readback 0131-rb-onda-38-2-15-ft4-credenciamento-lote. Escopo autorizado: FT-4 credenciamento em lote em Credencia_Empresa.frm, testes V2 dirigidos, pacote V3 e documentacao HBN, sem .frx, sem Auto_Open.bas, Mod_Types.bas ou Importador_V3.bas, e sem freeze V206."
+}

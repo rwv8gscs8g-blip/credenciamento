@@ -1,0 +1,135 @@
+{
+  "readback_id": "0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao",
+  "data": "2026-06-03",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0141-rb-onda-38-2-21-formularios-residuais-codeonly",
+  "intent": {
+    "objective": "Abrir auditoria cruzada consolidada das ondas 0136 a 0141 e dos residuos concretos de impressao observados nos PDFs 001, 002 e 003, sem implementar codigo nesta etapa.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao editar codigo VBA nesta auditoria",
+      "Nao gerar pacote V3 nesta auditoria",
+      "Nao tocar Auto_Open.bas, Mod_Types.bas ou Importador_V3.bas",
+      "Nao tocar Menu_Principal.frm, Credencia_Empresa.frm, qualquer UserForm ou .frx",
+      "Nao alterar templates do workbook diretamente pelo Excel",
+      "Nao rodar limpeza generica de espacos finais em VBA",
+      "Nao reabrir implementacao sem novo readback e hearback explicito"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json",
+      ".hbn/hearbacks/0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao-confirmed.json",
+      ".hbn/hearbacks/0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao-confirmed.md",
+      ".hbn/results/0142-exec-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_22_auditoria_cruzada_0136_0141_impressao/0142_TECNICO.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "V12-206-*/**",
+      "incoming/**",
+      "backups/**",
+      "**/*.frm",
+      "**/*.frx"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "0141 permanece validada por TV2_20260602_234618 OK=6/FALHA=0/MANUAL=0",
+    "RVS completo VR_20260602_182253 permanece evidencia verde da 0139-fix1",
+    "Auditoria 0142 nao altera fonte, espelho importavel, workbook ou templates",
+    "Qualquer correcao de impressao futura exigira readback proprio, pacote V3, teste V2 dirigido e ERP"
+  ],
+  "implementation_plan": {
+    "audit_steps_after_hearback": [
+      "Consolidar status das ondas 0136, 0137, 0138, 0139, 0140 e 0141 contra o parecer 0024.",
+      "Classificar residuos observados nos PDFs como BLOQUEADOR, FORTE ou MARGINAL.",
+      "Separar defeitos de comportamento ja validados de defeitos de template/layout ainda pendentes.",
+      "Conferir se os testes V2 atuais cobrem celulas reais do template ou apenas tokens estaticos.",
+      "Produzir documento tecnico 0142 com mapa resolvido/parcial/pendente e recomendacao da proxima onda.",
+      "Indicar se a proxima implementacao deve ser impressao residual code-only/template ou outra frente."
+    ],
+    "print_findings_to_audit": [
+      "PRE-OS 001.pdf: bloco Prestador de Servico tem bordas cinza claras e segmentos descontinuos; leitura do template EMITE_PREOS mostra C9/C11 com borda superior rgb FFC0C0C0 enquanto EMITE_OS usa preto indexed 64.",
+      "AVALIACAO 003.pdf: quadro Demandante esta vazio; leitura do template IMP_AVALIA mostra detalhe mesclado em L9:P15, mas PreencherAvaliacaoOS grava L8.",
+      "AVALIACAO 003.pdf: faixa vertical AVALIACAO tem borda esquerda ausente; leitura do template IMP_AVALIA mostra A25:A45 sem borda esquerda efetiva na faixa mesclada.",
+      "OS 002.pdf pagina 2: total de fechamento imprime '-' embora item tenha R$ 100,00; leitura do template EMITE_OS mostra formula em M63 e valor 0 em N63:P63, que e a celula visual do total final."
+    ],
+    "likely_next_implementation_readback": [
+      "Se Mauricio confirmar, abrir onda posterior de impressao residual code-only/template com escopo estreito em Preencher.bas e teste V2 que valide L9, N63 e bordas criticas.",
+      "A onda posterior deve decidir explicitamente se pode alterar apenas codigo que reaplica bordas no template ou se exige edicao/importacao de template via workbook.",
+      "Nao importar UserForms nem .frx para estes residuos, salvo se a auditoria provar necessidade real."
+    ]
+  },
+  "risks": [
+    {
+      "risk": "A auditoria pode confundir defeito de template salvo no workbook com defeito de codigo VBA.",
+      "mitigation": "Registrar separadamente evidencia de PDF, leitura do workbook e linha de codigo antes de recomendar implementacao.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Os testes V2 atuais podem estar verdes por validarem tokens estaticos e nao as celulas impressas reais.",
+      "mitigation": "Mapear explicitamente celulas/ranges observados no template e recomendar teste V2 que leia valores/bordas reais.",
+      "severity": "high"
+    },
+    {
+      "risk": "Uma correcao de bordas pode exigir alteracao de template no workbook, fora do alcance de pacote code-only.",
+      "mitigation": "A auditoria deve propor decisao humana entre helper VBA que reaplica bordas e ajuste manual/importavel de template, sem executar nesta etapa.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Contexto longo do chat pode prejudicar passagem de bastao se a implementacao comecar aqui.",
+      "mitigation": "Fechar a auditoria com handoff curto e recomendar novo chat para a proxima onda de implementacao.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0142 valido contra schema HBN",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0142-exec-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json"
+      },
+      {
+        "gate": "Hearback 0142 confirmado antes de produzir documento tecnico",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0142-rb-onda-38-2-22-auditoria-cruzada-0136-0141-impressao-confirmed.json"
+      },
+      {
+        "gate": "Documento tecnico 0142 produzido sem tocar codigo ou pacote importavel",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0142-exec-onda-38-2-22-auditoria-cruzada-0136-0141-impressao.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o readback 0142 for rejeitado, nao produzir documento tecnico e registrar rejeicao no relay se necessario.",
+      "Se a auditoria mostrar necessidade de codigo, parar e abrir readback safe_track proprio para a proxima onda.",
+      "Se a auditoria mostrar necessidade de template workbook, parar e solicitar decisao humana explicita antes de tocar qualquer template."
+    ],
+    "anchor_to_restore": "Estado validado apos 0141: TV2_20260602_234618 OK=6/FALHA=0/MANUAL=0; V206 sem freeze."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Mauricio pediu para abrir auditoria cruzada, verificar contexto e analisar residuos de impressao em PRE-OS, OS e avaliacao.",
+    "context_check": "Ferramenta get_goal retornou sem goal ativo e sem percentual de orcamento disponivel; por contexto longo, recomendacao operacional e gerar handoff curto e abrir novo chat para implementacao posterior.",
+    "pdfs_analisados": [
+      "incoming/workbook_ref_20260602_compila_bo330_v1falha/001.pdf",
+      "incoming/workbook_ref_20260602_compila_bo330_v1falha/002.pdf",
+      "incoming/workbook_ref_20260602_compila_bo330_v1falha/003.pdf"
+    ],
+    "created_at_local": "2026-06-03T02:14:24-03:00"
+  },
+  "created_at": "2026-06-03T02:14:24-03:00"
+}

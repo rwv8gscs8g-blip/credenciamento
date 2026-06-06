@@ -1,0 +1,270 @@
+{
+  "readback_id": "0150-onda-gate0-consolidacao-working-tree-v206",
+  "data": "2026-06-05",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0149-onda-0116-fix1-ratchet-epoch",
+  "intent": {
+    "objective": "Consolidar historicamente o working tree V206 ja produzido e validado em ondas 38.2.x, sem criar comportamento novo, preparando commits tematicos e o primeiro push sob CI hbn-guards ratchet.",
+    "non_goals": [
+      "Nao executar importacao no workbook, compile VBE, TV2 ou RVS nesta onda",
+      "Nao corrigir os dois residuos de impressao previstos para a onda 0151",
+      "Nao iniciar V12.0.0207 nem alterar condicoes C1-C5 do doc 126",
+      "Nao editar codigo VBA alem de preservar e consolidar o diff ja existente no working tree",
+      "Nao deletar nem mover incoming/ sem hearback humano explicito neste readback"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0150-rb-onda-gate0-consolidacao-working-tree-v206.json",
+      ".hbn/hearbacks/0150-*.json",
+      ".hbn/hearbacks/0150-*.md",
+      ".hbn/hearbacks/0129-*",
+      ".hbn/hearbacks/0130-*",
+      ".hbn/hearbacks/0131-*",
+      ".hbn/hearbacks/0132-*",
+      ".hbn/hearbacks/0133-*",
+      ".hbn/hearbacks/0134-*",
+      ".hbn/hearbacks/0136-*",
+      ".hbn/hearbacks/0137-*",
+      ".hbn/hearbacks/0138-*",
+      ".hbn/hearbacks/0139-*",
+      ".hbn/hearbacks/0140-*",
+      ".hbn/hearbacks/0141-*",
+      ".hbn/hearbacks/0142-*",
+      ".hbn/hearbacks/0143-*",
+      ".hbn/hearbacks/0144-*",
+      ".hbn/proposals/0033-consolidacao-auditoria-cruzada-38-2-4-a-38-2-12.md",
+      ".hbn/readbacks/0129-*",
+      ".hbn/readbacks/0130-*",
+      ".hbn/readbacks/0131-*",
+      ".hbn/readbacks/0132-*",
+      ".hbn/readbacks/0133-*",
+      ".hbn/readbacks/0134-*",
+      ".hbn/readbacks/0135-*",
+      ".hbn/readbacks/0136-*",
+      ".hbn/readbacks/0137-*",
+      ".hbn/readbacks/0138-*",
+      ".hbn/readbacks/0139-*",
+      ".hbn/readbacks/0140-*",
+      ".hbn/readbacks/0141-*",
+      ".hbn/readbacks/0142-*",
+      ".hbn/readbacks/0143-*",
+      ".hbn/readbacks/0144-*",
+      ".hbn/results/0129-*",
+      ".hbn/results/0130-*",
+      ".hbn/results/0131-*",
+      ".hbn/results/0132-*",
+      ".hbn/results/0133-*",
+      ".hbn/results/0134-*",
+      ".hbn/results/0136-*",
+      ".hbn/results/0137-*",
+      ".hbn/results/0138-*",
+      ".hbn/results/0139-*",
+      ".hbn/results/0140-*",
+      ".hbn/results/0141-*",
+      ".hbn/results/0142-*",
+      ".hbn/results/0143-*",
+      ".hbn/results/0144-*",
+      ".hbn/results/0147-exec-onda-0116-a3-guards-ci.json",
+      ".hbn/results/0148-exec-onda-0117-organizacao-handoff-codex.json",
+      ".hbn/results/0149-exec-onda-0116-fix1-ratchet-epoch.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "src/vba/App_Release.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/Credencia_Empresa.frm",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Teste_V2_BO330_Diagnostico.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Form_Avaliacao_Modulos.bas",
+      "src/vba/Teste_V2_Formularios_Residuais.bas",
+      "src/vba/Teste_V2_Impressao_Residual.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Teste_V2_UX_IniciarSistema.bas",
+      "src/vba/UX_IniciarSistema.bas",
+      "src/vba/Util_Planilha.bas",
+      "local-ai/vba_import/001-modulo/AAE-Util_Planilha.bas",
+      "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+      "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAZ-UX_IniciarSistema.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/ABP-Teste_V2_BO330_Diagnostico.bas",
+      "local-ai/vba_import/001-modulo/ABQ-Teste_V2_Form_Avaliacao_Modulos.bas",
+      "local-ai/vba_import/001-modulo/ABR-Teste_V2_UX_IniciarSistema.bas",
+      "local-ai/vba_import/001-modulo/ABS-Teste_V2_Formularios_Residuais.bas",
+      "local-ai/vba_import/001-modulo/ABT-Teste_V2_Impressao_Residual.bas",
+      "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAI-Credencia_Empresa.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "auditoria/03_ondas/onda_38_2_13_auditoria_cruzada/**",
+      "auditoria/03_ondas/onda_38_2_14_behavioralizacao_c1/**",
+      "auditoria/03_ondas/onda_38_2_15_ft4_credenciamento_lote/**",
+      "auditoria/03_ondas/onda_38_2_16_bl4_protecao_persistente/**",
+      "auditoria/03_ondas/onda_38_2_16_fix1_bl4_autoopen_marker/**",
+      "auditoria/03_ondas/onda_38_2_17_formularios_avaliacao_demandante/**",
+      "auditoria/03_ondas/onda_38_2_18_recuperacao_bo330_diagnostico/**",
+      "auditoria/03_ondas/onda_38_2_18_fix1_bo330_status_canonico/**",
+      "auditoria/03_ondas/onda_38_2_19_form_avaliacao_modulos_primeiro/**",
+      "auditoria/03_ondas/onda_38_2_19_fix1_form_avaliacao_idsiguais/**",
+      "auditoria/03_ondas/onda_38_2_20_ux_iniciar_sistema_codeonly/**",
+      "auditoria/03_ondas/onda_38_2_21_formularios_residuais_codeonly/**",
+      "auditoria/03_ondas/onda_38_2_22_auditoria_cruzada_0136_0141_impressao/**",
+      "auditoria/03_ondas/onda_38_2_23_impressao_residual_codeonly_template/**",
+      "auditoria/03_ondas/onda_38_2_23_fix1_impressao_residual_testeonly/**",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260602_182253.csv",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260603_112553.csv",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseTrio_V12_0_0205_VR_20260601_204217.csv",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseTrio_V12_0_0205_VR_20260602_112011.csv",
+      "incoming/workbook_ref_20260602_compila_bo330_v1falha/**",
+      "auditoria/04_evidencias/V12.0.0206/workbook_ref_20260602_compila_bo330_v1falha/**"
+    ],
+    "files_forbidden": [
+      ".hbn/schemas/**",
+      ".github/workflows/**",
+      "scripts/hbn-guards/**",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "local-ai/vba_import/**/Importador_V3.bas",
+      "obsidian-vault/releases/V12.0.0205.md",
+      "docs/reference/regras/REGRAS_DE_NEGOCIO_V205.md",
+      "docs/tutorials/JORNADA_VALIDACAO_HUMANA_V205.md",
+      "auditoria/00_status/126_AUDITORIA_ARQUITETURAL_V207_OPUS48.md"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece como release oficial validada; V12.0.0206 nao sera congelada nesta onda",
+    "O GATE 0 nao cria regra de negocio, fluxo de UI ou comportamento de servico novo",
+    "Nenhuma importacao no workbook sera executada pela IA; gates Excel continuam humanos",
+    "V12.0.0207 nao inicia; doc 126 e condicoes C1-C5 permanecem somente leitura",
+    "Codigo VBA ja existente no diff sera apenas consolidado em commits tematicos apos hearback"
+  ],
+  "risks": [
+    {
+      "risk": "Consolidar um working tree grande pode misturar mudancas de ondas distintas em commits pouco auditaveis",
+      "mitigation": "Separar os commits em grupos tematicos: contratos HBN, codigo e espelho VBA, docs e CHANGELOG, relay e fechamento de ERPs; revisar git diff por grupo antes de cada commit",
+      "severity": "medium"
+    },
+    {
+      "risk": "O escopo inclui arquivos sensiveis ja modificados, como UserForms e suites V2 completas",
+      "mitigation": "Tratar esta onda como consolidacao historica de trabalho ja validado, sem novas edicoes funcionais; qualquer ajuste adicional sai do GATE 0 e exige novo readback",
+      "severity": "high"
+    },
+    {
+      "risk": "incoming/ contem export completo de workbook, arquivos .frx e PDFs que podem ser confundidos com fonte importavel",
+      "mitigation": "Registrar incoming/ como evidencia de referencia, nunca como pacote importavel; propor destino canonico em auditoria/04_evidencias e aguardar hearback antes de mover ou deletar",
+      "severity": "medium"
+    },
+      {
+        "risk": "Contratos 0150+ passam a ser validados estritamente pelo CI ratchet",
+        "mitigation": "Usar somente agent_id codex e evidence_kind do enum 1.0.0; validar o readback localmente contra .hbn/schemas/readback.schema.json antes de pedir hearback",
+        "severity": "medium"
+      },
+      {
+        "risk": "G7 detectou que o mapa de prefixos nao tinha entrada explicita para UX_IniciarSistema e o fallback casava por sufixo com Teste_V2_UX_IniciarSistema",
+        "mitigation": "Adicionar entrada explicita no 000-MAPA-PREFIXOS.txt e sincronizar apenas os espelhos canônicos, preservando o manifesto delta 0140 validado",
+        "severity": "medium"
+      }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0150 valida contra .hbn/schemas/readback.schema.json 1.0.0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/readbacks/0150-rb-onda-gate0-consolidacao-working-tree-v206.json"
+      },
+      {
+        "gate": "Hearback humano 0150 confirmado antes de qualquer staging, commit, push ou edicao de consolidacao",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/hearbacks/0150-*.json"
+      },
+      {
+        "gate": "Commits tematicos criados sem arquivos fora do scope e sem bypass HBN",
+        "evidence_kind": "git_sha",
+        "evidence_required_in": ".hbn/results/0150-exec-onda-gate0-consolidacao-working-tree-v206.json"
+      },
+      {
+        "gate": "Primeiro run do hbn-guards-ci reportado apos push do GATE 0",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0150-exec-onda-gate0-consolidacao-working-tree-v206.json"
+      },
+      {
+        "gate": "Glasswing G7/G8 sem violacoes apos sincronizar src/vba e local-ai/vba_import",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0150-exec-onda-gate0-consolidacao-working-tree-v206.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Antes do hearback: nao ha rollback funcional, pois esta onda so cria o readback pendente",
+      "Se algum commit tematico falhar nos guards locais, interromper e corrigir o escopo ou o contrato antes de prosseguir",
+      "Se o push deixar o CI vermelho por defeito do GATE 0, parar o GATE 1 e abrir micro-onda de correcao documental ou de escopo",
+      "Se um commit tematico precisar ser revertido apos push, usar git revert do SHA especifico em nova onda com readback proprio"
+    ],
+    "anchor_to_restore": "e2b8700"
+  },
+  "gate0_commit_plan": [
+    {
+      "group": "contratos_hbn_38_2",
+      "contents": "readbacks, hearbacks, ERPs e proposal 0033 das ondas 38.2.13 a 38.2.23-fix1"
+    },
+    {
+      "group": "codigo_espelho_vba_v206",
+      "contents": "src/vba modificados e novos, mais espelhos correspondentes em local-ai/vba_import"
+    },
+    {
+      "group": "docs_changelog_evidencias",
+      "contents": "auditoria/03_ondas das ondas 38.2.x, CHANGELOG e CSVs de evidencia V205/V206 usados nos gates"
+    },
+    {
+      "group": "relay_erps_arquiteto_incoming",
+      "contents": "relay/INDEX com ponte 0114-0117/0149, fechamento de ERPs 0147/0148/0149 com SHAs e decisao sobre incoming/"
+    }
+  ],
+  "architect_commits_observed": {
+    "0114": "5ad07fe",
+    "0115": "8204fe9",
+    "0116": "5b5b9a7",
+    "0117": "7cff187",
+    "0116_fix1_0149": "e2b8700"
+  },
+  "incoming_triage": {
+    "path": "incoming/workbook_ref_20260602_compila_bo330_v1falha/",
+    "observed_file_count": 69,
+    "composition": {
+      "bas": 40,
+      "frm": 13,
+      "frx": 13,
+      "pdf": 3
+    },
+    "proposed_destination": "auditoria/04_evidencias/V12.0.0206/workbook_ref_20260602_compila_bo330_v1falha/",
+    "proposed_action_after_hearback": "Mover como evidencia de referencia do workbook que compilava mas tinha BO330/V1 falho; nunca usar como origem de importacao e nunca misturar com local-ai/vba_import."
+  },
+  "scope_adjustment_before_first_commit": {
+    "reason": "G7 pre-commit check revelou divergencias em espelhos já existentes mas ainda nao modificados no working tree; sem inclui-los, a consolidação aprovada seria bloqueada mecanicamente.",
+    "added_files_allowed": [
+      "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+      "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/AAZ-UX_IniciarSistema.bas",
+      "local-ai/vba_import/001-modulo/ABP-Teste_V2_BO330_Diagnostico.bas",
+      "local-ai/vba_import/001-modulo/ABQ-Teste_V2_Form_Avaliacao_Modulos.bas",
+      "local-ai/vba_import/001-modulo/ABR-Teste_V2_UX_IniciarSistema.bas",
+      "local-ai/vba_import/001-modulo/ABS-Teste_V2_Formularios_Residuais.bas",
+      "local-ai/vba_import/001-modulo/ABT-Teste_V2_Impressao_Residual.bas"
+    ]
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-05T23:35:52-03:00"
+}

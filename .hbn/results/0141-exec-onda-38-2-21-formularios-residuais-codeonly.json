@@ -1,0 +1,137 @@
+{
+  "result_id": "0141-exec-onda-38-2-21-formularios-residuais-codeonly",
+  "execution_id": "0141-exec-onda-38-2-21-formularios-residuais-codeonly",
+  "readback_id": "0141-rb-onda-38-2-21-formularios-residuais-codeonly",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "formularios_residuais_codeonly_validated",
+  "human_status": "import_compile_tv2_approved",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "build_label": "e157221+ONDA38.2.21-FORM-RES-CODE",
+  "action": "Adicionar defesa no servico AvaliarOS para resolver demandante por OS_ID quando avaliador vier vazio e criar teste V2 residual com duas OS/demandantes, sem importar UserForms.",
+  "summary": "A 0141 atua por modulos code-only: Svc_Avaliacao passa a rejeitar avaliacao direta sem demandante resolvido e usa avaliadorEfetivo nos registros/auditoria; Teste_V2_Formularios_Residuais cobre lista multi-OS, payload com estado global obsoleto, AvaliarOS direto com avaliador vazio, negativo de ENT_ID inexistente e restore. O pacote V3 tem apenas tres itens M e nenhum item F. Mauricio reportou importacao, compile limpo e TV2_20260602_234618 com OK=6/FALHA=0/MANUAL=0.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunFormulariosResiduaisCodeOnly pela Janela Imediata.",
+      "Reportar OK/FALHA/MANUAL e anexar CSV se houver falha."
+    ],
+    "status": "completed"
+  },
+  "human_gate_expected": {
+    "import_result": "Importador V3 OK: M=3 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunFormulariosResiduaisCodeOnly",
+    "tv2_directed_result": "OK=6 | FALHA=0 | MANUAL=0",
+    "tv2_directed_failure_csv_pattern": "TesteV2_FORMULARIOS_RESIDUAIS_Falhas_*.csv"
+  },
+  "human_gate_observed": {
+    "import_result": "Mauricio reportou importacao executada.",
+    "compile_result": "VBE Debug > Compile VBAProject passou limpo conforme reporte humano.",
+    "tv2_directed_execution": "TV2_20260602_234618",
+    "tv2_directed_result": "OK=6 | FALHA=0 | MANUAL=0",
+    "tv2_directed_failure_csv": "NAO_EXPORTADO",
+    "evidence_source": "Captura de tela enviada por Mauricio em 2026-06-02 mostra Suite V2 concluida, Execucao TV2_20260602_234618, OK=6, FALHA=0, MANUAL=0, sem CSV de falhas."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_21_FORMULARIOS_RESIDUAIS_CODEONLY.txt",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_21_FORMULARIOS_RESIDUAIS_CODEONLY\", \"e157221+ONDA38.2.21-FORM-RES-CODE\"",
+    "expected_import_result": "M=3 | F=0 | err=0 | skip=0",
+    "expected_suite": "TV2_RunFormulariosResiduaisCodeOnly",
+    "expected_suite_result": "OK=6 | FALHA=0 | MANUAL=0",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23208,
+        "sha256": "878e1f8948cf1a376de1bd36abbdd31525d09df2de5f1509b76976e02dfe38fe"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+        "bytes": 23148,
+        "sha256": "503c08dd2601863f35056bd980c96a302131c6c1ebef1997700176aa163cd4ba"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABS-Teste_V2_Formularios_Residuais.bas",
+        "bytes": 13447,
+        "sha256": "b61b6c75464436b195a756dd7fe8c1f4f0c75c966bec0fa47235a8ff0b66c9af"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_21_FORMULARIOS_RESIDUAIS_CODEONLY.txt",
+        "bytes": 1371,
+        "sha256": "5d7b1f3d7e67a206bedd6802e9e25d8bd44f9e746884bcca30c659841a84dc5e"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0141-rb-onda-38-2-21-formularios-residuais-codeonly.json",
+    ".hbn/hearbacks/0141-rb-onda-38-2-21-formularios-residuais-codeonly-confirmed.json",
+    ".hbn/hearbacks/0141-rb-onda-38-2-21-formularios-residuais-codeonly-confirmed.md",
+    ".hbn/results/0141-exec-onda-38-2-21-formularios-residuais-codeonly.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_21_formularios_residuais_codeonly/0141_TECNICO.md",
+    "CHANGELOG.md",
+    "src/vba/Svc_Avaliacao.bas",
+    "src/vba/Teste_V2_Formularios_Residuais.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+    "local-ai/vba_import/001-modulo/ABS-Teste_V2_Formularios_Residuais.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_21_FORMULARIOS_RESIDUAIS_CODEONLY.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0141",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/validate-readback.sh retornou OK para o readback confirmado."
+    },
+    {
+      "gate": "Hearback 0141",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: confirmo o readback 0141-rb-onda-38-2-21-formularios-residuais-codeonly."
+    },
+    {
+      "gate": "Fonte e espelho App_Release",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/App_Release.bas e AAX-App_Release.bas sem diferencas."
+    },
+    {
+      "gate": "Fonte e espelho Svc_Avaliacao",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/Svc_Avaliacao.bas e AAS-Svc_Avaliacao.bas sem diferencas."
+    },
+    {
+      "gate": "Fonte e espelho Teste_V2_Formularios_Residuais",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/Teste_V2_Formularios_Residuais.bas e ABS-Teste_V2_Formularios_Residuais.bas sem diferencas."
+    },
+    {
+      "gate": "Manifesto V3 minimo",
+      "status": "pass_local",
+      "evidencia": "Manifesto contem tres itens M e nenhum item F; nao importa UserForms, .frx, Auto_Open, ThisWorkbook, Mod_Types, Importador_V3, Preencher, Teste_V2_Engine ou Teste_V2_Roteiros."
+    },
+    {
+      "gate": "Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou compile limpo."
+    },
+    {
+      "gate": "TV2_RunFormulariosResiduaisCodeOnly",
+      "status": "pass_human",
+      "evidencia": "TV2_20260602_234618 retornou OK=6 | FALHA=0 | MANUAL=0; nenhum CSV de falhas exportado."
+    }
+  ],
+  "next_decision": [
+    "0141 validada por V2 dirigido.",
+    "Proxima decisao recomendada: abrir nova onda de formularios residuais code-only apenas se houver caso humano concreto; caso contrario, executar auditoria cruzada curta das ondas 0136-0141 antes de nova implementacao.",
+    "Nao declarar freeze V206 sem gate proprio e decisao humana explicita."
+  ],
+  "created_at": "2026-06-02T21:33:00-03:00",
+  "package_ready_at": "2026-06-02T21:33:00-03:00",
+  "completed_at": "2026-06-02T23:46:18-03:00"
+}

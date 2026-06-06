@@ -1,0 +1,142 @@
+{
+  "result_id": "0140-exec-onda-38-2-20-ux-iniciar-sistema-codeonly",
+  "execution_id": "0140-exec-onda-38-2-20-ux-iniciar-sistema-codeonly",
+  "readback_id": "0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "ux_iniciar_sistema_codeonly_validated",
+  "human_status": "import_compile_tv2_approved",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_observed": "e157221",
+  "build_label": "e157221+ONDA38.2.20-UX-INICIAR-CODE",
+  "action": "Adicionar UX code-only para instalar shape visual que executa IniciarSistema, com teste V2 isolado e pacote V3 sem UserForms.",
+  "summary": "A 0140 cria o modulo UX_IniciarSistema para instalar/atualizar um shape de planilha com OnAction=IniciarSistema e o modulo Teste_V2_UX_IniciarSistema com suite dirigida de 5 asserts. O delta evita abas criticas de dados, nao altera Auto_Open, ThisWorkbook, UserForms, .frx, Svc_Avaliacao, Preencher, Mod_Types, Importador_V3, Teste_V2_Engine ou Teste_V2_Roteiros. Mauricio reportou importacao, compile limpo e TV2_20260602_205320 com OK=5/FALHA=0/MANUAL=0.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunUXIniciarSistemaCodeOnly pela Janela Imediata.",
+      "Se o teste ficar verde, executar UX_InstalarAtalhoIniciarSistema para deixar o botao visivel."
+    ],
+    "status": "completed"
+  },
+  "human_gate_expected": {
+    "import_result": "Importador V3 OK: M=3 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunUXIniciarSistemaCodeOnly",
+    "tv2_directed_result": "OK=5 | FALHA=0 | MANUAL=0",
+    "post_gate_macro": "UX_InstalarAtalhoIniciarSistema",
+    "tv2_directed_failure_csv_pattern": "TesteV2_UX_INICIAR_SISTEMA_Falhas_*.csv"
+  },
+  "human_gate_observed": {
+    "import_result": "Mauricio reportou importacao executada.",
+    "compile_result": "VBE Debug > Compile VBAProject passou limpo conforme reporte humano.",
+    "tv2_directed_execution": "TV2_20260602_205320",
+    "tv2_directed_result": "OK=5 | FALHA=0 | MANUAL=0",
+    "tv2_directed_failure_csv": "NAO_EXPORTADO",
+    "post_gate_macro_status": "executado por Mauricio; shape localizado em J1 e click executou IniciarSistema",
+    "post_gate_macro_evidence": "Janela Imediata: UX_InstalarAtalhoIniciarSistema executou; UX_IniciarSistema_ResolverAba().Name=RESULTADO_QA_V2; UX_IniciarSistema_ContarAtalhos()=1; UX_IniciarSistema_OnActionAtual()=IniciarSistema.",
+    "post_gate_visual_note": "Mauricio localizou o botao no J1 e confirmou que funcionou. A dificuldade inicial era apenas localizacao/viewport.",
+    "evidence_source": "Captura de tela enviada por Mauricio em 2026-06-02 mostra Suite V2 concluida, Execucao TV2_20260602_205320, OK=5, FALHA=0, MANUAL=0, sem CSV de falhas."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_20_UX_INICIAR_SISTEMA_CODEONLY.txt",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_20_UX_INICIAR_SISTEMA_CODEONLY\", \"e157221+ONDA38.2.20-UX-INICIAR-CODE\"",
+    "expected_import_result": "M=3 | F=0 | err=0 | skip=0",
+    "expected_suite": "TV2_RunUXIniciarSistemaCodeOnly",
+    "expected_suite_result": "OK=5 | FALHA=0 | MANUAL=0",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23202,
+        "sha256": "3155c4dbd75bbcf49c7cfbde47bca4eaec5abe2367b873c034665841020e7bd8"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAZ-UX_IniciarSistema.bas",
+        "bytes": 8906,
+        "sha256": "1e6674db91f4b33b8b7a4985005cf3115d18a48fb1c0968f92d672288b5fabf2"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABR-Teste_V2_UX_IniciarSistema.bas",
+        "bytes": 7217,
+        "sha256": "ecc950de5945d71ac44b09e0741db85dc7ef33a7344a91ba9426ebfaa8131591"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_20_UX_INICIAR_SISTEMA_CODEONLY.txt",
+        "bytes": 1488,
+        "sha256": "5753beff2a3cfa0369599d06f9d10b9f8fa29a08887f953bd8d5d2fcbba3323a"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly.json",
+    ".hbn/hearbacks/0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly-confirmed.json",
+    ".hbn/hearbacks/0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly-confirmed.md",
+    ".hbn/results/0140-exec-onda-38-2-20-ux-iniciar-sistema-codeonly.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_20_ux_iniciar_sistema_codeonly/0140_TECNICO.md",
+    "CHANGELOG.md",
+    "src/vba/UX_IniciarSistema.bas",
+    "src/vba/Teste_V2_UX_IniciarSistema.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAZ-UX_IniciarSistema.bas",
+    "local-ai/vba_import/001-modulo/ABR-Teste_V2_UX_IniciarSistema.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_20_UX_INICIAR_SISTEMA_CODEONLY.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0140",
+      "status": "pass_local",
+      "evidencia": "Readback confirmado por Mauricio e atualizado para human_status=confirmed."
+    },
+    {
+      "gate": "Hearback 0140",
+      "status": "pass_human",
+      "evidencia": "Mauricio confirmou em chat: confirmo o readback 0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly."
+    },
+    {
+      "gate": "Fonte e espelho App_Release",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/App_Release.bas e AAX-App_Release.bas sem diferencas."
+    },
+    {
+      "gate": "Fonte e espelho UX_IniciarSistema",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/UX_IniciarSistema.bas e AAZ-UX_IniciarSistema.bas sem diferencas."
+    },
+    {
+      "gate": "Fonte e espelho Teste_V2_UX_IniciarSistema",
+      "status": "pass_local",
+      "evidencia": "diff -u entre src/vba/Teste_V2_UX_IniciarSistema.bas e ABR-Teste_V2_UX_IniciarSistema.bas sem diferencas."
+    },
+    {
+      "gate": "Manifesto V3 minimo",
+      "status": "pass_local",
+      "evidencia": "Manifesto contem tres itens M e nenhum item F; nao importa UserForms, .frx, Auto_Open, ThisWorkbook, Mod_Types, Importador_V3, Svc_Avaliacao, Preencher, Teste_V2_Engine ou Teste_V2_Roteiros."
+    },
+    {
+      "gate": "Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Mauricio reportou compile limpo."
+    },
+    {
+      "gate": "TV2_RunUXIniciarSistemaCodeOnly",
+      "status": "pass_human",
+      "evidencia": "TV2_20260602_205320 retornou OK=5 | FALHA=0 | MANUAL=0; nenhum CSV de falhas exportado."
+    }
+  ],
+  "next_decision": [
+    "Atalho funcionalmente instalado em RESULTADO_QA_V2 com OnAction=IniciarSistema; Mauricio localizou em J1 e confirmou funcionamento.",
+    "A proxima onda recomendada volta para melhoria incremental de formularios em fatia code-only/modulos primeiro.",
+    "Nao tocar Auto_Open, ThisWorkbook ou UserForms sem novo readback proprio."
+  ],
+  "created_at": "2026-06-02T19:36:43-03:00",
+  "package_ready_at": "2026-06-02T19:36:43-03:00",
+  "completed_at": "2026-06-02T20:56:33-03:00",
+  "post_install_checked_at": "2026-06-02T21:25:14-03:00"
+}

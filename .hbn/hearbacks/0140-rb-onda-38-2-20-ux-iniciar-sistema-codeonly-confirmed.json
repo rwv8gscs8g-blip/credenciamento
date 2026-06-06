@@ -1,0 +1,17 @@
+{
+  "hearback_id": "0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly-confirmed",
+  "readback_id": "0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly",
+  "data": "2026-06-02",
+  "agent_id": "codex",
+  "human_operator": "Mauricio",
+  "status": "confirmed",
+  "confirmation_text": "confirmo o readback 0140-rb-onda-38-2-20-ux-iniciar-sistema-codeonly",
+  "confirmed_at": "2026-06-02T19:36:43-03:00",
+  "scope_confirmed": [
+    "Criar modulo padrao UX_IniciarSistema.bas para instalar/atualizar atalho visual de planilha",
+    "Criar modulo V2 isolado Teste_V2_UX_IniciarSistema.bas",
+    "Atualizar App_Release.bas para build 0140",
+    "Gerar espelhos importaveis e manifesto V3 M=3/F=0",
+    "Nao tocar Auto_Open, ThisWorkbook, UserForms, .frx, Svc_Avaliacao, Preencher, Mod_Types, Importador_V3, Teste_V2_Engine ou Teste_V2_Roteiros"
+  ]
+}
