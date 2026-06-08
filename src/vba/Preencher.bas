@@ -1011,6 +1011,7 @@ ws.Range("C11").Value = Empresa_endereco
 ws.Range("C13").Value = Empresa_TelCel
 ws.Range("C15").Value = Empresa_email
 ws.Range("G13").Value = Empresa_CNPJ
+Call Preencher_EscreverAvisoOperacional(ws)
 ws.Range("B18").Value = Desc_Ativi
 ws.Range("F18").Value = END_ENTIDADE
 ws.Range("L18").Value = Desc_Serv
@@ -1061,6 +1062,7 @@ ws.Range("C11").Value = Empresa_endereco
 ws.Range("C13").Value = Empresa_TelCel
 ws.Range("C15").Value = Empresa_email
 ws.Range("G13").Value = Empresa_CNPJ
+Call Preencher_EscreverAvisoOperacional(ws)
 ws.Range("B18").Value = Desc_Ativi
 ws.Range("F18").Value = END_ENTIDADE
 ws.Range("L18").Value = Desc_Serv
@@ -1112,6 +1114,7 @@ ws.Range("C11").Value = Empresa_endereco
 ws.Range("C13").Value = Empresa_TelCel
 ws.Range("C15").Value = Empresa_email
 ws.Range("G13").Value = Empresa_CNPJ
+Call Preencher_EscreverAvisoOperacional(ws)
 ws.Range("B18").Value = Desc_Ativi
 ws.Range("F18").Value = END_ENTIDADE
 ws.Range("L18").Value = Desc_Serv
@@ -1642,6 +1645,97 @@ End Sub
 
 Private Function Preencher_TextoDemandanteImpressao() As String
     Preencher_TextoDemandanteImpressao = Trim$(Desc_entidade & " - " & cont_entidade & " - " & telcont_entidade)
+End Function
+
+Private Sub Preencher_EscreverAvisoOperacional(ByVal ws As Worksheet)
+    Dim aviso As String
+
+    aviso = Preencher_AvisoOperacionalAtual()
+    ws.Range("C16").Value = aviso
+    With ws.Range("C16:N16")
+        .Font.Size = 8
+        .Font.Italic = True
+        .ShrinkToFit = True
+    End With
+End Sub
+
+Private Function Preencher_AvisoOperacionalAtual() As String
+    Dim empId As String
+
+    empId = Preencher_EmpresaIdAtual()
+    If empId <> "" Then Preencher_AvisoOperacionalAtual = RRS_AvisoOperacionalEmpresa(empId, "ATIVO", Preencher_AtividadeIdAtual())
+End Function
+
+Private Function Preencher_AtividadeIdAtual() As String
+    Dim idAtividade As String
+
+    On Error GoTo fim
+    idAtividade = Trim$(CStr(Cd_Ativi))
+    If idAtividade <> "" Then
+        If IsNumeric(idAtividade) Then idAtividade = Format$(CLng(Val(idAtividade)), "000")
+    End If
+
+fim:
+    Preencher_AtividadeIdAtual = idAtividade
+End Function
+
+Private Function Preencher_ObservacaoComAviso(ByVal observacao As String) As String
+    Dim obs As String
+    Dim aviso As String
+
+    obs = Trim$(CStr(observacao))
+    aviso = Trim$(Preencher_AvisoOperacionalAtual())
+
+    If obs = "" Then
+        Preencher_ObservacaoComAviso = aviso
+    ElseIf aviso = "" Then
+        Preencher_ObservacaoComAviso = obs
+    Else
+        Preencher_ObservacaoComAviso = obs & vbLf & aviso
+    End If
+End Function
+
+Private Function Preencher_EmpresaIdAtual() As String
+    Dim wsEmp As Worksheet
+    Dim linha As Long
+    Dim ultima As Long
+    Dim alvoCnpj As String
+    Dim alvoRazao As String
+    Dim idGlobal As String
+
+    On Error GoTo fim
+
+    alvoCnpj = Trim$(CStr(Empresa_CNPJ))
+    alvoRazao = Trim$(CStr(M_NomeEmpresa))
+    idGlobal = Trim$(CStr(M_ID_Empresa))
+
+    Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+    ultima = UltimaLinhaAba(SHEET_EMPRESAS)
+
+    If alvoCnpj <> "" Then
+        For linha = PrimeiraLinhaDadosEmpresas() To ultima
+            If StrComp(Trim$(SafeListVal(wsEmp.Cells(linha, COL_EMP_CNPJ).Value)), alvoCnpj, vbTextCompare) = 0 Then
+                Preencher_EmpresaIdAtual = SafeListVal(wsEmp.Cells(linha, COL_EMP_ID).Value)
+                Exit Function
+            End If
+        Next linha
+    End If
+
+    If idGlobal <> "" Then
+        Preencher_EmpresaIdAtual = idGlobal
+        Exit Function
+    End If
+
+    If alvoRazao <> "" Then
+        For linha = PrimeiraLinhaDadosEmpresas() To ultima
+            If StrComp(Trim$(SafeListVal(wsEmp.Cells(linha, COL_EMP_RAZAO).Value)), alvoRazao, vbTextCompare) = 0 Then
+                Preencher_EmpresaIdAtual = SafeListVal(wsEmp.Cells(linha, COL_EMP_ID).Value)
+                Exit Function
+            End If
+        Next linha
+    End If
+
+fim:
 End Function
 
 Private Function Preencher_CelulaGravavelMerge(ByVal alvo As Range) As Range
@@ -3457,6 +3551,7 @@ ws.Range("C11").Value = Empresa_endereco
 ws.Range("C13").Value = Empresa_TelCel
 ws.Range("C15").Value = Empresa_email
 ws.Range("G13").Value = Empresa_CNPJ
+Call Preencher_EscreverAvisoOperacional(ws)
 ws.Range("B18").Value = Desc_Ativi
 ws.Range("F18").Value = END_ENTIDADE
 ws.Range("L18").Value = Desc_Serv
@@ -3478,7 +3573,7 @@ Call Preencher_EscreverNotaAvaliacaoImpressa(ws.Range("N36"), AvN10)
 ws.Range("D37").Value = AvNEmp
 ws.Range("N37").Value = Util_Conversao.ToCurrency(FormatarMediaAvaliacao(media))
 ws.Range("N37").NumberFormat = "0.00"
-ws.Range("B40").Value = AvOb
+ws.Range("B40").Value = Preencher_ObservacaoComAviso(AvOb)
 Call Preencher_AplicarBordasCriticasAvaliacao(ws)
 End Sub
 

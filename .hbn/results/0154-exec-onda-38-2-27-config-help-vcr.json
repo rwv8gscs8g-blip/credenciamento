@@ -1,0 +1,147 @@
+{
+  "result_id": "0154-exec-onda-38-2-27-config-help-vcr",
+  "execution_id": "0154-exec-onda-38-2-27-config-help-vcr",
+  "readback_id": "0154-rb-onda-38-2-27-config-help-vcr",
+  "data": "2026-06-06",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "configuracoes_iniciais_help_hbn_vcr_package_ready",
+  "human_status": "pending_import_compile_tv2_manual_help",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "293e44c",
+  "build_label": "293e44c+ONDA38.2.27-CONFIG-HELP-VCR",
+  "action": "Iniciar validacao tela a tela pela tela Configuracoes Iniciais, corrigir editabilidade do campo de dias por recusa/prazo, adicionar Ajuda HBN e padronizar o nome publico da validacao completa como VCR.",
+  "summary": "A 0154 adiciona correcao runtime para que o controle legado TxtMesesSuspensao fique editavel e continue representando dias de suspensao por recusa/prazo. O teste dirigido TV2_RunTelaConfiguracoesIniciais cobre editabilidade, persistencia em CONFIG e disponibilidade da ajuda HBN. A Central de Testes passa a apresentar Validacao Completa da Release (VCR) como nome operacional, preservando macros legadas por compatibilidade. O modulo de validacao troca mensagens publicas para VCR e usa .csv apenas como formato de evidencia.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunTelaConfiguracoesIniciais pela Janela Imediata.",
+      "Validar manualmente que o campo de dias por recusa/prazo esta editavel.",
+      "Clicar em Ajuda na tela Configuracoes Iniciais e confirmar abertura do HTML HBN.",
+      "Rodar a VCR apenas se for checkpoint forte, pois o tempo observado passou de uma hora."
+    ],
+    "status": "pending"
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_27_CONFIG_HELP_VCR\", \"293e44c+ONDA38.2.27-CONFIG-HELP-VCR\"",
+    "import_result": "M=4 | F=1 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunTelaConfiguracoesIniciais",
+    "tv2_directed_result": "OK=3 | FALHA=0 | MANUAL=0",
+    "manual_ui": "Campo de dias por recusa/prazo editavel; botao Ajuda abre docs/help/hbn/configuracoes-iniciais.html",
+    "vcr_macro": "CT_ValidarRelease_Completa",
+    "vcr_cadence": "Reservar para checkpoint forte; nao rodar a cada microajuste."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_27_CONFIG_HELP_VCR.txt",
+    "manifest_bytes": 2365,
+    "manifest_sha256": "1122e4974946eda79c79a59ab001a11742565c0c61058e0a7f9536da7fd5232c",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_27_CONFIG_HELP_VCR\", \"293e44c+ONDA38.2.27-CONFIG-HELP-VCR\"",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23912,
+        "sha256": "38389ce664ae2bb87bb620def766cc850e3bee3652d1520851f14fcfe08ba40c"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAZ-Central_Testes.bas",
+        "bytes": 35246,
+        "sha256": "6a87a1554387727ea968db977a0e04d2dec1eb4547647da7d5bbb01a197ea016"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 303814,
+        "sha256": "a0c288d18c290fe7e6a49238e8625fdab90ed923b7a169f80df51bf52ada820a"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas",
+        "bytes": 47423,
+        "sha256": "100cdbc35e5b2bdffdbd44e012991883148eb69ce2d8fb86d75a0c91df0b1c9b"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+        "bytes": 25356,
+        "sha256": "9c8a3d5911bf89a2c39144fd8b5e9081a1edafc0e67a3632f7618f6fb0454d13"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+        "bytes": 24830,
+        "sha256": "1241a59b88c3dedf6b9ab10d288d7a85ae2d5348b21289a5078892bbd0f56398"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0154-rb-onda-38-2-27-config-help-vcr.json",
+    ".hbn/hearbacks/0154-rb-onda-38-2-27-config-help-vcr-confirmed.json",
+    ".hbn/hearbacks/0154-rb-onda-38-2-27-config-help-vcr-confirmed.md",
+    ".hbn/results/0154-exec-onda-38-2-27-config-help-vcr.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/03_ondas/onda_38_2_27_config_help_vcr/0154_TECNICO.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "docs/help/hbn/index.html",
+    "docs/help/hbn/configuracoes-iniciais.html",
+    "src/vba/Configuracao_Inicial.frm",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_Validacao_Release.bas",
+    "src/vba/Central_Testes.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas",
+    "local-ai/vba_import/001-modulo/AAZ-Central_Testes.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_27_CONFIG_HELP_VCR.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; git worktree list aponta a branch codex/v12-0-0206-planejamento na raiz canonica."
+    },
+    {
+      "gate": "Readback 0154",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0154-rb-onda-38-2-27-config-help-vcr.json retornou OK."
+    },
+    {
+      "gate": "Hearback 0154",
+      "status": "pass_local_json",
+      "evidence": "python3 -m json.tool .hbn/hearbacks/0154-rb-onda-38-2-27-config-help-vcr-confirmed.json retornou JSON valido; nao ha validate-hearback.sh neste repo."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only ... retornou OK e vba_import 100% sincronizado com src/vba para os 5 arquivos do delta."
+    },
+    {
+      "gate": "EOL e whitespace",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/report-vba-eol-whitespace.sh retornou OK; git diff --check sem saida."
+    },
+    {
+      "gate": "Nomenclatura publica",
+      "status": "pass_local",
+      "evidence": "rg por Gate RVS, RVS oficial, CSV resumo, CSV_RESUMO e antigo Sexteto no escopo novo nao retornou ocorrencias."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunTelaConfiguracoesIniciais no workbook",
+    "Validacao manual do campo editavel",
+    "Clique real no botao Ajuda dentro do workbook"
+  ],
+  "rollback_plan": [
+    "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+    "Se compile falhar, nao salvar o workbook e restaurar o backup V3 gerado antes do import.",
+    "Se TV2_RunTelaConfiguracoesIniciais falhar, anexar CSV de falhas e nao executar VCR.",
+    "Se a Ajuda nao abrir, manter docs/help/hbn como evidencia e abrir fix curto sem mexer no .frx."
+  ]
+}

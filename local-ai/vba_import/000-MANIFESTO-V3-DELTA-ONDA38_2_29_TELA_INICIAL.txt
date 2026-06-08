@@ -1,0 +1,46 @@
+# Manifesto V3 DELTA ONDA38_2_29_TELA_INICIAL - V12.0.0206 Onda 38.2.29 / Readback 0159
+# Tema: Tela Inicial/Menu_Principal; entrada, comandos, mensagens, processos e saida.
+#
+# Contexto:
+#   - A 0158 fechou Configuracoes Iniciais botoes/menus com TV2 dirigido.
+#   - A 0159 avanca a validacao tela a tela para a Tela Inicial.
+#   - Gate humano inicial importou e compilou, mas TV2_20260607_094429
+#     retornou OK=12 | FALHA=2 | MANUAL=0 por contrato de teste acoplado a
+#     Auto_Open fora do delta. Fix1 delega essa cobertura a BL4.
+#   - Central de Testes, Sair e fluxos destrutivos sao validados por contrato
+#     seguro; nao sao acionados automaticamente pelo teste V2.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_29_TELA_INICIAL", "293e44c+ONDA38.2.29-FIX1-TELA-INICIAL"
+#
+# Pos-import esperado:
+#   - Importador V3: M=3 | F=0 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunTelaInicial
+#   - Esperado: OK=14 | FALHA=0 | MANUAL=0.
+#   - Validacao manual segura opcional: abrir Tela Inicial, conferir Sobre,
+#     GitHub, Configuracoes Iniciais, aviso da Central e confirmacao de Sair
+#     sem prosseguir nos fluxos de risco.
+#
+# Guardas:
+#   - Test-only + build label.
+#   - Sem .frm/.frx neste delta.
+#   - Sem Menu_Principal.frm, sem Auto_Open, sem ThisWorkbook.
+#   - Sem Mod_Types, sem Importador_V3.
+#   - Sem VCR neste microdelta.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24084
+#     sha256=d38870288a25739029f58b951c5e60192fe7abb9a3fd4ef1150cd369ec395a13
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=212940
+#     sha256=070e8f9a5e74e822c5fe7cfce3c4bab8351edffe23ff6a5a8e70fc4ee801b699
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=320753
+#     sha256=de73c3268622e8c0b463af7cfcb60cea7ed17b2fa7d4a8587d253e1bd109343a
+#
+# GRUPO_ONDA38_2_29_TELA_INICIAL
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas

@@ -799,15 +799,15 @@ Public Sub TV2_RunAdversarial_UI(Optional ByVal visual As Boolean = False, Optio
                              "Protege a acao mais destrutiva do workbook contra disparo acidental"
 
     TV2_UIAdv_LogFileTokens suite, "UI_ADV_010_CENTRAL_V2_EXPOE_SUITE", repoRoot, "Central_Testes_V2.bas", _
-                             "TV2_RunAdversarial_UI|CT2_ExecutarAdversarialUI|V2 Adversarial UI", _
+                             "TV2_RunAdversarial_UI|CT2_ExecutarAdversarialUI|V2 Adversarial UI|Gate de Validacao de Release (RVS)", _
                              "Central V2 expoe a suite adversarial para humano", _
-                             "Wrapper e texto de menu presentes", _
+                             "Wrapper, texto de menu e entrada RVS presentes", _
                              "Garante que a nova suite nao fique escondida apenas na janela imediata"
 
     TV2_UIAdv_LogFileTokens suite, "UI_ADV_011_SEXTETO_GATE_EXPOSTO", repoRoot, "Teste_Validacao_Release.bas", _
-                             "CT_ValidarRelease_SextetoMinimo|VR_ValidarReleaseSextetoMinimo|VR_SintaxeSexteto|Gate de Validacao de Release (RVS)", _
+                             "CT_ValidarRelease_SextetoMinimo|VR_ValidarReleaseSextetoMinimo|VR_SintaxeSexteto", _
                              "Gate RVS preserva entrada publica, alias e sintaxe auditavel", _
-                             "Sub oficial, wrapper, sintaxe e mensagem final RVS presentes", _
+                             "Sub oficial, wrapper e sintaxe presentes no modulo validador", _
                              "Toda funcionalidade nova precisa de teste correspondente no mesmo microdelta"
 
     TV2_UIAdv_LogFileNaoContemTokens suite, "UI_ADV_012_LIMPAR_BASE_SEM_SENHA_CLARA", repoRoot, "Limpar_Base.frm", _
@@ -926,6 +926,7 @@ Public Sub TV2_RunPersistenciaPainel(Optional ByVal visual As Boolean = False, O
     Dim valorPrazoAntes As Variant
     Dim valorMaxRecusasAntes As Variant
     Dim valorMesesAntes As Variant
+    Dim valorDiasRecusaAntes As Variant
     Dim frm As Configuracao_Inicial
     Dim controlesOk As Boolean
     Dim persistiuOk As Boolean
@@ -936,6 +937,7 @@ Public Sub TV2_RunPersistenciaPainel(Optional ByVal visual As Boolean = False, O
     Dim prazoDepois As Long
     Dim maxRecusasDepois As Long
     Dim mesesDepois As Long
+    Dim diasRecusaDepois As Long
     Dim erroFatalNumero As Long
     Dim erroFatalDescricao As String
 
@@ -950,6 +952,7 @@ Public Sub TV2_RunPersistenciaPainel(Optional ByVal visual As Boolean = False, O
     valorPrazoAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value
     valorMaxRecusasAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value
     valorMesesAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MESES_SUSPENSAO).Value
+    valorDiasRecusaAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value
 
     Set frm = New Configuracao_Inicial
     controlesOk = TV2_FormControleExiste(frm, "TxtNotaCorte")
@@ -971,7 +974,7 @@ Public Sub TV2_RunPersistenciaPainel(Optional ByVal visual As Boolean = False, O
                   controlesOk
 
     If controlesOk Then
-        persistiuOk = frm.CI_TestarPersistenciaPainel("6", "4", "120", detalhes, "5", "2", "8")
+        persistiuOk = frm.CI_TestarPersistenciaPainel("6", "4", "120", detalhes, "5", "60", "8")
     Else
         detalhes = "Controles canonicos ausentes"
         persistiuOk = False
@@ -983,19 +986,21 @@ Public Sub TV2_RunPersistenciaPainel(Optional ByVal visual As Boolean = False, O
     prazoDepois = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value))
     maxRecusasDepois = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value))
     mesesDepois = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MESES_SUSPENSAO).Value))
+    diasRecusaDepois = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value))
     TV2_LogAssert suite, "CS_PAINEL_02_PERSISTE_CONFIG", "AUTO", _
                   "Salvar painel de regras de negocio persiste valores em CONFIG", _
-                  "NOTA_MINIMA=6; MAX_STRIKES=4; DIAS_SUSPENSAO_STRIKE=120; PRAZO_PREOS=8; MAX_RECUSAS=5; MESES_SUSPENSAO=2", _
+                  "NOTA_MINIMA=6; MAX_STRIKES=4; DIAS_SUSPENSAO_STRIKE=120; PRAZO_PREOS=8; MAX_RECUSAS=5; DIAS_RECUSA_PRAZO=60", _
                   "PERSISTIU=" & CStr(persistiuOk) & "; DETALHES=" & detalhes & _
                   "; NOTA=" & CStr(notaDepois) & "; MAX=" & CStr(maxDepois) & _
                   "; DIAS=" & CStr(diasDepois) & "; PRAZO_PREOS=" & CStr(prazoDepois) & _
                   "; MAX_RECUSAS=" & CStr(maxRecusasDepois) & _
-                  "; MESES_SUSPENSAO=" & CStr(mesesDepois), _
+                  "; DIAS_RECUSA_PRAZO=" & CStr(diasRecusaDepois) & _
+                  "; MESES_LEGADO=" & CStr(mesesDepois), _
                   "Garante que a UI nao apenas exibe campos, mas grava regras consumidas por Svc_Avaliacao/Svc_Rodizio", _
                   (persistiuOk And Abs(notaDepois - 6#) < 0.001 And maxDepois = 4 And diasDepois = 120 And _
-                   prazoDepois = 8 And maxRecusasDepois = 5 And mesesDepois = 2)
+                   prazoDepois = 8 And maxRecusasDepois = 5 And diasRecusaDepois = 60)
 
-    TV2_RestaurarConfigPainel valorNotaAntes, valorMaxAntes, valorDiasAntes, valorPrazoAntes, valorMaxRecusasAntes, valorMesesAntes
+    TV2_RestaurarConfigPainel valorNotaAntes, valorMaxAntes, valorDiasAntes, valorPrazoAntes, valorMaxRecusasAntes, valorMesesAntes, valorDiasRecusaAntes
     Unload frm
     TV2_FinalizarExecucao suite, silencioso
     Exit Sub
@@ -1004,11 +1009,1007 @@ falha:
     erroFatalNumero = Err.Number
     erroFatalDescricao = Err.Description
     On Error Resume Next
-    TV2_RestaurarConfigPainel valorNotaAntes, valorMaxAntes, valorDiasAntes, valorPrazoAntes, valorMaxRecusasAntes, valorMesesAntes
+    TV2_RestaurarConfigPainel valorNotaAntes, valorMaxAntes, valorDiasAntes, valorPrazoAntes, valorMaxRecusasAntes, valorMesesAntes, valorDiasRecusaAntes
     If Not frm Is Nothing Then Unload frm
     On Error GoTo 0
     TV2_LogAssert suite, "FATAL", "AUTO", _
                   "Executar suite PersistenciaPainel sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Public Sub TV2_RunConfigCenariosNovoPeriodo(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "CONFIG_CENARIOS_CSV"
+    Const buildLabel As String = "293e44c+ONDA38.2.30-FIX1-CONFIG-CENARIOS-CSV"
+    Const pastaNovoPeriodo As String = "V12-0-0206-Onda-38-2-30"
+    Dim frm As Configuracao_Inicial
+    Dim execId As String
+    Dim csvTexto As String
+    Dim csvPath As String
+    Dim pastaSaida As String
+    Dim copiaSaida As String
+    Dim detalhes As String
+    Dim observado As String
+    Dim okControles As Boolean
+    Dim okCen1 As Boolean
+    Dim okCen2 As Boolean
+    Dim okRegraRecusa As Boolean
+    Dim okRegraStrike As Boolean
+    Dim okNovoPeriodo As Boolean
+    Dim okCsv As Boolean
+    Dim okCopia As Boolean
+    Dim preDepois As Long
+    Dim cadDepois As Long
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual, 7
+    execId = TV2_ExecucaoAtualId()
+    TV2_LogInfo suite, "CFGCSV_00_AVISO_DESTRUTIVO", _
+                "Aviso destrutivo da suite 0160", _
+                "Esta suite prepara cenarios deterministicos, cria pasta de Novo Periodo, salva copia da planilha e limpa PRE_OS/CAD_OS para validar idempotencia."
+    If Not silencioso Then
+        MsgBox "ATENCAO: este teste e destrutivo e deve rodar somente em homologacao." & vbCrLf & vbCrLf & _
+               "A suite 0160 cria cenarios deterministicos, salva copia da planilha antes da limpeza, inicia Novo Periodo e limpa PRE_OS/CAD_OS." & vbCrLf & _
+               "A evidencia sera gravada em CSV na pasta V12-0-0206-Onda-38-2-30.", _
+               vbExclamation, "Teste destrutivo 0160"
+    End If
+
+    TV2_PrepararBaselineCanonica
+    Set frm = New Configuracao_Inicial
+
+    csvTexto = TV2_ConfigCsvHeader()
+    csvTexto = csvTexto & TV2_ConfigCsvRow(execId, buildLabel, suite, "AVISO", "DESTRUTIVO", 0, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "AVISO_REGISTRADO", "Suite destrutiva autorizada por hearback 0160", "", "", "", "Copia antes da limpeza; CSV na pasta do Novo Periodo") & vbCrLf
+    csvTexto = csvTexto & TV2_ConfigCsvFilaSnapshot(execId, buildLabel, suite, "FILA_ANTES", "BASELINE", 10)
+
+    okControles = TV2_ConfigControlesCenarioOk(frm, observado)
+    TV2_LogAssert suite, "CFGCSV_01_CONTROLES_TODOS_CAMPOS", "AUTO", _
+                  "Configuracao_Inicial expoe todos os controles de persistencia testados", _
+                  "Gestor, Municipio, prazo, recusas, dias recusa/prazo, nota, strikes e dias strike existem", _
+                  observado, _
+                  "Sem estes controles a matriz de cenarios nao prova a tela real", _
+                  okControles
+
+    If okControles Then
+        okCen1 = TV2_ConfigCenarioRoundTrip(frm, execId, buildLabel, suite, "CEN1_VALORES_1", 1, _
+                                            "Gestor Auditoria " & buildLabel & " CEN1", _
+                                            "Municipio Auditoria V12 Onda 38.2.30 CEN1", _
+                                            1, 1, 1, 1, 1, 1, csvTexto, observado)
+    Else
+        observado = "Controles ausentes; CEN1 nao executado"
+        okCen1 = False
+    End If
+    TV2_LogAssert suite, "CFGCSV_02_CENARIO_1_ROUNDTRIP", "AUTO", _
+                  "Persistir matriz CEN1 com todos os valores numericos iguais a 1", _
+                  "CONFIG e getters retornam 1 em prazo, recusas, dias, nota, strikes e dias strike; gestor/municipio contem build", _
+                  observado, _
+                  "Cobre borda minima positiva para todos os campos variaveis", _
+                  okCen1
+
+    If okControles Then
+        okCen2 = TV2_ConfigCenarioRoundTrip(frm, execId, buildLabel, suite, "CEN2_VALORES_2", 2, _
+                                            "Gestor Auditoria " & buildLabel & " CEN2", _
+                                            "Municipio Auditoria V12 Onda 38.2.30 CEN2", _
+                                            2, 2, 2, 2, 2, 2, csvTexto, observado)
+    Else
+        observado = "Controles ausentes; CEN2 nao executado"
+        okCen2 = False
+    End If
+    TV2_LogAssert suite, "CFGCSV_03_CENARIO_2_ROUNDTRIP", "AUTO", _
+                  "Persistir matriz CEN2 com todos os valores numericos iguais a 2", _
+                  "CONFIG e getters retornam 2 em prazo, recusas, dias, nota, strikes e dias strike; gestor/municipio contem build", _
+                  observado, _
+                  "Cobre variacao maior que 1 antes do fluxo de negocio", _
+                  okCen2
+
+    okRegraRecusa = TV2_ConfigCenarioRecusaConsomeRegra(frm, execId, buildLabel, suite, csvTexto, observado)
+    TV2_LogAssert suite, "CFGCSV_04_REGRA_RECUSA_DIAS", "AUTO", _
+                  "Recusa consome MAX_RECUSAS=1 e DIAS_RECUSA_PRAZO=1 gravados pela tela", _
+                  "Empresa recusada suspende por 1 dia e registra estado na fila", _
+                  observado, _
+                  "Prova que a persistencia nao ficou isolada da regra de rodizio", _
+                  okRegraRecusa
+
+    okRegraStrike = TV2_ConfigCenarioStrikeConsomeRegra(frm, execId, buildLabel, suite, csvTexto, observado)
+    TV2_LogAssert suite, "CFGCSV_05_REGRA_STRIKE_DIAS", "AUTO", _
+                  "Avaliacao consome MAX_STRIKES=2 e DIAS_STRIKE=2 gravados pela tela", _
+                  "Empresa com duas notas baixas suspende por 2 dias", _
+                  observado, _
+                  "Prova que nota, strikes e dias de suspensao chegam ao servico de avaliacao", _
+                  okRegraStrike
+
+    csvTexto = csvTexto & TV2_ConfigCsvFilaSnapshot(execId, buildLabel, suite, "FILA_ANTES_NOVO_PERIODO", "PRE_LIMPEZA", 40)
+
+    okNovoPeriodo = frm.CI_TestarNovoPeriodoDeterministico(pastaNovoPeriodo, pastaSaida, copiaSaida, detalhes)
+    preDepois = TV2_ConfigQtdLinhasDados(SHEET_PREOS)
+    cadDepois = TV2_ConfigQtdLinhasDados(SHEET_CAD_OS)
+    okCopia = (Len(copiaSaida) > 0 And Dir(copiaSaida) <> "")
+    TV2_LogAssert suite, "CFGCSV_06_NOVO_PERIODO_COPIA_LIMPEZA", "AUTO", _
+                  "Novo Periodo deterministico cria pasta, salva copia e limpa PRE_OS/CAD_OS", _
+                  "Pasta V12-0-0206-Onda-38-2-30; copia da planilha existe; PRE_OS=0; CAD_OS=0", _
+                  "OK_NOVO_PERIODO=" & CStr(okNovoPeriodo) & "; COPIA_EXISTE=" & CStr(okCopia) & _
+                  "; PRE_OS_DEPOIS=" & CStr(preDepois) & "; CAD_OS_DEPOIS=" & CStr(cadDepois) & _
+                  "; DETALHES=" & detalhes, _
+                  "Fecha o prototipo de testador de cenarios com evidencia antes da limpeza", _
+                  (okNovoPeriodo And okCopia And preDepois = 0 And cadDepois = 0)
+
+    If okNovoPeriodo Then
+        csvPath = TV2_ConfigPathJoin(pastaSaida, "TesteV2_CONFIG_CENARIOS_" & execId & ".csv")
+        csvTexto = csvTexto & TV2_ConfigCsvRow(execId, buildLabel, suite, "NOVO_PERIODO", "COPIA_E_LIMPEZA", 50, "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "PRE_OS=0;CAD_OS=0", "PRE_OS=" & CStr(preDepois) & ";CAD_OS=" & CStr(cadDepois), pastaSaida, copiaSaida, csvPath, detalhes) & vbCrLf
+        Call TV2_ConfigEscreverTexto(csvPath, csvTexto)
+    End If
+    okCsv = (Len(csvPath) > 0 And Dir(csvPath) <> "")
+    TV2_LogAssert suite, "CFGCSV_07_CSV_EVIDENCIA", "AUTO", _
+                  "CSV de evidencia fica salvo junto da copia da planilha na pasta do Novo Periodo", _
+                  "CSV existe e contem cenarios, ordem, fila, valores esperados/observados e caminhos", _
+                  "CSV=" & csvPath & "; EXISTE=" & CStr(okCsv), _
+                  "Permite validacao humana lendo o CSV enquanto o gerador PDF nao existe", _
+                  okCsv
+
+    Unload frm
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    On Error Resume Next
+    If Not frm Is Nothing Then Unload frm
+    On Error GoTo 0
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite ConfigCenariosNovoPeriodo sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Private Function TV2_ConfigControlesCenarioOk(ByVal frm As Object, ByRef observado As String) As Boolean
+    Dim ok As Boolean
+
+    ok = TV2_FormControleExiste(frm, "Gestor_Rodizio")
+    ok = ok And TV2_FormControleExiste(frm, "Municipio_gestao")
+    ok = ok And TV2_FormControleExiste(frm, "PR_Val_OS")
+    ok = ok And TV2_FormControleExiste(frm, "TP_Valor")
+    ok = ok And TV2_FormControleExiste(frm, "TxtMesesSuspensao")
+    ok = ok And TV2_FormControleExiste(frm, "TxtNotaCorte")
+    ok = ok And TV2_FormControleExiste(frm, "TxtMaxStrikes")
+    ok = ok And TV2_FormControleExiste(frm, "TxtDiasSuspensao")
+
+    observado = "Gestor_Rodizio=" & CStr(TV2_FormControleExiste(frm, "Gestor_Rodizio")) & _
+                "; Municipio_gestao=" & CStr(TV2_FormControleExiste(frm, "Municipio_gestao")) & _
+                "; PR_Val_OS=" & CStr(TV2_FormControleExiste(frm, "PR_Val_OS")) & _
+                "; TP_Valor=" & CStr(TV2_FormControleExiste(frm, "TP_Valor")) & _
+                "; TxtMesesSuspensao=" & CStr(TV2_FormControleExiste(frm, "TxtMesesSuspensao")) & _
+                "; TxtNotaCorte=" & CStr(TV2_FormControleExiste(frm, "TxtNotaCorte")) & _
+                "; TxtMaxStrikes=" & CStr(TV2_FormControleExiste(frm, "TxtMaxStrikes")) & _
+                "; TxtDiasSuspensao=" & CStr(TV2_FormControleExiste(frm, "TxtDiasSuspensao"))
+    TV2_ConfigControlesCenarioOk = ok
+End Function
+
+Private Function TV2_ConfigCenarioRoundTrip( _
+    ByVal frm As Configuracao_Inicial, _
+    ByVal execId As String, _
+    ByVal buildLabel As String, _
+    ByVal suite As String, _
+    ByVal cenario As String, _
+    ByVal ordem As Long, _
+    ByVal gestor As String, _
+    ByVal municipio As String, _
+    ByVal prazoPreOS As Long, _
+    ByVal maxRecusas As Long, _
+    ByVal diasRecusaPrazo As Long, _
+    ByVal notaMinima As Double, _
+    ByVal maxStrikes As Long, _
+    ByVal diasStrike As Long, _
+    ByRef csvTexto As String, _
+    ByRef observado As String _
+) As Boolean
+    Dim wsCfg As Worksheet
+    Dim detalhes As String
+    Dim persistiu As Boolean
+    Dim gestorConfig As String
+    Dim municipioConfig As String
+    Dim prazoConfig As Long
+    Dim maxRecusasConfig As Long
+    Dim diasRecusaConfig As Long
+    Dim notaConfig As Double
+    Dim maxStrikesConfig As Long
+    Dim diasStrikeConfig As Long
+    Dim ok As Boolean
+
+    Set wsCfg = ThisWorkbook.Sheets(SHEET_CONFIG)
+    persistiu = frm.CI_TestarPersistenciaPainel( _
+                    CStr(notaMinima), CStr(maxStrikes), CStr(diasStrike), detalhes, _
+                    CStr(maxRecusas), CStr(diasRecusaPrazo), CStr(prazoPreOS), _
+                    gestor, municipio)
+
+    gestorConfig = Trim$(CStr(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_GESTOR).Value))
+    municipioConfig = Trim$(CStr(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MUNICIPIO).Value))
+    prazoConfig = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value))
+    maxRecusasConfig = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value))
+    diasRecusaConfig = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value))
+    notaConfig = CDbl(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value))
+    maxStrikesConfig = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value))
+    diasStrikeConfig = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value))
+
+    ok = persistiu
+    ok = ok And (gestorConfig = Funcoes.NormalizarTextoPTBR(gestor))
+    ok = ok And (municipioConfig = Funcoes.NormalizarTextoPTBR(municipio))
+    ok = ok And (prazoConfig = prazoPreOS)
+    ok = ok And (GetDiasDecisao() = prazoPreOS)
+    ok = ok And (maxRecusasConfig = maxRecusas)
+    ok = ok And (GetMaxRecusas() = maxRecusas)
+    ok = ok And (diasRecusaConfig = diasRecusaPrazo)
+    ok = ok And (GetDiasSuspensaoRecusaPrazo() = diasRecusaPrazo)
+    ok = ok And (Abs(notaConfig - notaMinima) < 0.001)
+    ok = ok And (Abs(GetNotaMinimaAvaliacao() - notaMinima) < 0.001)
+    ok = ok And (maxStrikesConfig = maxStrikes)
+    ok = ok And (GetMaxStrikes() = maxStrikes)
+    ok = ok And (diasStrikeConfig = diasStrike)
+    ok = ok And (GetDiasSuspensaoStrike() = diasStrike)
+
+    observado = "PERSISTIU=" & CStr(persistiu) & "; DETALHES=" & detalhes & _
+                "; GESTOR=" & gestorConfig & "; MUNICIPIO=" & municipioConfig & _
+                "; PRAZO=" & CStr(prazoConfig) & "/" & CStr(GetDiasDecisao()) & _
+                "; MAX_RECUSAS=" & CStr(maxRecusasConfig) & "/" & CStr(GetMaxRecusas()) & _
+                "; DIAS_RECUSA=" & CStr(diasRecusaConfig) & "/" & CStr(GetDiasSuspensaoRecusaPrazo()) & _
+                "; NOTA=" & CStr(notaConfig) & "/" & CStr(GetNotaMinimaAvaliacao()) & _
+                "; MAX_STRIKES=" & CStr(maxStrikesConfig) & "/" & CStr(GetMaxStrikes()) & _
+                "; DIAS_STRIKE=" & CStr(diasStrikeConfig) & "/" & CStr(GetDiasSuspensaoStrike())
+
+    csvTexto = csvTexto & TV2_ConfigCsvRow( _
+                    execId, buildLabel, suite, "MATRIZ", cenario, ordem, "", "", "", "", _
+                    gestor, gestorConfig, municipio, municipioConfig, _
+                    prazoPreOS, GetDiasDecisao(), maxRecusas, GetMaxRecusas(), _
+                    diasRecusaPrazo, GetDiasSuspensaoRecusaPrazo(), _
+                    notaMinima, GetNotaMinimaAvaliacao(), maxStrikes, GetMaxStrikes(), _
+                    diasStrike, GetDiasSuspensaoStrike(), "OK", IIf(ok, "OK", "FALHA"), _
+                    "", "", "", observado) & vbCrLf
+
+    TV2_ConfigCenarioRoundTrip = ok
+End Function
+
+Private Function TV2_ConfigCenarioRecusaConsomeRegra( _
+    ByVal frm As Configuracao_Inicial, _
+    ByVal execId As String, _
+    ByVal buildLabel As String, _
+    ByVal suite As String, _
+    ByRef csvTexto As String, _
+    ByRef observado As String _
+) As Boolean
+    Dim detalhes As String
+    Dim persistiu As Boolean
+    Dim ents() As String
+    Dim emps() As String
+    Dim ativs() As String
+    Dim resPre As TResult
+    Dim resRecusa As TResult
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+    Dim ok As Boolean
+
+    TV2_LimparNamespace "SCFR"
+    persistiu = frm.CI_TestarPersistenciaPainel("1", "1", "1", detalhes, "1", "1", "1", _
+                                                "Gestor Auditoria " & buildLabel & " RECUSA", _
+                                                "Municipio Auditoria V12 Onda 38.2.30 RECUSA")
+    TV2_FixtureFactory "SCFR", 1, 1, 1, ents, emps, ativs
+    resPre = EmitirPreOS(ents(1), ativs(1) & "|001", 1)
+    If resPre.sucesso Then
+        resRecusa = RecusarPreOS(resPre.IdGerado, "TV2_CONFIG_CENARIOS")
+    End If
+    emp = LerEmpresa(emps(1), linhaEmp)
+
+    ok = persistiu And resPre.sucesso And resRecusa.sucesso
+    ok = ok And (GetMaxRecusas() = 1)
+    ok = ok And (GetDiasSuspensaoRecusaPrazo() = 1)
+    ok = ok And (emp.STATUS_GLOBAL = "SUSPENSA_GLOBAL")
+    ok = ok And (emp.DT_FIM_SUSP = DateAdd("d", 1, Date))
+
+    observado = "PERSISTIU=" & CStr(persistiu) & "; PREOS=" & resPre.IdGerado & _
+                "; RECUSA_OK=" & CStr(resRecusa.sucesso) & "; MSG=" & resRecusa.mensagem & _
+                "; EMP=" & emps(1) & "; STATUS=" & emp.STATUS_GLOBAL & _
+                "; DT_FIM=" & IIf(emp.DT_FIM_SUSP > CDate(0), Format$(emp.DT_FIM_SUSP, "yyyy-mm-dd"), "") & _
+                "; MAX_RECUSAS=" & CStr(GetMaxRecusas()) & _
+                "; DIAS_RECUSA=" & CStr(GetDiasSuspensaoRecusaPrazo())
+
+    csvTexto = csvTexto & TV2_ConfigCsvRow( _
+                    execId, buildLabel, suite, "REGRA_RECUSA", "SCFR_MAX1_DIAS1", 30, _
+                    "1", emps(1), ativs(1), TV2_ConfigPosicaoFila(emps(1), ativs(1)), _
+                    "", "", "", "", GetDiasDecisao(), GetDiasDecisao(), _
+                    1, GetMaxRecusas(), 1, GetDiasSuspensaoRecusaPrazo(), _
+                    GetNotaMinimaAvaliacao(), GetNotaMinimaAvaliacao(), _
+                    GetMaxStrikes(), GetMaxStrikes(), GetDiasSuspensaoStrike(), GetDiasSuspensaoStrike(), _
+                    "SUSPENSA_GLOBAL;DT_FIM=HOJE+1", emp.STATUS_GLOBAL, "", "", "", observado) & vbCrLf
+
+    TV2_ConfigCenarioRecusaConsomeRegra = ok
+End Function
+
+Private Function TV2_ConfigCenarioStrikeConsomeRegra( _
+    ByVal frm As Configuracao_Inicial, _
+    ByVal execId As String, _
+    ByVal buildLabel As String, _
+    ByVal suite As String, _
+    ByRef csvTexto As String, _
+    ByRef observado As String _
+) As Boolean
+    Dim detalhes As String
+    Dim persistiu As Boolean
+    Dim ents() As String
+    Dim emps() As String
+    Dim ativs() As String
+    Dim notas(1 To 1) As Integer
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+    Dim strikes As Long
+    Dim ok As Boolean
+
+    TV2_LimparNamespace "SCFS"
+    persistiu = frm.CI_TestarPersistenciaPainel("2", "2", "2", detalhes, "2", "2", "2", _
+                                                "Gestor Auditoria " & buildLabel & " STRIKE", _
+                                                "Municipio Auditoria V12 Onda 38.2.30 STRIKE")
+    TV2_FixtureFactory "SCFS", 1, 1, 1, ents, emps, ativs
+    notas(1) = 1
+    TV2_FF_RodadaCompleta ativs(1), ents(1), 2, emps, notas, Date + 1
+
+    emp = LerEmpresa(emps(1), linhaEmp)
+    strikes = ContarStrikesPorEmpresa(emps(1), GetNotaMinimaAvaliacao())
+
+    ok = persistiu
+    ok = ok And (GetMaxStrikes() = 2)
+    ok = ok And (GetDiasSuspensaoStrike() = 2)
+    ok = ok And (strikes >= 2)
+    ok = ok And (emp.STATUS_GLOBAL = "SUSPENSA_GLOBAL")
+    ok = ok And (emp.DT_FIM_SUSP = DateAdd("d", 2, Date))
+
+    observado = "PERSISTIU=" & CStr(persistiu) & "; EMP=" & emps(1) & _
+                "; STATUS=" & emp.STATUS_GLOBAL & "; STRIKES=" & CStr(strikes) & _
+                "; DT_FIM=" & IIf(emp.DT_FIM_SUSP > CDate(0), Format$(emp.DT_FIM_SUSP, "yyyy-mm-dd"), "") & _
+                "; MAX_STRIKES=" & CStr(GetMaxStrikes()) & _
+                "; DIAS_STRIKE=" & CStr(GetDiasSuspensaoStrike())
+
+    csvTexto = csvTexto & TV2_ConfigCsvRow( _
+                    execId, buildLabel, suite, "REGRA_STRIKE", "SCFS_MAX2_DIAS2", 31, _
+                    "1", emps(1), ativs(1), TV2_ConfigPosicaoFila(emps(1), ativs(1)), _
+                    "", "", "", "", GetDiasDecisao(), GetDiasDecisao(), _
+                    GetMaxRecusas(), GetMaxRecusas(), GetDiasSuspensaoRecusaPrazo(), GetDiasSuspensaoRecusaPrazo(), _
+                    GetNotaMinimaAvaliacao(), GetNotaMinimaAvaliacao(), _
+                    2, GetMaxStrikes(), 2, GetDiasSuspensaoStrike(), _
+                    "SUSPENSA_GLOBAL;DT_FIM=HOJE+2", emp.STATUS_GLOBAL, "", "", "", observado) & vbCrLf
+
+    TV2_ConfigCenarioStrikeConsomeRegra = ok
+End Function
+
+Private Function TV2_ConfigCsvHeader() As String
+    TV2_ConfigCsvHeader = "EXECUCAO_ID;BUILD;SUITE;TIPO;CENARIO;ORDEM;ORDEM_FILA;EMP_ID;ATIV_ID;POSICAO_FILA;GESTOR_ESPERADO;GESTOR_CONFIG;MUNICIPIO_ESPERADO;MUNICIPIO_CONFIG;PRAZO_PREOS;GET_DIAS_DECISAO;MAX_RECUSAS;GET_MAX_RECUSAS;DIAS_RECUSA_PRAZO;GET_DIAS_RECUSA_PRAZO;NOTA_MINIMA;GET_NOTA_MINIMA;MAX_STRIKES;GET_MAX_STRIKES;DIAS_STRIKE;GET_DIAS_STRIKE;STATUS_ESPERADO;STATUS_OBSERVADO;PASTA_NOVO_PERIODO;COPIA_PLANILHA;CSV_EVIDENCIA;DETALHES" & vbCrLf
+End Function
+
+Private Function TV2_ConfigCsvRow(ParamArray valores() As Variant) As String
+    Dim i As Long
+    Dim linha As String
+
+    For i = 0 To 31
+        If i > 0 Then linha = linha & ";"
+        If i <= UBound(valores) Then
+            linha = linha & TV2_ConfigCsvCell(valores(i))
+        Else
+            linha = linha & TV2_ConfigCsvCell("")
+        End If
+    Next i
+    TV2_ConfigCsvRow = linha
+End Function
+
+Private Function TV2_ConfigCsvCell(ByVal valor As Variant) As String
+    Dim s As String
+
+    If IsError(valor) Then
+        s = "#ERRO"
+    Else
+        s = CStr(valor)
+    End If
+    s = Replace(s, """", """""")
+    TV2_ConfigCsvCell = """" & s & """"
+End Function
+
+Private Function TV2_ConfigCsvFilaSnapshot( _
+    ByVal execId As String, _
+    ByVal buildLabel As String, _
+    ByVal suite As String, _
+    ByVal tipo As String, _
+    ByVal cenario As String, _
+    ByVal ordemBase As Long _
+) As String
+    Dim ws As Worksheet
+    Dim ult As Long
+    Dim i As Long
+    Dim ordemFila As Long
+    Dim saida As String
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    ult = ws.Cells(ws.Rows.Count, COL_CRED_ID).End(xlUp).row
+    For i = LINHA_DADOS To ult
+        ordemFila = ordemFila + 1
+        If ordemFila > 5 Then Exit For
+        saida = saida & TV2_ConfigCsvRow( _
+                    execId, buildLabel, suite, tipo, cenario, ordemBase + ordemFila, _
+                    ordemFila, ws.Cells(i, COL_CRED_EMP_ID).Value, ws.Cells(i, COL_CRED_ATIV_ID).Value, _
+                    ws.Cells(i, COL_CRED_POSICAO).Value, "", "", "", "", _
+                    "", "", "", "", "", "", "", "", "", "", "", "", _
+                    "FILA_SNAPSHOT", "EMP_ID=" & CStr(ws.Cells(i, COL_CRED_EMP_ID).Value) & _
+                    ";ATIV_ID=" & CStr(ws.Cells(i, COL_CRED_ATIV_ID).Value) & _
+                    ";POSICAO=" & CStr(ws.Cells(i, COL_CRED_POSICAO).Value), _
+                    "", "", "", "Snapshot das primeiras 5 linhas de CREDENCIADOS") & vbCrLf
+    Next i
+    TV2_ConfigCsvFilaSnapshot = saida
+End Function
+
+Private Function TV2_ConfigPosicaoFila(ByVal empId As String, ByVal ativId As String) As Variant
+    Dim ws As Worksheet
+    Dim ult As Long
+    Dim i As Long
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+    ult = ws.Cells(ws.Rows.Count, COL_CRED_ID).End(xlUp).row
+    For i = LINHA_DADOS To ult
+        If IdsIguais(ws.Cells(i, COL_CRED_EMP_ID).Value, empId) And _
+           IdsIguais(ws.Cells(i, COL_CRED_ATIV_ID).Value, ativId) Then
+            TV2_ConfigPosicaoFila = ws.Cells(i, COL_CRED_POSICAO).Value
+            Exit Function
+        End If
+    Next i
+    TV2_ConfigPosicaoFila = ""
+End Function
+
+Private Function TV2_ConfigQtdLinhasDados(ByVal nomeAba As String) As Long
+    TV2_ConfigQtdLinhasDados = TV2_CountRows(nomeAba)
+End Function
+
+Private Function TV2_ConfigPathJoin(ByVal pasta As String, ByVal nome As String) As String
+    If Right$(pasta, 1) = "\" Or Right$(pasta, 1) = "/" Then
+        TV2_ConfigPathJoin = pasta & nome
+    Else
+        TV2_ConfigPathJoin = pasta & Application.PathSeparator & nome
+    End If
+End Function
+
+Private Sub TV2_ConfigEscreverTexto(ByVal caminho As String, ByVal conteudo As String)
+    Dim fNum As Integer
+
+    fNum = FreeFile
+    Open caminho For Output As #fNum
+    Print #fNum, conteudo;
+    Close #fNum
+End Sub
+
+Public Sub TV2_RunTelaConfiguracoesIniciais(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "CONFIGURACOES_INICIAIS"
+    Dim repoRoot As String
+    Dim wsCfg As Worksheet
+    Dim valorNotaAntes As Variant
+    Dim valorMaxAntes As Variant
+    Dim valorDiasAntes As Variant
+    Dim valorPrazoAntes As Variant
+    Dim valorMaxRecusasAntes As Variant
+    Dim valorMesesAntes As Variant
+    Dim valorDiasRecusaAntes As Variant
+    Dim frm As Configuracao_Inicial
+    Dim detalhesEditavel As String
+    Dim detalhesLayout As String
+    Dim detalhesPersistencia As String
+    Dim campoEditavel As Boolean
+    Dim campoLayoutOk As Boolean
+    Dim persistiuOk As Boolean
+    Dim diasRecusaDepois As Long
+    Dim ajudaPath As String
+    Dim ajudaOk As Boolean
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual
+    repoRoot = TV2_UI_RepoRoot()
+
+    Set wsCfg = ThisWorkbook.Sheets(SHEET_CONFIG)
+    valorNotaAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value
+    valorMaxAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value
+    valorDiasAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value
+    valorPrazoAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value
+    valorMaxRecusasAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value
+    valorMesesAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MESES_SUSPENSAO).Value
+    valorDiasRecusaAntes = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value
+
+    Set frm = New Configuracao_Inicial
+    campoEditavel = TV2_FormControleEditavel(frm, "TxtMesesSuspensao", detalhesEditavel)
+    campoLayoutOk = TV2_FormControleLivreDeSobreposicao(frm, "TxtMesesSuspensao", detalhesLayout, "suspender por")
+    TV2_LogAssert suite, "CI_TELA_01_DIAS_RECUSA_EDITAVEL", "AUTO", _
+                  "Campo de dias por recusa/prazo fica editavel e sem sobreposicao visual", _
+                  "TxtMesesSuspensao Enabled=True, Locked=False, TabStop=True e nenhum label 'suspender por' cobre o campo", _
+                  detalhesEditavel & "; " & detalhesLayout, _
+                  "Evita interface mentir sobre regra que o codigo realmente persiste em dias", _
+                  (campoEditavel And campoLayoutOk)
+
+    If campoEditavel And campoLayoutOk Then
+        persistiuOk = frm.CI_TestarPersistenciaPainel("5", "2", "11", detalhesPersistencia, "3", "45", "5")
+    Else
+        detalhesPersistencia = "Campo de dias por recusa/prazo nao editavel ou coberto por label; persistencia nao executada."
+        persistiuOk = False
+    End If
+    diasRecusaDepois = CLng(Val(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value))
+    TV2_LogAssert suite, "CI_TELA_02_DIAS_RECUSA_PERSISTE", "AUTO", _
+                  "Salvar parametros grava dias de suspensao por recusa/prazo na CONFIG", _
+                  "MAX_RECUSAS=3; DIAS_RECUSA_PRAZO=45; PRAZO_PREOS=5", _
+                  "PERSISTIU=" & CStr(persistiuOk) & "; DIAS_RECUSA_PRAZO=" & _
+                  CStr(diasRecusaDepois) & "; DETALHES=" & detalhesPersistencia, _
+                  "Cobre round-trip do campo visual para a regra consumida pelo rodizio", _
+                  (persistiuOk And diasRecusaDepois = 45)
+
+    ajudaPath = ThisWorkbook.Path & Application.PathSeparator & "docs" & _
+                Application.PathSeparator & "help" & _
+                Application.PathSeparator & "hbn" & _
+                Application.PathSeparator & "configuracoes-iniciais.html"
+    ajudaOk = (TV2_FormControleExiste(frm, "CommandButton1") And Len(Dir(ajudaPath)) > 0)
+    TV2_LogAssert suite, "CI_TELA_03_AJUDA_HBN_DISPONIVEL", "AUTO", _
+                  "Tela Configuracoes Iniciais tem botao Ajuda e HTML HBN publicado", _
+                  "CommandButton1 existe; configuracoes-iniciais.html existe no caminho do workbook", _
+                  "BOTAO=" & CStr(TV2_FormControleExiste(frm, "CommandButton1")) & _
+                  "; HTML=" & ajudaPath & "; EXISTE=" & CStr(Len(Dir(ajudaPath)) > 0), _
+                  "Permite documentar a operacao tela a tela sem depender do chat", _
+                  ajudaOk
+
+    TV2_EST_LogComponenteContemTokens suite, "CI_TELA_04_BOTOES_TELA_HANDLERS", repoRoot, _
+        "Configuracao_Inicial", "Configuracao_Inicial.frm", _
+        "Private Sub CommandButton1_Click()|CI_AbrirAjudaHBN|" & _
+        "Private Sub B_Parametros_Click()|Call CI_PersistirParametros(True, True, True, detalhes)|" & _
+        "Private Sub BR_Backup_Click()|Private Sub Limpar_Base_Click()|" & _
+        "Private Sub Limpar_Basee_Click()|Call AbrirLimparBaseSeguro", _
+        "Tela Configuracoes Iniciais expoe handlers dos botoes principais", _
+        "Ajuda, Salvar Parametros, Iniciar Novo Periodo e Limpar Base tem handlers rastreaveis", _
+        "Evita validar apenas campos e deixar botoes centrais fora da cobertura dirigida"
+
+    TV2_EST_LogComponenteContemTokens suite, "CI_TELA_05_FLUXOS_ADMIN_GUARDADOS", repoRoot, _
+        "Configuracao_Inicial", "Configuracao_Inicial.frm", _
+        "Resposta = MsgBox(""Confirme o Backup|If Resposta = vbNo Then|" & _
+        "If MsgBox(""Tem certeza que deseja iniciar um NOVO PER|ThisWorkbook.SaveCopyAs Copia|" & _
+        "Set wsPreOS = ThisWorkbook.Sheets(""PRE_OS"")|Set wsCADOS = ThisWorkbook.Sheets(""CAD_OS"")|" & _
+        "VBA.UserForms.Add(""Limpar_Base"").Show", _
+        "Fluxos administrativos da tela exigem confirmacao antes de mutar base", _
+        "Iniciar Novo Periodo pede confirmacao e Limpar Base abre formulario proprio", _
+        "Fluxos destrutivos nao devem ser acionados automaticamente pelo teste V2"
+
+    TV2_EST_LogComponenteContemTokens suite, "CI_TELA_06_LIMPAR_BASE_CONFIRMACAO", repoRoot, _
+        "Preencher", "Preencher.bas", _
+        "Sub Limpa_Base()|Tem certeza que deseja ZERAR a Base Operacional?|If Not LimpaBaseTotalReset(relatorio) Then|" & _
+        "Util_SalvarWorkbookSeguro", _
+        "Fallback de Limpar Base mantem confirmacao explicita e rotina centralizada", _
+        "Limpa_Base pergunta antes de zerar a base e delega para LimpaBaseTotalReset", _
+        "Mesmo o fallback operacional preserva gate humano antes de uma acao destrutiva"
+
+    TV2_EST_LogComponenteContemTokens suite, "CI_TELA_07_MENU_INICIAL_ATALHOS", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub B_Config_Inicial_Click()|VBA.UserForms.Add(""Configuracao_Inicial"")|frmConfiguracao.Show vbModal|" & _
+        "Private Sub BT_CENTRAL_TESTES_Click()|Call Menu_TelaInicial_AbrirCentralTestes|" & _
+        "Private Sub BT_SOBRE_Click()|Call Menu_TelaInicial_MostrarSobre|" & _
+        "Private Sub BT_GITHUB_Click()|Call Menu_TelaInicial_AbrirGitHub|" & _
+        "Private Sub CommandButton15_Click()|Private Sub CommandButton13_Click()|Private Sub CommandButton14_Click()", _
+        "Menu inicial preserva atalhos para Configuracoes, Central de Testes, Sobre e GitHub", _
+        "Atalhos nomeados e legados delegam para handlers internos rastreaveis", _
+        "Evita quebra silenciosa de entrada na tela e botoes institucionais"
+
+    TV2_EST_LogComponenteContemTokens suite, "CI_TELA_08_MENU_LATERAL_ROTAS", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub B_Home_Click()|Private Sub B_Entidade_Click()|Private Sub B_Empresa_Cadastro_Click()|" & _
+        "Private Sub B_Empresa_Rodizio_Click()|Private Sub B_Emite_OS_Click()|" & _
+        "Private Sub B_Empresa_Avaliacao_Click()|Private Sub B_CAD_SERV_Click()|" & _
+        "Private Sub B_Relatorios_Click()|Private Sub L_Sair_Click()", _
+        "Menu lateral preserva rotas principais de entrada e saida ao redor da tela", _
+        "Inicio, cadastros, rodizio, impressao, avaliacao, servicos, relatorios e sair tem handlers", _
+        "Garante que a validacao tela a tela nao isole Configuracoes Iniciais do fluxo real"
+
+    TV2_EST_LogComponenteNaoContemTokens suite, "CI_TELA_09_FECHAMENTO_X_NAO_BLOQUEADO", repoRoot, _
+        "Configuracao_Inicial", "Configuracao_Inicial.frm", _
+        "Private Sub UserForm_QueryClose|Cancel = True", _
+        "Fechamento pelo X nao e bloqueado por handler customizado na tela", _
+        "Configuracao_Inicial nao define QueryClose nem Cancel=True para impedir fechamento", _
+        "O operador deve conseguir sair da tela sem caminho escondido ou trava visual"
+
+    TV2_RestaurarConfigPainel valorNotaAntes, valorMaxAntes, valorDiasAntes, valorPrazoAntes, valorMaxRecusasAntes, valorMesesAntes, valorDiasRecusaAntes
+    Unload frm
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    On Error Resume Next
+    TV2_RestaurarConfigPainel valorNotaAntes, valorMaxAntes, valorDiasAntes, valorPrazoAntes, valorMaxRecusasAntes, valorMesesAntes, valorDiasRecusaAntes
+    If Not frm Is Nothing Then Unload frm
+    On Error GoTo 0
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar validacao da tela Configuracoes Iniciais sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Public Sub TV2_RunTelaInicial(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "TELA_INICIAL"
+    Dim repoRoot As String
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual, 14
+    repoRoot = TV2_UI_RepoRoot()
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_01_ENTRADAS_CANONICAS", repoRoot, _
+        "Auto_Open", "Auto_Open.bas", _
+        "Private Sub InicializarSistema()|Public Sub Auto_Open()|Public Sub IniciarSistema()|" & _
+        "Public Sub AbrirMenu()|InicializarSistema", _
+        "Tela Inicial tem entradas canonicas convergentes", _
+        "Auto_Open, IniciarSistema e AbrirMenu delegam ao mesmo inicializador", _
+        "Evita divergencia entre abertura automatica, macro manual e atalho visual"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_02_PROCESSOS_DE_ABERTURA", repoRoot, _
+        "Auto_Open", "Auto_Open.bas", _
+        "qtdCnae = CargaInicialCNAE_SeNecessario(False)|" & _
+        "AutoOpen_VerificarBackfillDtUltReativ|VBA.UserForms.Add(""Menu_Principal"")", _
+        "Abertura do sistema preserva processos operacionais obrigatorios", _
+        "Carga CNAE, backfill e abertura do Menu_Principal continuam encadeados", _
+        "Garante que a entrada da Tela Inicial preserva diagnosticos de base no escopo importado"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_03_PROTECAO_DELEGADA_BL4", repoRoot, _
+        "Teste_V2_Roteiros", "Teste_V2_Roteiros.bas", _
+        "Public Sub TV2_RunBL4ProtecaoPersistente|BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO|" & _
+        "TV2_BL4_AutoOpenMarcadorAposUltimoSaveCompat|AutoOpen_UltimaProtecaoMarcadorAposUltimoSave", _
+        "Tela Inicial mantem protecao de abertura coberta por suite dedicada", _
+        "Cobertura BL4 permanece disponivel sem exigir Auto_Open no delta da Tela Inicial", _
+        "Evita reprovar Tela Inicial por modulo fora do pacote 0159"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_04_ATALHO_VISUAL_INICIAR", repoRoot, _
+        "UX_IniciarSistema", "UX_IniciarSistema.bas", _
+        "Private Const UX_IS_SHAPE_NAME As String = ""UX_BTN_INICIAR_SISTEMA""|" & _
+        "Private Const UX_IS_ONACTION As String = ""IniciarSistema""|shp.OnAction = UX_IS_ONACTION|" & _
+        ".TextRange.Text = ""Iniciar Sistema""|UX_IS_AbaCritica", _
+        "Atalho visual Iniciar Sistema aponta para o comando correto", _
+        "Shape unico chama IniciarSistema, tem texto operacional e evita abas criticas", _
+        "Garante entrada visual sem alterar Auto_Open ou UserForms de producao"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_05_INICIALIZACAO_PAGINA_ZERO", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub UserForm_Initialize()|mInicializando = True|Me.caption = ""SISTEMA DE CREDENCIAMENTO""|" & _
+        "Call PreenchimentoEscolhaAtividade|Call PreenchimentoEntidade|Call PreenchimentoEmpresa|" & _
+        "Call Tela_Inicial|PAGINAS.Style = fmTabStyleNone|mInicializando = False", _
+        "Menu_Principal inicializa dados e entra na Tela Inicial", _
+        "Listas principais sao carregadas, Tela_Inicial e chamada e as abas ficam ocultas ao operador", _
+        "Evita abrir o sistema em pagina residual ou com dados basicos nao carregados"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_06_HOME_ESTADO_VISUAL", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub Tela_Inicial()|B_Home.BackStyle = fmBackStyleOpaque|PAGINAS.Value = 0|" & _
+        "Private Sub B_Home_Click()|B_CAD_SERV.BackStyle = fmBackStyleTransparent", _
+        "Comando Inicio volta para a pagina inicial", _
+        "Home fica ativo, demais rotas ficam transparentes e PAGINAS volta para 0", _
+        "Garante retorno previsivel para o painel inicial depois de navegar"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_07_SOBRE_RELEASE_REGRA", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub Menu_TelaInicial_MostrarSobre()|AppRelease_Atual()|AppRelease_Status()|" & _
+        "AppRelease_Canal()|AppRelease_Alvo()|AppRelease_BuildImportadoRotulo()|" & _
+        "AppRelease_BuildBranch()|AppRelease_BuildGeradoEm()|MsgBox msg, vbInformation + vbOKOnly, ""Sobre""", _
+        "Botao Sobre informa release, build e objetivo operacional", _
+        "Mensagem usa App_Release como fonte e volta ao sistema com OK", _
+        "O operador consegue conferir versao e regra geral sem mutar dados"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_08_GITHUB_FALLBACK_URL", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Function AbrirURLExterna(ByVal url As String)|Application.OperatingSystem, ""Mac""|" & _
+        "Shell ""open|Application.OperatingSystem, ""Windows""|Application.FollowHyperlink url|" & _
+        "ThisWorkbook.FollowHyperlink url|Private Sub Menu_TelaInicial_AbrirGitHub()|AppRelease_GitHubRepoUrl()", _
+        "Botao GitHub abre URL oficial com fallback", _
+        "Mac usa Shell open antes de hyperlinks; Windows e fallbacks continuam disponiveis", _
+        "Evita travamento no Mac e preserva caminho manual para o repositorio"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_09_CENTRAL_TESTES_GUARD", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Function Treinamento_ConfirmarUso()|modo de treinamento altera dados reais|" & _
+        "Deseja continuar?|Private Sub Menu_TelaInicial_AbrirCentralTestes()|" & _
+        "If Not Treinamento_ConfirmarUso() Then Exit Sub|Call Menu_RecolherParaBateria|" & _
+        "Call CT_AbrirCentral|Erro ao abrir Central de Testes", _
+        "Central de Testes tem confirmacao antes do fluxo de treinamento", _
+        "Operador e avisado sobre alteracao de dados reais antes de recolher o menu e abrir a Central", _
+        "Fluxo de maior risco fica condicionado a confirmacao humana"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_10_CENTRAL_OPCOES", repoRoot, _
+        "Central_Testes", "Central_Testes.bas", _
+        "Public Sub CT_AbrirCentral()|InputBox(|[1] VCR: Validacao Completa da Release|" & _
+        "[2] Central de Testes V2|[3] Bateria Oficial V1|Case ""1"": Call CT_ValidarRelease_Completa|" & _
+        "Case ""2"": Call CT2_AbrirCentral", _
+        "Central de Testes expoe VCR, V2 e bateria oficial", _
+        "InputBox lista opcoes principais e roteia para os entry points oficiais", _
+        "O mapa da Tela Inicial cobre o que o botao Central pode disparar"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_11_CONFIGURACOES_MODAL", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub B_Config_Inicial_Click()|Call UI_DescartarFormVisivel(""Configuracao_Inicial"")|" & _
+        "Set frmConfiguracao = VBA.UserForms.Add(""Configuracao_Inicial"")|frmConfiguracao.Show vbModal|" & _
+        "Erro ao abrir Configura", _
+        "Atalho Configuracoes Iniciais abre tela modal limpa", _
+        "Instancia antiga e descartada antes de criar Configuracao_Inicial em modo modal", _
+        "Evita stale form e preserva o fluxo validado na onda anterior"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_12_ROTAS_LATERAIS", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub B_Entidade_Click()|PAGINAS.Value = 1|Private Sub B_Empresa_Cadastro_Click()|" & _
+        "PAGINAS.Value = 2|Private Sub B_Empresa_Rodizio_Click()|PAGINAS.Value = 3|" & _
+        "Private Sub B_Emite_OS_Click()|PAGINAS.Value = 4|Private Sub B_Empresa_Avaliacao_Click()|" & _
+        "PAGINAS.Value = 5|Private Sub B_CAD_SERV_Click()|PAGINAS.Value = 6|" & _
+        "Private Sub B_Relatorios_Click()|PAGINAS.Value = 7", _
+        "Menu lateral preserva rotas principais do sistema", _
+        "Entidade, Empresa, Rodizio, OS, Avaliacao, Servicos e Relatorios continuam mapeados", _
+        "A Tela Inicial fica conectada ao fluxo real do operador"
+
+    TV2_EST_LogComponenteContemTokens suite, "TELAINI_13_SAIR_CONFIRMA_SEM_SAVE", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub L_Sair_Click()|Deseja realmente continuar com o fechamento do sistema?|" & _
+        "ProgressBar.Show|Application.Quit|ActiveWorkbook.Close savechanges:=False", _
+        "Comando Sair exige confirmacao e nao salva automaticamente", _
+        "Fechamento operacional pergunta antes e fecha sem savechanges", _
+        "Evita confundir Sair com persistencia; operador precisa salvar antes se quiser preservar edicoes"
+
+    TV2_EST_LogComponenteNaoContemTokens suite, "TELAINI_14_X_NAO_BLOQUEADO", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub UserForm_QueryClose|Cancel = True", _
+        "Fechamento pelo X nao e bloqueado por handler customizado", _
+        "Menu_Principal nao define QueryClose nem Cancel=True para impedir o X", _
+        "Operador tem saida visual padrao alem do comando Sair"
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite TelaInicial sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Public Sub TV2_RunTelaRelatorios(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "TELA_RELATORIOS"
+    Dim repoRoot As String
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual, 10
+    repoRoot = TV2_UI_RepoRoot()
+
+    TV2_EST_LogComponenteContemTokens suite, "REL_TELA_01_HELPERS_STATUS_HUMANO", repoRoot, _
+        "Rel_Rodizio_Status", "Rel_Rodizio_Status.bas", _
+        "Public Function RRS_StatusGlobalHumano|Public Function RRS_SuspensaDesdeTexto|" & _
+        "Public Function RRS_SuspensaAteTexto|Public Function RRS_UltimaReativacaoTexto|" & _
+        "Public Function RRS_ParticipaRodizioHumanoPorEmpresa|Public Function RRS_StrikesNotaBaixa|" & _
+        "Public Function RRS_StrikesRecusaPrazo|Public Function RRS_DisponibilidadeOperacionalEmpresa|" & _
+        "Public Function RRS_StatusEmpresaNaData|Public Function RRS_DiagnosticoOperacionalEmpresa", _
+        "Relatorios tem helpers publicos para status, datas e strikes", _
+        "Helpers convertem regra tecnica em texto humano para relatorios", _
+        "Evita repetir interpretacao de suspensao e strikes em cada relatorio"
+
+    TV2_EST_LogComponenteContemTokens suite, "REL_TELA_02_EMPRESA_POR_SERVICO_NOME_SERVICO", repoRoot, _
+        "Rel_Emp_Serv", "Rel_Emp_Serv.frm", _
+        "RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO|ATIVIDADE|SERVICO|COD_ATIV_SERV|" & _
+        "STATUS EMPRESA|SUSPENSA ATE|DISPONIBILIDADE ATUAL|STRIKES NOTA BAIXA|" & _
+        "STRIKES RECUSA/PRAZO|RESUMO OPERACIONAL|RRS_DisponibilidadeOperacionalEmpresa", _
+        "Relatorio por servico mostra o nome do servico e o status operacional da empresa", _
+        "Cabecalho identifica atividade/servico e tabela inclui status, suspensao, disponibilidade e strikes", _
+        "Fecha a lacuna visual apontada para Empresa credenciada por servico"
+
+    TV2_EST_LogComponenteContemTokens suite, "REL_TELA_03_OS_POR_EMPRESA_DATAS_STATUS", repoRoot, _
+        "Rel_OSEmpresa", "Rel_OSEmpresa.frm", _
+        "STATUS EMPRESA|SUSPENSA DESDE|SUSPENSA ATE|ULTIMA REATIVACAO|DISPONIBILIDADE ATUAL|" & _
+        "STRIKES NOTA BAIXA|STRIKES RECUSA/PRAZO|RESUMO OPERACIONAL|" & _
+        "RRS_SuspensaDesdeTexto|RRS_UltimaReativacaoTexto", _
+        "Relatorio de OS por empresa mostra status, datas, retorno e strikes", _
+        "Resumo superior apresenta status humano, suspensa desde, suspensa ate, ultima reativacao e strikes", _
+        "Permite ler historico operacional da empresa sem abrir a base"
+
+    TV2_EST_LogComponenteContemTokens suite, "REL_TELA_04_ENTIDADES_FORMATACAO_PADRAO", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub Entidades_Cadastradas_Click()|Rel_FormatarCabecalho(wsRel, 10)|" & _
+        "Rel_FormatarDados(wsRel, 2, linhaRel - 1, 10)|RELATORIO DE ENTIDADES CADASTRADAS NO CREDENCIAMENTO", _
+        "Relatorio de entidades usa a formatacao tabular padrao", _
+        "Cabecalho, linhas alternadas, bordas e pagina sao aplicados via helpers compartilhados", _
+        "Alinha os relatorios que nao possuem empresa ao padrao visual aprovado"
+
+    TV2_EST_LogComponenteContemTokens suite, "REL_TELA_05_EMPRESAS_CADASTRADAS_STATUS", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub Btn_Empresas_Cadastradas_Click()|STATUS EMPRESA|SUSPENSA DESDE|" & _
+        "SUSPENSA ATE|ULTIMA REATIVACAO|STRIKES NOTA BAIXA|STRIKES RECUSA/PRAZO|" & _
+        "RESUMO OPERACIONAL|Rel_FormatarCabecalho(wsRel, 14)", _
+        "Relatorio de empresas cadastradas mostra status, datas e strikes", _
+        "Colunas de status, suspensa desde, suspensa ate, ultima reativacao e strikes estao presentes", _
+        "Garante que a listagem geral de empresas nao omite bloqueio operacional"
+
+    TV2_EST_LogComponenteContemTokens suite, "REL_TELA_06_EMPRESAS_CREDENCIADAS_STATUS", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub Btn_Empresas_Credenciados_Click()|STATUS CRED.|STATUS EMPRESA|" & _
+        "SUSPENSA ATE|DISPONIBILIDADE ATUAL|STRIKES NOTA BAIXA|STRIKES RECUSA/PRAZO|" & _
+        "RESUMO OPERACIONAL|Rel_DisponibilidadeEmpresaTexto(empId, statusCred, ativId)|Rel_FormatarCabecalho(wsRel, 14)", _
+        "Relatorio de empresas credenciadas mostra status de credenciamento e status global", _
+        "Tabela inclui status do credenciamento, status da empresa, suspensao, disponibilidade e strikes", _
+        "Evita confundir credenciamento ativo com empresa apta no rodizio"
+
+    TV2_EST_LogComponenteContemTokens suite, "REL_TELA_07_OS_ABERTAS_STATUS", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub OS_Emitidas_Click()|STATUS EMPRESA|SUSPENSA DESDE|SUSPENSA ATE|" & _
+        "DISPONIBILIDADE ATUAL|STRIKES NOTA BAIXA|STRIKES RECUSA/PRAZO|RESUMO OPERACIONAL|" & _
+        "ProximaOSAberta:|Rel_FormatarCabecalho(wsRel, 16)|Rel_ConfigurarPagina(wsRel, ""RELATORIO DE ORDENS DE SERVICO ABERTAS"", ""P"", False)", _
+        "Relatorio de OS abertas mostra a situacao atual da empresa", _
+        "Colunas de status, suspensao e strikes acompanham cada OS aberta impressa", _
+        "Permite decidir sobre execucao pendente com a condicao operacional visivel"
+
+    TV2_EST_LogComponenteContemTokens suite, "REL_TELA_08_PREOS_VENCIDAS_STATUS", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub PRE_OS_Vencidas_Click()|STATUS EMPRESA|SUSPENSA DESDE|SUSPENSA ATE|" & _
+        "DISPONIBILIDADE ATUAL|STRIKES NOTA BAIXA|STRIKES RECUSA/PRAZO|RESUMO OPERACIONAL|" & _
+        "Rel_FormatarCabecalho(wsRel, 13)|Rel_ConfigurarPagina(wsRel, ""RELATORIO DE PRE-OS VENCIDAS"", ""M"", False)", _
+        "Relatorio de pre-OS vencidas mostra a situacao atual da empresa", _
+        "Cada pre-OS vencida inclui status, datas de suspensao, disponibilidade e strikes", _
+        "Evita avaliar atraso sem saber se a empresa esta suspensa"
+
+    TV2_EST_LogComponenteContemTokens suite, "REL_TELA_09_LIMPEZA_RELATORIO_TEMPORARIO", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "falha_rel_entidades:|falha_rel_emp_cad:|falha_rel_emp_cred:|falha_rel_os_emit:|" & _
+        "falha_rel_pre_venc:|wsRel.PageSetup.PrintArea = """"|wsRel.Cells.Clear", _
+        "Relatorios temporarios limpam aba e area de impressao apos sucesso ou erro", _
+        "Caminhos principais e handlers de falha restauram RELATORIO antes de devolver o controle", _
+        "Evita resquicio visual ou area de impressao velha entre relatorios"
+
+    TV2_EST_LogComponenteContemTokens suite, "REL_TELA_10_STATUS_RODIZIO_POR_SERVICO_FORMATADO", repoRoot, _
+        "Rel_Rodizio_Status", "Rel_Rodizio_Status.bas", _
+        "Public Function RRS_GerarRelatorioStatusPorServico|EMPRESAS_SUSPENSAS|PROXIMO_RETORNO|" & _
+        "Rel_FormatarCabecalho(wsRpt, 12, 1)|Rel_FormatarDados(wsRpt, 2, linhaOut - 1, 12)", _
+        "Relatorio tecnico de status do rodizio por servico preserva formatacao e retorno", _
+        "Saida consolidada por servico lista suspensas, proximo retorno e alerta formatado", _
+        "Complementa os relatorios humanos com diagnostico operacional por servico"
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite TelaRelatorios sem erro fatal", _
+                  "Nenhum erro fatal", _
+                  "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
+                  "Toda falha fatal precisa ficar rastreavel", False
+    TV2_FinalizarExecucao suite, silencioso
+End Sub
+
+Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
+    Const suite As String = "REL_SUSP_STRIKES_RESET"
+    Dim repoRoot As String
+    Dim erroFatalNumero As Long
+    Dim erroFatalDescricao As String
+
+    On Error GoTo falha
+
+    TV2_InitExecucao suite, visual, 10
+    repoRoot = TV2_UI_RepoRoot()
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_01_HELPER_RESUMO_STRIKES", repoRoot, _
+        "Rel_Rodizio_Status", "Rel_Rodizio_Status.bas", _
+        "Public Function RRS_StrikesNotaBaixa|Public Function RRS_StrikesRecusaPrazo|" & _
+        "Public Function RRS_DisponibilidadeOperacionalEmpresa|Public Function RRS_StatusEmpresaNaData|" & _
+        "Public Function RRS_DiagnosticoOperacionalEmpresa|Public Function RRS_AvisoOperacionalEmpresa|" & _
+        "Private Function RRS_UltimoStrikeSuspensaoAudit|ORIGEM=STRIKE|STRIKES=|" & _
+        "Status da empresa nesta data|disponibilidade=|PRE-OS PENDENTE|OS EM EXECUCAO", _
+        "Helpers de relatorio expõem strikes de nota baixa e recusa/prazo", _
+        "Strikes atuais vêm da regra e suspensao remanescente pode usar ultimo evento de auditoria", _
+        "Evita divergencia visual apos iniciar novo periodo com suspensao preservada"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_02_EMPRESAS_CADASTRADAS_STRIKES", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub Btn_Empresas_Cadastradas_Click()|STRIKES NOTA BAIXA|" & _
+        "STRIKES RECUSA/PRAZO|RESUMO OPERACIONAL|Rel_StrikesNotaBaixaTexto(empId)|" & _
+        "Rel_StrikesRecusaPrazoTexto(empId)|Rel_DiagnosticoEmpresaTexto(empId)|Rel_FormatarCabecalho(wsRel, 14)", _
+        "Empresas cadastradas exibem status e contadores de strikes", _
+        "Tabela geral inclui colunas especificas para nota baixa, recusa/prazo e diagnostico", _
+        "Empresa suspensa fica legivel no relatorio geral"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_03_EMPRESAS_CREDENCIADAS_STRIKES", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub Btn_Empresas_Credenciados_Click()|STATUS CRED.|STATUS EMPRESA|" & _
+        "DISPONIBILIDADE ATUAL|STRIKES NOTA BAIXA|STRIKES RECUSA/PRAZO|RESUMO OPERACIONAL|" & _
+        "Rel_DisponibilidadeEmpresaTexto(empId, statusCred, ativId)|Rel_DiagnosticoEmpresaTexto(empId, statusCred, ativId)|Rel_FormatarCabecalho(wsRel, 14)", _
+        "Empresas credenciadas separam credenciamento ativo de aptidao operacional", _
+        "Relatorio mostra status global, suspensao, disponibilidade e strikes por empresa", _
+        "Evita empresa credenciada parecer apta quando esta suspensa"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_04_OS_ABERTAS_SEM_FANTASMA", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub OS_Emitidas_Click()|If Trim$(osId) = """" Or CLng(Val(osId)) <= 0 Then GoTo ProximaOSAberta|" & _
+        "ProximaOSAberta:|DISPONIBILIDADE ATUAL|STRIKES NOTA BAIXA|STRIKES RECUSA/PRAZO|RESUMO OPERACIONAL|" & _
+        "Rel_DisponibilidadeEmpresaTexto(empId, ""ATIVO"", ativId)|Rel_FormatarCabecalho(wsRel, 16)", _
+        "Relatorio de OS abertas ignora linha fantasma sem numero real", _
+        "Linhas vazias ou N.O.S. zero nao viram EMPRESA NAO ENCONTRADA", _
+        "Remove o falso positivo observado no PDF 058"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_05_PREOS_VENCIDAS_STRIKES", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub PRE_OS_Vencidas_Click()|STRIKES NOTA BAIXA|STRIKES RECUSA/PRAZO|" & _
+        "DISPONIBILIDADE ATUAL|RESUMO OPERACIONAL|Rel_StrikesNotaBaixaTexto(empId)|" & _
+        "Rel_DisponibilidadeEmpresaTexto(empId, ""ATIVO"", ativId)|Rel_FormatarCabecalho(wsRel, 13)", _
+        "Pre-OS vencidas exibem o diagnostico operacional da empresa", _
+        "Status, datas de suspensao, disponibilidade e strikes acompanham cada pre-OS", _
+        "Atraso fica auditavel junto da condicao atual da empresa"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_06_EMPRESA_POR_SERVICO_STRIKES", repoRoot, _
+        "Rel_Emp_Serv", "Rel_Emp_Serv.frm", _
+        "RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO|SERVICO|STRIKES NOTA BAIXA|" & _
+        "STRIKES RECUSA/PRAZO|DISPONIBILIDADE ATUAL|RESUMO OPERACIONAL|RRS_StrikesNotaBaixaTexto|" & _
+        "RRS_DisponibilidadeOperacionalEmpresa|RRS_DiagnosticoOperacionalEmpresa|Rel_FormatarCabecalho(wsRel, 11, linhaHeader)", _
+        "Empresa credenciada por servico mostra nome do servico e strikes", _
+        "Cabecalho identifica servico e cada empresa recebe diagnostico operacional", _
+        "Fecha a divergencia entre relatorios com e sem status"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_07_OS_POR_EMPRESA_STRIKES", repoRoot, _
+        "Rel_OSEmpresa", "Rel_OSEmpresa.frm", _
+        "RELATORIO DE ORDENS DE SERVICO POR EMPRESA|STRIKES NOTA BAIXA|" & _
+        "STRIKES RECUSA/PRAZO|DISPONIBILIDADE ATUAL|RESUMO OPERACIONAL|linhaHeader = 8|" & _
+        "RRS_StrikesNotaBaixaTexto|RRS_DisponibilidadeOperacionalEmpresa|RRS_DiagnosticoOperacionalEmpresa", _
+        "OS por empresa mostra resumo de suspensao e strikes antes das ordens", _
+        "Resumo superior inclui status, retorno, disponibilidade e diagnostico", _
+        "Permite ler a situacao operacional antes de auditar as OS"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_08_IMPRESSOS_AVISO_OPERACIONAL", repoRoot, _
+        "Preencher", "Preencher.bas", _
+        "Preencher_EscreverAvisoOperacional|Preencher_AvisoOperacionalAtual|" & _
+        "Preencher_AtividadeIdAtual|Preencher_EmpresaIdAtual|Preencher_ObservacaoComAviso|" & _
+        "RRS_AvisoOperacionalEmpresa(empId, ""ATIVO"", Preencher_AtividadeIdAtual())|" & _
+        "ws.Range(""C16"").Value = aviso|ws.Range(""B40"").Value = Preencher_ObservacaoComAviso(AvOb)", _
+        "Pre-OS, OS e avaliacao impressas recebem aviso operacional do sistema", _
+        "Aviso informa status da empresa nesta data, disponibilidade e strikes no proprio formulario", _
+        "Facilita auditoria humana dos documentos impressos"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_09_CONTRATO_NOVO_PERIODO_PRESERVA_SUSPENSAO", repoRoot, _
+        "Configuracao_Inicial", "Configuracao_Inicial.frm", _
+        "Efetuando c|limpando a base de Pr|mantendo os demais cadastros|" & _
+        "Set wsPreOS = ThisWorkbook.Sheets(SHEET_PREOS)|Set wsCADOS = ThisWorkbook.Sheets(SHEET_CAD_OS)|" & _
+        "wsPreOS.Cells(1, COL_CONTADOR_AR).Value = 0|wsCADOS.Cells(1, COL_CONTADOR_AR).Value = 0", _
+        "Iniciar Novo Periodo limpa PRE_OS/CAD_OS e preserva cadastros", _
+        "Suspensoes permanecem porque EMPRESAS, CREDENCIADOS, CONFIG e AUDIT_LOG nao sao apagados", _
+        "Documenta a passagem de ano sem anistia operacional"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_10_CONTRATO_LIMPAR_BASE_REMOVE_SUSPENSAO", repoRoot, _
+        "Mod_Limpeza_Base", "Mod_Limpeza_Base.bas", _
+        "Public Function LimpaBaseTotalReset|MLB_LimparAba(""EMPRESAS""|MLB_LimparAba(""CREDENCIADOS""|" & _
+        "MLB_LimparAba(""PRE_OS""|MLB_LimparAba(""CAD_OS""|MLB_LimparAba(""AUDIT_LOG""|" & _
+        "PRESERVADO (nao tocado):|ATIVIDADES (CNAE)|CONFIG", _
+        "Limpar Base remove suspensoes ao apagar a base cadastral e operacional", _
+        "Reset total zera empresas, credenciamentos, PRE_OS, CAD_OS e audit log, preservando apenas CNAE e configuracao", _
+        "Documenta o uso correto para iniciar outro municipio"
+
+    TV2_FinalizarExecucao suite, silencioso
+    Exit Sub
+
+falha:
+    erroFatalNumero = Err.Number
+    erroFatalDescricao = Err.Description
+    TV2_LogAssert suite, "FATAL", "AUTO", _
+                  "Executar suite RelatoriosSuspensoesStrikesReset sem erro fatal", _
                   "Nenhum erro fatal", _
                   "Erro " & CStr(erroFatalNumero) & ": " & erroFatalDescricao, _
                   "Toda falha fatal precisa ficar rastreavel", False
@@ -1231,7 +2232,7 @@ Public Sub TV2_RunConfigSnapshotV2(Optional ByVal visual As Boolean = False, Opt
 
     TV2_EST_LogComponenteContemTokens suite, "CS_CFGSNAP_01_SNAPSHOT_A_N", repoRoot, _
         "Teste_V2_Engine", "Teste_V2_Engine.bas", _
-        "Private Const TV2_CONFIG_SNAPSHOT_COLS As Long = 14|Private gTV2ConfigSnapshot As Variant|Private gTV2ConfigSnapshotAtivo As Boolean", _
+        "Private Const TV2_CONFIG_SNAPSHOT_COLS As Long = 15|Private gTV2ConfigSnapshot As Variant|Private gTV2ConfigSnapshotAtivo As Boolean", _
         "Motor V2 declara snapshot completo da linha CONFIG A:N", _
         "Snapshot cobre 14 colunas de CONFIG conforme Const_Colunas", _
         "Protege parametros operacionais de CONFIG contra vazamento dos testes"
@@ -1492,7 +2493,7 @@ Public Sub TV2_RunFT4CredenciamentoLote(Optional ByVal visual As Boolean = False
     Dim okLote As Boolean
     Dim okSeq As Boolean
     Dim okReexec As Boolean
-    Dim frm As Credencia_Empresa
+    Dim frm As Object
     Dim erroFatalNumero As Long
     Dim erroFatalDescricao As String
 
@@ -1511,7 +2512,7 @@ Public Sub TV2_RunFT4CredenciamentoLote(Optional ByVal visual As Boolean = False
     If okPrep Then
         qtdAntes = TV2_CountRows(SHEET_CREDENCIADOS)
         Set frm = New Credencia_Empresa
-        okLote = frm.TV2_ExecutarCredenciamentoLote(empId, ativId, detalhesLote, totalServ, adicionados, ignorados, tempoSeg)
+        okLote = TV2_FT4_ExecutarCredenciamentoLoteCompat(frm, empId, ativId, detalhesLote, totalServ, adicionados, ignorados, tempoSeg)
         Unload frm
         Set frm = Nothing
         qtdDepois = TV2_CountRows(SHEET_CREDENCIADOS)
@@ -1553,7 +2554,7 @@ Public Sub TV2_RunFT4CredenciamentoLote(Optional ByVal visual As Boolean = False
 
     If okLote Then
         Set frm = New Credencia_Empresa
-        okReexec = frm.TV2_ExecutarCredenciamentoLote(empId, ativId, detalhesReexec, totalServReexec, adicionadosReexec, ignoradosReexec, tempoReexec)
+        okReexec = TV2_FT4_ExecutarCredenciamentoLoteCompat(frm, empId, ativId, detalhesReexec, totalServReexec, adicionadosReexec, ignoradosReexec, tempoReexec)
         Unload frm
         Set frm = Nothing
         qtdDepoisReexec = TV2_CountRows(SHEET_CREDENCIADOS)
@@ -1588,6 +2589,35 @@ falha:
     TV2_FinalizarExecucao suite, silencioso
 End Sub
 
+Private Function TV2_FT4_ExecutarCredenciamentoLoteCompat( _
+    ByVal frm As Object, _
+    ByVal empId As String, _
+    ByVal ativId As String, _
+    ByRef detalhes As String, _
+    ByRef totalServOut As Long, _
+    ByRef adicionadosOut As Long, _
+    ByRef ignoradosOut As Long, _
+    ByRef tempoSegOut As Double _
+) As Boolean
+    Dim ret As Variant
+
+    On Error GoTo falha
+
+    ret = CallByName(frm, "TV2_ExecutarCredenciamentoLote", VbMethod, _
+                     empId, ativId, detalhes, totalServOut, adicionadosOut, ignoradosOut, tempoSegOut)
+    TV2_FT4_ExecutarCredenciamentoLoteCompat = CBool(ret)
+    Exit Function
+
+falha:
+    detalhes = "Credencia_Empresa.TV2_ExecutarCredenciamentoLote indisponivel; Erro " & _
+               CStr(Err.Number) & ": " & Err.Description
+    totalServOut = 0
+    adicionadosOut = 0
+    ignoradosOut = 0
+    tempoSegOut = 0#
+    TV2_FT4_ExecutarCredenciamentoLoteCompat = False
+End Function
+
 Public Sub TV2_RunBL4ProtecaoPersistente(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
     Const suite As String = "BL4_PROTECAO_PERSISTENTE"
     Dim detalhesAuto As String
@@ -1610,8 +2640,8 @@ Public Sub TV2_RunBL4ProtecaoPersistente(Optional ByVal visual As Boolean = Fals
 
     TV2_InitExecucao suite, visual
 
-    dtAuto = AutoOpen_UltimaProtecaoMarcadorExecutadaEm()
-    okAutoOpen = AutoOpen_UltimaProtecaoMarcadorAposUltimoSave(detalhesAuto)
+    dtAuto = TV2_BL4_AutoOpenMarcadorExecutadaEmCompat()
+    okAutoOpen = TV2_BL4_AutoOpenMarcadorAposUltimoSaveCompat(detalhesAuto)
     TV2_LogAssert suite, "BL4_01_AUTO_OPEN_REAPLICOU_PROTECAO", "AUTO", _
                   "Auto_Open persistiu marcador auditavel da reaplicacao de protecao critica na abertura", _
                   "Marcador persistente de abertura existe, esta OK e nao e anterior ao ultimo save quando esse metadado estiver disponivel", _
@@ -1628,7 +2658,7 @@ Public Sub TV2_RunBL4ProtecaoPersistente(Optional ByVal visual As Boolean = Fals
                   "BL-4: impede workbook reaberto com base operacional editavel diretamente", _
                   okProtecao
 
-    okPersistencia = Util_VerificarProtecaoPersistenteAposAbertura(detalhesPersistencia)
+    okPersistencia = TV2_BL4_VerificarProtecaoPersistenteCompat(detalhesPersistencia)
     TV2_LogAssert suite, "BL4_03_UIONLY_REAPLICADO_APOS_REOPEN", "AUTO", _
                   "UserInterfaceOnly foi reaplicado apos reopen", _
                   "VBA consegue escrever o mesmo valor em celula bloqueada protegida, sem desproteger a aba", _
@@ -1637,7 +2667,7 @@ Public Sub TV2_RunBL4ProtecaoPersistente(Optional ByVal visual As Boolean = Fals
                   okPersistencia
 
     okReaplicar = Util_ProtegerAbasCriticasVerificado(detalhesReaplicar)
-    okPersistenciaPosReaplicar = Util_VerificarProtecaoPersistenteAposAbertura(detalhesPersistenciaPosReaplicar)
+    okPersistenciaPosReaplicar = TV2_BL4_VerificarProtecaoPersistenteCompat(detalhesPersistenciaPosReaplicar)
     TV2_LogAssert suite, "BL4_04_REAPLICACAO_IDEMPOTENTE", "AUTO", _
                   "Reaplicar protecao critica e idempotente", _
                   "Nova chamada de protecao mantem abas criticas verificaveis e com escrita VBA permitida", _
@@ -1666,6 +2696,55 @@ falha:
                   "Toda falha fatal precisa ficar rastreavel", False
     TV2_FinalizarExecucao suite, silencioso
 End Sub
+
+Private Function TV2_BL4_AutoOpenMarcadorExecutadaEmCompat() As Date
+    Dim ret As Variant
+
+    On Error GoTo falha
+
+    ret = Application.Run("AutoOpen_UltimaProtecaoMarcadorExecutadaEm")
+    If IsDate(ret) Then TV2_BL4_AutoOpenMarcadorExecutadaEmCompat = CDate(ret)
+    Exit Function
+
+falha:
+    TV2_BL4_AutoOpenMarcadorExecutadaEmCompat = 0
+End Function
+
+Private Function TV2_BL4_AutoOpenMarcadorAposUltimoSaveCompat(ByRef detalhes As String) As Boolean
+    Dim ret As Variant
+    Dim detalhesRun As String
+
+    On Error GoTo falha
+
+    detalhesRun = ""
+    ret = Application.Run("AutoOpen_UltimaProtecaoMarcadorAposUltimoSave", detalhesRun)
+    detalhes = CStr(detalhesRun)
+    TV2_BL4_AutoOpenMarcadorAposUltimoSaveCompat = CBool(ret)
+    Exit Function
+
+falha:
+    detalhes = "AutoOpen_UltimaProtecaoMarcadorAposUltimoSave indisponivel; Erro " & _
+               CStr(Err.Number) & ": " & Err.Description
+    TV2_BL4_AutoOpenMarcadorAposUltimoSaveCompat = False
+End Function
+
+Private Function TV2_BL4_VerificarProtecaoPersistenteCompat(ByRef detalhes As String) As Boolean
+    Dim ret As Variant
+    Dim detalhesRun As String
+
+    On Error GoTo falha
+
+    detalhesRun = ""
+    ret = Application.Run("Util_VerificarProtecaoPersistenteAposAbertura", detalhesRun)
+    detalhes = CStr(detalhesRun)
+    TV2_BL4_VerificarProtecaoPersistenteCompat = CBool(ret)
+    Exit Function
+
+falha:
+    detalhes = "Util_VerificarProtecaoPersistenteAposAbertura indisponivel; Erro " & _
+               CStr(Err.Number) & ": " & Err.Description
+    TV2_BL4_VerificarProtecaoPersistenteCompat = False
+End Function
 
 Public Sub TV2_RunFormulariosAvaliacaoDemandante(Optional ByVal visual As Boolean = False, Optional ByVal silencioso As Boolean = False)
     Const suite As String = "FORM_AVALIACAO_DEMANDANTE"
@@ -1705,7 +2784,7 @@ Public Sub TV2_RunFormulariosAvaliacaoDemandante(Optional ByVal visual As Boolea
     Dim resPayload As TResult
     Dim resAval As TResult
     Dim resInvalido As TResult
-    Dim frm As Menu_Principal
+    Dim frm As Object
     Dim auditDemandanteAntes As Long
     Dim auditDemandanteDepois As Long
     Dim erroFatalNumero As Long
@@ -1738,7 +2817,7 @@ Public Sub TV2_RunFormulariosAvaliacaoDemandante(Optional ByVal visual As Boolea
 
     If okBase Then
         Set frm = New Menu_Principal
-        okLista = frm.TV2_AvaliacaoDemandanteNaLista(osId, demandanteLista, detalhesLista)
+        okLista = TV2_FormAval_DemandanteNaListaCompat(frm, osId, demandanteLista, detalhesLista)
     Else
         detalhesLista = "Base nao preparada; lista nao verificada."
     End If
@@ -1778,7 +2857,7 @@ Public Sub TV2_RunFormulariosAvaliacaoDemandante(Optional ByVal visual As Boolea
 
     If okBase Then
         If frm Is Nothing Then Set frm = New Menu_Principal
-        okPrint = frm.TV2_AvaliacaoAplicarDemandanteImpressao(osId, demandantePrint, detalhesPrint)
+        okPrint = TV2_FormAval_AplicarDemandanteImpressaoCompat(frm, osId, demandantePrint, detalhesPrint)
     Else
         detalhesPrint = "Base nao preparada; impressao nao verificada."
     End If
@@ -1845,6 +2924,48 @@ falha:
                   "Toda falha fatal precisa ficar rastreavel", False
     TV2_FinalizarExecucao suite, silencioso
 End Sub
+
+Private Function TV2_FormAval_DemandanteNaListaCompat( _
+    ByVal frm As Object, _
+    ByVal osId As String, _
+    ByRef demandanteOut As String, _
+    ByRef detalhes As String _
+) As Boolean
+    Dim retorno As Variant
+
+    On Error GoTo falha
+
+    retorno = CallByName(frm, "TV2_AvaliacaoDemandanteNaLista", VbMethod, osId, demandanteOut, detalhes)
+    TV2_FormAval_DemandanteNaListaCompat = CBool(retorno)
+    Exit Function
+
+falha:
+    detalhes = "Menu_Principal.TV2_AvaliacaoDemandanteNaLista indisponivel; Erro " & _
+               CStr(Err.Number) & ": " & Err.Description
+    demandanteOut = ""
+    TV2_FormAval_DemandanteNaListaCompat = False
+End Function
+
+Private Function TV2_FormAval_AplicarDemandanteImpressaoCompat( _
+    ByVal frm As Object, _
+    ByVal osId As String, _
+    ByRef demandanteOut As String, _
+    ByRef detalhes As String _
+) As Boolean
+    Dim retorno As Variant
+
+    On Error GoTo falha
+
+    retorno = CallByName(frm, "TV2_AvaliacaoAplicarDemandanteImpressao", VbMethod, osId, demandanteOut, detalhes)
+    TV2_FormAval_AplicarDemandanteImpressaoCompat = CBool(retorno)
+    Exit Function
+
+falha:
+    detalhes = "Menu_Principal.TV2_AvaliacaoAplicarDemandanteImpressao indisponivel; Erro " & _
+               CStr(Err.Number) & ": " & Err.Description
+    demandanteOut = ""
+    TV2_FormAval_AplicarDemandanteImpressaoCompat = False
+End Function
 
 Private Function TV2_FormAval_PrepararOS(ByRef osIdOut As String, ByRef detalhes As String) As Boolean
     Dim resPre As TResult
@@ -1936,7 +3057,7 @@ Private Function TV2_BL4_PrepararRestaurarCritica(ByRef detalhes As String) As B
     alvo.Formula = formulaOriginal
     Call Util_RestaurarProtecaoAba(ws, estavaProtegida, senhaProtecao)
 
-    TV2_BL4_PrepararRestaurarCritica = Util_VerificarProtecaoPersistenteAposAbertura(detalhesPersistencia)
+    TV2_BL4_PrepararRestaurarCritica = TV2_BL4_VerificarProtecaoPersistenteCompat(detalhesPersistencia)
     detalhes = "ABA=" & SHEET_EMPRESAS & "; ESTAVA_PROTEGIDA=" & CStr(estavaProtegida) & _
                "; POS_RESTORE=" & detalhesPersistencia
     Exit Function
@@ -1960,13 +3081,105 @@ Private Function TV2_FormControleExiste(ByVal frm As Object, ByVal nomeControle 
     On Error GoTo 0
 End Function
 
+Private Function TV2_FormControleEditavel(ByVal frm As Object, ByVal nomeControle As String, ByRef detalhes As String) As Boolean
+    Dim ctl As Object
+    Dim enabledOk As Boolean
+    Dim unlockedOk As Boolean
+    Dim tabOk As Boolean
+
+    On Error GoTo falha
+
+    Set ctl = frm.Controls(nomeControle)
+    enabledOk = CBool(ctl.Enabled)
+    unlockedOk = Not CBool(ctl.Locked)
+    tabOk = CBool(ctl.TabStop)
+    detalhes = nomeControle & ": Enabled=" & CStr(enabledOk) & _
+               "; Locked=" & CStr(Not unlockedOk) & _
+               "; TabStop=" & CStr(tabOk)
+    TV2_FormControleEditavel = (enabledOk And unlockedOk And tabOk)
+    Exit Function
+
+falha:
+    detalhes = nomeControle & ": controle ausente ou sem propriedades de edicao; Erro " & _
+               CStr(Err.Number) & ": " & Err.Description
+    TV2_FormControleEditavel = False
+End Function
+
+Private Function TV2_FormControleLivreDeSobreposicao( _
+    ByVal frm As Object, _
+    ByVal nomeControle As String, _
+    ByRef detalhes As String, _
+    Optional ByVal termoLabel As String = "" _
+) As Boolean
+    Dim alvo As Object
+    Dim ctl As Object
+    Dim alvoLeft As Double
+    Dim alvoTop As Double
+    Dim alvoRight As Double
+    Dim alvoBottom As Double
+    Dim ctlLeft As Double
+    Dim ctlTop As Double
+    Dim ctlRight As Double
+    Dim ctlBottom As Double
+    Dim legenda As String
+    Dim termo As String
+    Dim avaliados As Long
+    Dim sobrepostos As Long
+    Dim detalhesSobrepostos As String
+
+    On Error GoTo falha
+
+    Set alvo = frm.Controls(nomeControle)
+    alvoLeft = CDbl(alvo.Left)
+    alvoTop = CDbl(alvo.Top)
+    alvoRight = alvoLeft + CDbl(alvo.Width)
+    alvoBottom = alvoTop + CDbl(alvo.Height)
+    termo = LCase$(Trim$(termoLabel))
+
+    For Each ctl In frm.Controls
+        If typeName(ctl) = "Label" Then
+            legenda = LCase$(Trim$(CStr(ctl.caption)))
+            If termo = "" Or InStr(legenda, termo) > 0 Then
+                ctlLeft = CDbl(ctl.Left)
+                ctlTop = CDbl(ctl.Top)
+                ctlRight = ctlLeft + CDbl(ctl.Width)
+                ctlBottom = ctlTop + CDbl(ctl.Height)
+                If TV2_IntervalosSobrepoem(alvoTop, alvoBottom, ctlTop, ctlBottom) Then
+                    avaliados = avaliados + 1
+                    If TV2_IntervalosSobrepoem(alvoLeft, alvoRight, ctlLeft, ctlRight) Then
+                        sobrepostos = sobrepostos + 1
+                        detalhesSobrepostos = detalhesSobrepostos & "[" & CStr(ctl.Name) & "=" & ctl.caption & "]"
+                    End If
+                End If
+            End If
+        End If
+    Next ctl
+
+    detalhes = nomeControle & ": LABELS_LINHA=" & CStr(avaliados) & _
+               "; SOBREPOSTOS=" & CStr(sobrepostos) & _
+               "; TERMO=" & termoLabel
+    If detalhesSobrepostos <> "" Then detalhes = detalhes & "; DETALHE=" & detalhesSobrepostos
+    TV2_FormControleLivreDeSobreposicao = (avaliados > 0 And sobrepostos = 0)
+    Exit Function
+
+falha:
+    detalhes = nomeControle & ": falha ao verificar sobreposicao; Erro " & _
+               CStr(Err.Number) & ": " & Err.Description
+    TV2_FormControleLivreDeSobreposicao = False
+End Function
+
+Private Function TV2_IntervalosSobrepoem(ByVal aInicio As Double, ByVal aFim As Double, ByVal bInicio As Double, ByVal bFim As Double) As Boolean
+    TV2_IntervalosSobrepoem = (aInicio < bFim And bInicio < aFim)
+End Function
+
 Private Sub TV2_RestaurarConfigPainel( _
     ByVal valorNota As Variant, _
     ByVal valorMax As Variant, _
     ByVal valorDias As Variant, _
     ByVal valorPrazo As Variant, _
     ByVal valorMaxRecusas As Variant, _
-    ByVal valorMeses As Variant _
+    ByVal valorMeses As Variant, _
+    ByVal valorDiasRecusa As Variant _
 )
     Dim wsCfg As Worksheet
     Dim estavaProtegida As Boolean
@@ -1982,6 +3195,7 @@ Private Sub TV2_RestaurarConfigPainel( _
         wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value = valorPrazo
         wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value = valorMaxRecusas
         wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MESES_SUSPENSAO).Value = valorMeses
+        wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value = valorDiasRecusa
         Call Util_RestaurarProtecaoAba(wsCfg, estavaProtegida, senhaProtecao)
     End If
     On Error GoTo 0
@@ -3351,7 +4565,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
                   ok22
 
     TV2_PrepararCenarioTriploCanonico
-    resSusp = Suspender("001")
+    resSusp = Suspender("001", 30, "MANUAL", "CS_11_MANUAL", Config_SnapshotPunicoesDias())
     resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
     empA = LerEmpresa("001", linhaEmpA)
     posA = TV2_PosicaoFila("001", TV2_AtivCanonA())
@@ -3368,7 +4582,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
     ok11 = ok11 And IdsIguais(TV2_EmpIdPreOS(resPre.IdGerado), "002")
     ok11 = ok11 And empA.STATUS_GLOBAL = "SUSPENSA_GLOBAL"
     ok11 = ok11 And posA = 1 And TV2_FilaCsv(TV2_AtivCanonA()) = "001,002,003"
-    ok11 = ok11 And empA.DT_FIM_SUSP > Date And auditSusp = 1
+    ok11 = ok11 And empA.DT_FIM_SUSP = DateAdd("d", 30, Date) And auditSusp = 1
     TV2_LogAssert "CANONICO", "CS_11", "AUTO", _
                   "Validar suspensão manual global de A", _
                   "A suspensa; B escolhida; posição 1 preservada", _
@@ -3377,7 +4591,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
                   ok11
 
     TV2_PrepararCenarioTriploCanonico
-    resSusp = Suspender("001")
+    resSusp = Suspender("001", 30, "MANUAL", "CS_13_MANUAL_REATIVACAO", Config_SnapshotPunicoesDias())
     empA = LerEmpresa("001", linhaEmpA)
     GravarStatusEmpresa linhaEmpA, "SUSPENSA_GLOBAL", Date - 1, empA.QTD_RECUSAS
     resPre = EmitirPreOS("001", TV2_CodServicoA(), 1)
@@ -3423,7 +4637,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
     ok14 = resAval.sucesso And TV2_StatusOS(osIdB) = "CONCLUIDA"
     ok14 = ok14 And resPre.sucesso And IdsIguais(TV2_EmpIdPreOS(resPre.IdGerado), "003")
     ok14 = ok14 And empB.STATUS_GLOBAL = "SUSPENSA_GLOBAL"
-    ok14 = ok14 And empB.DT_FIM_SUSP > Date
+    ok14 = ok14 And empB.DT_FIM_SUSP = DateAdd("d", 30, Date)
     ok14 = ok14 And TV2_FilaCsv(TV2_AtivCanonA()) = "003,001,002"
     ok14 = ok14 And (auditSuspDepois - auditSuspAntes) = 1
     TV2_LogAssert "CANONICO", "CS_14", "AUTO", _
@@ -3819,7 +5033,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
 
     TV2_LimparNamespace "SBM2"
     TV2_FixtureFactory "SBM2", 1, 3, 1, entsBM2, empsBM2, ativsBM2
-    TV2_RestaurarConfigBaseline 2, 0  ' MAX_STRIKES=2 (set; nome semantico, mesmo backend que restore)
+    TV2_RestaurarConfigBaseline 2, 30  ' MAX_STRIKES=2 (set; nome semantico, mesmo backend que restore)
 
     notasBM2(1) = TV2_E2E_NOTA_BAIXA  ' EMP1 (SBM2_001)
     notasBM2(2) = TV2_E2E_NOTA_ALTA   ' EMP2
@@ -3853,7 +5067,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
                   okBM2
 
     ' Restore + cleanup do escopo (L16 - nao vazar para proximo cenario).
-    TV2_RestaurarConfigBaseline 1, 0
+    TV2_RestaurarConfigBaseline 1, 30
     TV2_LimparNamespace "SBM2"
 
     ' --- CS_BORDA_MAX5 (Onda 17 MD-17.1.b) -----------------------------
@@ -3872,7 +5086,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
 
     TV2_LimparNamespace "SBM5"
     TV2_FixtureFactory "SBM5", 1, 3, 1, entsBM5, empsBM5, ativsBM5
-    TV2_RestaurarConfigBaseline 5, 0  ' MAX_STRIKES=5
+    TV2_RestaurarConfigBaseline 5, 30  ' MAX_STRIKES=5
 
     notasBM5(1) = TV2_E2E_NOTA_BAIXA
     notasBM5(2) = TV2_E2E_NOTA_ALTA
@@ -3905,7 +5119,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
                   "Valida escala da regra de strikes em borda alta (cardinalidade maior)", _
                   okBM5
 
-    TV2_RestaurarConfigBaseline 1, 0
+    TV2_RestaurarConfigBaseline 1, 30
     TV2_LimparNamespace "SBM5"
 
     ' --- CS_NOTA_ZERO (Onda 17 MD-17.1.b) ------------------------------
@@ -3923,7 +5137,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
 
     TV2_LimparNamespace "SNZE"
     TV2_FixtureFactory "SNZE", 1, 3, 1, entsNZE, empsNZE, ativsNZE
-    TV2_RestaurarConfigBaseline 1, 0  ' MAX_STRIKES=1 (legado), DIAS=0
+    TV2_RestaurarConfigBaseline 1, 30  ' MAX_STRIKES=1 (legado), DIAS=30
 
     notasNZE(1) = 0  ' EMP1: nota ZERO (caso de borda L12)
     notasNZE(2) = TV2_E2E_NOTA_ALTA
@@ -3950,7 +5164,7 @@ Public Sub TV2_RunCanonicoFundacao(Optional ByVal visual As Boolean = False, Opt
                   okNZE
 
     ' Restore (mantem MAX=1 que ja eh baseline) + cleanup.
-    TV2_RestaurarConfigBaseline 1, 0
+    TV2_RestaurarConfigBaseline 1, 30
     TV2_LimparNamespace "SNZE"
 
     TV2_FinalizarExecucao "CANONICO", silencioso
@@ -4312,11 +5526,12 @@ Public Sub TV2_RunRodizioStrikesEndToEnd(Optional ByVal visual As Boolean = Fals
     Next i
     emp = LerEmpresa("001", linhaEmp)
     TV2_LogAssert "STRIKES_E2E", "CS_E2E_C_FINAL_SUSP", "AUTO", _
-        "Apos 3 strikes, EMP1 deve estar SUSPENSA com DT_FIM_SUSP futuro", _
-        "STATUS=SUSPENSA_GLOBAL; DT_FIM>hoje", _
-        "STATUS=" & emp.STATUS_GLOBAL & "; DT_FIM=" & Format$(emp.DT_FIM_SUSP, "DD/MM/YYYY"), _
-        "Confirma que MAX_STRIKES dispara suspensao na 3a vez (regra Onda 1)", _
-        emp.STATUS_GLOBAL = "SUSPENSA_GLOBAL" And emp.DT_FIM_SUSP > Date
+        "Apos 3 strikes, EMP1 deve estar SUSPENSA com DT_FIM_SUSP exato", _
+        "STATUS=SUSPENSA_GLOBAL; DT_FIM=hoje+DIAS_STRIKE", _
+        "STATUS=" & emp.STATUS_GLOBAL & "; DT_FIM=" & Format$(emp.DT_FIM_SUSP, "DD/MM/YYYY") & _
+        "; DIAS=" & CStr(GetDiasSuspensaoStrike()), _
+        "Confirma que MAX_STRIKES dispara suspensao em dias na 3a vez", _
+        emp.STATUS_GLOBAL = "SUSPENSA_GLOBAL" And emp.DT_FIM_SUSP = DateAdd("d", GetDiasSuspensaoStrike(), Date)
 
     ' ========= ETAPA D: 1 volta sem EMP1 =========
     TV2_E2E_RodadaCompleta TV2_E2E_NOTA_ALTA, TV2_E2E_NOTA_ALTA, TV2_E2E_NOTA_ALTA
@@ -4589,7 +5804,7 @@ Public Sub TV2_RunRodizioStrikesEndToEnd(Optional ByVal visual As Boolean = Fals
                   "Garante que a janela nova nao anistia strikes posteriores a DT_ULT_REATIV", _
                   strikesR2S_punicao3 >= 3 And statusR2S_pos_3novas = "SUSPENSA_GLOBAL"
 
-    TV2_RestaurarConfigBaseline 1, 0
+    TV2_RestaurarConfigBaseline 1, 30
     TV2_LimparNamespace "SR2S"
 
     ' --- CS_REATIV_LEGADO_VAZIO (Onda 18 MD-18.1b) ---------------------
@@ -4618,7 +5833,7 @@ Public Sub TV2_RunRodizioStrikesEndToEnd(Optional ByVal visual As Boolean = Fals
                   "Cobre migracao: empresas antigas com U vazia seguem comportamento historico ate primeira reativacao", _
                   empLEG.DT_ULT_REATIV = CDate(0) And totalLEG = 1 And punicaoLEG = 1
 
-    TV2_RestaurarConfigBaseline 1, 0
+    TV2_RestaurarConfigBaseline 1, 30
     TV2_LimparNamespace "SLEG"
 
     ' --- CS_REATIV_BORDA_TEMPORAL (Onda 22 MD-22.4) --------------------
@@ -4694,7 +5909,7 @@ Public Sub TV2_RunRodizioStrikesEndToEnd(Optional ByVal visual As Boolean = Fals
                   "Cobre bases com data futura acidental sem cair em historico antigo", _
                   resBT.sucesso And qtdBT = 0
 
-    TV2_RestaurarConfigBaseline 1, 0
+    TV2_RestaurarConfigBaseline 1, 30
     TV2_E2E_LimparCadOsPrefixo "SBTM_"
     TV2_LimparNamespace "SBTM"
 
@@ -4749,7 +5964,7 @@ Public Sub TV2_RunRodizioStrikesEndToEnd(Optional ByVal visual As Boolean = Fals
                   "Valida idempotencia + cardinalidade maior + rodizio frente a suspensao no meio do ciclo. Combinacao critica nao coberta por CS_E2E_* originais (operam com 3 EMPs).", _
                   ok5E
 
-    TV2_RestaurarConfigBaseline 1, 0
+    TV2_RestaurarConfigBaseline 1, 30
     TV2_LimparNamespace "S5E"
 
     ' V12.0.0203 ONDA 11 / MD-2.3 - restaurar CONFIG baseline antes
@@ -4757,7 +5972,7 @@ Public Sub TV2_RunRodizioStrikesEndToEnd(Optional ByVal visual As Boolean = Fals
     ' V12.0.0203 ONDA 17 MD-17.1.a - agora chama o helper generalizado
     ' TV2_RestaurarConfigBaseline (Engine), parametrizado com defaults
     ' que reproduzem o comportamento legado (1, 0).
-    TV2_RestaurarConfigBaseline 1, 0
+    TV2_RestaurarConfigBaseline 1, 30
     TV2_FinalizarExecucao "STRIKES_E2E", silencioso
     Exit Sub
 
@@ -4770,7 +5985,7 @@ falha:
     ' MD-2.3 - mesmo em erro, restaurar baseline para nao contaminar
     ' suite seguinte rodada pelo operador.
     ' Onda 17 MD-17.1.a: helper unificado em Engine.
-    TV2_RestaurarConfigBaseline 1, 0
+    TV2_RestaurarConfigBaseline 1, 30
     TV2_FinalizarExecucao "STRIKES_E2E", silencioso
 End Sub
 

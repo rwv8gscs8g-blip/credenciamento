@@ -20,6 +20,7 @@ Private Const ABA_RPT_ROTEIRO As String = "RPT_ROTEIRO"
 Private Const ABA_RPT_BATERIA As String = "RPT_BATERIA"
 Private Const ABA_RPT_CK136 As String = "RPT_CK136"
 Private Const ABA_RPT_CONSOLIDADO As String = "RPT_CONSOLIDADO"
+Private Const ABA_RPT_RODIZIO_STATUS As String = "RPT_RODIZIO_STATUS"
 Private Const ABA_ROTEIRO As String = "ROTEIRO_RAPIDO"
 Private Const ABA_TESTE_OFICIAL As String = "RESULTADO_QA"
 Private Const ABA_CK136 As String = "CHECKLIST_136"
@@ -806,6 +807,54 @@ Public Sub CTR_GerarRelatorioConsolidado()
         End If
     End If
     
+    ' === Secao 5: Status do Rodizio ===
+    wsRpt.Range("A" & r & ":F" & r).Merge
+    wsRpt.Cells(r, 1).Value = "5. STATUS DO RODIZIO POR SERVICO"
+    wsRpt.Cells(r, 1).Font.Bold = True
+    wsRpt.Cells(r, 1).Font.Size = 12
+    wsRpt.Cells(r, 1).Interior.Color = RGB(217, 225, 242)
+    r = r + 1
+
+    Dim resRodStatus As TResult
+    Dim wsRod As Worksheet
+    Dim ultRod As Long
+    Dim rr As Long
+    Dim totalServRod As Long
+    Dim totalSemAptaRod As Long
+    Dim totalSuspRod As Long
+
+    resRodStatus = RRS_GerarRelatorioStatusPorServico(False)
+    On Error Resume Next
+    Set wsRod = ThisWorkbook.Sheets(ABA_RPT_RODIZIO_STATUS)
+    On Error GoTo falha
+
+    If wsRod Is Nothing Or Not resRodStatus.sucesso Then
+        wsRpt.Cells(r, 1).Value = "Relatorio de status do rodizio nao gerado."
+        wsRpt.Cells(r, 2).Value = resRodStatus.mensagem
+        wsRpt.Cells(r, 1).Font.Italic = True
+        r = r + 2
+    Else
+        ultRod = wsRod.Cells(wsRod.Rows.count, 1).End(xlUp).row
+        For rr = 2 To ultRod
+            totalServRod = totalServRod + 1
+            totalSuspRod = totalSuspRod + CLng(Val(wsRod.Cells(rr, 6).Value))
+            If UCase$(Trim$(CStr(wsRod.Cells(rr, 12).Value))) = "SEM_EMPRESA_APTA" Then
+                totalSemAptaRod = totalSemAptaRod + 1
+            End If
+        Next rr
+
+        wsRpt.Cells(r, 1).Value = "SERVICOS:"
+        wsRpt.Cells(r, 2).Value = totalServRod
+        wsRpt.Cells(r + 1, 1).Value = "SEM_EMPRESA_APTA:"
+        wsRpt.Cells(r + 1, 2).Value = totalSemAptaRod
+        wsRpt.Cells(r + 2, 1).Value = "EMPRESAS_SUSPENSAS:"
+        wsRpt.Cells(r + 2, 2).Value = totalSuspRod
+        wsRpt.Cells(r + 3, 1).Value = "ABA_DETALHE:"
+        wsRpt.Cells(r + 3, 2).Value = ABA_RPT_RODIZIO_STATUS
+        CTR_ColorirResumo wsRpt, r, totalSemAptaRod, 0
+        r = r + 5
+    End If
+
     ' Veredicto final
     wsRpt.Range("A" & r & ":F" & r).Merge
     Dim veredicto As String

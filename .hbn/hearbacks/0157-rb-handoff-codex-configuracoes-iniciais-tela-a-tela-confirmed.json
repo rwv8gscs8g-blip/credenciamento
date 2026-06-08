@@ -1,0 +1,14 @@
+{
+  "hearback_id": "0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela-confirmed",
+  "readback_id": "0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela",
+  "status": "confirmed",
+  "confirmed_by": "Mauricio",
+  "confirmed_at": "2026-06-06T23:25:00-03:00",
+  "source": "Mensagem do operador: campo aceita clique, edicao e salvamento; etapa fechada; preparar handoff para novo chat Codex e identificar melhorias USEHBN antes da retomada.",
+  "conditions": [
+    "Considerar a etapa 0156 fechada.",
+    "Preparar handoff para continuar em outro chat Codex.",
+    "Continuar a validacao tela a tela em Configuracoes Iniciais, incluindo botoes, menus e submenus.",
+    "Identificar pontos de melhoria do protocolo USEHBN para evolucao manual antes da proxima janela."
+  ]
+}

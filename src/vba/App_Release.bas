@@ -261,9 +261,15 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0205|OFICIAL|V12.0.0206"
 ' V12.0.0206 ONDA 38.2.24 - Impressao residual quant/borda code-only:
 ' Quant. usa formato inteiro; A25:A45 recebe borda externa esquerda media.
 ' V12.0.0206 ONDA 38.2.25 - RVS inclui TV2_RunImpressaoResidual.
-Public Const APP_BUILD_IMPORTADO As String = "e157221+ONDA38.2.25-RVS-IMP-RES"
+' V12.0.0206 ONDA 38.2.26 - punicoes padronizadas em dias, UI, relatorios e RVS.
+' V12.0.0206 ONDA 38.2.27 - Configuracoes Iniciais tela a tela, Ajuda HBN e VCR.
+' V12.0.0206 ONDA 38.2.27-fix1 - layout do campo dias recusa/prazo corrigido no designer.
+' V12.0.0206 ONDA 38.2.29 FIX1 - Tela Inicial/Menu_Principal com V2 dirigido.
+' V12.0.0206 ONDA 38.2.31 - Relatorios tela a tela com status e formatacao.
+' V12.0.0206 ONDA 38.2.32-fix1 - teste RELSSR_08 valida fiacao; texto do aviso fica em Rel_Rodizio_Status.
+Public Const APP_BUILD_IMPORTADO As String = "293e44c+ONDA38.2.33-DISPONIBILIDADE-RELATORIOS"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0206-planejamento"
-Public Const APP_BUILD_GERADO_EM As String = "2026-06-06 11:24"
+Public Const APP_BUILD_GERADO_EM As String = "2026-06-08 13:23"
 Public Const APP_RELEASE_TAG As String = "v12.0.0205"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0205"
 Public Const APP_RELEASE_TEST_KEY As String = "rvs-v205-final-2026-05-21"

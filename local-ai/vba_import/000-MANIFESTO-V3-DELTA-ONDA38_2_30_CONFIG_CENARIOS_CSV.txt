@@ -1,0 +1,55 @@
+# Manifesto V3 DELTA ONDA38_2_30_CONFIG_CENARIOS_CSV - V12.0.0206 Onda 38.2.30 / Readback 0160
+# Tema: Configuracoes Iniciais; matriz de persistencia, consumo por regras e Novo Periodo com CSV.
+#
+# Contexto:
+#   - A 0158 validou botoes/menus de Configuracoes Iniciais.
+#   - A 0159 Fix1 validou Tela Inicial/Menu Principal por TV2 dirigido.
+#   - A 0160 amplia a persistencia da tela para matriz 1/2 e cria prototipo
+#     destrutivo controlado de testador de cenarios.
+#   - O hearback humano autorizou destruir dados do teste para preparar
+#     cenarios deterministicos e idempotentes, desde que a suite avise,
+#     salve copia da planilha e grave CSV na pasta do Novo Periodo.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_30_CONFIG_CENARIOS_CSV", "293e44c+ONDA38.2.30-CONFIG-CENARIOS-CSV"
+#
+# Pos-import esperado:
+#   - Importador V3: M=3 | F=1 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunConfigCenariosNovoPeriodo
+#   - Esperado: OK=7 | FALHA=0 | MANUAL=0.
+#   - A suite cria/usa a pasta V12-0-0206-Onda-38-2-30 no caminho do workbook.
+#   - Dentro da pasta devem existir:
+#       1. uma copia da planilha salva antes da limpeza;
+#       2. TesteV2_CONFIG_CENARIOS_<execucao>.csv com matriz, fila, regras e paths.
+#
+# Guardas:
+#   - Destrutivo autorizado apenas para esta suite e base de homologacao.
+#   - Sem PDF nesta onda; evidencia em CSV.
+#   - Sem .frx neste manifesto.
+#   - Sem Menu_Principal.frm, sem Auto_Open, sem ThisWorkbook.
+#   - Sem Mod_Types, sem Importador_V3.
+#   - Sem VCR neste microdelta.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24086
+#     sha256=86f3804b246cb123e0015929793c168b2e79572aa81bad2a7d44d6c7f30c0658
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=218086
+#     sha256=b86d5acc1c951b181c2502764458287907ffcf72f8b8c6dbd3642a29c458e8ff
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=344204
+#     sha256=2cb1c943323a38082bd3ac91a63e5e5278e6d74a5695e35cc143857807929e86
+#   F|002-formularios/AAC-Configuracao_Inicial.frm
+#     bytes=31071
+#     sha256=b4a8a8b4693ae9f6e8a484adf5326e6757b7f4d355bb85608590c1c5ec5607b2
+#   CODE_ONLY|002-formularios/AAC-Configuracao_Inicial.code-only.txt
+#     bytes=30545
+#     sha256=54ac45beec1a73781020944e20c7d8928eddeb7638cc742970a2eefcf4132c46
+#
+# GRUPO_ONDA38_2_30_CONFIG_CENARIOS_CSV
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+F|002-formularios/AAC-Configuracao_Inicial.frm

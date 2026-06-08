@@ -1,0 +1,7 @@
+{
+  "readback_id": "0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao",
+  "status": "confirmed",
+  "confirmed_by": "Mauricio",
+  "confirmed_at": "2026-06-08T07:51:00-03:00",
+  "summary": "Aprovado implementar a revisao tela a tela dos relatorios com status de suspensao/reativacao, nome do servico no relatorio por servico, formatacao padrao e teste V2 dirigido, sem VCR neste microdelta."
+}

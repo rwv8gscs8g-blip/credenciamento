@@ -1,0 +1,156 @@
+{
+  "result_id": "0160-exec-onda-38-2-30-config-cenarios-persistencia-csv",
+  "execution_id": "0160-exec-onda-38-2-30-config-cenarios-persistencia-csv",
+  "readback_id": "0160-rb-onda-38-2-30-config-cenarios-persistencia-csv",
+  "data": "2026-06-07",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "config_cenarios_novo_periodo_csv_package_ready",
+  "human_status": "import_compile_tv2_pending",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "293e44c",
+  "build_label": "293e44c+ONDA38.2.30-CONFIG-CENARIOS-CSV",
+  "action": "Adicionar suite destrutiva controlada para Configuracoes Iniciais, persistencia matricial, consumo por regras, Novo Periodo com copia da planilha e CSV de evidencia.",
+  "summary": "A 0160 implementa TV2_RunConfigCenariosNovoPeriodo como mapa de testes destrutivo autorizado pelo hearback humano. A suite valida controles, round-trip de gestor, municipio, prazo de Pre-OS, recusas, dias por recusa/prazo, nota de corte, strikes e dias por strike com valores 1 e 2; prova consumo por recusa e por strike; exibe aviso destrutivo quando nao esta em modo silencioso; cria a pasta V12-0-0206-Onda-38-2-30; salva copia da planilha antes da limpeza; limpa PRE_OS/CAD_OS para Novo Periodo deterministico; e grava TesteV2_CONFIG_CENARIOS_<execucao>.csv para validacao humana. O pacote V3 esta pronto, mas importacao, compilacao e execucao TV2 dependem do operador no Excel.",
+  "classification": {
+    "defect_type": "persistencia_regra_negocio_teste_dirigido",
+    "design_change_required": false,
+    "production_form_change_required": false,
+    "rationale": "A lacuna era de cobertura de persistencia/consumo e de evidencia de Novo Periodo, nao de geometria, sobreposicao ou alinhamento do UserForm."
+  },
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 pelo comando do manifesto 0160.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunConfigCenariosNovoPeriodo pela Janela Imediata.",
+      "Esperar OK=7 | FALHA=0 | MANUAL=0.",
+      "Conferir que a pasta V12-0-0206-Onda-38-2-30 contem copia da planilha e TesteV2_CONFIG_CENARIOS_<execucao>.csv.",
+      "Nao executar VCR neste microdelta.",
+      "Nao executar em base de producao."
+    ],
+    "status": "pending"
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_30_CONFIG_CENARIOS_CSV\", \"293e44c+ONDA38.2.30-CONFIG-CENARIOS-CSV\"",
+    "import_result": "M=3 | F=1 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunConfigCenariosNovoPeriodo",
+    "tv2_directed_result": "OK=7 | FALHA=0 | MANUAL=0",
+    "folder_expected": "\\\\Mac\\Home\\Projetos\\Credenciamento\\V12-0-0206-Onda-38-2-30",
+    "csv_expected": "TesteV2_CONFIG_CENARIOS_<execucao>.csv"
+  },
+  "destructive_scope": {
+    "authorized": true,
+    "reason": "Mauricio confirmou que, por ser mapa de testes, a suite pode destruir dados para criar cenarios deterministicos e idempotentes.",
+    "warning": "Executar somente em homologacao; a suite salva copia da planilha antes de limpar PRE_OS e CAD_OS.",
+    "tables_cleaned_by_new_period": [
+      "PRE_OS",
+      "CAD_OS"
+    ],
+    "restoration": "A suite V2 captura baseline tecnico antes dos cenarios; o Novo Periodo intencionalmente deixa PRE_OS/CAD_OS vazias apos salvar copia."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV.txt",
+    "manifest_bytes": 2543,
+    "manifest_sha256": "d05a57583a378b8b25e76ca8b50edf757495fbde2cc9bd94c6d18bbc01999c58",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_30_CONFIG_CENARIOS_CSV\", \"293e44c+ONDA38.2.30-CONFIG-CENARIOS-CSV\"",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24086,
+        "sha256": "86f3804b246cb123e0015929793c168b2e79572aa81bad2a7d44d6c7f30c0658"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 218086,
+        "sha256": "b86d5acc1c951b181c2502764458287907ffcf72f8b8c6dbd3642a29c458e8ff"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 344204,
+        "sha256": "2cb1c943323a38082bd3ac91a63e5e5278e6d74a5695e35cc143857807929e86"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+        "bytes": 31071,
+        "sha256": "b4a8a8b4693ae9f6e8a484adf5326e6757b7f4d355bb85608590c1c5ec5607b2"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+        "bytes": 30545,
+        "sha256": "54ac45beec1a73781020944e20c7d8928eddeb7638cc742970a2eefcf4132c46"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0160-rb-onda-38-2-30-config-cenarios-persistencia-csv.json",
+    ".hbn/hearbacks/0160-rb-onda-38-2-30-config-cenarios-persistencia-csv-confirmed.json",
+    ".hbn/hearbacks/0160-rb-onda-38-2-30-config-cenarios-persistencia-csv-confirmed.md",
+    ".hbn/results/0160-exec-onda-38-2-30-config-cenarios-persistencia-csv.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_PROCEDIMENTO_IMPORT.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "src/vba/Configuracao_Inicial.frm",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; git worktree list aponta a branch codex/v12-0-0206-planejamento na raiz canonica."
+    },
+    {
+      "gate": "Readback 0160",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0160-rb-onda-38-2-30-config-cenarios-persistencia-csv.json retornou OK."
+    },
+    {
+      "gate": "Hearback 0160",
+      "status": "pass_local_json",
+      "evidence": "python3 -m json.tool validou o hearback 0160."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only Configuracao_Inicial.frm --only Teste_V2_Roteiros.bas --only Teste_V2_Engine.bas --only App_Release.bas retornou in_sync."
+    },
+    {
+      "gate": "EOL e whitespace",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/report-vba-eol-whitespace.sh retornou OK; git diff --check sem saida."
+    },
+    {
+      "gate": "Import/compile/TV2 humano",
+      "status": "pending_human",
+      "evidence": "Aguardando operador importar, compilar e executar TV2_RunConfigCenariosNovoPeriodo no workbook."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunConfigCenariosNovoPeriodo no workbook",
+    "Verificacao visual/manual da pasta V12-0-0206-Onda-38-2-30 e do CSV"
+  ],
+  "rollback_plan": [
+    "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+    "Se compile falhar, nao salvar o workbook e restaurar o backup V3 gerado antes do import.",
+    "Se TV2_RunConfigCenariosNovoPeriodo falhar, anexar CSV de falhas e nao executar VCR.",
+    "Se a pasta, copia ou CSV nao aparecer, abrir fix novo e nao repetir em base de producao."
+  ],
+  "updated_at": "2026-06-07T10:58:01-03:00"
+}

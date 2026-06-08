@@ -1,0 +1,74 @@
+# Manifesto V3 DELTA ONDA38_2_32_RELATORIOS_SUSPENSOES_STRIKES_RESET - V12.0.0206 Onda 38.2.32 / Readback 0163
+# Tema: Relatorios com suspensoes normalizadas, strikes visiveis e contrato documentado de Novo Periodo/Limpar Base.
+#
+# Contexto:
+#   - Onda 38.2.31 fechou a revisao tela a tela de relatorios com OK=10.
+#   - Operador validou manualmente que Novo Periodo preserva suspensoes e Limpar Base remove suspensoes ao zerar a base.
+#   - PDFs 054-061 mostraram divergencia entre relatorios e linha fantasma N.O.S. 0 em OS abertas.
+#   - Relatorios devem mostrar status operacional sempre que exibirem dados de empresa.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_32_RELATORIOS_SUSPENSOES_STRIKES_RESET", "293e44c+ONDA38.2.32-REL-SUSP-STRIKES-RESET"
+#
+# Pos-import esperado:
+#   - Importador V3: M=5 | F=3 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunRelatoriosSuspensoesStrikesReset
+#   - Esperado: OK=10 | FALHA=0 | MANUAL=0.
+#   - Suite de regressao preservada: TV2_RunTelaRelatorios deve continuar OK=10.
+#   - Sem VCR neste microdelta; VCR fica reservado para checkpoint forte.
+#
+# Guardas:
+#   - Sem .frx neste manifesto.
+#   - Sem Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.
+#   - Sem restaurar/importar 0155.
+#   - Fluxos destrutivos continuam documentados; a suite nova e estrutural por tokens.
+#
+# Contrato operacional documentado:
+#   - Iniciar Novo Periodo cria pasta/copia, limpa PRE_OS e CAD_OS, zera AR dessas abas e preserva cadastros/configuracao/auditoria. Suspensoes permanecem.
+#   - Limpar Base e reset total para novo municipio: apaga EMPRESAS, CREDENCIADOS, PRE_OS, CAD_OS e AUDIT_LOG. Suspensoes desaparecem porque a base cadastral e auditavel foi zerada.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24166
+#     sha256=3de67b2072aa309a6aeadbf5f659ef2e0541d8f9ce649ff06c0ec904e0c2e3ca
+#   M|001-modulo/AAU-Preencher.bas
+#     bytes=155922
+#     sha256=fe57ff93717eba43566151ca2b04aaba6771dc58278630ecd40b48a36580ef33
+#   M|001-modulo/ABV-Rel_Rodizio_Status.bas
+#     bytes=19674
+#     sha256=79f7aa020546ebf3b8e19792799b10250ac771b832767a1876e8214fae7e8778
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=232529
+#     sha256=21d78cab88473816d96c95388d50e03046ddcc6c03b8d5f0b6fd4db85041f3de
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=359143
+#     sha256=4ee85ab084938b981079bedf6b15c497240932899338e0d269d853b2bce5cd92
+#   F|002-formularios/AAM-Menu_Principal.frm
+#     bytes=155490
+#     sha256=6b0993f5d902e69857d9a4fbd7e4bd0696e085a45c78ff4aba5350dd8eb56411
+#   CODE_ONLY|002-formularios/AAM-Menu_Principal.code-only.txt
+#     bytes=155027
+#     sha256=571b84e4a9f5f39e93941fdbf7b79bd892c46a9cd3a6736217bdf32f6f7d48a3
+#   F|002-formularios/AAK-Rel_Emp_Serv.frm
+#     bytes=9806
+#     sha256=23ed1e005eebfa19f510257ca2cfd54ba369ea92c081b05c4bad39620c42f7c9
+#   CODE_ONLY|002-formularios/AAK-Rel_Emp_Serv.code-only.txt
+#     bytes=9280
+#     sha256=c957b3156e8693a20217e7ff466e290f98efc99baa20d14ff18cd06fa286e419
+#   F|002-formularios/AAL-Rel_OSEmpresa.frm
+#     bytes=14253
+#     sha256=a875e78142a0e2caf83b4ed1ba856cdf23a2f803af1832698284ff225349932a
+#   CODE_ONLY|002-formularios/AAL-Rel_OSEmpresa.code-only.txt
+#     bytes=13746
+#     sha256=5c6f3782048e7d13f6e73d30e43bb94555dd3afde42ebf84d4d2f6502f2e6310
+#
+# GRUPO_ONDA38_2_32_RELATORIOS_SUSPENSOES_STRIKES_RESET
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/ABV-Rel_Rodizio_Status.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+F|002-formularios/AAM-Menu_Principal.frm
+F|002-formularios/AAK-Rel_Emp_Serv.frm
+F|002-formularios/AAL-Rel_OSEmpresa.frm

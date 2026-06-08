@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0153-rb-onda-38-2-26-punicoes-em-dias-confirmed",
+  "readback_id": "0153-rb-onda-38-2-26-punicoes-em-dias",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-06T17:37:12-03:00",
+  "notes": "Mauricio confirmou em chat: aprovado, pode seguir 0153. Confirmado tambem o pedido adicional incorporado ao readback: os relatorios devem informar claramente empresas suspensas, dias restantes, data de retorno e quais itens/servicos possuem empresas ativas/aptas ou suspensas. Implementacao deve permanecer independente, transparente, sem fallback em meses, sem tocar Mod_Types.bas e com testes/RVS cobrindo regra e relatorios."
+}

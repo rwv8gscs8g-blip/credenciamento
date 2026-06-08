@@ -1,12 +1,273 @@
 ---
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.6 (§12 Cadencia D Estendida + §12.B por papel + firewall 0022 + CI ratchet 0116)
-proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b`, sincronizou HBN em `d2d7ac5`, entregou Performance/UX basica em `e157221`, consolidou a auditoria cruzada documental 38.2.13, entregou a Onda 38.2.14 behavioralizacao C1, validou a Onda 38.2.15 FT-4 em 2026-06-01, validou 38.2.16 BL-4 via fix1 0133, 0137 fix1, 0139 fix1, 0140 e 0141. Antigravity executou a auditoria cruzada de impressao 0142 apontando 2 BLOQUEADORES nos PDFs; Codex implementou 0143, validou 0144 fix1 test-only por import/compile/`TV2_20260606_104057`, validou 0151 GATE 2 Quant./borda por import/compile/`TV2_20260606_111039` e preparou 0152 para incluir impressao residual no RVS oficial. Linha arquiteto 0114-0117/0149 consolidou firewall, CI ratchet e handoff do Codex; Codex concluiu GATE 0 pelo readback 0150.
-ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE/VALIDADA: 38.2.4 Integridade de Estado -> 38.2.5 UI regras de negocio -> 38.2.6 Integridade de impressao -> 38.2.7 Leitura/exibicao -> 38.2.8 CONFIG baseline seguro -> 38.2.9 snapshot CONFIG V2 -> 38.2.10 higiene/commit -> 38.2.11 sincronizacao HBN pos-commit -> 38.2.12 Performance/UX basica validada por import/compile/TV2 -> 38.2.13 auditoria cruzada consolidada doc-only -> 38.2.14 behavioralizacao C1 validada por import/compile/TV2 -> 38.2.15 FT-4 validada por import/compile/TV2 -> 38.2.16 BL-4 validada via fix1 0133 -> 38.2.18-fix1 validada por VR_20260602_112011 -> 38.2.19-fix1 validada por VR_20260602_182253 -> 38.2.20 validada por TV2_20260602_205320 -> 38.2.21 validada por TV2_20260602_234618 -> 38.2.22 auditoria cruzada de impressao concluida -> 38.2.23 import/compile limpos, TV2 falhou por falso negativo -> 38.2.23-fix1 validada por TV2_20260606_104057 -> 38.2.24 validada por TV2_20260606_111039 -> 38.2.25 pacote RVS+ImpressaoResidual pronto para import/compile/RVS.
+proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b`, sincronizou HBN em `d2d7ac5`, entregou Performance/UX basica em `e157221`, consolidou a auditoria cruzada documental 38.2.13, entregou a Onda 38.2.14 behavioralizacao C1, validou a Onda 38.2.15 FT-4 em 2026-06-01, validou 38.2.16 BL-4 via fix1 0133, 0137 fix1, 0139 fix1, 0140 e 0141. Antigravity executou a auditoria cruzada de impressao 0142 apontando 2 BLOQUEADORES nos PDFs; Codex implementou 0143, validou 0144 fix1 test-only por import/compile/`TV2_20260606_104057`, validou 0151 GATE 2 Quant./borda por import/compile/`TV2_20260606_111039`, preparou 0152 para incluir impressao residual no RVS oficial e validou 0153 para padronizar punicoes do rodizio em dias com UI, relatorios e RVS; primeiro 0153 importou mas falhou compile, corrigido no fix1 por late-binding auditavel do FT4; fix1 importou mas compile avancou para dependencia direta de `Auto_Open`, corrigida no fix2 via `Application.Run`; fix2 importou mas compile avancou para `Util_VerificarProtecaoPersistenteAposAbertura`, corrigida no fix3 via wrapper; fix3 importou mas compile avancou para membros TV2 de `Menu_Principal`, corrigidos no fix4 via `CallByName`; fix4 importou, compilou e passou `TV2_20260606_193709` + `VR_20260606_193911`; 0154 importou/compilou e passou `TV2_20260606_212617`; 0155 runtime foi suspensa antes de importacao apos diagnostico correto de sobreposicao de label; 0156 substituiu por correcao simples de design `.frm/.frx`, passou import/compile/`TV2_20260606_231033` e teve clique/edicao/salvamento confirmados; 0157 preparou handoff Codex->Codex e proposta USEHBN para tela a tela design-first; 0158 validou botoes/menus por import/compile/`TV2_20260607_005745`; 0159 importou/compilou, mas `TV2_20260607_094429` retornou `OK=12 | FALHA=2 | MANUAL=0` por contrato de teste acoplado a `Auto_Open` fora do delta; Fix1 ajustou a suite para delegar protecao a BL4 e foi validado por import/compile/`TV2_20260607_101426` com `OK=14 | FALHA=0 | MANUAL=0`. Linha arquiteto 0114-0117/0149 consolidou firewall, CI ratchet e handoff do Codex; Codex concluiu GATE 0 pelo readback 0150.
+ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE/VALIDADA: 38.2.4 Integridade de Estado -> 38.2.5 UI regras de negocio -> 38.2.6 Integridade de impressao -> 38.2.7 Leitura/exibicao -> 38.2.8 CONFIG baseline seguro -> 38.2.9 snapshot CONFIG V2 -> 38.2.10 higiene/commit -> 38.2.11 sincronizacao HBN pos-commit -> 38.2.12 Performance/UX basica validada por import/compile/TV2 -> 38.2.13 auditoria cruzada consolidada doc-only -> 38.2.14 behavioralizacao C1 validada por import/compile/TV2 -> 38.2.15 FT-4 validada por import/compile/TV2 -> 38.2.16 BL-4 validada via fix1 0133 -> 38.2.18-fix1 validada por VR_20260602_112011 -> 38.2.19-fix1 validada por VR_20260602_182253 -> 38.2.20 validada por TV2_20260602_205320 -> 38.2.21 validada por TV2_20260602_234618 -> 38.2.22 auditoria cruzada de impressao concluida -> 38.2.23 import/compile limpos, TV2 falhou por falso negativo -> 38.2.23-fix1 validada por TV2_20260606_104057 -> 38.2.24 validada por TV2_20260606_111039 -> 38.2.25 RVS+ImpressaoResidual importado/compilado, RVS reprovou e abriu analise de punicoes -> 38.2.26 fix4 validado por import/compile/`TV2_20260606_193709` e `VR_20260606_193911` APROVADO -> 38.2.27 importado/compilado/TV2 verde -> 38.2.27-fix1/0156 validado por import/compile/`TV2_20260606_231033` + clique/edicao/salvamento -> 38.2.28/0158 validada por import/compile/`TV2_20260607_005745` -> 38.2.29/0159 Fix1 validada por import/compile/`TV2_20260607_101426` -> 38.2.30/0160 import/compile OK, TV2 abriu fix1 0161 por falso negativo em CFGCSV_06 -> 38.2.30/0161 Fix1 validada por import/compile/`TV2_20260608_044610` -> 38.2.31/0162 validada por import/compile/`TV2_20260608_084549` -> 38.2.32/0163 base importado/compilado, `TV2_20260608_114127` retornou `OK=9 | FALHA=1 | MANUAL=0` por falso negativo em RELSSR_08; fix1 test-only package_ready_gate_pending.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio APROVADO em VR_20260526_102200. **Anchor de rollback Onda 38.2.2: commit 179bac5**. **Caminho B (rollback) tecnicamente valido se Mauricio escolher**.
-proxima-acao: Importar 0152, compilar e executar `CT_ValidarRelease_SextetoMinimo`; somente se o RVS ampliado aprovar, iniciar GATE 3 tela a tela com readback curto por lote de defeitos da mesma tela.
-ultima-atualizacao: 2026-06-06T11:30:15-03:00 (0152 pacote pronto: RVS oficial passa a incluir `TV2_RunImpressaoResidual`; gate humano import/compile/RVS pendente)
+proxima-acao: 38.2.33/0164 Disponibilidade operacional em relatorios esta package_ready_gate_pending; operador deve importar `ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS`, compilar e rodar `TV2_RunRelatoriosSuspensoesStrikesReset`. Regressao recomendada: `TV2_RunTelaRelatorios`. Worktree segue sujo com alteracoes de ondas anteriores e runtime local; nao remover nem versionar sem decisao humana.
+ultima-atualizacao: 2026-06-08T13:23:00-03:00 (0164 pacote pronto para import/compile/TV2 dirigido; 0163 fix1 passou; VCR recente reprovou apenas por falso negativo UI_ADV_011 corrigido nesta onda)
 ---
+
+## 🟡 GATE / 0164 — Disponibilidade operacional em relatorios (PACKAGE READY)
+
+| Campo | Valor |
+|---|---|
+| Sinal | ✅ HBN ACTIVE |
+| Track | safe_track |
+| Readback | [`0164-rb-onda-38-2-33-disponibilidade-operacional-relatorios.json`](../readbacks/0164-rb-onda-38-2-33-disponibilidade-operacional-relatorios.json) — **human_status: confirmed** |
+| Hearback | [`0164-rb-onda-38-2-33-disponibilidade-operacional-relatorios-confirmed.json`](../hearbacks/0164-rb-onda-38-2-33-disponibilidade-operacional-relatorios-confirmed.json) |
+| ERP | [`0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios.json`](../results/0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios.json) — `package_ready_gate_pending` |
+| Tecnico | [`0164_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_33_disponibilidade_operacional_relatorios/0164_TECNICO.md) |
+| Procedimento | [`0164_PROCEDIMENTO_IMPORT.md`](../../auditoria/03_ondas/onda_38_2_33_disponibilidade_operacional_relatorios/0164_PROCEDIMENTO_IMPORT.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS.txt) |
+| Decisao aplicada | Relatorios e mensagem de Pre-OS passam a mostrar disponibilidade operacional real: suspensa, OS em execucao, Pre-OS pendente ou disponivel |
+| Build | `293e44c+ONDA38.2.33-DISPONIBILIDADE-RELATORIOS` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS", "293e44c+ONDA38.2.33-DISPONIBILIDADE-RELATORIOS"` |
+| Pos-import esperado | `M=5 | F=3 | err=0 | skip=0`; compile limpo; `TV2_RunRelatoriosSuspensoesStrikesReset` com `OK=10 | FALHA=0 | MANUAL=0` |
+| Regressao recomendada | `TV2_RunTelaRelatorios` com `OK=10 | FALHA=0 | MANUAL=0` |
+| VCR recente | `VR_20260608_115812` reprovou apenas por falso negativo em `UI_ADV_011`; correcao test-only incluida nesta onda |
+| Nao tocar | `.frx`, `Configuracao_Inicial.frm`, `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`; nao implementar checkboxes de reset anual nesta onda |
+| Veredito atual | Pacote pronto; aguardando gate humano |
+
+## 🟢 FIX1 / 0163 — Relatorios suspensoes, strikes e reset (FECHADO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | ✅ HBN ACTIVE |
+| Track | safe_track |
+| Readback | [`0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset.json`](../readbacks/0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset.json) — **human_status: confirmed** |
+| Hearback | [`0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset-confirmed.json`](../hearbacks/0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset-confirmed.json) |
+| ERP | [`0163-exec-onda-38-2-32-fix1-relatorios-suspensoes-strikes-reset.json`](../results/0163-exec-onda-38-2-32-fix1-relatorios-suspensoes-strikes-reset.json) — `completed` |
+| Tecnico | [`0163_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/0163_TECNICO.md) |
+| Procedimento | [`0163_PROCEDIMENTO_IMPORT.md`](../../auditoria/03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/0163_PROCEDIMENTO_IMPORT.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_32_FIX1_RELATORIOS_SUSPENSOES_STRIKES_RESET.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_32_FIX1_RELATORIOS_SUSPENSOES_STRIKES_RESET.txt) |
+| Decisao aplicada | Corrige falso negativo test-only: RELSSR_01 valida os literais do aviso em `Rel_Rodizio_Status`; RELSSR_08 valida apenas a fiacao de `Preencher` para o impresso |
+| Build | `293e44c+ONDA38.2.32-FIX1-REL-SUSP-STRIKES-RESET` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_32_FIX1_RELATORIOS_SUSPENSOES_STRIKES_RESET", "293e44c+ONDA38.2.32-FIX1-REL-SUSP-STRIKES-RESET"` |
+| Pos-import esperado | `M=2 | F=0 | err=0 | skip=0`; compile limpo; `TV2_RunRelatoriosSuspensoesStrikesReset` com `OK=10 | FALHA=0 | MANUAL=0` |
+| Gate base observado | Pacote base importou e compilou; `TV2_20260608_114127` retornou `OK=9 | FALHA=1 | MANUAL=0` em `RELSSR_08_IMPRESSOS_AVISO_OPERACIONAL` |
+| Suite | `TV2_RunRelatoriosSuspensoesStrikesReset`, read-only por tokens, sem acionar impressao real ou fluxo destrutivo |
+| Nao tocar | `.frx`, `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`; nao rodar VCR neste microdelta |
+| Gate observado | Importou, compilou e `TV2_20260608_115730` retornou `OK=10 | FALHA=0 | MANUAL=0`; VCR posterior falhou apenas por falso negativo adversarial fora da regra RELSSR |
+| Veredito atual | Fechado; 0164 aberta para disponibilidade operacional e correcao do falso negativo VCR |
+
+## 🟢 GATE TELA A TELA / 0162 — Relatorios status e formatacao (FECHADO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 FECHADO |
+| Track | safe_track |
+| Readback | [`0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json`](../readbacks/0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json) — **human_status: confirmed** |
+| Hearback | [`0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao-confirmed.json`](../hearbacks/0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao-confirmed.json) |
+| ERP | [`0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json`](../results/0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json) — `package_ready_gate_pending` |
+| Tecnico | [`0162_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_31_relatorios_tela_a_tela/0162_TECNICO.md) |
+| Procedimento | [`0162_PROCEDIMENTO_IMPORT.md`](../../auditoria/03_ondas/onda_38_2_31_relatorios_tela_a_tela/0162_PROCEDIMENTO_IMPORT.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_31_RELATORIOS_TELA_A_TELA.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_31_RELATORIOS_TELA_A_TELA.txt) |
+| Decisao aplicada | Relatorios com empresa passam a mostrar status operacional, datas de suspensao, ultima reativacao/retorno e participacao no rodizio; relatorios principais usam formatacao tabular comum |
+| Build | `293e44c+ONDA38.2.31-RELATORIOS-TELA-A-TELA` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_31_RELATORIOS_TELA_A_TELA", "293e44c+ONDA38.2.31-RELATORIOS-TELA-A-TELA"` |
+| Pos-import esperado | `M=4 | F=3 | err=0 | skip=0`; compile limpo; `TV2_RunTelaRelatorios` com `OK=10 | FALHA=0 | MANUAL=0` |
+| Gate observado | Importou e compilou, reportado pelo operador; `TV2_20260608_084549` com `OK=10 | FALHA=0 | MANUAL=0`; PDFs 054-061 analisados para abrir 0163 |
+| Suite | `TV2_RunTelaRelatorios`, read-only por tokens, sem acionar impressao real |
+| Nao tocar | `.frx`, `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`; nao rodar VCR neste microdelta |
+| Veredito atual | Fechado; proxima onda 0163 aberta para normalizar strikes/reset |
+
+## 🟢 FIX1 / 0161 — Novo Periodo limpeza e contagem (FECHADO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 FECHADO |
+| Track | safe_track |
+| Readback | [`0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json`](../readbacks/0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json) — **human_status: confirmed** |
+| Hearback | [`0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza-confirmed.json`](../hearbacks/0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza-confirmed.json) |
+| ERP | [`0161-exec-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json`](../results/0161-exec-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json) — `completed` |
+| Tecnico | [`0160_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_TECNICO.md) |
+| Procedimento | [`0160_PROCEDIMENTO_IMPORT.md`](../../auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_PROCEDIMENTO_IMPORT.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1.txt) |
+| Causa | Gate 0160 passou import/compile e falhou apenas `CFGCSV_06`; limpeza parcial + contagem por ultima linha viraram falso negativo `PRE_OS_DEPOIS=1` e `CAD_OS_DEPOIS=1` |
+| Decisao aplicada | Limpar `PRE_OS` ate `COL_PREOS_OS_ID`, limpar `CAD_OS` ate `COL_OS_JUSTIF_DIV`, contar registros por coluna-chave e aplicar a mesma limpeza no botao real de Novo Periodo |
+| Build | `293e44c+ONDA38.2.30-FIX1-CONFIG-CENARIOS-CSV` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1", "293e44c+ONDA38.2.30-FIX1-CONFIG-CENARIOS-CSV"` |
+| Pos-import esperado | `M=2 | F=1 | err=0 | skip=0`; compile limpo; `TV2_RunConfigCenariosNovoPeriodo` com `OK=7 | FALHA=0 | MANUAL=0` |
+| Gate observado | Importou e compilou, reportado pelo operador; `TV2_20260608_044610` com `OK=7 | FALHA=0 | MANUAL=0`; CSV de falhas nao exportado |
+| Nao tocar | `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`, `Menu_Principal.frm/.frx`, `Configuracao_Inicial.frx`; nao rodar VCR |
+| Veredito atual | Fechado; proxima onda deve abrir novo readback |
+
+## 🟡 GATE TELA A TELA / 0160 — Configuracoes Iniciais matriz de cenarios + CSV (ABRIU FIX1)
+
+| Campo | Valor |
+|---|---|
+| Sinal | ✅ HBN ACTIVE |
+| Track | safe_track |
+| Readback | [`0160-rb-onda-38-2-30-config-cenarios-persistencia-csv.json`](../readbacks/0160-rb-onda-38-2-30-config-cenarios-persistencia-csv.json) — **human_status: confirmed** |
+| Hearback | [`0160-rb-onda-38-2-30-config-cenarios-persistencia-csv-confirmed.json`](../hearbacks/0160-rb-onda-38-2-30-config-cenarios-persistencia-csv-confirmed.json) |
+| ERP | [`0160-exec-onda-38-2-30-config-cenarios-persistencia-csv.json`](../results/0160-exec-onda-38-2-30-config-cenarios-persistencia-csv.json) — `package_ready_gate_pending` |
+| Tecnico | [`0160_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_TECNICO.md) |
+| Procedimento | [`0160_PROCEDIMENTO_IMPORT.md`](../../auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_PROCEDIMENTO_IMPORT.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV.txt) |
+| Decisao aplicada | Ampliar a persistencia do painel para matriz 1/2, gestor/municipio com build, consumo por getters/regras, Novo Periodo deterministico e CSV salvo junto da copia da planilha |
+| Build | `293e44c+ONDA38.2.30-CONFIG-CENARIOS-CSV` |
+| Base encontrada | `TV2_RunPersistenciaPainel` ja cobre round-trip parcial; `TV2_RunTelaConfiguracoesIniciais` cobre tela/botoes; `CONFIG_SNAPSHOT_V2` cobre restauracao tecnica da CONFIG |
+| Lacuna coberta | Gestor/municipio, matriz 1/2, consumo por servicos, copia da planilha e CSV de evidencias de Novo Periodo |
+| Destrutivo autorizado | Sim, apenas para o mapa de testes: avisar, criar cenario deterministico/idempotente, salvar copia da planilha antes da limpeza e registrar CSV na pasta `V12-0-0206-Onda-38-2-30` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_30_CONFIG_CENARIOS_CSV", "293e44c+ONDA38.2.30-CONFIG-CENARIOS-CSV"` |
+| Pos-import esperado | `M=3 | F=1 | err=0 | skip=0`; compile limpo; `TV2_RunConfigCenariosNovoPeriodo` com `OK=7 | FALHA=0 | MANUAL=0` |
+| Gate observado | Import `M=3 | F=1 | err=0 | skip=0`; compile limpo; `TV2_20260607_110826` com `OK=6 | FALHA=1 | MANUAL=0`, falha isolada em `CFGCSV_06` |
+| Evidencia esperada | Pasta `V12-0-0206-Onda-38-2-30` contendo copia da planilha e `TesteV2_CONFIG_CENARIOS_<execucao>.csv` |
+| Nao tocar | `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`, `Menu_Principal.frm/.frx`, `Configuracao_Inicial.frx`, Util_PDF quarentenado; nao rodar VCR neste microdelta |
+| Veredito atual | Supersedido pelo fix1 0161 para corrigir falso negativo de limpeza/contagem |
+
+## 🟢 GATE TELA A TELA / 0159 — Tela Inicial Menu Principal (FECHADO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 FECHADO |
+| Track | safe_track |
+| Readback | [`0159-rb-onda-38-2-29-tela-inicial-menu-principal.json`](../readbacks/0159-rb-onda-38-2-29-tela-inicial-menu-principal.json) — **human_status: confirmed** |
+| Hearback | [`0159-rb-onda-38-2-29-tela-inicial-menu-principal-confirmed.json`](../hearbacks/0159-rb-onda-38-2-29-tela-inicial-menu-principal-confirmed.json) |
+| ERP | [`0159-exec-onda-38-2-29-tela-inicial-menu-principal.json`](../results/0159-exec-onda-38-2-29-tela-inicial-menu-principal.json) — `completed` |
+| Tecnico | [`0159_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_29_tela_inicial_menu_principal/0159_TECNICO.md) |
+| Procedimento | [`0159_PROCEDIMENTO_IMPORT.md`](../../auditoria/03_ondas/onda_38_2_29_tela_inicial_menu_principal/0159_PROCEDIMENTO_IMPORT.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_29_TELA_INICIAL.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_29_TELA_INICIAL.txt) |
+| Decisao aplicada | Test-only + build label; sem alterar `Menu_Principal.frm`, `.frx`, `Auto_Open.bas` ou fluxos destrutivos |
+| Build | `293e44c+ONDA38.2.29-FIX1-TELA-INICIAL` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_29_TELA_INICIAL", "293e44c+ONDA38.2.29-FIX1-TELA-INICIAL"` |
+| Gate inicial observado | Import `M=3 | F=0 | err=0 | skip=0`; compile limpo; `TV2_20260607_094429` com `OK=12 | FALHA=2 | MANUAL=0` por tokens de `Auto_Open` fora do delta |
+| Gate Fix1 observado | Import `M=3 | F=0 | err=0 | skip=0`; compile limpo; `TV2_20260607_101426` com `OK=14 | FALHA=0 | MANUAL=0`; sem CSV de falhas |
+| Pos-import esperado | `M=3 | F=0 | err=0 | skip=0`; compile limpo; `TV2_RunTelaInicial` com `OK=14 | FALHA=0 | MANUAL=0` |
+| Nao tocar | `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`, `Menu_Principal.frm/.frx`, freeze V206; nao rodar VCR neste microdelta |
+| Veredito atual | Fechado; proxima onda deve ter novo readback |
+
+## 🟢 GATE TELA A TELA / 0158 — Configuracoes Iniciais botoes e menus (FECHADO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 FECHADO |
+| Track | safe_track |
+| Readback | [`0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus.json`](../readbacks/0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus.json) — **human_status: confirmed** |
+| Hearback | [`0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus-confirmed.json`](../hearbacks/0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus-confirmed.json) |
+| ERP | [`0158-exec-onda-38-2-28-configuracoes-iniciais-botoes-menus.json`](../results/0158-exec-onda-38-2-28-configuracoes-iniciais-botoes-menus.json) — `completed` |
+| Tecnico | [`0158_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_28_configuracoes_iniciais_botoes_menus/0158_TECNICO.md) |
+| Procedimento | [`0158_PROCEDIMENTO_IMPORT.md`](../../auditoria/03_ondas/onda_38_2_28_configuracoes_iniciais_botoes_menus/0158_PROCEDIMENTO_IMPORT.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_28_CONFIG_BOTOES_MENUS.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_28_CONFIG_BOTOES_MENUS.txt) |
+| Decisao aplicada | Test-only + build label; sem alterar `.frm/.frx`; fluxos destrutivos validados por contrato estatico/confirmacao, nao por execucao automatica |
+| Build | `293e44c+ONDA38.2.28-CONFIG-BOTOES-MENUS` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_28_CONFIG_BOTOES_MENUS", "293e44c+ONDA38.2.28-CONFIG-BOTOES-MENUS"` |
+| Pos-import esperado | `M=2 | F=0 | err=0 | skip=0`; compile limpo; `TV2_RunTelaConfiguracoesIniciais` com `OK=9 | FALHA=0 | MANUAL=0` |
+| Import V3 observado | `M=2 | F=0 | err=0 | skip=0`; backup `20260607_005702-V3-FULL` |
+| Compile observado | Limpo, reportado pelo operador |
+| Teste dirigido | `TV2_20260607_005745` — `OK=9 | FALHA=0 | MANUAL=0`; sem CSV de falhas |
+| Nao tocar | `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`, freeze V206; nao rodar VCR neste microdelta |
+| Veredito atual | Etapa fechada; proximo delta exige novo readback |
+
+## 🔵 HANDOFF / 0157 — Codex para Codex: Configuracoes Iniciais tela a tela (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🔵 HBN HANDOFF READY |
+| Track | fast_track |
+| Readback | [`0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela.json`](../readbacks/0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela.json) — **human_status: confirmed** |
+| Hearback | [`0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela-confirmed.json`](../hearbacks/0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela-confirmed.json) |
+| ERP | [`0157-exec-handoff-codex-configuracoes-iniciais-tela-a-tela.json`](../results/0157-exec-handoff-codex-configuracoes-iniciais-tela-a-tela.json) |
+| Handoff | [`20260606-2325-handoff-fim-sessao-codex-bastao-codex-para-codex.md`](../messages/20260606-2325-handoff-fim-sessao-codex-bastao-codex-para-codex.md) |
+| Prompt de retomada | [`128_PROMPT_RETOMADA_CODEX_CONFIG_INICIAL_TELA_A_TELA.md`](../../auditoria/00_status/128_PROMPT_RETOMADA_CODEX_CONFIG_INICIAL_TELA_A_TELA.md) |
+| Proposta USEHBN | [`20260606-2325-configuracoes-iniciais-design-first-handoff.md`](../protocol-evolutions/20260606-2325-configuracoes-iniciais-design-first-handoff.md) |
+| Proxima acao | Cumprida pela 0158; qualquer novo delta exige novo readback |
+| Diretriz-chave | Defeito geometrico de UserForm deve preferir designer/export; regra/evento deve ter codigo + teste V2 |
+
+## 🟢 GATE TELA A TELA / 0156 — Configuracoes Iniciais layout design fix1 (FECHADO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟢 FECHADO |
+| Track | safe_track |
+| Readback | [`0156-rb-onda-38-2-27-fix1-config-layout-design.json`](../readbacks/0156-rb-onda-38-2-27-fix1-config-layout-design.json) — **human_status: confirmed** |
+| Hearback | [`0156-rb-onda-38-2-27-fix1-config-layout-design-confirmed.json`](../hearbacks/0156-rb-onda-38-2-27-fix1-config-layout-design-confirmed.json) |
+| Tecnico | [`0156_FIX1_DESIGN_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_27_config_help_vcr/0156_FIX1_DESIGN_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_27_CONFIG_LAYOUT_FIX1.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_27_CONFIG_LAYOUT_FIX1.txt) |
+| Motivo | Diagnostico humano isolou causa raiz: label `suspender por` sobrepunha o campo numerico, logo a correcao correta e de design |
+| Decisao aplicada | Incorporado `.frm/.frx` exportado de `incoming`; teste dirigido agora reprova label sobreposto ao campo |
+| Build | `293e44c+ONDA38.2.27-CONFIG-LAYOUT-fix1` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_27_CONFIG_LAYOUT_FIX1", "293e44c+ONDA38.2.27-CONFIG-LAYOUT-fix1"` |
+| Pos-import esperado | `M=2 | F=1 | err=0 | skip=0`; compile limpo; `TV2_RunTelaConfiguracoesIniciais` com `OK=3 | FALHA=0 | MANUAL=0` |
+| Import V3 observado | `M=2 | F=1 | err=0 | skip=0`; backup `20260606_230924-V3-FULL` |
+| Compile observado | Limpo, reportado pelo operador |
+| Teste dirigido | `TV2_20260606_231033` — `OK=3 | FALHA=0 | MANUAL=0`; sem CSV de falhas |
+| Validacao manual | Mauricio confirmou: campo aceita clique, edicao e salvamento |
+| Nao tocar | `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`, freeze V206 |
+| Veredito atual | Etapa fechada; seguir em novo chat para botoes, menus e submenus |
+
+## 🟡 GATE TELA A TELA / 0155 — Configuracoes Iniciais campo dias/Tab fix1 (SUPERSEDIDA)
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🔴 SUSPENSA ANTES DE IMPORTACAO |
+| Track | safe_track |
+| Readback | [`0155-rb-onda-38-2-27-fix1-config-campo-tab.json`](../readbacks/0155-rb-onda-38-2-27-fix1-config-campo-tab.json) — **human_status: confirmed** |
+| Hearback | [`0155-rb-onda-38-2-27-fix1-config-campo-tab-confirmed.json`](../hearbacks/0155-rb-onda-38-2-27-fix1-config-campo-tab-confirmed.json) |
+| Tecnico | [`0155_FIX1_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_27_config_help_vcr/0155_FIX1_TECNICO.md) |
+| Manifesto | Removido para evitar import acidental |
+| Motivo | A 0154 passou no teste dirigido, mas o gate humano mostrou que o campo `suspender por 30 dia(s)` ainda estava dificil de editar e fora da navegacao Tab esperada |
+| Decisao aplicada | Supersedida pela 0156; runtime magic removido |
+| Build | `293e44c+ONDA38.2.27-CONFIG-HELP-VCR-fix1` |
+| Import V3 | NAO IMPORTAR |
+| Pos-import esperado | NAO APLICAVEL |
+| Validacao manual | Clicar, editar e navegar por Tab no campo `suspender por 30 dia(s)` |
+| Nao tocar | `.frx`, `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`, freeze V206 |
+| Veredito atual | Nao usar; substituida por 0156 |
+
+## 🟡 GATE TELA A TELA / 0154 — Configuracoes Iniciais, Ajuda HBN e VCR
+
+| Campo | Valor |
+|---|---|
+| Sinal | 🟡 IMPORT/COMPILE/TV2 VERDE; GATE VISUAL ABRIU FIX1 0155 |
+| Track | safe_track |
+| Readback | [`0154-rb-onda-38-2-27-config-help-vcr.json`](../readbacks/0154-rb-onda-38-2-27-config-help-vcr.json) — **human_status: confirmed** |
+| Hearback | [`0154-rb-onda-38-2-27-config-help-vcr-confirmed.json`](../hearbacks/0154-rb-onda-38-2-27-config-help-vcr-confirmed.json) |
+| Tecnico | [`0154_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_27_config_help_vcr/0154_TECNICO.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_27_CONFIG_HELP_VCR.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_27_CONFIG_HELP_VCR.txt) |
+| Motivo | Mauricio aprovou a atuacao tela a tela e corrigiu a nomenclatura: Validacao Completa da Release deve ser VCR; `.csv` e apenas formato de evidencia |
+| Decisao aplicada | Central de Testes mostra VCR; alias `CT_ValidarRelease_Completa`; `TxtMesesSuspensao` fica editavel em runtime e semanticamente representa dias por recusa/prazo |
+| Build | `293e44c+ONDA38.2.27-CONFIG-HELP-VCR` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_27_CONFIG_HELP_VCR", "293e44c+ONDA38.2.27-CONFIG-HELP-VCR"` |
+| Pos-import esperado | `M=4 | F=1 | err=0 | skip=0`; compile limpo; `TV2_RunTelaConfiguracoesIniciais` com `OK=3 | FALHA=0 | MANUAL=0` |
+| Help | `docs/help/hbn/configuracoes-iniciais.html` abre pelo botao Ajuda da tela |
+| Cadencia | VCR demora mais de 1h no fluxo atual; usar teste dirigido por tela e reservar VCR para checkpoint forte |
+| Nao tocar | `.frx`, `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`, freeze V206 |
+| Gate humano | Importou, compilou e `TV2_20260606_212617` retornou `OK=3 | FALHA=0 | MANUAL=0`; porem campo `suspender por 30 dia(s)` continuou ruim para clique/edicao/Tab |
+| Veredito atual | 0154 parcialmente validada; 0155 corrige a acessibilidade real do campo antes de seguir tela a tela |
+
+## 🟡 GATE PRE-TELA / 0153 — punicoes do rodizio em dias (NOVO)
+
+| Campo | Valor |
+|---|---|
+| Sinal | ✅ VALIDADO POR IMPORT/COMPILE/TV2/RVS |
+| Track | safe_track |
+| Readback | [`0153-rb-onda-38-2-26-punicoes-em-dias.json`](../readbacks/0153-rb-onda-38-2-26-punicoes-em-dias.json) — **human_status: confirmed** |
+| Hearback | [`0153-rb-onda-38-2-26-punicoes-em-dias-confirmed.json`](../hearbacks/0153-rb-onda-38-2-26-punicoes-em-dias-confirmed.json) |
+| Tecnico | [`0153_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_26_punicoes_em_dias/0153_TECNICO.md) |
+| ERP | [`0153-exec-onda-38-2-26-punicoes-em-dias.json`](../results/0153-exec-onda-38-2-26-punicoes-em-dias.json) — `validated_human_gate_passed` |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_26_PUNICOES_EM_DIAS.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_26_PUNICOES_EM_DIAS.txt) |
+| Motivo | Mauricio pediu rigor maximo na regra de strikes/punicoes e apontou que a interface podia dizer zero dias enquanto o codigo usava fallback inadequado |
+| Decisao aplicada | Todas as suspensoes usam dias: strike, recusa, expiracao e manual; meses ficam apenas como legado de migracao idempotente |
+| Build | `293e44c+ONDA38.2.26-PUNICOES-DIAS-fix4` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_26_PUNICOES_EM_DIAS_FIX4", "293e44c+ONDA38.2.26-PUNICOES-DIAS-fix4"` |
+| Primeiro import | `M=14 | F=3 | err=0 | skip=0`; compile falhou por chamada fortemente tipada a membro ausente em `Credencia_Empresa` |
+| Fix1 aplicado | `Teste_V2_Roteiros` chama o helper FT4 por `CallByName` em `Object`, eliminando dependencia em tempo de compilacao |
+| Fix1 import | `M=14 | F=3 | err=0 | skip=0`; compile falhou em chamada direta a `AutoOpen_UltimaProtecaoMarcadorExecutadaEm` |
+| Fix2 aplicado | `Teste_V2_Roteiros` chama funcoes `AutoOpen_*` por `Application.Run`; se ausentes, teste BL4 registra falha em runtime sem quebrar compile |
+| Fix2 import | `M=14 | F=3 | err=0 | skip=0`; compile falhou em chamada direta a `Util_VerificarProtecaoPersistenteAposAbertura` |
+| Fix3 aplicado | `Teste_V2_Roteiros` chama `Util_VerificarProtecaoPersistenteAposAbertura` por wrapper `Application.Run` em todos os pontos BL4 |
+| Fix3 import | `M=14 | F=3 | err=0 | skip=0`; compile falhou em chamada direta a `frm.TV2_AvaliacaoDemandanteNaLista` |
+| Fix4 aplicado | `Teste_V2_Roteiros` chama membros TV2 de `Menu_Principal` por wrappers `CallByName`, sem importar `Menu_Principal.frm` |
+| Fix4 import | `M=14 | F=3 | err=0 | skip=0`; backup `20260606_193609-V3-FULL` |
+| Compile fix4 | Limpo, reportado pelo operador |
+| Relatorios | Novo `RPT_RODIZIO_STATUS`; relatorios de empresa/servico e OS/empresa mostram STATUS_GLOBAL, DIAS_RESTANTES, RETORNO_PREVISTO e PARTICIPA_RODIZIO |
+| Teste dirigido | `TV2_20260606_193709` — `OK=8 | FALHA=0 | MANUAL=0` |
+| RVS | `VR_20260606_193911` — APROVADO com `PunicoesDias=8/0` |
+| CSV RVS | `auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260606_193911.csv` |
+| Nao tocar | `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`, freeze V206 |
+| Veredito atual | 0153 validada; liberar proximo readback curto antes do GATE 3 tela a tela |
 
 ## 🟡 GATE PRE-TELA / 0152 — RVS inclui impressao residual (NOVO)
 

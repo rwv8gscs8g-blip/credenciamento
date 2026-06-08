@@ -1,0 +1,76 @@
+# Manifesto V3 DELTA ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS - V12.0.0206 Onda 38.2.33 / Readback 0164
+# Tema: Disponibilidade operacional unificada em mensagens, relatorios e impressos.
+#
+# Contexto:
+#   - Onda 38.2.32 normalizou status/suspensoes/strikes nos relatorios e passou TV2 dirigido.
+#   - VCR VR_20260608_115812 reprovou apenas por falso negativo em UI_ADV_011: o texto do Gate RVS estava na Central V2, nao no modulo validador.
+#   - Operador confirmou cenario real: empresa ativa com Pre-OS aberta deve bloquear nova Pre-OS na mesma atividade.
+#   - PDFs 065-071 mostraram que relatorios ainda confundiam status cadastral ATIVA com disponibilidade operacional.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS", "293e44c+ONDA38.2.33-DISPONIBILIDADE-RELATORIOS"
+#
+# Pos-import esperado:
+#   - Importador V3: M=5 | F=3 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunRelatoriosSuspensoesStrikesReset
+#   - Esperado: OK=10 | FALHA=0 | MANUAL=0.
+#   - Regressao recomendada: TV2_RunTelaRelatorios deve continuar OK=10.
+#   - VCR reservado para checkpoint forte apos teste dirigido e revisao visual.
+#
+# Guardas:
+#   - Sem Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.
+#   - Sem Configuracao_Inicial.frm/.frx e sem designer nesta onda.
+#   - Sem alterar motor do rodizio; a regra existente foi exposta em mensagem/relatorio.
+#   - Sem implementar checkboxes de anistia anual; tema documentado como decisao futura.
+#
+# Contrato operacional documentado:
+#   - Empresa suspensa deixa de bloquear automaticamente quando DT_FIM_SUSP <= hoje; SelecionarEmpresa reativa a empresa antes de selecionar.
+#   - Empresa ativa pode ficar indisponivel se tiver OS em execucao ou Pre-OS pendente na mesma atividade.
+#   - Iniciar Novo Periodo preserva suspensoes/cadastros/auditoria; Limpar Base remove suspensoes ao apagar a base cadastral e auditavel.
+#   - Reset seletivo anual de strikes exige novo readback, designer/persistencia e regra explicita sobre reativar ou nao empresas ja suspensas.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24278
+#     sha256=862e3b93ec8b1a5683f0aeeca25759aecf6018bf939bf4c8fe3b61e374562957
+#   M|001-modulo/AAU-Preencher.bas
+#     bytes=156814
+#     sha256=3b122e2b08237d9d57dc15be4977f59bb9d70cd63ec149a3abccc9d0350dcc7e
+#   M|001-modulo/ABV-Rel_Rodizio_Status.bas
+#     bytes=22346
+#     sha256=6eb501d1f234c08b105e5a76e103b2189de5c766ddfe6aedf7b87d6007470f71
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=232698
+#     sha256=2d156b2b3253a701db9938648f7380f2ab3c34f501aab57d23ca9f41a9702ecc
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=360022
+#     sha256=7314e996e17f5760bbaf5763588a9b7f876b60c6af91a56e98f9cb7a89304ba0
+#   F|002-formularios/AAM-Menu_Principal.frm
+#     bytes=156603
+#     sha256=bb539913720e46d653a12411aead89f50d3c0c0261427d82f514a1d0c32079ba
+#   CODE_ONLY|002-formularios/AAM-Menu_Principal.code-only.txt
+#     bytes=156140
+#     sha256=803245862ecc740c3b87a2afdc6b195b33dfc6ea7c12dcf5dafba2fa9cc8a331
+#   F|002-formularios/AAK-Rel_Emp_Serv.frm
+#     bytes=9836
+#     sha256=07f6d7a638dd66b36b0d5ab1ecd333edb3215838f278d8bc0b5d838781b13fe3
+#   CODE_ONLY|002-formularios/AAK-Rel_Emp_Serv.code-only.txt
+#     bytes=9310
+#     sha256=e59919dedd85556ba9ee9fc3bdc01171b5fb3be2a1d6ce215f7c2d33b7315fa9
+#   F|002-formularios/AAL-Rel_OSEmpresa.frm
+#     bytes=14267
+#     sha256=cc89291de683b22a520c326cd0f1f55f66a8f3639f81e1d2517d9d4e75a33477
+#   CODE_ONLY|002-formularios/AAL-Rel_OSEmpresa.code-only.txt
+#     bytes=13760
+#     sha256=346e634a7f4b06ed14a0fa860849df5a0d05c86b64436a682fa29698f53507e6
+#
+# GRUPO_ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/ABV-Rel_Rodizio_Status.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+F|002-formularios/AAM-Menu_Principal.frm
+F|002-formularios/AAK-Rel_Emp_Serv.frm
+F|002-formularios/AAL-Rel_OSEmpresa.frm

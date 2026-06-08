@@ -1,0 +1,48 @@
+# Manifesto V3 DELTA ONDA38_2_27_CONFIG_LAYOUT_FIX1 - V12.0.0206 Onda 38.2.27-fix1 / Readback 0156
+# Tema: Configuracoes Iniciais; layout do campo de dias por recusa/prazo corrigido no designer.
+#
+# Contexto:
+#   - A 0154 importou, compilou e TV2_RunTelaConfiguracoesIniciais passou.
+#   - O gate humano identificou que o label "suspender por" sobrepunha o campo
+#     numerico de dias por recusa/prazo.
+#   - A proposta runtime 0155 foi suspensa antes de importacao.
+#   - Este delta incorpora o formulario reexportado pelo operador em incoming,
+#     com a correcao simples no designer, e endurece o teste contra sobreposicao.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_27_CONFIG_LAYOUT_FIX1", "293e44c+ONDA38.2.27-CONFIG-LAYOUT-fix1"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=1 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunTelaConfiguracoesIniciais
+#   - Esperado: OK=3 | FALHA=0 | MANUAL=0.
+#   - Validacao manual: abrir Configuracoes Iniciais, clicar no campo
+#     "suspender por 30 dia(s)" e editar o valor. O label nao deve cobrir o campo.
+#
+# Guardas:
+#   - Este delta importa o .frm com .frx associado, pois a correcao e de design.
+#   - Sem Auto_Open, sem ThisWorkbook, sem Mod_Types, sem Importador_V3.
+#   - Sem ajuste runtime de Width/ZOrder/TabIndex no formulario.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24006
+#     sha256=4d569b187e0a098424e23083be41c4b7e2487b9da39b3e470f77578bbdceffd1
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=306732
+#     sha256=1173f655ba1db8dcb64001b773956d4e4aeccefd8068ad73680775bc322edab2
+#   F|002-formularios/AAC-Configuracao_Inicial.frm
+#     bytes=25316
+#     sha256=b637d9e11109690a32beee3c73f584a569106fc9b378c2042bc957d8c0150866
+#   F|002-formularios/AAC-Configuracao_Inicial.code-only.txt
+#     bytes=24790
+#     sha256=c768447b38da4d6fea2f4b9675a355124f5dedff2c2e7b17c014bf829f685d81
+#   F|002-formularios/Configuracao_Inicial.frx
+#     bytes=354840
+#     sha256=3e3e4d5cc838ab3199514cdf0b13328a3eb295eaf34c7378157f96610abc7c4d
+#
+# GRUPO_ONDA38_2_27_CONFIG_LAYOUT_FIX1
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+F|002-formularios/AAC-Configuracao_Inicial.frm

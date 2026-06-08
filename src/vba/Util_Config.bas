@@ -3,6 +3,8 @@ Option Explicit
 
 ' Leitura centralizada de parâmetros da aba CONFIG (V10).
 ' Referência: Const_Colunas.SHEET_CONFIG
+Private Const CFG_DIAS_SUSPENSAO_PADRAO As Long = 30
+Private Const CFG_DIAS_SUSPENSAO_MAX As Long = 3650
 
 Public Function GetConfig() As TConfig
     Dim ws As Worksheet
@@ -44,6 +46,17 @@ End Function
 
 Public Function GetMesesSuspensao() As Long
     GetMesesSuspensao = GetConfig().PERIODO_SUSPENSAO_MESES
+End Function
+
+Public Function GetDiasSuspensaoRecusaPrazo() As Long
+    Dim dias As Long
+    Dim mensagem As String
+
+    If Config_TryGetDiasSuspensaoRecusaPrazo(dias, mensagem) Then
+        GetDiasSuspensaoRecusaPrazo = dias
+    Else
+        GetDiasSuspensaoRecusaPrazo = 0
+    End If
 End Function
 
 Public Function GetNotaMinimaAvaliacao() As Double
@@ -95,33 +108,143 @@ falha:
     GetMaxStrikes = 1
 End Function
 
-' V12.0.0203 ONDA 1 - Quantidade de dias da suspensao automatica
-' disparada pela regra de strikes na avaliacao.
-' Coluna COL_CFG_DIAS_SUSPENSAO_STRIKE (M) na aba CONFIG.
-' Quando o valor for <= 0, o helper Svc_Rodizio.Suspender cai no
-' fallback historico em meses (PERIODO_SUSPENSAO_MESES).
-'
-' V12.0.0203 ONDA 10 Microdelta 1.5 fix2 (2026-05-01) - DEFAULT MUDADO
-' DE 90 PARA 0. Justificativa: quando CONFIG nao tem valor (workbook
-' natural), default 0 forca fallback meses, alinhando com regra antiga.
-' Operador pode override para 90 (ou outro valor) via Configuracao_Inicial.frm.
+' V12.0.0206 ONDA 38.2.26 - Quantidade de dias da suspensao automatica
+' disparada pela regra de strikes na avaliacao. Valor valido: 1..3650.
+' Valores vazios/0/invalidos sao saneados pela migracao idempotente 0153
+' a partir de COL_CFG_MESES_SUSPENSAO (legado) * 30, com minimo 30 dias.
 Public Function GetDiasSuspensaoStrike() As Long
+    Dim dias As Long
+    Dim mensagem As String
+
+    If Config_TryGetDiasSuspensaoStrike(dias, mensagem) Then
+        GetDiasSuspensaoStrike = dias
+    Else
+        GetDiasSuspensaoStrike = 0
+    End If
+End Function
+
+Public Function Config_TryGetDiasSuspensaoStrike(ByRef dias As Long, ByRef mensagem As String) As Boolean
+    mensagem = ""
+    If Not Config_MigrarPunicoesDias0153(mensagem) Then Exit Function
+    Config_TryGetDiasSuspensaoStrike = Config_LerDiasSuspensao( _
+        COL_CFG_DIAS_SUSPENSAO_STRIKE, _
+        "DIAS_SUSPENSAO_STRIKE", _
+        dias, _
+        mensagem)
+End Function
+
+Public Function Config_TryGetDiasSuspensaoRecusaPrazo(ByRef dias As Long, ByRef mensagem As String) As Boolean
+    mensagem = ""
+    If Not Config_MigrarPunicoesDias0153(mensagem) Then Exit Function
+    Config_TryGetDiasSuspensaoRecusaPrazo = Config_LerDiasSuspensao( _
+        COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO, _
+        "DIAS_SUSPENSAO_RECUSA_PRAZO", _
+        dias, _
+        mensagem)
+End Function
+
+Public Function Config_MigrarPunicoesDias0153(Optional ByRef detalhes As String) As Boolean
+    Dim ws As Worksheet
+    Dim rawMeses As String
+    Dim rawStrike As String
+    Dim rawRecusa As String
+    Dim meses As Long
+    Dim diasBase As Long
+    Dim diasStrike As Long
+    Dim diasRecusa As Long
+    Dim precisaStrike As Boolean
+    Dim precisaRecusa As Boolean
+    Dim precisaHeader As Boolean
+    Dim estCfg As Boolean
+    Dim senCfg As String
+    Dim errD As String
+
     On Error GoTo falha
 
-    Dim ws As Worksheet
-    Dim v As Long
-
     Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
-    v = CLng(Val(ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value))
+    rawMeses = Trim$(CStr(ws.Cells(LINHA_CFG_VALORES, COL_CFG_MESES_SUSPENSAO).Value))
+    rawStrike = Trim$(CStr(ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value))
+    rawRecusa = Trim$(CStr(ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value))
 
-    If v < 0 Then v = 0
-    If v > 3650 Then v = 3650
+    If Not Config_TentarInteiro(rawMeses, meses) Or meses < 1 Then meses = 1
+    If meses > 121 Then
+        diasBase = CFG_DIAS_SUSPENSAO_MAX
+    Else
+        diasBase = meses * 30
+    End If
+    If diasBase < CFG_DIAS_SUSPENSAO_PADRAO Then diasBase = CFG_DIAS_SUSPENSAO_PADRAO
 
-    GetDiasSuspensaoStrike = v
+    precisaStrike = Not Config_ValorDiasValido(rawStrike, diasStrike)
+    precisaRecusa = Not Config_ValorDiasValido(rawRecusa, diasRecusa)
+    precisaHeader = Trim$(CStr(ws.Cells(1, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value)) = ""
+
+    If Not precisaStrike And Not precisaRecusa And Not precisaHeader Then
+        detalhes = "MIGRACAO_0153=NOOP; STRIKE_DIAS=" & CStr(diasStrike) & "; RECUSA_PRAZO_DIAS=" & CStr(diasRecusa)
+        Config_MigrarPunicoesDias0153 = True
+        Exit Function
+    End If
+
+    If Not Util_PrepararAbaParaEscrita(ws, estCfg, senCfg) Then
+        detalhes = "Nao foi possivel preparar CONFIG para migracao de punicoes em dias."
+        Exit Function
+    End If
+
+    If precisaHeader Then ws.Cells(1, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value = "DIAS_SUSPENSAO_RECUSA_PRAZO"
+    If precisaStrike Then
+        ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = diasBase
+        diasStrike = diasBase
+    End If
+    If precisaRecusa Then
+        ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value = diasBase
+        diasRecusa = diasBase
+    End If
+
+    Call Util_RestaurarProtecaoAba(ws, estCfg, senCfg)
+
+    detalhes = "MIGRACAO_0153=APLICADA; LEGADO_MESES_ANTES=" & rawMeses & _
+               "; ANTES_STRIKE_DIAS=" & rawStrike & _
+               "; ANTES_RECUSA_PRAZO_DIAS=" & rawRecusa & _
+               "; DEPOIS_STRIKE_DIAS=" & CStr(diasStrike) & _
+               "; DEPOIS_RECUSA_PRAZO_DIAS=" & CStr(diasRecusa) & _
+               "; FATOR_DIAS_MES=30"
+
+    RegistrarEvento EVT_TRANSACAO, ENT_ATIV, "CONFIG", _
+        "MIGRACAO_PUNICOES_DIAS_0153; LEGADO_MESES_ANTES=" & rawMeses & _
+        "; ANTES_STRIKE_DIAS=" & rawStrike & _
+        "; ANTES_RECUSA_PRAZO_DIAS=" & rawRecusa, _
+        "DEPOIS_STRIKE_DIAS=" & CStr(diasStrike) & _
+        "; DEPOIS_RECUSA_PRAZO_DIAS=" & CStr(diasRecusa) & _
+        "; FATOR_DIAS_MES=30", _
+        "Util_Config"
+
+    Config_MigrarPunicoesDias0153 = True
     Exit Function
 
 falha:
-    GetDiasSuspensaoStrike = 0
+    errD = Err.Description
+    On Error Resume Next
+    If Not ws Is Nothing Then Call Util_RestaurarProtecaoAba(ws, estCfg, senCfg)
+    On Error GoTo 0
+    detalhes = "Erro na migracao 0153 de punicoes em dias: " & errD
+    Config_MigrarPunicoesDias0153 = False
+End Function
+
+Public Function Config_SnapshotPunicoesDias() As String
+    Dim diasStrike As Long
+    Dim diasRecusa As Long
+    Dim msgStrike As String
+    Dim msgRecusa As String
+
+    If Config_TryGetDiasSuspensaoStrike(diasStrike, msgStrike) And _
+       Config_TryGetDiasSuspensaoRecusaPrazo(diasRecusa, msgRecusa) Then
+        Config_SnapshotPunicoesDias = "MAX_RECUSAS=" & CStr(GetMaxRecusas()) & _
+            "; DIAS_RECUSA_PRAZO=" & CStr(diasRecusa) & _
+            "; NOTA_MIN=" & Format$(GetNotaMinimaAvaliacao(), "0.00") & _
+            "; MAX_STRIKES=" & CStr(GetMaxStrikes()) & _
+            "; DIAS_STRIKE=" & CStr(diasStrike)
+    Else
+        Config_SnapshotPunicoesDias = "CONFIG_INVALIDA; STRIKE=" & msgStrike & "; RECUSA_PRAZO=" & msgRecusa
+    End If
 End Function
 
 ' V12.0.0203 ONDA 16 MD-16.2 (2026-05-02) - threshold de teste lento.
@@ -215,12 +338,12 @@ Public Function Config_ValidarRegraStrikes( _
         End If
     End If
 
-    If diasSuspensaoTxt <> "" Then
-        If Not Config_TentarInteiro(diasSuspensaoTxt, valorInteiro) Then
-            Config_AddErro erros, "TxtDiasSuspensao deve ser numero inteiro entre 0 e 3650."
-        ElseIf valorInteiro < 0 Or valorInteiro > 3650 Then
-            Config_AddErro erros, "TxtDiasSuspensao deve ficar entre 0 e 3650."
-        End If
+    If diasSuspensaoTxt = "" Then
+        Config_AddErro erros, "TxtDiasSuspensao deve ser informado."
+    ElseIf Not Config_TentarInteiro(diasSuspensaoTxt, valorInteiro) Then
+        Config_AddErro erros, "TxtDiasSuspensao deve ser numero inteiro entre 1 e 3650."
+    ElseIf valorInteiro < 1 Or valorInteiro > CFG_DIAS_SUSPENSAO_MAX Then
+        Config_AddErro erros, "TxtDiasSuspensao deve ficar entre 1 e 3650."
     End If
 
     If erros = "" Then
@@ -270,6 +393,40 @@ Private Function Config_TentarInteiro(ByVal texto As String, ByRef valor As Long
 
     valor = CLng(valorDouble)
     Config_TentarInteiro = True
+End Function
+
+Private Function Config_ValorDiasValido(ByVal texto As String, ByRef dias As Long) As Boolean
+    texto = Trim$(texto)
+    If texto = "" Then Exit Function
+    If Not Config_TentarInteiro(texto, dias) Then Exit Function
+    If dias < 1 Or dias > CFG_DIAS_SUSPENSAO_MAX Then Exit Function
+    Config_ValorDiasValido = True
+End Function
+
+Private Function Config_LerDiasSuspensao( _
+    ByVal coluna As Long, _
+    ByVal nomeCampo As String, _
+    ByRef dias As Long, _
+    ByRef mensagem As String _
+) As Boolean
+    Dim ws As Worksheet
+    Dim raw As String
+
+    On Error GoTo falha
+
+    Set ws = ThisWorkbook.Sheets(SHEET_CONFIG)
+    raw = Trim$(CStr(ws.Cells(LINHA_CFG_VALORES, coluna).Value))
+    If Not Config_ValorDiasValido(raw, dias) Then
+        mensagem = nomeCampo & " invalido: informe inteiro entre 1 e " & CStr(CFG_DIAS_SUSPENSAO_MAX) & " dias."
+        Exit Function
+    End If
+
+    Config_LerDiasSuspensao = True
+    Exit Function
+
+falha:
+    mensagem = "Erro ao ler " & nomeCampo & ": " & Err.Description
+    Config_LerDiasSuspensao = False
 End Function
 
 Private Sub Config_AddErro(ByRef erros As String, ByVal detalhe As String)
@@ -322,6 +479,8 @@ Public Function Rel_TituloExibicao(ByVal titulo As String) As String
             Rel_TituloExibicao = "Relat" & ChrW(243) & "rio de Ordens de Servi" & ChrW(231) & "o por Empresa"
         Case "RELATORIO DE PRE-OS VENCIDAS"
             Rel_TituloExibicao = "Relat" & ChrW(243) & "rio de Pr" & ChrW(233) & "-OS Vencidas"
+        Case "RELATORIO DE STATUS DO RODIZIO POR SERVICO"
+            Rel_TituloExibicao = "Relat" & ChrW(243) & "rio de Status do Rod" & ChrW(237) & "zio por Servi" & ChrW(231) & "o"
         Case Else
             Rel_TituloExibicao = titulo
             Rel_TituloExibicao = Replace(Rel_TituloExibicao, "RELATORIO", "Relat" & ChrW(243) & "rio")
@@ -351,6 +510,8 @@ Private Function Rel_CodigoCurto(ByVal titulo As String) As String
             Rel_CodigoCurto = "OS_POR_EMPRESA"
         Case "RELATORIO DE PRE-OS VENCIDAS"
             Rel_CodigoCurto = "PREOS_VENCIDAS"
+        Case "RELATORIO DE STATUS DO RODIZIO POR SERVICO"
+            Rel_CodigoCurto = "RODIZIO_STATUS_SERVICO"
         Case Else
             Rel_CodigoCurto = "RELATORIO"
     End Select

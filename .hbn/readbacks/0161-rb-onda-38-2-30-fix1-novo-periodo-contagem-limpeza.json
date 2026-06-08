@@ -1,0 +1,146 @@
+{
+  "readback_id": "0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza",
+  "data": "2026-06-07",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0160-rb-onda-38-2-30-config-cenarios-persistencia-csv",
+  "intent": {
+    "objective": "Corrigir o falso negativo de CFGCSV_06_NOVO_PERIODO_COPIA_LIMPEZA observado no gate humano 0160, preservando a copia da planilha e o CSV, mas fazendo a limpeza e a contagem pos-Novo Periodo refletirem dados reais por coluna-chave em PRE_OS e CAD_OS.",
+    "non_goals": [
+      "Nao alterar designer .frx nem reposicionar controles",
+      "Nao alterar Menu_Principal.frm, Auto_Open.bas, ThisWorkbook, Importador_V3.bas ou Mod_Types.bas",
+      "Nao restaurar a 0155",
+      "Nao rodar VCR neste microdelta",
+      "Nao alterar regras de rodizio, avaliacao, recusa ou strike que ja passaram em CFGCSV_01 a CFGCSV_05",
+      "Nao transformar ainda o prototipo em testador de cenarios parametrico com interface humana"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json",
+      ".hbn/hearbacks/0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza-confirmed.json",
+      ".hbn/hearbacks/0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza-confirmed.md",
+      ".hbn/results/0161-exec-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_PROCEDIMENTO_IMPORT.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Menu_Principal.frx",
+      "src/vba/Configuracao_Inicial.frx",
+      "local-ai/vba_import/**/AAA-Mod_Types.bas",
+      "local-ai/vba_import/**/ABK-Importador_V3.bas",
+      "local-ai/vba_import/**/AAY-Auto_Open.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/Menu_Principal.frx",
+      "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "Gate humano 0160 importou com M=3 | F=1 | err=0 | skip=0 e compilou limpo.",
+    "TV2_20260607_110826 retornou OK=6 | FALHA=1 | MANUAL=0.",
+    "A unica falha foi CFGCSV_06_NOVO_PERIODO_COPIA_LIMPEZA.",
+    "O CSV de falhas mostrou OK_NOVO_PERIODO=Verdadeiro e COPIA_EXISTE=Verdadeiro, mas PRE_OS_DEPOIS=1 e CAD_OS_DEPOIS=1.",
+    "A pasta V12-0-0206-Onda-38-2-30 foi criada e contem a copia da planilha e TesteV2_CONFIG_CENARIOS_TV2_20260607_110826.csv.",
+    "Os cenarios CFGCSV_01 a CFGCSV_05 passaram: controles, matriz 1/2, recusa e strike consumiram a configuracao corretamente.",
+    "A limpeza 0160 usa faixas parciais A:I para PRE_OS e A:Y para CAD_OS, enquanto os schemas vigentes vao ate N e AD; a contagem local tambem usa End(xlUp) em vez de contar registros reais por coluna-chave."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Ajustar CI_LimparPreOSCadOSNovoPeriodo para limpar a extensao real de PRE_OS ate COL_PREOS_OS_ID e CAD_OS ate COL_OS_JUSTIF_DIV, preservando o reset do contador AR.",
+      "Ajustar CI_QtdLinhasDados para contar registros reais pela coluna-chave de cada aba, evitando tratar linha tecnica vazia como dado operacional.",
+      "Ajustar TV2_ConfigQtdLinhasDados para usar contagem semantica por coluna-chave ou delegar a TV2_CountRows.",
+      "Atualizar App_Release para build fix1.",
+      "Gerar manifesto V3 fix1 com Configuracao_Inicial.frm, Teste_V2_Roteiros.bas e App_Release.bas.",
+      "Atualizar ERP/relay/docs apenas o necessario para refletir o fix1."
+    ]
+  },
+  "invariants_preserved": [
+    "Import/compile da 0160 passaram; o fix1 nao deve mexer nos cenarios que ja passaram.",
+    "A copia da planilha e o CSV continuam sendo gerados antes/depois da limpeza conforme a 0160.",
+    "Fluxo continua destrutivo apenas em homologacao e com aviso.",
+    "Sem .frx e sem designer.",
+    "VCR continua reservada para checkpoint forte."
+  ],
+  "risks": [
+    {
+      "risk": "Limpar apenas faixas parciais pode deixar residuo em colunas do schema atual e manter UltimaLinhaAba artificialmente alta.",
+      "mitigation": "Limpar ate as colunas finais canonicas de PRE_OS/CAD_OS e contar dados reais por coluna-chave.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Alterar contagem pode mascarar residuo real em outras colunas sem ID.",
+      "mitigation": "O Novo Periodo deve limpar a extensao real antes de contar; a contagem por ID confirma ausencia de registros operacionais.",
+      "severity": "medium"
+    },
+    {
+      "risk": "O fix1 pode mudar o total importado do pacote e exigir novo gate humano, apesar de o defeito estar isolado.",
+      "mitigation": "Gerar manifesto fix1 pequeno, importar apenas Configuracao_Inicial, Teste_V2_Roteiros e App_Release, compilar e repetir somente TV2_RunConfigCenariosNovoPeriodo.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0161 confirmado antes de codigo",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0161-exec-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json"
+      },
+      {
+        "gate": "Fonte e espelho VBA sincronizados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0161-exec-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json"
+      },
+      {
+        "gate": "Importador V3 do fix1",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0161-exec-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json"
+      },
+      {
+        "gate": "Compile VBE limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0161-exec-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json"
+      },
+      {
+        "gate": "TV2_RunConfigCenariosNovoPeriodo passa sem falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0161-exec-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+      "Se a suite continuar falhando, anexar CSV de falhas e nao rodar VCR."
+    ],
+    "anchor_to_restore": "0160 importado e compilado; falha isolada em CFGCSV_06 no TV2_20260607_110826"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-07T11:18:00-03:00",
+  "confirmed_at": "2026-06-08T04:08:47-03:00",
+  "hearback_summary": "Mauricio aprovou o readback 0161 para corrigir o falso negativo de CFGCSV_06, ajustando limpeza e contagem pos-Novo Periodo sem VCR, sem designer/.frx e sem tocar arquivos proibidos."
+}

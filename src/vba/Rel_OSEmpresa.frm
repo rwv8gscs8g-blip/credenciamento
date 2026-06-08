@@ -69,6 +69,21 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
     Dim senRel As String
     Dim relPreparado As Boolean
     Dim errMsg As String
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+    Dim statusGlobal As String
+    Dim diasRestantes As Long
+    Dim retornoPrevisto As String
+    Dim disponibilidadeOperacional As String
+    Dim nomeEmpresa As String
+    Dim suspensaDesde As String
+    Dim suspensaAte As String
+    Dim ultimaReativacao As String
+    Dim linhaHeader As Long
+    Dim linhaDados As Long
+    Dim strikesNota As String
+    Dim strikesRecusa As String
+    Dim diagnosticoSistema As String
 
     Const COL_OS_NUM As Long = 1      ' A: numero OS
     Const COL_OS_DEMANDANTE As Long = 2 ' B: demandante (entidade)
@@ -88,6 +103,32 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
     empresaId = CStr(RO_Lista.Column(0))
     Var10 = ""
     dataTexto = Trim$(CStr(Dt_inicial.Value))
+    emp = LerEmpresa(empresaId, linhaEmp)
+    If linhaEmp > 0 Then
+        statusGlobal = emp.STATUS_GLOBAL
+        diasRestantes = RRS_DiasRestantesSuspensao(emp.STATUS_GLOBAL, emp.DT_FIM_SUSP)
+        retornoPrevisto = RRS_RetornoPrevistoTexto(emp.STATUS_GLOBAL, emp.DT_FIM_SUSP)
+        disponibilidadeOperacional = RRS_DisponibilidadeOperacionalEmpresa(emp.EMP_ID, "ATIVO")
+        nomeEmpresa = emp.RAZAO_NOME
+        suspensaDesde = RRS_SuspensaDesdeTexto(emp.EMP_ID, emp.STATUS_GLOBAL)
+        suspensaAte = RRS_SuspensaAteTexto(emp.STATUS_GLOBAL, emp.DT_FIM_SUSP)
+        ultimaReativacao = RRS_UltimaReativacaoTexto(emp.DT_ULT_REATIV)
+        strikesNota = RRS_StrikesNotaBaixaTexto(emp.EMP_ID, emp.STATUS_GLOBAL)
+        strikesRecusa = RRS_StrikesRecusaPrazoTexto(emp.EMP_ID)
+        diagnosticoSistema = RRS_DiagnosticoOperacionalEmpresa(emp.EMP_ID, "ATIVO")
+    Else
+        statusGlobal = "EMPRESA_NAO_ENCONTRADA"
+        diasRestantes = 0
+        retornoPrevisto = ""
+        disponibilidadeOperacional = "EMPRESA NAO ENCONTRADA"
+        nomeEmpresa = ""
+        suspensaDesde = "-"
+        suspensaAte = "-"
+        ultimaReativacao = "-"
+        strikesNota = "0"
+        strikesRecusa = "0"
+        diagnosticoSistema = "Empresa nao encontrada no cadastro."
+    End If
 
     If dataTexto = "" Then
         dataInicial = Rel_DataInicialPadrao()
@@ -109,15 +150,52 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
 
     wsRel.Cells.Clear
     wsRel.PageSetup.PrintArea = ""
-    wsRel.Cells(1, 1).Value = "N" & ChrW(186) & " O.S."
-    wsRel.Cells(1, 2).Value = "DEMANDANTE"
-    wsRel.Cells(1, 3).Value = "SERVI" & ChrW(199) & "O"
-    wsRel.Cells(1, 4).Value = "N" & ChrW(186) & " EMPENHO"
-    wsRel.Cells(1, 5).Value = "DATA S.S."
-    wsRel.Cells(1, 6).Value = "DT FECHAMENTO"
-    wsRel.Cells(1, 7).Value = "VALOR S.S."
-    wsRel.Cells(1, 8).Value = "NOTA TOTAL"
-    relLinha = 2
+    wsRel.Cells(1, 1).Value = "RELATORIO DE ORDENS DE SERVICO POR EMPRESA"
+    With wsRel.Range("A1:H1")
+        .Merge
+        .Font.Bold = True
+        .Font.Size = 12
+        .Interior.Color = RGB(217, 225, 242)
+        .HorizontalAlignment = xlCenter
+    End With
+    wsRel.Cells(2, 1).Value = "EMPRESA_ID"
+    wsRel.Cells(2, 2).Value = empresaId
+    wsRel.Cells(2, 3).Value = "EMPRESA"
+    wsRel.Cells(2, 4).Value = nomeEmpresa
+    wsRel.Cells(3, 1).Value = "STATUS EMPRESA"
+    wsRel.Cells(3, 2).Value = RRS_StatusGlobalHumano(statusGlobal)
+    wsRel.Cells(3, 3).Value = "SUSPENSA DESDE"
+    wsRel.Cells(3, 4).Value = suspensaDesde
+    wsRel.Cells(3, 5).Value = "SUSPENSA ATE"
+    wsRel.Cells(3, 6).Value = suspensaAte
+    wsRel.Cells(4, 1).Value = "DIAS RESTANTES"
+    wsRel.Cells(4, 2).Value = diasRestantes
+    wsRel.Cells(4, 3).Value = "RETORNO PREVISTO"
+    wsRel.Cells(4, 4).Value = retornoPrevisto
+    wsRel.Cells(4, 5).Value = "ULTIMA REATIVACAO"
+    wsRel.Cells(4, 6).Value = ultimaReativacao
+    wsRel.Cells(4, 7).Value = "DISPONIBILIDADE ATUAL"
+    wsRel.Cells(4, 8).Value = disponibilidadeOperacional
+    wsRel.Cells(5, 1).Value = "STRIKES NOTA BAIXA"
+    wsRel.Cells(5, 2).Value = strikesNota
+    wsRel.Cells(5, 3).Value = "STRIKES RECUSA/PRAZO"
+    wsRel.Cells(5, 4).Value = strikesRecusa
+    wsRel.Cells(5, 5).Value = "RESUMO OPERACIONAL"
+    wsRel.Cells(5, 6).Value = diagnosticoSistema
+    wsRel.Cells(6, 1).Value = "DATA INICIAL"
+    wsRel.Cells(6, 2).Value = Format$(dataInicial, "dd/mm/yyyy")
+
+    linhaHeader = 8
+    linhaDados = linhaHeader + 1
+    wsRel.Cells(linhaHeader, 1).Value = "N" & ChrW(186) & " O.S."
+    wsRel.Cells(linhaHeader, 2).Value = "DEMANDANTE"
+    wsRel.Cells(linhaHeader, 3).Value = "SERVI" & ChrW(199) & "O"
+    wsRel.Cells(linhaHeader, 4).Value = "N" & ChrW(186) & " EMPENHO"
+    wsRel.Cells(linhaHeader, 5).Value = "DATA S.S."
+    wsRel.Cells(linhaHeader, 6).Value = "DT FECHAMENTO"
+    wsRel.Cells(linhaHeader, 7).Value = "VALOR S.S."
+    wsRel.Cells(linhaHeader, 8).Value = "NOTA TOTAL"
+    relLinha = linhaDados
 
     Call ClassificaOSEmpresa
 
@@ -160,7 +238,7 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
         End If
     Next linhaAtual
 
-    totalRegistros = relLinha - 2
+    totalRegistros = relLinha - linhaDados
     If totalRegistros <= 0 Then
         wsRel.Cells.Clear
         wsRel.PageSetup.PrintArea = ""
@@ -173,8 +251,9 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
     End If
 
     wsRel.Columns("A:H").AutoFit
-    Call Rel_FormatarCabecalho(wsRel, 8)
-    Call Rel_FormatarDados(wsRel, 2, relLinha - 1, 8)
+    wsRel.Range(wsRel.Cells(2, 1), wsRel.Cells(6, 8)).Font.Bold = True
+    Call Rel_FormatarCabecalho(wsRel, 8, linhaHeader)
+    Call Rel_FormatarDados(wsRel, linhaDados, relLinha - 1, 8)
     Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE ORDENS DE SERVICO POR EMPRESA", "H", False, xlLandscape)
     wsRel.PageSetup.PrintArea = wsRel.Range("A1:H" & CStr(relLinha - 1)).Address
 

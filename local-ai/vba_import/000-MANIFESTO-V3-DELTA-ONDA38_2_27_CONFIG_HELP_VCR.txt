@@ -1,0 +1,51 @@
+# Manifesto V3 DELTA ONDA38_2_27_CONFIG_HELP_VCR - V12.0.0206 Onda 38.2.27 / Readback 0154
+# Tema: Configuracoes Iniciais tela a tela; campo de dias por recusa/prazo editavel;
+#       ajuda HBN simples; nome operacional da validacao completa padronizado como VCR.
+#
+# Decisao de nomenclatura:
+#   - VCR = Validacao Completa da Release.
+#   - RVS, Sexteto, Quinteto e Quarteto ficam como nomes internos/legados.
+#   - CSV e apenas formato de arquivo .csv de evidencia, nao nome de teste.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_27_CONFIG_HELP_VCR", "293e44c+ONDA38.2.27-CONFIG-HELP-VCR"
+#
+# Pos-import esperado:
+#   - Importador V3: M=4 | F=1 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunTelaConfiguracoesIniciais
+#   - Esperado: OK=3 | FALHA=0 | MANUAL=0.
+#   - Validacao manual: campo de dias por recusa/prazo editavel; botao Ajuda abre docs/help/hbn/configuracoes-iniciais.html.
+#   - VCR completa nao precisa rodar a cada microajuste; reservar para checkpoint forte.
+#
+# Guardas:
+#   - Sem .frx no delta.
+#   - Sem Auto_Open, sem ThisWorkbook, sem Mod_Types, sem Importador_V3.
+#   - Sem renomear macros legadas em massa; alias VCR preserva compatibilidade.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=23912
+#     sha256=38389ce664ae2bb87bb620def766cc850e3bee3652d1520851f14fcfe08ba40c
+#   M|001-modulo/AAZ-Central_Testes.bas
+#     bytes=35246
+#     sha256=6a87a1554387727ea968db977a0e04d2dec1eb4547647da7d5bbb01a197ea016
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=303814
+#     sha256=a0c288d18c290fe7e6a49238e8625fdab90ed923b7a169f80df51bf52ada820a
+#   M|001-modulo/ABH-Teste_Validacao_Release.bas
+#     bytes=47423
+#     sha256=100cdbc35e5b2bdffdbd44e012991883148eb69ce2d8fb86d75a0c91df0b1c9b
+#   F|002-formularios/AAC-Configuracao_Inicial.frm
+#     bytes=25356
+#     sha256=9c8a3d5911bf89a2c39144fd8b5e9081a1edafc0e67a3632f7618f6fb0454d13
+#   F|002-formularios/AAC-Configuracao_Inicial.code-only.txt
+#     bytes=24830
+#     sha256=1241a59b88c3dedf6b9ab10d288d7a85ae2d5348b21289a5078892bbd0f56398
+#
+# GRUPO_ONDA38_2_27_CONFIG_HELP_VCR
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/AAZ-Central_Testes.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/ABH-Teste_Validacao_Release.bas
+F|002-formularios/AAC-Configuracao_Inicial.frm

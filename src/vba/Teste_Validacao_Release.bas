@@ -3,10 +3,9 @@ Option Explicit
 
 ' Orquestrador minimo de homologacao da release:
 ' Trio Minimo  : V1 rapida + V2 Smoke + V2 Canonica.
-' Quarteto Min.: V1 + V2 Smoke + V2 Canonica + V2 E2E Strikes (Onda 11 MD-3 / DT-1).
-' Quinteto Min.: Quarteto + V2 IntegridadeBase.
-' Sexteto Min. : Quinteto + bloco adversarial Onda 23.
-' RVS oficial : Sexteto + Impressao Residual (Onda 38.2.25).
+' Quarteto/Quinteto/Sexteto permanecem como nomes internos legados de macros.
+' VCR oficial: Validacao Completa da Release com V1, V2, adversariais,
+' Impressao Residual e Punicoes Dias.
 ' Cada gate escreve evidencia copiavel para IA/humano em VALIDACAO_RELEASE.
 
 Private Const VR_SHEET As String = "VALIDACAO_RELEASE"
@@ -54,12 +53,12 @@ Public Sub CT_ValidarRelease_TrioMinimo()
     ' quando arquivo nao existia (passava imagem errada ao operador).
     Dim csvStatusMsg As String
     If Len(csvResumo) > 0 And Dir(csvResumo) <> "" Then
-        csvStatusMsg = "CSV resumo (gerado):" & vbCrLf & csvResumo
+        csvStatusMsg = "Arquivo .csv de evidencia (gerado):" & vbCrLf & csvResumo
     ElseIf Len(csvResumo) > 0 Then
-        csvStatusMsg = "CSV resumo NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
+        csvStatusMsg = "Arquivo .csv de evidencia NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
                        "(verificar permissoes ou erro de I/O - caminho retornado pelo exporter mas Dir() vazio)"
     Else
-        csvStatusMsg = "CSV resumo: nao exportado (caminho vazio)"
+        csvStatusMsg = "Arquivo .csv de evidencia: nao exportado (caminho vazio)"
     End If
 
     msgFinal = "Validacao consolidada concluida." & vbCrLf & _
@@ -151,12 +150,12 @@ Public Sub CT_ValidarRelease_QuartetoMinimo()
     ' antes de mostrar caminho. Antes: caminho aparecia mesmo sem arquivo.
     Dim csvStatusMsgQ As String
     If Len(csvResumo) > 0 And Dir(csvResumo) <> "" Then
-        csvStatusMsgQ = "CSV resumo (gerado):" & vbCrLf & csvResumo
+        csvStatusMsgQ = "Arquivo .csv de evidencia (gerado):" & vbCrLf & csvResumo
     ElseIf Len(csvResumo) > 0 Then
-        csvStatusMsgQ = "CSV resumo NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
+        csvStatusMsgQ = "Arquivo .csv de evidencia NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
                         "(verificar permissoes ou erro de I/O - caminho retornado pelo exporter mas Dir() vazio)"
     Else
-        csvStatusMsgQ = "CSV resumo: nao exportado (caminho vazio)"
+        csvStatusMsgQ = "Arquivo .csv de evidencia: nao exportado (caminho vazio)"
     End If
 
     msgFinal = "Validacao Quarteto concluida." & vbCrLf & _
@@ -333,7 +332,7 @@ Private Sub VR_EscreverResumoIA(ByVal ws As Worksheet, ByVal validacaoId As Stri
     bloco = bloco & VR_LinhaResumoIA(ws, 8) & vbLf
     bloco = bloco & VR_LinhaResumoIA(ws, 9) & vbLf
     bloco = bloco & "RESULTADO=" & statusGeral & vbLf
-    bloco = bloco & "CSV_RESUMO=" & csvResumo
+    bloco = bloco & "ARQUIVO_EVIDENCIA_CSV=" & csvResumo
 
     ws.Cells(12, 1).Value = "BLOCO_COPIAVEL_PARA_IA"
     ws.Cells(13, 1).Value = bloco
@@ -628,7 +627,7 @@ Private Sub VR_EscreverResumoIAQuarteto(ByVal ws As Worksheet, ByVal validacaoId
     bloco = bloco & VR_LinhaResumoIA(ws, 10) & vbLf
     bloco = bloco & "RESULTADO=" & statusGeral & vbLf
     bloco = bloco & "SINTAXE=" & VR_SintaxeQuarteto(ws) & vbLf
-    bloco = bloco & "CSV_RESUMO=" & csvResumo
+    bloco = bloco & "ARQUIVO_EVIDENCIA_CSV=" & csvResumo
 
     ws.Cells(13, 1).Value = "BLOCO_COPIAVEL_PARA_IA"
     ws.Cells(14, 1).Value = bloco
@@ -792,12 +791,12 @@ Public Sub CT_ValidarRelease_QuintetoMinimo()
     ' antes de mostrar caminho.
     Dim csvStatusMsgQ5 As String
     If Len(csvResumo) > 0 And Dir(csvResumo) <> "" Then
-        csvStatusMsgQ5 = "CSV resumo (gerado):" & vbCrLf & csvResumo
+        csvStatusMsgQ5 = "Arquivo .csv de evidencia (gerado):" & vbCrLf & csvResumo
     ElseIf Len(csvResumo) > 0 Then
-        csvStatusMsgQ5 = "CSV resumo NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
+        csvStatusMsgQ5 = "Arquivo .csv de evidencia NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
                          "(verificar permissoes ou erro de I/O - caminho retornado pelo exporter mas Dir() vazio)"
     Else
-        csvStatusMsgQ5 = "CSV resumo: nao exportado (caminho vazio)"
+        csvStatusMsgQ5 = "Arquivo .csv de evidencia: nao exportado (caminho vazio)"
     End If
 
     msgFinal = "Validacao Quinteto concluida." & vbCrLf & _
@@ -859,7 +858,7 @@ Private Sub VR_EscreverResumoIAQuinteto(ByVal ws As Worksheet, ByVal validacaoId
     bloco = bloco & VR_LinhaResumoIA(ws, 11) & vbLf
     bloco = bloco & "RESULTADO=" & statusGeral & vbLf
     bloco = bloco & "SINTAXE=" & VR_SintaxeQuinteto(ws) & vbLf
-    bloco = bloco & "CSV_RESUMO=" & csvResumo
+    bloco = bloco & "ARQUIVO_EVIDENCIA_CSV=" & csvResumo
 
     ws.Cells(14, 1).Value = "BLOCO_COPIAVEL_PARA_IA"
     ws.Cells(15, 1).Value = bloco
@@ -959,7 +958,7 @@ Private Sub VR_FormatarSheetQuinteto(ByVal ws As Worksheet, ByVal statusGeral As
 End Sub
 
 '======================================================================
-' Sexteto Minimo (Onda 23 MD-23.5)
+' Validacao Completa da Release (VCR)
 '   Etapas (linhas em VALIDACAO_RELEASE):
 '     7  V1_RAPIDA
 '     8  V2_SMOKE
@@ -968,9 +967,10 @@ End Sub
 '     11 V2_INTEGRIDADE_BASE
 '     12 V2_ONDA23_ADV
 '     13 V2_IMPRESSAO_RESIDUAL
-'     15 RESULTADO_GERAL
-'     16 BLOCO_COPIAVEL_PARA_IA (label)
-'     17 bloco merge
+'     14 V2_PUNICOES_DIAS
+'     16 RESULTADO_GERAL
+'     17 BLOCO_COPIAVEL_PARA_IA (label)
+'     18 bloco merge
 '   A sexta etapa agrega as suites adversariais aprovadas na Onda 23:
 '     ADVERSARIAL_UI + TRANSACAO_INTERRUPT + BOUNDARY_DATES.
 '   A etapa de impressao residual agrega a suite validada no GATE 2/0151.
@@ -988,35 +988,39 @@ Public Sub CT_ValidarRelease_SextetoMinimo()
 
     validacaoId = "VR_" & Format$(Now, "yyyymmdd_hhnnss")
     Set ws = VR_PrepararSheet(validacaoId)
-    ws.Cells(1, 1).Value = "VALIDACAO RELEASE - GATE RVS"
+    ws.Cells(1, 1).Value = "VALIDACAO COMPLETA DA RELEASE - VCR"
 
-    Application.StatusBar = "Validacao RVS: V1 rapida"
+    Application.StatusBar = "VCR: V1 rapida"
     BA_SetModoExecucaoVisual False
     RunBateriaOficial True
     VR_RegistrarEtapaV1 ws, validacaoId, 7
 
-    Application.StatusBar = "Validacao RVS: V2 Smoke"
+    Application.StatusBar = "VCR: V2 Smoke"
     TV2_RunSmoke False, True
     VR_RegistrarEtapaV2 ws, validacaoId, 8, "V2_SMOKE", TV2_ExecucaoAtualId()
 
-    Application.StatusBar = "Validacao RVS: V2 Canonica"
+    Application.StatusBar = "VCR: V2 Canonica"
     TV2_RunCanonicoFundacao False, True
     VR_RegistrarEtapaV2 ws, validacaoId, 9, "V2_CANONICO", TV2_ExecucaoAtualId()
 
-    Application.StatusBar = "Validacao RVS: E2E Strikes"
+    Application.StatusBar = "VCR: E2E Strikes"
     TV2_RunRodizioStrikesEndToEnd False, True
     VR_RegistrarEtapaV2 ws, validacaoId, 10, "V2_E2E_STRIKES", TV2_ExecucaoAtualId()
 
-    Application.StatusBar = "Validacao RVS: IntegridadeBase"
+    Application.StatusBar = "VCR: IntegridadeBase"
     TV2_RunIntegridadeBase False, True
     VR_RegistrarEtapaV2 ws, validacaoId, 11, "V2_INTEGRIDADE_BASE", TV2_ExecucaoAtualId()
 
-    Application.StatusBar = "Validacao RVS: Onda 23 adversarial"
+    Application.StatusBar = "VCR: Onda 23 adversarial"
     VR_RegistrarEtapaOnda23 ws, validacaoId, 12
 
-    Application.StatusBar = "Validacao RVS: Impressao Residual"
+    Application.StatusBar = "VCR: Impressao Residual"
     TV2_RunImpressaoResidual False, True
     VR_RegistrarEtapaV2 ws, validacaoId, 13, "V2_IMPRESSAO_RESIDUAL", TV2_ExecucaoAtualId()
+
+    Application.StatusBar = "VCR: Punicoes em Dias"
+    TV2_RunPunicoesDias False, True
+    VR_RegistrarEtapaV2 ws, validacaoId, 14, "V2_PUNICOES_DIAS", TV2_ExecucaoAtualId()
 
     statusGeral = VR_StatusGeralSexteto(ws)
     csvResumo = VR_ExportarResumoCSVSexteto(ws, validacaoId, statusGeral)
@@ -1029,15 +1033,15 @@ Public Sub CT_ValidarRelease_SextetoMinimo()
 
     Dim csvStatusMsgS6 As String
     If Len(csvResumo) > 0 And Dir(csvResumo) <> "" Then
-        csvStatusMsgS6 = "CSV resumo (gerado):" & vbCrLf & csvResumo
+        csvStatusMsgS6 = "Arquivo .csv de evidencia (gerado):" & vbCrLf & csvResumo
     ElseIf Len(csvResumo) > 0 Then
-        csvStatusMsgS6 = "CSV resumo NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
+        csvStatusMsgS6 = "Arquivo .csv de evidencia NAO GERADO em:" & vbCrLf & csvResumo & vbCrLf & _
                          "(verificar permissoes ou erro de I/O - caminho retornado pelo exporter mas Dir() vazio)"
     Else
-        csvStatusMsgS6 = "CSV resumo: nao exportado (caminho vazio)"
+        csvStatusMsgS6 = "Arquivo .csv de evidencia: nao exportado (caminho vazio)"
     End If
 
-    msgFinal = "Gate RVS concluido." & vbCrLf & _
+    msgFinal = "Validacao Completa da Release (VCR) concluida." & vbCrLf & _
                "ID: " & validacaoId & vbCrLf & _
                "Resultado: " & statusGeral & vbCrLf & vbCrLf & _
                "Sintaxe: " & VR_SintaxeSexteto(ws) & vbCrLf & vbCrLf & _
@@ -1047,19 +1051,27 @@ Public Sub CT_ValidarRelease_SextetoMinimo()
     Else
         estiloMsg = vbExclamation
     End If
-    MsgBox msgFinal, estiloMsg, "Gate de Validacao de Release (RVS)"
+    MsgBox msgFinal, estiloMsg, "Validacao Completa da Release (VCR)"
     Exit Sub
 
 falha:
     Application.StatusBar = False
-    MsgBox "Erro no Gate RVS: " & Err.Description & vbCrLf & _
+    MsgBox "Erro na Validacao Completa da Release (VCR): " & Err.Description & vbCrLf & _
            "Codigo: " & CStr(Err.Number) & vbCrLf & _
            "Origem: " & Err.Source, _
-           vbCritical, "Gate de Validacao de Release (RVS)"
+           vbCritical, "Validacao Completa da Release (VCR)"
+End Sub
+
+Public Sub CT_ValidarRelease_Completa()
+    CT_ValidarRelease_SextetoMinimo
 End Sub
 
 Public Sub VR_ValidarReleaseSextetoMinimo()
     CT_ValidarRelease_SextetoMinimo
+End Sub
+
+Public Sub VR_ValidarReleaseCompleta()
+    CT_ValidarRelease_Completa
 End Sub
 
 Private Sub VR_RegistrarEtapaOnda23(ByVal ws As Worksheet, ByVal validacaoId As String, ByVal linha As Long)
@@ -1082,7 +1094,7 @@ Private Sub VR_RegistrarEtapaOnda23(ByVal ws As Worksheet, ByVal validacaoId As 
 
     If falhaTotal > 0 Then
         If csvFalhas = "" Then csvFalhas = "NAO_EXPORTADO"
-        acao = "Corrigir a primeira falha do bloco adversarial e reexecutar o RVS."
+        acao = "Corrigir a primeira falha do bloco adversarial e reexecutar a VCR."
     Else
         csvFalhas = "NAO_EXPORTADO"
         primeiraFalha = ""
@@ -1135,7 +1147,7 @@ End Sub
 
 Private Function VR_StatusGeralSexteto(ByVal ws As Worksheet) As String
     Dim r As Long
-    For r = 7 To 13
+    For r = 7 To 14
         If UCase$(Trim$(CStr(ws.Cells(r, 9).Value))) <> VR_STATUS_OK Then
             VR_StatusGeralSexteto = "REPROVADO"
             Exit Function
@@ -1153,6 +1165,7 @@ Private Function VR_SintaxeSexteto(ByVal ws As Worksheet) As String
     s = s & "+IntegridadeBase=" & CStr(ws.Cells(11, 6).Value) & "/" & CStr(ws.Cells(11, 7).Value)
     s = s & "+Onda23Adv=" & CStr(ws.Cells(12, 6).Value) & "/" & CStr(ws.Cells(12, 7).Value)
     s = s & "+ImpressaoResidual=" & CStr(ws.Cells(13, 6).Value) & "/" & CStr(ws.Cells(13, 7).Value)
+    s = s & "+PunicoesDias=" & CStr(ws.Cells(14, 6).Value) & "/" & CStr(ws.Cells(14, 7).Value)
     VR_SintaxeSexteto = s
 End Function
 
@@ -1168,15 +1181,16 @@ Private Sub VR_EscreverResumoIASexteto(ByVal ws As Worksheet, ByVal validacaoId 
     bloco = bloco & VR_LinhaResumoIA(ws, 11) & vbLf
     bloco = bloco & VR_LinhaResumoIA(ws, 12) & vbLf
     bloco = bloco & VR_LinhaResumoIA(ws, 13) & vbLf
+    bloco = bloco & VR_LinhaResumoIA(ws, 14) & vbLf
     bloco = bloco & "RESULTADO=" & statusGeral & vbLf
     bloco = bloco & "SINTAXE=" & VR_SintaxeSexteto(ws) & vbLf
-    bloco = bloco & "CSV_RESUMO=" & csvResumo
+    bloco = bloco & "ARQUIVO_EVIDENCIA_CSV=" & csvResumo
 
-    ws.Cells(16, 1).Value = "BLOCO_COPIAVEL_PARA_IA"
-    ws.Cells(17, 1).Value = bloco
-    ws.Range(ws.Cells(17, 1), ws.Cells(17, 12)).Merge
-    ws.Cells(17, 1).WrapText = True
-    ws.Rows(17).RowHeight = 185
+    ws.Cells(17, 1).Value = "BLOCO_COPIAVEL_PARA_IA"
+    ws.Cells(18, 1).Value = bloco
+    ws.Range(ws.Cells(18, 1), ws.Cells(18, 12)).Merge
+    ws.Cells(18, 1).WrapText = True
+    ws.Rows(18).RowHeight = 205
 End Sub
 
 Private Function VR_ExportarResumoCSVSexteto(ByVal ws As Worksheet, ByVal validacaoId As String, ByVal statusGeral As String) As String
@@ -1188,20 +1202,20 @@ Private Function VR_ExportarResumoCSVSexteto(ByVal ws As Worksheet, ByVal valida
     On Error GoTo falha
 
     pasta = VR_PastaSaida()
-    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseRVS_V12_0_0205_" & validacaoId & ".csv"
+    caminho = pasta & Application.PathSeparator & "ValidacaoReleaseVCR_V12_0_0205_" & validacaoId & ".csv"
 
     fNum = FreeFile
     Open caminho For Output As #fNum
     Print #fNum, "VALIDACAO_ID;BUILD;DATA_HORA;ETAPA;EXECUCAO_ID;OK;FALHA;MANUAL;STATUS;CSV_FALHAS;PRIMEIRA_FALHA;ACAO_IA"
 
-    For r = 7 To 13
+    For r = 7 To 14
         Print #fNum, VR_CsvLinha(ws, r)
     Next r
 
     Print #fNum, VR_CsvCell(validacaoId) & ";" & VR_CsvCell(VR_BuildImportado()) & ";" & _
         VR_CsvCell(Format$(Now, "dd/mm/yyyy hh:nn:ss")) & ";GERAL;;;;;" & _
         VR_CsvCell(statusGeral) & ";;;" & _
-        VR_CsvCell("RVS V1+V2_Smoke+V2_Canonica+E2E_Strikes+IntegridadeBase+Onda23Adv+ImpressaoResidual; usar como evidencia textual.")
+        VR_CsvCell("VCR V1+V2_Smoke+V2_Canonica+E2E_Strikes+IntegridadeBase+Onda23Adv+ImpressaoResidual+PunicoesDias; usar como evidencia textual.")
 
     Close #fNum
     VR_ExportarResumoCSVSexteto = caminho
@@ -1234,7 +1248,7 @@ Private Sub VR_FormatarSheetSexteto(ByVal ws As Worksheet, ByVal statusGeral As 
         .HorizontalAlignment = xlCenter
     End With
 
-    For r = 7 To 13
+    For r = 7 To 14
         If UCase$(Trim$(CStr(ws.Cells(r, 9).Value))) = VR_STATUS_OK Then
             ws.Cells(r, 9).Interior.Color = RGB(198, 239, 206)
         Else
@@ -1242,13 +1256,13 @@ Private Sub VR_FormatarSheetSexteto(ByVal ws As Worksheet, ByVal statusGeral As 
         End If
     Next r
 
-    ws.Cells(15, 1).Value = "RESULTADO_GERAL"
-    ws.Cells(15, 2).Value = statusGeral
-    ws.Cells(15, 2).Font.Bold = True
+    ws.Cells(16, 1).Value = "RESULTADO_GERAL"
+    ws.Cells(16, 2).Value = statusGeral
+    ws.Cells(16, 2).Font.Bold = True
     If statusGeral = "APROVADO" Then
-        ws.Cells(15, 2).Interior.Color = RGB(198, 239, 206)
+        ws.Cells(16, 2).Interior.Color = RGB(198, 239, 206)
     Else
-        ws.Cells(15, 2).Interior.Color = RGB(255, 199, 206)
+        ws.Cells(16, 2).Interior.Color = RGB(255, 199, 206)
     End If
 
     ws.Columns(1).ColumnWidth = 23
@@ -1263,8 +1277,8 @@ Private Sub VR_FormatarSheetSexteto(ByVal ws As Worksheet, ByVal statusGeral As 
     ws.Columns(10).ColumnWidth = 42
     ws.Columns(11).ColumnWidth = 70
     ws.Columns(12).ColumnWidth = 42
-    ws.Range(ws.Cells(6, 1), ws.Cells(13, 12)).AutoFilter
-    ws.Range(ws.Cells(1, 1), ws.Cells(17, 12)).Borders.LineStyle = xlContinuous
+    ws.Range(ws.Cells(6, 1), ws.Cells(14, 12)).AutoFilter
+    ws.Range(ws.Cells(1, 1), ws.Cells(18, 12)).Borders.LineStyle = xlContinuous
     ws.Cells.WrapText = True
     On Error GoTo 0
 End Sub

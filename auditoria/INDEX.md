@@ -1,6 +1,6 @@
 ---
 titulo: Indice das Auditorias (pos-Onda 6)
-ultima-atualizacao: 2026-05-24
+ultima-atualizacao: 2026-06-08
 diataxis: reference
 hbn-track: fast_track
 hbn-status: active
@@ -73,9 +73,10 @@ versao-sistema: V12.0.0206
 - [00_status/125_REGISTRO_ONDA_0116_A3_GUARDS_CI.md](00_status/125_REGISTRO_ONDA_0116_A3_GUARDS_CI.md) — onda 0116: CI hbn-guards (ratchet + scope-lock por commit)
 - [00_status/126_AUDITORIA_ARQUITETURAL_V207_OPUS48.md](00_status/126_AUDITORIA_ARQUITETURAL_V207_OPUS48.md) — auditoria arquitetural definitiva V207 (Opus 4.8): condições bloqueadoras + recomendações
 - [00_status/127_PROMPT_HANDOFF_CODEX_RETOMADA_V206.md](00_status/127_PROMPT_HANDOFF_CODEX_RETOMADA_V206.md) — prompt canônico de handoff do Codex (retomada V206 pós-onda-0117)
+- [00_status/128_PROMPT_RETOMADA_CODEX_CONFIG_INICIAL_TELA_A_TELA.md](00_status/128_PROMPT_RETOMADA_CODEX_CONFIG_INICIAL_TELA_A_TELA.md) — prompt de retomada Codex para Configurações Iniciais tela a tela
 
-> Entradas 100-127 adicionadas na onda 0117 (2026-06-05) com descrições de 1
-> linha derivadas dos títulos; refinamentos pontuais são bem-vindos em ondas
+> Entradas 100-128 adicionadas/atualizadas entre a onda 0117 e o handoff 0157
+> com descrições curtas derivadas dos títulos; refinamentos pontuais são bem-vindos em ondas
 > futuras. Doc 99 não existe (lacuna de numeração intencional — ver regra de
 > leitura abaixo).
 - [00_status/00_SUMARIO_EXECUTIVO.md](00_status/00_SUMARIO_EXECUTIVO.md) — status executivo da linha oficial
@@ -118,6 +119,12 @@ versao-sistema: V12.0.0206
 | 6 | [03_ondas/onda_06_consolidacao_documental/](03_ondas/onda_06_consolidacao_documental/) | consolidacao documental + integracao HBN/Diataxis/llms.txt/AGENTS.md/Glasswing |
 | 31 | [03_ondas/onda_31_v206_higiene_documental/](03_ondas/onda_31_v206_higiene_documental/) | higiene documental e evidências V206 |
 | 33 | [03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/](03_ondas/onda_33_v206_fix_relatorios_pdf_precondicao/) | correção dos relatórios antes do motor PDF |
+| 38.2.28 | [03_ondas/onda_38_2_28_configuracoes_iniciais_botoes_menus/](03_ondas/onda_38_2_28_configuracoes_iniciais_botoes_menus/) | Configuracoes Iniciais: botoes, menus e fechamento |
+| 38.2.29 | [03_ondas/onda_38_2_29_tela_inicial_menu_principal/](03_ondas/onda_38_2_29_tela_inicial_menu_principal/) | Tela Inicial/Menu Principal: entrada, comandos, processos e saida |
+| 38.2.30 | [03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/](03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/) | Configuracoes Iniciais: matriz destrutiva de cenarios, Novo Periodo e CSV |
+| 38.2.31 | [03_ondas/onda_38_2_31_relatorios_tela_a_tela/](03_ondas/onda_38_2_31_relatorios_tela_a_tela/) | Relatorios tela a tela: status da empresa, suspensao e formatacao |
+| 38.2.32 | [03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/](03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/) | Relatorios: suspensoes, strikes, avisos impressos e reset documentado |
+| 38.2.33 | [03_ondas/onda_38_2_33_disponibilidade_operacional_relatorios/](03_ondas/onda_38_2_33_disponibilidade_operacional_relatorios/) | Relatorios: disponibilidade operacional, Pre-OS pendente e resumo padronizado |
 
 ## 04_evidencias/ — CSVs e manifestos hashados
 

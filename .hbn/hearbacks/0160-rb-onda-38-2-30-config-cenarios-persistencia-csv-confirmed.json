@@ -1,0 +1,16 @@
+{
+  "hearback_id": "0160-rb-onda-38-2-30-config-cenarios-persistencia-csv-confirmed",
+  "readback_id": "0160-rb-onda-38-2-30-config-cenarios-persistencia-csv",
+  "status": "confirmed",
+  "confirmed_by": "mauricio",
+  "confirmed_at": "2026-06-07T10:32:00-03:00",
+  "summary": "Mauricio confirmou que, por ser mapa de testes, a suite pode ser destrutiva desde que avise que destruira dados para criar cenarios deterministicos e idempotentes. Autorizou implementar a persistencia matricial de Configuracoes Iniciais, iniciar Novo Periodo, criar pasta V12-0-0206-Onda-38-2-30, salvar copia da planilha e gravar CSV de evidencia na mesma pasta.",
+  "constraints": [
+    "Fluxos destrutivos devem avisar explicitamente antes de destruir dados.",
+    "O teste deve ser deterministico e idempotente.",
+    "Nao gerar PDF nesta onda; gerar CSV de evidencia.",
+    "Nao restaurar a 0155.",
+    "Nao tocar em Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.",
+    "Nao rodar VCR neste microdelta."
+  ]
+}

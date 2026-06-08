@@ -184,11 +184,45 @@ Public Function AvancarFila( _
     Dim linhaCredOriginal As Long
     Dim credOriginal As TCredenciamento
     Dim posicaoOriginal As Long
+    Dim empAntesPunicao As TEmpresa
+    Dim linhaEmpAntesPunicao As Long
+    Dim qtdRecusasAntes As Long
+    Dim qtdRecusasAtivAntes As Long
+    Dim vaiSuspender As Boolean
+    Dim diasSuspRecusaPrazo As Long
+    Dim msgConfigDias As String
+    Dim snapshotConfig As String
+    Dim origemSuspensao As String
+    Dim resRollbackRecusa As TResult
 
     On Error GoTo erro
 
     credOriginal = BuscarPorEmpresaAtividade(EMP_ID, ATIV_ID, linhaCredOriginal)
     If linhaCredOriginal > 0 Then posicaoOriginal = credOriginal.POSICAO_FILA
+
+    If IsPunido Then
+        cfg = GetConfig()
+        empAntesPunicao = LerEmpresa(EMP_ID, linhaEmpAntesPunicao)
+        If linhaEmpAntesPunicao = 0 Then
+            res.sucesso = False
+            res.mensagem = "Empresa nao encontrada antes de punir fila: EMP_ID=" & EMP_ID
+            AvancarFila = res
+            Exit Function
+        End If
+
+        qtdRecusasAntes = empAntesPunicao.QTD_RECUSAS
+        If linhaCredOriginal > 0 Then qtdRecusasAtivAntes = credOriginal.QTD_RECUSAS
+        vaiSuspender = (qtdRecusasAntes + 1 >= cfg.MAX_RECUSAS)
+        If vaiSuspender Then
+            If Not Config_TryGetDiasSuspensaoRecusaPrazo(diasSuspRecusaPrazo, msgConfigDias) Then
+                res.sucesso = False
+                res.mensagem = "Configuracao invalida para suspensao por recusa/prazo: " & msgConfigDias
+                AvancarFila = res
+                Exit Function
+            End If
+            snapshotConfig = Config_SnapshotPunicoesDias()
+        End If
+    End If
 
     ' 1. Mover para o fim da fila
     resMove = MoverFinal(EMP_ID, ATIV_ID, Now)
@@ -231,17 +265,34 @@ Public Function AvancarFila( _
                 novaRecusaGlobal = 0
             End If
 
-            cfg = GetConfig()
-
             If novaRecusaGlobal >= cfg.MAX_RECUSAS Then
-                resSusp = Suspender(EMP_ID)
+                If InStr(1, motivo, "EXPIRAD", vbTextCompare) > 0 Then
+                    origemSuspensao = "EXPIRACAO"
+                Else
+                    origemSuspensao = "RECUSA"
+                End If
+
+                resSusp = Suspender( _
+                    EMP_ID, _
+                    diasSuspRecusaPrazo, _
+                    origemSuspensao, _
+                    "QTD_RECUSAS_GLOBAL=" & CStr(novaRecusaGlobal) & _
+                        "; ATIV=" & ATIV_ID & _
+                        "; MOTIVO=" & motivo, _
+                    snapshotConfig)
                 ' Suspensão registra sua própria auditoria
                 If Not resSusp.sucesso Then
+                    resRollbackRecusa = RollbackRecusaIncremento(EMP_ID, ATIV_ID, qtdRecusasAntes, qtdRecusasAtivAntes)
+                    If linhaCredOriginal > 0 Then
+                        resRollbackFila = RestaurarPosicaoFila(EMP_ID, ATIV_ID, posicaoOriginal, credOriginal.DT_ULTIMA_IND)
+                    End If
                     RegistrarEvento _
                         EVT_TRANSACAO, ENT_EMP, EMP_ID, _
                         "QTD_RECUSAS_GLOBAL=" & CStr(novaRecusaGlobal), _
                         "FALHA_SUSPENSAO_APOS_RECUSA=" & resSusp.mensagem & _
-                        "; ATIV=" & ATIV_ID, _
+                        "; ATIV=" & ATIV_ID & _
+                        "; ROLLBACK_RECUSA=" & IIf(resRollbackRecusa.sucesso, "OK", "FALHOU") & _
+                        "; ROLLBACK_FILA=" & IIf(resRollbackFila.sucesso, "OK", "NAO_APLICADO"), _
                         "Svc_Rodizio"
                     res.sucesso = False
                     res.mensagem = "Falha ao suspender empresa apos recusa: " & resSusp.mensagem
@@ -285,26 +336,50 @@ End Function
 ' ============================================================
 
 ' Suspender - coloca empresa em SUSPENSA_GLOBAL.
-' Chamada automaticamente por AvancarFila quando MAX_RECUSAS é atingido.
-' Pode também ser chamada manualmente pelo gestor (futuro Sprint 4).
+' V12.0.0206: dias, origem e snapshot de configuracao sao obrigatorios.
+' Nao le CONFIG e nao possui fallback em meses.
 '
 Public Function Suspender( _
     ByVal EMP_ID As String, _
-    Optional ByVal diasSuspensao As Long = 0, _
-    Optional ByVal motivo As String = "" _
+    ByVal diasSuspensao As Long, _
+    ByVal origem As String, _
+    Optional ByVal motivo As String = "", _
+    Optional ByVal configSnapshot As String = "" _
 ) As TResult
     Dim res As TResult
     Dim emp As TEmpresa
     Dim linhaEmp As Long
-    Dim cfg As TConfig
     Dim dtFimSusp As Date
-    Dim base As String
-    Dim baseTexto As String
     Dim resGravacao As TResult
     Dim empDepois As TEmpresa
     Dim linhaEmpDepois As Long
+    Dim origemNorm As String
 
     On Error GoTo erro
+
+    origemNorm = UCase$(Trim$(origem))
+    Select Case origemNorm
+        Case "STRIKE", "RECUSA", "EXPIRACAO", "MANUAL"
+        Case Else
+            res.sucesso = False
+            res.mensagem = "Origem de suspensao invalida: " & origem
+            Suspender = res
+            Exit Function
+    End Select
+
+    If diasSuspensao < 1 Or diasSuspensao > 3650 Then
+        res.sucesso = False
+        res.mensagem = "Dias de suspensao invalido: informe inteiro entre 1 e 3650."
+        Suspender = res
+        Exit Function
+    End If
+
+    If Trim$(configSnapshot) = "" Then
+        res.sucesso = False
+        res.mensagem = "Snapshot de configuracao obrigatorio para suspensao."
+        Suspender = res
+        Exit Function
+    End If
 
     emp = LerEmpresa(EMP_ID, linhaEmp)
 
@@ -323,19 +398,7 @@ Public Function Suspender( _
         Exit Function
     End If
 
-    ' V12.0.0203 ONDA 1 - Suspensao em dias quando informado;
-    ' fallback historico em meses (PERIODO_SUSPENSAO_MESES) quando nao.
-    ' Compatibilidade: chamadores antigos sem parametros continuam usando meses.
-    If diasSuspensao > 0 Then
-        dtFimSusp = DateAdd("d", diasSuspensao, Date)
-        base = "DIAS"
-        baseTexto = "DIAS=" & CStr(diasSuspensao)
-    Else
-        cfg = GetConfig()
-        dtFimSusp = DateAdd("m", cfg.PERIODO_SUSPENSAO_MESES, Date)
-        base = "MESES"
-        baseTexto = "MESES=" & cfg.PERIODO_SUSPENSAO_MESES
-    End If
+    dtFimSusp = DateAdd("d", diasSuspensao, Date)
 
     ' Gravar status de suspensão
     resGravacao = GravarStatusEmpresa(linhaEmp, STATUS_EMP_SUSPENSA, dtFimSusp, -1)
@@ -360,13 +423,15 @@ Public Function Suspender( _
         EVT_SUSPENSAO, ENT_EMP, EMP_ID, _
         "STATUS=" & emp.STATUS_GLOBAL, _
         "STATUS=SUSPENSA_GLOBAL; DT_FIM_SUSP=" & Format$(dtFimSusp, "DD/MM/YYYY") & _
-        "; BASE=" & base & "; " & baseTexto & _
+        "; BASE=DIAS; DIAS=" & CStr(diasSuspensao) & _
+        "; ORIGEM=" & origemNorm & _
+        "; SNAPSHOT_CONFIG=" & configSnapshot & _
         IIf(Trim$(motivo) = "", "", "; MOTIVO=" & motivo), _
         "Svc_Rodizio"
 
     res.sucesso = True
     res.mensagem = "Empresa EMP_ID=" & EMP_ID & " suspensa ate " & Format$(dtFimSusp, "DD/MM/YYYY") & _
-                   " (BASE=" & base & ")"
+                   " (DIAS=" & CStr(diasSuspensao) & "; ORIGEM=" & origemNorm & ")"
     res.IdGerado = EMP_ID
     Suspender = res
     Exit Function
@@ -606,6 +671,98 @@ End Function
 ' ============================================================
 ' SEÇÃO 4: HELPERS PRIVADOS
 ' ============================================================
+
+Private Function RollbackRecusaIncremento( _
+    ByVal EMP_ID As String, _
+    ByVal ATIV_ID As String, _
+    ByVal qtdGlobalAnterior As Long, _
+    ByVal qtdAtivAnterior As Long _
+) As TResult
+    Dim res As TResult
+    Dim wsEmp As Worksheet
+    Dim wsCred As Worksheet
+    Dim i As Long
+    Dim linhaEmp As Long
+    Dim linhaCred As Long
+    Dim estEmp As Boolean
+    Dim senEmp As String
+    Dim estCred As Boolean
+    Dim senCred As String
+    Dim empPreparada As Boolean
+    Dim credPreparada As Boolean
+    Dim errD As String
+
+    On Error GoTo falha
+
+    Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+    Set wsCred = ThisWorkbook.Sheets(SHEET_CREDENCIADOS)
+
+    For i = PrimeiraLinhaDadosEmpresas() To UltimaLinhaAba(SHEET_EMPRESAS)
+        If IdsIguais(wsEmp.Cells(i, COL_EMP_ID).Value, EMP_ID) Then
+            linhaEmp = i
+            Exit For
+        End If
+    Next i
+
+    For i = LINHA_DADOS To UltimaLinhaAba(SHEET_CREDENCIADOS)
+        If IdsIguais(wsCred.Cells(i, COL_CRED_EMP_ID).Value, EMP_ID) And _
+           IdsIguais(wsCred.Cells(i, COL_CRED_ATIV_ID).Value, ATIV_ID) Then
+            linhaCred = i
+            Exit For
+        End If
+    Next i
+
+    If linhaEmp = 0 Or linhaCred = 0 Then
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel localizar linhas para rollback de recusa."
+        RollbackRecusaIncremento = res
+        Exit Function
+    End If
+
+    If Not Util_PrepararAbaParaEscrita(wsEmp, estEmp, senEmp) Then
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar EMPRESAS para rollback de recusa."
+        RollbackRecusaIncremento = res
+        Exit Function
+    End If
+    empPreparada = True
+    wsEmp.Cells(linhaEmp, COL_EMP_QTD_RECUSAS).Value = qtdGlobalAnterior
+    wsEmp.Cells(linhaEmp, COL_EMP_DT_ULT_ALT).Value = Now
+    Util_RestaurarProtecaoAba wsEmp, estEmp, senEmp
+    empPreparada = False
+
+    If Not Util_PrepararAbaParaEscrita(wsCred, estCred, senCred) Then
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar CREDENCIADOS para rollback de recusa."
+        RollbackRecusaIncremento = res
+        Exit Function
+    End If
+    credPreparada = True
+    wsCred.Cells(linhaCred, COL_CRED_RECUSAS).Value = qtdAtivAnterior
+    Util_RestaurarProtecaoAba wsCred, estCred, senCred
+    credPreparada = False
+
+    RegistrarEvento EVT_TRANSACAO, ENT_CRED, EMP_ID, _
+        "ROLLBACK_RECUSA; ATIV=" & ATIV_ID, _
+        "QTD_RECUSAS_GLOBAL=" & CStr(qtdGlobalAnterior) & _
+        "; QTD_RECUSAS_ATIV=" & CStr(qtdAtivAnterior), _
+        "Svc_Rodizio"
+
+    res.sucesso = True
+    res.mensagem = "Rollback de recusa concluido."
+    RollbackRecusaIncremento = res
+    Exit Function
+
+falha:
+    errD = Err.Description
+    On Error Resume Next
+    If empPreparada Then Util_RestaurarProtecaoAba wsEmp, estEmp, senEmp
+    If credPreparada Then Util_RestaurarProtecaoAba wsCred, estCred, senCred
+    On Error GoTo 0
+    res.sucesso = False
+    res.mensagem = "Erro no rollback de recusa: " & errD
+    RollbackRecusaIncremento = res
+End Function
 
 ' Registra a data de indicação na linha do credenciamento sem mover a posição.
 ' Chamado quando uma empresa é selecionada pelo rodízio.

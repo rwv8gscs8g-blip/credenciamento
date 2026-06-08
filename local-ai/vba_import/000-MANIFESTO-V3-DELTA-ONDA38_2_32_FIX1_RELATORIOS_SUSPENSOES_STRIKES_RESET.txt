@@ -1,0 +1,38 @@
+# Manifesto V3 DELTA ONDA38_2_32_FIX1_RELATORIOS_SUSPENSOES_STRIKES_RESET - V12.0.0206 Onda 38.2.32-fix1 / Readback 0163
+# Tema: Corrigir falso negativo do teste RELSSR_08 sem alterar regra de negocio.
+#
+# Contexto:
+#   - Pacote base ONDA38_2_32 importou e compilou.
+#   - TV2_RunRelatoriosSuspensoesStrikesReset retornou OK=9 | FALHA=1 | MANUAL=0.
+#   - A falha foi em RELSSR_08_IMPRESSOS_AVISO_OPERACIONAL.
+#   - Causa: o teste procurava literais do aviso em Preencher.bas.
+#   - O texto correto esta centralizado em Rel_Rodizio_Status.bas, na funcao RRS_AvisoOperacionalEmpresa.
+#   - Preencher.bas deve apenas chamar RRS_AvisoOperacionalEmpresa e escrever o aviso no impresso.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_32_FIX1_RELATORIOS_SUSPENSOES_STRIKES_RESET", "293e44c+ONDA38.2.32-FIX1-REL-SUSP-STRIKES-RESET"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=0 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunRelatoriosSuspensoesStrikesReset
+#   - Esperado: OK=10 | FALHA=0 | MANUAL=0.
+#   - Sem VCR neste microdelta; VCR fica reservado para checkpoint forte.
+#
+# Guardas:
+#   - Correcao test-only mais bump de App_Release.
+#   - Sem forms, sem .frx, sem codigo de regra de negocio.
+#   - Sem Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.
+#   - Sem restaurar/importar 0155.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24279
+#     sha256=69e76c718cfb1656799fefeb73d1bfb9b282e3bba6d06e82bf6cd1be91bf8f89
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=359143
+#     sha256=12bc98f11fb164b75e25a43f0dc1ab3a5ef7b7550fa16084a35850d45182abaa
+#
+# GRUPO_ONDA38_2_32_FIX1_RELATORIOS_SUSPENSOES_STRIKES_RESET
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas

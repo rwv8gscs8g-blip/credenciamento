@@ -1,0 +1,168 @@
+{
+  "result_id": "0156-exec-onda-38-2-27-fix1-config-layout-design",
+  "execution_id": "0156-exec-onda-38-2-27-fix1-config-layout-design",
+  "readback_id": "0156-rb-onda-38-2-27-fix1-config-layout-design",
+  "data": "2026-06-06",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "configuracoes_iniciais_layout_design_fix1_validated",
+  "human_status": "confirmed_closed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "293e44c",
+  "build_label": "293e44c+ONDA38.2.27-CONFIG-LAYOUT-fix1",
+  "action": "Substituir a proposta runtime 0155 por correcao simples de design no formulario Configuracoes Iniciais.",
+  "summary": "A 0156 incorpora o .frm/.frx exportado de incoming apos correcao no designer: o label 'suspender por' nao deve cobrir o campo numerico de dias por recusa/prazo. A proposta 0155 foi marcada como supersedida antes de importacao e o manifesto antigo foi removido. O teste TV2_RunTelaConfiguracoesIniciais foi mantido com 3 asserts; o primeiro agora valida editabilidade basica e ausencia de sobreposicao de label sobre TxtMesesSuspensao. O operador reportou importacao OK, compile limpo, TV2_20260606_231033 com OK=3, FALHA=0, MANUAL=0, e confirmacao manual de clique, edicao e salvamento do campo.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 pelo comando do manifesto 0156.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunTelaConfiguracoesIniciais pela Janela Imediata.",
+      "Abrir Configuracoes Iniciais e confirmar que o label 'suspender por' nao cobre o campo '30'.",
+      "Editar o campo manualmente e salvar parametros.",
+      "Nao executar a 0155 runtime; ela foi supersedida."
+    ],
+    "status": "passed"
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_27_CONFIG_LAYOUT_FIX1\", \"293e44c+ONDA38.2.27-CONFIG-LAYOUT-fix1\"",
+    "import_result": "M=2 | F=1 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunTelaConfiguracoesIniciais",
+    "tv2_directed_result": "OK=3 | FALHA=0 | MANUAL=0",
+    "manual_ui": "Campo 'suspender por 30 dia(s)' aceita clique e edicao direta; label nao sobrepoe o campo."
+  },
+  "human_gate_observed": {
+    "reported_by": "Mauricio",
+    "reported_at": "2026-06-06T23:10:00-03:00",
+    "import_result": "Importador V3 concluiu OK; modo=Estabilizado | dryRun=Falso | M=2 | F=1 | err=0 | skip=0; backup 20260606_230924-V3-FULL",
+    "compile_result": "Compilou",
+    "tv2_directed_macro": "TV2_RunTelaConfiguracoesIniciais",
+    "tv2_directed_result": "TV2_20260606_231033 | OK=3 | FALHA=0 | MANUAL=0 | CSV de falhas nao exportado",
+    "manual_ui": "Confirmado por Mauricio: o campo aceita clique, edicao e salvamento. Etapa considerada fechada."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_27_CONFIG_LAYOUT_FIX1.txt",
+    "manifest_bytes": 2278,
+    "manifest_sha256": "a0d120dad78001694ee2e12c926b14d845140b20ad847d383968f51fa4e27f72",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_27_CONFIG_LAYOUT_FIX1\", \"293e44c+ONDA38.2.27-CONFIG-LAYOUT-fix1\"",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24006,
+        "sha256": "4d569b187e0a098424e23083be41c4b7e2487b9da39b3e470f77578bbdceffd1"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 306732,
+        "sha256": "1173f655ba1db8dcb64001b773956d4e4aeccefd8068ad73680775bc322edab2"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+        "bytes": 25316,
+        "sha256": "b637d9e11109690a32beee3c73f584a569106fc9b378c2042bc957d8c0150866"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+        "bytes": 24790,
+        "sha256": "c768447b38da4d6fea2f4b9675a355124f5dedff2c2e7b17c014bf829f685d81"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+        "bytes": 354840,
+        "sha256": "3e3e4d5cc838ab3199514cdf0b13328a3eb295eaf34c7378157f96610abc7c4d"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0156-rb-onda-38-2-27-fix1-config-layout-design.json",
+    ".hbn/hearbacks/0156-rb-onda-38-2-27-fix1-config-layout-design-confirmed.json",
+    ".hbn/hearbacks/0156-rb-onda-38-2-27-fix1-config-layout-design-confirmed.md",
+    ".hbn/results/0155-exec-onda-38-2-27-fix1-config-campo-tab.json",
+    ".hbn/results/0156-exec-onda-38-2-27-fix1-config-layout-design.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/03_ondas/onda_38_2_27_config_help_vcr/0156_FIX1_DESIGN_TECNICO.md",
+    "src/vba/Configuracao_Inicial.frm",
+    "src/vba/Configuracao_Inicial.frx",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+    "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_27_CONFIG_LAYOUT_FIX1.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; git worktree list aponta a branch codex/v12-0-0206-planejamento na raiz canonica."
+    },
+    {
+      "gate": "Readback 0156",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0156-rb-onda-38-2-27-fix1-config-layout-design.json retornou OK."
+    },
+    {
+      "gate": "Hearback 0156",
+      "status": "pass_local_json",
+      "evidence": "python3 -m json.tool .hbn/hearbacks/0156-rb-onda-38-2-27-fix1-config-layout-design-confirmed.json retornou JSON valido."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only Configuracao_Inicial.frm --only Teste_V2_Roteiros.bas --only App_Release.bas retornou OK."
+    },
+    {
+      "gate": "FRX incorporado",
+      "status": "pass_local_hash",
+      "evidence": "src/vba/Configuracao_Inicial.frx, incoming/Configuracao_Inicial.frx e local-ai/vba_import/002-formularios/Configuracao_Inicial.frx tem sha256 3e3e4d5cc838ab3199514cdf0b13328a3eb295eaf34c7378157f96610abc7c4d."
+    },
+    {
+      "gate": "EOL e whitespace",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/report-vba-eol-whitespace.sh retornou OK; git diff --check sem saida."
+    },
+    {
+      "gate": "Runtime layout removido",
+      "status": "pass_static",
+      "evidence": "rg nao encontrou CI_PrepararCampoDiasRecusaPrazo, CI_PrepararNavegacaoPorTab, CI_AjustarRotuloDiaAposCampo, Width>=54 ou ZOrder no escopo fonte/espelho aplicavel."
+    },
+    {
+      "gate": "Importador V3 0156",
+      "status": "pass_human_reported",
+      "evidence": "Mauricio reportou Importador V3 OK: modo=Estabilizado, dryRun=Falso, M=2, F=1, err=0, skip=0; backup 20260606_230924-V3-FULL."
+    },
+    {
+      "gate": "Compile VBE 0156",
+      "status": "pass_human_reported",
+      "evidence": "Mauricio reportou que compilou."
+    },
+    {
+      "gate": "TV2_RunTelaConfiguracoesIniciais 0156",
+      "status": "pass_human_reported",
+      "evidence": "TV2_20260606_231033 retornou OK=3, FALHA=0, MANUAL=0; sem CSV de falhas."
+    },
+    {
+      "gate": "Clique, edicao e salvamento do campo dias recusa/prazo",
+      "status": "pass_human_reported",
+      "evidence": "Mauricio confirmou que o campo aceita clique, edicao e salvamento; etapa fechada."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunTelaConfiguracoesIniciais no workbook",
+    "Clique real e edicao direta no campo 'suspender por 30 dia(s)' apos importacao"
+  ],
+  "rollback_plan": [
+    "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+    "Se compile falhar, nao salvar o workbook e restaurar o backup V3 gerado antes do import.",
+    "Se TV2_RunTelaConfiguracoesIniciais falhar, anexar CSV de falhas e nao executar VCR.",
+    "Se a tela ainda apresentar sobreposicao, corrigir novamente no designer e reexportar o formulario."
+  ]
+}

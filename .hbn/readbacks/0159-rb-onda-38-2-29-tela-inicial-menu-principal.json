@@ -1,0 +1,139 @@
+{
+  "readback_id": "0159-rb-onda-38-2-29-tela-inicial-menu-principal",
+  "data": "2026-06-07",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus",
+  "intent": {
+    "objective": "Avancar a validacao tela a tela para a Tela Inicial/Menu_Principal, documentando comportamento operacional e adicionando teste V2 dirigido para entrada, comandos institucionais, navegacao lateral, mensagens, impactos e mapa de cobertura.",
+    "non_goals": [
+      "Nao alterar Auto_Open.bas, ThisWorkbook, Importador_V3.bas ou Mod_Types.bas",
+      "Nao alterar o designer ou codigo de producao do Menu_Principal nesta onda",
+      "Nao executar Central de Testes, Sair ou qualquer fluxo destrutivo por clique automatizado",
+      "Nao rodar VCR neste microdelta",
+      "Nao iniciar V207",
+      "Nao declarar freeze da V12.0.0206"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0159-rb-onda-38-2-29-tela-inicial-menu-principal.json",
+      ".hbn/hearbacks/0159-rb-onda-38-2-29-tela-inicial-menu-principal-confirmed.json",
+      ".hbn/hearbacks/0159-rb-onda-38-2-29-tela-inicial-menu-principal-confirmed.md",
+      ".hbn/results/0159-exec-onda-38-2-29-tela-inicial-menu-principal.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_29_tela_inicial_menu_principal/0159_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_29_tela_inicial_menu_principal/0159_PROCEDIMENTO_IMPORT.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_29_TELA_INICIAL.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Menu_Principal.frx",
+      "local-ai/vba_import/**/AAA-Mod_Types.bas",
+      "local-ai/vba_import/**/ABK-Importador_V3.bas",
+      "local-ai/vba_import/**/AAY-Auto_Open.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/Menu_Principal.frx",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "after_hearback": [
+      "Adicionar suite V2 dirigida TV2_RunTelaInicial para contratos seguros da Tela Inicial/Menu_Principal.",
+      "Validar por tokens e funcoes existentes: entrada por IniciarSistema, reaplicacao de protecao, carga CNAE, backfill, estado da pagina inicial, Sobre, GitHub, Central de Testes, Configuracoes Iniciais, rotas laterais, Sair e fechamento pelo X.",
+      "Atualizar catalogo/guia de testes para que os pontos descritos tenham mapa de cobertura rastreavel.",
+      "Gerar manifesto V3 apenas com modulos alterados e build label da onda.",
+      "Registrar classificacao: cobertura de comportamento/contrato, sem defeito de designer confirmado."
+    ]
+  },
+  "invariants_preserved": [
+    "0158 permanece fechada com import OK, compile OK e TV2 OK=9",
+    "Tela Inicial/Menu_Principal de producao nao e alterada nesta onda",
+    "Auto_Open permanece fora do delta",
+    "Fluxos destrutivos ou de treinamento nao sao executados automaticamente",
+    "VCR fica reservada para checkpoint forte"
+  ],
+  "risks": [
+    {
+      "risk": "Central de Testes pode alterar dados reais se acionada pelo teste automatizado.",
+      "mitigation": "Validar apenas contrato de confirmacao, delegacao e mensagens; nao executar clique real.",
+      "severity": "high"
+    },
+    {
+      "risk": "Sair pode fechar o workbook sem salvar se executado por automacao.",
+      "mitigation": "Cobrir por contrato estatico e registrar validacao manual segura; nao acionar o handler.",
+      "severity": "high"
+    },
+    {
+      "risk": "Validar Tela Inicial por tokens pode nao provar layout visual.",
+      "mitigation": "Classificar a onda como cobertura comportamental; defeitos de geometria exigem readback de designer/export.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Adicionar suite V2 sem mapa no catalogo pode deixar a validacao invisivel ao operador.",
+      "mitigation": "Atualizar Teste_V2_Engine, guia de testes e manual tela a tela no mesmo microdelta.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0159 validado e hearback confirmado",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0159-exec-onda-38-2-29-tela-inicial-menu-principal.json"
+      },
+      {
+        "gate": "Fonte e espelho VBA sincronizados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0159-exec-onda-38-2-29-tela-inicial-menu-principal.json"
+      },
+      {
+        "gate": "Importador V3 do delta 0159",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0159-exec-onda-38-2-29-tela-inicial-menu-principal.json"
+      },
+      {
+        "gate": "Compile VBE limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0159-exec-onda-38-2-29-tela-inicial-menu-principal.json"
+      },
+      {
+        "gate": "TV2_RunTelaInicial passa sem falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0159-exec-onda-38-2-29-tela-inicial-menu-principal.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup gerado pelo Importador V3.",
+      "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+      "Se TV2_RunTelaInicial falhar, anexar CSV de falhas e nao rodar VCR.",
+      "Se aparecer defeito visual no Menu_Principal, abrir readback proprio de designer/export antes de qualquer correcao."
+    ],
+    "anchor_to_restore": "0158 fechada: 293e44c+ONDA38.2.28-CONFIG-BOTOES-MENUS / TV2_20260607_005745"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-07T09:29:35-03:00"
+}

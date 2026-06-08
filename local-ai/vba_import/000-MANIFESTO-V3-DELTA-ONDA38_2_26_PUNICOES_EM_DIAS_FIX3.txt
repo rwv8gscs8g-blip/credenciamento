@@ -1,0 +1,113 @@
+# Manifesto V3 DELTA ONDA38_2_26_PUNICOES_EM_DIAS_FIX3 - V12.0.0206 Onda 38.2.26 / Readback 0153
+# Tema: punicoes do rodizio padronizadas em DIAS; sem fallback em meses; UI, relatorios e RVS.
+# Fix1: remove dependencia de membro fortemente tipado em Credencia_Empresa no teste FT4,
+#       convertendo a chamada para late-binding auditavel e preservando compile limpo.
+# Fix2: remove dependencia de compilacao em funcoes publicas de Auto_Open no teste BL4,
+#       usando Application.Run com falha rastreavel em runtime quando o marcador nao existir.
+# Fix3: remove dependencia de compilacao em Util_VerificarProtecaoPersistenteAposAbertura,
+#       tambem via Application.Run, inclusive no helper interno BL4 de preparar/restaurar.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_26_PUNICOES_EM_DIAS_FIX3", "293e44c+ONDA38.2.26-PUNICOES-DIAS-fix3"
+#
+# Pos-import esperado:
+#   - Importador V3: M=14 | F=3 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunPunicoesDias
+#   - Esperado: OK=8 | FALHA=0 | MANUAL=0.
+#   - Janela Imediata: CT_ValidarRelease_SextetoMinimo
+#   - Esperado: Gate RVS APROVADO com PunicoesDias=8/0 na sintaxe final.
+#   - Relatorios esperados:
+#       * RPT_RODIZIO_STATUS: QTD_APTAS, QTD_SUSPENSAS, PROXIMO_RETORNO, ALERTA.
+#       * Relatorio empresa/servico: STATUS_GLOBAL, DIAS_RESTANTES, RETORNO_PREVISTO, PARTICIPA_RODIZIO.
+#       * Relatorio OS/empresa: status real, dias restantes e retorno previsto.
+#
+# Guardas:
+#   - Sem Auto_Open, sem Mod_Types, sem Importador_V3.
+#   - Suspender exige dias, origem e snapshot.
+#   - Caminhos STRIKE, RECUSA, EXPIRACAO e MANUAL usam DateAdd("d", dias, Date).
+#   - COL_CFG_MESES_SUSPENSAO fica apenas legado/migracao; recusa/prazo usa COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAB-Const_Colunas.bas
+#     bytes=10623
+#     sha256=7ba94bb69723acd761921785f67db65f6d894235ecc53e6ed07dc24095770432
+#   M|001-modulo/AAD-Util_Config.bas
+#     bytes=24541
+#     sha256=30ffbf4115a0214812d053247c18f500ad885bedb724f361ef8a29424b8265ea
+#   M|001-modulo/AAP-Svc_Rodizio.bas
+#     bytes=30848
+#     sha256=84ec1ecbf2e47c21b2d0441dd92112d35b34ba2464365174472ec94c813447d7
+#   M|001-modulo/AAQ-Svc_PreOS.bas
+#     bytes=19953
+#     sha256=ec721a62d26e8bc9bac2d9127c7ab7ffc7cdf0dcd84c1f42ac880c9c9fdbd870
+#   M|001-modulo/AAS-Svc_Avaliacao.bas
+#     bytes=23829
+#     sha256=7e6019722f678dae539b85193c3a828c6a943da67e9a71fe7d10dd20b8e60092
+#   M|001-modulo/ABA-Teste_Bateria_Oficial.bas
+#     bytes=130211
+#     sha256=cc072881aa88c448e52eff0408c78209c1df7f5ba3de49508170e94f9c1a16a9
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=203998
+#     sha256=eb60618374290c133c042d79f346318eeb861891bea6af3d8bf829b2345ddeaa
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=296614
+#     sha256=b4a1b5ee76c8d4eeabd53c4603cd916c83d2b3e7940d1476d85988ea4ee03eb6
+#   A|001-modulo/ABU-Teste_V2_Punicoes_Dias.bas
+#     bytes=17236
+#     sha256=18ab1a915ce9c0dc7f3971764f67e07240e28214fab30fd0363102259b1c7ff2
+#   M|001-modulo/ABH-Teste_Validacao_Release.bas
+#     bytes=47120
+#     sha256=34259d9af0e879bd81e3c60f6ce5cdd2da5329c1f61b842f3a266b0e467ce40f
+#   M|001-modulo/AAZ-Central_Testes.bas
+#     bytes=35295
+#     sha256=e861d17b21b683e3361694af3228994fba3f518a36dc2d0a68afd91dc1c655fc
+#   M|001-modulo/ABB-Central_Testes_Relatorio.bas
+#     bytes=41825
+#     sha256=a24d467785231b555d4d6c5c6676a5921036b99db10dc1a1439fcb90082e35b4
+#   A|001-modulo/ABV-Rel_Rodizio_Status.bas
+#     bytes=10036
+#     sha256=9a12c892c46df7d79fea8118c63dfa712b40d805e6dcfc9852c6a665cbd40767
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=23833
+#     sha256=43003786647a4ad13841be6c3d518e9d4b3683f8e2383363a0b73631ac43fa79
+#   F|002-formularios/AAC-Configuracao_Inicial.frm
+#     bytes=24175
+#     sha256=d06e2250e3862793d91788d4c30ee3b14cfabe39614ca0e962e1a27c1cb1234d
+#   F|002-formularios/AAC-Configuracao_Inicial.code-only.txt
+#     bytes=23649
+#     sha256=f1963bf50a447525ac82c716c989230f3d1aab85cec2819f9937a292a105ca13
+#   F|002-formularios/Configuracao_Inicial.frx
+#     bytes=354840
+#     sha256=c36033591374ef99d6b87b4e26aea03429b617abb7b257bb390b26eb9a08ba79
+#   F|002-formularios/AAK-Rel_Emp_Serv.frm
+#     bytes=7732
+#     sha256=1533de746d84f783a2257fbea57dbe537a31b3390ed568ae465df734083395d9
+#   F|002-formularios/AAK-Rel_Emp_Serv.code-only.txt
+#     bytes=7206
+#     sha256=8286b01ea2ec7bc1e806c929d6c62dc328bdb3fca6d2803925f6245b6f03a62f
+#   F|002-formularios/AAL-Rel_OSEmpresa.frm
+#     bytes=12485
+#     sha256=636f15f086f854ba76070999ea8664ca201700bd48845d0a11b0e1b1d83fc86c
+#   F|002-formularios/AAL-Rel_OSEmpresa.code-only.txt
+#     bytes=11978
+#     sha256=cb4a7b2e0bae36c04d63d73336a133bd31886dedffdeb5d332bc6b3462db5e50
+#
+# GRUPO_ONDA38_2_26_PUNICOES_EM_DIAS_FIX3
+M|001-modulo/AAB-Const_Colunas.bas
+M|001-modulo/AAD-Util_Config.bas
+M|001-modulo/AAP-Svc_Rodizio.bas
+M|001-modulo/AAQ-Svc_PreOS.bas
+M|001-modulo/AAS-Svc_Avaliacao.bas
+M|001-modulo/ABA-Teste_Bateria_Oficial.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/ABU-Teste_V2_Punicoes_Dias.bas
+M|001-modulo/ABH-Teste_Validacao_Release.bas
+M|001-modulo/AAZ-Central_Testes.bas
+M|001-modulo/ABB-Central_Testes_Relatorio.bas
+M|001-modulo/ABV-Rel_Rodizio_Status.bas
+M|001-modulo/AAX-App_Release.bas
+F|002-formularios/AAC-Configuracao_Inicial.frm
+F|002-formularios/AAK-Rel_Emp_Serv.frm
+F|002-formularios/AAL-Rel_OSEmpresa.frm

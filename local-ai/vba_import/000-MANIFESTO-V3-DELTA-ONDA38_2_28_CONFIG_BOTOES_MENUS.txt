@@ -1,0 +1,37 @@
+# Manifesto V3 DELTA ONDA38_2_28_CONFIG_BOTOES_MENUS - V12.0.0206 Onda 38.2.28 / Readback 0158
+# Tema: Configuracoes Iniciais; botoes, menus, submenus, entrada, saida e fechamento.
+#
+# Contexto:
+#   - A 0156 fechou o layout do campo de dias por recusa/prazo.
+#   - A 0158 amplia a validacao dirigida para botoes e menus ligados a tela.
+#   - Fluxos destrutivos sao validados por contrato seguro; nao sao acionados
+#     automaticamente pelo teste V2.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_28_CONFIG_BOTOES_MENUS", "293e44c+ONDA38.2.28-CONFIG-BOTOES-MENUS"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=0 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunTelaConfiguracoesIniciais
+#   - Esperado: OK=9 | FALHA=0 | MANUAL=0.
+#   - Validacao manual segura: abrir Configuracoes Iniciais e conferir Ajuda,
+#     Salvar Parametros, confirmacoes dos fluxos administrativos e fechamento.
+#
+# Guardas:
+#   - Test-only + build label.
+#   - Sem .frm/.frx neste delta.
+#   - Sem Auto_Open, sem ThisWorkbook, sem Mod_Types, sem Importador_V3.
+#   - Sem VCR neste microdelta.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24007
+#     sha256=fca20cbf4d62f281345f4e5caf86e624b62315802a009ed6a85c26b8dfad054b
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=311071
+#     sha256=166cb965817929fac406f2f3677af30855ff2a17dfd75956b09adda25ed1fd1a
+#
+# GRUPO_ONDA38_2_28_CONFIG_BOTOES_MENUS
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas

@@ -1,0 +1,17 @@
+{
+  "hearback_id": "0159-rb-onda-38-2-29-tela-inicial-menu-principal-confirmed",
+  "readback_id": "0159-rb-onda-38-2-29-tela-inicial-menu-principal",
+  "data": "2026-06-07",
+  "human": "Mauricio",
+  "status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "confirmation_text": "Aprovado. Codex autorizado a implementar a proxima onda de validacao tela a tela para Tela Inicial/Menu_Principal, com teste V2 dirigido, sem VCR neste microdelta e sem acionar fluxos destrutivos automaticamente.",
+  "constraints": [
+    "Sem VCR neste microdelta",
+    "Nao executar Central de Testes, Sair ou fluxos destrutivos por clique automatizado",
+    "Nao tocar nos arquivos proibidos",
+    "Defeitos visuais exigem readback proprio de designer/export"
+  ],
+  "confirmed_at": "2026-06-07T09:29:35-03:00"
+}

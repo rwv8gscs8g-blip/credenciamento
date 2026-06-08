@@ -1,0 +1,237 @@
+{
+  "readback_id": "0153-rb-onda-38-2-26-punicoes-em-dias",
+  "data": "2026-06-06",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0152-rb-onda-38-2-25-rvs-inclui-impressao-residual",
+  "intent": {
+      "objective": "Padronizar a regra de suspensao do rodizio para usar dias em todos os caminhos: nota/strike, recusa explicita, expiracao de prazo e suspensao manual, eliminando fallback em meses e corrigindo interface, persistencia, migracao, relatorios e testes.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao iniciar V207",
+      "Nao tocar Mod_Types.bas fora de autorizacao explicita da Onda 9",
+      "Nao alterar regras de memoria dos contadores alem da duracao da suspensao",
+      "Nao mudar a regra de nota minima, max strikes ou max recusas alem da validacao de duracao",
+      "Nao editar workbook manualmente fora do pacote importavel",
+      "Nao reaproveitar COL_CFG_MESES_SUSPENSAO como dias para evitar reinterpretacao silenciosa",
+      "Nao alterar layout de UserForms de relatorio; ajustes de relatorio devem ser code-only quando possivel"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0153-rb-onda-38-2-26-punicoes-em-dias.json",
+      ".hbn/hearbacks/0153-rb-onda-38-2-26-punicoes-em-dias-confirmed.json",
+      ".hbn/hearbacks/0153-rb-onda-38-2-26-punicoes-em-dias-confirmed.md",
+      ".hbn/results/0153-exec-onda-38-2-26-punicoes-em-dias.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_26_punicoes_em_dias/**",
+      "CHANGELOG.md",
+      "src/vba/Const_Colunas.bas",
+      "src/vba/Util_Config.bas",
+      "src/vba/Svc_Rodizio.bas",
+      "src/vba/Svc_PreOS.bas",
+      "src/vba/Svc_Avaliacao.bas",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Configuracao_Inicial.frx",
+      "src/vba/Teste_Bateria_Oficial.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Teste_V2_Punicoes_Dias.bas",
+      "src/vba/Teste_Validacao_Release.bas",
+      "src/vba/Central_Testes.bas",
+      "src/vba/Central_Testes_Relatorio.bas",
+      "src/vba/Rel_Rodizio_Status.bas",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAB-Const_Colunas.bas",
+      "local-ai/vba_import/001-modulo/AAD-Util_Config.bas",
+      "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+      "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+      "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+      "local-ai/vba_import/001-modulo/ABA-Teste_Bateria_Oficial.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/ABU-Teste_V2_Punicoes_Dias.bas",
+      "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas",
+      "local-ai/vba_import/001-modulo/AAZ-Central_Testes.bas",
+      "local-ai/vba_import/001-modulo/ABB-Central_Testes_Relatorio.bas",
+      "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+      "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_26_PUNICOES_EM_DIAS.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook.code.txt",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "after_hearback": [
+      "Criar COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO em coluna nova da aba CONFIG e manter COL_CFG_MESES_SUSPENSAO como legado deprecado.",
+      "Adicionar helper em Util_Config para ler e validar dias de recusa/prazo sem alterar Mod_Types.bas.",
+      "Migrar de forma idempotente: converter meses legado para dias de recusa/prazo uma unica vez quando a coluna nova estiver vazia/invalida, semear dias de strike quando 0/vazio, registrar antes/depois e nunca multiplicar valor ja migrado.",
+      "Atualizar Configuracao_Inicial para persistir e carregar dias em ambos os campos, aceitar 1..3650, rejeitar vazio/zero/negativo/decimal e usar o formulario exportado em incoming como evidencia visual.",
+      "Remover fallback em meses de Svc_Avaliacao e Svc_Rodizio; toda suspensao deve receber dias explicitos, origem e snapshot textual de configuracao.",
+      "Definir ORIGEM como STRIKE, RECUSA, EXPIRACAO ou MANUAL; chamadas manuais e testes devem passar dias explicitamente.",
+      "Validar duracao antes de incrementar recusa ou expirar Pre-OS, evitando estado parcial; em falha de suspensao, rollback do incremento deve ser verificavel.",
+      "Adicionar relatorio code-only de status do rodizio por item/servico, com total de empresas credenciadas, empresas aptas/ativas, suspensas, inativas, dias restantes e proximo retorno.",
+      "Atualizar Rel_Emp_Serv para que o relatorio de empresas por servico mostre STATUS_GLOBAL, SUSPENSA, DIAS_RESTANTES, RETORNO_PREVISTO e PARTICIPA_RODIZIO, sem depender apenas de STATUS_CRED.",
+      "Atualizar Rel_OSEmpresa para que o relatorio por empresa mostre o status real da empresa selecionada, dias restantes e retorno previsto quando suspensa.",
+      "Atualizar relatorios de validacao para exigir evidencia clara desses campos antes da aprovacao humana.",
+      "Atualizar V1, V2 e RVS para testar datas exatas por dias, migracao idempotente, rejeicao de configuracao invalida, suspensao manual, ausencia de BASE=MESES/MESES=/FALLBACK_MESES, round-trip da UI e clareza dos relatorios."
+    ],
+    "human_gate_expected": [
+      "ImportarPacoteV3_Delta \"ONDA38_2_26_PUNICOES_EM_DIAS\", \"<build-a-definir>\"",
+      "VBE Debug > Compile VBAProject limpo.",
+      "Executar suite dirigida de punicoes em dias a ser criada.",
+      "Gerar/validar relatorio de status do rodizio por item/servico e confirmar que ele distingue empresas ativas, suspensas, inativas e sem empresa apta.",
+      "Gerar/validar relatorio de empresas por servico e confirmar colunas STATUS_GLOBAL, DIAS_RESTANTES e RETORNO_PREVISTO.",
+      "Gerar/validar relatorio por empresa e confirmar que a empresa suspensa mostra retorno previsto e dias restantes.",
+      "Executar TV2_RunSmoke e TV2_RunCanonica quando o pacote estiver estavel.",
+      "Executar CT_ValidarRelease_SextetoMinimo; o RVS deve reprovar qualquer caminho de meses e aprovar apenas com datas de suspensao exatas em dias."
+    ],
+    "stop_conditions": [
+      "Se a correcao exigir alterar Mod_Types.bas, parar e pedir autorizacao humana especifica.",
+      "Se o formulario exportado em incoming nao puder ser sincronizado com src/vba e local-ai/vba_import sem quebrar compile, parar antes de importar.",
+      "Se houver qualquer chamada remanescente a Suspender sem dias explicitos, nao fechar o pacote.",
+      "Se qualquer relatorio aprovado ocultar STATUS_GLOBAL, dias restantes ou retorno previsto de empresa suspensa, nao fechar o pacote.",
+      "Se o relatorio por item/servico nao indicar quando um item nao tem empresa ativa/apta para rodizio, nao fechar o pacote.",
+      "Se os testes detectarem BASE=MESES, MESES=, FALLBACK_MESES ou DateAdd(\"m\") no caminho de suspensao, nao liberar o delta.",
+      "Se a migracao nao for idempotente em execucao dupla, nao liberar o delta."
+    ]
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Mod_Types.bas permanece intocado",
+    "Importador_V3.bas permanece intocado",
+    "A regra de nota minima, max strikes e max recusas permanece configuravel",
+    "A memoria dos contadores permanece declarada como fora do escopo: recusa zera na reativacao; strike usa janela por DT_ULT_REATIV",
+    "Relatorios passam a refletir o estado real do rodizio e nao podem depender apenas do STATUS_CRED",
+    "Importacao no Excel continua vindo apenas de local-ai/vba_import/"
+  ],
+  "risks": [
+    {
+      "risk": "Migracao incorreta pode reinterpretar meses como dias ou multiplicar dias em aberturas repetidas.",
+      "mitigation": "Usar coluna nova para recusa/prazo, guarda idempotente e teste que roda a migracao duas vezes sem alterar valores.",
+      "severity": "high"
+    },
+    {
+      "risk": "Suspensao manual pode ficar sem fonte de duracao apos dias obrigatorios.",
+      "mitigation": "Exigir dias explicitos para origem MANUAL e atualizar chamadas/testes diretos de Suspender.",
+      "severity": "high"
+    },
+    {
+      "risk": "Caminho de recusa pode continuar usando BASE=MESES sem emitir FALLBACK_MESES.",
+      "mitigation": "Endurecer RVS para reprovar BASE=MESES, MESES= e DateAdd(\"m\") no caminho de suspensao, nao apenas FALLBACK_MESES.",
+      "severity": "high"
+    },
+    {
+      "risk": "Configuracao invalida pode incrementar QTD_RECUSAS sem suspender a empresa.",
+      "mitigation": "Validar dias antes de mutar contadores e testar rollback/invariante atomica.",
+      "severity": "high"
+    },
+    {
+      "risk": "Somente a legenda do formulario muda, mas validacao/persistencia continuam em meses.",
+      "mitigation": "Atualizar codigo do formulario, coluna de persistencia e teste de round-trip aceitando 1..3650 dias.",
+      "severity": "high"
+    },
+    {
+      "risk": "Relatorio pode aprovar visualmente uma empresa como credenciada sem revelar que ela esta suspensa e fora do rodizio.",
+      "mitigation": "Relatorios de empresa por servico, OS por empresa e status do rodizio devem mostrar STATUS_GLOBAL, DIAS_RESTANTES, RETORNO_PREVISTO e PARTICIPA_RODIZIO.",
+      "severity": "high"
+    },
+    {
+      "risk": "Item/servico pode aparecer operacionalmente coberto embora todas as empresas vinculadas estejam suspensas, inativas ou sem aptidao para rodizio.",
+      "mitigation": "Criar teste e relatorio matriz por item/servico com totais de aptas, suspensas, inativas e alerta para SEM_EMPRESA_APTA.",
+      "severity": "high"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0153 valido contra schema HBN e aguardando hearback antes de codigo",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0153-exec-onda-38-2-26-punicoes-em-dias.json"
+      },
+      {
+        "gate": "Migracao idempotente converte recusa/prazo e semeia strike-dias sem multiplicar valores",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0153-exec-onda-38-2-26-punicoes-em-dias.json"
+      },
+      {
+        "gate": "UI Configuracao_Inicial grava e carrega dias em strike e recusa/prazo, validando 1..3650",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0153-exec-onda-38-2-26-punicoes-em-dias.json"
+      },
+      {
+        "gate": "Strike, recusa, expiracao e manual suspendem com DT_FIM_SUSP exato por DateAdd(\"d\", dias, Date)",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0153-exec-onda-38-2-26-punicoes-em-dias.json"
+      },
+      {
+        "gate": "RVS reprova BASE=MESES, MESES=, FALLBACK_MESES e qualquer DateAdd(\"m\") no caminho de suspensao",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0153-exec-onda-38-2-26-punicoes-em-dias.json"
+      },
+      {
+        "gate": "Relatorio de empresas por servico mostra STATUS_CRED, STATUS_GLOBAL, DIAS_RESTANTES, RETORNO_PREVISTO e PARTICIPA_RODIZIO",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0153-exec-onda-38-2-26-punicoes-em-dias.json"
+      },
+      {
+        "gate": "Relatorio por empresa mostra status real da empresa selecionada, suspensao, dias restantes e data de retorno quando aplicavel",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0153-exec-onda-38-2-26-punicoes-em-dias.json"
+      },
+      {
+        "gate": "Relatorio matriz por item/servico indica itens com empresas aptas, suspensas, inativas e alerta SEM_EMPRESA_APTA",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0153-exec-onda-38-2-26-punicoes-em-dias.json"
+      },
+      {
+        "gate": "Import V3, compile manual limpo e CT_ValidarRelease_SextetoMinimo aprovado no workbook humano",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0153-exec-onda-38-2-26-punicoes-em-dias.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se o compile falhar, nao salvar o workbook e restaurar pelo backup V3 anterior ao delta 0153.",
+      "Se a migracao falhar, nao prosseguir para testes de rodizio; anexar evidencia e abrir fix1.",
+      "Se os relatorios nao exibirem status real, dias restantes ou retorno previsto, nao aprovar a onda; anexar evidencia e abrir fix1.",
+      "Se o RVS falhar por qualquer caminho de meses ou data inexata, anexar CSV e abrir fix1 antes de seguir tela a tela.",
+      "Se o formulario importado causar instabilidade de VBE, restaurar o .frm/.frx anterior e entregar alternativa code-only sem layout."
+    ],
+    "anchor_to_restore": "Estado antes da 0153: 0152 importada/compilada pelo operador, RVS reprovado por V1 BO_330; branch codex/v12-0-0206-planejamento em 293e44c com arquivos gerados ainda nao consolidados."
+  },
+  "human_status": "confirmed",
+  "source_context": {
+    "trigger": "Mauricio pediu padronizacao definitiva das punicoes em dias, apontou que a interface antiga mentia ao exibir zero dias com fallback em meses e exportou Configuracao_Inicial.frm/.frx para incoming.",
+    "opus_verdict": "APROVADO_COM_RESSALVAS: direcao correta, com quatro bloqueadores obrigatorios: origem manual, semeadura de dias-strike, migracao idempotente e RVS anti-meses abrangente.",
+    "incoming_form_observation": "incoming/Configuracao_Inicial.frx mudou; incoming/Configuracao_Inicial.frm acrescenta apenas handlers vazios Label56_Click e Label59_Click, portanto a mudanca visual precisa ser sincronizada com codigo de validacao/persistencia.",
+    "reporting_extension": "Mauricio pediu que a mesma onda incorpore informacao clara nos relatorios: empresas suspensas, dias restantes de suspensao, data de retorno e quais itens/servicos possuem empresas ativas/aptas ou suspensas."
+  },
+  "created_at": "2026-06-06T17:37:12-03:00"
+}

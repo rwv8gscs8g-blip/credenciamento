@@ -1,0 +1,139 @@
+{
+  "readback_id": "0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus",
+  "data": "2026-06-07",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela",
+  "intent": {
+    "objective": "Continuar a validacao tela a tela de Configuracoes Iniciais cobrindo botoes, menus, submenus, entrada/saida da tela e fechamento, com inventario de controles, classificacao de defeitos e teste V2 dirigido antes de qualquer pacote V3.",
+    "non_goals": [
+      "Nao importar ou restaurar a 0155",
+      "Nao rodar VCR neste microdelta",
+      "Nao alterar Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao iniciar V207",
+      "Nao declarar freeze da V12.0.0206",
+      "Nao executar fluxos destrutivos em teste automatizado"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus.json",
+      ".hbn/hearbacks/0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus-confirmed.json",
+      ".hbn/hearbacks/0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus-confirmed.md",
+      ".hbn/results/0158-exec-onda-38-2-28-configuracoes-iniciais-botoes-menus.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_28_configuracoes_iniciais_botoes_menus/0158_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_28_configuracoes_iniciais_botoes_menus/0158_PROCEDIMENTO_IMPORT.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Configuracao_Inicial.frx",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Menu_Principal.frx",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+      "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/Menu_Principal.frx",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_28_CONFIG_BOTOES_MENUS.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "local-ai/vba_import/**/AAA-Mod_Types.bas",
+      "local-ai/vba_import/**/ABK-Importador_V3.bas",
+      "local-ai/vba_import/**/AAY-Auto_Open.bas",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "after_hearback": [
+      "Inventariar controles reais de Configuracao_Inicial e Menu_Principal ligados a Ajuda, Iniciar Novo Periodo, Limpar Base, Salvar Parametros, Sobre, GitHub, Central de Testes e Configuracoes Iniciais.",
+      "Classificar cada achado como design, codigo ou hibrido antes de propor alteracao.",
+      "Ampliar TV2_RunTelaConfiguracoesIniciais apenas para comportamentos seguros: existencia de controles, handlers, abertura controlada e persistencia sem executar fluxo destrutivo.",
+      "Para Iniciar Novo Periodo e Limpar Base, validar por guard, confirmacao/caminho de cancelamento ou evidencia manual; nao apagar base em teste automatizado.",
+      "Se houver defeito geometrico, parar e pedir export do designer para incoming antes de tocar .frm/.frx."
+    ]
+  },
+  "invariants_preserved": [
+    "0156 permanece fechada e validada",
+    "Suspensoes por strike, recusa e prazo continuam em dias",
+    "VCR fica reservada para checkpoint forte",
+    "Importacao no workbook continua humano-aplicada pelo Importador V3",
+    "Fluxos destrutivos nao sao executados por teste automatizado"
+  ],
+  "risks": [
+    {
+      "risk": "Botoes administrativos podem alterar base se testados por clique real automatizado.",
+      "mitigation": "Usar teste estatico, guard, cancelamento e gate manual controlado para fluxos destrutivos.",
+      "severity": "high"
+    },
+    {
+      "risk": "Menu_Principal e Configuracao_Inicial podem exigir correcoes de naturezas diferentes.",
+      "mitigation": "Classificar design vs codigo antes de cada delta e dividir em microdelta se necessario.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Alterar .frx pode gerar regressao visual silenciosa.",
+      "mitigation": "Preferir designer/export apenas para defeito geometrico confirmado e exigir validacao manual da tela.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0158 confirmado antes de qualquer escrita",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0158-exec-onda-38-2-28-configuracoes-iniciais-botoes-menus.json"
+      },
+      {
+        "gate": "Inventario de botoes, menus, submenus e fechamento registrado",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": "auditoria/03_ondas/onda_38_2_28_configuracoes_iniciais_botoes_menus/0158_TECNICO.md"
+      },
+      {
+        "gate": "Importador V3, se houver delta",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0158-exec-onda-38-2-28-configuracoes-iniciais-botoes-menus.json"
+      },
+      {
+        "gate": "Compile VBE limpo, se houver delta",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0158-exec-onda-38-2-28-configuracoes-iniciais-botoes-menus.json"
+      },
+      {
+        "gate": "TV2_RunTelaConfiguracoesIniciais ampliado passa sem falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0158-exec-onda-38-2-28-configuracoes-iniciais-botoes-menus.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup gerado pelo Importador.",
+      "Se compile falhar, nao salvar o workbook e anexar erro ao ERP.",
+      "Se TV2 dirigido falhar, anexar CSV de falhas e nao executar VCR.",
+      "Se aparecer defeito geometrico, suspender codigo e corrigir via designer/export em microdelta proprio."
+    ],
+    "anchor_to_restore": "0156 validada: 293e44c+ONDA38.2.27-CONFIG-LAYOUT-fix1 / TV2_20260606_231033"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-07T00:39:20-03:00"
+}

@@ -7,6 +7,207 @@ tratam apenas da linha pública oficial.
 
 ### Adicionado
 
+- **Onda 38.2.33 — Disponibilidade operacional em mensagens, relatorios e
+  impressos** — normaliza a leitura de empresa ativa, suspensa, com OS em
+  execucao ou com Pre-OS pendente. Relatorios substituem a leitura antiga de
+  `PARTICIPA RODIZIO` por `DISPONIBILIDADE ATUAL` e `DIAGNOSTICO SISTEMA` por
+  `RESUMO OPERACIONAL`, usando a atividade quando ela existe para mostrar
+  `PRE-OS PENDENTE`, `OS EM EXECUCAO`, `SUSPENSA ATE ...` ou `DISPONIVEL`.
+  A mensagem de falha ao emitir Pre-OS passa a explicar quantas empresas foram
+  bloqueadas por credenciamento inativo, suspensao, inatividade, OS em execucao
+  e Pre-OS pendente. Impressos de Pre-OS, OS e avaliacao passam a usar a frase
+  `Status da empresa nesta data: ...`; na avaliacao, ela e anexada ao campo de
+  observacoes. Corrige tambem falso negativo do VCR em `UI_ADV_011`, movendo o
+  token textual do Gate RVS para a Central V2, onde ele realmente existe.
+  Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS.txt`.
+  Gate esperado: import `M=5 | F=3 | err=0 | skip=0`, compile limpo,
+  `TV2_RunRelatoriosSuspensoesStrikesReset` com
+  `OK=10 | FALHA=0 | MANUAL=0` e regressao recomendada
+  `TV2_RunTelaRelatorios` com `OK=10 | FALHA=0 | MANUAL=0`. Sem designer,
+  sem `.frx`, sem VCR neste microdelta e sem tocar `Mod_Types.bas`,
+  `Importador_V3.bas`, `Auto_Open.bas` ou `ThisWorkbook`.
+
+- **Onda 38.2.32 — Relatorios com suspensoes, strikes e reset documentado** —
+  normaliza a leitura de suspensao nos relatorios, adiciona strikes por nota
+  baixa e por recusa/prazo em Empresas Cadastradas, Empresas Credenciadas,
+  Empresas Credenciadas por Servico, OS por Empresa, OS Abertas e Pre-OS
+  Vencidas, e inclui diagnostico operacional do sistema sempre que a empresa
+  aparece. Os impressos de Pre-OS, OS e avaliacao passam a receber aviso do
+  sistema com os strikes da empresa. OS Abertas passa a ignorar linha sem N.O.S.
+  real ou N.O.S. zero, removendo o falso "EMPRESA NAO ENCONTRADA" observado em
+  PDF. A documentacao deixa explicito que Novo Periodo preserva suspensoes
+  porque limpa apenas `PRE_OS`/`CAD_OS`, enquanto Limpar Base remove suspensoes
+  porque zera empresas, credenciamentos, operacao e auditoria. Adiciona
+  `TV2_RunRelatoriosSuspensoesStrikesReset` com 10 cenarios estruturais.
+  Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_32_RELATORIOS_SUSPENSOES_STRIKES_RESET.txt`.
+  Gate esperado: import `M=5 | F=3 | err=0 | skip=0`, compile limpo e
+  `TV2_RunRelatoriosSuspensoesStrikesReset` com `OK=10 | FALHA=0 | MANUAL=0`.
+  Sem `.frx` no manifesto, sem VCR e sem tocar `Mod_Types.bas`,
+  `Importador_V3.bas`, `Auto_Open.bas` ou `ThisWorkbook`.
+  **Fix1 0163:** o pacote base importou e compilou, mas
+  `TV2_20260608_114127` retornou `OK=9 | FALHA=1 | MANUAL=0` por falso
+  negativo em `RELSSR_08`: o teste procurava os literais do aviso em
+  `Preencher.bas`, embora o texto correto esteja centralizado em
+  `Rel_Rodizio_Status.bas`. O fix1 move a validacao dos literais para
+  `RELSSR_01` e deixa `RELSSR_08` validar apenas a fiacao de impressao.
+  Manifesto aplicavel:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_32_FIX1_RELATORIOS_SUSPENSOES_STRIKES_RESET.txt`.
+  Gate fix1 esperado: import `M=2 | F=0 | err=0 | skip=0`, compile limpo e
+  `TV2_RunRelatoriosSuspensoesStrikesReset` com `OK=10 | FALHA=0 | MANUAL=0`.
+
+- **Onda 38.2.31 — Relatorios tela a tela com status e formatacao** —
+  adiciona leitura operacional de status da empresa nos relatorios. Empresas
+  Cadastradas passa a mostrar status, suspensa desde, suspensa ate e ultima
+  reativacao; Empresas Credenciadas passa a mostrar status do credenciamento,
+  status global, suspensao e participacao no rodizio; Empresas Credenciadas por
+  Servico passa a identificar atividade/servico no topo; OS por Empresa, OS
+  Abertas e Pre-OS Vencidas passam a mostrar status e datas de suspensao. A
+  formatacao tabular usa o padrao aprovado de cabecalho, linhas alternadas e
+  bordas. Adiciona `TV2_RunTelaRelatorios` com 10 cenarios read-only.
+  Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_31_RELATORIOS_TELA_A_TELA.txt`.
+  Gate esperado: import `M=4 | F=3 | err=0 | skip=0`, compile limpo e
+  `TV2_RunTelaRelatorios` com `OK=10 | FALHA=0 | MANUAL=0`. Sem `.frx`, sem
+  VCR e sem tocar `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas` ou
+  `ThisWorkbook`.
+
+- **Onda 38.2.30 — Configuracoes Iniciais, matriz de cenarios e Novo Periodo
+  com CSV** — adiciona a suite destrutiva controlada
+  `TV2_RunConfigCenariosNovoPeriodo`, autorizada para homologacao pelo
+  hearback 0160. A suite valida controles, round-trip de gestor, municipio,
+  prazo de Pre-OS, recusas, dias de suspensao por recusa/prazo, nota de corte,
+  strikes e dias de suspensao por nota com matriz 1/2; prova consumo por regra
+  de negocio em recusa e strike; cria a pasta `V12-0-0206-Onda-38-2-30`, salva
+  copia da planilha antes da limpeza, inicia Novo Periodo limpando
+  `PRE_OS`/`CAD_OS` e grava `TesteV2_CONFIG_CENARIOS_<execucao>.csv` para
+  validacao humana. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV.txt`.
+  Gate esperado: import `M=3 | F=1 | err=0 | skip=0`, compile limpo e
+  `TV2_RunConfigCenariosNovoPeriodo` com `OK=7 | FALHA=0 | MANUAL=0`. Sem PDF,
+  sem VCR, sem restaurar 0155 e sem tocar `Mod_Types.bas`,
+  `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`, `Menu_Principal.frm` ou
+  `.frx`.
+  **Fix1 0161:** o gate inicial importou e compilou, mas
+  `TV2_20260607_110826` retornou `OK=6 | FALHA=1 | MANUAL=0` por falso
+  negativo em `CFGCSV_06`: a limpeza usava faixas parciais e a contagem lia
+  ultima linha em vez de registro operacional. O fix1 limpa `PRE_OS` ate
+  `COL_PREOS_OS_ID`, `CAD_OS` ate `COL_OS_JUSTIF_DIV`, aplica a mesma correcao
+  no botao real de Novo Periodo e conta por coluna-chave. Manifesto aplicavel:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1.txt`.
+  Gate fix1 esperado: import `M=2 | F=1 | err=0 | skip=0`, compile limpo e
+  `TV2_RunConfigCenariosNovoPeriodo` com `OK=7 | FALHA=0 | MANUAL=0`.
+  Gate fix1 observado: importou, compilou e `TV2_20260608_044610` retornou
+  `OK=7 | FALHA=0 | MANUAL=0`, sem CSV de falhas. Etapa fechada.
+
+- **Onda 38.2.29 — Tela Inicial/Menu Principal** — adiciona a suite dirigida
+  `TV2_RunTelaInicial`, com 14 cenarios para validar entradas canonicas
+  (`Auto_Open`, `IniciarSistema`, `AbrirMenu` e shape visual), processos de
+  abertura, delegacao da protecao de abertura para a suite BL4 dedicada,
+  inicializacao da pagina 0, Home, Sobre, GitHub, Central de Testes,
+  Configuracoes Iniciais, rotas laterais, Sair e fechamento pelo X. A onda
+  tambem atualiza o catalogo/roteiro V2, o manual tela a tela e o guia de
+  testes. O delta e test-only + build label, sem alterar `Auto_Open.bas`,
+  `Menu_Principal.frm`, `.frx`, `ThisWorkbook`, `Mod_Types.bas` ou
+  `Importador_V3.bas`. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_29_TELA_INICIAL.txt`.
+  Gate inicial: import `M=3 | F=0 | err=0 | skip=0`, compile limpo e
+  `TV2_RunTelaInicial` com `OK=12 | FALHA=2 | MANUAL=0` por excesso de contrato
+  em `Auto_Open`. Fix1 ajusta a suite para o escopo importado; gate esperado:
+  import `M=3 | F=0 | err=0 | skip=0`, compile limpo e `TV2_RunTelaInicial`
+  com `OK=14 | FALHA=0 | MANUAL=0`. Gate Fix1 observado:
+  `TV2_20260607_101426` retornou `OK=14 | FALHA=0 | MANUAL=0`, sem CSV de
+  falhas. Sem VCR neste microdelta.
+
+- **Onda 38.2.28 — Configuracoes Iniciais, botoes e menus** — amplia a
+  validacao dirigida `TV2_RunTelaConfiguracoesIniciais` para cobrir botoes da
+  tela, atalhos do menu inicial, rotas laterais relevantes e fechamento pelo X,
+  sem executar automaticamente fluxos destrutivos. O teste passa a verificar
+  handlers e confirmacoes de Ajuda, Salvar Parametros, Iniciar Novo Periodo,
+  Limpar Base, Sobre, GitHub, Central de Testes e entrada em Configuracoes
+  Iniciais. Fluxos administrativos continuam tratados por contrato seguro e
+  validacao humana quando necessario. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_28_CONFIG_BOTOES_MENUS.txt`.
+  Gate humano 0158: importou com `M=2 | F=0 | err=0 | skip=0`, compilou e
+  `TV2_20260607_005745` retornou `OK=9 | FALHA=0 | MANUAL=0`, sem CSV de
+  falhas. Etapa fechada.
+
+- **Onda 38.2.27 — Configurações Iniciais tela a tela, Ajuda HBN e VCR** —
+  inicia a validação operacional tela a tela pela tela `Configuracao_Inicial`.
+  O campo técnico legado `TxtMesesSuspensao`, agora usado semanticamente como
+  dias de suspensão por recusa/prazo, é preparado em runtime apenas para
+  propriedades básicas de editabilidade (`Enabled=True`, `Locked=False`,
+  `TabStop=True`).
+  Adiciona `TV2_RunTelaConfiguracoesIniciais` com 3 asserts: campo editável,
+  persistência de `DIAS_SUSPENSAO_RECUSA_PRAZO` e ajuda HBN disponível.
+  Cria `docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md`,
+  `docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md` e HTML simples em
+  `docs/help/hbn/`. A Central de Testes passa a apresentar a validação oficial
+  como **Validação Completa da Release (VCR)**; `.csv` permanece apenas como
+  formato de arquivo de evidência. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_27_CONFIG_HELP_VCR.txt`.
+  Gate humano 0154: importou, compilou e
+  `TV2_20260606_212617` retornou `OK=3 | FALHA=0 | MANUAL=0`, mas a validação
+  visual mostrou que o campo `suspender por 30 dia(s)` ainda não estava
+  acessível/editável na prática e que a navegação por Tab era irregular.
+  **Fix1 0156:** a causa raiz era geométrica: o label `suspender por`
+  sobrepunha o campo numérico. A proposta runtime 0155 foi suspensa antes de
+  importação e substituída por correção simples de designer com `.frm/.frx`
+  reexportado. O teste dirigido passa a reprovar se label da mesma linha cobrir
+  o campo. Manifesto aplicável:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_27_CONFIG_LAYOUT_FIX1.txt`.
+  Gate humano 0156: importou com `M=2 | F=1 | err=0 | skip=0`, compilou e
+  `TV2_20260606_231033` retornou `OK=3 | FALHA=0 | MANUAL=0`, sem CSV de
+  falhas. Mauricio confirmou clique, edição e salvamento do campo; etapa
+  fechada. A 0157 preparou handoff Codex→Codex para continuar em
+  Configurações Iniciais cobrindo botões, menus e submenus.
+  A VCR fica reservada para checkpoint forte, pois o tempo observado passou de
+  uma hora.
+
+- **Onda 38.2.26 — punições do rodízio padronizadas em dias** — elimina a
+  divergência entre interface e código na suspensão por nota, recusa,
+  expiração de prazo e suspensão manual. `Suspender` passa a exigir dias,
+  origem (`STRIKE`, `RECUSA`, `EXPIRACAO`, `MANUAL`) e snapshot de
+  configuração; `COL_CFG_MESES_SUSPENSAO` fica apenas como legado de migração
+  idempotente, enquanto recusa/prazo usa a nova coluna
+  `DIAS_SUSPENSAO_RECUSA_PRAZO`. A tela `Configuracao_Inicial` valida 1..3650
+  dias e o `.frx` exportado pelo operador foi incorporado ao pacote. Adiciona
+  `Rel_Rodizio_Status.bas`, amplia relatórios de empresa/serviço e OS/empresa
+  para mostrar empresas suspensas, dias restantes, retorno previsto e itens sem
+  empresa apta. Adiciona `TV2_RunPunicoesDias` com 8 asserts e inclui
+  `V2_PUNICOES_DIAS` no RVS oficial. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_26_PUNICOES_EM_DIAS.txt`.
+  Gate humano aprovado no `fix4`: import `M=14 | F=3 | err=0 | skip=0`,
+  compile limpo, `TV2_20260606_193709` com `OK=8 | FALHA=0 | MANUAL=0` e
+  `VR_20260606_193911` APROVADO com `PunicoesDias=8/0`. Sem tocar
+  `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas` ou `ThisWorkbook`.
+  **Fix1 pós-import:** o primeiro pacote importou com
+  `M=14 | F=3 | err=0 | skip=0`, mas o compile falhou porque
+  `Teste_V2_Roteiros` chamava diretamente um membro ausente em
+  `Credencia_Empresa`. O `fix1` faz a chamada FT4 por `CallByName` auditável,
+  removendo a dependência em tempo de compilação. Novo comando:
+  `ImportarPacoteV3_Delta "ONDA38_2_26_PUNICOES_EM_DIAS_FIX1", "293e44c+ONDA38.2.26-PUNICOES-DIAS-fix1"`.
+  **Fix2 pós-import:** o `fix1` importou, mas o compile avançou para chamada
+  direta a funções públicas de `Auto_Open.bas` em `TV2_RunBL4ProtecaoPersistente`.
+  Como `Auto_Open.bas` segue proibido nesta onda, o `fix2` troca essas chamadas
+  por wrappers via `Application.Run`; ausência do marcador vira falha de teste
+  auditável, sem quebrar compile. Novo comando:
+  `ImportarPacoteV3_Delta "ONDA38_2_26_PUNICOES_EM_DIAS_FIX2", "293e44c+ONDA38.2.26-PUNICOES-DIAS-fix2"`.
+  **Fix3 pós-import:** o `fix2` importou, mas o compile avançou para chamada
+  direta a `Util_VerificarProtecaoPersistenteAposAbertura`. O `fix3` troca
+  todas as ocorrências diretas dessa função no BL4 por wrapper via
+  `Application.Run`, inclusive no helper interno de preparar/restaurar. Novo
+  comando:
+  `ImportarPacoteV3_Delta "ONDA38_2_26_PUNICOES_EM_DIAS_FIX3", "293e44c+ONDA38.2.26-PUNICOES-DIAS-fix3"`.
+  **Fix4 pós-import:** o `fix3` importou, mas o compile avançou para chamada
+  direta a membros TV2 de `Menu_Principal` em
+  `TV2_RunFormulariosAvaliacaoDemandante`. Como `Menu_Principal.frm` segue
+  fora do delta 0153, o `fix4` troca essas chamadas por wrappers via
+  `CallByName`; ausência do helper vira falha de teste auditável, sem quebrar
+  compile. Comando aprovado:
+  `ImportarPacoteV3_Delta "ONDA38_2_26_PUNICOES_EM_DIAS_FIX4", "293e44c+ONDA38.2.26-PUNICOES-DIAS-fix4"`.
+
 - **Onda 38.2.25 — RVS inclui impressão residual** — antes da atuação tela a
   tela, o gate oficial `CT_ValidarRelease_SextetoMinimo` passa a executar
   também `TV2_RunImpressaoResidual False, True` após o bloco adversarial Onda

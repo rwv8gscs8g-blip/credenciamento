@@ -1,0 +1,167 @@
+{
+  "readback_id": "0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao",
+  "intent": {
+    "objective": "Normalizar nos relatorios a exibicao de suspensoes, strikes por nota baixa, recusas/prazo e o contrato operacional de Novo Periodo versus Limpar Base.",
+    "non_goals": [
+      "Nao alterar Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao criar gerador de PDF nesta onda",
+      "Nao alterar designer .frx dos formularios de relatorio",
+      "Nao rodar VCR neste microdelta",
+      "Nao mudar a regra de negocio de Novo Periodo ou Limpar Base, apenas documentar e testar o comportamento aprovado",
+      "Nao reverter alteracoes anteriores do worktree"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset.json",
+      ".hbn/hearbacks/0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset-confirmed.json",
+      ".hbn/hearbacks/0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset-confirmed.md",
+      ".hbn/results/0163-exec-onda-38-2-32-relatorios-suspensoes-strikes-reset.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/0163_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/0163_PROCEDIMENTO_IMPORT.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "src/vba/App_Release.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/Rel_Rodizio_Status.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_32_RELATORIOS_SUSPENSOES_STRIKES_RESET.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "src/vba/Menu_Principal.frx",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Rel_OSEmpresa.frx",
+      "src/vba/Configuracao_Inicial.frx",
+      "local-ai/vba_import/**/AAA-Mod_Types.bas",
+      "local-ai/vba_import/**/ABK-Importador_V3.bas",
+      "local-ai/vba_import/**/AAY-Auto_Open.bas",
+      "backups/**",
+      "V12-0-0206-Onda-38-2-30/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "O gate humano da 0162 foi informado como importado, compilado e TV2_20260608_084549 OK=10 FALHA=0 MANUAL=0.",
+    "O botao Iniciar Novo Periodo salva copia e limpa apenas PRE_OS e CAD_OS; cadastros, credenciamentos, auditoria e suspensoes em EMPRESAS permanecem.",
+    "O botao Limpar Base chama LimpaBaseTotalReset e apaga EMPRESAS, CREDENCIADOS, PRE_OS, CAD_OS, AUDIT_LOG e RELATORIO, preservando apenas ATIVIDADES e CONFIG.",
+    "Recusas/prazo ja possuem contador persistente em EMPRESAS.QTD_RECUSAS e CREDENCIADOS.RECUSAS.",
+    "Strikes por nota baixa sao calculados por CAD_OS, mas a suspensao por strike tambem registra STRIKES=n e snapshot de configuracao no AUDIT_LOG.",
+    "Os PDFs enviados indicam necessidade de texto uniforme; OS abertas tambem mostrou risco de linha fantasma N.O.S. 0 quando a aba contem placeholder."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Adicionar em Rel_Rodizio_Status helpers de resumo operacional com strikes por nota, recusas/prazo e texto humano auditavel.",
+      "Atualizar relatorios de Menu_Principal, Rel_Emp_Serv e Rel_OSEmpresa para usar o resumo comum e incluir colunas de strikes/diagnostico.",
+      "Atualizar impressos de PRE_OS, OS e Avaliacao para carregar aviso operacional da empresa selecionada.",
+      "Corrigir o relatorio de OS abertas para ignorar linha sem OS_ID real.",
+      "Criar teste V2 dirigido para validar contrato Novo Periodo versus Limpar Base e presenca dos textos/colunas de auditoria.",
+      "Atualizar manual, guia de testes, changelog, tecnico, procedimento e manifesto de importacao."
+    ]
+  },
+  "invariants_preserved": [
+    "Novo Periodo continua preservando suspensoes e cadastros.",
+    "Limpar Base continua limpando a base operacional para municipio novo.",
+    "Nao ha mudanca de schema nesta onda.",
+    "Importacao continua humano-aplicada pelo Importador V3.",
+    "VCR fica reservada para checkpoint forte posterior."
+  ],
+  "risks": [
+    {
+      "risk": "Strikes por nota baixa podem desaparecer de CAD_OS apos Novo Periodo.",
+      "mitigation": "Usar fallback de AUDIT_LOG para recuperar ultimo STRIKES=n quando a empresa ainda estiver suspensa.",
+      "severity": "high"
+    },
+    {
+      "risk": "Adicionar informacao aos impressos PRE_OS/OS/Avaliacao pode estourar layout existente.",
+      "mitigation": "Usar campo compacto em celulas ja disponiveis e manter a validacao humana de PDF/impressao como gate.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Menu_Principal.frm e Preencher.bas sao arquivos grandes com mudancas anteriores no worktree.",
+      "mitigation": "Editar apenas helpers/rotinas de relatorio e impressao relacionados ao escopo aprovado.",
+      "severity": "high"
+    },
+    {
+      "risk": "Teste destrutivo de Limpar Base pode apagar dados de homologacao durante execucao humana.",
+      "mitigation": "Suite deve avisar que e destrutiva, criar cenario deterministico e validar comportamento explicitamente autorizado.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0163 confirmado antes de codigo",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0163-exec-onda-38-2-32-relatorios-suspensoes-strikes-reset.json"
+      },
+      {
+        "gate": "Fonte e espelho VBA sincronizados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0163-exec-onda-38-2-32-relatorios-suspensoes-strikes-reset.json"
+      },
+      {
+        "gate": "Importador V3 do delta 0163",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0163-exec-onda-38-2-32-relatorios-suspensoes-strikes-reset.json"
+      },
+      {
+        "gate": "Compile VBE limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0163-exec-onda-38-2-32-relatorios-suspensoes-strikes-reset.json"
+      },
+      {
+        "gate": "TV2_RunRelatoriosSuspensoesStrikesReset passa sem falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0163-exec-onda-38-2-32-relatorios-suspensoes-strikes-reset.json"
+      },
+      {
+        "gate": "Validacao manual dos PDFs/impressos principais",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0163-exec-onda-38-2-32-relatorios-suspensoes-strikes-reset.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+      "Se TV2_RunRelatoriosSuspensoesStrikesReset falhar, anexar CSV de falhas e nao rodar VCR.",
+      "Se o layout impresso ficar inadequado, abrir fix1 classificando como formatacao de relatorio."
+    ],
+    "anchor_to_restore": "0162 validada por humano: TV2_20260608_084549 OK=10 FALHA=0 MANUAL=0"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-08T09:25:35-03:00",
+  "confirmed_at": "2026-06-08T09:25:35-03:00",
+  "hearback_summary": "Mauricio confirmou que o comportamento atual de Novo Periodo e Limpar Base esta correto, pediu documentacao nos testes/documentos e autorizou aplicar as propostas da onda para relatorios, strikes, recusas e reset."
+}

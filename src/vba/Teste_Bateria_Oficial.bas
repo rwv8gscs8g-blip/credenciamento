@@ -511,7 +511,7 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     BA_LogAssert "BO_300_FiltroA_StatusCredInativo", Not resRod.encontrou, "Sem empresa apta quando credenciamento esta inativo", BA_ResumoRodizio(resRod), "Validar filtro A do rodizio", "Inativar credenciamento de Empresa 1 no Item A"
 
     BA_PrepararCenarioBase
-    BA_SetEmpresaStatus "001", BA_STATUS_EMP_SUSPENSA, DateAdd("m", 1, Date), 2
+    BA_SetEmpresaStatus "001", BA_STATUS_EMP_SUSPENSA, DateAdd("d", 30, Date), 2
     resRod = BA_SelecionarEmpresa("001")
     BA_LogAssert "BO_301_FiltroB_SuspensaFutura", Not resRod.encontrou, "Empresa suspensa com prazo futuro nao participa", BA_ResumoRodizio(resRod), "Validar filtro B com suspensao ativa", "Suspender Empresa 1 com prazo futuro"
 
@@ -626,10 +626,10 @@ Private Sub BA_Bloco3_RegressaoTecnica()
     Dim linhaEmpAfter As Long
     r = AvaliarOS(osId, "Gestor QA", notas, 10, "DT_FIM_SUSP esperado", "")
     empAfter = LerEmpresa("003", linhaEmpAfter)
-    BA_LogAssert "BO_330g_DtFimSusp", r.sucesso And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA And linhaEmpAfter > 0 And empAfter.DT_FIM_SUSP > Date, _
-        "Ao suspender por nota, DT_FIM_SUSP deve ser hoje + meses de suspensao", _
-        "STATUS=" & BA_StatusEmpresa("003") & " | DT_FIM_SUSP=" & Format$(empAfter.DT_FIM_SUSP, "yyyy-mm-dd"), _
-        "Validar que a suspensao por nota grava DT_FIM_SUSP", _
+    BA_LogAssert "BO_330g_DtFimSusp", r.sucesso And BA_StatusEmpresa("003") = BA_STATUS_EMP_SUSPENSA And linhaEmpAfter > 0 And empAfter.DT_FIM_SUSP = DateAdd("d", GetDiasSuspensaoStrike(), Date), _
+        "Ao suspender por nota, DT_FIM_SUSP deve ser hoje + dias de suspensao", _
+        "STATUS=" & BA_StatusEmpresa("003") & " | DT_FIM_SUSP=" & Format$(empAfter.DT_FIM_SUSP, "yyyy-mm-dd") & " | DIAS=" & CStr(GetDiasSuspensaoStrike()), _
+        "Validar que a suspensao por nota grava DT_FIM_SUSP exato em dias", _
         "Avaliar com notas 4 e conferir DT_FIM_SUSP"
 End Sub
 
@@ -639,6 +639,8 @@ Private Sub BA_Bloco4_Combinatoria()
     Dim res As TResult
     Dim notas(1 To 10) As Integer
     Dim resRod As TRodizioResultado
+    Dim empAfter As TEmpresa
+    Dim linhaEmpAfter As Long
 
     BA_PrepararCenarioBase
     BA_SetEmpresaStatus "001", BA_STATUS_EMP_ATIVA, CDate(0), 0
@@ -667,7 +669,18 @@ Private Sub BA_Bloco4_Combinatoria()
     BA_RecusarEmissao "BO_410_MatrizFronteiraRecusas_Recusa2", "001", "001", "001", "Recusa fronteira 2"
     BA_LogAssert "BO_410_MatrizFronteiraRecusas_Apos2", BA_QtdRecusasEmpresa("001") = 2 And BA_StatusEmpresa("001") = BA_STATUS_EMP_ATIVA, "Duas recusas mantem empresa ativa", CStr(BA_QtdRecusasEmpresa("001")) & " | STATUS=" & BA_StatusEmpresa("001"), "Cobrir fronteira abaixo do limite de suspensao", "Executar duas recusas consecutivas"
     BA_RecusarEmissao "BO_410_MatrizFronteiraRecusas_Recusa3", "001", "001", "001", "Recusa fronteira 3"
-    BA_LogAssert "BO_410_MatrizFronteiraRecusas_Apos3", BA_QtdRecusasEmpresa("001") >= GetConfig().MAX_RECUSAS And BA_StatusEmpresa("001") = BA_STATUS_EMP_SUSPENSA, "Terceira recusa suspende empresa conforme limite", CStr(BA_QtdRecusasEmpresa("001")) & " | STATUS=" & BA_StatusEmpresa("001"), "Cobrir fronteira superior de recusas", "Executar terceira recusa"
+    empAfter = LerEmpresa("001", linhaEmpAfter)
+    BA_LogAssert "BO_410_MatrizFronteiraRecusas_Apos3", _
+        BA_QtdRecusasEmpresa("001") >= GetConfig().MAX_RECUSAS And _
+        BA_StatusEmpresa("001") = BA_STATUS_EMP_SUSPENSA And _
+        linhaEmpAfter > 0 And _
+        empAfter.DT_FIM_SUSP = DateAdd("d", GetDiasSuspensaoRecusaPrazo(), Date), _
+        "Terceira recusa suspende empresa conforme limite em dias", _
+        CStr(BA_QtdRecusasEmpresa("001")) & " | STATUS=" & BA_StatusEmpresa("001") & _
+        " | DT_FIM_SUSP=" & Format$(empAfter.DT_FIM_SUSP, "yyyy-mm-dd") & _
+        " | DIAS=" & CStr(GetDiasSuspensaoRecusaPrazo()), _
+        "Cobrir fronteira superior de recusas com data exata", _
+        "Executar terceira recusa"
 
     BA_PrepararCenarioBase
     preId = BA_EmitirPreOS("001", "182", "001", 1)
@@ -1634,10 +1647,14 @@ Private Sub BA_SetConfig()
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value = 5
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value = 3
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_MESES_SUSPENSAO).Value = 1
+    ws.Cells(1, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value = "DIAS_SUSPENSAO_RECUSA_PRAZO"
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value = 30
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_VERSAO).Value = "BATERIA_OFICIAL_2026_03_25"
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_UF).Value = "PE"
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_SECRETARIA).Value = "Secretaria Auditoria V12"
     ws.Cells(LINHA_CFG_VALORES, COL_CFG_NOTA_MINIMA).Value = 5
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_STRIKES).Value = 1
+    ws.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = 30
 
     Util_RestaurarProtecaoAba ws, estavaProtegida, senhaProtecao
 End Sub

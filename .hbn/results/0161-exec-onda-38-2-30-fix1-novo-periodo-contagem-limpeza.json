@@ -1,0 +1,156 @@
+{
+  "result_id": "0161-exec-onda-38-2-30-fix1-novo-periodo-contagem-limpeza",
+  "execution_id": "0161-exec-onda-38-2-30-fix1-novo-periodo-contagem-limpeza",
+  "readback_id": "0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "fix1_novo_periodo_validated_human_gate_passed",
+  "human_status": "import_compile_tv2_passed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "293e44c",
+  "build_label": "293e44c+ONDA38.2.30-FIX1-CONFIG-CENARIOS-CSV",
+  "action": "Corrigir o falso negativo de CFGCSV_06 ajustando limpeza completa de PRE_OS/CAD_OS e contagem por registro operacional.",
+  "summary": "A 0161 corrige a falha isolada observada no gate humano 0160. O primeiro pacote importou e compilou, mas TV2_20260607_110826 retornou OK=6 | FALHA=1 | MANUAL=0 porque CFGCSV_06 contou PRE_OS_DEPOIS=1 e CAD_OS_DEPOIS=1, apesar de o Novo Periodo ter executado e a copia existir. O fix1 limpa PRE_OS ate COL_PREOS_OS_ID, CAD_OS ate COL_OS_JUSTIF_DIV, aplica a mesma correcao no botao real de Novo Periodo, zera os contadores AR e passa a contar registros por coluna-chave no teste. O operador reportou importacao, compilacao limpa e TV2_20260608_044610 com OK=7 | FALHA=0 | MANUAL=0, sem CSV de falhas. A 38.2.30 fica fechada pelo fix1.",
+  "classification": {
+    "defect_type": "codigo_teste_limpeza_contagem",
+    "design_change_required": false,
+    "production_form_change_required": true,
+    "rationale": "O defeito estava em faixa de limpeza e criterio de contagem, nao em geometria/visual. Como o botao real usava a mesma faixa parcial, a correcao foi aplicada ao helper test-only e ao fluxo real de Novo Periodo."
+  },
+  "human_gate_observed_0160": {
+    "import_result": "M=3 | F=1 | err=0 | skip=0",
+    "compile_result": "limpo, reportado pelo operador",
+    "tv2_execution_id": "TV2_20260607_110826",
+    "tv2_result": "OK=6 | FALHA=1 | MANUAL=0",
+    "failure_csv": "TesteV2_CONFIG_CENARIOS_CSV_Falhas_TV2_20260607_110826.csv",
+    "failure": "CFGCSV_06_NOVO_PERIODO_COPIA_LIMPEZA",
+    "observed": "OK_NOVO_PERIODO=Verdadeiro; COPIA_EXISTE=Verdadeiro; PRE_OS_DEPOIS=1; CAD_OS_DEPOIS=1"
+  },
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 fix1 pelo comando do manifesto 0161.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunConfigCenariosNovoPeriodo pela Janela Imediata.",
+      "Esperar OK=7 | FALHA=0 | MANUAL=0.",
+      "Conferir que a pasta V12-0-0206-Onda-38-2-30 contem copia da planilha e CSV.",
+      "Nao executar VCR neste microdelta.",
+      "Nao executar em base de producao."
+    ],
+    "status": "completed"
+  },
+  "human_gate_observed_fix1": {
+    "import_result": "OK, reportado pelo operador",
+    "compile_result": "limpo, reportado pelo operador",
+    "tv2_execution_id": "TV2_20260608_044610",
+    "tv2_result": "OK=7 | FALHA=0 | MANUAL=0",
+    "failure_csv": "nao exportado",
+    "evidence": "Screenshot do operador mostra Suite V2 concluida para CONFIG_CENARIOS_CSV, sem falhas e sem CSV exportado."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1\", \"293e44c+ONDA38.2.30-FIX1-CONFIG-CENARIOS-CSV\"",
+    "import_result": "M=2 | F=1 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunConfigCenariosNovoPeriodo",
+    "tv2_directed_result": "OK=7 | FALHA=0 | MANUAL=0",
+    "folder_expected": "\\\\Mac\\Home\\Projetos\\Credenciamento\\V12-0-0206-Onda-38-2-30",
+    "csv_expected": "TesteV2_CONFIG_CENARIOS_<execucao>.csv"
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1.txt",
+    "manifest_bytes": 2121,
+    "manifest_sha256": "14952c06d1e274c9385708b5d89b8daef1c5c935af8702dc63be1ffc1b2eca12",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1\", \"293e44c+ONDA38.2.30-FIX1-CONFIG-CENARIOS-CSV\"",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24091,
+        "sha256": "f3293047d7ea1bc6a4b084dadf4baf66b3a37d41a2b5da6e57b331c1b5239103"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 343960,
+        "sha256": "4bfc672eacca3ba13b2549b04922d231e7cec14d66e3259153f34595192d4a10"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+        "bytes": 32218,
+        "sha256": "efd749d29db821d524803bdfb8f995dbf3482ba083142b0ff60bbde3d2ddbb9c"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+        "bytes": 31692,
+        "sha256": "d66ca193b3865f7eb40092b9ca90f08e74ac26c300ce8d9d1906e48b26e8b130"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json",
+    ".hbn/hearbacks/0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza-confirmed.json",
+    ".hbn/hearbacks/0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza-confirmed.md",
+    ".hbn/results/0161-exec-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_PROCEDIMENTO_IMPORT.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "src/vba/Configuracao_Inicial.frm",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; git worktree list aponta a branch codex/v12-0-0206-planejamento na raiz canonica."
+    },
+    {
+      "gate": "Readback 0161",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza.json retornou OK."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only Configuracao_Inicial.frm --only Teste_V2_Roteiros.bas --only App_Release.bas retornou in_sync."
+    },
+    {
+      "gate": "EOL e whitespace",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/report-vba-eol-whitespace.sh retornou OK; git diff --check sem saida."
+    },
+    {
+      "gate": "Import/compile/TV2 humano",
+      "status": "pass_human",
+      "evidence": "Operador reportou importacao e compilacao limpa; screenshot mostra TV2_20260608_044610 com OK=7 | FALHA=0 | MANUAL=0 e sem CSV de falhas."
+    }
+  ],
+  "worktree_cleanup_plan": [
+    "Nao versionar a pasta runtime V12-0-0206-Onda-38-2-30 como parte do fix1.",
+    "Apos gate humano verde, decidir se o CSV gerado deve ser promovido para auditoria/evidencias em onda propria ou removido localmente.",
+    "Nao remover arquivos runtime, incoming ou evidencias locais sem confirmacao explicita do operador.",
+    "Separar no status os artefatos 0161 dos arquivos historicos de ondas anteriores antes de qualquer commit."
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunConfigCenariosNovoPeriodo no workbook",
+    "Verificacao visual/manual da pasta V12-0-0206-Onda-38-2-30 e do CSV"
+  ],
+  "rollback_plan": [
+    "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+    "Se compile falhar, nao salvar o workbook e restaurar o backup V3 gerado antes do import.",
+    "Se TV2_RunConfigCenariosNovoPeriodo continuar falhando, anexar CSV de falhas e nao executar VCR.",
+    "Se a pasta, copia ou CSV nao aparecer, abrir novo fix e nao repetir em base de producao."
+  ],
+  "updated_at": "2026-06-08T05:03:29-03:00"
+}

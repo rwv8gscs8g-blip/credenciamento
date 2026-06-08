@@ -1,0 +1,165 @@
+{
+  "readback_id": "0164-rb-onda-38-2-33-disponibilidade-operacional-relatorios",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset",
+  "intent": {
+    "objective": "Melhorar a explicacao de indisponibilidade operacional no rodizio, nos relatorios e nos impressos de Pre-OS, OS e Avaliacao.",
+    "non_goals": [
+      "Nao alterar a regra de selecao do rodizio nesta onda",
+      "Nao implementar ainda checkboxes de zeragem anual em Configuracoes Iniciais",
+      "Nao alterar Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao editar .frx de UserForms nesta onda",
+      "Nao rodar VCR neste microdelta; VCR fica para checkpoint humano posterior",
+      "Nao reverter alteracoes anteriores do worktree"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0164-rb-onda-38-2-33-disponibilidade-operacional-relatorios.json",
+      ".hbn/hearbacks/0164-rb-onda-38-2-33-disponibilidade-operacional-relatorios-confirmed.json",
+      ".hbn/hearbacks/0164-rb-onda-38-2-33-disponibilidade-operacional-relatorios-confirmed.md",
+      ".hbn/results/0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_33_disponibilidade_operacional_relatorios/0164_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_33_disponibilidade_operacional_relatorios/0164_PROCEDIMENTO_IMPORT.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "src/vba/App_Release.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Preencher.bas",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/Rel_Rodizio_Status.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "src/vba/Menu_Principal.frx",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Rel_OSEmpresa.frx",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Configuracao_Inicial.frx",
+      "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "PDFs 065-071 mostram relatorios muito largos com diagnostico repetido em texto corrido e pouca distribuicao visual.",
+    "PDF 069 mostra empresa ativa e apta cadastralmente, mas o operador validou que ela ficou com Pre-OS aberta; a mensagem atual nao explica esse bloqueio operacional.",
+    "A selecao do rodizio usa ATIV_ID e pula empresas suspensas, inativas, com OS em execucao ou com Pre-OS pendente.",
+    "O relatorio por servico hoje mostra status/suspensao, mas nao informa a ocupacao imediata por Pre-OS pendente ou OS em execucao.",
+    "O impresso de avaliacao ja recebe aviso do sistema, mas o texto aparece fora do campo OBSERVACOES e deve ser padronizado como status da empresa nesta data.",
+    "A falha VCR UI_ADV_011 e falso negativo estrutural: o texto visivel do Gate RVS esta em Central_Testes_V2.bas, mas o teste procura tudo em Teste_Validacao_Release.bas."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Adicionar helpers em Rel_Rodizio_Status para disponibilidade operacional atual por empresa/atividade e diagnostico compacto.",
+      "Melhorar MensagemAmigavelPreOS para exibir contadores por motivo: credenciamento inativo, suspensao, empresa inativa, OS em execucao, Pre-OS pendente e cadastro ausente.",
+      "Atualizar relatorios com empresa para reduzir duplicidade, adicionar disponibilidade atual e distribuir melhor colunas/diagnostico.",
+      "Atualizar impressos de Pre-OS, OS e Avaliacao para escrever em OBSERVACOES: Status da empresa nesta data, com suspensao, strikes e disponibilidade.",
+      "Corrigir o teste adversarial UI_ADV_011 para validar Gate RVS no modulo certo sem falso negativo.",
+      "Adicionar/ampliar teste V2 dirigido para disponibilidade operacional e aviso em observacoes."
+    ]
+  },
+  "invariants_preserved": [
+    "Rodizio continua bloqueando empresa com Pre-OS pendente e OS em execucao.",
+    "Suspensoes continuam reativando automaticamente quando DT_FIM_SUSP <= Date no fluxo de selecao.",
+    "Relatorios continuam sendo gerados no workbook, sem gerador PDF novo.",
+    "Configuracoes Iniciais nao ganham novos controles nesta onda.",
+    "VCR nao sera executada pelo agente."
+  ],
+  "risks": [
+    {
+      "risk": "Texto diagnostico longo pode estourar layout de relatorio em carta horizontal.",
+      "mitigation": "Usar diagnostico compacto, wrap controlado, orientacao landscape e colunas de disponibilidade separadas.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Mensagem de Pre-OS pode esconder informacao tecnica necessaria para depuracao.",
+      "mitigation": "Manter contadores de bloqueio em linguagem humana e preservar mensagem tecnica nos testes por tokens.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Impressos de Pre-OS/OS/Avaliacao podem ter areas de observacao diferentes.",
+      "mitigation": "Centralizar a escrita em Preencher_EscreverAvisoOperacional e validar tokens estruturais no V2 dirigido.",
+      "severity": "high"
+    },
+    {
+      "risk": "Checkboxes de zeragem anual poderiam anistiar punicoes sem trilha clara se implementados agora.",
+      "mitigation": "Nao implementar nesta onda; documentar proposta para readback proprio com designer, persistencia, auditoria e teste destrutivo.",
+      "severity": "high"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0164 confirmado antes de codigo",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios.json"
+      },
+      {
+        "gate": "Fonte e espelho VBA sincronizados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios.json"
+      },
+      {
+        "gate": "TV2 dirigido de disponibilidade operacional passa sem falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios.json"
+      },
+      {
+        "gate": "Importador V3 do delta 0164",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios.json"
+      },
+      {
+        "gate": "Compile VBE limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios.json"
+      },
+      {
+        "gate": "Validacao manual dos PDFs/impressos principais",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+      "Se TV2 dirigido falhar, anexar CSV de falhas e nao rodar VCR.",
+      "Se PDF manual mostrar layout inadequado, abrir fix1 classificando como formatacao de relatorio ou impressao."
+    ],
+    "anchor_to_restore": "0163 fix1 importado/compilado; TV2_RunRelatoriosSuspensoesStrikesReset OK=10 FALHA=0 MANUAL=0"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-08T13:07:13-03:00",
+  "confirmed_at": "2026-06-08T13:07:13-03:00",
+  "hearback_summary": "Mauricio aprovou as propostas de correcao, pediu melhor uso da area impressa dos relatorios, reducao de duplicidade, clareza de disponibilidade operacional e texto de status da empresa no campo observacao de OS, Pre-OS e Avaliacao. A zeragem anual por checkbox foi solicitada como avaliacao estruturada, nao como implementacao imediata."
+}

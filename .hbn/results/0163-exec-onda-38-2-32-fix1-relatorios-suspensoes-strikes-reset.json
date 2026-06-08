@@ -1,0 +1,105 @@
+{
+  "result_id": "0163-exec-onda-38-2-32-fix1-relatorios-suspensoes-strikes-reset",
+  "execution_id": "0163-exec-onda-38-2-32-fix1-relatorios-suspensoes-strikes-reset",
+  "readback_id": "0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "relatorios_suspensoes_strikes_reset_fix1_package_ready",
+  "human_status": "pending_import_compile_tv2",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "293e44c",
+  "build_label": "293e44c+ONDA38.2.32-FIX1-REL-SUSP-STRIKES-RESET",
+  "base_gate_observed": {
+    "import_result": "Importou",
+    "compile_result": "Compilou",
+    "tv2_execution": "TV2_20260608_114127",
+    "tv2_result": "OK=9 | FALHA=1 | MANUAL=0",
+    "failure_csv": "TesteV2_REL_SUSP_STRIKES_RESET_Falhas_TV2_20260608_114127.csv",
+    "failed_scenario": "RELSSR_08_IMPRESSOS_AVISO_OPERACIONAL"
+  },
+  "action": "Corrigir falso negativo test-only em RELSSR_08 sem alterar regra de negocio, relatorios, impressos ou persistencia.",
+  "summary": "O teste RELSSR_08 cobrava os literais do aviso operacional dentro de Preencher.bas. A implementacao correta centraliza esses literais em Rel_Rodizio_Status.bas, na funcao RRS_AvisoOperacionalEmpresa, e Preencher.bas apenas chama essa funcao e escreve o aviso em C16. O fix1 move a validacao dos literais para RELSSR_01 e deixa RELSSR_08 validar somente a fiacao dos impressos.",
+  "classification": {
+    "defect_type": "falso_negativo_teste_v2",
+    "production_code_change_required": false,
+    "design_change_required": false,
+    "test_change_required": true,
+    "rationale": "A regra de negocio e o texto impresso ja estavam no helper correto; a falha estava na expectativa estrutural do teste."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_32_FIX1_RELATORIOS_SUSPENSOES_STRIKES_RESET\", \"293e44c+ONDA38.2.32-FIX1-REL-SUSP-STRIKES-RESET\"",
+    "import_result": "M=2 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunRelatoriosSuspensoesStrikesReset",
+    "tv2_directed_result": "OK=10 | FALHA=0 | MANUAL=0",
+    "vcr": "Nao rodar neste microdelta"
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_32_FIX1_RELATORIOS_SUSPENSOES_STRIKES_RESET.txt",
+    "manifest_bytes": 1818,
+    "manifest_sha256": "618d8db648baf40f283cf60df380d6b84476820e89f13e342cd117ac1447608c",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_32_FIX1_RELATORIOS_SUSPENSOES_STRIKES_RESET\", \"293e44c+ONDA38.2.32-FIX1-REL-SUSP-STRIKES-RESET\"",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24279,
+        "sha256": "69e76c718cfb1656799fefeb73d1bfb9b282e3bba6d06e82bf6cd1be91bf8f89"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 359143,
+        "sha256": "12bc98f11fb164b75e25a43f0dc1ab3a5ef7b7550fa16084a35850d45182abaa"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/results/0163-exec-onda-38-2-32-fix1-relatorios-suspensoes-strikes-reset.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/0163_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/0163_PROCEDIMENTO_IMPORT.md",
+    "src/vba/App_Release.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_32_FIX1_RELATORIOS_SUSPENSOES_STRIKES_RESET.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only App_Release.bas --only Teste_V2_Roteiros.bas retornou in_sync para 2 arquivos e OK em G7/G8."
+    },
+    {
+      "gate": "JSON HBN",
+      "status": "pass_local",
+      "evidence": "python3 -m json.tool validou este ERP."
+    },
+    {
+      "gate": "EOL e whitespace",
+      "status": "pass_local",
+      "evidence": "git diff --check retornou sem saida; bash scripts/hbn-guards/report-vba-eol-whitespace.sh retornou OK."
+    },
+    {
+      "gate": "Import/compile/TV2 humano",
+      "status": "pending_human",
+      "evidence": "Importador V3, compile no VBE e TV2_RunRelatoriosSuspensoesStrikesReset devem ser executados pelo operador."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunRelatoriosSuspensoesStrikesReset no workbook",
+    "VCR"
+  ],
+  "rollback_plan": [
+    "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+    "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+    "Se TV2_RunRelatoriosSuspensoesStrikesReset falhar, anexar CSV de falhas e nao executar VCR."
+  ],
+  "updated_at": "2026-06-08T11:45:00-03:00"
+}

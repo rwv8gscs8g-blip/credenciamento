@@ -1,0 +1,66 @@
+# Manifesto V3 DELTA ONDA38_2_31_RELATORIOS_TELA_A_TELA - V12.0.0206 Onda 38.2.31 / Readback 0162
+# Tema: Relatorios tela a tela com status da empresa, datas de suspensao e formatacao padrao.
+#
+# Contexto:
+#   - Configuracoes Iniciais e Tela Inicial foram validadas e encerradas pelo operador.
+#   - Mauricio solicitou a proxima revisao tela a tela nos relatorios.
+#   - Relatorio de Empresas Credenciadas por Servico e referencia visual para cabecalho,
+#     linhas alternadas e bordas.
+#   - Onde aparecer empresa, o relatorio deve mostrar status operacional e suspensao.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_31_RELATORIOS_TELA_A_TELA", "293e44c+ONDA38.2.31-RELATORIOS-TELA-A-TELA"
+#
+# Pos-import esperado:
+#   - Importador V3: M=4 | F=3 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunTelaRelatorios
+#   - Esperado: OK=10 | FALHA=0 | MANUAL=0.
+#   - Sem VCR neste microdelta; VCR fica reservado para checkpoint forte.
+#
+# Guardas:
+#   - Sem .frx neste manifesto.
+#   - Sem Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.
+#   - Sem restaurar/importar 0155.
+#   - Fluxos de impressao reais continuam humanos; a suite V2 e read-only por tokens.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24166
+#     sha256=32ec87f1c08ccb8ddc2e53155ce5ef4a289b9c096ab75d81061689c756c3abf6
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=225067
+#     sha256=5467f7e1012a6e9f8f0a069263a5a2c0cdaf43c5d7e0145ce6809ca36218148e
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=350992
+#     sha256=64ab7d50a27eb72728e4550b48edda95e111d3a755c2cbbcd9672a5762852feb
+#   M|001-modulo/ABV-Rel_Rodizio_Status.bas
+#     bytes=14200
+#     sha256=b19260c996373d6de6a0bb6cffb6c941481cb244744ee0d7773709e4954f9b58
+#   F|002-formularios/AAM-Menu_Principal.frm
+#     bytes=152811
+#     sha256=3ceb1a15d61af1d029d6bc063fe6e9f73b3e0ecbb1058b35079fdf6b3cd21635
+#   CODE_ONLY|002-formularios/AAM-Menu_Principal.code-only.txt
+#     bytes=152348
+#     sha256=e14a04bed06bc28c95e99c6af11709cb92027fc73e89a728f3fe318939c29aba
+#   F|002-formularios/AAK-Rel_Emp_Serv.frm
+#     bytes=8885
+#     sha256=5e7be2e2ea36be8a13dd9942878df583c0030ffe8f5264878ee982dce4623df6
+#   CODE_ONLY|002-formularios/AAK-Rel_Emp_Serv.code-only.txt
+#     bytes=8359
+#     sha256=bc6b0910d3ca07cc345769ae5d120223fa926890dd0848f3dfa3e0b0941cc818
+#   F|002-formularios/AAL-Rel_OSEmpresa.frm
+#     bytes=13500
+#     sha256=d53c324c7576821450e96681333ecfdbbab6ded8780b402989e17f3533087c92
+#   CODE_ONLY|002-formularios/AAL-Rel_OSEmpresa.code-only.txt
+#     bytes=12993
+#     sha256=ae0c78104242b1c1ce0354f1e044e5c7df49f0689e7298e639465059ccadb163
+#
+# GRUPO_ONDA38_2_31_RELATORIOS_TELA_A_TELA
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+M|001-modulo/ABV-Rel_Rodizio_Status.bas
+F|002-formularios/AAM-Menu_Principal.frm
+F|002-formularios/AAK-Rel_Emp_Serv.frm
+F|002-formularios/AAL-Rel_OSEmpresa.frm

@@ -20,6 +20,7 @@ Private Const ABA_RPT_ROTEIRO As String = "RPT_ROTEIRO"
 Private Const ABA_RPT_BATERIA As String = "RPT_BATERIA"
 Private Const ABA_RPT_CK136 As String = "RPT_CK136"
 Private Const ABA_RPT_CONSOLIDADO As String = "RPT_CONSOLIDADO"
+Private Const ABA_RPT_RODIZIO_STATUS As String = "RPT_RODIZIO_STATUS"
 Private Const ABA_V2_RESULTADO As String = "RESULTADO_QA_V2"
 Private Const ABA_V2_HIST As String = "HISTORICO_QA_V2"
 Private Const ABA_V2_ROTEIRO As String = "ROTEIRO_ASSISTIDO_V2"
@@ -44,17 +45,17 @@ Public Sub CT_AbrirCentral()
     op = Trim$(InputBox( _
         "=== CENTRAL DE TESTES V12.0.0205 ===" & vbCrLf & _
         "Build: " & build & vbCrLf & _
-        "Gate oficial de release: [1] Gate de Validacao de Release (RVS)" & vbCrLf & vbCrLf & _
+        "Validacao oficial: [1] Validacao Completa da Release (VCR)" & vbCrLf & vbCrLf & _
         ">> GATE DE RELEASE" & vbCrLf & _
-        "[1] Gate RVS: validacao completa de release (antigo Sexteto Minimo)" & vbCrLf & vbCrLf & _
+        "[1] VCR: Validacao Completa da Release" & vbCrLf & vbCrLf & _
         ">> ENTRY POINTS" & vbCrLf & _
         "[2] Central de Testes V2 (suites detalhadas + utilitarios)" & vbCrLf & _
         "[3] Bateria Oficial V1 (legado, rapida ~5 min / assistida ~8 min)" & vbCrLf & _
-        "[4] Bateria Rapida Legada (BRL; antigo Quarteto Direto)" & vbCrLf & vbCrLf & _
+        "[4] Regressao Rapida Legada (compatibilidade)" & vbCrLf & vbCrLf & _
         "Digite o numero:", "Central de Testes V12", "1"))
     If op = "" Then Exit Sub
     Select Case op
-        Case "1": Call CT_ValidarRelease_SextetoMinimo
+        Case "1": Call CT_ValidarRelease_Completa
         Case "2": Call CT2_AbrirCentral
         Case "3": Call CT_IniciarBateria
         Case "4": Call CT_ValidarRelease_QuartetoMinimo
@@ -208,7 +209,7 @@ Private Sub CT_LimparArtefatosTesteV1()
         End If
     Next idx
 
-    For Each nome In Array(ABA_TESTE_OF, ABA_CK136, ABA_HIST, ABA_ROTEIRO, ABA_V2_RESULTADO, ABA_V2_HIST, ABA_V2_ROTEIRO, ABA_V2_CATALOGO, ABA_V2_RELATORIO)
+    For Each nome In Array(ABA_TESTE_OF, ABA_CK136, ABA_HIST, ABA_ROTEIRO, ABA_V2_RESULTADO, ABA_V2_HIST, ABA_V2_ROTEIRO, ABA_V2_CATALOGO, ABA_V2_RELATORIO, ABA_RPT_RODIZIO_STATUS)
         Set ws = Nothing
         Set ws = ThisWorkbook.Sheets(nome)
         If Not ws Is Nothing Then
@@ -225,7 +226,7 @@ Private Function CT_EhArtefatoTeste(ByVal nomeAba As String) As Boolean
     Select Case UCase$(Trim$(nomeAba))
         Case UCase$(ABA_ROTEIRO), UCase$(ABA_CK136), UCase$(ABA_HIST), UCase$(ABA_TESTE_OF), _
              UCase$(ABA_RPT_ROTEIRO), UCase$(ABA_RPT_BATERIA), UCase$(ABA_RPT_CK136), UCase$(ABA_RPT_CONSOLIDADO), _
-             UCase$(ABA_V2_RESULTADO), UCase$(ABA_V2_HIST), UCase$(ABA_V2_ROTEIRO), UCase$(ABA_V2_CATALOGO), UCase$(ABA_V2_RELATORIO)
+             UCase$(ABA_RPT_RODIZIO_STATUS), UCase$(ABA_V2_RESULTADO), UCase$(ABA_V2_HIST), UCase$(ABA_V2_ROTEIRO), UCase$(ABA_V2_CATALOGO), UCase$(ABA_V2_RELATORIO)
             CT_EhArtefatoTeste = True
             Exit Function
     End Select
@@ -250,7 +251,8 @@ Private Sub CT_MenuRelatorios()
         "[2] Bateria Oficial" & vbCrLf & _
         "[3] Validacao Humana (planilha de apoio)" & vbCrLf & _
         "[4] Consolidado" & vbCrLf & _
-        "[5] Histórico", "Relatórios V12", "1"))
+        "[5] Histórico" & vbCrLf & _
+        "[6] Status do Rodizio por Servico", "Relatórios V12", "1"))
     If op = "" Then Exit Sub
     Select Case op
         Case "1": Call CTR_GerarRelatorioRoteiro
@@ -258,6 +260,7 @@ Private Sub CT_MenuRelatorios()
         Case "3": Call CTR_GerarRelatorioChecklist136
         Case "4": Call CTR_GerarRelatorioConsolidado
         Case "5": Call CT_AbrirHistorico
+        Case "6": Call RRS_GerarRelatorioStatusPorServico(True)
         Case Else: MsgBox "Opção inválida.", vbInformation, "Relatórios V12"
     End Select
     Exit Sub

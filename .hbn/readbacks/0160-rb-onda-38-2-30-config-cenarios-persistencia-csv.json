@@ -1,0 +1,161 @@
+{
+  "readback_id": "0160-rb-onda-38-2-30-config-cenarios-persistencia-csv",
+  "data": "2026-06-07",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0159-rb-onda-38-2-29-tela-inicial-menu-principal",
+  "intent": {
+    "objective": "Ampliar a validacao dirigida de Configuracoes Iniciais para matriz destrutiva controlada de cenarios com persistencia de gestor, municipio, prazo de Pre-OS, recusas, dias de punicao por recusa/prazo, nota de corte, strikes e dias de suspensao por nota, criando Novo Periodo deterministico com copia da planilha e CSVs de evidencia na mesma pasta.",
+    "non_goals": [
+      "Nao alterar designer .frx nem reposicionar controles nesta onda",
+      "Nao alterar Menu_Principal.frm, Auto_Open.bas, ThisWorkbook, Importador_V3.bas ou Mod_Types.bas",
+      "Nao acionar Limpar Base, Sair ou Central de Testes como fluxo real destrutivo nesta onda",
+      "Nao importar Util_PDF legado/quarentenado da Onda 16 nem gerar PDF nesta onda",
+      "Nao transformar ainda o prototipo em testador de cenarios com interface para operador",
+      "Nao rodar VCR neste microdelta"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0160-rb-onda-38-2-30-config-cenarios-persistencia-csv.json",
+      ".hbn/hearbacks/0160-rb-onda-38-2-30-config-cenarios-persistencia-csv-confirmed.json",
+      ".hbn/hearbacks/0160-rb-onda-38-2-30-config-cenarios-persistencia-csv-confirmed.md",
+      ".hbn/results/0160-exec-onda-38-2-30-config-cenarios-persistencia-csv.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_30_config_cenarios_persistencia_csv/0160_PROCEDIMENTO_IMPORT.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_30_CONFIG_CENARIOS_CSV.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Menu_Principal.frx",
+      "src/vba/Configuracao_Inicial.frx",
+      "local-ai/vba_import/**/AAA-Mod_Types.bas",
+      "local-ai/vba_import/**/ABK-Importador_V3.bas",
+      "local-ai/vba_import/**/AAY-Auto_Open.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/Menu_Principal.frx",
+      "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+      "auditoria/04_evidencias/V12.0.0203/_quarentena_pos_md16_3_2026_05_03/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "Ja existe TV2_RunPersistenciaPainel, mas hoje ele cobre apenas existencia de controles e um unico round-trip numerico: NOTA=6, MAX_STRIKES=4, DIAS_STRIKE=120, PRAZO_PREOS=8, MAX_RECUSAS=5 e DIAS_RECUSA_PRAZO=60.",
+    "Ja existe TV2_RunTelaConfiguracoesIniciais, mas o foco e tela/botoes; a persistencia numerica ali cobre apenas o caminho 5/2/11/3/45/5 e nao valida gestor nem municipio.",
+    "Ja existe CONFIG_SNAPSHOT_V2 cobrindo 15 colunas de CONFIG para restauracao tecnica, mas ele nao prova que a UI salva nem que os servicos consomem cada parametro.",
+    "Nao ha Util_PDF ativo em src/vba; por decisao humana desta onda, a evidencia sera CSV salvo junto da copia da planilha na pasta de Novo Periodo."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Ampliar TV2_RunPersistenciaPainel ou criar TV2_RunConfigCenariosPainel como suite dirigida test-only, mantendo restauracao integral de CONFIG ao final e em falha fatal.",
+      "Adicionar matriz pequena de cenarios: CEN1 com valores 1, CEN2 com valores 2 e CEN_BUILD com gestor/municipio contendo o build 293e44c+ONDA38.2.30-CONFIG-CENARIOS-CSV.",
+      "Validar round-trip da UI para CONFIG nos campos GESTOR, MUNICIPIO, PRAZO_PREOS, MAX_RECUSAS, DIAS_SUSPENSAO_RECUSA_PRAZO, NOTA_MINIMA, MAX_STRIKES e DIAS_SUSPENSAO_STRIKE.",
+      "Validar consumo por getters: GetDiasDecisao, GetMaxRecusas, GetDiasSuspensaoRecusaPrazo, GetNotaMinimaAvaliacao, GetMaxStrikes e GetDiasSuspensaoStrike retornam os valores do cenario ativo.",
+      "Adicionar pelo menos um cenario de consumo por regra de negocio para MAX_STRIKES=1/2 e DIAS_SUSPENSAO_STRIKE=1/2, usando fluxo controlado de avaliacao/reativacao sem depender de clique humano.",
+      "Adicionar rotina code-only para Novo Periodo deterministico que cria pasta V12-0-0206-Onda-38-2-30, salva copia da planilha e grava/copia CSVs de evidencia na mesma pasta.",
+      "Atualizar catalogo/roteiro V2, guia de testes, manual tela a tela, changelog, procedimento de import e manifesto V3 apenas com os modulos/form code-only alterados."
+    ]
+  },
+  "invariants_preserved": [
+    "0159 permanece fechada com import OK, compile OK e TV2_20260607_101426 OK=14",
+    "CONFIG operacional deve ser restaurada ao fim da suite e em erro fatal",
+    "Configuracao_Inicial.frx e layout visual nao sao alterados nesta onda",
+    "Util_PDF historico/quarentenado nao e restaurado",
+    "Apenas Novo Periodo entra em automacao destrutiva controlada, com aviso, copia da planilha e CSV de evidencia",
+    "VCR fica reservada para checkpoint forte"
+  ],
+  "risks": [
+    {
+      "risk": "Matriz destrutiva de cenarios pode deixar CONFIG do operador com valores de teste.",
+      "mitigation": "Capturar e restaurar as 15 colunas de CONFIG pelo engine V2; registrar assert especifico de consumo e resultado.",
+      "severity": "high"
+    },
+    {
+      "risk": "Novo Periodo apaga PRE_OS/CAD_OS para criar cenario deterministico.",
+      "mitigation": "Avisar no teste, salvar copia da planilha antes da limpeza e registrar CSV na pasta do novo periodo.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Validar todos os campos com combinatoria completa 2^6 deixaria a suite lenta demais.",
+      "mitigation": "Usar matriz minima 1/2 + cenario misto com build, deixando o testador parametrico completo para onda futura.",
+      "severity": "medium"
+    },
+    {
+      "risk": "CSV pode nao ser gerado ou nao ser copiado para a pasta do novo periodo.",
+      "mitigation": "Registrar assert especifico de existencia do CSV e caminho final; se falhar, a suite reprova sem rodar VCR.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0160 confirmado antes de codigo",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0160-exec-onda-38-2-30-config-cenarios-persistencia-csv.json"
+      },
+      {
+        "gate": "Fonte e espelho VBA sincronizados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0160-exec-onda-38-2-30-config-cenarios-persistencia-csv.json"
+      },
+      {
+        "gate": "Importador V3 do delta 0160",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0160-exec-onda-38-2-30-config-cenarios-persistencia-csv.json"
+      },
+      {
+        "gate": "Compile VBE limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0160-exec-onda-38-2-30-config-cenarios-persistencia-csv.json"
+      },
+      {
+        "gate": "Suite dirigida de cenarios de configuracao passa sem falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0160-exec-onda-38-2-30-config-cenarios-persistencia-csv.json"
+      },
+      {
+        "gate": "Pasta de Novo Periodo contem copia da planilha e CSVs de evidencia",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0160-exec-onda-38-2-30-config-cenarios-persistencia-csv.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup gerado pelo Importador V3.",
+      "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+      "Se a suite dirigida falhar, anexar CSV de falhas e nao rodar VCR.",
+      "Se a copia da planilha ou CSV nao aparecer na pasta de Novo Periodo, anexar evidencia e abrir fix sem rodar VCR."
+    ],
+    "anchor_to_restore": "0159 fechada: 293e44c+ONDA38.2.29-FIX1-TELA-INICIAL / TV2_20260607_101426"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-07T10:18:00-03:00",
+  "confirmed_at": "2026-06-07T10:32:00-03:00",
+  "hearback_summary": "Mauricio confirmou que, por ser mapa de testes, a suite pode ser destrutiva desde que avise que destruira dados para criar cenarios deterministicos e idempotentes. Autorizou implementar persistencia matricial, iniciar Novo Periodo e gerar CSV junto da copia da planilha na pasta V12-0-0206-Onda-38-2-30."
+}

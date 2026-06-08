@@ -1,0 +1,15 @@
+{
+  "hearback_id": "0156-rb-onda-38-2-27-fix1-config-layout-design-confirmed",
+  "readback_id": "0156-rb-onda-38-2-27-fix1-config-layout-design",
+  "status": "confirmed",
+  "confirmed_by": "Mauricio",
+  "confirmed_at": "2026-06-06T22:28:00-03:00",
+  "source": "Mensagem do operador: formulario com correcao de design foi exportado para incoming; em validacao tela a tela, campos que puderem ser corrigidos no design devem ser reexportados para simplificar codigo e manutencao.",
+  "conditions": [
+    "Substituir a proposta runtime 0155 por correcao de design.",
+    "Preferir solucoes simples, claras, objetivas e de facil manutencao.",
+    "Incorporar a descoberta de que o label sobrepunha o campo numerico.",
+    "Usar design exportado quando for a correcao de menor impacto.",
+    "Preservar preparacao para refatoramento limpo da V207."
+  ]
+}

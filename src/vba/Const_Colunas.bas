@@ -45,16 +45,20 @@ Public Const COL_CFG_SECRETARIA As Long = 10      ' J
 Public Const COL_CFG_NOTA_MINIMA As Long = 11     ' K
 ' --- V12.0.0203 ONDA 1: regra de strikes na avaliacao ---
 ' Numero de avaliacoes com media abaixo de COL_CFG_NOTA_MINIMA antes de suspender.
-' Default em Util_Config.GetMaxStrikes(): 3.
+' Default em Util_Config.GetMaxStrikes(): 1.
 Public Const COL_CFG_MAX_STRIKES As Long = 12          ' L
 ' Quantidade de dias da suspensao automatica disparada por strikes.
-' Default em Util_Config.GetDiasSuspensaoStrike(): 90.
+' V12.0.0206: valor valido 1..3650; 0 nao e sentinela valido.
 Public Const COL_CFG_DIAS_SUSPENSAO_STRIKE As Long = 13 ' M
 ' --- V12.0.0203 ONDA 16 MD-16.2: threshold de teste lento ---
 ' Suites V2 que excederem este valor em milissegundos sao marcadas como
 ' "lento" em RESULTADO_QA_V2.DURACAO_MS (cor condicional vermelha).
 ' Default em Util_Config.GetThresholdTesteLentoMS(): 500 ms.
 Public Const COL_CFG_THRESHOLD_TESTE_LENTO_MS As Long = 14 ' N
+' --- V12.0.0206 ONDA 38.2.26: suspensao por recusa/prazo em dias ---
+' Coluna nova. COL_CFG_MESES_SUSPENSAO (F) fica legado/deprecado e nao
+' deve ser reinterpretada como dias.
+Public Const COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO As Long = 15 ' O
 Public Const LINHA_CFG_VALORES As Long = 2        ' Linha dos valores na CONFIG
 
 ' --- Aba EMPRESAS (e EMPRESAS_INATIVAS) ---

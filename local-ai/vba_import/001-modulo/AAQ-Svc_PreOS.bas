@@ -339,6 +339,15 @@ Public Function RecusarPreOS( _
         Exit Function
     End If
 
+    Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar PRE_OS para escrita antes de punir fila."
+        RecusarPreOS = res
+        Exit Function
+    End If
+    Call Util_RestaurarProtecaoAba(ws, estavaProtegida, senhaProtecao)
+
     ' 3. AvancarFila ANTES de gravar PRE_OS (critérios 14 e 46)
     resAv = AvancarFila(empId, ativId, True, "RECUSA_EXPLICITA")
     If Not resAv.sucesso Then
@@ -350,7 +359,6 @@ Public Function RecusarPreOS( _
     End If
 
     ' 4. Gravar STATUS e Motivo (critério 13)
-    Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
         res.sucesso = False
         res.mensagem = "Nao foi possivel preparar PRE_OS para escrita."
@@ -418,6 +426,15 @@ Public Function ExpirarPreOS(ByVal PREOS_ID As String) As TResult
         Exit Function
     End If
 
+    Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
+    If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
+        res.sucesso = False
+        res.mensagem = "Nao foi possivel preparar PRE_OS para escrita antes de punir fila."
+        ExpirarPreOS = res
+        Exit Function
+    End If
+    Call Util_RestaurarProtecaoAba(ws, estavaProtegida, senhaProtecao)
+
     ' AvancarFila ANTES de gravar PRE_OS (critérios 18 e 47)
     resAv = AvancarFila(empId, ativId, True, "PRAZO_EXPIRADO")
     If Not resAv.sucesso Then
@@ -429,7 +446,6 @@ Public Function ExpirarPreOS(ByVal PREOS_ID As String) As TResult
     End If
 
     ' Gravar STATUS (critério 17)
-    Set ws = ThisWorkbook.Sheets(SHEET_PREOS)
     If Not Util_PrepararAbaParaEscrita(ws, estavaProtegida, senhaProtecao) Then
         res.sucesso = False
         res.mensagem = "Nao foi possivel preparar PRE_OS para escrita."

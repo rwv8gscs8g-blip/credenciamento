@@ -1,0 +1,104 @@
+{
+  "readback_id": "0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela",
+  "data": "2026-06-06",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0156-rb-onda-38-2-27-fix1-config-layout-design",
+  "intent": {
+    "objective": "Fechar a etapa 0156 de Configuracoes Iniciais, preparar handoff Codex para Codex e registrar propostas objetivas de evolucao do protocolo USEHBN antes da proxima janela de validacao tela a tela.",
+    "non_goals": [
+      "Nao alterar codigo VBA",
+      "Nao gerar novo pacote de importacao V3",
+      "Nao abrir a proxima onda de implementacao",
+      "Nao executar VCR",
+      "Nao iniciar refatoracao V207",
+      "Nao alterar o PROMPT_ARQUITETO externo automaticamente"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela.json",
+      ".hbn/hearbacks/0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela-confirmed.json",
+      ".hbn/hearbacks/0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela-confirmed.md",
+      ".hbn/results/0156-exec-onda-38-2-27-fix1-config-layout-design.json",
+      ".hbn/results/0157-exec-handoff-codex-configuracoes-iniciais-tela-a-tela.json",
+      ".hbn/messages/20260606-2325-handoff-fim-sessao-codex-bastao-codex-para-codex.md",
+      ".hbn/protocol-evolutions/20260606-2325-configuracoes-iniciais-design-first-handoff.md",
+      ".hbn/relay/INDEX.md",
+      "auditoria/00_status/128_PROMPT_RETOMADA_CODEX_CONFIG_INICIAL_TELA_A_TELA.md",
+      "auditoria/03_ondas/onda_38_2_27_config_help_vcr/0156_FIX1_DESIGN_TECNICO.md",
+      "auditoria/INDEX.md",
+      "CHANGELOG.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "incoming/**",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "backups/**"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa",
+    "0156 permanece como ultima etapa tecnica validada para Configuracoes Iniciais",
+    "A proxima janela deve abrir readback novo antes de qualquer escrita",
+    "Correcoes geometricas de UserForm devem preferir designer/export quando for a solucao simples"
+  ],
+  "risks": [
+    {
+      "risk": "O handoff pode ficar extenso demais e reduzir a clareza da proxima janela.",
+      "mitigation": "Separar o prompt operacional em auditoria/00_status/128 e manter o handoff com itens canônicos e referencias objetivas.",
+      "severity": "medium"
+    },
+    {
+      "risk": "A proxima IA pode confundir 0155 suspensa com 0156 validada.",
+      "mitigation": "Registrar explicitamente que 0155 nao deve ser importada e que 0156 esta fechada por import, compile, TV2 e validacao manual.",
+      "severity": "medium"
+    },
+    {
+      "risk": "A evolucao do protocolo pode se misturar com a proxima onda de codigo.",
+      "mitigation": "Registrar propostas em protocol-evolutions e orientar que a evolucao manual rode antes da nova janela Codex, sem alterar codigo nesta 0157.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0157 valido contra schema",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0157-exec-handoff-codex-configuracoes-iniciais-tela-a-tela.json"
+      },
+      {
+        "gate": "Handoff criado com 16 itens canonicos",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0157-exec-handoff-codex-configuracoes-iniciais-tela-a-tela.json"
+      },
+      {
+        "gate": "Prompt de retomada criado para nova janela Codex",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0157-exec-handoff-codex-configuracoes-iniciais-tela-a-tela.json"
+      },
+      {
+        "gate": "Propostas de evolucao USEHBN registradas",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0157-exec-handoff-codex-configuracoes-iniciais-tela-a-tela.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se algum documento ficar incoerente, corrigir apenas os documentos fast_track desta 0157.",
+      "Se o schema do readback falhar, ajustar o JSON antes de usar o handoff.",
+      "Se o operador decidir nao abrir novo chat, manter relay apontando que 0156 esta fechada e abrir readback novo na mesma sessao antes de qualquer codigo."
+    ],
+    "anchor_to_restore": "0156 completed: 293e44c+ONDA38.2.27-CONFIG-LAYOUT-fix1 / TV2_20260606_231033"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-06T23:25:00-03:00"
+}

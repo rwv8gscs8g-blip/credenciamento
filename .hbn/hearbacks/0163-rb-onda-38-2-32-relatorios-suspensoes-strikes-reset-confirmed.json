@@ -1,0 +1,7 @@
+{
+  "readback_id": "0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset",
+  "status": "confirmed",
+  "confirmed_by": "Mauricio",
+  "confirmed_at": "2026-06-08T09:25:35-03:00",
+  "summary": "Aprovado implementar a onda 38.2.32. O comportamento de Novo Periodo preservando suspensoes e Limpar Base apagando a base para municipio novo foi confirmado como correto e deve ser documentado/testado. Aplicar normalizacao de relatorios com suspensoes, strikes por nota baixa, recusas/prazo e aviso operacional em PRE_OS, OS e Avaliacao, sem VCR neste microdelta."
+}

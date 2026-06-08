@@ -1,0 +1,17 @@
+{
+  "hearback_id": "0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus-confirmed",
+  "readback_id": "0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus",
+  "data": "2026-06-07",
+  "human": "Mauricio",
+  "status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "confirmation_text": "Confirmo o readback 0158. Autorizo o Codex a iniciar a validacao tela a tela de Configuracoes Iniciais para botoes, menus, submenus, entrada, saida e fechamento, respeitando o escopo HBN, sem VCR neste microdelta, sem restaurar a 0155 e sem tocar nos arquivos proibidos. Fluxos destrutivos devem ser tratados por validacao segura ou manual.",
+  "constraints": [
+    "Sem VCR neste microdelta",
+    "Nao restaurar a 0155",
+    "Nao tocar nos arquivos proibidos",
+    "Fluxos destrutivos devem ser tratados por validacao segura ou manual"
+  ],
+  "confirmed_at": "2026-06-07T00:39:20-03:00"
+}

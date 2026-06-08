@@ -1,0 +1,162 @@
+{
+  "readback_id": "0154-rb-onda-38-2-27-config-help-vcr",
+  "data": "2026-06-06",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0153-rb-onda-38-2-26-punicoes-em-dias",
+  "intent": {
+    "objective": "Iniciar a validacao tela a tela pela tela Configuracoes Iniciais, corrigindo o campo de dias por recusa/prazo, adicionando ajuda HBN simples e padronizando a linguagem operacional do gate completo como VCR.",
+    "non_goals": [
+      "Nao declarar freeze V206",
+      "Nao iniciar refatoracao ampla V207",
+      "Nao remover macros legadas CT_ValidarRelease_TrioMinimo, QuartetoMinimo, QuintetoMinimo ou SextetoMinimo",
+      "Nao alterar Importador_V3.bas",
+      "Nao alterar Mod_Types.bas",
+      "Nao alterar Auto_Open.bas ou ThisWorkbook",
+      "Nao redesenhar UserForms no VBE nesta onda",
+      "Nao trocar historico antigo de auditoria que menciona trio, quarteto, quinteto ou sexteto"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0154-rb-onda-38-2-27-config-help-vcr.json",
+      ".hbn/hearbacks/0154-rb-onda-38-2-27-config-help-vcr-confirmed.json",
+      ".hbn/hearbacks/0154-rb-onda-38-2-27-config-help-vcr-confirmed.md",
+      ".hbn/results/0154-exec-onda-38-2-27-config-help-vcr.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_27_config_help_vcr/**",
+      "CHANGELOG.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/help/hbn/index.html",
+      "docs/help/hbn/configuracoes-iniciais.html",
+      "src/vba/Configuracao_Inicial.frm",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Teste_Validacao_Release.bas",
+      "src/vba/Central_Testes.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+      "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas",
+      "local-ai/vba_import/001-modulo/AAZ-Central_Testes.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_27_CONFIG_HELP_VCR.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook.code.txt",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "src/vba/Configuracao_Inicial.frx",
+      "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+      "PlanilhaCredenciamento-Homologacao-V5.xlsm",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "implementation_plan": {
+    "after_hearback": [
+      "Forcar o controle legado TxtMesesSuspensao, usado semanticamente como dias de recusa/prazo, a ficar editavel em runtime: Enabled=True, Locked=False e TabStop=True.",
+      "Adicionar teste dirigido TV2_RunTelaConfiguracoesIniciais para provar controle editavel e round-trip de persistencia dos dias de recusa/prazo.",
+      "Adicionar alias CT_ValidarRelease_Completa e VR_ValidarReleaseCompleta chamando o gate completo atual.",
+      "Atualizar Central de Testes para mostrar Validação Completa da Release (VCR) como nome principal, sem divulgar sexteto/quinteto/trio como metodologia nova.",
+      "Manter nomes legados de macro e helpers internos para compatibilidade ate V207.",
+      "Criar guia de testes com nomes profissionais, macros, escopo e tempo aproximado.",
+      "Iniciar manual operacional tela a tela pela tela Configuracoes Iniciais.",
+      "Criar HTML simples em docs/help/hbn e fazer o botao Ajuda da tela Configuracoes Iniciais abrir a pagina correspondente."
+    ],
+    "human_gate_expected": [
+      "ImportarPacoteV3_Delta \"ONDA38_2_27_CONFIG_HELP_VCR\", \"293e44c+ONDA38.2.27-CONFIG-HELP-VCR\"",
+      "VBE Debug > Compile VBAProject limpo.",
+      "Executar TV2_RunTelaConfiguracoesIniciais e esperar OK sem falhas.",
+      "Validar manualmente que o campo de dias por recusa/prazo esta editavel.",
+      "Clicar no botao Ajuda da tela Configuracoes Iniciais e confirmar abertura do HTML HBN.",
+      "Executar teste dirigido de impacto quando necessario; Validação Completa da Release (VCR) fica reservada para checkpoint forte por ser demorada."
+    ],
+    "stop_conditions": [
+      "Se for necessario editar FRX para corrigir o campo, parar e pedir aprovacao especifica.",
+      "Se o alias VCR exigir renomear macros legadas ou quebrar compatibilidade, parar.",
+      "Se o botao Ajuda nao puder ser ligado sem mexer no designer, manter HTML/documentacao e registrar pendencia.",
+      "Se TV2_RunTelaConfiguracoesIniciais nao cobrir o campo editavel e a persistencia em CONFIG, nao liberar o pacote."
+    ]
+  },
+  "invariants_preserved": [
+    "V12.0.0205 permanece release oficial vigente",
+    "V12.0.0206 permanece em validacao iterativa e sem freeze",
+    "Macros legadas de validacao permanecem disponiveis",
+    "RVS fica apenas como sigla tecnica legada em artefatos antigos; nome operacional novo e VCR",
+    "CSV permanece apenas como formato de arquivo .csv quando mencionado",
+    "A regra de punicoes em dias validada na 0153 permanece inalterada",
+    "Importacao no Excel continua vindo apenas de local-ai/vba_import/"
+  ],
+  "risks": [
+    {
+      "risk": "O botao Ajuda pode ter nome legado inesperado no FRX e o handler novo pode nao disparar.",
+      "mitigation": "Usar o nome detectado CommandButton1 e, se necessario, registrar pendencia sem redesenhar FRX nesta onda.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Trocar nomes visiveis de testes pode confundir evidencias antigas.",
+      "mitigation": "Manter macros e artefatos legados, documentando VCR como nome operacional novo e RVS como identificador legado temporario.",
+      "severity": "medium"
+    },
+    {
+      "risk": "A validacao completa demora mais de uma hora e pode travar iteracoes tela a tela.",
+      "mitigation": "Documentar cadencia incremental: compile + teste dirigido por tela; VCR apenas em checkpoints fortes.",
+      "severity": "high"
+    },
+    {
+      "risk": "Campo de dias por recusa/prazo continuar visualmente editavel mas nao persistir.",
+      "mitigation": "Adicionar TV2 dirigido com round-trip no controle e leitura da coluna COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO.",
+      "severity": "high"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0154 e hearback confirmados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0154-exec-onda-38-2-27-config-help-vcr.json"
+      },
+      {
+        "gate": "Campo dias por recusa/prazo editavel e persistente",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0154-exec-onda-38-2-27-config-help-vcr.json"
+      },
+      {
+        "gate": "Alias VCR compila e chama a validacao completa existente",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0154-exec-onda-38-2-27-config-help-vcr.json"
+      },
+      {
+        "gate": "Help HBN abre a pagina de Configuracoes Iniciais",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0154-exec-onda-38-2-27-config-help-vcr.json"
+      },
+      {
+        "gate": "TV2_RunTelaConfiguracoesIniciais passa limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0154-exec-onda-38-2-27-config-help-vcr.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se compile falhar, nao salvar o workbook e restaurar o backup V3 gerado antes do import.",
+      "Se o teste dirigido falhar, anexar CSV de falhas do TV2 e nao executar VCR.",
+      "Se a ajuda nao abrir, manter documentacao em docs/help/hbn e registrar defeito para a proxima onda sem bloquear a regra principal."
+    ],
+    "anchor_to_restore": "Build validado 293e44c+ONDA38.2.26-PUNICOES-DIAS-fix4 / VR_20260606_193911"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-06T20:48:11-03:00"
+}

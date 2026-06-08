@@ -1077,7 +1077,8 @@ End If
 
 On Error GoTo falha_rel_entidades
 
-wsRel.Cells.ClearContents
+wsRel.Cells.Clear
+wsRel.PageSetup.PrintArea = ""
 wsRel.Cells(1, 1).Value = "CNPJ"
 wsRel.Cells(1, 2).Value = "RAZ" & ChrW(195) & "O SOCIAL"
 wsRel.Cells(1, 3).Value = "TEL.FIXO"
@@ -1105,16 +1106,24 @@ For i = LINHA_DADOS To ultimaEnt
 Next i
 
 wsRel.Columns("A:J").AutoFit
+Call Rel_FormatarCabecalho(wsRel, 10)
+Call Rel_FormatarDados(wsRel, 2, linhaRel - 1, 10)
 Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE ENTIDADES CADASTRADAS NO CREDENCIAMENTO", "J", False)
+wsRel.PageSetup.PrintArea = wsRel.Range("A1:J" & (linhaRel - 1)).Address
 
 wsRel.Range("A1:J" & (linhaRel - 1)).PrintOut
 
-wsRel.Range("A1:J" & (linhaRel - 1)).ClearContents
+wsRel.Cells.Clear
+wsRel.PageSetup.PrintArea = ""
 Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
 Exit Sub
 
 falha_rel_entidades:
 On Error Resume Next
+If Not wsRel Is Nothing Then
+    wsRel.PageSetup.PrintArea = ""
+    wsRel.Cells.Clear
+End If
 Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
 On Error GoTo 0
 erro_carregamento:
@@ -2508,30 +2517,10 @@ Private Function MensagemAmigavelPreOS(ByVal msgOriginal As String) As String
         Exit Function
     End If
 
-    If (cD > 0) And (cE = 0) And (cA + cB + cC + cSemEmp = 0) Then
-        MensagemAmigavelPreOS = "Não foi possível emitir a Pre-OS: todas as empresas desta atividade estão com OS em execução."
-        Exit Function
-    End If
-
-    If InStr(1, u, "BLOQUEIO=PREOS_PENDENTE", vbTextCompare) > 0 Then
-        MensagemAmigavelPreOS = "Não foi possível emitir a Pre-OS: todas as empresas aptas desta atividade estão com Pre-OS pendente de aceite."
-        Exit Function
-    End If
-
-    If (cD > 0) And (cE > 0) And (cA + cB + cC + cSemEmp = 0) Then
-        MensagemAmigavelPreOS = "Não foi possível emitir a Pre-OS: no momento, todas as empresas estão ocupadas (OS em execução ou Pre-OS pendente)."
-        Exit Function
-    End If
-
-    If (cSemEmp > 0) Or ((cA + cB + cC + cD + cE + cSemEmp) = 0 And InStr(1, u, "SEM_CREDENCIADOS", vbTextCompare) > 0) Then
-        MensagemAmigavelPreOS = "Não foi possível emitir a Pre-OS: não há empresas disponíveis para esta atividade."
-        Exit Function
-    End If
-
     If InStr(1, u, "SEM_CREDENCIADOS", vbTextCompare) > 0 _
        Or InStr(1, u, "NAO HA EMPRESAS CREDENCIADAS", vbTextCompare) > 0 _
        Or InStr(1, u, "NAO HA EMPRESAS CREDENCIADAS APTAS", vbTextCompare) > 0 Then
-        MensagemAmigavelPreOS = "Não foi possível emitir a Pre-OS: não há empresas disponíveis para esta atividade."
+        MensagemAmigavelPreOS = MensagemPreOSSemDisponibilidade(cA, cB, cC, cD, cE, cSemEmp)
         Exit Function
     End If
 
@@ -2548,6 +2537,37 @@ Private Function MensagemAmigavelPreOS(ByVal msgOriginal As String) As String
     End If
 
     MensagemAmigavelPreOS = "Ocorreu um problema ao emitir a Pre-OS. Detalhes técnicos: " & m
+End Function
+
+Private Function MensagemPreOSSemDisponibilidade( _
+    ByVal cA As Long, _
+    ByVal cB As Long, _
+    ByVal cC As Long, _
+    ByVal cD As Long, _
+    ByVal cE As Long, _
+    ByVal cSemEmp As Long _
+) As String
+    Dim diagnostico As String
+    Dim acao As String
+
+    diagnostico = "Diagnóstico: " & _
+        CStr(cA) & " credenciamento(s) inativo(s), " & _
+        CStr(cB) & " empresa(s) suspensa(s), " & _
+        CStr(cC) & " empresa(s) inativa(s), " & _
+        CStr(cD) & " empresa(s) com OS em execução, " & _
+        CStr(cE) & " empresa(s) com Pré-OS pendente, " & _
+        CStr(cSemEmp) & " vínculo(s) sem empresa cadastrada."
+
+    If cE > 0 Or cD > 0 Then
+        acao = "Ação sugerida: encerre/cancele as OS ou Pré-OS pendentes, aguarde o fim das suspensões ou cadastre uma empresa apta para esta atividade."
+    ElseIf cB > 0 Then
+        acao = "Ação sugerida: aguarde o fim das suspensões, reative as empresas quando o prazo vencer ou cadastre uma empresa apta para esta atividade."
+    Else
+        acao = "Ação sugerida: revise os credenciamentos e cadastre ao menos uma empresa ativa e disponível para esta atividade."
+    End If
+
+    MensagemPreOSSemDisponibilidade = "Não foi possível emitir a Pre-OS: não há empresas disponíveis para esta atividade." & _
+        vbCrLf & diagnostico & vbCrLf & acao
 End Function
 
 Private Function ExtrairContadorMotivo(ByVal texto As String, ByVal chave As String) As Long
@@ -2662,12 +2682,17 @@ End Sub
 
 Private Sub Btn_Empresas_Cadastradas_Click()
 Dim wsEmp As Worksheet
+Dim wsRel As Worksheet
 Dim ultima As Long
 Dim primeiraLinhaEmp As Long
-Dim estEmp As Boolean
-Dim senEmp As String
+Dim linhaRel As Long
+Dim linha As Long
+Dim empId As String
+Dim estRel As Boolean
+Dim senRel As String
 
 Set wsEmp = ThisWorkbook.Sheets(SHEET_EMPRESAS)
+Set wsRel = ThisWorkbook.Sheets(SHEET_REL_UI)
 ultima = UltimaLinhaAba(SHEET_EMPRESAS)
 primeiraLinhaEmp = PrimeiraLinhaDadosEmpresas()
 If ultima < primeiraLinhaEmp Then
@@ -2675,22 +2700,79 @@ If ultima < primeiraLinhaEmp Then
     Exit Sub
 End If
 
-If Not Util_PrepararAbaParaEscrita(wsEmp, estEmp, senEmp) Then
-    MsgBox "Não foi possível preparar a aba EMPRESAS para impressão (proteção).", vbCritical, "Relatório"
+If Not Util_PrepararAbaParaEscrita(wsRel, estRel, senRel) Then
+    MsgBox "Não foi possível preparar a aba RELATORIO para o relatório (proteção).", vbCritical, "Relatório"
     Exit Sub
 End If
 
 On Error GoTo falha_rel_emp_cad
 
-wsEmp.Columns("A:O").AutoFit
-Call Rel_ConfigurarPagina(wsEmp, "RELATORIO DE EMPRESAS CADASTRADAS NO CREDENCIAMENTO", "O", False)
-wsEmp.Range("A1:O" & ultima).PrintOut
-Call Util_RestaurarProtecaoAba(wsEmp, estEmp, senEmp)
+wsRel.Cells.Clear
+wsRel.PageSetup.PrintArea = ""
+wsRel.Cells(1, 1).Value = "COD.EMP"
+wsRel.Cells(1, 2).Value = "CNPJ"
+wsRel.Cells(1, 3).Value = "RAZ" & ChrW(195) & "O SOCIAL"
+wsRel.Cells(1, 4).Value = "MUNICIPIO"
+wsRel.Cells(1, 5).Value = "UF"
+wsRel.Cells(1, 6).Value = "TELEFONE"
+wsRel.Cells(1, 7).Value = "EMAIL"
+wsRel.Cells(1, 8).Value = "STATUS EMPRESA"
+wsRel.Cells(1, 9).Value = "SUSPENSA DESDE"
+wsRel.Cells(1, 10).Value = "SUSPENSA ATE"
+wsRel.Cells(1, 11).Value = "ULTIMA REATIVACAO"
+wsRel.Cells(1, 12).Value = "STRIKES NOTA BAIXA"
+wsRel.Cells(1, 13).Value = "STRIKES RECUSA/PRAZO"
+wsRel.Cells(1, 14).Value = "RESUMO OPERACIONAL"
+
+linhaRel = 2
+For linha = primeiraLinhaEmp To ultima
+    If Trim$(SafeListVal(wsEmp.Cells(linha, COL_EMP_ID).Value)) <> "" Or _
+       Trim$(SafeListVal(wsEmp.Cells(linha, COL_EMP_CNPJ).Value)) <> "" Or _
+       Trim$(SafeListVal(wsEmp.Cells(linha, COL_EMP_RAZAO).Value)) <> "" Then
+        empId = SafeListVal(wsEmp.Cells(linha, COL_EMP_ID).Value)
+        wsRel.Cells(linhaRel, 1).Value = empId
+        wsRel.Cells(linhaRel, 2).Value = SafeListVal(wsEmp.Cells(linha, COL_EMP_CNPJ).Value)
+        wsRel.Cells(linhaRel, 3).Value = SafeListVal(wsEmp.Cells(linha, COL_EMP_RAZAO).Value)
+        wsRel.Cells(linhaRel, 4).Value = SafeListVal(wsEmp.Cells(linha, COL_EMP_MUNICIPIO).Value)
+        wsRel.Cells(linhaRel, 5).Value = SafeListVal(wsEmp.Cells(linha, COL_EMP_UF).Value)
+        wsRel.Cells(linhaRel, 6).Value = SafeListVal(wsEmp.Cells(linha, COL_EMP_TEL_CEL).Value)
+        wsRel.Cells(linhaRel, 7).Value = SafeListVal(wsEmp.Cells(linha, COL_EMP_EMAIL).Value)
+        wsRel.Cells(linhaRel, 8).Value = Rel_StatusEmpresaTexto(empId)
+        wsRel.Cells(linhaRel, 9).Value = Rel_SuspensaDesdeEmpresaTexto(empId)
+        wsRel.Cells(linhaRel, 10).Value = Rel_SuspensaAteEmpresaTexto(empId)
+        wsRel.Cells(linhaRel, 11).Value = Rel_UltimaReativacaoEmpresaTexto(empId)
+        wsRel.Cells(linhaRel, 12).Value = Rel_StrikesNotaBaixaTexto(empId)
+        wsRel.Cells(linhaRel, 13).Value = Rel_StrikesRecusaPrazoTexto(empId)
+        wsRel.Cells(linhaRel, 14).Value = Rel_DiagnosticoEmpresaTexto(empId)
+        linhaRel = linhaRel + 1
+    End If
+Next linha
+
+If linhaRel = 2 Then
+    wsRel.Cells.Clear
+    Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
+    MsgBox "Não há empresas cadastradas para listar.", vbInformation, "Relatório"
+    Exit Sub
+End If
+
+wsRel.Columns("A:N").AutoFit
+Call Rel_FormatarCabecalho(wsRel, 14)
+Call Rel_FormatarDados(wsRel, 2, linhaRel - 1, 14)
+Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE EMPRESAS CADASTRADAS NO CREDENCIAMENTO", "N", False)
+wsRel.PageSetup.PrintArea = wsRel.Range("A1:N" & (linhaRel - 1)).Address
+wsRel.Range("A1:N" & (linhaRel - 1)).PrintOut
+wsRel.Cells.Clear
+wsRel.PageSetup.PrintArea = ""
+Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
 Exit Sub
 
 falha_rel_emp_cad:
 On Error Resume Next
-Call Util_RestaurarProtecaoAba(wsEmp, estEmp, senEmp)
+If Not wsRel Is Nothing Then
+    wsRel.PageSetup.PrintArea = ""
+    wsRel.Cells.Clear
+    Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
+End If
 On Error GoTo 0
 MsgBox "Erro ao gerar relatório de empresas cadastradas: " & Err.Description, vbCritical, "Relatório"
 End Sub
@@ -2711,6 +2793,8 @@ Dim ativId As String
 Dim servId As String
 Dim descAtiv As String
 Dim descServ As String
+Dim empId As String
+Dim statusCred As String
 Dim estRel As Boolean
 Dim senRel As String
 
@@ -2735,8 +2819,23 @@ End If
 
 On Error GoTo falha_rel_emp_cred
 
-wsRel.Cells.ClearContents
-linhaRel = 1
+    wsRel.Cells.Clear
+    wsRel.PageSetup.PrintArea = ""
+wsRel.Cells(1, 1).Value = "ATIVIDADE"
+wsRel.Cells(1, 2).Value = "SERVICO"
+wsRel.Cells(1, 3).Value = "CNPJ EMPRESA"
+wsRel.Cells(1, 4).Value = "NOME EMPRESA"
+wsRel.Cells(1, 5).Value = "POSICAO FILA"
+wsRel.Cells(1, 6).Value = "ULTIMA OS"
+wsRel.Cells(1, 7).Value = "DATA ULT. OS"
+wsRel.Cells(1, 8).Value = "STATUS CRED."
+wsRel.Cells(1, 9).Value = "STATUS EMPRESA"
+wsRel.Cells(1, 10).Value = "SUSPENSA ATE"
+wsRel.Cells(1, 11).Value = "DISPONIBILIDADE ATUAL"
+wsRel.Cells(1, 12).Value = "STRIKES NOTA BAIXA"
+wsRel.Cells(1, 13).Value = "STRIKES RECUSA/PRAZO"
+wsRel.Cells(1, 14).Value = "RESUMO OPERACIONAL"
+linhaRel = 2
 
 For i = LINHA_DADOS To ultimaCred
     codAtivServ = SafeListVal(wsCred.Cells(i, COL_CRED_COD_ATIV_SERV).Value)
@@ -2744,59 +2843,64 @@ For i = LINHA_DADOS To ultimaCred
     servId = ExtrairServIdFromCod(codAtivServ, ativId)
     If servId = "" And Len(codAtivServ) >= 6 Then servId = Right$(codAtivServ, 3)
 
-    chave = ativId & "|" & servId
-    If chave <> chaveAtual Then
-        If linhaRel > 1 Then linhaRel = linhaRel + 1
-        descAtiv = ""
-        descServ = ""
-        For j = LINHA_DADOS To ultimaServ
-            If IdsIguais(SafeListVal(wsServ.Cells(j, COL_SERV_ATIV_ID).Value), ativId) And _
-               IdsIguais(SafeListVal(wsServ.Cells(j, COL_SERV_ID).Value), servId) Then
-                descAtiv = SafeListVal(wsServ.Cells(j, COL_SERV_ATIV_DESC).Value)
-                descServ = SafeListVal(wsServ.Cells(j, COL_SERV_DESCRICAO).Value)
-                Exit For
-            End If
-        Next j
-        If descAtiv = "" Then descAtiv = "ATIVIDADE " & ativId
-        If descServ = "" Then descServ = "SERVI" & ChrW(199) & "O " & servId
+    descAtiv = ""
+    descServ = ""
+    For j = LINHA_DADOS To ultimaServ
+        If IdsIguais(SafeListVal(wsServ.Cells(j, COL_SERV_ATIV_ID).Value), ativId) And _
+           IdsIguais(SafeListVal(wsServ.Cells(j, COL_SERV_ID).Value), servId) Then
+            descAtiv = SafeListVal(wsServ.Cells(j, COL_SERV_ATIV_DESC).Value)
+            descServ = SafeListVal(wsServ.Cells(j, COL_SERV_DESCRICAO).Value)
+            Exit For
+        End If
+    Next j
+    If descAtiv = "" Then descAtiv = "ATIVIDADE " & ativId
+    If descServ = "" Then descServ = "SERVI" & ChrW(199) & "O " & servId
 
-        wsRel.Cells(linhaRel, 1).Value = descAtiv & " / " & descServ
-        linhaRel = linhaRel + 1
-        wsRel.Cells(linhaRel, 1).Value = "CNPJ EMPRESA"
-        wsRel.Cells(linhaRel, 2).Value = "NOME EMPRESA"
-        wsRel.Cells(linhaRel, 3).Value = "POSICAO FILA"
-        wsRel.Cells(linhaRel, 4).Value = "ULTIMA OS"
-        wsRel.Cells(linhaRel, 5).Value = "DATA ULT. OS"
-        wsRel.Cells(linhaRel, 6).Value = "STATUS CRED."
-        linhaRel = linhaRel + 1
-        chaveAtual = chave
-    End If
-
-    wsRel.Cells(linhaRel, 1).Value = SafeListVal(wsCred.Cells(i, COL_CRED_CNPJ).Value)
-    wsRel.Cells(linhaRel, 2).Value = SafeListVal(wsCred.Cells(i, COL_CRED_RAZAO).Value)
-    wsRel.Cells(linhaRel, 3).Value = SafeListVal(wsCred.Cells(i, COL_CRED_POSICAO).Value)
-    wsRel.Cells(linhaRel, 4).Value = SafeListVal(wsCred.Cells(i, COL_CRED_ULT_OS).Value)
-    wsRel.Cells(linhaRel, 5).Value = SafeListVal(wsCred.Cells(i, COL_CRED_DT_ULT_OS).Value)
-    wsRel.Cells(linhaRel, 6).Value = SafeListVal(wsCred.Cells(i, COL_CRED_STATUS).Value)
+    empId = SafeListVal(wsCred.Cells(i, COL_CRED_EMP_ID).Value)
+    statusCred = SafeListVal(wsCred.Cells(i, COL_CRED_STATUS).Value)
+    wsRel.Cells(linhaRel, 1).Value = ativId & " - " & descAtiv
+    wsRel.Cells(linhaRel, 2).Value = servId & " - " & descServ
+    wsRel.Cells(linhaRel, 3).Value = SafeListVal(wsCred.Cells(i, COL_CRED_CNPJ).Value)
+    wsRel.Cells(linhaRel, 4).Value = SafeListVal(wsCred.Cells(i, COL_CRED_RAZAO).Value)
+    wsRel.Cells(linhaRel, 5).Value = SafeListVal(wsCred.Cells(i, COL_CRED_POSICAO).Value)
+    wsRel.Cells(linhaRel, 6).Value = SafeListVal(wsCred.Cells(i, COL_CRED_ULT_OS).Value)
+    wsRel.Cells(linhaRel, 7).Value = SafeListVal(wsCred.Cells(i, COL_CRED_DT_ULT_OS).Value)
+    wsRel.Cells(linhaRel, 8).Value = statusCred
+    wsRel.Cells(linhaRel, 9).Value = Rel_StatusEmpresaTexto(empId)
+    wsRel.Cells(linhaRel, 10).Value = Rel_SuspensaAteEmpresaTexto(empId)
+    wsRel.Cells(linhaRel, 11).Value = Rel_DisponibilidadeEmpresaTexto(empId, statusCred, ativId)
+    wsRel.Cells(linhaRel, 12).Value = Rel_StrikesNotaBaixaTexto(empId)
+    wsRel.Cells(linhaRel, 13).Value = Rel_StrikesRecusaPrazoTexto(empId)
+    wsRel.Cells(linhaRel, 14).Value = Rel_DiagnosticoEmpresaTexto(empId, statusCred, ativId)
     linhaRel = linhaRel + 1
 Next i
 
-If linhaRel <= 1 Then
+If linhaRel <= 2 Then
+    wsRel.Cells.Clear
+    wsRel.PageSetup.PrintArea = ""
     MsgBox "Não há empresas credenciadas para listar.", vbInformation, "Relatório"
     Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
     Exit Sub
 End If
 
-wsRel.Columns("A:F").AutoFit
-Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE EMPRESAS CREDENCIADAS", "F", False)
+wsRel.Columns("A:N").AutoFit
+Call Rel_FormatarCabecalho(wsRel, 14)
+Call Rel_FormatarDados(wsRel, 2, linhaRel - 1, 14)
+Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE EMPRESAS CREDENCIADAS", "N", False)
+wsRel.PageSetup.PrintArea = wsRel.Range("A1:N" & (linhaRel - 1)).Address
 
-wsRel.Range("A1:F" & (linhaRel - 1)).PrintOut
-wsRel.Range("A1:F" & (linhaRel - 1)).ClearContents
+    wsRel.Range("A1:N" & (linhaRel - 1)).PrintOut
+    wsRel.Cells.Clear
+wsRel.PageSetup.PrintArea = ""
 Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
 Exit Sub
 
 falha_rel_emp_cred:
 On Error Resume Next
+If Not wsRel Is Nothing Then
+    wsRel.PageSetup.PrintArea = ""
+    wsRel.Cells.Clear
+End If
 Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
 On Error GoTo 0
 MsgBox "Erro ao gerar relatório de empresas credenciadas: " & Err.Description, vbCritical, "Relatório"
@@ -2813,6 +2917,7 @@ Dim dtFechamento As String
 Dim osId As String
 Dim entId As String
 Dim codServ As String
+Dim ativId As String
 Dim empId As String
 Dim estRel As Boolean
 Dim senRel As String
@@ -2829,16 +2934,24 @@ End If
 
 On Error GoTo falha_rel_os_emit
 
-wsRel.Cells.ClearContents
-wsRel.Cells(1, 1).Value = "N.O.S."
-wsRel.Cells(1, 2).Value = "DEMANDANTE"
-wsRel.Cells(1, 3).Value = "SERVI" & ChrW(199) & "O"
+    wsRel.Cells.Clear
+    wsRel.PageSetup.PrintArea = ""
+    wsRel.Cells(1, 1).Value = "N.O.S."
+    wsRel.Cells(1, 2).Value = "DEMANDANTE"
+    wsRel.Cells(1, 3).Value = "SERVI" & ChrW(199) & "O"
 wsRel.Cells(1, 4).Value = "CREDENCIADO"
 wsRel.Cells(1, 5).Value = "N. EMPENHO"
 wsRel.Cells(1, 6).Value = "DATA O.S."
-wsRel.Cells(1, 7).Value = "DT PREV. FIM"
-wsRel.Cells(1, 8).Value = "QTDE H/D"
-wsRel.Cells(1, 9).Value = "VALOR TOTAL"
+    wsRel.Cells(1, 7).Value = "DT PREV. FIM"
+    wsRel.Cells(1, 8).Value = "QTDE H/D"
+    wsRel.Cells(1, 9).Value = "VALOR TOTAL"
+    wsRel.Cells(1, 10).Value = "STATUS EMPRESA"
+    wsRel.Cells(1, 11).Value = "SUSPENSA DESDE"
+    wsRel.Cells(1, 12).Value = "SUSPENSA ATE"
+    wsRel.Cells(1, 13).Value = "DISPONIBILIDADE ATUAL"
+    wsRel.Cells(1, 14).Value = "STRIKES NOTA BAIXA"
+    wsRel.Cells(1, 15).Value = "STRIKES RECUSA/PRAZO"
+    wsRel.Cells(1, 16).Value = "RESUMO OPERACIONAL"
 
 ultimaOS = UltimaLinhaAba(SHEET_CAD_OS)
 linhaRel = 2
@@ -2849,8 +2962,10 @@ For i = LINHA_DADOS To ultimaOS
 
     If statusOS = "EM_EXECUCAO" Or dtFechamento = "" Then
         osId = SafeListVal(wsOS.Cells(i, COL_OS_ID).Value)
+        If Trim$(osId) = "" Or CLng(Val(osId)) <= 0 Then GoTo ProximaOSAberta
         entId = SafeListVal(wsOS.Cells(i, COL_OS_ENT_ID).Value)
         codServ = SafeListVal(wsOS.Cells(i, COL_OS_COD_SERV).Value)
+        ativId = Pad3Id(wsOS.Cells(i, COL_OS_ATIV_ID).Value)
         empId = SafeListVal(wsOS.Cells(i, COL_OS_EMP_ID).Value)
 
         wsRel.Cells(linhaRel, 1).Value = Format$(Val(osId), "000")
@@ -2862,28 +2977,46 @@ For i = LINHA_DADOS To ultimaOS
         wsRel.Cells(linhaRel, 7).Value = SafeListVal(wsOS.Cells(i, COL_OS_DT_PREV_FIM).Value)
         wsRel.Cells(linhaRel, 8).Value = SafeListVal(wsOS.Cells(i, COL_OS_QT_EST).Value)
         wsRel.Cells(linhaRel, 9).Value = Format(Util_Conversao.ToCurrency(wsOS.Cells(i, COL_OS_VL_TOTAL).Value), "Currency")
+        wsRel.Cells(linhaRel, 10).Value = Rel_StatusEmpresaTexto(empId)
+        wsRel.Cells(linhaRel, 11).Value = Rel_SuspensaDesdeEmpresaTexto(empId)
+        wsRel.Cells(linhaRel, 12).Value = Rel_SuspensaAteEmpresaTexto(empId)
+        wsRel.Cells(linhaRel, 13).Value = Rel_DisponibilidadeEmpresaTexto(empId, "ATIVO", ativId)
+        wsRel.Cells(linhaRel, 14).Value = Rel_StrikesNotaBaixaTexto(empId)
+        wsRel.Cells(linhaRel, 15).Value = Rel_StrikesRecusaPrazoTexto(empId)
+        wsRel.Cells(linhaRel, 16).Value = Rel_DiagnosticoEmpresaTexto(empId, "ATIVO", ativId)
         linhaRel = linhaRel + 1
     End If
+ProximaOSAberta:
 Next i
 
 If linhaRel = 2 Then
+    wsRel.Cells.Clear
+    wsRel.PageSetup.PrintArea = ""
     MsgBox "Não há ordens de serviço abertas para listar.", vbInformation, "Relatório"
     Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
     Exit Sub
 End If
 
-wsRel.Columns("A:I").AutoFit
-Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE ORDENS DE SERVICO ABERTAS", "I", False)
+    wsRel.Columns("A:P").AutoFit
+    Call Rel_FormatarCabecalho(wsRel, 16)
+    Call Rel_FormatarDados(wsRel, 2, linhaRel - 1, 16)
+    Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE ORDENS DE SERVICO ABERTAS", "P", False)
+    wsRel.PageSetup.PrintArea = wsRel.Range("A1:P" & (linhaRel - 1)).Address
 
-wsRel.Range("A1:I" & (linhaRel - 1)).PrintOut
+    wsRel.Range("A1:P" & (linhaRel - 1)).PrintOut
 
-wsRel.Range("A1:I" & (linhaRel - 1)).ClearContents
-Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
-Call ClassificaOS
-Exit Sub
+    wsRel.Cells.Clear
+    wsRel.PageSetup.PrintArea = ""
+    Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
+    Call ClassificaOS
+    Exit Sub
 
 falha_rel_os_emit:
 On Error Resume Next
+If Not wsRel Is Nothing Then
+    wsRel.PageSetup.PrintArea = ""
+    wsRel.Cells.Clear
+End If
 Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
 On Error GoTo 0
 MsgBox "Erro ao gerar relatório de ordens de serviço abertas: " & Err.Description, vbCritical, "Relatório"
@@ -3194,6 +3327,124 @@ Private Function BuscarNomeEmpresaPorId(ByVal empId As Variant) As String
     BuscarNomeEmpresaPorId = alvo
 End Function
 
+Private Function Rel_LerEmpresaPorId(ByVal empId As Variant, ByRef emp As TEmpresa, ByRef linhaEmp As Long) As Boolean
+    Dim alvo As String
+
+    alvo = Trim$(SafeListVal(empId))
+    linhaEmp = 0
+    If alvo = "" Then Exit Function
+
+    emp = LerEmpresa(alvo, linhaEmp)
+    Rel_LerEmpresaPorId = (linhaEmp > 0)
+End Function
+
+Private Function Rel_StatusEmpresaTexto(ByVal empId As Variant) As String
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+
+    If Rel_LerEmpresaPorId(empId, emp, linhaEmp) Then
+        Rel_StatusEmpresaTexto = RRS_StatusGlobalHumano(emp.STATUS_GLOBAL)
+    Else
+        Rel_StatusEmpresaTexto = "EMPRESA NAO ENCONTRADA"
+    End If
+End Function
+
+Private Function Rel_SuspensaDesdeEmpresaTexto(ByVal empId As Variant) As String
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+
+    If Rel_LerEmpresaPorId(empId, emp, linhaEmp) Then
+        Rel_SuspensaDesdeEmpresaTexto = RRS_SuspensaDesdeTexto(emp.EMP_ID, emp.STATUS_GLOBAL)
+    Else
+        Rel_SuspensaDesdeEmpresaTexto = "-"
+    End If
+End Function
+
+Private Function Rel_SuspensaAteEmpresaTexto(ByVal empId As Variant) As String
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+
+    If Rel_LerEmpresaPorId(empId, emp, linhaEmp) Then
+        Rel_SuspensaAteEmpresaTexto = RRS_SuspensaAteTexto(emp.STATUS_GLOBAL, emp.DT_FIM_SUSP)
+    Else
+        Rel_SuspensaAteEmpresaTexto = "-"
+    End If
+End Function
+
+Private Function Rel_UltimaReativacaoEmpresaTexto(ByVal empId As Variant) As String
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+
+    If Rel_LerEmpresaPorId(empId, emp, linhaEmp) Then
+        Rel_UltimaReativacaoEmpresaTexto = RRS_UltimaReativacaoTexto(emp.DT_ULT_REATIV)
+    Else
+        Rel_UltimaReativacaoEmpresaTexto = "-"
+    End If
+End Function
+
+Private Function Rel_DiasRestantesEmpresa(ByVal empId As Variant) As Long
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+
+    If Rel_LerEmpresaPorId(empId, emp, linhaEmp) Then
+        Rel_DiasRestantesEmpresa = RRS_DiasRestantesSuspensao(emp.STATUS_GLOBAL, emp.DT_FIM_SUSP)
+    End If
+End Function
+
+Private Function Rel_ParticipaRodizioEmpresaTexto(ByVal empId As Variant, Optional ByVal statusCred As String = "ATIVO") As String
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+
+    If Rel_LerEmpresaPorId(empId, emp, linhaEmp) Then
+        Rel_ParticipaRodizioEmpresaTexto = RRS_ParticipaRodizioHumanoPorEmpresa(statusCred, emp.STATUS_GLOBAL, emp.DT_FIM_SUSP)
+    Else
+        Rel_ParticipaRodizioEmpresaTexto = "NAO - EMPRESA NAO ENCONTRADA"
+    End If
+End Function
+
+Private Function Rel_DisponibilidadeEmpresaTexto( _
+    ByVal empId As Variant, _
+    Optional ByVal statusCred As String = "ATIVO", _
+    Optional ByVal ativId As String = "" _
+) As String
+    If Trim$(SafeListVal(empId)) = "" Then
+        Rel_DisponibilidadeEmpresaTexto = "EMPRESA NAO ENCONTRADA"
+    Else
+        Rel_DisponibilidadeEmpresaTexto = RRS_DisponibilidadeOperacionalEmpresa(SafeListVal(empId), statusCred, ativId)
+    End If
+End Function
+
+Private Function Rel_StrikesNotaBaixaTexto(ByVal empId As Variant) As String
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+
+    If Rel_LerEmpresaPorId(empId, emp, linhaEmp) Then
+        Rel_StrikesNotaBaixaTexto = RRS_StrikesNotaBaixaTexto(emp.EMP_ID, emp.STATUS_GLOBAL)
+    Else
+        Rel_StrikesNotaBaixaTexto = "0"
+    End If
+End Function
+
+Private Function Rel_StrikesRecusaPrazoTexto(ByVal empId As Variant) As String
+    If Trim$(SafeListVal(empId)) = "" Then
+        Rel_StrikesRecusaPrazoTexto = "0"
+    Else
+        Rel_StrikesRecusaPrazoTexto = RRS_StrikesRecusaPrazoTexto(SafeListVal(empId))
+    End If
+End Function
+
+Private Function Rel_DiagnosticoEmpresaTexto( _
+    ByVal empId As Variant, _
+    Optional ByVal statusCred As String = "ATIVO", _
+    Optional ByVal ativId As String = "" _
+) As String
+    If Trim$(SafeListVal(empId)) = "" Then
+        Rel_DiagnosticoEmpresaTexto = "Empresa nao encontrada no cadastro."
+    Else
+        Rel_DiagnosticoEmpresaTexto = RRS_DiagnosticoOperacionalEmpresa(SafeListVal(empId), statusCred, ativId)
+    End If
+End Function
+
 Private Function BuscarDescricaoServicoPorCod(ByVal codServRaw As Variant, ByVal ativIdRaw As Variant) As String
     Dim wsServ As Worksheet
     Dim ultima As Long
@@ -3258,6 +3509,7 @@ Dim preosId As String
 Dim entId As String
 Dim empId As String
 Dim codServ As String
+Dim ativId As String
 Dim estRel As Boolean
 Dim senRel As String
 
@@ -3277,13 +3529,21 @@ End If
 
 On Error GoTo falha_rel_pre_venc
 
-wsRel.Cells.ClearContents
-wsRel.Cells(1, 1).Value = "N. PRE O.S."
-wsRel.Cells(1, 2).Value = "DEMANDANTE"
-wsRel.Cells(1, 3).Value = "SERVI" & ChrW(199) & "O"
-wsRel.Cells(1, 4).Value = "CREDENCIADO"
-wsRel.Cells(1, 5).Value = "DATA PRE O.S."
-wsRel.Cells(1, 6).Value = "DATA LIMITE"
+    wsRel.Cells.Clear
+    wsRel.PageSetup.PrintArea = ""
+    wsRel.Cells(1, 1).Value = "N. PRE O.S."
+    wsRel.Cells(1, 2).Value = "DEMANDANTE"
+    wsRel.Cells(1, 3).Value = "SERVI" & ChrW(199) & "O"
+    wsRel.Cells(1, 4).Value = "CREDENCIADO"
+    wsRel.Cells(1, 5).Value = "DATA PRE O.S."
+    wsRel.Cells(1, 6).Value = "DATA LIMITE"
+    wsRel.Cells(1, 7).Value = "STATUS EMPRESA"
+    wsRel.Cells(1, 8).Value = "SUSPENSA DESDE"
+    wsRel.Cells(1, 9).Value = "SUSPENSA ATE"
+    wsRel.Cells(1, 10).Value = "DISPONIBILIDADE ATUAL"
+    wsRel.Cells(1, 11).Value = "STRIKES NOTA BAIXA"
+    wsRel.Cells(1, 12).Value = "STRIKES RECUSA/PRAZO"
+    wsRel.Cells(1, 13).Value = "RESUMO OPERACIONAL"
 
 ultimaPre = UltimaLinhaAba(SHEET_PREOS)
 linhaRel = 2
@@ -3306,6 +3566,7 @@ For i = LINHA_DADOS To ultimaPre
     preosId = SafeListVal(wsPre.Cells(i, COL_PREOS_ID).Value)
     entId = SafeListVal(wsPre.Cells(i, COL_PREOS_ENT_ID).Value)
     codServ = SafeListVal(wsPre.Cells(i, COL_PREOS_COD_SERV).Value)
+    ativId = Pad3Id(wsPre.Cells(i, COL_PREOS_ATIV_ID).Value)
     empId = SafeListVal(wsPre.Cells(i, COL_PREOS_EMP_ID).Value)
 
     wsRel.Cells(linhaRel, 1).Value = Format$(Val(preosId), "000")
@@ -3314,29 +3575,46 @@ For i = LINHA_DADOS To ultimaPre
     wsRel.Cells(linhaRel, 4).Value = BuscarNomeEmpresaPorId(empId)
     wsRel.Cells(linhaRel, 5).Value = SafeListVal(wsPre.Cells(i, COL_PREOS_DT_EMISSAO).Value)
     wsRel.Cells(linhaRel, 6).Value = SafeListVal(wsPre.Cells(i, COL_PREOS_DT_LIMITE).Value)
+    wsRel.Cells(linhaRel, 7).Value = Rel_StatusEmpresaTexto(empId)
+    wsRel.Cells(linhaRel, 8).Value = Rel_SuspensaDesdeEmpresaTexto(empId)
+    wsRel.Cells(linhaRel, 9).Value = Rel_SuspensaAteEmpresaTexto(empId)
+    wsRel.Cells(linhaRel, 10).Value = Rel_DisponibilidadeEmpresaTexto(empId, "ATIVO", ativId)
+    wsRel.Cells(linhaRel, 11).Value = Rel_StrikesNotaBaixaTexto(empId)
+    wsRel.Cells(linhaRel, 12).Value = Rel_StrikesRecusaPrazoTexto(empId)
+    wsRel.Cells(linhaRel, 13).Value = Rel_DiagnosticoEmpresaTexto(empId, "ATIVO", ativId)
     linhaRel = linhaRel + 1
 
 ProximoPre:
 Next i
 
 If linhaRel = 2 Then
+    wsRel.Cells.Clear
+    wsRel.PageSetup.PrintArea = ""
     MsgBox "Não há pré-OS vencidas para listar.", vbInformation, "Relatório"
     Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
     Exit Sub
 End If
 
-wsRel.Columns("A:F").AutoFit
-Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE PRE-OS VENCIDAS", "F", False)
+    wsRel.Columns("A:M").AutoFit
+    Call Rel_FormatarCabecalho(wsRel, 13)
+    Call Rel_FormatarDados(wsRel, 2, linhaRel - 1, 13)
+    Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE PRE-OS VENCIDAS", "M", False)
+    wsRel.PageSetup.PrintArea = wsRel.Range("A1:M" & (linhaRel - 1)).Address
 
-wsRel.Range("A1:F" & (linhaRel - 1)).PrintOut
+    wsRel.Range("A1:M" & (linhaRel - 1)).PrintOut
 
-wsRel.Range("A1:F" & (linhaRel - 1)).ClearContents
-Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
-Call ClassificaPreOS
-Exit Sub
+    wsRel.Cells.Clear
+    wsRel.PageSetup.PrintArea = ""
+    Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
+    Call ClassificaPreOS
+    Exit Sub
 
 falha_rel_pre_venc:
 On Error Resume Next
+If Not wsRel Is Nothing Then
+    wsRel.PageSetup.PrintArea = ""
+    wsRel.Cells.Clear
+End If
 Call Util_RestaurarProtecaoAba(wsRel, estRel, senRel)
 On Error GoTo 0
 MsgBox "Erro ao gerar relatório de pré-OS vencidas: " & Err.Description, vbCritical, "Relatório"

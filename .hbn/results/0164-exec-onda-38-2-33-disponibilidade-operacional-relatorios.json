@@ -1,0 +1,197 @@
+{
+  "result_id": "0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios",
+  "execution_id": "0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios",
+  "readback_id": "0164-rb-onda-38-2-33-disponibilidade-operacional-relatorios",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "disponibilidade_operacional_relatorios_package_ready",
+  "human_status": "pending_import_compile_tv2",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "293e44c",
+  "build_label": "293e44c+ONDA38.2.33-DISPONIBILIDADE-RELATORIOS",
+  "input_observed": {
+    "manual_scenario": "Empresa ativa com Pre-OS aberta na atividade deve bloquear nova Pre-OS.",
+    "vcr_execution": "VR_20260608_115812",
+    "vcr_result": "REPROVADO",
+    "vcr_failure": "V2_ONDA23_ADV falhou em UI_ADV_011 por falso negativo: token 'Gate de Validacao de Release (RVS)' estava na Central_Testes_V2.bas, nao em Teste_Validacao_Release.bas.",
+    "pdfs_reviewed": [
+      "/Users/macbookpro/Downloads/065.pdf",
+      "/Users/macbookpro/Downloads/066.pdf",
+      "/Users/macbookpro/Downloads/067.pdf",
+      "/Users/macbookpro/Downloads/068.pdf",
+      "/Users/macbookpro/Downloads/069.pdf",
+      "/Users/macbookpro/Downloads/070.pdf",
+      "/Users/macbookpro/Downloads/071.pdf"
+    ]
+  },
+  "action": "Unificar disponibilidade operacional em mensagem de Pre-OS, relatorios e impressos, sem alterar o motor do rodizio.",
+  "summary": "Foi criado helper central para classificar disponibilidade como DISPONIVEL, SUSPENSA ATE, REATIVAVEL, OS EM EXECUCAO, PRE-OS PENDENTE, CREDENCIAMENTO INATIVO ou EMPRESA INATIVA. Relatorios passaram a mostrar DISPONIBILIDADE ATUAL e RESUMO OPERACIONAL. Impressos passaram a usar a frase 'Status da empresa nesta data'. O teste adversarial foi ajustado para procurar o texto do Gate RVS no modulo correto.",
+  "classification": {
+    "defect_type": "comunicacao_operacional_relatorio_mensagem",
+    "production_code_change_required": true,
+    "business_rule_engine_changed": false,
+    "design_change_required": false,
+    "frx_change_required": false,
+    "test_change_required": true,
+    "rationale": "O motor do rodizio ja bloqueava corretamente empresa com OS ou Pre-OS pendente; a lacuna era a explicacao ao operador e a consistencia dos relatorios."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS\", \"293e44c+ONDA38.2.33-DISPONIBILIDADE-RELATORIOS\"",
+    "import_result": "M=5 | F=3 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunRelatoriosSuspensoesStrikesReset",
+    "tv2_directed_result": "OK=10 | FALHA=0 | MANUAL=0",
+    "tv2_regression_macro": "TV2_RunTelaRelatorios",
+    "tv2_regression_result": "OK=10 | FALHA=0 | MANUAL=0",
+    "vcr": "Nao rodar neste microdelta; reservar para checkpoint forte posterior."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS.txt",
+    "manifest_bytes": 4098,
+    "manifest_sha256": "e3d4a68f8e1c3918f4e9fa4b79091179ef21caed626346d10390793fbb6fdca2",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS\", \"293e44c+ONDA38.2.33-DISPONIBILIDADE-RELATORIOS\"",
+    "expected_import": {
+      "modules": 5,
+      "forms": 3,
+      "errors": 0,
+      "skips": 0
+    },
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24278,
+        "sha256": "862e3b93ec8b1a5683f0aeeca25759aecf6018bf939bf4c8fe3b61e374562957"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "bytes": 156814,
+        "sha256": "3b122e2b08237d9d57dc15be4977f59bb9d70cd63ec149a3abccc9d0350dcc7e"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+        "bytes": 22346,
+        "sha256": "6eb501d1f234c08b105e5a76e103b2189de5c766ddfe6aedf7b87d6007470f71"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 232698,
+        "sha256": "2d156b2b3253a701db9938648f7380f2ab3c34f501aab57d23ca9f41a9702ecc"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 360022,
+        "sha256": "7314e996e17f5760bbaf5763588a9b7f876b60c6af91a56e98f9cb7a89304ba0"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+        "bytes": 156603,
+        "sha256": "bb539913720e46d653a12411aead89f50d3c0c0261427d82f514a1d0c32079ba"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+        "bytes": 156140,
+        "sha256": "803245862ecc740c3b87a2afdc6b195b33dfc6ea7c12dcf5dafba2fa9cc8a331"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+        "bytes": 9836,
+        "sha256": "07f6d7a638dd66b36b0d5ab1ecd333edb3215838f278d8bc0b5d838781b13fe3"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+        "bytes": 9310,
+        "sha256": "e59919dedd85556ba9ee9fc3bdc01171b5fb3be2a1d6ce215f7c2d33b7315fa9"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+        "bytes": 14267,
+        "sha256": "cc89291de683b22a520c326cd0f1f55f66a8f3639f81e1d2517d9d4e75a33477"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+        "bytes": 13760,
+        "sha256": "346e634a7f4b06ed14a0fa860849df5a0d05c86b64436a682fa29698f53507e6"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/results/0164-exec-onda-38-2-33-disponibilidade-operacional-relatorios.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_33_disponibilidade_operacional_relatorios/0164_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_33_disponibilidade_operacional_relatorios/0164_PROCEDIMENTO_IMPORT.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "src/vba/App_Release.bas",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Preencher.bas",
+    "src/vba/Rel_Emp_Serv.frm",
+    "src/vba/Rel_OSEmpresa.frm",
+    "src/vba/Rel_Rodizio_Status.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_33_DISPONIBILIDADE_OPERACIONAL_RELATORIOS.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only ... retornou in_sync para 8 arquivos e OK em G7/G8."
+    },
+    {
+      "gate": "HBN readback",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0164-rb-onda-38-2-33-disponibilidade-operacional-relatorios.json retornou OK."
+    },
+    {
+      "gate": "JSON HBN",
+      "status": "pass_local",
+      "evidence": "python3 -m json.tool validou o hearback e este ERP."
+    },
+    {
+      "gate": "Diff textual",
+      "status": "pass_local",
+      "evidence": "git diff --check nos arquivos da onda retornou sem saida."
+    },
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidence": "assert-canonical-root e forbid-tmp-worktree retornaram OK."
+    },
+    {
+      "gate": "Import/compile/TV2 humano",
+      "status": "pending_human",
+      "evidence": "Importador V3, compile no VBE e TV2_RunRelatoriosSuspensoesStrikesReset devem ser executados pelo operador."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunRelatoriosSuspensoesStrikesReset no workbook",
+    "TV2_RunTelaRelatorios no workbook",
+    "VCR"
+  ],
+  "rollback_plan": [
+    "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+    "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+    "Se TV2_RunRelatoriosSuspensoesStrikesReset falhar, anexar CSV de falhas e nao executar VCR.",
+    "Se regressao visual em PDF persistir, abrir fix1 limitado aos relatorios afetados."
+  ],
+  "updated_at": "2026-06-08T13:23:00-03:00"
+}

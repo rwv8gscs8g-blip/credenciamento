@@ -1,0 +1,282 @@
+{
+  "result_id": "0153-exec-onda-38-2-26-punicoes-em-dias",
+  "execution_id": "0153-exec-onda-38-2-26-punicoes-em-dias",
+  "readback_id": "0153-rb-onda-38-2-26-punicoes-em-dias",
+  "data": "2026-06-06",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "validated_human_gate_passed",
+  "outcome": "punicoes_rodizio_em_dias_validated_by_compile_tv2_and_rvs",
+  "human_status": "fix4_import_ok_compile_ok_tv2_ok_rvs_ok",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "293e44c",
+  "build_label": "293e44c+ONDA38.2.26-PUNICOES-DIAS-fix4",
+  "action": "Padronizar as punicoes do rodizio em dias, eliminando fallback em meses e expondo status de suspensao em UI, relatorios e RVS.",
+  "summary": "A 0153 altera a regra de suspensao para exigir dias explicitos em todos os caminhos: STRIKE, RECUSA, EXPIRACAO e MANUAL. A configuracao de recusa/prazo passa para coluna nova DIAS_SUSPENSAO_RECUSA_PRAZO; o campo de meses permanece apenas como legado de migracao idempotente. A tela Configuracao_Inicial valida 1..3650 dias e incorpora o frx exportado pelo operador. Relatorios passam a mostrar empresas aptas, suspensas, dias restantes, retorno previsto e itens sem empresa apta. O RVS oficial passa a incluir TV2_RunPunicoesDias. O primeiro pacote importou OK, mas o compile falhou em Teste_V2_Roteiros por chamada fortemente tipada a membro ausente em Credencia_Empresa; o fix1 removeu essa dependencia usando CallByName. O fix1 importou OK, mas o compile avancou para dependencia direta de Auto_Open; o fix2 removeu chamadas diretas a AutoOpen_* usando Application.Run. O fix2 importou OK, mas o compile avancou para dependencia direta de Util_VerificarProtecaoPersistenteAposAbertura; o fix3 removeu todas as ocorrencias diretas dessa funcao no BL4. O fix3 importou OK, mas o compile avancou para dependencia direta de membros TV2 de Menu_Principal em TV2_RunFormulariosAvaliacaoDemandante; o fix4 removeu essa dependencia usando CallByName em helpers locais. O operador reportou fix4 importado, compile limpo, TV2_RunPunicoesDias OK=8/FALHA=0/MANUAL=0 e RVS APROVADO em VR_20260606_193911 com PunicoesDias=8/0.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 pelo comando do manifesto.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunPunicoesDias pela Janela Imediata.",
+      "Executar CT_ValidarRelease_SextetoMinimo pela Janela Imediata ou pela Central de Testes.",
+      "Validar visualmente os relatorios RPT_RODIZIO_STATUS, empresa/servico e OS/empresa.",
+      "Reportar IDs de execucao TV2/VR e anexar CSV se houver falha."
+    ],
+    "status": "completed"
+  },
+  "human_gate_expected": {
+    "import_result": "Importador V3 OK: M=14 | F=3 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunPunicoesDias",
+    "tv2_directed_result": "OK=8 | FALHA=0 | MANUAL=0",
+    "rvs_macro": "CT_ValidarRelease_SextetoMinimo",
+    "rvs_result": "APROVADO",
+    "rvs_syntax_expected_suffix": "+PunicoesDias=8/0",
+    "reports_expected": "RPT_RODIZIO_STATUS e relatorios de empresa mostram STATUS_GLOBAL, DIAS_RESTANTES, RETORNO_PREVISTO, PARTICIPA_RODIZIO e SEM_EMPRESA_APTA quando aplicavel."
+  },
+  "human_gate_observed": {
+    "import_result": "OK reportado pelo operador no fix4 em 2026-06-06 19:36: M=14 | F=3 | err=0 | skip=0; backup V3 gerado em \\\\Mac\\Home\\Projetos\\Credenciamento\\backups\\vba\\20260606_193609-V3-FULL",
+    "compile_result": "PASS reportado pelo operador: VBE > Depurar > Compilar VBAProject passou limpo apos import do fix4.",
+    "tv2_directed_execution": "TV2_20260606_193709",
+    "tv2_directed_result": "OK=8 | FALHA=0 | MANUAL=0",
+    "rvs_execution": "VR_20260606_193911",
+    "rvs_result": "APROVADO; sintaxe V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0+ImpressaoResidual=7/0+PunicoesDias=8/0",
+    "reports": "Cobertura automatizada no TV2/RVS aprovada para aptas, suspensas, retorno previsto e item sem empresa apta; prints especificos dos relatorios nao foram anexados separadamente neste hearback.",
+    "rvs_summary_csv": "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260606_193911.csv",
+    "evidence_source": "Prints enviados pelo operador no chat em 2026-06-06 apos import/compile/TV2/RVS do fix4."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_26_PUNICOES_EM_DIAS.txt",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_26_PUNICOES_EM_DIAS_FIX4\", \"293e44c+ONDA38.2.26-PUNICOES-DIAS-fix4\"",
+    "expected_import_result": "M=14 | F=3 | err=0 | skip=0",
+    "expected_suite": "TV2_RunPunicoesDias",
+    "expected_suite_result": "OK=8 | FALHA=0 | MANUAL=0",
+    "expected_gate": "CT_ValidarRelease_SextetoMinimo",
+    "expected_gate_result": "APROVADO com PunicoesDias=8/0",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAB-Const_Colunas.bas",
+        "bytes": 10623,
+        "sha256": "7ba94bb69723acd761921785f67db65f6d894235ecc53e6ed07dc24095770432"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAD-Util_Config.bas",
+        "bytes": 24541,
+        "sha256": "30ffbf4115a0214812d053247c18f500ad885bedb724f361ef8a29424b8265ea"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+        "bytes": 30848,
+        "sha256": "84ec1ecbf2e47c21b2d0441dd92112d35b34ba2464365174472ec94c813447d7"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+        "bytes": 19953,
+        "sha256": "ec721a62d26e8bc9bac2d9127c7ab7ffc7cdf0dcd84c1f42ac880c9c9fdbd870"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+        "bytes": 23829,
+        "sha256": "7e6019722f678dae539b85193c3a828c6a943da67e9a71fe7d10dd20b8e60092"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 298037,
+        "sha256": "ae80277553eaa10dbe6ebf6288c89df86f355e8e81c21932424f7f2ecaf863db"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABU-Teste_V2_Punicoes_Dias.bas",
+        "bytes": 17236,
+        "sha256": "18ab1a915ce9c0dc7f3971764f67e07240e28214fab30fd0363102259b1c7ff2"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+        "bytes": 10036,
+        "sha256": "9a12c892c46df7d79fea8118c63dfa712b40d805e6dcfc9852c6a665cbd40767"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 23833,
+        "sha256": "531e7359f10ed169bc685fbb0bcc2c9f581e1fc53eafe419f38d2f6804b9d6b5"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+        "bytes": 24175,
+        "sha256": "d06e2250e3862793d91788d4c30ee3b14cfabe39614ca0e962e1a27c1cb1234d"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+        "bytes": 23649,
+        "sha256": "f1963bf50a447525ac82c716c989230f3d1aab85cec2819f9937a292a105ca13"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+        "bytes": 354840,
+        "sha256": "c36033591374ef99d6b87b4e26aea03429b617abb7b257bb390b26eb9a08ba79"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_26_PUNICOES_EM_DIAS.txt",
+        "bytes": 5657,
+        "sha256": "5993f3fbea89649dbb2255598f5d1465080f790170de5a293243686033787ae8"
+      },
+      {
+        "path": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_26_PUNICOES_EM_DIAS_FIX4.txt",
+        "bytes": 5657,
+        "sha256": "5993f3fbea89649dbb2255598f5d1465080f790170de5a293243686033787ae8"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0153-rb-onda-38-2-26-punicoes-em-dias.json",
+    ".hbn/hearbacks/0153-rb-onda-38-2-26-punicoes-em-dias-confirmed.json",
+    ".hbn/hearbacks/0153-rb-onda-38-2-26-punicoes-em-dias-confirmed.md",
+    ".hbn/results/0153-exec-onda-38-2-26-punicoes-em-dias.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_26_punicoes_em_dias/0153_TECNICO.md",
+    "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260606_193911.csv",
+    "CHANGELOG.md",
+    "src/vba/Const_Colunas.bas",
+    "src/vba/Util_Config.bas",
+    "src/vba/Svc_Rodizio.bas",
+    "src/vba/Svc_PreOS.bas",
+    "src/vba/Svc_Avaliacao.bas",
+    "src/vba/Configuracao_Inicial.frm",
+    "src/vba/Configuracao_Inicial.frx",
+    "src/vba/Teste_Bateria_Oficial.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Punicoes_Dias.bas",
+    "src/vba/Teste_Validacao_Release.bas",
+    "src/vba/Central_Testes.bas",
+    "src/vba/Central_Testes_Relatorio.bas",
+    "src/vba/Rel_Rodizio_Status.bas",
+    "src/vba/Rel_Emp_Serv.frm",
+    "src/vba/Rel_OSEmpresa.frm",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAB-Const_Colunas.bas",
+    "local-ai/vba_import/001-modulo/AAD-Util_Config.bas",
+    "local-ai/vba_import/001-modulo/AAP-Svc_Rodizio.bas",
+    "local-ai/vba_import/001-modulo/AAQ-Svc_PreOS.bas",
+    "local-ai/vba_import/001-modulo/AAS-Svc_Avaliacao.bas",
+    "local-ai/vba_import/001-modulo/ABA-Teste_Bateria_Oficial.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABU-Teste_V2_Punicoes_Dias.bas",
+    "local-ai/vba_import/001-modulo/ABH-Teste_Validacao_Release.bas",
+    "local-ai/vba_import/001-modulo/AAZ-Central_Testes.bas",
+    "local-ai/vba_import/001-modulo/ABB-Central_Testes_Relatorio.bas",
+    "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.frm",
+    "local-ai/vba_import/002-formularios/AAC-Configuracao_Inicial.code-only.txt",
+    "local-ai/vba_import/002-formularios/Configuracao_Inicial.frx",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_26_PUNICOES_EM_DIAS.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_26_PUNICOES_EM_DIAS_FIX4.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidencia": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; worktree list aponta 293e44c em codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Readback 0153",
+      "status": "pass_local",
+      "evidencia": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0153-rb-onda-38-2-26-punicoes-em-dias.json retornou OK."
+    },
+    {
+      "gate": "Hearback 0153",
+      "status": "pass_human",
+      "evidencia": "python3/jsonschema validou .hbn/hearbacks/0153-rb-onda-38-2-26-punicoes-em-dias-confirmed.json contra .hbn/schemas/hearback.schema.json; operador confirmou no chat: aprovado, pode seguir 0153."
+    },
+    {
+      "gate": "Sem chamada curta de Suspender",
+      "status": "pass_local",
+      "evidencia": "rg -n \"Suspender\\(\" src/vba mostrou apenas chamadas com dias/origem/snapshot e a assinatura publica."
+    },
+    {
+      "gate": "Sem fallback em meses nos servicos",
+      "status": "pass_local",
+      "evidencia": "rg -n \"BASE=MESES|FALLBACK_MESES|MESES=|DateAdd(\\\"m\\\"\" src/vba retornou apenas strings da suite canario Teste_V2_Punicoes_Dias."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidencia": "python3 local-ai/scripts/publicar_vba_import_v2.py apply --only Teste_V2_Roteiros.bas --only App_Release.bas sincronizou o fix4; cmp -s confirmou ABG-Teste_V2_Roteiros.bas e AAX-App_Release.bas iguais aos fontes."
+    },
+    {
+      "gate": "FRX da UI",
+      "status": "pass_local",
+      "evidencia": "incoming/Configuracao_Inicial.frx foi copiado para src/vba/Configuracao_Inicial.frx e local-ai/vba_import/002-formularios/Configuracao_Inicial.frx; hash c36033591374ef99d6b87b4e26aea03429b617abb7b257bb390b26eb9a08ba79."
+    },
+    {
+      "gate": "Diff whitespace",
+      "status": "pass_local",
+      "evidencia": "scripts/hbn-guards/report-vba-eol-whitespace.sh retornou git diff --check OK."
+    },
+    {
+      "gate": "Manifesto V3",
+      "status": "pass_local",
+      "evidencia": "Manifesto 0153 contem grupo ONDA38_2_26_PUNICOES_EM_DIAS_FIX4 e nao importa Mod_Types, Importador_V3, Auto_Open ou ThisWorkbook."
+    },
+    {
+      "gate": "Import V3 primeiro pacote",
+      "status": "pass_human",
+      "evidencia": "Operador reportou Importador V3 OK com M=14 | F=3 | err=0 | skip=0; F=3 representa tres formularios importados."
+    },
+    {
+      "gate": "Compile primeiro pacote",
+      "status": "fail_human_fixed_locally",
+      "evidencia": "Operador reportou erro de compilacao 'Metodo ou membro de dados nao encontrado' em Teste_V2_Roteiros, chamada frm.TV2_ExecutarCredenciamentoLote. Fix1 converteu a chamada para CallByName em helper compativel."
+    },
+    {
+      "gate": "Compile fix1",
+      "status": "fail_human_fixed_locally",
+      "evidencia": "Operador reportou erro de compilacao 'Sub' ou 'Function' nao definida em Teste_V2_Roteiros, chamada AutoOpen_UltimaProtecaoMarcadorExecutadaEm. Fix2 converteu chamadas AutoOpen_* para Application.Run em helpers compativeis."
+    },
+    {
+      "gate": "Compile fix2",
+      "status": "fail_human_fixed_locally",
+      "evidencia": "Operador reportou erro de compilacao 'Sub' ou 'Function' nao definida em Teste_V2_Roteiros, chamada Util_VerificarProtecaoPersistenteAposAbertura. Fix3 converteu todas as chamadas BL4 dessa funcao para Application.Run em helper compativel."
+    },
+    {
+      "gate": "Compile fix3",
+      "status": "fail_human_fixed_locally",
+      "evidencia": "Operador reportou erro de compilacao 'Metodo ou membro de dados nao encontrado' em Teste_V2_Roteiros, chamada frm.TV2_AvaliacaoDemandanteNaLista. Fix4 converteu as chamadas TV2 de Menu_Principal no teste FormulariosAvaliacaoDemandante para CallByName em helpers compativeis."
+    },
+    {
+      "gate": "Compile VBAProject",
+      "status": "pass_human",
+      "evidencia": "Operador reportou compile manual limpo apos import do fix4."
+    },
+    {
+      "gate": "TV2_RunPunicoesDias",
+      "status": "pass_human",
+      "evidencia": "Operador reportou TV2_20260606_193709 com OK=8 | FALHA=0 | MANUAL=0."
+    },
+    {
+      "gate": "RVS completo",
+      "status": "pass_human",
+      "evidencia": "Operador reportou VR_20260606_193911 APROVADO com V1=171/0, V2_Smoke=34/0, V2_Canonica=24/0, E2E_Strikes=76/0, IntegridadeBase=4/0, Onda23Adv=27/0, ImpressaoResidual=7/0 e PunicoesDias=8/0."
+    },
+    {
+      "gate": "Relatorios de suspensao",
+      "status": "pass_automated_visual_pending",
+      "evidencia": "TV2_RunPunicoesDias e RVS validaram cenarios de empresas aptas, suspensas, retorno previsto e item sem empresa apta; prints especificos dos relatorios RPT_RODIZIO_STATUS, empresa/servico e OS/empresa nao foram anexados separadamente."
+    }
+  ],
+  "next_decision": [
+    "0153 esta validada por import, compile, TV2 dirigido e RVS ampliado.",
+    "Antes de iniciar GATE 3 tela a tela, registrar readback curto do proximo lote de defeitos da mesma tela.",
+    "Nao declarar freeze V206 sem gate proprio e decisao humana explicita."
+  ],
+  "created_at": "2026-06-06T18:35:37-03:00",
+  "package_ready_at": "2026-06-06T19:27:19-03:00",
+  "completed_at": "2026-06-06T20:15:00-03:00"
+}

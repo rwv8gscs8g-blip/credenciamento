@@ -1,0 +1,14 @@
+{
+  "hearback_id": "0155-rb-onda-38-2-27-fix1-config-campo-tab-confirmed",
+  "readback_id": "0155-rb-onda-38-2-27-fix1-config-campo-tab",
+  "status": "confirmed",
+  "confirmed_by": "Mauricio",
+  "confirmed_at": "2026-06-06T21:32:00-03:00",
+  "source": "Mensagem do operador: importou, compilou, TV2_RunTelaConfiguracoesIniciais passou, mas o campo 'suspender por 30 dia(s)' nao esta editavel/acessivel e a navegacao por Tab esta irregular; solicitou verificacao e ajuste.",
+  "conditions": [
+    "Manter a correcao estreita na tela Configuracoes Iniciais.",
+    "Tornar o campo de dias por recusa/prazo editavel e acessivel por Tab.",
+    "Indicar se o aumento do tamanho do campo e necessario.",
+    "Nao depender de VCR completa para esta iteracao dirigida."
+  ]
+}

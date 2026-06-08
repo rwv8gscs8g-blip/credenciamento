@@ -1,0 +1,59 @@
+{
+  "result_id": "0157-exec-handoff-codex-configuracoes-iniciais-tela-a-tela",
+  "execution_id": "0157-exec-handoff-codex-configuracoes-iniciais-tela-a-tela",
+  "readback_id": "0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela",
+  "data": "2026-06-06",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "handoff_ready_for_new_codex_chat",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "action": "Fechar a 0156 como etapa concluida e preparar handoff Codex para Codex com prompt de retomada e propostas USEHBN.",
+  "summary": "Mauricio confirmou que o campo de dias por recusa/prazo aceita clique, edicao e salvamento. A 0156 foi marcada como completed. A 0157 criou handoff canônico, prompt de retomada para novo chat Codex e proposta de evolucao manual do USEHBN focada em validacao tela a tela, design-first para UserForms e evidencia manual estruturada.",
+  "artifacts_created": [
+    ".hbn/readbacks/0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela.json",
+    ".hbn/hearbacks/0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela-confirmed.json",
+    ".hbn/hearbacks/0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela-confirmed.md",
+    ".hbn/results/0157-exec-handoff-codex-configuracoes-iniciais-tela-a-tela.json",
+    ".hbn/messages/20260606-2325-handoff-fim-sessao-codex-bastao-codex-para-codex.md",
+    ".hbn/protocol-evolutions/20260606-2325-configuracoes-iniciais-design-first-handoff.md",
+    "auditoria/00_status/128_PROMPT_RETOMADA_CODEX_CONFIG_INICIAL_TELA_A_TELA.md"
+  ],
+  "artifacts_updated": [
+    ".hbn/results/0156-exec-onda-38-2-27-fix1-config-layout-design.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_27_config_help_vcr/0156_FIX1_DESIGN_TECNICO.md",
+    "auditoria/INDEX.md",
+    "CHANGELOG.md"
+  ],
+  "next_required_action": "Abrir novo chat Codex com o prompt auditoria/00_status/128_PROMPT_RETOMADA_CODEX_CONFIG_INICIAL_TELA_A_TELA.md; sucessor deve criar readback 0158 antes de qualquer escrita.",
+  "protocol_improvement_focus": [
+    "Classificacao obrigatoria de defeito UserForm: design versus codigo versus hibrido.",
+    "Inventario de tela antes de corrigir botoes, menus e submenus.",
+    "Bloco manual_ui_gate no ERP para evidencias de clique/edicao/salvamento.",
+    "Cadencia de teste por custo: dirigido, canonico parcial, VCR.",
+    "Handoff antecipado para ondas .frm/.frx com import/compile/fix repetido.",
+    "Prompt de retomada separado do handoff completo."
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0157",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0157-rb-handoff-codex-configuracoes-iniciais-tela-a-tela.json retornou OK."
+    },
+    {
+      "gate": "JSONs 0157",
+      "status": "pass_local",
+      "evidence": "python3 -m json.tool validou hearback 0157, ERP 0156 e ERP 0157."
+    },
+    {
+      "gate": "Diff check",
+      "status": "pass_local",
+      "evidence": "git diff --check sem saida."
+    }
+  ],
+  "created_at": "2026-06-06T23:25:00-03:00"
+}

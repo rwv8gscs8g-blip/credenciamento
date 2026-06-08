@@ -1,0 +1,147 @@
+{
+  "result_id": "0158-exec-onda-38-2-28-configuracoes-iniciais-botoes-menus",
+  "execution_id": "0158-exec-onda-38-2-28-configuracoes-iniciais-botoes-menus",
+  "readback_id": "0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus",
+  "data": "2026-06-07",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "configuracoes_iniciais_botoes_menus_validated",
+  "human_status": "confirmed_closed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "293e44c",
+  "build_label": "293e44c+ONDA38.2.28-CONFIG-BOTOES-MENUS",
+  "action": "Ampliar a validacao dirigida de Configuracoes Iniciais para botoes, menus, submenus, entrada, saida e fechamento, sem alterar UserForms nem executar fluxos destrutivos automaticamente.",
+  "summary": "A 0158 classifica a lacuna como cobertura de comportamento/contrato, nao como defeito geometrico. O delta e test-only + build label: TV2_RunTelaConfiguracoesIniciais passa a ter 9 asserts, cobrindo campo de dias, persistencia, Ajuda HBN, handlers dos botoes principais, confirmacoes de fluxos administrativos, fallback de Limpar Base, atalhos do menu inicial, rotas laterais e ausencia de bloqueio customizado no X. Nenhum .frm/.frx foi alterado. Mauricio reportou importacao OK, compile limpo e TV2_20260607_005745 com OK=9, FALHA=0, MANUAL=0.",
+  "human_gate_required": {
+    "steps": [
+      "Importar o delta V3 pelo comando do manifesto 0158.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunTelaConfiguracoesIniciais pela Janela Imediata.",
+      "Esperar OK=9 | FALHA=0 | MANUAL=0.",
+      "Nao executar VCR neste microdelta.",
+      "Nao confirmar fluxos destrutivos se a checagem manual for apenas de protecao/confirmacao."
+    ],
+    "status": "passed"
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_28_CONFIG_BOTOES_MENUS\", \"293e44c+ONDA38.2.28-CONFIG-BOTOES-MENUS\"",
+    "import_result": "M=2 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunTelaConfiguracoesIniciais",
+    "tv2_directed_result": "OK=9 | FALHA=0 | MANUAL=0",
+    "manual_ui": "Validacao opcional segura: Ajuda abre HBN, Salvar Parametros continua salvando, Iniciar Novo Periodo e Limpar Base exibem confirmacao, X fecha a tela."
+  },
+  "human_gate_observed": {
+    "reported_by": "Mauricio",
+    "reported_at": "2026-06-07T01:04:00-03:00",
+    "import_result": "Importador V3 concluiu o import OK; modo=Estabilizado | dryRun=Falso | M=2 | F=0 | err=0 | skip=0; backup 20260607_005702-V3-FULL.",
+    "compile_result": "Compilou.",
+    "tv2_directed_macro": "TV2_RunTelaConfiguracoesIniciais",
+    "tv2_directed_result": "TV2_20260607_005745 | OK=9 | FALHA=0 | MANUAL=0 | CSV de falhas nao exportado.",
+    "manual_ui": "Nao requerida para fechar a 0158; fluxos destrutivos permanecem cobertos por contrato seguro e validacao manual controlada quando necessario."
+  },
+  "classification": {
+    "defect_type": "codigo_teste_cobertura",
+    "design_change_required": false,
+    "production_form_change_required": false,
+    "rationale": "Nao houve novo achado de geometria, sobreposicao, alinhamento, tab order ou texto. A acao necessaria foi ampliar cobertura dirigida de botoes e menus por contrato seguro."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_28_CONFIG_BOTOES_MENUS.txt",
+    "manifest_bytes": 1562,
+    "manifest_sha256": "96c921e173af805119459525f92a22d4afbed4ae455bf70577058804ca16f622",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_28_CONFIG_BOTOES_MENUS\", \"293e44c+ONDA38.2.28-CONFIG-BOTOES-MENUS\"",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24007,
+        "sha256": "fca20cbf4d62f281345f4e5caf86e624b62315802a009ed6a85c26b8dfad054b"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 311071,
+        "sha256": "166cb965817929fac406f2f3677af30855ff2a17dfd75956b09adda25ed1fd1a"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus.json",
+    ".hbn/hearbacks/0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus-confirmed.json",
+    ".hbn/hearbacks/0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus-confirmed.md",
+    ".hbn/results/0158-exec-onda-38-2-28-configuracoes-iniciais-botoes-menus.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_28_configuracoes_iniciais_botoes_menus/0158_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_28_configuracoes_iniciais_botoes_menus/0158_PROCEDIMENTO_IMPORT.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_28_CONFIG_BOTOES_MENUS.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; git worktree list aponta a branch codex/v12-0-0206-planejamento na raiz canonica."
+    },
+    {
+      "gate": "Readback 0158",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus.json retornou OK."
+    },
+    {
+      "gate": "Hearback 0158",
+      "status": "pass_local_json",
+      "evidence": "python3 -m json.tool .hbn/hearbacks/0158-rb-onda-38-2-28-configuracoes-iniciais-botoes-menus-confirmed.json retornou JSON valido."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only App_Release.bas --only Teste_V2_Roteiros.bas retornou OK e vba_import sincronizado."
+    },
+    {
+      "gate": "EOL e whitespace",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/report-vba-eol-whitespace.sh retornou OK; git diff --check sem saida."
+    },
+    {
+      "gate": "Tokens 0158",
+      "status": "pass_static",
+      "evidence": "rg confirmou handlers e tokens CI_TELA_01..CI_TELA_09 em Configuracao_Inicial.frm, Menu_Principal.frm, Preencher.bas e Teste_V2_Roteiros.bas."
+    },
+    {
+      "gate": "Importador V3 0158",
+      "status": "pass_human_reported",
+      "evidence": "Mauricio reportou Importador V3 OK: modo=Estabilizado, dryRun=Falso, M=2, F=0, err=0, skip=0; backup 20260607_005702-V3-FULL."
+    },
+    {
+      "gate": "Compile VBE 0158",
+      "status": "pass_human_reported",
+      "evidence": "Mauricio reportou que compilou."
+    },
+    {
+      "gate": "TV2_RunTelaConfiguracoesIniciais 0158",
+      "status": "pass_human_reported",
+      "evidence": "TV2_20260607_005745 retornou OK=9, FALHA=0, MANUAL=0; sem CSV de falhas."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunTelaConfiguracoesIniciais no workbook",
+    "Validacao visual manual dos botoes e confirmacoes"
+  ],
+  "rollback_plan": [
+    "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+    "Se compile falhar, nao salvar o workbook e restaurar o backup V3 gerado antes do import.",
+    "Se TV2_RunTelaConfiguracoesIniciais falhar, anexar CSV de falhas e nao executar VCR.",
+    "Se aparecer defeito geometrico em validacao manual, abrir novo readback e corrigir via designer/export."
+  ]
+}

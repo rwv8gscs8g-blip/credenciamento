@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>Ajuda HBN - Configuracoes Iniciais</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 32px; line-height: 1.45; color: #1f2933; }
+    main { max-width: 980px; }
+    h1, h2 { color: #075a9c; }
+    table { border-collapse: collapse; width: 100%; margin: 16px 0; }
+    th, td { border: 1px solid #d8dee4; padding: 8px; text-align: left; vertical-align: top; }
+    th { background: #eef6fc; }
+    .note { background: #fff8e5; border: 1px solid #ecd37a; padding: 12px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Configuracoes Iniciais</h1>
+  <p>Esta tela define os parametros gerais do municipio e as regras operacionais
+  de prazo, recusas, strikes e suspensoes. Toda suspensao configurada nesta tela
+  e medida em dias.</p>
+
+  <h2>Campos</h2>
+  <table>
+    <tr><th>Campo</th><th>Uso</th><th>Validacao</th></tr>
+    <tr><td>Area Gestora do Rodizio</td><td>Identifica a area responsavel.</td><td>Texto livre.</td></tr>
+    <tr><td>Municipio</td><td>Identifica o municipio da operacao.</td><td>Texto livre.</td></tr>
+    <tr><td>Prazo de Validade Pre-OS</td><td>Dias para resposta da Pre-OS.</td><td>Inteiro de 1 a 3650.</td></tr>
+    <tr><td>Recusas ou expiracao de prazo</td><td>Quantidade de ocorrencias que gera suspensao.</td><td>Inteiro de 1 a 50.</td></tr>
+    <tr><td>Dias de suspensao por recusa/prazo</td><td>Dias que a empresa fica suspensa ao atingir o limite.</td><td>Inteiro de 1 a 3650.</td></tr>
+    <tr><td>Nota abaixo de</td><td>Nota que gera strike.</td><td>Numero valido conforme regra de avaliacao.</td></tr>
+    <tr><td>Strikes e dias de suspensao</td><td>Quantidade de strikes e prazo da punicao.</td><td>Inteiros positivos.</td></tr>
+  </table>
+
+  <h2>Operacao</h2>
+  <ol>
+    <li>Preencha ou confira os dados institucionais.</li>
+    <li>Defina prazos e limites usando dias.</li>
+    <li>Clique em Salvar Parametros.</li>
+    <li>Reabra a tela para conferir a persistencia quando necessario.</li>
+  </ol>
+
+  <div class="note">
+    O nome tecnico legado do controle de dias por recusa/prazo e
+    <strong>TxtMesesSuspensao</strong>. Esse nome nao representa mais a regra de
+    negocio. A interface, a CONFIG e o rodizio tratam o valor como dias.
+  </div>
+
+  <h2>Teste Recomendado</h2>
+  <p>Para esta tela, rode <strong>TV2_RunTelaConfiguracoesIniciais</strong>
+  apos importacao e compile. A Validacao Completa da Release (VCR) deve ser
+  rodada em checkpoint forte, nao a cada microajuste.</p>
+</main>
+</body>
+</html>

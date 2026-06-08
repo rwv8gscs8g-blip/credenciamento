@@ -1,0 +1,168 @@
+{
+  "readback_id": "0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza",
+  "intent": {
+    "objective": "Abrir a revisao tela a tela dos relatorios, tornando o status de suspensao/reativacao visivel sempre que empresa aparecer e padronizando a formatacao dos relatorios operacionais pelo padrao aprovado em Empresas Credenciadas por Servico.",
+    "non_goals": [
+      "Nao alterar designer .frx nem reposicionar controles nesta onda",
+      "Nao criar coluna nova de inicio de suspensao em EMPRESAS nesta onda",
+      "Nao rodar VCR neste microdelta",
+      "Nao alterar Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao reabrir Configuracoes Iniciais ou Tela Inicial, ja fechadas por validacao humana",
+      "Nao implementar gerador de PDF"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json",
+      ".hbn/hearbacks/0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao-confirmed.json",
+      ".hbn/hearbacks/0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao-confirmed.md",
+      ".hbn/results/0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_31_relatorios_tela_a_tela/0162_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_31_relatorios_tela_a_tela/0162_PROCEDIMENTO_IMPORT.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/Rel_Rodizio_Status.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+      "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_31_RELATORIOS_TELA_A_TELA.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "src/vba/Menu_Principal.frx",
+      "src/vba/Rel_Emp_Serv.frx",
+      "src/vba/Rel_OSEmpresa.frx",
+      "local-ai/vba_import/**/AAA-Mod_Types.bas",
+      "local-ai/vba_import/**/ABK-Importador_V3.bas",
+      "local-ai/vba_import/**/AAY-Auto_Open.bas",
+      "local-ai/vba_import/002-formularios/Menu_Principal.frx",
+      "local-ai/vba_import/002-formularios/Rel_Emp_Serv.frx",
+      "local-ai/vba_import/002-formularios/Rel_OSEmpresa.frx",
+      "backups/**",
+      "V12-0-0206-Onda-38-2-30/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "Configurações Iniciais e Tela Inicial foram fechadas por validacao humana; os testes manuais de strikes e notas funcionaram.",
+    "Rel_Emp_Serv.frm ja usa Rel_FormatarCabecalho/Rel_FormatarDados e serve como referencia visual, mas nao mostra no topo o servico selecionado.",
+    "Btn_Empresas_Credenciados_Click em Menu_Principal.frm mostra apenas STATUS CRED. e nao expoe STATUS_GLOBAL, DT_FIM_SUSP, DT_ULT_REATIV, dias restantes ou participacao no rodizio.",
+    "Btn_Empresas_Cadastradas_Click imprime a aba EMPRESAS diretamente ate A:O, deixando fora STATUS_GLOBAL, DT_FIM_SUSP e DT_ULT_REATIV.",
+    "OS_Emitidas_Click e PRE_OS_Vencidas_Click mostram a empresa, mas nao mostram se a empresa esta suspensa ou apta.",
+    "Rel_OSEmpresa.frm ja mostra status no cabecalho, mas usa rotulos tecnicos e nao repete as datas de suspensao/reativacao de forma humana.",
+    "Rel_Rodizio_Status.bas ja contem os calculos de dias restantes, retorno previsto e participacao no rodizio; deve ser reutilizado como fonte de exibicao."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Adicionar helpers em Rel_Rodizio_Status.bas para texto humano de status, suspensa ate, ultima reativacao e participacao no rodizio.",
+      "Atualizar Rel_Emp_Serv.frm para incluir cabecalho com atividade/servico selecionado, manter formatacao aprovada e usar textos humanos de status.",
+      "Atualizar Rel_OSEmpresa.frm para exibir status, suspensa ate e ultima reativacao com rotulos humanos no cabecalho.",
+      "Atualizar relatorios do Menu_Principal.frm para gerar visoes em RELATORIO com status da empresa e padrao visual, em vez de imprimir dados crus quando isso esconder status.",
+      "Criar TV2_RunTelaRelatorios com validacao estatica/estrutural de colunas, headers e uso dos helpers de formatacao/status.",
+      "Atualizar catalogo/roteiro V2, manual tela a tela, guia de testes, changelog, tecnico, procedimento e manifesto V3."
+    ]
+  },
+  "invariants_preserved": [
+    "Sem alteracao de designer .frx.",
+    "Sem mudanca de schema de EMPRESAS para inicio de suspensao nesta onda.",
+    "Status de suspensao continua vindo de STATUS_GLOBAL, DT_FIM_SUSP e DT_ULT_REATIV.",
+    "Importacao continua humano-aplicada pelo Importador V3.",
+    "VCR reservada para checkpoint forte posterior."
+  ],
+  "risks": [
+    {
+      "risk": "Menu_Principal.frm concentra relatorios e e arquivo grande, aumentando risco de colisao com mudancas anteriores.",
+      "mitigation": "Editar apenas os handlers de relatorio e helpers locais necessarios; nao mexer em rotas ou designer.",
+      "severity": "high"
+    },
+    {
+      "risk": "Nao existe coluna de inicio da suspensao; tentar inventar data pode criar informacao falsa.",
+      "mitigation": "Exibir Suspensa ate e Ultima reativacao nesta onda; deixar Suspensa desde como alternativa futura baseada em AUDIT_LOG se o humano aprovar.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Relatorios que imprimem direto abas operacionais podem alterar formatacao da base.",
+      "mitigation": "Gerar visoes temporarias na aba RELATORIO para relatorios que precisam de nova formatacao/status.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Teste automatizado nao deve abrir dialogo de impressora.",
+      "mitigation": "Cobrir a onda por teste V2 dirigido estatico/estrutural e deixar impressao real para gate humano.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0162 confirmado antes de codigo",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json"
+      },
+      {
+        "gate": "Fonte e espelho VBA sincronizados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json"
+      },
+      {
+        "gate": "Importador V3 do delta 0162",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json"
+      },
+      {
+        "gate": "Compile VBE limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json"
+      },
+      {
+        "gate": "TV2_RunTelaRelatorios passa sem falhas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json"
+      },
+      {
+        "gate": "Validacao manual de impressao dos relatorios principais",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+      "Se TV2_RunTelaRelatorios falhar, anexar CSV de falhas e nao rodar VCR.",
+      "Se algum relatorio manual perder impressao ou protecao, anexar sintoma e abrir fix1 sem alterar outros fluxos."
+    ],
+    "anchor_to_restore": "0161 fechada: 293e44c+ONDA38.2.30-FIX1-CONFIG-CENARIOS-CSV / TV2_20260608_044610"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-08T07:51:00-03:00",
+  "confirmed_at": "2026-06-08T07:51:00-03:00",
+  "hearback_summary": "Mauricio aprovou implementar a proxima revisao tela a tela dos relatorios, com status de suspensao/reativacao visivel, nome do servico no relatorio por servico e padronizacao visual baseada no relatorio Empresas Credenciadas por Servico."
+}

@@ -1,0 +1,167 @@
+{
+  "result_id": "0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao",
+  "execution_id": "0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao",
+  "readback_id": "0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "relatorios_tela_a_tela_package_ready",
+  "human_status": "pending_import_compile_tv2",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "293e44c",
+  "build_label": "293e44c+ONDA38.2.31-RELATORIOS-TELA-A-TELA",
+  "action": "Implementar status, datas de suspensao, participacao no rodizio e formatacao padrao nos relatorios, com suite V2 dirigida.",
+  "summary": "A onda 38.2.31 prepara o pacote de relatorios tela a tela. Relatorios com empresa passam a mostrar status operacional, suspensa desde, suspensa ate, ultima reativacao ou participacao no rodizio quando aplicavel. Empresa Credenciada por Servico identifica atividade/servico no topo. OS por Empresa ganhou resumo superior com status e retorno. Entidades e relatorios principais usam formatacao tabular comum. A suite TV2_RunTelaRelatorios valida 10 contratos read-only; o gate humano de import/compile/TV2 ainda esta pendente.",
+  "classification": {
+    "defect_type": "relatorio_leitura_regra_negocio_formatacao",
+    "design_change_required": false,
+    "production_form_change_required": true,
+    "rationale": "Nao havia defeito de geometria de UserForm. A lacuna estava na informacao exibida por relatorios e na padronizacao de formatacao."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_31_RELATORIOS_TELA_A_TELA\", \"293e44c+ONDA38.2.31-RELATORIOS-TELA-A-TELA\"",
+    "import_result": "M=4 | F=3 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunTelaRelatorios",
+    "tv2_directed_result": "OK=10 | FALHA=0 | MANUAL=0",
+    "vcr": "Nao rodar neste microdelta"
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_31_RELATORIOS_TELA_A_TELA.txt",
+    "manifest_bytes": 3029,
+    "manifest_sha256": "69cdf5f35d027ea70ed6f3792827607cb1f4362a87831601e04aecfbb4207467",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_31_RELATORIOS_TELA_A_TELA\", \"293e44c+ONDA38.2.31-RELATORIOS-TELA-A-TELA\"",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24166,
+        "sha256": "32ec87f1c08ccb8ddc2e53155ce5ef4a289b9c096ab75d81061689c756c3abf6"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 225067,
+        "sha256": "5467f7e1012a6e9f8f0a069263a5a2c0cdaf43c5d7e0145ce6809ca36218148e"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 350992,
+        "sha256": "64ab7d50a27eb72728e4550b48edda95e111d3a755c2cbbcd9672a5762852feb"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+        "bytes": 14200,
+        "sha256": "b19260c996373d6de6a0bb6cffb6c941481cb244744ee0d7773709e4954f9b58",
+        "note": "Arquivo novo sob local-ai; .gitignore exige git add -f se for versionar."
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+        "bytes": 152811,
+        "sha256": "3ceb1a15d61af1d029d6bc063fe6e9f73b3e0ecbb1058b35079fdf6b3cd21635"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+        "bytes": 152348,
+        "sha256": "e14a04bed06bc28c95e99c6af11709cb92027fc73e89a728f3fe318939c29aba"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+        "bytes": 8885,
+        "sha256": "5e7be2e2ea36be8a13dd9942878df583c0030ffe8f5264878ee982dce4623df6"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+        "bytes": 8359,
+        "sha256": "bc6b0910d3ca07cc345769ae5d120223fa926890dd0848f3dfa3e0b0941cc818"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+        "bytes": 13500,
+        "sha256": "d53c324c7576821450e96681333ecfdbbab6ded8780b402989e17f3533087c92"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+        "bytes": 12993,
+        "sha256": "ae0c78104242b1c1ce0354f1e044e5c7df49f0689e7298e639465059ccadb163"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json",
+    ".hbn/hearbacks/0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao-confirmed.json",
+    ".hbn/hearbacks/0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao-confirmed.md",
+    ".hbn/results/0162-exec-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_31_relatorios_tela_a_tela/0162_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_31_relatorios_tela_a_tela/0162_PROCEDIMENTO_IMPORT.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "src/vba/App_Release.bas",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Rel_Emp_Serv.frm",
+    "src/vba/Rel_OSEmpresa.frm",
+    "src/vba/Rel_Rodizio_Status.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_31_RELATORIOS_TELA_A_TELA.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; git worktree list aponta a branch codex/v12-0-0206-planejamento na raiz canonica."
+    },
+    {
+      "gate": "Readback 0162",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0162-rb-onda-38-2-31-relatorios-tela-a-tela-status-formatacao.json retornou OK antes da implementacao."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only ... retornou in_sync para 7 arquivos."
+    },
+    {
+      "gate": "EOL e whitespace",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/report-vba-eol-whitespace.sh retornou OK; git diff --check no escopo da onda retornou sem saida."
+    },
+    {
+      "gate": "Token spot-check",
+      "status": "pass_local",
+      "evidence": "rg confirmou tokens criticos de TV2_RunTelaRelatorios, helpers RRS, formatacao e correcao totalRegistros = linhaOut - linhaDados em Rel_Emp_Serv."
+    },
+    {
+      "gate": "Import/compile/TV2 humano",
+      "status": "pending_human",
+      "evidence": "Importador V3, compile no VBE e TV2_RunTelaRelatorios devem ser executados pelo operador."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunTelaRelatorios no workbook",
+    "Impressao real dos relatorios"
+  ],
+  "rollback_plan": [
+    "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+    "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+    "Se TV2_RunTelaRelatorios falhar, anexar CSV de falhas e nao executar VCR.",
+    "Se falha visual/manual ocorrer, abrir fix novo classificando regra, evento ou formatacao."
+  ],
+  "updated_at": "2026-06-08T08:10:41-03:00"
+}

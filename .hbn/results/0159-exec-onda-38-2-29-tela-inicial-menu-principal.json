@@ -1,0 +1,163 @@
+{
+  "result_id": "0159-exec-onda-38-2-29-tela-inicial-menu-principal",
+  "execution_id": "0159-exec-onda-38-2-29-tela-inicial-menu-principal",
+  "readback_id": "0159-rb-onda-38-2-29-tela-inicial-menu-principal",
+  "data": "2026-06-07",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "tela_inicial_v2_directed_validated_fix1",
+  "human_status": "import_compile_tv2_passed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "293e44c",
+  "build_label": "293e44c+ONDA38.2.29-FIX1-TELA-INICIAL",
+  "action": "Adicionar validacao dirigida da Tela Inicial/Menu_Principal por contrato seguro, com documentacao de comportamento, mapa de cobertura e pacote V3 test-only.",
+  "summary": "A 0159 adiciona TV2_RunTelaInicial com 14 asserts cobrindo entradas canonicas, processos de abertura no escopo importado, delegacao da protecao de abertura para BL4, atalho visual, inicializacao da pagina 0, Home, Sobre, GitHub, Central de Testes, Configuracoes Iniciais, rotas laterais, Sair e X. O primeiro pacote importou com M=3 | F=0 | err=0 | skip=0 e compilou, mas TV2_20260607_094429 retornou OK=12 | FALHA=2 | MANUAL=0 porque TELAINI_02 e TELAINI_03 exigiam tokens de Auto_Open/BL4 em modulo explicitamente fora do delta. O Fix1 remove esse acoplamento: TELAINI_02 valida CNAE, backfill e abertura do Menu_Principal; TELAINI_03_PROTECAO_DELEGADA_BL4 valida que a cobertura de protecao permanece na suite TV2_RunBL4ProtecaoPersistente. Mauricio reimportou o Fix1 com M=3 | F=0 | err=0 | skip=0, compilou e executou TV2_20260607_101426 com OK=14 | FALHA=0 | MANUAL=0. Nao houve alteracao em Menu_Principal.frm/.frx nem Auto_Open.bas. Central de Testes, Sair e fluxos destrutivos nao sao acionados automaticamente.",
+  "classification": {
+    "defect_type": "codigo_teste_cobertura",
+    "design_change_required": false,
+    "production_form_change_required": false,
+    "rationale": "A falha observada foi excesso de contrato do teste sobre Auto_Open fora do delta 0159; nao houve defeito visual nem alteracao de regra de negocio."
+  },
+  "human_gate_required": {
+    "steps": [
+      "Reimportar o delta V3 pelo comando Fix1 do manifesto 0159.",
+      "Compilar o VBAProject no VBE.",
+      "Executar TV2_RunTelaInicial pela Janela Imediata.",
+      "Esperar OK=14 | FALHA=0 | MANUAL=0.",
+      "Nao executar VCR neste microdelta.",
+      "Nao confirmar Central de Testes, Sair ou fluxos destrutivos durante checagem manual opcional."
+    ],
+    "status": "completed"
+  },
+  "human_gate_observed_fix1": {
+    "import_result": "M=3 | F=0 | err=0 | skip=0",
+    "compile_result": "limpo, reportado pelo operador",
+    "tv2_execution_id": "TV2_20260607_101426",
+    "tv2_result": "OK=14 | FALHA=0 | MANUAL=0",
+    "failure_csv": "nao exportado",
+    "evidence": "Screenshot do operador mostra Suite V2 concluida para TELA_INICIAL, sem falhas e sem CSV exportado."
+  },
+  "human_gate_observed_initial": {
+    "import_result": "M=3 | F=0 | err=0 | skip=0",
+    "compile_result": "limpo, reportado pelo operador",
+    "tv2_execution_id": "TV2_20260607_094429",
+    "tv2_result": "OK=12 | FALHA=2 | MANUAL=0",
+    "failure_csv": "TesteV2_TELA_INICIAL_Falhas_TV2_20260607_094429.csv",
+    "failures": [
+      {
+        "cenario_id": "TELAINI_02_PROCESSOS_DE_ABERTURA",
+        "classification": "teste_fora_de_escopo",
+        "cause": "A suite exigia Call AutoOpen_ReaplicarProtecaoCritica em Auto_Open, modulo fora do delta 0159."
+      },
+      {
+        "cenario_id": "TELAINI_03_MARCADORES_PROTECAO_HBN",
+        "classification": "teste_fora_de_escopo",
+        "cause": "A suite exigia marcadores e gravacao BL4 em Auto_Open, modulo fora do delta 0159."
+      }
+    ],
+    "fix1_action": "Ajustar TV2_RunTelaInicial para remover acoplamento direto a Auto_Open/BL4 e delegar protecao a TV2_RunBL4ProtecaoPersistente."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_29_TELA_INICIAL\", \"293e44c+ONDA38.2.29-FIX1-TELA-INICIAL\"",
+    "import_result": "M=3 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunTelaInicial",
+    "tv2_directed_result": "OK=14 | FALHA=0 | MANUAL=0",
+    "manual_ui": "Validacao opcional segura: abrir Tela Inicial, conferir Sobre, GitHub, Configuracoes Iniciais, aviso da Central e confirmacao de Sair sem prosseguir nos fluxos de risco."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_29_TELA_INICIAL.txt",
+    "manifest_bytes": 2004,
+    "manifest_sha256": "7e281e847590f684f7ccfaa8ccd7c67d12f3f70185bf68acf650b3fd95630c29",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_29_TELA_INICIAL\", \"293e44c+ONDA38.2.29-FIX1-TELA-INICIAL\"",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24084,
+        "sha256": "d38870288a25739029f58b951c5e60192fe7abb9a3fd4ef1150cd369ec395a13"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 212940,
+        "sha256": "070e8f9a5e74e822c5fe7cfce3c4bab8351edffe23ff6a5a8e70fc4ee801b699"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 320753,
+        "sha256": "de73c3268622e8c0b463af7cfcb60cea7ed17b2fa7d4a8587d253e1bd109343a"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0159-rb-onda-38-2-29-tela-inicial-menu-principal.json",
+    ".hbn/hearbacks/0159-rb-onda-38-2-29-tela-inicial-menu-principal-confirmed.json",
+    ".hbn/hearbacks/0159-rb-onda-38-2-29-tela-inicial-menu-principal-confirmed.md",
+    ".hbn/results/0159-exec-onda-38-2-29-tela-inicial-menu-principal.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_29_tela_inicial_menu_principal/0159_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_29_tela_inicial_menu_principal/0159_PROCEDIMENTO_IMPORT.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_29_TELA_INICIAL.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; git worktree list aponta a branch codex/v12-0-0206-planejamento na raiz canonica."
+    },
+    {
+      "gate": "Readback 0159",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0159-rb-onda-38-2-29-tela-inicial-menu-principal.json retornou OK."
+    },
+    {
+      "gate": "Hearback 0159",
+      "status": "pass_local_json",
+      "evidence": "python3 -m json.tool .hbn/hearbacks/0159-rb-onda-38-2-29-tela-inicial-menu-principal-confirmed.json retornou JSON valido."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py apply --only App_Release.bas --only Teste_V2_Engine.bas --only Teste_V2_Roteiros.bas regenerou os tres espelhos e retornou Glasswing G8/G7 OK."
+    },
+    {
+      "gate": "EOL e whitespace",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/report-vba-eol-whitespace.sh retornou OK; git diff --check sem saida."
+    },
+    {
+      "gate": "Tokens 0159",
+      "status": "pass_static",
+      "evidence": "rg confirmou TV2_RunTelaInicial, TELAINI_03_PROTECAO_DELEGADA_BL4 e build ONDA38.2.29-FIX1 nos fontes, espelhos, docs e relay."
+    },
+    {
+      "gate": "Import/compile/TV2 humano Fix1",
+      "status": "pass_human",
+      "evidence": "Operador reportou import M=3 | F=0 | err=0 | skip=0, compile limpo e TV2_20260607_101426 com OK=14 | FALHA=0 | MANUAL=0."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunTelaInicial no workbook",
+    "Validacao visual manual da Tela Inicial"
+  ],
+  "rollback_plan": [
+    "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+    "Se compile falhar, nao salvar o workbook e restaurar o backup V3 gerado antes do import.",
+    "Se TV2_RunTelaInicial falhar, anexar CSV de falhas e nao executar VCR.",
+    "Se aparecer defeito geometrico em validacao manual, abrir novo readback e corrigir via designer/export."
+  ]
+}

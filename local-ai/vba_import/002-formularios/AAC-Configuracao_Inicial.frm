@@ -18,7 +18,8 @@ Private Const CI_CTRL_MAX_STRIKES As String = "TxtMaxStrikes"
 Private Const CI_CTRL_DIAS_SUSPENSAO As String = "TxtDiasSuspensao"
 Private Const CI_CTRL_PRAZO_PREOS As String = "PR_Val_OS"
 Private Const CI_CTRL_MAX_RECUSAS As String = "TP_Valor"
-Private Const CI_CTRL_MESES_SUSPENSAO As String = "TxtMesesSuspensao"
+' Nome legado no .frx; a semantica V12.0.0206 e dias de suspensao por recusa/prazo.
+Private Const CI_CTRL_DIAS_RECUSA_PRAZO As String = "TxtMesesSuspensao"
 
 Private Sub Carrega_CAD_SERV_Click()
 On Error GoTo erro_carregamento:
@@ -73,17 +74,21 @@ Public Function CI_TestarPersistenciaPainel( _
     ByVal diasSuspensaoTeste As String, _
     ByRef detalhes As String, _
     Optional ByVal maxRecusasTeste As String = "", _
-    Optional ByVal mesesSuspensaoTeste As String = "", _
-    Optional ByVal prazoPreOSTeste As String = "" _
+    Optional ByVal diasRecusaPrazoTeste As String = "", _
+    Optional ByVal prazoPreOSTeste As String = "", _
+    Optional ByVal gestorTeste As String = "", _
+    Optional ByVal municipioTeste As String = "" _
 ) As Boolean
     On Error GoTo falha
 
     CI_GarantirControlesRegraNegocio
+    If gestorTeste <> "" Then Me.Controls("Gestor_Rodizio").Value = gestorTeste
+    If municipioTeste <> "" Then Me.Controls("Municipio_gestao").Value = municipioTeste
     Me.Controls(CI_CTRL_NOTA_CORTE).Value = notaCorteTeste
     Me.Controls(CI_CTRL_MAX_STRIKES).Value = maxStrikesTeste
     Me.Controls(CI_CTRL_DIAS_SUSPENSAO).Value = diasSuspensaoTeste
     If maxRecusasTeste <> "" Then Me.Controls(CI_CTRL_MAX_RECUSAS).Value = maxRecusasTeste
-    If mesesSuspensaoTeste <> "" Then Me.Controls(CI_CTRL_MESES_SUSPENSAO).Value = mesesSuspensaoTeste
+    If diasRecusaPrazoTeste <> "" Then Me.Controls(CI_CTRL_DIAS_RECUSA_PRAZO).Value = diasRecusaPrazoTeste
     If prazoPreOSTeste <> "" Then Me.Controls(CI_CTRL_PRAZO_PREOS).Value = prazoPreOSTeste
     CI_TestarPersistenciaPainel = CI_PersistirParametros(False, False, False, detalhes)
     Exit Function
@@ -91,6 +96,191 @@ Public Function CI_TestarPersistenciaPainel( _
 falha:
     detalhes = "Erro " & CStr(Err.Number) & ": " & Err.Description
     CI_TestarPersistenciaPainel = False
+End Function
+
+Public Function CI_TestarNovoPeriodoDeterministico( _
+    ByVal nomePasta As String, _
+    ByRef pastaSaida As String, _
+    ByRef copiaSaida As String, _
+    ByRef detalhes As String _
+) As Boolean
+    On Error GoTo falha
+
+    Dim fso As Object
+    Dim basePath As String
+    Dim nomeSeguro As String
+    Dim preAntes As Long
+    Dim cadAntes As Long
+    Dim preDepois As Long
+    Dim cadDepois As Long
+
+    nomeSeguro = CI_NormalizarNomePastaNovoPeriodo(nomePasta)
+    If Len(nomeSeguro) = 0 Then
+        detalhes = "Nome de pasta vazio."
+        Exit Function
+    End If
+
+    basePath = ThisWorkbook.path
+    If Len(Trim$(basePath)) = 0 Then
+        detalhes = "Workbook ainda nao possui pasta salva."
+        Exit Function
+    End If
+
+    preAntes = CI_QtdLinhasDados(SHEET_PREOS)
+    cadAntes = CI_QtdLinhasDados(SHEET_CAD_OS)
+
+    Set fso = CreateObject("Scripting.FileSystemObject")
+    pastaSaida = CI_PathJoin(basePath, nomeSeguro)
+    If Not fso.FolderExists(pastaSaida) Then fso.CreateFolder pastaSaida
+
+    copiaSaida = CI_PathJoin(pastaSaida, Format$(Now(), "yyyymmdd_hhnnss_") & ThisWorkbook.Name)
+    ThisWorkbook.SaveCopyAs copiaSaida
+
+    If Not CI_LimparPreOSCadOSNovoPeriodo(detalhes) Then Exit Function
+
+    preDepois = CI_QtdLinhasDados(SHEET_PREOS)
+    cadDepois = CI_QtdLinhasDados(SHEET_CAD_OS)
+
+    detalhes = "PASTA=" & pastaSaida & _
+               "; COPIA=" & copiaSaida & _
+               "; PRE_OS_ANTES=" & CStr(preAntes) & _
+               "; CAD_OS_ANTES=" & CStr(cadAntes) & _
+               "; PRE_OS_DEPOIS=" & CStr(preDepois) & _
+               "; CAD_OS_DEPOIS=" & CStr(cadDepois)
+    CI_TestarNovoPeriodoDeterministico = True
+    Exit Function
+
+falha:
+    detalhes = "Erro " & CStr(Err.Number) & ": " & Err.Description
+    CI_TestarNovoPeriodoDeterministico = False
+End Function
+
+Private Function CI_LimparPreOSCadOSNovoPeriodo(ByRef detalhes As String) As Boolean
+    On Error GoTo falha
+
+    Dim wsPreOS As Worksheet
+    Dim wsCADOS As Worksheet
+    Dim estProtPreOS As Boolean
+    Dim senhaPreOS As String
+    Dim estProtCADOS As Boolean
+    Dim senhaCADOS As String
+    Dim ultimaLinhaPreOS As Long
+    Dim ultimaLinhaCADOS As Long
+    Dim preOSPreparada As Boolean
+    Dim cadOSPreparada As Boolean
+
+    Set wsPreOS = ThisWorkbook.Sheets(SHEET_PREOS)
+    Set wsCADOS = ThisWorkbook.Sheets(SHEET_CAD_OS)
+
+    ultimaLinhaPreOS = CI_UltimaLinhaUsadaAteColuna(wsPreOS, COL_PREOS_OS_ID)
+    ultimaLinhaCADOS = CI_UltimaLinhaUsadaAteColuna(wsCADOS, COL_OS_JUSTIF_DIV)
+
+    If Not Util_PrepararAbaParaEscrita(wsPreOS, estProtPreOS, senhaPreOS) Then
+        detalhes = "Nao foi possivel iniciar novo periodo: aba PRE_OS protegida para escrita."
+        Exit Function
+    End If
+    preOSPreparada = True
+
+    If Not Util_PrepararAbaParaEscrita(wsCADOS, estProtCADOS, senhaCADOS) Then
+        detalhes = "Nao foi possivel iniciar novo periodo: aba CAD_OS protegida para escrita."
+        GoTo limpar
+    End If
+    cadOSPreparada = True
+
+    If ultimaLinhaPreOS >= LINHA_DADOS Then
+        wsPreOS.Range(wsPreOS.Cells(LINHA_DADOS, 1), _
+                      wsPreOS.Cells(ultimaLinhaPreOS, COL_PREOS_OS_ID)).ClearContents
+    End If
+    wsPreOS.Cells(1, COL_CONTADOR_AR).Value = 0
+
+    If ultimaLinhaCADOS >= LINHA_DADOS Then
+        wsCADOS.Range(wsCADOS.Cells(LINHA_DADOS, 1), _
+                      wsCADOS.Cells(ultimaLinhaCADOS, COL_OS_JUSTIF_DIV)).ClearContents
+    End If
+    wsCADOS.Cells(1, COL_CONTADOR_AR).Value = 0
+
+    CI_LimparPreOSCadOSNovoPeriodo = True
+
+limpar:
+    If cadOSPreparada Then Call Util_RestaurarProtecaoAba(wsCADOS, estProtCADOS, senhaCADOS)
+    If preOSPreparada Then Call Util_RestaurarProtecaoAba(wsPreOS, estProtPreOS, senhaPreOS)
+    If CI_LimparPreOSCadOSNovoPeriodo Then
+        Call PreenchimentoServico
+        Call AtualizarListaEntidadeMenuAtual
+        Call AtualizarListaEmpresaMenuAtual
+        Call PreenchimentoEntidadeRodizio
+        Call PreencherAvaliarOS
+        Call PreencherManutencaoValor
+    End If
+    Exit Function
+
+falha:
+    CI_LimparPreOSCadOSNovoPeriodo = False
+    detalhes = "Falha ao iniciar novo periodo: (" & CStr(Err.Number) & ") " & Err.Description
+    On Error Resume Next
+    If cadOSPreparada Then Call Util_RestaurarProtecaoAba(wsCADOS, estProtCADOS, senhaCADOS)
+    If preOSPreparada Then Call Util_RestaurarProtecaoAba(wsPreOS, estProtPreOS, senhaPreOS)
+    On Error GoTo 0
+End Function
+
+Private Function CI_QtdLinhasDados(ByVal nomeAba As String) As Long
+    Dim ws As Worksheet
+    Dim colunaChave As Long
+    Dim intervalo As Range
+
+    Set ws = ThisWorkbook.Sheets(nomeAba)
+    colunaChave = CI_ColunaChaveDados(nomeAba)
+    Set intervalo = ws.Range(ws.Cells(LINHA_DADOS, colunaChave), _
+                             ws.Cells(ws.Rows.Count, colunaChave))
+    CI_QtdLinhasDados = Application.WorksheetFunction.CountA(intervalo)
+End Function
+
+Private Function CI_ColunaChaveDados(ByVal nomeAba As String) As Long
+    Select Case UCase$(nomeAba)
+        Case UCase$(SHEET_PREOS)
+            CI_ColunaChaveDados = COL_PREOS_ID
+        Case UCase$(SHEET_CAD_OS)
+            CI_ColunaChaveDados = COL_OS_ID
+        Case Else
+            CI_ColunaChaveDados = 1
+    End Select
+End Function
+
+Private Function CI_UltimaLinhaUsadaAteColuna(ByVal ws As Worksheet, ByVal ultimaColuna As Long) As Long
+    Dim col As Long
+    Dim ultima As Long
+    Dim linhaColuna As Long
+
+    ultima = LINHA_DADOS - 1
+    For col = 1 To ultimaColuna
+        linhaColuna = ws.Cells(ws.Rows.Count, col).End(xlUp).row
+        If linhaColuna > ultima Then ultima = linhaColuna
+    Next col
+    CI_UltimaLinhaUsadaAteColuna = ultima
+End Function
+
+Private Function CI_NormalizarNomePastaNovoPeriodo(ByVal nomePasta As String) As String
+    Dim nome As String
+
+    nome = Trim$(nomePasta)
+    nome = Replace(nome, "/", "-")
+    nome = Replace(nome, "\", "-")
+    nome = Replace(nome, ":", "-")
+    nome = Replace(nome, "*", "-")
+    nome = Replace(nome, "?", "-")
+    nome = Replace(nome, """", "'")
+    nome = Replace(nome, "<", "-")
+    nome = Replace(nome, ">", "-")
+    nome = Replace(nome, "|", "-")
+    CI_NormalizarNomePastaNovoPeriodo = nome
+End Function
+
+Private Function CI_PathJoin(ByVal pasta As String, ByVal nome As String) As String
+    If Right$(pasta, 1) = "\" Or Right$(pasta, 1) = "/" Then
+        CI_PathJoin = pasta & nome
+    Else
+        CI_PathJoin = pasta & Application.PathSeparator & nome
+    End If
 End Function
 
 Private Function CI_PersistirParametros( _
@@ -113,13 +303,13 @@ On Error GoTo erro_carregamento:
     Dim maxStrikesTxt As String
     Dim diasSuspensaoTxt As String
     Dim maxRecusasTxt As String
-    Dim mesesSuspensaoTxt As String
+    Dim diasRecusaPrazoTxt As String
     Dim notaCorteVal As Double
     Dim maxStrikesVal As Long
     Dim diasSuspensaoVal As Long
     Dim prazoVal As Long
     Dim maxRecusasVal As Long
-    Dim mesesSuspensaoVal As Long
+    Dim diasRecusaPrazoVal As Long
     Dim msgValidacao As String
 
     Set wsCfg = ThisWorkbook.Sheets(SHEET_CONFIG)
@@ -141,7 +331,7 @@ On Error GoTo erro_carregamento:
     maxStrikesTxt = CI_ValorControleObrigatorio(CI_CTRL_MAX_STRIKES)
     diasSuspensaoTxt = CI_ValorControleObrigatorio(CI_CTRL_DIAS_SUSPENSAO)
     maxRecusasTxt = CI_ValorControleObrigatorio(CI_CTRL_MAX_RECUSAS)
-    mesesSuspensaoTxt = CI_ValorControleObrigatorio(CI_CTRL_MESES_SUSPENSAO)
+    diasRecusaPrazoTxt = CI_ValorControleObrigatorio(CI_CTRL_DIAS_RECUSA_PRAZO)
 
     If prazoTxt = "" Then prazoTxt = "5"
 
@@ -167,7 +357,7 @@ On Error GoTo erro_carregamento:
         Exit Function
     End If
 
-    If Not CI_ValidarRegraRecusas(maxRecusasTxt, mesesSuspensaoTxt, msgValidacao) Then
+    If Not CI_ValidarRegraRecusas(maxRecusasTxt, diasRecusaPrazoTxt, msgValidacao) Then
         If Not Config_RegistrarFalhaValidacao("Configuracao_Inicial.B_Parametros_Click", msgValidacao) Then
             msgValidacao = msgValidacao & vbCrLf & "Atencao: nao foi possivel registrar a falha no AUDIT_LOG."
         End If
@@ -179,14 +369,15 @@ On Error GoTo erro_carregamento:
 
     prazoVal = CLng(CDbl(prazoTxt))
     maxRecusasVal = CLng(CDbl(maxRecusasTxt))
-    mesesSuspensaoVal = CLng(CDbl(mesesSuspensaoTxt))
+    diasRecusaPrazoVal = CLng(CDbl(diasRecusaPrazoTxt))
 
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_GESTOR).Value = gestorTxt
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_LOGO).Value = logoTxt
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MUNICIPIO).Value = municipioTxt
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_PRAZO_PREOS).Value = prazoVal
     wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MAX_RECUSAS).Value = maxRecusasVal
-    wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MESES_SUSPENSAO).Value = mesesSuspensaoVal
+    wsCfg.Cells(1, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value = "DIAS_SUSPENSAO_RECUSA_PRAZO"
+    wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_RECUSA_PRAZO).Value = diasRecusaPrazoVal
 
     ' V12.0.0203 ONDA 4 - Persistencia da regra de strikes.
     ' Validacao defensiva: se o usuario apagar os campos, mantem o
@@ -205,7 +396,7 @@ On Error GoTo erro_carregamento:
     End If
     If diasSuspensaoTxt <> "" Then
         diasSuspensaoVal = CLng(CDbl(diasSuspensaoTxt))
-        If diasSuspensaoVal >= 0 And diasSuspensaoVal <= 3650 Then
+        If diasSuspensaoVal >= 1 And diasSuspensaoVal <= 3650 Then
             wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_DIAS_SUSPENSAO_STRIKE).Value = diasSuspensaoVal
         End If
     End If
@@ -237,7 +428,7 @@ Private Sub CI_GarantirControlesRegraNegocio()
     CI_ExigirControle CI_CTRL_DIAS_SUSPENSAO
     CI_ExigirControle CI_CTRL_PRAZO_PREOS
     CI_ExigirControle CI_CTRL_MAX_RECUSAS
-    CI_ExigirControle CI_CTRL_MESES_SUSPENSAO
+    CI_ExigirControle CI_CTRL_DIAS_RECUSA_PRAZO
 End Sub
 
 Private Sub CI_ExigirControle(ByVal nomeControle As String)
@@ -262,7 +453,7 @@ End Function
 
 Private Function CI_ValidarRegraRecusas( _
     ByVal maxRecusasTxt As String, _
-    ByVal mesesSuspensaoTxt As String, _
+    ByVal diasRecusaPrazoTxt As String, _
     ByRef mensagem As String _
 ) As Boolean
     Dim erros As String
@@ -270,7 +461,7 @@ Private Function CI_ValidarRegraRecusas( _
 
     mensagem = ""
     maxRecusasTxt = Trim$(maxRecusasTxt)
-    mesesSuspensaoTxt = Trim$(mesesSuspensaoTxt)
+    diasRecusaPrazoTxt = Trim$(diasRecusaPrazoTxt)
 
     If maxRecusasTxt = "" Then
         CI_AddErro erros, "TP_Valor deve ser informado."
@@ -280,12 +471,12 @@ Private Function CI_ValidarRegraRecusas( _
         CI_AddErro erros, "TP_Valor deve ficar entre 1 e 50."
     End If
 
-    If mesesSuspensaoTxt = "" Then
-        CI_AddErro erros, "TxtMesesSuspensao deve ser informado."
-    ElseIf Not CI_TentarInteiro(mesesSuspensaoTxt, valorInteiro) Then
-        CI_AddErro erros, "TxtMesesSuspensao deve ser numero inteiro entre 1 e 120."
-    ElseIf valorInteiro < 1 Or valorInteiro > 120 Then
-        CI_AddErro erros, "TxtMesesSuspensao deve ficar entre 1 e 120."
+    If diasRecusaPrazoTxt = "" Then
+        CI_AddErro erros, "Dias de suspensao por recusa/prazo deve ser informado."
+    ElseIf Not CI_TentarInteiro(diasRecusaPrazoTxt, valorInteiro) Then
+        CI_AddErro erros, "Dias de suspensao por recusa/prazo deve ser numero inteiro entre 1 e 3650."
+    ElseIf valorInteiro < 1 Or valorInteiro > 3650 Then
+        CI_AddErro erros, "Dias de suspensao por recusa/prazo deve ficar entre 1 e 3650."
     End If
 
     If erros = "" Then
@@ -401,37 +592,35 @@ On Error GoTo erro_carregamento:
         Set wsPreOS = ThisWorkbook.Sheets("PRE_OS")
         Set wsCADOS = ThisWorkbook.Sheets("CAD_OS")
 
-        ultimaLinhaPreOS = wsPreOS.Range("A65536").End(xlUp).row
-        ultimaLinhaCADOS = wsCADOS.Range("A65536").End(xlUp).row
+        ultimaLinhaPreOS = CI_UltimaLinhaUsadaAteColuna(wsPreOS, COL_PREOS_OS_ID)
+        ultimaLinhaCADOS = CI_UltimaLinhaUsadaAteColuna(wsCADOS, COL_OS_JUSTIF_DIV)
 
-        If ultimaLinhaPreOS > 1 Then
-            If Not Util_PrepararAbaParaEscrita(wsPreOS, estProtPreOS, senhaPreOS) Then
-                MsgBox "Não foi possível iniciar o novo período: aba PRE_OS protegida para escrita.", _
-                       vbCritical, "Configurações iniciais"
-                Exit Sub
-            End If
-            preOSPreparada = True
+        If Not Util_PrepararAbaParaEscrita(wsPreOS, estProtPreOS, senhaPreOS) Then
+            MsgBox "Não foi possível iniciar o novo período: aba PRE_OS protegida para escrita.", _
+                   vbCritical, "Configurações iniciais"
+            Exit Sub
         End If
+        preOSPreparada = True
 
-        If ultimaLinhaCADOS > 1 Then
-            If Not Util_PrepararAbaParaEscrita(wsCADOS, estProtCADOS, senhaCADOS) Then
-                If preOSPreparada Then Call Util_RestaurarProtecaoAba(wsPreOS, estProtPreOS, senhaPreOS)
-                MsgBox "Não foi possível iniciar o novo período: aba CAD_OS protegida para escrita.", _
-                       vbCritical, "Configurações iniciais"
-                Exit Sub
-            End If
-            cadOSPreparada = True
+        If Not Util_PrepararAbaParaEscrita(wsCADOS, estProtCADOS, senhaCADOS) Then
+            If preOSPreparada Then Call Util_RestaurarProtecaoAba(wsPreOS, estProtPreOS, senhaPreOS)
+            MsgBox "Não foi possível iniciar o novo período: aba CAD_OS protegida para escrita.", _
+                   vbCritical, "Configurações iniciais"
+            Exit Sub
         End If
+        cadOSPreparada = True
 
-        If ultimaLinhaPreOS > 1 Then
-            wsPreOS.Range("A2:I" & ultimaLinhaPreOS).ClearContents
-            wsPreOS.Cells(1, 44).Value = 0  ' coluna AR = contador de IDs
+        If ultimaLinhaPreOS >= LINHA_DADOS Then
+            wsPreOS.Range(wsPreOS.Cells(LINHA_DADOS, 1), _
+                          wsPreOS.Cells(ultimaLinhaPreOS, COL_PREOS_OS_ID)).ClearContents
         End If
+        wsPreOS.Cells(1, COL_CONTADOR_AR).Value = 0
 
-        If ultimaLinhaCADOS > 1 Then
-            wsCADOS.Range("A2:Y" & ultimaLinhaCADOS).ClearContents
-            wsCADOS.Cells(1, 44).Value = 0  ' coluna AR = contador de IDs
+        If ultimaLinhaCADOS >= LINHA_DADOS Then
+            wsCADOS.Range(wsCADOS.Cells(LINHA_DADOS, 1), _
+                          wsCADOS.Cells(ultimaLinhaCADOS, COL_OS_JUSTIF_DIV)).ClearContents
         End If
+        wsCADOS.Cells(1, COL_CONTADOR_AR).Value = 0
 
         If cadOSPreparada Then Call Util_RestaurarProtecaoAba(wsCADOS, estProtCADOS, senhaCADOS)
         If preOSPreparada Then Call Util_RestaurarProtecaoAba(wsPreOS, estProtPreOS, senhaPreOS)
@@ -488,6 +677,13 @@ fallback:
     Call Limpa_Base
 End Sub
 
+Private Sub Label56_Click()
+End Sub
+
+Private Sub CommandButton1_Click()
+    CI_AbrirAjudaHBN
+End Sub
+
 Private Sub UserForm_Initialize()
 On Error GoTo erro_carregamento:
     ' V12: eliminado Sheets.Select + .Select + ActiveCell (proibidos; formulario modal).
@@ -495,6 +691,9 @@ On Error GoTo erro_carregamento:
     Dim wsCfg As Worksheet
     Dim ctl As Object
     Dim txt As String
+    Dim diasStrikeCfg As Long
+    Dim diasRecusaPrazoCfg As Long
+    Dim msgCfg As String
 
     Set wsCfg = ThisWorkbook.Sheets(SHEET_CONFIG)
 
@@ -502,12 +701,22 @@ On Error GoTo erro_carregamento:
     Caminho_Logo = wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_LOGO).Value
     Municipio_gestao = Funcoes.NormalizarTextoPTBR(wsCfg.Cells(LINHA_CFG_VALORES, COL_CFG_MUNICIPIO).Value)
     CI_GarantirControlesRegraNegocio
+    CI_PrepararCampoTextoEditavel CI_CTRL_DIAS_RECUSA_PRAZO
     Me.Controls(CI_CTRL_PRAZO_PREOS).Value = CStr(GetDiasDecisao())
     Me.Controls(CI_CTRL_NOTA_CORTE).Value = Format$(GetNotaMinimaAvaliacao(), "0.0")
     Me.Controls(CI_CTRL_MAX_STRIKES).Value = CStr(GetMaxStrikes())
-    Me.Controls(CI_CTRL_DIAS_SUSPENSAO).Value = CStr(GetDiasSuspensaoStrike())
     Me.Controls(CI_CTRL_MAX_RECUSAS).Value = CStr(GetMaxRecusas())
-    Me.Controls(CI_CTRL_MESES_SUSPENSAO).Value = CStr(GetMesesSuspensao())
+    If Config_TryGetDiasSuspensaoStrike(diasStrikeCfg, msgCfg) Then
+        Me.Controls(CI_CTRL_DIAS_SUSPENSAO).Value = CStr(diasStrikeCfg)
+    Else
+        Me.Controls(CI_CTRL_DIAS_SUSPENSAO).Value = ""
+    End If
+    msgCfg = ""
+    If Config_TryGetDiasSuspensaoRecusaPrazo(diasRecusaPrazoCfg, msgCfg) Then
+        Me.Controls(CI_CTRL_DIAS_RECUSA_PRAZO).Value = CStr(diasRecusaPrazoCfg)
+    Else
+        Me.Controls(CI_CTRL_DIAS_RECUSA_PRAZO).Value = ""
+    End If
 
     ' Ajustes de interface: acentuacao e rotulos
     On Error Resume Next
@@ -535,11 +744,60 @@ On Error GoTo erro_carregamento:
                 If InStr(txt, "municipio de") > 0 Or InStr(txt, "munic") > 0 Then
                     ctl.caption = "Munic" & ChrW(237) & "pio"
                 End If
+
+                If InStr(txt, "recusa") > 0 And InStr(txt, "puni") > 0 Then
+                    ctl.caption = "recusa(s) ou expiracao de prazo, suspender por"
+                    ctl.WordWrap = True
+                End If
+
+                If InStr(txt, "strike") > 0 And InStr(txt, "puni") > 0 Then
+                    ctl.caption = "strike(s), suspender por"
+                    ctl.WordWrap = True
+                End If
+
+                If InStr(txt, "mes") > 0 And Len(txt) <= 12 Then
+                    ctl.caption = "dia(s)."
+                End If
             End If
         Next ctl
     On Error GoTo 0
 Exit Sub
 erro_carregamento:
+End Sub
+
+Private Sub CI_PrepararCampoTextoEditavel(ByVal nomeControle As String)
+    On Error Resume Next
+    With Me.Controls(nomeControle)
+        .Enabled = True
+        .Locked = False
+        .TabStop = True
+        .BackColor = &HFFFFFF
+    End With
+    On Error GoTo 0
+End Sub
+
+Private Sub CI_AbrirAjudaHBN()
+    Dim caminho As String
+
+    On Error GoTo falha
+
+    caminho = ThisWorkbook.Path & Application.PathSeparator & "docs" & _
+              Application.PathSeparator & "help" & _
+              Application.PathSeparator & "hbn" & _
+              Application.PathSeparator & "configuracoes-iniciais.html"
+
+    If Dir(caminho) = "" Then
+        MsgBox "Ajuda HBN nao encontrada:" & vbCrLf & caminho, _
+               vbExclamation, "Configurações iniciais"
+        Exit Sub
+    End If
+
+    Application.FollowHyperlink Address:=caminho
+    Exit Sub
+
+falha:
+    MsgBox "Nao foi possivel abrir a ajuda HBN." & vbCrLf & _
+           "Detalhe: " & Err.Description, vbExclamation, "Configurações iniciais"
 End Sub
 
 Private Function ValorControleTexto(ByVal frm As Object, ByVal nomeControle As String, Optional ByVal valorPadrao As String = "") As String

@@ -1,0 +1,15 @@
+{
+  "hearback_id": "0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza-confirmed",
+  "readback_id": "0161-rb-onda-38-2-30-fix1-novo-periodo-contagem-limpeza",
+  "status": "confirmed",
+  "confirmed_by": "mauricio",
+  "confirmed_at": "2026-06-08T04:08:47-03:00",
+  "summary": "Mauricio aprovou implementar o fix1 da 0161 para corrigir o falso negativo de Novo Periodo: limpar a extensao real de PRE_OS/CAD_OS e contar registros reais por coluna-chave, preservando copia da planilha, CSV e escopo destrutivo apenas em homologacao.",
+  "constraints": [
+    "Nao rodar VCR neste microdelta.",
+    "Nao alterar .frx ou designer.",
+    "Nao tocar em Mod_Types.bas, Importador_V3.bas, Auto_Open.bas, ThisWorkbook ou Menu_Principal.frm.",
+    "Nao restaurar a 0155.",
+    "Repetir apenas TV2_RunConfigCenariosNovoPeriodo apos import e compile."
+  ]
+}

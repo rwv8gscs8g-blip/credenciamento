@@ -502,6 +502,7 @@ Public Function AvaliarOS( _
         Dim strikesPunicaoAntes As Long
         Dim auditAntes As String
         Dim auditDepois As String
+        Dim msgDiasSusp As String
 
         maxStrikes = GetMaxStrikes()
         resStrikes = ContarStrikesParaPunicaoResultado(os.EMP_ID, notaMin, strikesAtuais)
@@ -560,13 +561,25 @@ Public Function AvaliarOS( _
             "Svc_Avaliacao"
 
         If strikesAtuais >= maxStrikes Then
-            diasSusp = GetDiasSuspensaoStrike()
-            If diasSusp > 0 Then
-                resSusp = Suspender(os.EMP_ID, diasSusp, "STRIKES=" & CStr(strikesAtuais))
-            Else
-                ' Fallback: usa a regra antiga em meses.
-                resSusp = Suspender(os.EMP_ID, 0, "STRIKES=" & CStr(strikesAtuais) & "; FALLBACK_MESES")
+            If Not Config_TryGetDiasSuspensaoStrike(diasSusp, msgDiasSusp) Then
+                RegistrarEvento _
+                    EVT_AVALIACAO, ENT_OS, OS_ID, _
+                    "MEDIA=" & FormatarMediaAvaliacao(media) & "; STRIKES=" & CStr(strikesAtuais), _
+                    "FALHA_CONFIG_DIAS_STRIKE=" & msgDiasSusp & _
+                    "; OS_JA_AVALIADA=SIM", _
+                    "Svc_Avaliacao"
+                res.sucesso = False
+                res.mensagem = "Avaliacao salva, mas configuracao de dias de suspensao por strike e invalida: " & msgDiasSusp
+                res.IdGerado = OS_ID
+                AvaliarOS = res
+                Exit Function
             End If
+            resSusp = Suspender( _
+                os.EMP_ID, _
+                diasSusp, _
+                "STRIKE", _
+                "STRIKES=" & CStr(strikesAtuais), _
+                Config_SnapshotPunicoesDias())
             ' Suspender registra sua propria auditoria.
             If Not resSusp.sucesso Then
                 RegistrarEvento _

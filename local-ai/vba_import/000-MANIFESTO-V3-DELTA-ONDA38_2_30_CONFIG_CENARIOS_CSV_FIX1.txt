@@ -1,0 +1,47 @@
+# Manifesto V3 DELTA ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1 - V12.0.0206 Onda 38.2.30 / Readback 0161
+# Tema: Fix1 de Novo Periodo; limpeza completa de PRE_OS/CAD_OS e contagem por registro real.
+#
+# Contexto:
+#   - A 0160 importou com M=3 | F=1 | err=0 | skip=0 e compilou.
+#   - TV2_20260607_110826 retornou OK=6 | FALHA=1 | MANUAL=0.
+#   - A unica falha foi CFGCSV_06_NOVO_PERIODO_COPIA_LIMPEZA.
+#   - O CSV mostrou copia e pasta criadas, mas PRE_OS_DEPOIS=1 e CAD_OS_DEPOIS=1.
+#   - Causa: limpeza parcial do schema e contagem por ultima linha em vez de
+#     registro operacional pela coluna-chave.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1", "293e44c+ONDA38.2.30-FIX1-CONFIG-CENARIOS-CSV"
+#
+# Pos-import esperado:
+#   - Importador V3: M=2 | F=1 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunConfigCenariosNovoPeriodo
+#   - Esperado: OK=7 | FALHA=0 | MANUAL=0.
+#   - A pasta V12-0-0206-Onda-38-2-30 deve conter copia da planilha e CSV.
+#
+# Guardas:
+#   - Destrutivo autorizado apenas para esta suite e base de homologacao.
+#   - Sem PDF nesta onda; evidencia em CSV.
+#   - Sem .frx neste manifesto.
+#   - Sem Menu_Principal.frm, sem Auto_Open, sem ThisWorkbook.
+#   - Sem Mod_Types, sem Importador_V3.
+#   - Sem VCR neste microdelta.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24091
+#     sha256=f3293047d7ea1bc6a4b084dadf4baf66b3a37d41a2b5da6e57b331c1b5239103
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=343960
+#     sha256=4bfc672eacca3ba13b2549b04922d231e7cec14d66e3259153f34595192d4a10
+#   F|002-formularios/AAC-Configuracao_Inicial.frm
+#     bytes=32218
+#     sha256=efd749d29db821d524803bdfb8f995dbf3482ba083142b0ff60bbde3d2ddbb9c
+#   CODE_ONLY|002-formularios/AAC-Configuracao_Inicial.code-only.txt
+#     bytes=31692
+#     sha256=d66ca193b3865f7eb40092b9ca90f08e74ac26c300ce8d9d1906e48b26e8b130
+#
+# GRUPO_ONDA38_2_30_CONFIG_CENARIOS_CSV_FIX1
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+F|002-formularios/AAC-Configuracao_Inicial.frm

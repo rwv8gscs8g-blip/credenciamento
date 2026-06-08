@@ -1,0 +1,182 @@
+{
+  "result_id": "0163-exec-onda-38-2-32-relatorios-suspensoes-strikes-reset",
+  "execution_id": "0163-exec-onda-38-2-32-relatorios-suspensoes-strikes-reset",
+  "readback_id": "0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "relatorios_suspensoes_strikes_reset_package_ready",
+  "human_status": "pending_import_compile_tv2",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "293e44c",
+  "build_label": "293e44c+ONDA38.2.32-REL-SUSP-STRIKES-RESET",
+  "action": "Normalizar relatorios com suspensoes e strikes, incluir aviso operacional em impressos e documentar Novo Periodo versus Limpar Base.",
+  "summary": "A onda 38.2.32 prepara o pacote de relatorios com status normalizado, strikes por nota baixa, strikes por recusa/prazo e diagnostico operacional em todos os relatorios com empresa. Impressos de Pre-OS, OS e avaliacao recebem aviso do sistema com strikes. OS abertas ignora N.O.S. vazio ou zero. Documentacao e testes registram que Novo Periodo preserva suspensoes e Limpar Base remove suspensoes por reset total da base.",
+  "classification": {
+    "defect_type": "relatorio_leitura_regra_negocio_aviso_impressao_teste_dirigido",
+    "design_change_required": false,
+    "production_form_change_required": true,
+    "rationale": "Nao havia defeito de geometria de UserForm. A lacuna estava na informacao exibida pelos relatorios e nos avisos operacionais impressos."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_32_RELATORIOS_SUSPENSOES_STRIKES_RESET\", \"293e44c+ONDA38.2.32-REL-SUSP-STRIKES-RESET\"",
+    "import_result": "M=5 | F=3 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunRelatoriosSuspensoesStrikesReset",
+    "tv2_directed_result": "OK=10 | FALHA=0 | MANUAL=0",
+    "optional_regression_macro": "TV2_RunTelaRelatorios",
+    "optional_regression_result": "OK=10 | FALHA=0 | MANUAL=0",
+    "vcr": "Nao rodar neste microdelta"
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_32_RELATORIOS_SUSPENSOES_STRIKES_RESET.txt",
+    "manifest_bytes": 3743,
+    "manifest_sha256": "f2670d68fcb13a8be14dabba4642d1c3ee95cd32209d5400f4ab4fe8e3582e2b",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_32_RELATORIOS_SUSPENSOES_STRIKES_RESET\", \"293e44c+ONDA38.2.32-REL-SUSP-STRIKES-RESET\"",
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24166,
+        "sha256": "3de67b2072aa309a6aeadbf5f659ef2e0541d8f9ce649ff06c0ec904e0c2e3ca"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "bytes": 155922,
+        "sha256": "fe57ff93717eba43566151ca2b04aaba6771dc58278630ecd40b48a36580ef33"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+        "bytes": 19674,
+        "sha256": "79f7aa020546ebf3b8e19792799b10250ac771b832767a1876e8214fae7e8778"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 232529,
+        "sha256": "21d78cab88473816d96c95388d50e03046ddcc6c03b8d5f0b6fd4db85041f3de"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 359143,
+        "sha256": "4ee85ab084938b981079bedf6b15c497240932899338e0d269d853b2bce5cd92"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+        "bytes": 155490,
+        "sha256": "6b0993f5d902e69857d9a4fbd7e4bd0696e085a45c78ff4aba5350dd8eb56411"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+        "bytes": 155027,
+        "sha256": "571b84e4a9f5f39e93941fdbf7b79bd892c46a9cd3a6736217bdf32f6f7d48a3"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+        "bytes": 9806,
+        "sha256": "23ed1e005eebfa19f510257ca2cfd54ba369ea92c081b05c4bad39620c42f7c9"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+        "bytes": 9280,
+        "sha256": "c957b3156e8693a20217e7ff466e290f98efc99baa20d14ff18cd06fa286e419"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+        "bytes": 14253,
+        "sha256": "a875e78142a0e2caf83b4ed1ba856cdf23a2f803af1832698284ff225349932a"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+        "bytes": 13746,
+        "sha256": "5c6f3782048e7d13f6e73d30e43bb94555dd3afde42ebf84d4d2f6502f2e6310"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset.json",
+    ".hbn/hearbacks/0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset-confirmed.json",
+    ".hbn/hearbacks/0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset-confirmed.md",
+    ".hbn/results/0163-exec-onda-38-2-32-relatorios-suspensoes-strikes-reset.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/0163_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/0163_PROCEDIMENTO_IMPORT.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "src/vba/App_Release.bas",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Preencher.bas",
+    "src/vba/Rel_Emp_Serv.frm",
+    "src/vba/Rel_OSEmpresa.frm",
+    "src/vba/Rel_Rodizio_Status.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_32_RELATORIOS_SUSPENSOES_STRIKES_RESET.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0163",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0163-rb-onda-38-2-32-relatorios-suspensoes-strikes-reset.json retornou OK."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only ... retornou in_sync para 8 arquivos."
+    },
+    {
+      "gate": "EOL e whitespace",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/report-vba-eol-whitespace.sh retornou OK e git diff --check retornou sem saida."
+    },
+    {
+      "gate": "JSON HBN",
+      "status": "pass_local",
+      "evidence": "python3 -m json.tool validou readback 0163, hearback 0163 e este ERP."
+    },
+    {
+      "gate": "Manifesto V3",
+      "status": "pass_local",
+      "evidence": "Manifesto delta criado com M=5 e F=3; arquivos proibidos aparecem apenas em comentario de guarda, nao em linhas importaveis."
+    },
+    {
+      "gate": "Token spot-check",
+      "status": "pass_local",
+      "evidence": "rg confirmou tokens criticos de TV2_RunRelatoriosSuspensoesStrikesReset, RELSSR_*, RRS_Strikes*, RRS_AvisoOperacionalEmpresa e Preencher_EscreverAvisoOperacional."
+    },
+    {
+      "gate": "Import/compile/TV2 humano",
+      "status": "pending_human",
+      "evidence": "Importador V3, compile no VBE e TV2_RunRelatoriosSuspensoesStrikesReset devem ser executados pelo operador."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunRelatoriosSuspensoesStrikesReset no workbook",
+    "TV2_RunTelaRelatorios no workbook",
+    "Impressao real dos relatorios",
+    "VCR"
+  ],
+  "rollback_plan": [
+    "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+    "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+    "Se TV2_RunRelatoriosSuspensoesStrikesReset falhar, anexar CSV de falhas e nao executar VCR.",
+    "Se falha visual/manual ocorrer, abrir fix novo classificando regra, evento ou formatacao."
+  ],
+  "updated_at": "2026-06-08T09:39:00-03:00"
+}

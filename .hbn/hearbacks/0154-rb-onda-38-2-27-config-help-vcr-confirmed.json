@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0154-rb-onda-38-2-27-config-help-vcr-confirmed",
+  "readback_id": "0154-rb-onda-38-2-27-config-help-vcr",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-06T20:48:11-03:00",
+  "notes": "Mauricio aprovou a proposta da 0154, com correcao obrigatoria: a sigla operacional da Validacao Completa da Release deve ser VCR. RVS fica apenas como legado tecnico temporario; CSV deve ser tratado apenas como formato de arquivo .csv, nao como nome de teste ou gate."
+}
