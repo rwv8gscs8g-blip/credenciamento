@@ -1,0 +1,106 @@
+{
+  "readback_id": "0171-rb-onda-38-2-38-checkpoint-vcr-pos-0169-0170",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0170-rb-onda-38-2-37-disponibilidade-composta-suspensao",
+  "intent": {
+    "objective": "Preparar checkpoint forte de Validacao Completa da Release apos os pacotes 0169 e 0170, sem executar VCR pelo agente.",
+    "non_goals": [
+      "Nao alterar codigo VBA",
+      "Nao alterar pacote importavel",
+      "Nao executar Excel, VBE, TV2 ou VCR pelo agente",
+      "Nao declarar freeze V12.0.0206",
+      "Nao substituir a validacao tela a tela restante"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0171-rb-onda-38-2-38-checkpoint-vcr-pos-0169-0170.json",
+      ".hbn/hearbacks/0171-rb-onda-38-2-38-checkpoint-vcr-pos-0169-0170-confirmed.json",
+      ".hbn/hearbacks/0171-rb-onda-38-2-38-checkpoint-vcr-pos-0169-0170-confirmed.md",
+      ".hbn/results/0171-exec-onda-38-2-38-checkpoint-vcr-pos-0169-0170.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_38_checkpoint_vcr_pos_0169_0170/0171_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_38_checkpoint_vcr_pos_0169_0170/0171_PROCEDIMENTO_VCR.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "docs/**",
+      "CHANGELOG.md",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "0169 e 0170 sao deltas sequenciais; se o workbook nao recebeu 0169, deve receber 0169 antes de 0170.",
+    "A VCR e gate humano de checkpoint forte e nao deve ser executada pelo agente.",
+    "Antes da VCR, os testes dirigidos afetados devem estar verdes para evitar gastar mais de uma hora em falha ja conhecida."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Criar procedimento 0171 com ordem de importacao, compile, TV2 dirigido e VCR.",
+      "Registrar ERP 0171 como checkpoint pronto para gate humano.",
+      "Atualizar relay com a proxima acao e o formato de evidencia esperado do operador.",
+      "Validar readback/JSON/guards e commitar doc-only."
+    ]
+  },
+  "invariants_preserved": [
+    "Nenhum arquivo de codigo ou pacote importavel muda na 0171.",
+    "A VCR continua sendo executada exclusivamente pelo operador no workbook.",
+    "Sem freeze automatico: resultado da VCR sera analisado antes de decidir novas ondas."
+  ],
+  "risks": [
+    {
+      "risk": "Operador rodar VCR sem importar 0169 e 0170 em ordem.",
+      "mitigation": "Procedimento e relay colocam a precondicao sequencial antes da VCR.",
+      "severity": "medium"
+    },
+    {
+      "risk": "VCR reprovar por falha ja detectavel em TV2 dirigido.",
+      "mitigation": "Exigir TV2_RunTelaRelatorios e TV2_RunRelatoriosSuspensoesStrikesReset verdes antes da VCR.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Confundir checkpoint VCR com freeze.",
+      "mitigation": "Documentar que freeze V12.0.0206 permanece pendente de consolidacao e validacao tela a tela.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0171 valido",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0171-exec-onda-38-2-38-checkpoint-vcr-pos-0169-0170.json"
+      },
+      {
+        "gate": "Procedimento VCR doc-only criado",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0171-exec-onda-38-2-38-checkpoint-vcr-pos-0169-0170.json"
+      },
+      {
+        "gate": "VCR executada pelo operador",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "proximo hearback humano com ID da VCR, resultado e CSV quando houver"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o procedimento estiver incompleto, abrir fix1 documental antes da VCR.",
+      "Se a VCR reprovar, nao congelar a versao e abrir nova onda com a primeira falha concreta.",
+      "Se a VCR aprovar, consolidar evidencia e seguir para validacao tela a tela/freeze conforme decisao humana."
+    ],
+    "anchor_to_restore": "a16d0ab onda 0170 disponibilidade composta"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-08T23:58:00-03:00",
+  "confirmed_at": "2026-06-08T23:58:00-03:00",
+  "hearback_summary": "Mauricio aprovou a serie ate 0171; checkpoint VCR deve ser preparado sem execucao pelo agente."
+}

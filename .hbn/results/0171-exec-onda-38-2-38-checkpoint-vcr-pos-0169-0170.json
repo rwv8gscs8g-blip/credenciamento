@@ -1,0 +1,86 @@
+{
+  "result_id": "0171-exec-onda-38-2-38-checkpoint-vcr-pos-0169-0170",
+  "execution_id": "0171-exec-onda-38-2-38-checkpoint-vcr-pos-0169-0170",
+  "readback_id": "0171-rb-onda-38-2-38-checkpoint-vcr-pos-0169-0170",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "checkpoint_ready_human_gate_pending",
+  "outcome": "procedimento_vcr_pos_0169_0170_pronto",
+  "human_status": "pending_human_import_compile_tv2_vcr",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "a16d0ab",
+  "action": "Preparar procedimento doc-only para checkpoint VCR apos os deltas 0169 e 0170.",
+  "summary": "A 0171 nao altera codigo nem pacote importavel. Ela fixa a ordem humana: importar 0169 se pendente, importar 0170, compilar, rodar TV2_RunTelaRelatorios, rodar TV2_RunRelatoriosSuspensoesStrikesReset, revisar pontos visuais e somente entao executar CT_ValidarRelease_Completa.",
+  "classification": {
+    "defect_type": "governance_checkpoint",
+    "production_code_change_required": false,
+    "package_change_required": false,
+    "business_rule_engine_changed": false,
+    "test_execution_by_agent": false,
+    "rationale": "Checkpoint forte precisa organizar a validacao humana sem contaminar deltas de codigo."
+  },
+  "human_gate_expected": {
+    "precondition": "Workbook deve receber 0169 antes da 0170 se a 0169 ainda nao foi importada.",
+    "import_0169": "ImportarPacoteV3_Delta \"ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF\", \"37486b7+ONDA38.2.36-C16-AVISO-OPERACIONAL\"",
+    "import_0170": "ImportarPacoteV3_Delta \"ONDA38_2_37_DISPONIBILIDADE_COMPOSTA_SUSPENSAO\", \"10c1750+ONDA38.2.37-DISPONIBILIDADE-COMPOSTA\"",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_tela_relatorios": "TV2_RunTelaRelatorios => OK=11 | FALHA=0 | MANUAL=0",
+    "tv2_relatorios_suspensoes": "TV2_RunRelatoriosSuspensoesStrikesReset => OK=12 | FALHA=0 | MANUAL=0",
+    "visual_review": "C16 legivel; disponibilidade composta legivel; Pre-OS Vencidas continua informativa.",
+    "vcr_macro": "CT_ValidarRelease_Completa",
+    "vcr_expected": "APROVADO"
+  },
+  "files_changed": [
+    ".hbn/readbacks/0171-rb-onda-38-2-38-checkpoint-vcr-pos-0169-0170.json",
+    ".hbn/hearbacks/0171-rb-onda-38-2-38-checkpoint-vcr-pos-0169-0170-confirmed.json",
+    ".hbn/hearbacks/0171-rb-onda-38-2-38-checkpoint-vcr-pos-0169-0170-confirmed.md",
+    ".hbn/results/0171-exec-onda-38-2-38-checkpoint-vcr-pos-0169-0170.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_38_checkpoint_vcr_pos_0169_0170/0171_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_38_checkpoint_vcr_pos_0169_0170/0171_PROCEDIMENTO_VCR.md"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0171",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0171-rb-onda-38-2-38-checkpoint-vcr-pos-0169-0170.json retornou OK."
+    },
+    {
+      "gate": "JSON HBN",
+      "status": "pass_local",
+      "evidence": "python3 -m json.tool passou para readback, hearback e ERP 0171."
+    },
+    {
+      "gate": "Escopo doc-only",
+      "status": "pass_local",
+      "evidence": "Nenhum arquivo src/vba, local-ai/vba_import, docs ou CHANGELOG foi alterado na 0171."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunTelaRelatorios",
+    "TV2_RunRelatoriosSuspensoesStrikesReset",
+    "CT_ValidarRelease_Completa",
+    "VCR"
+  ],
+  "evidence_to_collect_from_human": [
+    "Resultado do import 0169, se executado",
+    "Resultado do import 0170",
+    "Compile limpo ou primeira falha",
+    "ID/contagem de TV2_RunTelaRelatorios",
+    "ID/contagem de TV2_RunRelatoriosSuspensoesStrikesReset",
+    "ID/resultado da VCR",
+    "CSV de evidencia, se gerado",
+    "Primeira falha concreta se houver reprovacao"
+  ],
+  "rollback_plan": [
+    "Se o procedimento estiver incompleto, abrir fix1 documental antes da VCR.",
+    "Se a VCR reprovar, nao congelar e abrir nova onda com a primeira falha concreta.",
+    "Se a VCR aprovar, consolidar evidencia antes de decidir freeze."
+  ],
+  "updated_at": "2026-06-08T23:58:00-03:00"
+}
