@@ -1,0 +1,49 @@
+# Manifesto V3 DELTA ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF - V12.0.0206 Onda 38.2.36 / Readback 0169
+# Tema: C16 dos impressos com aviso operacional legivel.
+#
+# Contexto:
+#   - Auditoria cruzada 0167 identificou caracteres artificialmente espacado no aviso operacional de C16 em PDFs.
+#   - A causa provavel e alinhamento distribuido/justificado herdado do template.
+#   - A correcao desta onda e code-only: Preencher reaplica alinhamento legivel em runtime.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF", "37486b7+ONDA38.2.36-C16-AVISO-OPERACIONAL"
+#
+# Pos-import esperado:
+#   - Importador V3: M=4 | F=0 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunRelatoriosSuspensoesStrikesReset
+#   - Esperado: OK=11 | FALHA=0 | MANUAL=0.
+#   - Gerar PDFs de Pre-OS, OS e Avaliacao e revisar visualmente C16.
+#   - VCR reservado para checkpoint forte 0171.
+#
+# Guardas:
+#   - Sem Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.
+#   - Sem formularios e sem .frx nesta onda.
+#   - Sem alterar regra de disponibilidade; isso fica para 0170.
+#   - Sem alterar motor de rodizio, expiracao, recusa ou fila.
+#
+# Contrato operacional documentado:
+#   - O texto do aviso operacional continua o mesmo.
+#   - O range C16:N16 recebe HorizontalAlignment=xlLeft, VerticalAlignment=xlCenter, WrapText=False e ShrinkToFit=True.
+#   - O gate visual humano deve confirmar que o PDF nao mostra letras artificialmente espacadas no aviso.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24359
+#     sha256=61d2c6b933120a2b316ad63b7d6a3ac1d556b983561afa4e079ffecc414d58f5
+#   M|001-modulo/AAU-Preencher.bas
+#     bytes=156919
+#     sha256=462e07b2e5b6f97cf65d6c2dd8dbc1c84d92597a853e8465f8db1daa0a90da3a
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=234429
+#     sha256=160904c1e3598cf2b9e1ff536999cde6db30f42f7ccf0d2879693f3268e02255
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=363777
+#     sha256=127c3ca987d415258f0a3cb62a6b30e802f63f741b6e9e7465e0ef1882f72444
+#
+# GRUPO_ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas

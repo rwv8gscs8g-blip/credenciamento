@@ -1,0 +1,122 @@
+{
+  "result_id": "0169-exec-onda-38-2-36-c16-aviso-operacional-pdf",
+  "execution_id": "0169-exec-onda-38-2-36-c16-aviso-operacional-pdf",
+  "readback_id": "0169-rb-onda-38-2-36-c16-aviso-operacional-pdf",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "pacote_c16_aviso_operacional_pdf_pronto",
+  "human_status": "pending_import_compile_tv2_pdf",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "37486b7",
+  "build_label": "37486b7+ONDA38.2.36-C16-AVISO-OPERACIONAL",
+  "action": "Reaplicar alinhamento legivel em C16:N16 no aviso operacional dos impressos e adicionar teste V2 dirigido.",
+  "summary": "Preencher_EscreverAvisoOperacional agora define HorizontalAlignment=xlLeft, VerticalAlignment=xlCenter, WrapText=False e ShrinkToFit=True em C16:N16. A suite TV2_RunRelatoriosSuspensoesStrikesReset passou para 11 cenarios com RELSSR_11_IMPRESSOS_C16_ALINHAMENTO_LEGIVEL.",
+  "classification": {
+    "defect_type": "visual_pdf_runtime_formatting",
+    "production_code_change_required": true,
+    "business_rule_engine_changed": false,
+    "design_change_required": false,
+    "frx_change_required": false,
+    "test_change_required": true,
+    "rationale": "A falha vinha de formatacao herdada do template; a correcao code-only reaplica alinhamento no momento de preencher os impressos."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF\", \"37486b7+ONDA38.2.36-C16-AVISO-OPERACIONAL\"",
+    "import_result": "M=4 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunRelatoriosSuspensoesStrikesReset",
+    "tv2_directed_result": "OK=11 | FALHA=0 | MANUAL=0",
+    "pdf_review": "Gerar PDFs de Pre-OS, OS e Avaliacao e confirmar aviso C16 legivel, sem letras artificialmente espacadas.",
+    "vcr": "Nao rodar neste microdelta; reservar para checkpoint forte 0171."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF.txt",
+    "manifest_bytes": 2288,
+    "manifest_sha256": "6df7e223638f26cdc6043de53bb1c710f467fb78fa2b717c4b19897b1c0a2744",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF\", \"37486b7+ONDA38.2.36-C16-AVISO-OPERACIONAL\"",
+    "expected_import": {
+      "modules": 4,
+      "forms": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24359,
+        "sha256": "61d2c6b933120a2b316ad63b7d6a3ac1d556b983561afa4e079ffecc414d58f5"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "bytes": 156919,
+        "sha256": "462e07b2e5b6f97cf65d6c2dd8dbc1c84d92597a853e8465f8db1daa0a90da3a"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 234429,
+        "sha256": "160904c1e3598cf2b9e1ff536999cde6db30f42f7ccf0d2879693f3268e02255"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 363777,
+        "sha256": "127c3ca987d415258f0a3cb62a6b30e802f63f741b6e9e7465e0ef1882f72444"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0169-rb-onda-38-2-36-c16-aviso-operacional-pdf.json",
+    ".hbn/hearbacks/0169-rb-onda-38-2-36-c16-aviso-operacional-pdf-confirmed.json",
+    ".hbn/hearbacks/0169-rb-onda-38-2-36-c16-aviso-operacional-pdf-confirmed.md",
+    ".hbn/results/0169-exec-onda-38-2-36-c16-aviso-operacional-pdf.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/03_ondas/onda_38_2_36_c16_aviso_operacional_pdf/0169_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_36_c16_aviso_operacional_pdf/0169_PROCEDIMENTO_IMPORT.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "src/vba/App_Release.bas",
+    "src/vba/Preencher.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0169",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0169-rb-onda-38-2-36-c16-aviso-operacional-pdf.json retornou OK."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only App_Release.bas --only Preencher.bas --only Teste_V2_Engine.bas --only Teste_V2_Roteiros.bas retornou in_sync para 4 arquivos e OK em G7/G8."
+    },
+    {
+      "gate": "Hashes do manifesto",
+      "status": "pass_local",
+      "evidence": "wc -c e shasum -a 256 conferidos para manifesto e quatro modulos importaveis."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunRelatoriosSuspensoesStrikesReset no workbook",
+    "Geracao/revisao visual de PDFs",
+    "VCR"
+  ],
+  "rollback_plan": [
+    "Se import V3 falhar, restaurar backup indicado pelo Importador.",
+    "Se compile falhar, nao salvar workbook e restaurar backup V3.",
+    "Se TV2 falhar, anexar CSV de falhas e nao rodar VCR.",
+    "Se PDF continuar ilegivel, abrir fix1 para ajuste code-only adicional ou decisao humana sobre template."
+  ],
+  "updated_at": "2026-06-08T23:31:48-03:00"
+}

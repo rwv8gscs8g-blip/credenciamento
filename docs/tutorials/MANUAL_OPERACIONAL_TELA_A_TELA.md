@@ -244,6 +244,8 @@ ja esta ocupada na mesma atividade.
 Nos documentos impressos de Pre-OS, OS e avaliacao, o sistema tambem deve
 incluir `Status da empresa nesta data: ...`, com status, disponibilidade,
 eventual suspensao e strikes por nota baixa e por recusa/prazo.
+Esse aviso deve aparecer legivel em `C16`, sem letras artificialmente
+espacadas por alinhamento distribuido do template.
 
 ### Relatorio de Pre-OS Vencidas
 

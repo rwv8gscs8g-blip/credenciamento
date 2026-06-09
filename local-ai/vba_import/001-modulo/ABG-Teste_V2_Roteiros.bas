@@ -1918,7 +1918,7 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
 
     On Error GoTo falha
 
-    TV2_InitExecucao suite, visual, 10
+    TV2_InitExecucao suite, visual, 11
     repoRoot = TV2_UI_RepoRoot()
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_01_HELPER_RESUMO_STRIKES", repoRoot, _
@@ -2013,6 +2013,14 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
         "Limpar Base remove suspensoes ao apagar a base cadastral e operacional", _
         "Reset total zera empresas, credenciamentos, PRE_OS, CAD_OS e audit log, preservando apenas CNAE e configuracao", _
         "Documenta o uso correto para iniciar outro municipio"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_11_IMPRESSOS_C16_ALINHAMENTO_LEGIVEL", repoRoot, _
+        "Preencher", "Preencher.bas", _
+        "With ws.Range(""C16:N16"")|.HorizontalAlignment = xlLeft|" & _
+        ".VerticalAlignment = xlCenter|.WrapText = False|.ShrinkToFit = True", _
+        "Aviso operacional em C16 neutraliza alinhamento distribuido herdado do template", _
+        "Range C16:N16 recebe alinhamento esquerdo, vertical central e sem wrap antes do ShrinkToFit", _
+        "Evita caracteres artificialmente espacado nos PDFs de Pre-OS, OS e avaliacao"
 
     TV2_FinalizarExecucao suite, silencioso
     Exit Sub

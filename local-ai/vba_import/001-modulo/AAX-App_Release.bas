@@ -267,9 +267,10 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0205|OFICIAL|V12.0.0206"
 ' V12.0.0206 ONDA 38.2.29 FIX1 - Tela Inicial/Menu_Principal com V2 dirigido.
 ' V12.0.0206 ONDA 38.2.31 - Relatorios tela a tela com status e formatacao.
 ' V12.0.0206 ONDA 38.2.32-fix1 - teste RELSSR_08 valida fiacao; texto do aviso fica em Rel_Rodizio_Status.
-Public Const APP_BUILD_IMPORTADO As String = "b33ec4e+ONDA38.2.34-PREOS-VENCIDAS-RELATORIO"
+' V12.0.0206 ONDA 38.2.36 - C16 dos impressos recebe alinhamento legivel em runtime.
+Public Const APP_BUILD_IMPORTADO As String = "37486b7+ONDA38.2.36-C16-AVISO-OPERACIONAL"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0206-planejamento"
-Public Const APP_BUILD_GERADO_EM As String = "2026-06-08 15:45"
+Public Const APP_BUILD_GERADO_EM As String = "2026-06-08 23:31"
 Public Const APP_RELEASE_TAG As String = "v12.0.0205"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0205"
 Public Const APP_RELEASE_TEST_KEY As String = "rvs-v205-final-2026-05-21"

@@ -1,0 +1,132 @@
+{
+  "readback_id": "0169-rb-onda-38-2-36-c16-aviso-operacional-pdf",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0168-rb-onda-38-2-35-higiene-hbn-pos-auditoria",
+  "intent": {
+    "objective": "Corrigir de forma code-only o espacamento distribuido do aviso operacional em C16 nos impressos de Pre-OS, OS e Avaliacao, adicionando teste V2 dirigido.",
+    "non_goals": [
+      "Nao editar templates manualmente no workbook nesta onda",
+      "Nao editar .frm ou .frx",
+      "Nao alterar regra de rodizio, disponibilidade ou expiracao de Pre-OS",
+      "Nao tocar em Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao rodar VCR neste microdelta"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0169-rb-onda-38-2-36-c16-aviso-operacional-pdf.json",
+      ".hbn/hearbacks/0169-rb-onda-38-2-36-c16-aviso-operacional-pdf-confirmed.json",
+      ".hbn/hearbacks/0169-rb-onda-38-2-36-c16-aviso-operacional-pdf-confirmed.md",
+      ".hbn/results/0169-exec-onda-38-2-36-c16-aviso-operacional-pdf.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_2_36_c16_aviso_operacional_pdf/0169_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_36_c16_aviso_operacional_pdf/0169_PROCEDIMENTO_IMPORT.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "src/vba/App_Release.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF.txt",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "src/vba/*.frx",
+      "local-ai/vba_import/002-formularios/**",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "Parecer Antigravity identificou que C16 nos PDFs 075-078 fica com caracteres distribuidos por alinhamento herdado do template.",
+    "Preencher_EscreverAvisoOperacional grava C16 e aplica fonte/italico/ShrinkToFit, mas nao reaplica HorizontalAlignment ou VerticalAlignment.",
+    "A correcao pode ser feita em Preencher.bas, reaplicando alinhamento esquerdo em C16:N16 no momento de gerar Pre-OS, OS e Avaliacao."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Ajustar Preencher_EscreverAvisoOperacional para aplicar alinhamento legivel em C16:N16.",
+      "Adicionar contrato V2 explicito para o alinhamento do aviso operacional em C16.",
+      "Atualizar catalogo/roteiro V2 e documentacao humana com a nova contagem da suite.",
+      "Gerar manifesto V3 delta 0169 e sincronizar src/vba com local-ai/vba_import.",
+      "Registrar ERP 0169 e atualizar relay."
+    ]
+  },
+  "invariants_preserved": [
+    "O texto do aviso operacional nao muda nesta onda.",
+    "A regra de disponibilidade nao muda nesta onda; isso fica para 0170.",
+    "A validacao visual dos PDFs continua obrigatoria porque o defeito e de renderizacao."
+  ],
+  "risks": [
+    {
+      "risk": "xlLeft nao corrigir todos os templates se houver merge ou formatacao fisica concorrente.",
+      "mitigation": "Aplicar alinhamento no range C16:N16 em runtime e exigir revisao visual de PDFs no gate humano.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Teste estatico nao capturar renderizacao real do PDF.",
+      "mitigation": "Teste V2 cobre contrato de runtime code-only; gate humano deve gerar e revisar PDFs.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Ajuste de contagem da suite REL_SUSP_STRIKES_RESET ficar dessincronizado.",
+      "mitigation": "Atualizar TV2_InitExecucao, catalogo, roteiro, guia e procedimento de importacao na mesma onda.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Fonte e espelho VBA sincronizados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0169-exec-onda-38-2-36-c16-aviso-operacional-pdf.json"
+      },
+      {
+        "gate": "Importador V3 delta 0169",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0169-exec-onda-38-2-36-c16-aviso-operacional-pdf.json"
+      },
+      {
+        "gate": "Compile VBE limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0169-exec-onda-38-2-36-c16-aviso-operacional-pdf.json"
+      },
+      {
+        "gate": "TV2_RunRelatoriosSuspensoesStrikesReset cobre alinhamento C16",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0169-exec-onda-38-2-36-c16-aviso-operacional-pdf.json"
+      },
+      {
+        "gate": "PDFs de Pre-OS, OS e Avaliacao revisados visualmente",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0169-exec-onda-38-2-36-c16-aviso-operacional-pdf.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se import V3 falhar, restaurar pelo backup indicado pelo Importador.",
+      "Se compile falhar, nao salvar o workbook e restaurar backup V3.",
+      "Se TV2 falhar, anexar CSV e nao rodar VCR.",
+      "Se PDF continuar ilegivel, abrir fix1 escolhendo entre ajuste code-only adicional ou correcao de template com gate humano."
+    ],
+    "anchor_to_restore": "37486b7 higiene HBN pos-auditoria 0168"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-08T23:31:48-03:00",
+  "confirmed_at": "2026-06-08T23:31:48-03:00",
+  "hearback_summary": "Mauricio aprovou a sequencia de correcoes ate 0171, incluindo a correcao visual C16 antes da disponibilidade composta."
+}

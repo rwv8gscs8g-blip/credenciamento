@@ -1655,6 +1655,9 @@ Private Sub Preencher_EscreverAvisoOperacional(ByVal ws As Worksheet)
     With ws.Range("C16:N16")
         .Font.Size = 8
         .Font.Italic = True
+        .HorizontalAlignment = xlLeft
+        .VerticalAlignment = xlCenter
+        .WrapText = False
         .ShrinkToFit = True
     End With
 End Sub

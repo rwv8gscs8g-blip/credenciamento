@@ -7,6 +7,18 @@ tratam apenas da linha pública oficial.
 
 ### Adicionado
 
+- **Onda 38.2.36 — aviso operacional C16 legivel nos impressos** — reaplica em
+  runtime o alinhamento do range `C16:N16` nos impressos de Pre-OS, OS e
+  avaliacao, mantendo o texto do aviso operacional e neutralizando alinhamento
+  distribuido herdado do template. Adiciona o cenario V2
+  `RELSSR_11_IMPRESSOS_C16_ALINHAMENTO_LEGIVEL`, atualizando
+  `TV2_RunRelatoriosSuspensoesStrikesReset` para
+  `OK=11 | FALHA=0 | MANUAL=0`. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF.txt`.
+  Gate esperado: import `M=4 | F=0 | err=0 | skip=0`, compile limpo, TV2
+  dirigido verde e revisao visual de PDFs de Pre-OS, OS e avaliacao. Sem
+  designer, sem `.frx` e sem VCR neste microdelta.
+
 - **Onda 38.2.34 — Pre-OS vencidas: relatorio informativo com teste de
   impressao sem expiracao automatica** — documenta que Relatorios > Pre-OS
   Vencidas apenas lista/imprime Pre-OS `AGUARDANDO_ACEITE` vencidas. A

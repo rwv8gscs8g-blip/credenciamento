@@ -205,6 +205,8 @@ A suite cobre:
 - OS por Empresa com resumo superior de status, retorno, disponibilidade,
   strikes e resumo operacional;
 - `Status da empresa nesta data` em impressos de Pre-OS, OS e avaliacao;
+- alinhamento legivel do aviso operacional em `C16:N16`, neutralizando
+  alinhamento distribuido herdado do template;
 - contrato de Novo Periodo: limpa `PRE_OS`/`CAD_OS`, preserva cadastros,
   configuracao e auditoria, portanto preserva suspensoes;
 - contrato de Limpar Base: apaga empresas, credenciamentos, operacao e
@@ -214,5 +216,5 @@ Resultado esperado apos import/compile:
 
 ```text
 TV2_RunRelatoriosSuspensoesStrikesReset
-OK=10 | FALHA=0 | MANUAL=0
+OK=11 | FALHA=0 | MANUAL=0
 ```

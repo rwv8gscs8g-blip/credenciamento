@@ -2,10 +2,10 @@
 titulo: Relay HBN — coordenacao inter-IA do Credenciamento
 versao-protocolo: HBN 0.3.1 + Cura Onda 36 (contratos executáveis) + PROMPT_ARQUITETO v1.6 (§12 Cadencia D Estendida + §12.B por papel + firewall 0022 + CI ratchet 0116)
 proprietario-bastao: Codex (implementador principal V206) consolidou localmente as ondas 38.2.4 a 38.2.10 no commit `882cd2b`, sincronizou HBN em `d2d7ac5`, entregou Performance/UX basica em `e157221`, consolidou a auditoria cruzada documental 38.2.13, entregou a Onda 38.2.14 behavioralizacao C1, validou a Onda 38.2.15 FT-4 em 2026-06-01, validou 38.2.16 BL-4 via fix1 0133, 0137 fix1, 0139 fix1, 0140 e 0141. Antigravity executou a auditoria cruzada de impressao 0142 apontando 2 BLOQUEADORES nos PDFs; Codex implementou 0143, validou 0144 fix1 test-only por import/compile/`TV2_20260606_104057`, validou 0151 GATE 2 Quant./borda por import/compile/`TV2_20260606_111039`, preparou 0152 para incluir impressao residual no RVS oficial e validou 0153 para padronizar punicoes do rodizio em dias com UI, relatorios e RVS; primeiro 0153 importou mas falhou compile, corrigido no fix1 por late-binding auditavel do FT4; fix1 importou mas compile avancou para dependencia direta de `Auto_Open`, corrigida no fix2 via `Application.Run`; fix2 importou mas compile avancou para `Util_VerificarProtecaoPersistenteAposAbertura`, corrigida no fix3 via wrapper; fix3 importou mas compile avancou para membros TV2 de `Menu_Principal`, corrigidos no fix4 via `CallByName`; fix4 importou, compilou e passou `TV2_20260606_193709` + `VR_20260606_193911`; 0154 importou/compilou e passou `TV2_20260606_212617`; 0155 runtime foi suspensa antes de importacao apos diagnostico correto de sobreposicao de label; 0156 substituiu por correcao simples de design `.frm/.frx`, passou import/compile/`TV2_20260606_231033` e teve clique/edicao/salvamento confirmados; 0157 preparou handoff Codex->Codex e proposta USEHBN para tela a tela design-first; 0158 validou botoes/menus por import/compile/`TV2_20260607_005745`; 0159 importou/compilou, mas `TV2_20260607_094429` retornou `OK=12 | FALHA=2 | MANUAL=0` por contrato de teste acoplado a `Auto_Open` fora do delta; Fix1 ajustou a suite para delegar protecao a BL4 e foi validado por import/compile/`TV2_20260607_101426` com `OK=14 | FALHA=0 | MANUAL=0`. Linha arquiteto 0114-0117/0149 consolidou firewall, CI ratchet e handoff do Codex; Codex concluiu GATE 0 pelo readback 0150.
-ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE/VALIDADA: 38.2.29/0159 Fix1 validada por import/compile/`TV2_20260607_101426` -> 38.2.30/0161 Fix1 validada por import/compile/`TV2_20260608_044610` -> 38.2.31/0162 validada por import/compile/`TV2_20260608_084549` -> 38.2.32/0163 Fix1 validada por import/compile/`TV2_20260608_115730` -> 38.2.33/0164 validada por import/compile/TV2 e `VR_20260608_134548` APROVADO -> 38.2.34/0165 validada por import/compile/`TV2_20260608_161110` -> 38.2.35/0166 limpeza worktree consolidada no commit `945039d` -> 0167 auditoria cruzada concluida -> 0168 higiene HBN pos-auditoria em fechamento doc-only.
+ciclo-ativo: V12.0.0206 EM VALIDACAO ITERATIVA — V12.0.0205 permanece como release oficial. Sequencia recente ENTREGUE/VALIDADA: 38.2.29/0159 Fix1 validada por import/compile/`TV2_20260607_101426` -> 38.2.30/0161 Fix1 validada por import/compile/`TV2_20260608_044610` -> 38.2.31/0162 validada por import/compile/`TV2_20260608_084549` -> 38.2.32/0163 Fix1 validada por import/compile/`TV2_20260608_115730` -> 38.2.33/0164 validada por import/compile/TV2 e `VR_20260608_134548` APROVADO -> 38.2.34/0165 validada por import/compile/`TV2_20260608_161110` -> 38.2.35/0166 limpeza worktree consolidada no commit `945039d` -> 0167 auditoria cruzada concluida -> 0168 higiene HBN pos-auditoria fechada -> 38.2.36/0169 C16 aviso operacional package_ready_gate_pending.
 ancora-estavel-atual: V12-202-Z011-onda17-fechada (INTOCAVEL ate aprovacao operador) — build f7aa84f+ONDA17.MD2-bloco-a-fechamento-onda17, Quinteto VR_20260503_234443 APROVADO. CICLO V206 anchor funcional: HEAD ee75b30 (Onda 38.2.1-AR1-FIX2-PERF entregue), build ad5b487+ONDA38.2.1-AR1-FIX2-PERF, RVS Trio APROVADO em VR_20260526_102200. **Anchor de rollback Onda 38.2.2: commit 179bac5**. **Caminho B (rollback) tecnicamente valido se Mauricio escolher**.
-proxima-acao: abrir readback 0169 para correcao visual C16 nos impressos; depois 0170 disponibilidade composta e 0171 checkpoint VCR, conforme aprovacao humana.
-ultima-atualizacao: 2026-06-08T23:31:48-03:00 (0168 doc-only fechou ERP 0166, saneou relay e registrou auditoria cruzada 0167)
+proxima-acao: operador deve importar `ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF`, compilar, rodar `TV2_RunRelatoriosSuspensoesStrikesReset` e revisar PDFs de Pre-OS/OS/Avaliacao; depois abrir 0170 disponibilidade composta.
+ultima-atualizacao: 2026-06-08T23:31:48-03:00 (0169 pacote pronto para import/compile/TV2/PDF; 0168 doc-only fechada no commit 37486b7)
 ---
 
 ## 🟢 HIGIENE / 0168 — Auditoria cruzada e fechamento HBN pos-0166 (FECHADO)
@@ -21,7 +21,27 @@ ultima-atualizacao: 2026-06-08T23:31:48-03:00 (0168 doc-only fechou ERP 0166, sa
 | Decisao aplicada | Fechar a lacuna de governanca antes de nova implementacao VBA |
 | Escopo | HBN/relay/auditoria somente; sem VBA, sem pacote importavel, sem VCR |
 | Sequencia aprovada | 0168 higiene HBN -> 0169 C16 PDF -> 0170 disponibilidade composta -> 0171 VCR |
-| Veredito atual | Fechado; commitar e abrir 0169 |
+| Veredito atual | Fechado no commit `37486b7`; 0169 aberta |
+
+## 🟡 GATE / 0169 — C16 aviso operacional em PDF (PACKAGE READY)
+
+| Campo | Valor |
+|---|---|
+| Sinal | ✅ HBN ACTIVE |
+| Track | safe_track |
+| Readback | [`0169-rb-onda-38-2-36-c16-aviso-operacional-pdf.json`](../readbacks/0169-rb-onda-38-2-36-c16-aviso-operacional-pdf.json) — **human_status: confirmed** |
+| Hearback | [`0169-rb-onda-38-2-36-c16-aviso-operacional-pdf-confirmed.json`](../hearbacks/0169-rb-onda-38-2-36-c16-aviso-operacional-pdf-confirmed.json) |
+| ERP | [`0169-exec-onda-38-2-36-c16-aviso-operacional-pdf.json`](../results/0169-exec-onda-38-2-36-c16-aviso-operacional-pdf.json) — `package_ready_gate_pending` |
+| Tecnico | [`0169_TECNICO.md`](../../auditoria/03_ondas/onda_38_2_36_c16_aviso_operacional_pdf/0169_TECNICO.md) |
+| Procedimento | [`0169_PROCEDIMENTO_IMPORT.md`](../../auditoria/03_ondas/onda_38_2_36_c16_aviso_operacional_pdf/0169_PROCEDIMENTO_IMPORT.md) |
+| Manifesto | [`000-MANIFESTO-V3-DELTA-ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF.txt`](../../local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF.txt) |
+| Decisao aplicada | C16:N16 dos impressos recebe alinhamento legivel em runtime para neutralizar alinhamento distribuido do template |
+| Build | `37486b7+ONDA38.2.36-C16-AVISO-OPERACIONAL` |
+| Import V3 | `ImportarPacoteV3_Delta "ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF", "37486b7+ONDA38.2.36-C16-AVISO-OPERACIONAL"` |
+| Pos-import esperado | `M=4 | F=0 | err=0 | skip=0`; compile limpo; `TV2_RunRelatoriosSuspensoesStrikesReset` com `OK=11 | FALHA=0 | MANUAL=0` |
+| Validacao visual | Gerar PDFs de Pre-OS, OS e Avaliacao; aviso `Status da empresa nesta data` em C16 deve sair sem letras artificialmente espacadas |
+| Nao tocar | `.frm`, `.frx`, `Mod_Types.bas`, `Importador_V3.bas`, `Auto_Open.bas`, `ThisWorkbook`; nao rodar VCR neste microdelta |
+| Veredito atual | Pacote pronto; aguardando gate humano |
 
 ## 🟢 HIGIENE / 0166 — Limpeza worktree pos-0165 (FECHADO POR FOLLOW-UP 0168)
 
