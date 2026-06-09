@@ -1,0 +1,118 @@
+{
+  "readback_id": "0168-rb-onda-38-2-35-higiene-hbn-pos-auditoria",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0166-rb-onda-38-2-35-limpeza-worktree-pos-0165",
+  "intent": {
+    "objective": "Fechar a lacuna de governanca apontada pela auditoria cruzada pos-0165/0166: registrar ERP 0166, sanear relay e materializar a consolidacao 0167 antes de nova implementacao VBA.",
+    "non_goals": [
+      "Nao alterar codigo VBA nesta onda",
+      "Nao alterar pacote V3 importavel nesta onda",
+      "Nao rodar VCR nesta onda",
+      "Nao tocar em Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao fazer push para o remoto"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0168-rb-onda-38-2-35-higiene-hbn-pos-auditoria.json",
+      ".hbn/hearbacks/0168-rb-onda-38-2-35-higiene-hbn-pos-auditoria-confirmed.json",
+      ".hbn/hearbacks/0168-rb-onda-38-2-35-higiene-hbn-pos-auditoria-confirmed.md",
+      ".hbn/results/0166-exec-onda-38-2-35-limpeza-worktree-pos-0165.json",
+      ".hbn/results/0168-exec-onda-38-2-35-higiene-hbn-pos-auditoria.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_35_auditoria_cruzada_pos_0165_0166/0167_PARECER_CLAUDE_OPUS48_ARQUITETO.md",
+      "auditoria/03_ondas/onda_38_2_35_auditoria_cruzada_pos_0165_0166/0167_PARECER_ANTIGRAVITY_GEMINI35_ADVERSARIAL.md",
+      "auditoria/03_ondas/onda_38_2_35_auditoria_cruzada_pos_0165_0166/0167_PARECER_CODEX_IMPLEMENTADOR.md",
+      "auditoria/03_ondas/onda_38_2_35_auditoria_cruzada_pos_0165_0166/0167_CONSOLIDADO_AUDITORIA_CRUZADA.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/001-modulo/**",
+      "local-ai/vba_import/002-formularios/**",
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "Auditoria Codex, Claude e Antigravity convergiu: 0165 esta funcionalmente valida; 0166 esta executada mas formalmente aberta por falta de ERP e relay estagnado.",
+    "Commit 945039d consolidou 0165 e a limpeza 0166, mas o rastro HBN precisa de ERP 0166 em follow-up porque o ERP deve registrar o proprio commit criado.",
+    "O diretorio de auditoria cruzada 0167 ja contem pareceres Claude e Antigravity nao versionados; o parecer Codex foi colado pelo operador e deve ser materializado para rastreabilidade."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Criar hearback 0168 confirmado com a aprovacao humana recebida no chat.",
+      "Criar ERP 0166 registrando commit 945039d, escopo e estado real de fechamento.",
+      "Materializar o parecer Codex e a consolidacao 0167 da auditoria cruzada.",
+      "Atualizar relay com bloco 0166 fechado e bloco 0168 de higiene HBN.",
+      "Validar JSON/readback/diff textual e commitar a onda doc-only."
+    ]
+  },
+  "invariants_preserved": [
+    "Nao ha alteracao de workbook, codigo VBA, forms ou pacote importavel.",
+    "A proxima implementacao VBA so deve comecar apos esta higiene HBN.",
+    "VCR continua reservado para a onda 0171/checkpoint forte."
+  ],
+  "risks": [
+    {
+      "risk": "Misturar higiene documental com correcao de produto.",
+      "mitigation": "Escopo proibe src/vba e local-ai/vba_import nesta onda.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Relay continuar ambiguo para o proximo handoff.",
+      "mitigation": "Atualizar frontmatter e inserir bloco 0166 fechado antes do bloco 0165.",
+      "severity": "medium"
+    },
+    {
+      "risk": "ERP 0166 registrar estado final sem distinguir commit 945039d do worktree sujo posterior por pareceres 0167.",
+      "mitigation": "Declarar no ERP que o sujo atual corresponde a artefatos de auditoria cruzada criados depois do commit 945039d.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0168 confirmado antes de escrita",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0168-exec-onda-38-2-35-higiene-hbn-pos-auditoria.json"
+      },
+      {
+        "gate": "ERP 0166 criado e JSON valido",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0168-exec-onda-38-2-35-higiene-hbn-pos-auditoria.json"
+      },
+      {
+        "gate": "Relay nao afirma mais que 0165 esta sem commit proprio",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0168-exec-onda-38-2-35-higiene-hbn-pos-auditoria.json"
+      },
+      {
+        "gate": "Commit local criado sem tocar VBA",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0168-exec-onda-38-2-35-higiene-hbn-pos-auditoria.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se JSON/HBN falhar, corrigir apenas os artefatos documentais da onda.",
+      "Se aparecer diff em src/vba ou local-ai/vba_import, parar e pedir decisao humana.",
+      "Se commit falhar por pre-commit, nao usar bypass sem novo hearback humano."
+    ],
+    "anchor_to_restore": "945039d consolidacao 0165/0166 antes da higiene 0168"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-08T23:31:48-03:00",
+  "confirmed_at": "2026-06-08T23:31:48-03:00",
+  "hearback_summary": "Mauricio aprovou implementar a sequencia ate 0171, iniciando pela higiene HBN 0168 antes das correcoes tela a tela."
+}

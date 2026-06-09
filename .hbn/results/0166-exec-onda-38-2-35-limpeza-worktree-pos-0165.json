@@ -1,0 +1,91 @@
+{
+  "result_id": "0166-exec-onda-38-2-35-limpeza-worktree-pos-0165",
+  "execution_id": "0166-exec-onda-38-2-35-limpeza-worktree-pos-0165",
+  "readback_id": "0166-rb-onda-38-2-35-limpeza-worktree-pos-0165",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "worktree_pos_0165_consolidado",
+  "human_status": "confirmed_commit_local",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "b33ec4e",
+  "head_after": "945039da0560e30e09888310ee806fbe61e6f832",
+  "commit": {
+    "sha": "945039da0560e30e09888310ee806fbe61e6f832",
+    "short_sha": "945039d",
+    "message": "chore(hbn): consolida onda 0165 pre-os vencidas",
+    "note": "Commit criado como limpeza/consolidacao pos-0165, contendo tambem readback/hearback 0166 e sincronizacao mecanica fonte/espelho exigida pelo Glasswing."
+  },
+  "input_observed": {
+    "predecessor": "b33ec4e checkpoint ondas 0153-0164 aprovadas",
+    "onda_0165_gate": "Importador V3 M=3 | F=0 | err=0 | skip=0; compile limpo; TV2_20260608_161110 OK=11 | FALHA=0 | MANUAL=0.",
+    "operator_approval": "Mauricio aprovou a limpeza do worktree sujo por commit local da entrega 0165 validada, sem reset, revert, stash ou push."
+  },
+  "action": "Consolidar em commit local os artefatos validados da 0165 e a limpeza/sincronizacao mecanica descrita no readback 0166.",
+  "summary": "O commit 945039d versionou os readbacks/hearbacks 0165 e 0166, ERP 0165, relay, CHANGELOG, documentos humanos, manifesto V3 0165, build label e suites V2. Tambem sincronizou Teste_V2_Punicoes_Dias fonte/espelho por ajuste mecanico de EOF, sem alteracao executavel.",
+  "files_changed": [
+    ".hbn/hearbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao-confirmed.json",
+    ".hbn/hearbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao-confirmed.md",
+    ".hbn/hearbacks/0166-rb-onda-38-2-35-limpeza-worktree-pos-0165-confirmed.json",
+    ".hbn/hearbacks/0166-rb-onda-38-2-35-limpeza-worktree-pos-0165-confirmed.md",
+    ".hbn/readbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao.json",
+    ".hbn/readbacks/0166-rb-onda-38-2-35-limpeza-worktree-pos-0165.json",
+    ".hbn/relay/INDEX.md",
+    ".hbn/results/0165-exec-onda-38-2-34-preos-vencidas-relatorio-impressao.json",
+    "CHANGELOG.md",
+    "auditoria/03_ondas/onda_38_2_34_preos_vencidas_relatorio_impressao/0165_PROCEDIMENTO_IMPORT.md",
+    "auditoria/03_ondas/onda_38_2_34_preos_vencidas_relatorio_impressao/0165_TECNICO.md",
+    "auditoria/INDEX.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/001-modulo/ABU-Teste_V2_Punicoes_Dias.bas",
+    "src/vba/App_Release.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Punicoes_Dias.bas",
+    "src/vba/Teste_V2_Roteiros.bas"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0166 confirmado",
+      "status": "pass_human",
+      "evidence": ".hbn/hearbacks/0166-rb-onda-38-2-35-limpeza-worktree-pos-0165-confirmed.json e .md foram incluidos no commit 945039d."
+    },
+    {
+      "gate": "Escopo do commit",
+      "status": "pass_review",
+      "evidence": "Auditorias 0167 verificaram que os arquivos fora do escopo 0165 isolado estavam dentro do escopo 0166, incluindo ABU/Teste_V2_Punicoes_Dias para sincronizacao mecanica."
+    },
+    {
+      "gate": "Commit local criado",
+      "status": "pass_local",
+      "evidence": "HEAD atual aponta para 945039da0560e30e09888310ee806fbe61e6f832 na branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Fonte e espelho VBA sincronizados",
+      "status": "pass_review",
+      "evidence": "Auditoria Codex reportou diff --no-index sem diferenca para App_Release, Teste_V2_Engine, Teste_V2_Roteiros e Teste_V2_Punicoes_Dias."
+    },
+    {
+      "gate": "Worktree limpo apos commit",
+      "status": "pass_review",
+      "evidence": "Auditoria pos-945039d reportou worktree limpo; o sujo atual corresponde aos pareceres 0167 criados posteriormente."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Push para remoto",
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "VCR"
+  ],
+  "follow_up": [
+    "Onda 0168 deve registrar este ERP em commit de follow-up e sanear o relay, porque o ERP referencia o hash 945039d criado pela propria limpeza."
+  ],
+  "updated_at": "2026-06-08T23:31:48-03:00"
+}

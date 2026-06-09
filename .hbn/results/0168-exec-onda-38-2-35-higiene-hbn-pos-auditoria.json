@@ -1,0 +1,71 @@
+{
+  "result_id": "0168-exec-onda-38-2-35-higiene-hbn-pos-auditoria",
+  "execution_id": "0168-exec-onda-38-2-35-higiene-hbn-pos-auditoria",
+  "readback_id": "0168-rb-onda-38-2-35-higiene-hbn-pos-auditoria",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "higiene_hbn_pos_auditoria_consolidada",
+  "human_status": "confirmed",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "945039da0560e30e09888310ee806fbe61e6f832",
+  "commit_status": "commit_da_0168_a_criar_apos_erp",
+  "action": "Fechar ERP 0166, materializar auditoria cruzada 0167 e sanear relay antes de nova implementacao VBA.",
+  "summary": "A Onda 0168 resolveu o bloqueio de governanca apontado pela auditoria cruzada: criou ERP 0166 referenciando o commit 945039d, materializou o parecer Codex e o consolidado 0167, e atualizou o relay para nao afirmar mais que 0165 permanece sem commit proprio.",
+  "files_changed": [
+    ".hbn/readbacks/0168-rb-onda-38-2-35-higiene-hbn-pos-auditoria.json",
+    ".hbn/hearbacks/0168-rb-onda-38-2-35-higiene-hbn-pos-auditoria-confirmed.json",
+    ".hbn/hearbacks/0168-rb-onda-38-2-35-higiene-hbn-pos-auditoria-confirmed.md",
+    ".hbn/results/0166-exec-onda-38-2-35-limpeza-worktree-pos-0165.json",
+    ".hbn/results/0168-exec-onda-38-2-35-higiene-hbn-pos-auditoria.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_35_auditoria_cruzada_pos_0165_0166/0167_PARECER_CLAUDE_OPUS48_ARQUITETO.md",
+    "auditoria/03_ondas/onda_38_2_35_auditoria_cruzada_pos_0165_0166/0167_PARECER_ANTIGRAVITY_GEMINI35_ADVERSARIAL.md",
+    "auditoria/03_ondas/onda_38_2_35_auditoria_cruzada_pos_0165_0166/0167_PARECER_CODEX_IMPLEMENTADOR.md",
+    "auditoria/03_ondas/onda_38_2_35_auditoria_cruzada_pos_0165_0166/0167_CONSOLIDADO_AUDITORIA_CRUZADA.md"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0168 confirmado",
+      "status": "pass_human",
+      "evidence": "Mensagem humana aprovou implementar a sequencia ate 0171; hearback 0168 confirmado criado."
+    },
+    {
+      "gate": "Readback 0168 schema",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0168-rb-onda-38-2-35-higiene-hbn-pos-auditoria.json retornou OK."
+    },
+    {
+      "gate": "JSON HBN",
+      "status": "pass_local",
+      "evidence": "python3 -m json.tool validou readback 0168, hearback 0168 e ERP 0166."
+    },
+    {
+      "gate": "Diff textual",
+      "status": "pass_local",
+      "evidence": "git diff --check retornou sem saida."
+    },
+    {
+      "gate": "Sem alteracao VBA",
+      "status": "pass_review",
+      "evidence": "git status mostra apenas HBN/relay/auditoria nesta onda; nenhum arquivo src/vba ou local-ai/vba_import foi modificado."
+    },
+    {
+      "gate": "Relay saneado",
+      "status": "pass_review",
+      "evidence": ".hbn/relay/INDEX.md agora inclui blocos 0166 e 0168 e remove a afirmacao de que 0165 permanece sem commit proprio."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2",
+    "VCR",
+    "Push para remoto"
+  ],
+  "next_action": "Abrir Onda 0169 para correcao visual C16 nos impressos, com readback/hearback proprio e pacote VBA se necessario.",
+  "updated_at": "2026-06-08T23:31:48-03:00"
+}
