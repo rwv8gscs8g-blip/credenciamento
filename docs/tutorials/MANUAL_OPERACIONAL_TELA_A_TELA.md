@@ -232,7 +232,7 @@ para nova indicacao naquele momento.
 | Suspensa Desde | data do ultimo evento de suspensao encontrado no `AUDIT_LOG`; se nao houver registro, aparece `SEM REGISTRO` |
 | Suspensa Ate | data final prevista da suspensao; se nao houver data, aparece `INDEFINIDA` |
 | Ultima Reativacao | data gravada em `DT_ULT_REATIV`; vazia quando nunca houve reativacao registrada |
-| Disponibilidade Atual | leitura operacional na data do relatorio: `DISPONIVEL`, `SUSPENSA ATE dd/mm/aaaa`, `REATIVAVEL - PRAZO VENCIDO`, `OS EM EXECUCAO`, `PRE-OS PENDENTE`, `CREDENCIAMENTO INATIVO` ou equivalente |
+| Disponibilidade Atual | leitura operacional na data do relatorio: `DISPONIVEL`, `SUSPENSA ATE dd/mm/aaaa`, `REATIVAVEL - PRAZO VENCIDO`, `OS EM EXECUCAO`, `PRE-OS PENDENTE`, `CREDENCIAMENTO INATIVO` ou equivalente. Quando uma empresa suspensa tambem esta ocupada na atividade, o texto pode ser composto, como `SUSPENSA ATE dd/mm/aaaa; OS EM EXECUCAO` ou `SUSPENSA ATE dd/mm/aaaa; PRE-OS PENDENTE` |
 | Strikes Nota Baixa | quantidade de strikes derivados de avaliacoes abaixo da nota minima; quando o novo periodo preserva uma suspensao mas limpa `CAD_OS`, o relatorio pode usar o ultimo evento de suspensao por strike no `AUDIT_LOG` |
 | Strikes Recusa/Prazo | quantidade atual de recusas ou expiracoes de prazo acumuladas no cadastro da empresa |
 | Resumo Operacional | texto consolidado com status, disponibilidade, data final de suspensao e strikes |
@@ -240,6 +240,9 @@ para nova indicacao naquele momento.
 Credenciamento ativo nao significa automaticamente empresa disponivel. Uma
 empresa ativa pode aparecer como `PRE-OS PENDENTE` ou `OS EM EXECUCAO` quando
 ja esta ocupada na mesma atividade.
+Quando a empresa esta suspensa, a suspensao continua sendo o bloqueio
+principal; o complemento `; OS EM EXECUCAO` ou `; PRE-OS PENDENTE` apenas revela
+que existe ocupacao adicional na mesma atividade.
 
 Nos documentos impressos de Pre-OS, OS e avaliacao, o sistema tambem deve
 incluir `Status da empresa nesta data: ...`, com status, disponibilidade,

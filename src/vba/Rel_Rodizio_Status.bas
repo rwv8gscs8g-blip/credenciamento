@@ -123,6 +123,24 @@ Public Function RRS_StrikesRecusaPrazoTexto(ByVal empId As String) As String
     RRS_StrikesRecusaPrazoTexto = CStr(RRS_StrikesRecusaPrazo(empId))
 End Function
 
+Private Function RRS_OcupacaoAtividadeTexto(ByVal empId As String, ByVal idAtividade As String) As String
+    If Trim$(idAtividade) = "" Then Exit Function
+
+    If TemOSAbertaNaAtividade(empId, idAtividade) Then
+        RRS_OcupacaoAtividadeTexto = "OS EM EXECUCAO"
+    ElseIf TemPreOSPendenteNaAtividade(empId, idAtividade) Then
+        RRS_OcupacaoAtividadeTexto = "PRE-OS PENDENTE"
+    End If
+End Function
+
+Private Function RRS_ComporDisponibilidadeSuspensa(ByVal dispBase As String, ByVal ocupacaoAtividade As String) As String
+    If Trim$(ocupacaoAtividade) = "" Then
+        RRS_ComporDisponibilidadeSuspensa = dispBase
+    Else
+        RRS_ComporDisponibilidadeSuspensa = dispBase & "; " & ocupacaoAtividade
+    End If
+End Function
+
 Public Function RRS_DisponibilidadeOperacionalEmpresa( _
     ByVal empId As String, _
     Optional ByVal statusCred As String = "ATIVO", _
@@ -133,6 +151,8 @@ Public Function RRS_DisponibilidadeOperacionalEmpresa( _
     Dim stCred As String
     Dim stGlobal As String
     Dim idAtividade As String
+    Dim ocupacaoAtividade As String
+    Dim dispBase As String
 
     On Error GoTo falha
 
@@ -149,23 +169,26 @@ Public Function RRS_DisponibilidadeOperacionalEmpresa( _
     If stCred <> STATUS_CRED_ATIVO Then
         RRS_DisponibilidadeOperacionalEmpresa = "CREDENCIAMENTO INATIVO"
     ElseIf stGlobal = STATUS_EMP_SUSPENSA Then
+        ocupacaoAtividade = RRS_OcupacaoAtividadeTexto(emp.EMP_ID, idAtividade)
         If emp.DT_FIM_SUSP > CDate(0) And emp.DT_FIM_SUSP <= Date Then
-            RRS_DisponibilidadeOperacionalEmpresa = "REATIVAVEL - PRAZO VENCIDO"
+            dispBase = "REATIVAVEL - PRAZO VENCIDO"
         ElseIf emp.DT_FIM_SUSP > CDate(0) Then
-            RRS_DisponibilidadeOperacionalEmpresa = "SUSPENSA ATE " & Format$(emp.DT_FIM_SUSP, "dd/mm/yyyy")
+            dispBase = "SUSPENSA ATE " & Format$(emp.DT_FIM_SUSP, "dd/mm/yyyy")
         Else
-            RRS_DisponibilidadeOperacionalEmpresa = "SUSPENSA SEM DATA DE RETORNO"
+            dispBase = "SUSPENSA SEM DATA DE RETORNO"
         End If
+        RRS_DisponibilidadeOperacionalEmpresa = RRS_ComporDisponibilidadeSuspensa(dispBase, ocupacaoAtividade)
     ElseIf stGlobal = STATUS_EMP_INATIVA Then
         RRS_DisponibilidadeOperacionalEmpresa = "EMPRESA INATIVA"
     ElseIf stGlobal <> STATUS_EMP_ATIVA Then
         RRS_DisponibilidadeOperacionalEmpresa = "STATUS GLOBAL " & stGlobal
-    ElseIf idAtividade <> "" And TemOSAbertaNaAtividade(emp.EMP_ID, idAtividade) Then
-        RRS_DisponibilidadeOperacionalEmpresa = "OS EM EXECUCAO"
-    ElseIf idAtividade <> "" And TemPreOSPendenteNaAtividade(emp.EMP_ID, idAtividade) Then
-        RRS_DisponibilidadeOperacionalEmpresa = "PRE-OS PENDENTE"
     Else
-        RRS_DisponibilidadeOperacionalEmpresa = "DISPONIVEL"
+        ocupacaoAtividade = RRS_OcupacaoAtividadeTexto(emp.EMP_ID, idAtividade)
+        If ocupacaoAtividade <> "" Then
+            RRS_DisponibilidadeOperacionalEmpresa = ocupacaoAtividade
+        Else
+            RRS_DisponibilidadeOperacionalEmpresa = "DISPONIVEL"
+        End If
     End If
     Exit Function
 

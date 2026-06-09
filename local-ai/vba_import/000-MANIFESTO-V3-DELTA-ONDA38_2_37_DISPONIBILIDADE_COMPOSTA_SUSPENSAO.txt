@@ -1,0 +1,53 @@
+# Manifesto V3 DELTA ONDA38_2_37_DISPONIBILIDADE_COMPOSTA_SUSPENSAO - V12.0.0206 Onda 38.2.37 / Readback 0170
+# Tema: disponibilidade composta sob suspensao.
+#
+# Contexto:
+#   - Auditoria cruzada 0167 identificou risco de confusao quando uma empresa suspensa tambem possui OS aberta ou Pre-OS pendente.
+#   - A disponibilidade mostrava apenas a suspensao, ocultando a ocupacao da atividade.
+#   - A correcao desta onda e informativa: suspensao continua bloqueio principal e a ocupacao aparece como sufixo.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_37_DISPONIBILIDADE_COMPOSTA_SUSPENSAO", "10c1750+ONDA38.2.37-DISPONIBILIDADE-COMPOSTA"
+#
+# Pre-condicao:
+#   - Se a 0169 ainda nao foi importada no workbook, importar primeiro ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF.
+#
+# Pos-import esperado:
+#   - Importador V3: M=4 | F=0 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunRelatoriosSuspensoesStrikesReset
+#   - Esperado: OK=12 | FALHA=0 | MANUAL=0.
+#   - Revisar relatorios/avisos com empresa suspensa e ocupada: texto esperado no formato `SUSPENSA ATE dd/mm/aaaa; OS EM EXECUCAO` ou `...; PRE-OS PENDENTE`.
+#   - VCR reservado para checkpoint forte 0171.
+#
+# Guardas:
+#   - Sem Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.
+#   - Sem formularios e sem .frx nesta onda.
+#   - Sem alterar motor de rodizio, expiracao, recusa ou fila.
+#   - Sem tornar empresa suspensa disponivel automaticamente.
+#
+# Contrato operacional documentado:
+#   - A suspensao continua sendo o primeiro sinal operacional.
+#   - Se houver OS aberta na mesma atividade, a disponibilidade mostra `; OS EM EXECUCAO`.
+#   - Se nao houver OS aberta, mas houver Pre-OS pendente na mesma atividade, a disponibilidade mostra `; PRE-OS PENDENTE`.
+#   - Empresa ativa sem suspensao preserva a leitura anterior: OS aberta, Pre-OS pendente ou disponivel.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24458
+#     sha256=6d108d2b3eba207d53c386410794c737375b0b08f247fb1e2361345cea23fddf
+#   M|001-modulo/ABV-Rel_Rodizio_Status.bas
+#     bytes=23191
+#     sha256=8b8e83b838e21b40d4dba0aacdcdf0493c564520d293a1cdb56389de672f315c
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=235276
+#     sha256=a859b48cabbaf9da182a2b074bc67b60b7219ec7a3cb28652c528b3e2077a26d
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=364599
+#     sha256=c1a2a8c79fa740643cc063ce2f806b62fdfb840b28828455d263449584421ce3
+#
+# GRUPO_ONDA38_2_37_DISPONIBILIDADE_COMPOSTA_SUSPENSAO
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/ABV-Rel_Rodizio_Status.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas

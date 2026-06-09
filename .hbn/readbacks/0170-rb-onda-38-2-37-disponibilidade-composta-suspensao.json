@@ -1,0 +1,128 @@
+{
+  "readback_id": "0170-rb-onda-38-2-37-disponibilidade-composta-suspensao",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0169-rb-onda-38-2-36-c16-aviso-operacional-pdf",
+  "intent": {
+    "objective": "Tornar a disponibilidade operacional mais legivel quando a empresa esta suspensa e tambem possui OS aberta ou Pre-OS pendente na mesma atividade, sem alterar regra de rodizio.",
+    "non_goals": [
+      "Nao alterar expiracao, recusa, emissao de Pre-OS ou avancar fila",
+      "Nao alterar telas .frm ou .frx",
+      "Nao alterar importador, Auto_Open, ThisWorkbook ou Mod_Types",
+      "Nao rodar VCR neste microdelta",
+      "Nao tornar empresa suspensa disponivel automaticamente"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0170-rb-onda-38-2-37-disponibilidade-composta-suspensao.json",
+      ".hbn/hearbacks/0170-rb-onda-38-2-37-disponibilidade-composta-suspensao-confirmed.json",
+      ".hbn/hearbacks/0170-rb-onda-38-2-37-disponibilidade-composta-suspensao-confirmed.md",
+      ".hbn/results/0170-exec-onda-38-2-37-disponibilidade-composta-suspensao.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/03_ondas/onda_38_2_37_disponibilidade_composta_suspensao/0170_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_37_disponibilidade_composta_suspensao/0170_PROCEDIMENTO_IMPORT.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "src/vba/App_Release.bas",
+      "src/vba/Rel_Rodizio_Status.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_37_DISPONIBILIDADE_COMPOSTA_SUSPENSAO.txt",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "src/vba/*.frm",
+      "src/vba/*.frx",
+      "local-ai/vba_import/002-formularios/**",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "Auditoria adversarial apontou que uma empresa suspensa pode ocultar, na coluna de disponibilidade, a existencia de OS aberta ou Pre-OS pendente na mesma atividade.",
+    "RRS_DisponibilidadeOperacionalEmpresa avalia STATUS_EMP_SUSPENSA antes de TemOSAbertaNaAtividade e TemPreOSPendenteNaAtividade.",
+    "A melhoria deve ser informativa: a suspensao permanece como bloqueio principal, mas a ocupacao da atividade passa a aparecer como complemento."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Extrair helper de ocupacao por atividade em Rel_Rodizio_Status.",
+      "Compor disponibilidade suspensa com sufixo de ocupacao quando houver OS aberta ou Pre-OS pendente.",
+      "Atualizar teste V2 estatico da suite RelatoriosSuspensoesStrikesReset para cobrir o contrato composto.",
+      "Atualizar catalogo/roteiro, docs humanas, changelog e manifesto V3 delta.",
+      "Registrar ERP 0170 e atualizar relay."
+    ]
+  },
+  "invariants_preserved": [
+    "Empresa suspensa continua indisponivel para rodizio.",
+    "Pre-OS pendente e OS em execucao continuam apenas diagnosticos de ocupacao nesta onda.",
+    "A melhoria afeta textos de relatorio/aviso, nao a fila."
+  ],
+  "risks": [
+    {
+      "risk": "Texto composto ficar longo em colunas estreitas de relatorio.",
+      "mitigation": "Usar formato curto com ponto e virgula e exigir revisao visual no gate humano.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Teste estatico nao simular dados reais com suspensao e OS aberta simultaneas.",
+      "mitigation": "Cobrir tokens estruturais da composicao e manter verificacao visual/operacional no workbook.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Operador interpretar sufixo como liberacao operacional.",
+      "mitigation": "Documentar que a suspensao continua sendo o bloqueio principal e o sufixo apenas revela ocupacao adicional.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Fonte e espelho VBA sincronizados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0170-exec-onda-38-2-37-disponibilidade-composta-suspensao.json"
+      },
+      {
+        "gate": "Importador V3 delta 0170",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0170-exec-onda-38-2-37-disponibilidade-composta-suspensao.json"
+      },
+      {
+        "gate": "Compile VBE limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0170-exec-onda-38-2-37-disponibilidade-composta-suspensao.json"
+      },
+      {
+        "gate": "TV2_RunRelatoriosSuspensoesStrikesReset cobre disponibilidade composta",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0170-exec-onda-38-2-37-disponibilidade-composta-suspensao.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se import V3 falhar, restaurar backup indicado pelo Importador.",
+      "Se compile falhar, nao salvar o workbook e restaurar backup V3.",
+      "Se TV2 falhar, anexar CSV e nao rodar VCR.",
+      "Se o texto composto causar confusao operacional, abrir fix1 para ajustar literal/documentacao mantendo a mesma regra."
+    ],
+    "anchor_to_restore": "10c1750 onda 0169 C16 aviso operacional"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-08T23:48:06-03:00",
+  "confirmed_at": "2026-06-08T23:48:06-03:00",
+  "hearback_summary": "Mauricio aprovou a serie de correcoes ate 0171; 0170 e a microcorrecao de disponibilidade composta sob suspensao."
+}

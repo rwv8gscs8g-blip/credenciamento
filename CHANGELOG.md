@@ -7,6 +7,19 @@ tratam apenas da linha pública oficial.
 
 ### Adicionado
 
+- **Onda 38.2.37 — disponibilidade composta sob suspensao** — melhora a
+  leitura operacional quando uma empresa suspensa tambem possui OS aberta ou
+  Pre-OS pendente na mesma atividade. A suspensao continua sendo o bloqueio
+  principal, mas a disponibilidade passa a exibir o complemento no formato
+  `SUSPENSA ATE dd/mm/aaaa; OS EM EXECUCAO` ou `...; PRE-OS PENDENTE`.
+  Adiciona o cenario V2 `RELSSR_12_DISPONIBILIDADE_COMPOSTA_SUSPENSAO`,
+  atualizando `TV2_RunRelatoriosSuspensoesStrikesReset` para
+  `OK=12 | FALHA=0 | MANUAL=0`. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_37_DISPONIBILIDADE_COMPOSTA_SUSPENSAO.txt`.
+  Gate esperado: import `M=4 | F=0 | err=0 | skip=0`, compile limpo e TV2
+  dirigido verde. Sem formulario, sem `.frx`, sem motor de rodizio e sem VCR
+  neste microdelta.
+
 - **Onda 38.2.36 — aviso operacional C16 legivel nos impressos** — reaplica em
   runtime o alinhamento do range `C16:N16` nos impressos de Pre-OS, OS e
   avaliacao, mantendo o texto do aviso operacional e neutralizando alinhamento

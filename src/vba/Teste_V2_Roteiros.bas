@@ -1918,7 +1918,7 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
 
     On Error GoTo falha
 
-    TV2_InitExecucao suite, visual, 11
+    TV2_InitExecucao suite, visual, 12
     repoRoot = TV2_UI_RepoRoot()
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_01_HELPER_RESUMO_STRIKES", repoRoot, _
@@ -2021,6 +2021,16 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
         "Aviso operacional em C16 neutraliza alinhamento distribuido herdado do template", _
         "Range C16:N16 recebe alinhamento esquerdo, vertical central e sem wrap antes do ShrinkToFit", _
         "Evita caracteres artificialmente espacado nos PDFs de Pre-OS, OS e avaliacao"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_12_DISPONIBILIDADE_COMPOSTA_SUSPENSAO", repoRoot, _
+        "Rel_Rodizio_Status", "Rel_Rodizio_Status.bas", _
+        "Private Function RRS_OcupacaoAtividadeTexto|Private Function RRS_ComporDisponibilidadeSuspensa|" & _
+        "TemOSAbertaNaAtividade|TemPreOSPendenteNaAtividade|" & _
+        "RRS_ComporDisponibilidadeSuspensa = dispBase & ""; "" & ocupacaoAtividade|" & _
+        "RRS_DisponibilidadeOperacionalEmpresa = RRS_ComporDisponibilidadeSuspensa(dispBase, ocupacaoAtividade)", _
+        "Disponibilidade de empresa suspensa mostra ocupacao adicional da atividade", _
+        "Suspensao continua bloqueio principal, mas OS aberta ou Pre-OS pendente deixam de ficar ocultas", _
+        "Evita confusao operacional em relatorios e avisos impressos"
 
     TV2_FinalizarExecucao suite, silencioso
     Exit Sub

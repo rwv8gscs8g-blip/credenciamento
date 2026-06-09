@@ -1,0 +1,122 @@
+{
+  "result_id": "0170-exec-onda-38-2-37-disponibilidade-composta-suspensao",
+  "execution_id": "0170-exec-onda-38-2-37-disponibilidade-composta-suspensao",
+  "readback_id": "0170-rb-onda-38-2-37-disponibilidade-composta-suspensao",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "pacote_disponibilidade_composta_suspensao_pronto",
+  "human_status": "pending_import_compile_tv2",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "10c1750",
+  "build_label": "10c1750+ONDA38.2.37-DISPONIBILIDADE-COMPOSTA",
+  "action": "Disponibilidade operacional de empresa suspensa passa a mostrar ocupacao adicional na atividade quando houver OS aberta ou Pre-OS pendente.",
+  "summary": "Rel_Rodizio_Status agora usa RRS_OcupacaoAtividadeTexto e RRS_ComporDisponibilidadeSuspensa. Empresa suspensa continua bloqueada pela suspensao, mas a disponibilidade pode sair como SUSPENSA ATE dd/mm/aaaa; OS EM EXECUCAO ou SUSPENSA ATE dd/mm/aaaa; PRE-OS PENDENTE. A suite TV2_RunRelatoriosSuspensoesStrikesReset passou para 12 cenarios com RELSSR_12_DISPONIBILIDADE_COMPOSTA_SUSPENSAO.",
+  "classification": {
+    "defect_type": "operational_message_legibility",
+    "production_code_change_required": true,
+    "business_rule_engine_changed": false,
+    "queue_or_expiration_changed": false,
+    "form_or_frx_changed": false,
+    "test_change_required": true,
+    "rationale": "A melhoria e informativa: nao altera aptidao para rodizio, apenas evita ocultar ocupacao quando a suspensao ja aparecia."
+  },
+  "human_gate_expected": {
+    "precondition": "Se a 0169 ainda nao foi importada no workbook, importar primeiro ONDA38_2_36_C16_AVISO_OPERACIONAL_PDF.",
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_37_DISPONIBILIDADE_COMPOSTA_SUSPENSAO\", \"10c1750+ONDA38.2.37-DISPONIBILIDADE-COMPOSTA\"",
+    "import_result": "M=4 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunRelatoriosSuspensoesStrikesReset",
+    "tv2_directed_result": "OK=12 | FALHA=0 | MANUAL=0",
+    "human_review": "Conferir que relatorios/avisos com empresa suspensa e ocupada mostram suspensao + OS EM EXECUCAO ou PRE-OS PENDENTE.",
+    "vcr": "Nao rodar neste microdelta; reservar para checkpoint forte 0171."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_37_DISPONIBILIDADE_COMPOSTA_SUSPENSAO.txt",
+    "manifest_bytes": 2690,
+    "manifest_sha256": "6e5e73b10377615443ee7dd09c32efd6d2dde42b28b321d42574aa2fc4de6f1a",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_37_DISPONIBILIDADE_COMPOSTA_SUSPENSAO\", \"10c1750+ONDA38.2.37-DISPONIBILIDADE-COMPOSTA\"",
+    "expected_import": {
+      "modules": 4,
+      "forms": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24458,
+        "sha256": "6d108d2b3eba207d53c386410794c737375b0b08f247fb1e2361345cea23fddf"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+        "bytes": 23191,
+        "sha256": "8b8e83b838e21b40d4dba0aacdcdf0493c564520d293a1cdb56389de672f315c"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 235276,
+        "sha256": "a859b48cabbaf9da182a2b074bc67b60b7219ec7a3cb28652c528b3e2077a26d"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 364599,
+        "sha256": "c1a2a8c79fa740643cc063ce2f806b62fdfb840b28828455d263449584421ce3"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0170-rb-onda-38-2-37-disponibilidade-composta-suspensao.json",
+    ".hbn/hearbacks/0170-rb-onda-38-2-37-disponibilidade-composta-suspensao-confirmed.json",
+    ".hbn/hearbacks/0170-rb-onda-38-2-37-disponibilidade-composta-suspensao-confirmed.md",
+    ".hbn/results/0170-exec-onda-38-2-37-disponibilidade-composta-suspensao.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/03_ondas/onda_38_2_37_disponibilidade_composta_suspensao/0170_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_37_disponibilidade_composta_suspensao/0170_PROCEDIMENTO_IMPORT.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "src/vba/App_Release.bas",
+    "src/vba/Rel_Rodizio_Status.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_37_DISPONIBILIDADE_COMPOSTA_SUSPENSAO.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0170",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0170-rb-onda-38-2-37-disponibilidade-composta-suspensao.json retornou OK."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only App_Release.bas --only Rel_Rodizio_Status.bas --only Teste_V2_Engine.bas --only Teste_V2_Roteiros.bas retornou in_sync para 4 arquivos e OK em G7/G8."
+    },
+    {
+      "gate": "Hashes do manifesto",
+      "status": "pass_local",
+      "evidence": "wc -c e shasum -a 256 conferidos para manifesto e quatro modulos importaveis."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunRelatoriosSuspensoesStrikesReset no workbook",
+    "VCR"
+  ],
+  "rollback_plan": [
+    "Se import V3 falhar, restaurar backup indicado pelo Importador.",
+    "Se compile falhar, nao salvar workbook e restaurar backup V3.",
+    "Se TV2 falhar, anexar CSV de falhas e nao rodar VCR.",
+    "Se a composicao textual causar confusao, abrir fix1 para ajustar literal/documentacao sem alterar motor de rodizio."
+  ],
+  "updated_at": "2026-06-08T23:48:06-03:00"
+}
