@@ -7,6 +7,22 @@ tratam apenas da linha pública oficial.
 
 ### Adicionado
 
+- **Onda 38.2.34 — Pre-OS vencidas: relatorio informativo com teste de
+  impressao sem expiracao automatica** — documenta que Relatorios > Pre-OS
+  Vencidas apenas lista/imprime Pre-OS `AGUARDANDO_ACEITE` vencidas. A
+  expiracao, recusa e avanco de fila continuam dependendo de acao manual do
+  operador. Adiciona o cenario V2
+  `REL_TELA_11_PREOS_VENCIDAS_IMPRESSAO_SEM_EXPIRAR`, atualizando
+  `TV2_RunTelaRelatorios` para `OK=11 | FALHA=0 | MANUAL=0`. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO.txt`.
+  Gate esperado: import `M=3 | F=0 | err=0 | skip=0`, compile limpo e
+  `TV2_RunTelaRelatorios` com `OK=11 | FALHA=0 | MANUAL=0`. Sem designer,
+  sem `.frx`, sem VCR neste microdelta e sem tocar `Mod_Types.bas`,
+  `Importador_V3.bas`, `Auto_Open.bas` ou `ThisWorkbook`.
+  Gate observado: import `M=3 | F=0 | err=0 | skip=0`, compile limpo e
+  `TV2_20260608_161110` com `OK=11 | FALHA=0 | MANUAL=0`; PDFs 072-078
+  revisados como evidencia visual enviada pelo operador.
+
 - **Onda 38.2.33 — Disponibilidade operacional em mensagens, relatorios e
   impressos** — normaliza a leitura de empresa ativa, suspensa, com OS em
   execucao ou com Pre-OS pendente. Relatorios substituem a leitura antiga de

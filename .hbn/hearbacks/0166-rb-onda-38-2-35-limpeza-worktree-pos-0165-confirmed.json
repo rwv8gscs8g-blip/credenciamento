@@ -1,0 +1,7 @@
+{
+  "readback_id": "0166-rb-onda-38-2-35-limpeza-worktree-pos-0165",
+  "status": "confirmed",
+  "confirmed_by": "mauricio",
+  "confirmed_at": "2026-06-08T22:35:00-03:00",
+  "summary": "Aprovada a limpeza do worktree sujo por commit local da entrega 0165 validada, sem reset, revert, stash ou push."
+}

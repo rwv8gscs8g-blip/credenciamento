@@ -1,0 +1,132 @@
+{
+  "readback_id": "0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0164-rb-onda-38-2-33-disponibilidade-operacional-relatorios",
+  "intent": {
+    "objective": "Fechar a leitura operacional do relatorio de Pre-OS vencidas e reforcar teste V2 dirigido para seu comportamento de impressao sem expirar automaticamente a Pre-OS.",
+    "non_goals": [
+      "Nao automatizar expiracao de Pre-OS apenas ao gerar relatorio",
+      "Nao alterar a regra de rodizio",
+      "Nao alterar o comportamento destrutivo de RecusarPreOS ou ExpirarPreOS",
+      "Nao tocar em Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao editar .frx de UserForms nesta onda",
+      "Nao rodar VCR neste microdelta"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao.json",
+      ".hbn/hearbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao-confirmed.json",
+      ".hbn/hearbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao-confirmed.md",
+      ".hbn/results/0165-exec-onda-38-2-34-preos-vencidas-relatorio-impressao.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_34_preos_vencidas_relatorio_impressao/0165_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_34_preos_vencidas_relatorio_impressao/0165_PROCEDIMENTO_IMPORT.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "src/vba/App_Release.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "src/vba/*.frx",
+      "local-ai/vba_import/002-formularios/*.frx",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "O relatorio de Pre-OS vencidas em Menu_Principal.PRE_OS_Vencidas_Click apenas lista Pre-OS AGUARDANDO_ACEITE vencidas e imprime a aba temporaria RELATORIO.",
+    "A expiracao com punicao e avanco de fila existe em Svc_PreOS.ExpirarPreOS e tambem no botao BT_PREOS_EXPIRAR, mas nao e chamada pelo relatorio.",
+    "O comportamento correto e: relatorio informa pendencias; operador decide expirar manualmente; depois emite nova Pre-OS se quiser novo rodizio.",
+    "A cobertura atual valida colunas/status do relatorio, mas ainda nao explicita que gerar/imprimir o relatorio nao deve executar ExpirarPreOS."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Adicionar assert V2 em TV2_RunTelaRelatorios para provar contrato de impressao do relatorio de Pre-OS vencidas.",
+      "Registrar no catalogo/roteiro V2 que o relatorio e informativo e nao expira Pre-OS automaticamente.",
+      "Documentar no manual tela a tela o fluxo relatorio -> expirar manualmente -> emitir nova Pre-OS.",
+      "Gerar pacote V3 de teste/documentacao com build novo."
+    ]
+  },
+  "invariants_preserved": [
+    "Pre-OS vencida permanece AGUARDANDO_ACEITE ate acao explicita de expirar ou rejeitar.",
+    "ExpirarPreOS continua avancando fila antes de gravar PRE_OS como EXPIRADA.",
+    "O relatorio continua limpando a aba RELATORIO apos imprimir ou falhar.",
+    "A validacao de impressao fica em teste dirigido; VCR fica para checkpoint forte."
+  ],
+  "risks": [
+    {
+      "risk": "Usuario interpretar o relatorio como acao automatica de expiracao.",
+      "mitigation": "Documentar explicitamente e validar por teste que o relatorio nao chama ExpirarPreOS.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Teste apenas estrutural nao substitui impressao humana.",
+      "mitigation": "Validar tokens de PrintOut/PrintArea/limpeza e manter gate humano de impressao quando houver alteracao visual.",
+      "severity": "low"
+    },
+    {
+      "risk": "Ajuste no catalogo V2 pode alterar contagem esperada da suite TELA_RELATORIOS.",
+      "mitigation": "Atualizar TV2_InitExecucao, catalogo, roteiro e procedimento de import com a nova contagem esperada.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0165 confirmado antes de codigo",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0165-exec-onda-38-2-34-preos-vencidas-relatorio-impressao.json"
+      },
+      {
+        "gate": "Fonte e espelho VBA sincronizados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0165-exec-onda-38-2-34-preos-vencidas-relatorio-impressao.json"
+      },
+      {
+        "gate": "TV2_RunTelaRelatorios cobre contrato de Pre-OS vencidas",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0165-exec-onda-38-2-34-preos-vencidas-relatorio-impressao.json"
+      },
+      {
+        "gate": "Importador V3 do delta 0165",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0165-exec-onda-38-2-34-preos-vencidas-relatorio-impressao.json"
+      },
+      {
+        "gate": "Compile VBE limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": ".hbn/results/0165-exec-onda-38-2-34-preos-vencidas-relatorio-impressao.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+      "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+      "Se TV2_RunTelaRelatorios falhar, anexar CSV de falhas e nao rodar VCR."
+    ],
+    "anchor_to_restore": "b33ec4e checkpoint 0153-0164 aprovado"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-08T15:41:21-03:00",
+  "confirmed_at": "2026-06-08T15:41:21-03:00",
+  "hearback_summary": "Mauricio aprovou o readback proposto para reforcar o teste e a documentacao do relatorio de Pre-OS vencidas, mantendo expiracao manual e sem VCR neste microdelta."
+}

@@ -1,0 +1,139 @@
+{
+  "readback_id": "0166-rb-onda-38-2-35-limpeza-worktree-pos-0165",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao",
+  "intent": {
+    "objective": "Limpar o worktree sujo apos a onda 0165 validada, consolidando em commit local apenas os arquivos ja aprovados e auditados.",
+    "non_goals": [
+      "Nao alterar codigo funcional novo",
+      "Nao executar reset, checkout destrutivo, stash ou revert",
+      "Nao remover arquivos da entrega 0165",
+      "Nao fazer push para o remoto",
+      "Nao iniciar nova bateria tela a tela",
+      "Nao rodar VCR neste microdelta"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0166-rb-onda-38-2-35-limpeza-worktree-pos-0165.json",
+      ".hbn/hearbacks/0166-rb-onda-38-2-35-limpeza-worktree-pos-0165-confirmed.json",
+      ".hbn/hearbacks/0166-rb-onda-38-2-35-limpeza-worktree-pos-0165-confirmed.md",
+      ".hbn/results/0166-exec-onda-38-2-35-limpeza-worktree-pos-0165.json",
+      ".hbn/readbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao.json",
+      ".hbn/hearbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao-confirmed.json",
+      ".hbn/hearbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao-confirmed.md",
+      ".hbn/results/0165-exec-onda-38-2-34-preos-vencidas-relatorio-impressao.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "auditoria/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_34_preos_vencidas_relatorio_impressao/0165_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_34_preos_vencidas_relatorio_impressao/0165_PROCEDIMENTO_IMPORT.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "src/vba/App_Release.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Punicoes_Dias.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO.txt",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/ABU-Teste_V2_Punicoes_Dias.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook*",
+      "src/vba/*.frx",
+      "local-ai/vba_import/002-formularios/*.frx",
+      "backups/**",
+      "qualquer arquivo fora do diff sujo observado antes deste readback"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento.",
+    "git status mostra a branch codex/v12-0-0206-planejamento ahead 1 por causa do checkpoint b33ec4e.",
+    "O worktree sujo atual corresponde a artefatos da onda 0165 validada: codigo V2, espelho importavel, HBN, docs e auditoria.",
+    "O manifesto local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO.txt esta ignorado por .gitignore:45 e precisa de git add -f se for versionado no commit.",
+    "O pre-commit Glasswing G7 encontrou divergencia mecanica em AAX-App_Release.bas e ABU-Teste_V2_Punicoes_Dias.bas; a limpeza deve sincronizar fonte/espelho sem alterar regra de negocio.",
+    "A sincronizacao de Teste_V2_Punicoes_Dias.bas alterou apenas EOF/linhas finais, sem mudanca de codigo executavel."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Criar hearback 0166 confirmado com o texto da aprovacao humana.",
+      "Revalidar JSON HBN, readback 0166, diff textual e sincronizacao src/vba <-> local-ai/vba_import.",
+      "Sincronizar mecanicamente fonte/espelho VBA exigidos pelo Glasswing G7, incluindo AAX-App_Release.bas e Teste_V2_Punicoes_Dias.bas/ABU-Teste_V2_Punicoes_Dias.bas.",
+      "Stagiar explicitamente apenas os arquivos em scope.files_allowed, usando git add -f para arquivos sob local-ai quando necessario.",
+      "Criar commit local de limpeza/consolidacao da onda 0165.",
+      "Registrar ERP 0166 com hash do commit e status final do worktree."
+    ]
+  },
+  "invariants_preserved": [
+    "Nao ha alteracao adicional de comportamento VBA alem da entrega 0165 ja validada.",
+    "Nenhum arquivo proibido sera tocado.",
+    "Nao sera usado reset/revert/stash para limpar o worktree.",
+    "A branch pode continuar ahead do remoto; limpeza aqui significa worktree local sem modificacoes pendentes."
+  ],
+  "risks": [
+    {
+      "risk": "Incluir arquivo fora do escopo por git add amplo.",
+      "mitigation": "Usar lista explicita de arquivos permitidos e conferir git status antes do commit.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Manifesto ignorado ficar fora do commit e quebrar a rastreabilidade do pacote 0165.",
+      "mitigation": "Usar git add -f no manifesto e confirmar sua presenca no staged diff.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Pre-commit HBN bloquear o commit por hearback ausente ou escopo incompleto.",
+      "mitigation": "Aguardar hearback 0166 confirmado e validar readback contra schema antes de commitar.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0166 confirmado antes do commit",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0166-exec-onda-38-2-35-limpeza-worktree-pos-0165.json"
+      },
+      {
+        "gate": "Escopo do staged diff contem apenas arquivos permitidos",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0166-exec-onda-38-2-35-limpeza-worktree-pos-0165.json"
+      },
+      {
+        "gate": "Commit local criado",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0166-exec-onda-38-2-35-limpeza-worktree-pos-0165.json"
+      },
+      {
+        "gate": "Worktree limpo apos commit",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0166-exec-onda-38-2-35-limpeza-worktree-pos-0165.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se validacao de escopo falhar, nao commitar e relatar os arquivos divergentes.",
+      "Se pre-commit falhar, nao usar bypass sem novo hearback humano.",
+      "Se o commit falhar por permissao de .git, repetir somente o mesmo git commit com escalacao aprovada, sem alterar escopo.",
+      "Se surgir arquivo sujo fora do escopo, parar e pedir decisao humana."
+    ],
+    "anchor_to_restore": "b33ec4e checkpoint 0153-0164 aprovado"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-08T22:28:18-03:00",
+  "confirmed_at": "2026-06-08T22:35:00-03:00",
+  "hearback_summary": "Mauricio aprovou a limpeza do worktree sujo por commit local da entrega 0165 validada, sem reset, revert, stash ou push."
+}

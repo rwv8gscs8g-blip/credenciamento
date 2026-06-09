@@ -125,6 +125,7 @@ versao-sistema: V12.0.0206
 | 38.2.31 | [03_ondas/onda_38_2_31_relatorios_tela_a_tela/](03_ondas/onda_38_2_31_relatorios_tela_a_tela/) | Relatorios tela a tela: status da empresa, suspensao e formatacao |
 | 38.2.32 | [03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/](03_ondas/onda_38_2_32_relatorios_suspensoes_strikes_reset/) | Relatorios: suspensoes, strikes, avisos impressos e reset documentado |
 | 38.2.33 | [03_ondas/onda_38_2_33_disponibilidade_operacional_relatorios/](03_ondas/onda_38_2_33_disponibilidade_operacional_relatorios/) | Relatorios: disponibilidade operacional, Pre-OS pendente e resumo padronizado |
+| 38.2.34 | [03_ondas/onda_38_2_34_preos_vencidas_relatorio_impressao/](03_ondas/onda_38_2_34_preos_vencidas_relatorio_impressao/) | Pre-OS vencidas: relatorio informativo sem expiracao automatica |
 
 ## 04_evidencias/ — CSVs e manifestos hashados
 

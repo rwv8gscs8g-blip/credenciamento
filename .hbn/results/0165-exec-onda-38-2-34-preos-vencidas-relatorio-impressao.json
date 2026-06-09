@@ -1,0 +1,180 @@
+{
+  "result_id": "0165-exec-onda-38-2-34-preos-vencidas-relatorio-impressao",
+  "execution_id": "0165-exec-onda-38-2-34-preos-vencidas-relatorio-impressao",
+  "readback_id": "0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao",
+  "data": "2026-06-08",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "preos_vencidas_relatorio_impressao_validado",
+  "human_status": "confirmed_import_compile_tv2",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "b33ec4e",
+  "build_label": "b33ec4e+ONDA38.2.34-PREOS-VENCIDAS-RELATORIO",
+  "input_observed": {
+    "checkpoint_0153_0164": "Commit b33ec4e consolidou as ondas 0153-0164 aprovadas pelo operador.",
+    "previous_gate": "0164 importou, compilou, passou TV2 dirigido e VCR aprovado conforme relato humano.",
+    "manual_question": "Relatorio de Pre-OS vencidas deve expirar automaticamente ou apenas informar pendencias vencidas?",
+    "code_reading": "Menu_Principal.PRE_OS_Vencidas_Click lista Pre-OS AGUARDANDO_ACEITE vencidas, imprime RELATORIO e nao chama ExpirarPreOS, RecusarPreOS ou AvancarFila.",
+    "human_gate_0165": "Operador reportou import M=3 | F=0 | err=0 | skip=0, compile limpo e TV2_20260608_161110 com OK=11 | FALHA=0 | MANUAL=0.",
+    "message_validation": "Operador confirmou visualmente que a mensagem de indisponibilidade por Pre-OS pendente foi aplicada corretamente."
+  },
+  "action": "Adicionar teste V2 e documentacao para explicitar que o relatorio de Pre-OS vencidas e informativo e nao executa expiracao automatica.",
+  "summary": "TV2_RunTelaRelatorios passou a ter 11 cenarios. O novo cenario REL_TELA_11_PREOS_VENCIDAS_IMPRESSAO_SEM_EXPIRAR valida o trecho do botao de Pre-OS vencidas: exige tokens de filtro/impressao e proibe tokens destrutivos de expiracao, recusa e avanco de fila. O manual e o guia de testes documentam o fluxo humano relatorio -> expiracao manual -> nova Pre-OS.",
+  "classification": {
+    "defect_type": "documentacao_teste_comportamento_operacional",
+    "production_code_change_required": false,
+    "business_rule_engine_changed": false,
+    "design_change_required": false,
+    "frx_change_required": false,
+    "test_change_required": true,
+    "rationale": "O comportamento de producao ja estava correto; a lacuna era falta de contrato V2 explicito e documentacao humana."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO\", \"b33ec4e+ONDA38.2.34-PREOS-VENCIDAS-RELATORIO\"",
+    "import_result": "M=3 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunTelaRelatorios",
+    "tv2_directed_result": "OK=11 | FALHA=0 | MANUAL=0",
+    "vcr": "Nao rodar neste microdelta; reservar para checkpoint forte posterior."
+  },
+  "human_gate_observed": {
+    "import_result": "M=3 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject reportado como limpo pelo operador",
+    "tv2_directed_execution": "TV2_20260608_161110",
+    "tv2_directed_macro": "TV2_RunTelaRelatorios",
+    "tv2_directed_result": "OK=11 | FALHA=0 | MANUAL=0",
+    "vcr": "Nao executado neste microdelta",
+    "printed_reports_reviewed": [
+      {
+        "path": "/Users/macbookpro/Downloads/072.pdf",
+        "summary": "Entidades cadastradas impresso em 08/06/2026 16:12."
+      },
+      {
+        "path": "/Users/macbookpro/Downloads/073.pdf",
+        "summary": "Empresas cadastradas com STATUS EMPRESA, SUSPENSA ATE, STRIKES e RESUMO OPERACIONAL."
+      },
+      {
+        "path": "/Users/macbookpro/Downloads/074.pdf",
+        "summary": "Empresas credenciadas com STATUS EMPRESA, DISPONIBILIDADE ATUAL e RESUMO OPERACIONAL."
+      },
+      {
+        "path": "/Users/macbookpro/Downloads/075.pdf",
+        "summary": "Pre Solicitação de Serviço 001 com Status da empresa nesta data e disponibilidade PRE-OS PENDENTE."
+      },
+      {
+        "path": "/Users/macbookpro/Downloads/076.pdf",
+        "summary": "Solicitação de Serviço 001 com Status da empresa nesta data e disponibilidade OS EM EXECUCAO."
+      },
+      {
+        "path": "/Users/macbookpro/Downloads/077.pdf",
+        "summary": "Avaliação de Serviço com Status da empresa nesta data anexado nas observações e disponibilidade DISPONIVEL."
+      },
+      {
+        "path": "/Users/macbookpro/Downloads/078.pdf",
+        "summary": "Pre Solicitação de Serviço 002 com Status da empresa nesta data e disponibilidade PRE-OS PENDENTE."
+      }
+    ]
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO.txt",
+    "manifest_bytes": 2207,
+    "manifest_sha256": "adfac686d8adb5c487c71c376338f6e1a15e614f35eede0c0b17fb0f89860908",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO\", \"b33ec4e+ONDA38.2.34-PREOS-VENCIDAS-RELATORIO\"",
+    "expected_import": {
+      "modules": 3,
+      "forms": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24276,
+        "sha256": "b796cab9a9d5d4b4cf15e59e485ee9eb10abe2424afb62d6dba317bad93a1ba3"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 233613,
+        "sha256": "8a57d1214e1892b5f537ad5a96c01334be84948026db5da4f9e6ebbb27d7630a"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 363186,
+        "sha256": "460a1392cba5ada4077133c70ad568333384e90a95286d44ca93167e9a9767cd"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao.json",
+    ".hbn/hearbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao-confirmed.json",
+    ".hbn/hearbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao-confirmed.md",
+    ".hbn/results/0165-exec-onda-38-2-34-preos-vencidas-relatorio-impressao.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "auditoria/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_34_preos_vencidas_relatorio_impressao/0165_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_34_preos_vencidas_relatorio_impressao/0165_PROCEDIMENTO_IMPORT.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "src/vba/App_Release.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "python3 local-ai/scripts/publicar_vba_import_v2.py check --only App_Release.bas --only Teste_V2_Engine.bas --only Teste_V2_Roteiros.bas retornou in_sync para 3 arquivos e OK em G7/G8."
+    },
+    {
+      "gate": "HBN readback",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao.json retornou OK."
+    },
+    {
+      "gate": "JSON HBN",
+      "status": "pass_local",
+      "evidence": "python3 -m json.tool validou readback, hearback e ERP."
+    },
+    {
+      "gate": "Diff textual",
+      "status": "pass_local",
+      "evidence": "git diff --check nos arquivos da onda retornou sem saida."
+    },
+    {
+      "gate": "Raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; assert-canonical-root e forbid-tmp-worktree retornaram OK."
+    },
+    {
+      "gate": "Import/compile/TV2 humano",
+      "status": "pass_human",
+      "evidence": "Operador reportou Importador V3 M=3 | F=0 | err=0 | skip=0, compile limpo e TV2_20260608_161110 com OK=11 | FALHA=0 | MANUAL=0."
+    },
+    {
+      "gate": "PDFs enviados pelo operador",
+      "status": "pass_review",
+      "evidence": "pdftotext -layout confirmou status/disponibilidade nos PDFs 072-078 e mensagem operacional aplicada nos impressos."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunTelaRelatorios no workbook",
+    "VCR"
+  ],
+  "rollback_plan": [
+    "Se o import V3 falhar, restaurar pelo backup V3 indicado pelo Importador.",
+    "Se compile falhar, nao salvar o workbook e restaurar o backup V3.",
+    "Se TV2_RunTelaRelatorios falhar, anexar CSV de falhas e nao executar VCR.",
+    "Se a contagem esperada de TELA_RELATORIOS divergir, abrir fix1 test-only sem alterar producao."
+  ],
+  "updated_at": "2026-06-08T16:20:00-03:00"
+}

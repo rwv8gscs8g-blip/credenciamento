@@ -1792,7 +1792,7 @@ Public Sub TV2_RunTelaRelatorios(Optional ByVal visual As Boolean = False, Optio
 
     On Error GoTo falha
 
-    TV2_InitExecucao suite, visual, 10
+    TV2_InitExecucao suite, visual, 11
     repoRoot = TV2_UI_RepoRoot()
 
     TV2_EST_LogComponenteContemTokens suite, "REL_TELA_01_HELPERS_STATUS_HUMANO", repoRoot, _
@@ -1883,6 +1883,18 @@ Public Sub TV2_RunTelaRelatorios(Optional ByVal visual As Boolean = False, Optio
         "Relatorio tecnico de status do rodizio por servico preserva formatacao e retorno", _
         "Saida consolidada por servico lista suspensas, proximo retorno e alerta formatado", _
         "Complementa os relatorios humanos com diagnostico operacional por servico"
+
+    TV2_EST_LogTrechoContrato suite, "REL_TELA_11_PREOS_VENCIDAS_IMPRESSAO_SEM_EXPIRAR", repoRoot, _
+        "Menu_Principal", "Menu_Principal.frm", _
+        "Private Sub PRE_OS_Vencidas_Click()", "Private Sub Rel_EmpXServ_Click()", _
+        "Call ClassificaDataPreOS|statusPre <> ""AGUARDANDO_ACEITE""|" & _
+        "If CDate(dtLimite) >= Date Then GoTo ProximoPre|" & _
+        "wsRel.PageSetup.PrintArea = wsRel.Range(""A1:M"" & (linhaRel - 1)).Address|" & _
+        "wsRel.Range(""A1:M"" & (linhaRel - 1)).PrintOut|Call ClassificaPreOS", _
+        "ExpirarPreOS(|RecusarPreOS(|AvancarFila(", _
+        "Relatorio de Pre-OS vencidas imprime pendencias sem expirar automaticamente", _
+        "Trecho do botao filtra AGUARDANDO_ACEITE vencida, configura impressao e nao chama mutacoes destrutivas", _
+        "Operador consulta/imprime o relatorio e decide manualmente expirar antes de emitir nova Pre-OS"
 
     TV2_FinalizarExecucao suite, silencioso
     Exit Sub
@@ -3305,6 +3317,69 @@ Private Sub TV2_EST_LogComponenteNaoContemTokens( _
     TV2_LogAssert suite, cenarioId, "AUTO", _
                   objetivo, esperado, _
                   IIf(ok, "OK; ORIGEM=" & origem, "ORIGEM=" & origem & "; PRESENTES=" & presentes), _
+                  significado, ok
+End Sub
+
+Private Sub TV2_EST_LogTrechoContrato( _
+    ByVal suite As String, _
+    ByVal cenarioId As String, _
+    ByVal repoRoot As String, _
+    ByVal componenteNome As String, _
+    ByVal arquivo As String, _
+    ByVal inicioToken As String, _
+    ByVal fimToken As String, _
+    ByVal tokensObrigatoriosPipe As String, _
+    ByVal tokensProibidosPipe As String, _
+    ByVal objetivo As String, _
+    ByVal esperado As String, _
+    ByVal significado As String _
+)
+    Dim codigo As String
+    Dim origem As String
+    Dim trecho As String
+    Dim posInicio As Long
+    Dim posFim As Long
+    Dim tokens() As String
+    Dim i As Long
+    Dim token As String
+    Dim faltantes As String
+    Dim presentes As String
+    Dim ok As Boolean
+
+    codigo = TV2_EST_LerCodigoComponenteOuArquivo(repoRoot, componenteNome, arquivo, origem)
+    posInicio = InStr(1, codigo, inicioToken, vbTextCompare)
+    If posInicio > 0 Then
+        posFim = InStr(posInicio + Len(inicioToken), codigo, fimToken, vbTextCompare)
+        If posFim <= 0 Then posFim = Len(codigo) + 1
+        trecho = Mid$(codigo, posInicio, posFim - posInicio)
+    End If
+
+    tokens = Split(tokensObrigatoriosPipe, "|")
+    For i = LBound(tokens) To UBound(tokens)
+        token = Trim$(tokens(i))
+        If token <> "" Then
+            If InStr(1, trecho, token, vbTextCompare) = 0 Then
+                faltantes = faltantes & token & ";"
+            End If
+        End If
+    Next i
+
+    tokens = Split(tokensProibidosPipe, "|")
+    For i = LBound(tokens) To UBound(tokens)
+        token = Trim$(tokens(i))
+        If token <> "" Then
+            If InStr(1, trecho, token, vbTextCompare) > 0 Then
+                presentes = presentes & token & ";"
+            End If
+        End If
+    Next i
+
+    ok = (origem <> "AUSENTE" And posInicio > 0 And faltantes = "" And presentes = "")
+    TV2_LogAssert suite, cenarioId, "AUTO", _
+                  objetivo, esperado, _
+                  IIf(ok, "OK; ORIGEM=" & origem, _
+                      "ORIGEM=" & origem & "; INICIO=" & CStr(posInicio) & _
+                      "; FALTANTES=" & faltantes & "; PROIBIDOS=" & presentes), _
                   significado, ok
 End Sub
 

@@ -168,6 +168,8 @@ A suite cobre:
   empresa;
 - Pre-OS Vencidas com status, datas de suspensao, disponibilidade e strikes por
   empresa;
+- contrato de Pre-OS Vencidas como relatorio informativo: imprime pendencias
+  vencidas sem chamar expiracao, recusa ou avanco de fila;
 - limpeza da aba temporaria `RELATORIO` e da area de impressao em caminhos de
   sucesso, falta de dados e erro;
 - diagnostico de Status do Rodizio por Servico com empresas suspensas e proximo
@@ -177,7 +179,7 @@ Resultado esperado apos import/compile:
 
 ```text
 TV2_RunTelaRelatorios
-OK=10 | FALHA=0 | MANUAL=0
+OK=11 | FALHA=0 | MANUAL=0
 ```
 
 Quando houver falha, anexar o CSV de falhas e nao rodar VCR nesse microdelta.

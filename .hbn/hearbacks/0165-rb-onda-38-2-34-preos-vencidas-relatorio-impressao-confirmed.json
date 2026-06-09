@@ -1,0 +1,7 @@
+{
+  "readback_id": "0165-rb-onda-38-2-34-preos-vencidas-relatorio-impressao",
+  "status": "confirmed",
+  "confirmed_by": "mauricio",
+  "confirmed_at": "2026-06-08T15:41:21-03:00",
+  "summary": "Aprovado o readback proposto para teste e documentacao do relatorio de Pre-OS vencidas, sem expiracao automatica e sem VCR neste microdelta."
+}

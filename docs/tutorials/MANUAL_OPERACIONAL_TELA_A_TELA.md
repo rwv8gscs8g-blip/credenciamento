@@ -245,6 +245,25 @@ Nos documentos impressos de Pre-OS, OS e avaliacao, o sistema tambem deve
 incluir `Status da empresa nesta data: ...`, com status, disponibilidade,
 eventual suspensao e strikes por nota baixa e por recusa/prazo.
 
+### Relatorio de Pre-OS Vencidas
+
+O relatorio de Pre-OS Vencidas e uma consulta operacional. Ele identifica
+Pre-OS com status `AGUARDANDO_ACEITE` cujo prazo ja venceu e imprime a lista
+para analise humana. Gerar ou imprimir esse relatorio nao expira a Pre-OS, nao
+recusa a demanda e nao avanca a fila do rodizio.
+
+O fluxo correto e:
+
+1. Abrir Relatorios > Pre-OS Vencidas.
+2. Conferir ou imprimir as pendencias vencidas.
+3. Voltar para a tela de indicacao/Pre-OS.
+4. Selecionar a Pre-OS vencida e executar a acao manual de expirar, quando
+   essa for a decisao administrativa.
+5. Emitir nova Pre-OS se a demanda ainda deve ser atendida por outro prestador.
+
+Esse comportamento preserva auditoria: o relatorio mostra o problema, mas a
+mutacao destrutiva continua dependendo de comando explicito do operador.
+
 ### Criterios de Aprovacao da Tela
 
 A tela Relatorios esta aprovada quando:
@@ -254,6 +273,8 @@ A tela Relatorios esta aprovada quando:
   recusa/prazo, disponibilidade atual e resumo operacional;
 - Empresa Credenciada por Servico identifica o servico tratado no topo;
 - Entidades, Empresas, OS e Pre-OS usam formatacao tabular consistente;
+- Pre-OS Vencidas imprime pendencias vencidas sem expirar automaticamente,
+  recusar ou avancar fila;
 - a aba temporaria `RELATORIO` e limpa apos impressao, falta de dados ou erro;
 - `TV2_RunTelaRelatorios` retorna sem falhas;
 - `TV2_RunRelatoriosSuspensoesStrikesReset` retorna sem falhas;

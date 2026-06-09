@@ -1,0 +1,45 @@
+# Manifesto V3 DELTA ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO - V12.0.0206 Onda 38.2.34 / Readback 0165
+# Tema: Pre-OS vencidas como relatorio informativo, sem expiracao automatica.
+#
+# Contexto:
+#   - Onda 38.2.33 foi importada, compilada, passou TV2 dirigido e VCR aprovado.
+#   - Operador confirmou que a Pre-OS pendente era o motivo correto de indisponibilidade.
+#   - Restava documentar e testar que o relatorio de Pre-OS vencidas imprime pendencias, mas nao executa expiracao.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO", "b33ec4e+ONDA38.2.34-PREOS-VENCIDAS-RELATORIO"
+#
+# Pos-import esperado:
+#   - Importador V3: M=3 | F=0 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunTelaRelatorios
+#   - Esperado: OK=11 | FALHA=0 | MANUAL=0.
+#   - VCR reservado para checkpoint forte posterior.
+#
+# Guardas:
+#   - Sem Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.
+#   - Sem formularios e sem .frx nesta onda.
+#   - Sem alterar motor do rodizio, ExpirarPreOS, RecusarPreOS ou AvancarFila.
+#   - Sem automacao de impressao real no teste; validacao e estrutural por tokens.
+#
+# Contrato operacional documentado:
+#   - Relatorio de Pre-OS vencidas lista Pre-OS AGUARDANDO_ACEITE com prazo vencido.
+#   - Imprimir o relatorio nao expira a Pre-OS, nao recusa a demanda e nao avanca fila.
+#   - Operador deve expirar manualmente a Pre-OS se essa for a decisao administrativa.
+#   - Depois da expiracao manual, operador emite nova Pre-OS se quiser novo rodizio para a demanda.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24276
+#     sha256=b796cab9a9d5d4b4cf15e59e485ee9eb10abe2424afb62d6dba317bad93a1ba3
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=233613
+#     sha256=8a57d1214e1892b5f537ad5a96c01334be84948026db5da4f9e6ebbb27d7630a
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=363186
+#     sha256=460a1392cba5ada4077133c70ad568333384e90a95286d44ca93167e9a9767cd
+#
+# GRUPO_ONDA38_2_34_PREOS_VENCIDAS_RELATORIO_IMPRESSAO
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
