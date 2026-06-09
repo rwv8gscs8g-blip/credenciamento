@@ -1,0 +1,182 @@
+{
+  "result_id": "0172-exec-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr",
+  "execution_id": "0172-exec-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr",
+  "readback_id": "0172-rb-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr",
+  "data": "2026-06-09",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "completed_with_findings",
+  "outcome": "vcr_aprovada_c16_visual_fix1_pendente",
+  "human_status": "evidence_received_and_consolidated",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "d61a1f6",
+  "action": "Consolidar evidencias humanas de import, compile, TV2, PDFs e VCR pos-0169/0170.",
+  "summary": "Imports 0169 e 0170 passaram com M=4 F=0 err=0 skip=0; compile VBE reportado limpo; TV2_RunTelaRelatorios retornou OK=11 FALHA=0 MANUAL=0; TV2_RunRelatoriosSuspensoesStrikesReset retornou OK=12 FALHA=0 MANUAL=0; VCR VR_20260609_082732 foi APROVADA. PDFs 079-082 ainda mostram C16 pequeno demais para leitura humana, portanto 0169 exige fix1 antes do freeze.",
+  "classification": {
+    "defect_type": "visual_pdf_legibility_regression_remaining",
+    "production_code_change_required_next": true,
+    "code_changed_in_0172": false,
+    "package_changed_in_0172": false,
+    "vcr_approved": true,
+    "freeze_allowed": false,
+    "rationale": "A VCR aprovada e os testes dirigidos validam o comportamento automatizado, mas o objetivo humano da 0169 era legibilidade visual em PDF e nao foi atingido nos formularios 079-082."
+  },
+  "human_evidence": {
+    "import_0169": "M=4 | F=0 | err=0 | skip=0",
+    "compile_0169": "limpo",
+    "import_0170": "M=4 | F=0 | err=0 | skip=0",
+    "compile_0170": "limpo",
+    "tv2_tela_relatorios": "TV2_20260609_080134 | OK=11 | FALHA=0 | MANUAL=0",
+    "tv2_relatorios_suspensoes": [
+      "TV2_20260609_080247 | OK=12 | FALHA=0 | MANUAL=0",
+      "TV2_20260609_081631 | OK=12 | FALHA=0 | MANUAL=0"
+    ],
+    "vcr": {
+      "validation_id": "VR_20260609_082732",
+      "build": "10c1750+ONDA38.2.37-DISPONIBILIDADE-COMPOSTA",
+      "status": "APROVADO",
+      "syntax": "V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0+ImpressaoResidual=7/0+PunicoesDias=8/0",
+      "csv": "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseVCR_V12_0_0205_VR_20260609_082732.csv",
+      "csv_sha256": "15f4816084636ebf9afd7e000492c9c0680267775c84b79b6c32b6b62f5778b7"
+    }
+  },
+  "findings": [
+    {
+      "severity": "FORTE",
+      "title": "C16 ainda nao atende ao gate visual humano",
+      "evidence": "PDFs 079-082 tem aviso C16 pequeno demais; pdftotext ainda mostra palavras separadas como empres a, s tatus e dis ponibilidade.",
+      "impact": "Freeze V12.0.0206 deve aguardar fix1 ou decisao humana explicita aceitando a limitacao.",
+      "recommended_next_wave": "0173-fix1-c16-legibilidade-real"
+    },
+    {
+      "severity": "MARGINAL",
+      "title": "Espelho AAX-App_Release.bas fora de sync",
+      "evidence": "Worktree mostra local-ai/vba_import/001-modulo/AAX-App_Release.bas alterado em APP_BUILD_GERADO_EM e EOF, sem alteracao correspondente em src/vba/App_Release.bas.",
+      "impact": "Antes de novo pacote importavel, sanear sync fonte/espelho por readback proprio.",
+      "recommended_next_wave": "0173 ou micro-higiene pre-0173"
+    }
+  ],
+  "evidence_artifacts": [
+    {
+      "path": "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseVCR_V12_0_0205_VR_20260609_082732.csv",
+      "bytes": 1746,
+      "sha256": "15f4816084636ebf9afd7e000492c9c0680267775c84b79b6c32b6b62f5778b7",
+      "status": "APROVADO"
+    },
+    {
+      "path": "auditoria/evidencias/V12.0.0205/pdf/079_PRE_OS_PROVISORIA_001_C16_PENDENTE.pdf",
+      "bytes": 624525,
+      "sha256": "eb805cc836ec1f054479a5f7f7b49aec4e4ac9f83c579ce125004e94b6afc5b6",
+      "status": "FINDING_C16_ILEGIVEL"
+    },
+    {
+      "path": "auditoria/evidencias/V12.0.0205/pdf/080_PRE_OS_PROVISORIA_002_C16_PENDENTE.pdf",
+      "bytes": 626794,
+      "sha256": "885dd3abb0eacc7cae21b0ecad88bfbcf1395b4019055d97f5973df5e37360f5",
+      "status": "FINDING_C16_ILEGIVEL"
+    },
+    {
+      "path": "auditoria/evidencias/V12.0.0205/pdf/081_OS_001_C16_OS_EXECUCAO.pdf",
+      "bytes": 725121,
+      "sha256": "8dbef2a4d10ebda41bd2aedd26a7b6a58ec93234f02655d214321c41c9af2f5c",
+      "status": "FINDING_C16_ILEGIVEL"
+    },
+    {
+      "path": "auditoria/evidencias/V12.0.0205/pdf/082_AVALIACAO_002_C16_OBS_DISPONIVEL.pdf",
+      "bytes": 726996,
+      "sha256": "fdeadc0a5aa6a88d1abe2d43ca8aa877ff4c673365e20384dca2b2b9d2c08136",
+      "status": "FINDING_C16_ILEGIVEL_OBS_OK"
+    },
+    {
+      "path": "auditoria/evidencias/V12.0.0205/pdf/083_REL_ENTIDADES_CADASTRADAS.pdf",
+      "bytes": 395775,
+      "sha256": "d85e8593d1cb7f1c635bca206c16aef8c6297117d95a844e14cd8d910fd1c9bf",
+      "status": "OK"
+    },
+    {
+      "path": "auditoria/evidencias/V12.0.0205/pdf/084_REL_EMPRESAS_CADASTRADAS_STATUS.pdf",
+      "bytes": 401008,
+      "sha256": "0e93521413ab956c717fa3696bb1e638ff7e4b3ee27967a6995e0b7cd11e0bac",
+      "status": "OK"
+    },
+    {
+      "path": "auditoria/evidencias/V12.0.0205/pdf/085_REL_EMPRESAS_CREDENCIADAS_DISPONIBILIDADE.pdf",
+      "bytes": 405057,
+      "sha256": "be90a1bd1c4c98e550e28640e4d719684efd7d2caa13a14617fe9ae74565cbb6",
+      "status": "OK"
+    },
+    {
+      "path": "auditoria/evidencias/V12.0.0205/pdf/086_REL_OS_ABERTAS_STATUS.pdf",
+      "bytes": 402408,
+      "sha256": "3b078655354e36a28b1941aa75c695f5a03290cce127196bfdd3acdb9d212fc5",
+      "status": "OK"
+    },
+    {
+      "path": "auditoria/evidencias/V12.0.0205/pdf/087_REL_EMPRESAS_CREDENCIADAS_SERVICO_STATUS.pdf",
+      "bytes": 410472,
+      "sha256": "25be32b07b081a6ba2fc666b6d414790b0eb0f0b1e419380a56e7def4f5f7c69",
+      "status": "OK"
+    },
+    {
+      "path": "auditoria/evidencias/V12.0.0205/pdf/088_REL_OS_POR_EMPRESA_STATUS.pdf",
+      "bytes": 406803,
+      "sha256": "6d68b1eff7d8178742fbf0b01aef5cf062c2c154a4f63acde36cbf8c9872f185",
+      "status": "OK"
+    }
+  ],
+  "files_changed": [
+    ".hbn/readbacks/0172-rb-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr.json",
+    ".hbn/hearbacks/0172-rb-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr-confirmed.json",
+    ".hbn/hearbacks/0172-rb-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr-confirmed.md",
+    ".hbn/results/0172-exec-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr.json",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_39_consolidacao_gate_humano_pdfs_vcr/0172_TECNICO.md",
+    "auditoria/evidencias/V12.0.0205/INDEX.md",
+    "auditoria/evidencias/V12.0.0205/MANIFEST.md",
+    "auditoria/evidencias/V12.0.0205/MANIFESTO.csv",
+    "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseVCR_V12_0_0205_VR_20260609_082732.csv",
+    "auditoria/evidencias/V12.0.0205/pdf/079_PRE_OS_PROVISORIA_001_C16_PENDENTE.pdf",
+    "auditoria/evidencias/V12.0.0205/pdf/080_PRE_OS_PROVISORIA_002_C16_PENDENTE.pdf",
+    "auditoria/evidencias/V12.0.0205/pdf/081_OS_001_C16_OS_EXECUCAO.pdf",
+    "auditoria/evidencias/V12.0.0205/pdf/082_AVALIACAO_002_C16_OBS_DISPONIVEL.pdf",
+    "auditoria/evidencias/V12.0.0205/pdf/083_REL_ENTIDADES_CADASTRADAS.pdf",
+    "auditoria/evidencias/V12.0.0205/pdf/084_REL_EMPRESAS_CADASTRADAS_STATUS.pdf",
+    "auditoria/evidencias/V12.0.0205/pdf/085_REL_EMPRESAS_CREDENCIADAS_DISPONIBILIDADE.pdf",
+    "auditoria/evidencias/V12.0.0205/pdf/086_REL_OS_ABERTAS_STATUS.pdf",
+    "auditoria/evidencias/V12.0.0205/pdf/087_REL_EMPRESAS_CREDENCIADAS_SERVICO_STATUS.pdf",
+    "auditoria/evidencias/V12.0.0205/pdf/088_REL_OS_POR_EMPRESA_STATUS.pdf"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Readback 0172",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0172-rb-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr.json retornou OK."
+    },
+    {
+      "gate": "Hashes CSV/PDF",
+      "status": "pass_local",
+      "evidence": "shasum -a 256 e wc -c conferidos para CSV VCR e PDFs canonizados."
+    },
+    {
+      "gate": "Escopo sem VBA",
+      "status": "pass_local",
+      "evidence": "0172 nao altera src/vba nem local-ai/vba_import; AAX sujo permanece pendente e fora do staged."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2",
+    "CT_ValidarRelease_Completa",
+    "VCR"
+  ],
+  "next_recommended_wave": {
+    "id": "0173",
+    "theme": "fix1 C16 legibilidade real nos impressos",
+    "required_human_decision": "Escolher se o aviso C16 sera abreviado, quebrado em duas linhas ou migrado para campo mais amplo/Observacoes.",
+    "also_include": "Sanear divergencia AAX-App_Release.bas vs src/vba/App_Release.bas antes do novo pacote."
+  },
+  "updated_at": "2026-06-09T09:15:00-03:00"
+}

@@ -46,8 +46,29 @@ nos dois arquivos no mesmo delta documental.
 
 | Artefato | Papel | Status | Observação |
 |---|---|---|---|
+| [`csv/ValidacaoReleaseVCR_V12_0_0205_VR_20260609_082732.csv`](csv/ValidacaoReleaseVCR_V12_0_0205_VR_20260609_082732.csv) | checkpoint VCR V206 pós-0169/0170 | APROVADO | VCR aprovada; freeze V206 ainda bloqueado por finding visual C16 |
+| [`pdf/079_PRE_OS_PROVISORIA_001_C16_PENDENTE.pdf`](pdf/079_PRE_OS_PROVISORIA_001_C16_PENDENTE.pdf) | evidência visual 0169 | FINDING | C16 existe, mas fica pequeno demais para leitura humana |
+| [`pdf/080_PRE_OS_PROVISORIA_002_C16_PENDENTE.pdf`](pdf/080_PRE_OS_PROVISORIA_002_C16_PENDENTE.pdf) | evidência visual 0169 | FINDING | C16 existe, mas fica pequeno demais para leitura humana |
+| [`pdf/081_OS_001_C16_OS_EXECUCAO.pdf`](pdf/081_OS_001_C16_OS_EXECUCAO.pdf) | evidência visual 0169 | FINDING | C16 existe, mas fica pequeno demais para leitura humana |
+| [`pdf/082_AVALIACAO_002_C16_OBS_DISPONIVEL.pdf`](pdf/082_AVALIACAO_002_C16_OBS_DISPONIVEL.pdf) | evidência visual 0169 | FINDING PARCIAL | C16 ilegível; aviso em Observações fica legível |
+| [`pdf/083_REL_ENTIDADES_CADASTRADAS.pdf`](pdf/083_REL_ENTIDADES_CADASTRADAS.pdf) | evidência visual relatórios | OK | Relatório tabular sem status operacional esperado |
+| [`pdf/084_REL_EMPRESAS_CADASTRADAS_STATUS.pdf`](pdf/084_REL_EMPRESAS_CADASTRADAS_STATUS.pdf) | evidência visual relatórios | OK | Status/disponibilidade/strikes aparecem em relatório |
+| [`pdf/085_REL_EMPRESAS_CREDENCIADAS_DISPONIBILIDADE.pdf`](pdf/085_REL_EMPRESAS_CREDENCIADAS_DISPONIBILIDADE.pdf) | evidência visual relatórios | OK | Disponibilidade atual mostra suspensões, Pre-OS pendente e OS em execução |
+| [`pdf/086_REL_OS_ABERTAS_STATUS.pdf`](pdf/086_REL_OS_ABERTAS_STATUS.pdf) | evidência visual relatórios | OK | OS aberta mostra disponibilidade e resumo operacional |
+| [`pdf/087_REL_EMPRESAS_CREDENCIADAS_SERVICO_STATUS.pdf`](pdf/087_REL_EMPRESAS_CREDENCIADAS_SERVICO_STATUS.pdf) | evidência visual relatórios | OK | Relatório por serviço mostra status e disponibilidade |
+| [`pdf/088_REL_OS_POR_EMPRESA_STATUS.pdf`](pdf/088_REL_OS_POR_EMPRESA_STATUS.pdf) | evidência visual relatórios | OK | OS por empresa mostra resumo operacional |
 | [`csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260523_215637.csv`](csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260523_215637.csv) | gate final RVS pós-MICRO61 | APROVADO | Evidência final de freeze V205 |
 | [`csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv`](csv/ValidacaoReleaseRVS_V12_0_0205_VR_20260521_182816.csv) | gate funcional RVS | APROVADO | Homologação interna V205, preservada como evidência complementar |
+
+## Checkpoint V206 Pos-0169/0170
+
+| Campo | Valor |
+|---|---|
+| Validation ID | `VR_20260609_082732` |
+| Build | `10c1750+ONDA38.2.37-DISPONIBILIDADE-COMPOSTA` |
+| Resultado geral | `APROVADO` |
+| Sintaxe | `V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0+ImpressaoResidual=7/0+PunicoesDias=8/0` |
+| Veredito HBN | VCR aprovada; freeze V206 ainda bloqueado ate corrigir ou aceitar explicitamente o finding visual C16 |
 
 ## Resultado do Gate RVS
 

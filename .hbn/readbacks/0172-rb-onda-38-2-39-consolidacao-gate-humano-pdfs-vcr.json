@@ -1,0 +1,122 @@
+{
+  "readback_id": "0172-rb-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr",
+  "data": "2026-06-09",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0171-rb-onda-38-2-38-checkpoint-vcr-pos-0169-0170",
+  "intent": {
+    "objective": "Consolidar o hearback humano dos imports 0169/0170, testes dirigidos, PDFs 079-088 e VCR VR_20260609_082732, registrando achados sem alterar codigo.",
+    "non_goals": [
+      "Nao alterar codigo VBA",
+      "Nao alterar pacote importavel",
+      "Nao corrigir C16 nesta onda",
+      "Nao rodar Excel, VBE, TV2 ou VCR pelo agente",
+      "Nao declarar freeze V12.0.0206"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0172-rb-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr.json",
+      ".hbn/hearbacks/0172-rb-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr-confirmed.json",
+      ".hbn/hearbacks/0172-rb-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr-confirmed.md",
+      ".hbn/results/0172-exec-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr.json",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_39_consolidacao_gate_humano_pdfs_vcr/0172_TECNICO.md",
+      "auditoria/evidencias/V12.0.0205/INDEX.md",
+      "auditoria/evidencias/V12.0.0205/MANIFEST.md",
+      "auditoria/evidencias/V12.0.0205/MANIFESTO.csv",
+      "auditoria/evidencias/V12.0.0205/csv/ValidacaoReleaseVCR_V12_0_0205_VR_20260609_082732.csv",
+      "auditoria/evidencias/V12.0.0205/pdf/079_PRE_OS_PROVISORIA_001_C16_PENDENTE.pdf",
+      "auditoria/evidencias/V12.0.0205/pdf/080_PRE_OS_PROVISORIA_002_C16_PENDENTE.pdf",
+      "auditoria/evidencias/V12.0.0205/pdf/081_OS_001_C16_OS_EXECUCAO.pdf",
+      "auditoria/evidencias/V12.0.0205/pdf/082_AVALIACAO_002_C16_OBS_DISPONIVEL.pdf",
+      "auditoria/evidencias/V12.0.0205/pdf/083_REL_ENTIDADES_CADASTRADAS.pdf",
+      "auditoria/evidencias/V12.0.0205/pdf/084_REL_EMPRESAS_CADASTRADAS_STATUS.pdf",
+      "auditoria/evidencias/V12.0.0205/pdf/085_REL_EMPRESAS_CREDENCIADAS_DISPONIBILIDADE.pdf",
+      "auditoria/evidencias/V12.0.0205/pdf/086_REL_OS_ABERTAS_STATUS.pdf",
+      "auditoria/evidencias/V12.0.0205/pdf/087_REL_EMPRESAS_CREDENCIADAS_SERVICO_STATUS.pdf",
+      "auditoria/evidencias/V12.0.0205/pdf/088_REL_OS_POR_EMPRESA_STATUS.pdf"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "docs/**",
+      "CHANGELOG.md",
+      "backups/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "analysis_findings": [
+    "Importador V3 reportou M=4 F=0 err=0 skip=0 para 0169 e 0170; compile humano reportado como limpo.",
+    "TV2_RunTelaRelatorios retornou TV2_20260609_080134 com OK=11 FALHA=0 MANUAL=0.",
+    "TV2_RunRelatoriosSuspensoesStrikesReset retornou TV2_20260609_080247 e TV2_20260609_081631 com OK=12 FALHA=0 MANUAL=0.",
+    "VCR VR_20260609_082732 retornou APROVADO com sintaxe V1=171/0+V2_Smoke=34/0+V2_Canonica=24/0+E2E_Strikes=76/0+IntegridadeBase=4/0+Onda23Adv=27/0+ImpressaoResidual=7/0+PunicoesDias=8/0.",
+    "PDFs 079-082 ainda mostram o aviso C16 visualmente pequeno demais; a extracao textual registra espacos artificiais em palavras como empres a, s tatus e dis ponibilidade."
+  ],
+  "implementation_plan": {
+    "after_hearback": [
+      "Copiar PDFs 079-088 de Downloads para a pasta canonica de evidencias.",
+      "Registrar hashes do CSV VCR e dos PDFs.",
+      "Atualizar manifesto/indice de evidencias com o lote 0172.",
+      "Criar documento tecnico com findings, veredito e proxima onda recomendada.",
+      "Atualizar relay para marcar VCR aprovado e C16 visual como fix1 pendente."
+    ]
+  },
+  "invariants_preserved": [
+    "Nenhum arquivo VBA sera alterado nesta onda.",
+    "A VCR aprovada sera registrada como evidencia, mas nao como freeze.",
+    "A correcao de C16 exigira readback/hearback proprio antes de codigo."
+  ],
+  "risks": [
+    {
+      "risk": "Registrar VCR aprovado e ignorar falha visual de C16.",
+      "mitigation": "Classificar C16 como finding FORTE e bloquear freeze ate fix1 ou decisao humana explicita.",
+      "severity": "high"
+    },
+    {
+      "risk": "Evidencias em Downloads se perderem.",
+      "mitigation": "Copiar PDFs para auditoria/evidencias e registrar hashes.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Worktree permanecer com espelho AAX fora de sync.",
+      "mitigation": "Registrar como higiene pendente; nao incluir no commit 0172 para nao fazer mudanca VBA sem readback proprio.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0172 valido",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0172-exec-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr.json"
+      },
+      {
+        "gate": "Hashes CSV/PDF registrados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0172-exec-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr.json"
+      },
+      {
+        "gate": "C16 fix1 decidido",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "proximo hearback humano"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se algum PDF for copiado com nome errado, corrigir em fix1 documental antes de nova implementacao.",
+      "Se o achado C16 for aceito como bloqueante, abrir 0173 com readback proprio.",
+      "Se Mauricio aceitar C16 como suficiente apesar do crop, registrar decisao humana explicita antes de freeze."
+    ],
+    "anchor_to_restore": "d61a1f6 checkpoint VCR 0171"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-09T09:15:00-03:00",
+  "confirmed_at": "2026-06-09T09:15:00-03:00",
+  "hearback_summary": "Mauricio enviou evidencias humanas de import, compile, TV2, PDFs e VCR para consolidacao."
+}
