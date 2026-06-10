@@ -1,0 +1,141 @@
+{
+  "result_id": "0174-exec-onda-38-2-41-aviso-operacional-corpo-legivel",
+  "execution_id": "0174-exec-onda-38-2-41-aviso-operacional-corpo-legivel",
+  "readback_id": "0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel",
+  "data": "2026-06-09",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "pacote_aviso_operacional_corpo_legivel_pronto",
+  "human_status": "pending_import_compile_tv2_pdf_review",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "ac47059",
+  "build_label": "ac47059+ONDA38.2.41-AVISO-CORPO-LEGIVEL",
+  "action": "Mover o aviso operacional dos impressos Pre-OS/OS para B24, limpar C16 e manter avaliacao com diagnostico completo em B40 Observacoes.",
+  "summary": "Preencher passou a limpar C16, escrever o aviso operacional no corpo de Pre-OS/OS em B24 e preservar a avaliacao em Observacoes. LimparOS e LimparPREOS agora limpam B24. A suite TV2_RunRelatoriosSuspensoesStrikesReset passou para 14 cenarios, incluindo C16 limpo, aviso em corpo/observacoes e limpeza do campo B24.",
+  "classification": {
+    "defect_type": "visual_pdf_legibility_fix2",
+    "production_code_change_required": true,
+    "business_rule_engine_changed": false,
+    "queue_or_expiration_changed": false,
+    "form_or_frx_changed": false,
+    "test_change_required": true,
+    "rationale": "A mudanca e informativa e visual: nao altera aptidao de rodizio nem qualquer mutacao operacional."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_41_AVISO_OPERACIONAL_CORPO_LEGIVEL\", \"ac47059+ONDA38.2.41-AVISO-CORPO-LEGIVEL\"",
+    "import_result": "M=4 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunRelatoriosSuspensoesStrikesReset",
+    "tv2_directed_result": "OK=14 | FALHA=0 | MANUAL=0",
+    "human_review": "Gerar PDFs equivalentes aos cenarios 009-021; C16 deve estar limpo, Pre-OS/OS devem mostrar aviso em B24 e avaliacao deve mostrar diagnostico em B40 Observacoes.",
+    "vcr": "Nao rodar neste microdelta antes da revisao visual; reservar para checkpoint forte posterior antes do freeze V206."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_41_AVISO_OPERACIONAL_CORPO_LEGIVEL.txt",
+    "manifest_bytes": 2725,
+    "manifest_sha256": "d81ae9620b32f56023ed32a77b413dca52792bb2fb0d57873451bad713eaba57",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_41_AVISO_OPERACIONAL_CORPO_LEGIVEL\", \"ac47059+ONDA38.2.41-AVISO-CORPO-LEGIVEL\"",
+    "expected_import": {
+      "modules": 4,
+      "forms": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24615,
+        "sha256": "6990007388e50dbd838eb84f3b2b5239d7eaf318582796c1881997bc5dfe4d27"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "bytes": 157658,
+        "sha256": "c98de1cca131607a2e0c9ede1e6f6efc031cdfbda984fc0a3c53601a02d3f7a9"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 236582,
+        "sha256": "6f379b38195ea114e6a04a878b0e573db94acdc0667c3f9e87292b72839a2f1e"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 365865,
+        "sha256": "d909a5ef5db8e3001777df16881ef95e850072131fe49473dc89b246f4f5a2cd"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel.json",
+    ".hbn/hearbacks/0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel-confirmed.json",
+    ".hbn/hearbacks/0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel-confirmed.md",
+    ".hbn/results/0174-exec-onda-38-2-41-aviso-operacional-corpo-legivel.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "auditoria/03_ondas/onda_38_2_41_aviso_operacional_corpo_legivel/0174_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_41_aviso_operacional_corpo_legivel/0174_PROCEDIMENTO_IMPORT.md",
+    "src/vba/App_Release.bas",
+    "src/vba/Preencher.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_41_AVISO_OPERACIONAL_CORPO_LEGIVEL.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Preflight raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Readback 0174",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel.json retornou OK."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "bash local-ai/scripts/publicar_vba_import_v2.sh --check retornou 61 arquivos in_sync e OK em G7/G8."
+    },
+    {
+      "gate": "Whitespace",
+      "status": "pass_local",
+      "evidence": "git diff --check sem saida."
+    },
+    {
+      "gate": "Hashes do manifesto",
+      "status": "pass_local",
+      "evidence": "wc -c e shasum -a 256 conferidos para manifesto e quatro modulos importaveis."
+    },
+    {
+      "gate": "Tokens do fix",
+      "status": "pass_local",
+      "evidence": "rg confirmou B24, limpeza C16, B40 Observacoes e RELSSR_14."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunRelatoriosSuspensoesStrikesReset no workbook",
+    "Geracao/revisao visual dos PDFs pos-0174",
+    "VCR"
+  ],
+  "rollback_plan": [
+    "Se import V3 falhar, restaurar backup indicado pelo Importador.",
+    "Se compile falhar, nao salvar workbook e restaurar backup V3.",
+    "Se TV2 falhar, anexar CSV de falhas e nao rodar VCR.",
+    "Se B24 ainda ficar ilegivel no PDF, manter V206 sem freeze e abrir decisao humana sobre campo alternativo ou ajuste de template."
+  ],
+  "next_recommended_wave": {
+    "after_human_gate": "Continuar validacao tela a tela dos formularios.",
+    "planning_request": "Abrir auditoria cruzada de pendencias, handoffs anteriores e planejamento final de estabilidade V206/V207 antes do freeze."
+  },
+  "updated_at": "2026-06-09T23:03:00-03:00"
+}

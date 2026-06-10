@@ -1918,7 +1918,7 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
 
     On Error GoTo falha
 
-    TV2_InitExecucao suite, visual, 13
+    TV2_InitExecucao suite, visual, 14
     repoRoot = TV2_UI_RepoRoot()
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_01_HELPER_RESUMO_STRIKES", repoRoot, _
@@ -1989,13 +1989,12 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_08_IMPRESSOS_AVISO_OPERACIONAL", repoRoot, _
         "Preencher", "Preencher.bas", _
-        "Preencher_EscreverAvisoOperacional|Preencher_AvisoOperacionalCurtoAtual|Preencher_AvisoOperacionalAtual|" & _
+        "Preencher_EscreverAvisoOperacionalCorpo|Preencher_LimparAvisoOperacionalCabecalho|Preencher_AvisoOperacionalAtual|" & _
         "Preencher_AtividadeIdAtual|Preencher_EmpresaIdAtual|Preencher_ObservacaoComAviso|" & _
-        "RRS_AvisoOperacionalEmpresaCurto(empId, ""ATIVO"", Preencher_AtividadeIdAtual())|" & _
         "RRS_AvisoOperacionalEmpresa(empId, ""ATIVO"", Preencher_AtividadeIdAtual())|" & _
-        "ws.Range(""C16"").Value = aviso|ws.Range(""B40"").Value = Preencher_ObservacaoComAviso(AvOb)", _
+        "ws.Range(""B24"").Value = aviso|ws.Range(""B40"").Value = Preencher_ObservacaoComAviso(AvOb)", _
         "Pre-OS, OS e avaliacao impressas recebem aviso operacional do sistema", _
-        "Aviso informa status da empresa nesta data, disponibilidade e strikes no proprio formulario", _
+        "Aviso informa status da empresa nesta data no corpo do formulario ou nas observacoes", _
         "Facilita auditoria humana dos documentos impressos"
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_09_CONTRATO_NOVO_PERIODO_PRESERVA_SUSPENSAO", repoRoot, _
@@ -2016,13 +2015,13 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
         "Reset total zera empresas, credenciamentos, PRE_OS, CAD_OS e audit log, preservando apenas CNAE e configuracao", _
         "Documenta o uso correto para iniciar outro municipio"
 
-    TV2_EST_LogComponenteContemTokens suite, "RELSSR_11_IMPRESSOS_C16_ALINHAMENTO_LEGIVEL", repoRoot, _
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_11_IMPRESSOS_C16_LIMPO", repoRoot, _
         "Preencher", "Preencher.bas", _
-        "With ws.Range(""C16:N16"")|.HorizontalAlignment = xlLeft|" & _
+        "Private Sub Preencher_LimparAvisoOperacionalCabecalho|ws.Range(""C16"").Value = """"|With ws.Range(""C16:N16"")|" & _
         ".VerticalAlignment = xlCenter|.WrapText = False|.ShrinkToFit = False", _
-        "Aviso operacional em C16 neutraliza alinhamento distribuido herdado do template sem encolher a fonte", _
-        "Range C16:N16 recebe alinhamento esquerdo, vertical central, sem wrap e sem ShrinkToFit", _
-        "Evita caracteres artificialmente espacado nos PDFs de Pre-OS, OS e avaliacao"
+        "C16 deixa de carregar aviso operacional e fica limpo antes da impressao", _
+        "Range C16:N16 permanece neutralizado para evitar residuo de formato herdado", _
+        "Evita manter frase comprimida no cabecalho dos PDFs de Pre-OS, OS e avaliacao"
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_12_DISPONIBILIDADE_COMPOSTA_SUSPENSAO", repoRoot, _
         "Rel_Rodizio_Status", "Rel_Rodizio_Status.bas", _
@@ -2034,13 +2033,20 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
         "Suspensao continua bloqueio principal, mas OS aberta ou Pre-OS pendente deixam de ficar ocultas", _
         "Evita confusao operacional em relatorios e avisos impressos"
 
-    TV2_EST_LogComponenteContemTokens suite, "RELSSR_13_IMPRESSOS_C16_AVISO_CURTO_LEGIVEL", repoRoot, _
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_13_IMPRESSOS_AVISO_CORPO_OBSERVACOES", repoRoot, _
         "Preencher", "Preencher.bas", _
-        "Private Function Preencher_AvisoOperacionalCurtoAtual|RRS_AvisoOperacionalEmpresaCurto(empId, ""ATIVO"", Preencher_AtividadeIdAtual())|" & _
-        "Preencher_AvisoOperacionalAtual|Preencher_ObservacaoComAviso|.ShrinkToFit = False", _
-        "C16 usa resumo operacional curto e preserva diagnostico completo nas observacoes", _
-        "Aviso curto fica em C16 e o texto completo continua disponivel quando ha campo de observacao", _
-        "Evita que o PDF comprima texto longo ate ficar ilegivel"
+        "Private Sub Preencher_EscreverAvisoOperacionalCorpo|ws.Range(""B24"").Value = aviso|With ws.Range(""B24:K24"")|" & _
+        ".WrapText = True|.ShrinkToFit = False|Preencher_ObservacaoComAviso", _
+        "Pre-OS e OS usam B24 para o aviso operacional; avaliacao preserva diagnostico completo nas observacoes", _
+        "Aviso sai do cabecalho comprimido e usa campo mais largo do corpo do formulario", _
+        "Evita que o PDF comprima texto operacional ate ficar ilegivel"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_14_IMPRESSOS_LIMPEZA_AVISO_CORPO", repoRoot, _
+        "Preencher", "Preencher.bas", _
+        "Sub LimparOS|Sub LimparPREOS|ws.Range(""B24"").Value = """"|Preencher_EscreverAvisoOperacionalCorpo", _
+        "Limpeza dos templates remove aviso operacional do corpo antes de novo uso", _
+        "B24 fica coberto nas rotinas de limpeza de OS e Pre-OS", _
+        "Evita residuo visual entre impressoes sucessivas"
 
     TV2_FinalizarExecucao suite, silencioso
     Exit Sub

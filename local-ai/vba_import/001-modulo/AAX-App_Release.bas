@@ -270,9 +270,10 @@ Public Const APP_RELEASE_BUILD_KEY As String = "V12.0.0205|OFICIAL|V12.0.0206"
 ' V12.0.0206 ONDA 38.2.36 - C16 dos impressos recebe alinhamento legivel em runtime.
 ' V12.0.0206 ONDA 38.2.37 - disponibilidade composta mostra suspensao e ocupacao da atividade.
 ' V12.0.0206 ONDA 38.2.40-fix1 - C16 usa aviso curto legivel sem ShrinkToFit.
-Public Const APP_BUILD_IMPORTADO As String = "349b2b6+ONDA38.2.40-C16-AVISO-CURTO-FIX1"
+' V12.0.0206 ONDA 38.2.41 - aviso operacional sai do C16 e usa corpo/observacoes.
+Public Const APP_BUILD_IMPORTADO As String = "ac47059+ONDA38.2.41-AVISO-CORPO-LEGIVEL"
 Public Const APP_BUILD_BRANCH As String = "codex/v12-0-0206-planejamento"
-Public Const APP_BUILD_GERADO_EM As String = "2026-06-09 09:35"
+Public Const APP_BUILD_GERADO_EM As String = "2026-06-09 23:03"
 Public Const APP_RELEASE_TAG As String = "v12.0.0205"
 Public Const APP_RELEASE_EVIDENCE_DIR As String = "auditoria/evidencias/V12.0.0205"
 Public Const APP_RELEASE_TEST_KEY As String = "rvs-v205-final-2026-05-21"

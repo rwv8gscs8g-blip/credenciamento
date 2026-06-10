@@ -1,0 +1,15 @@
+{
+  "hearback_id": "0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel-confirmed",
+  "readback_id": "0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel",
+  "data": "2026-06-09",
+  "status": "confirmed",
+  "human": "Mauricio",
+  "decision": "Aprovada a implementacao da 0174 para mover o aviso operacional para campo mais legivel nos formularios impressos, mantendo gate humano de import, compile, TV2 e revisao visual antes de congelar V206.",
+  "conditions": [
+    "Nao tocar .frm/.frx, Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.",
+    "Preservar regra operacional: aviso informativo nao expira Pre-OS, nao recusa e nao avanca fila.",
+    "Produzir pacote importavel, teste correspondente e documentacao HBN.",
+    "Indicar estado de contexto e preparar handoff curto se necessario ao fechar."
+  ],
+  "confirmed_at": "2026-06-09T23:03:00-03:00"
+}

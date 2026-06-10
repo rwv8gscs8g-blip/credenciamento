@@ -1,0 +1,138 @@
+{
+  "readback_id": "0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel",
+  "data": "2026-06-09",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1",
+  "intent": {
+    "objective": "Corrigir o achado visual pos-0173 movendo o aviso operacional dos impressos de Pre-OS/OS para uma linha larga do corpo do formulario, mantendo a avaliacao com o aviso completo em Observacoes e limpando o C16 para nao competir com o cabecalho.",
+    "non_goals": [
+      "Nao alterar formularios .frm ou .frx",
+      "Nao alterar Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao alterar motor de rodizio, expiracao, recusa ou fila",
+      "Nao alterar regra de disponibilidade operacional",
+      "Nao rodar Excel, VBE, TV2 ou VCR pelo agente",
+      "Nao iniciar refatoramento V12.0.0207 nesta onda"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel.json",
+      ".hbn/hearbacks/0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel-confirmed.json",
+      ".hbn/hearbacks/0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel-confirmed.md",
+      ".hbn/results/0174-exec-onda-38-2-41-aviso-operacional-corpo-legivel.json",
+      ".hbn/messages/**",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "auditoria/03_ondas/onda_38_2_41_aviso_operacional_corpo_legivel/0174_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_41_aviso_operacional_corpo_legivel/0174_PROCEDIMENTO_IMPORT.md",
+      "src/vba/App_Release.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_41_AVISO_OPERACIONAL_CORPO_LEGIVEL.txt",
+      "local-ai/vba_import/000-MANIFESTO-IMPORTACAO.txt",
+      "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+      "local-ai/vba_import/000-BUILD-IMPORTAR-SEMPRE.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/002-formularios/**",
+      "*.frm",
+      "*.frx",
+      "backups/**",
+      "auditoria/evidencias/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decision": {
+    "human_approval": "Mauricio aprovou a implementacao da 0174 em 2026-06-09 apos validar import, compile e TV2 da 0173 e apontar que a frase continuava dificil de ler nos PDFs 009-021.",
+    "chosen_fix": "Pre-OS/OS deixam de usar C16 para o aviso; o texto vai para B24, linha larga do corpo de servicos. Avaliacao limpa C16 e preserva o aviso completo em B40 Observacoes.",
+    "handoff_position": "Codex ainda tem contexto suficiente para implementar 0174, mas deve produzir handoff curto ao fechar a onda e recomendar auditoria cruzada de pendencias antes do freeze V206."
+  },
+  "invariants_preserved": [
+    "Aviso operacional continua informativo e nao altera estado.",
+    "Expiracao de Pre-OS, recusa e avanco de fila permanecem manuais pelos fluxos existentes.",
+    "Disponibilidade composta sob suspensao permanece a mesma.",
+    "Fonte src/vba e espelho local-ai/vba_import ficam sincronizados por Glasswing G7.",
+    "Linhas em branco finais do pacote sao preservadas pelo publicador e nao tratadas como bug manual."
+  ],
+  "risks": [
+    {
+      "risk": "B24 pode ficar fora da expectativa visual em algum template se a linha nao estiver tao ampla quanto nos PDFs revisados.",
+      "mitigation": "Usar B24 apenas em Pre-OS/OS, manter C16 limpo e exigir revisao visual dos PDFs pos-import antes de liberar validacao tela a tela.",
+      "severity": "high"
+    },
+    {
+      "risk": "Aviso novo ficar residual em impressao posterior.",
+      "mitigation": "Atualizar LimparOS e LimparPREOS para limpar B24, com teste RELSSR novo.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Teste estatico passar sem garantir legibilidade final.",
+      "mitigation": "Teste cobre contrato estrutural e ERP exige gate visual humano com PDFs.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0174 valido",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0174-exec-onda-38-2-41-aviso-operacional-corpo-legivel.json"
+      },
+      {
+        "gate": "Glasswing G7/G8 sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0174-exec-onda-38-2-41-aviso-operacional-corpo-legivel.json"
+      },
+      {
+        "gate": "Importador V3 delta 0174",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "VBE Compile limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "TV2_RunRelatoriosSuspensoesStrikesReset",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "Revisao visual PDFs 009-021 equivalentes pos-0174",
+        "evidence_kind": "screenshot",
+        "evidence_required_in": "evidencias humanas pos-import"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import falhar, nao salvar o workbook e restaurar o backup informado pelo Importador V3.",
+      "Se o compile falhar, nao salvar o workbook e restaurar o backup informado pelo Importador V3.",
+      "Se o TV2 falhar, anexar o resultado/CSV da suite e nao rodar VCR.",
+      "Se B24 nao ficar legivel no PDF, manter V206 sem freeze e abrir decisao humana sobre ajuste de template ou campo alternativo."
+    ],
+    "anchor_to_restore": "ac47059 fix(vba): corrige c16 com aviso curto legivel"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-09T23:03:00-03:00",
+  "confirmed_at": "2026-06-09T23:03:00-03:00",
+  "hearback_summary": "Mauricio aprovou a 0174, pediu posicionamento sobre contexto/handoff e quer liberar os formularios para seguir a validacao tela a tela apos este fix."
+}

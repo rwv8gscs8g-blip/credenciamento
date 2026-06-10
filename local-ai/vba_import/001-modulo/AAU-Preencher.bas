@@ -1011,7 +1011,6 @@ ws.Range("C11").Value = Empresa_endereco
 ws.Range("C13").Value = Empresa_TelCel
 ws.Range("C15").Value = Empresa_email
 ws.Range("G13").Value = Empresa_CNPJ
-Call Preencher_EscreverAvisoOperacional(ws)
 ws.Range("B18").Value = Desc_Ativi
 ws.Range("F18").Value = END_ENTIDADE
 ws.Range("L18").Value = Desc_Serv
@@ -1020,6 +1019,7 @@ ws.Range("L23").Value = Util_Conversao.ToDouble(QT_ESTIMADA)
 Call AplicarFormatoQuantidade(ws.Range("L23"))
 ws.Range("M23").Value = Util_Conversao.ToDouble(CStr(Vl_estimado))
 Call AplicarFormatoMoedaBR(ws.Range("M23"))
+Call Preencher_EscreverAvisoOperacionalCorpo(ws)
 ws.Range("M31").Value = Util_Conversao.ToDouble(CStr(Vl_estimado))
 Call AplicarFormatoMoedaBR(ws.Range("M31"))
 ws.Range("B55").Value = Desc_Serv
@@ -1062,7 +1062,6 @@ ws.Range("C11").Value = Empresa_endereco
 ws.Range("C13").Value = Empresa_TelCel
 ws.Range("C15").Value = Empresa_email
 ws.Range("G13").Value = Empresa_CNPJ
-Call Preencher_EscreverAvisoOperacional(ws)
 ws.Range("B18").Value = Desc_Ativi
 ws.Range("F18").Value = END_ENTIDADE
 ws.Range("L18").Value = Desc_Serv
@@ -1071,6 +1070,7 @@ ws.Range("L23").Value = Util_Conversao.ToDouble(QT_ESTIMADA)
 Call AplicarFormatoQuantidade(ws.Range("L23"))
 ws.Range("M23").Value = Util_Conversao.ToDouble(CStr(Vl_estimado))
 Call AplicarFormatoMoedaBR(ws.Range("M23"))
+Call Preencher_EscreverAvisoOperacionalCorpo(ws)
 ws.Range("M31").Value = Util_Conversao.ToDouble(CStr(Vl_estimado))
 Call AplicarFormatoMoedaBR(ws.Range("M31"))
 ws.Range("B55").Value = Desc_Serv
@@ -1114,7 +1114,6 @@ ws.Range("C11").Value = Empresa_endereco
 ws.Range("C13").Value = Empresa_TelCel
 ws.Range("C15").Value = Empresa_email
 ws.Range("G13").Value = Empresa_CNPJ
-Call Preencher_EscreverAvisoOperacional(ws)
 ws.Range("B18").Value = Desc_Ativi
 ws.Range("F18").Value = END_ENTIDADE
 ws.Range("L18").Value = Desc_Serv
@@ -1123,6 +1122,7 @@ ws.Range("L23").Value = Util_Conversao.ToDouble(QT_ESTIMADA)
 Call AplicarFormatoQuantidade(ws.Range("L23"))
 ws.Range("M23").Value = Util_Conversao.ToDouble(CStr(Vl_estimado))
 Call AplicarFormatoMoedaBR(ws.Range("M23"))
+Call Preencher_EscreverAvisoOperacionalCorpo(ws)
 ws.Range("M31").Value = Util_Conversao.ToDouble(CStr(Vl_estimado))
 Call AplicarFormatoMoedaBR(ws.Range("M31"))
 Call Preencher_AplicarBordasCriticasPreOS(ws)
@@ -1315,6 +1315,7 @@ ws.Range("B18").Value = ""
 ws.Range("F18").Value = ""
 ws.Range("L18").Value = ""
 ws.Range("B23").Value = ""
+ws.Range("B24").Value = ""
 If Not ws.Range("L23").HasFormula Then ws.Range("L23").Value = 0
 If Not ws.Range("M23").HasFormula Then ws.Range("M23").Value = 0
 If Not ws.Range("M31").HasFormula Then ws.Range("M31").Value = 0
@@ -1345,6 +1346,7 @@ ws.Range("B18").Value = ""
 ws.Range("F18").Value = ""
 ws.Range("L18").Value = ""
 ws.Range("B23").Value = ""
+ws.Range("B24").Value = ""
 If Not ws.Range("L23").HasFormula Then ws.Range("L23").Value = 0
 If Not ws.Range("M23").HasFormula Then ws.Range("M23").Value = 0
 If Not ws.Range("M31").HasFormula Then ws.Range("M31").Value = 0
@@ -1647,14 +1649,25 @@ Private Function Preencher_TextoDemandanteImpressao() As String
     Preencher_TextoDemandanteImpressao = Trim$(Desc_entidade & " - " & cont_entidade & " - " & telcont_entidade)
 End Function
 
-Private Sub Preencher_EscreverAvisoOperacional(ByVal ws As Worksheet)
+Private Sub Preencher_EscreverAvisoOperacionalCorpo(ByVal ws As Worksheet)
     Dim aviso As String
 
-    aviso = Preencher_AvisoOperacionalCurtoAtual()
-    ws.Range("C16").Value = aviso
-    With ws.Range("C16:N16")
-        .Font.Size = 8
+    aviso = Trim$(Preencher_AvisoOperacionalAtual())
+    Call Preencher_LimparAvisoOperacionalCabecalho(ws)
+    ws.Range("B24").Value = aviso
+    With ws.Range("B24:K24")
+        .Font.Size = 9
         .Font.Italic = True
+        .HorizontalAlignment = xlLeft
+        .VerticalAlignment = xlCenter
+        .WrapText = True
+        .ShrinkToFit = False
+    End With
+End Sub
+
+Private Sub Preencher_LimparAvisoOperacionalCabecalho(ByVal ws As Worksheet)
+    ws.Range("C16").Value = ""
+    With ws.Range("C16:N16")
         .HorizontalAlignment = xlLeft
         .VerticalAlignment = xlCenter
         .WrapText = False
@@ -3561,7 +3574,7 @@ ws.Range("C11").Value = Empresa_endereco
 ws.Range("C13").Value = Empresa_TelCel
 ws.Range("C15").Value = Empresa_email
 ws.Range("G13").Value = Empresa_CNPJ
-Call Preencher_EscreverAvisoOperacional(ws)
+Call Preencher_LimparAvisoOperacionalCabecalho(ws)
 ws.Range("B18").Value = Desc_Ativi
 ws.Range("F18").Value = END_ENTIDADE
 ws.Range("L18").Value = Desc_Serv

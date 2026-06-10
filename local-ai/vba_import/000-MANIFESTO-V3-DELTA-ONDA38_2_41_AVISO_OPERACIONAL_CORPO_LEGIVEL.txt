@@ -1,0 +1,52 @@
+# Manifesto V3 DELTA ONDA38_2_41_AVISO_OPERACIONAL_CORPO_LEGIVEL - V12.0.0206 Onda 38.2.41 / Readback 0174
+# Tema: aviso operacional sai do C16 e passa para campo legivel no corpo/observacoes.
+#
+# Contexto:
+#   - A 0173 passou import, compile e TV2, mas os PDFs 009-021 ainda mostraram leitura dificil no C16.
+#   - O problema remanescente nao era mais espacamento distribuido; era campo estreito e competicao visual com o cabecalho.
+#   - A correcao desta onda move o aviso dos impressos Pre-OS/OS para B24 e deixa a avaliacao com o diagnostico em B40 Observacoes.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_41_AVISO_OPERACIONAL_CORPO_LEGIVEL", "ac47059+ONDA38.2.41-AVISO-CORPO-LEGIVEL"
+#
+# Pos-import esperado:
+#   - Importador V3: M=4 | F=0 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunRelatoriosSuspensoesStrikesReset
+#   - Esperado: OK=14 | FALHA=0 | MANUAL=0.
+#   - Gerar/revisar PDFs de Pre-OS, OS e avaliacao: C16 deve ficar limpo; Pre-OS/OS devem mostrar o aviso em B24; avaliacao deve mostrar o diagnostico em Observacoes.
+#   - VCR reservado para checkpoint forte posterior, apos a revisao visual e antes do freeze V206.
+#
+# Guardas:
+#   - Sem Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.
+#   - Sem formularios e sem .frx nesta onda.
+#   - Sem alterar motor de rodizio, expiracao, recusa ou fila.
+#   - Sem tornar empresa suspensa disponivel automaticamente.
+#   - Linhas em branco finais do pacote sao normalizadas pelo publicador; nao tratar EOF do espelho como bug manual.
+#
+# Contrato operacional documentado:
+#   - C16 deixa de carregar aviso operacional.
+#   - Pre-OS e OS usam B24 no corpo de servicos para o aviso.
+#   - Avaliacao preserva o diagnostico completo em B40 Observacoes.
+#   - LimparOS e LimparPREOS limpam B24 para evitar residuo visual.
+#   - O aviso e apenas informativo; nao expira Pre-OS, nao recusa demanda e nao avanca fila.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24615
+#     sha256=6990007388e50dbd838eb84f3b2b5239d7eaf318582796c1881997bc5dfe4d27
+#   M|001-modulo/AAU-Preencher.bas
+#     bytes=157658
+#     sha256=c98de1cca131607a2e0c9ede1e6f6efc031cdfbda984fc0a3c53601a02d3f7a9
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=236582
+#     sha256=6f379b38195ea114e6a04a878b0e573db94acdc0667c3f9e87292b72839a2f1e
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=365865
+#     sha256=d909a5ef5db8e3001777df16881ef95e850072131fe49473dc89b246f4f5a2cd
+#
+# GRUPO_ONDA38_2_41_AVISO_OPERACIONAL_CORPO_LEGIVEL
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas

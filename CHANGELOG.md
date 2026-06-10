@@ -7,6 +7,22 @@ tratam apenas da linha pública oficial.
 
 ### Adicionado
 
+- **Onda 38.2.41 — aviso operacional no corpo dos impressos** — corrige o
+  achado visual pos-0173 nos PDFs 009-021: mesmo curto, o aviso em `C16`
+  continuava competindo com o cabecalho e ficava dificil de ler. Pre-OS e OS
+  passam a escrever o aviso operacional em `B24`, dentro do corpo de servicos;
+  a avaliacao limpa `C16` e preserva o diagnostico completo em `B40`
+  Observacoes. `LimparOS` e `LimparPREOS` tambem limpam `B24`. Atualiza
+  `TV2_RunRelatoriosSuspensoesStrikesReset` para
+  `OK=14 | FALHA=0 | MANUAL=0`, com os cenarios
+  `RELSSR_11_IMPRESSOS_C16_LIMPO`,
+  `RELSSR_13_IMPRESSOS_AVISO_CORPO_OBSERVACOES` e
+  `RELSSR_14_IMPRESSOS_LIMPEZA_AVISO_CORPO`. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_41_AVISO_OPERACIONAL_CORPO_LEGIVEL.txt`.
+  Gate esperado: import `M=4 | F=0 | err=0 | skip=0`, compile limpo, TV2
+  dirigido verde e revisao visual de novos PDFs. Sem formulario, sem `.frx`,
+  sem motor de rodizio e sem VCR neste microdelta.
+
 - **Onda 38.2.40-fix1 — C16 com aviso operacional curto legivel** — corrige
   o achado visual da consolidacao 0172: o aviso completo era longo demais para
   `C16:N16` e o `ShrinkToFit` deixava os PDFs 079-082 praticamente ilegiveis.
