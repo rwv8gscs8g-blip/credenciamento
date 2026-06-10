@@ -509,9 +509,11 @@ ProximoServico:
         Call Rel_FormatarCabecalho(wsRpt, 12, 1)
         Call Rel_FormatarDados(wsRpt, 2, linhaOut - 1, 12)
         wsRpt.Columns("A:L").AutoFit
-        wsRpt.PageSetup.PrintArea = wsRpt.Range("A1:L" & CStr(linhaOut - 1)).Address
     End If
     Call Rel_ConfigurarPagina(wsRpt, "RELATORIO DE STATUS DO RODIZIO POR SERVICO", "L", False, xlLandscape)
+    If totalServicos > 0 Then
+        Call Rel_DefinirAreaImpressao(wsRpt, wsRpt.Range("A1:L" & CStr(linhaOut - 1)))
+    End If
 
     res.sucesso = True
     res.mensagem = "Relatorio " & RRS_SHEET & " gerado. SERVICOS=" & CStr(totalServicos) & "; SEM_EMPRESA_APTA=" & CStr(totalSemApta)

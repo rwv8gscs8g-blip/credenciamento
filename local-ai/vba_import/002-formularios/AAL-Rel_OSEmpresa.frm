@@ -255,7 +255,7 @@ Private Sub GerarImprimirRelatorioOSEmpresa()
     Call Rel_FormatarCabecalho(wsRel, 8, linhaHeader)
     Call Rel_FormatarDados(wsRel, linhaDados, relLinha - 1, 8)
     Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE ORDENS DE SERVICO POR EMPRESA", "H", False, xlLandscape)
-    wsRel.PageSetup.PrintArea = wsRel.Range("A1:H" & CStr(relLinha - 1)).Address
+    Call Rel_DefinirAreaImpressao(wsRel, wsRel.Range("A1:H" & CStr(relLinha - 1)))
 
     If Application.Dialogs(xlDialogPrinterSetup).Show Then
         wsRel.PrintOut

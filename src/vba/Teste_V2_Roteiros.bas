@@ -1889,7 +1889,7 @@ Public Sub TV2_RunTelaRelatorios(Optional ByVal visual As Boolean = False, Optio
         "Private Sub PRE_OS_Vencidas_Click()", "Private Sub Rel_EmpXServ_Click()", _
         "Call ClassificaDataPreOS|statusPre <> ""AGUARDANDO_ACEITE""|" & _
         "If CDate(dtLimite) >= Date Then GoTo ProximoPre|" & _
-        "wsRel.PageSetup.PrintArea = wsRel.Range(""A1:M"" & (linhaRel - 1)).Address|" & _
+        "Call Rel_DefinirAreaImpressao(wsRel, wsRel.Range(""A1:M"" & (linhaRel - 1)))|" & _
         "wsRel.Range(""A1:M"" & (linhaRel - 1)).PrintOut|Call ClassificaPreOS", _
         "ExpirarPreOS(|RecusarPreOS(|AvancarFila(", _
         "Relatorio de Pre-OS vencidas imprime pendencias sem expirar automaticamente", _
@@ -1992,7 +1992,7 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
         "Preencher_EscreverAvisoOperacionalCorpo|Preencher_LimparAvisoOperacionalCabecalho|Preencher_AvisoOperacionalAtual|" & _
         "Preencher_AtividadeIdAtual|Preencher_EmpresaIdAtual|Preencher_ObservacaoComAviso|" & _
         "RRS_AvisoOperacionalEmpresa(empId, ""ATIVO"", Preencher_AtividadeIdAtual())|" & _
-        "ws.Range(""B30"").Value = aviso|ws.Range(""B40"").Value = Preencher_ObservacaoComAviso(AvOb)", _
+        "Preencher_DividirAvisoOperacional|ws.Range(""B29"").Value = avisoLinha1|ws.Range(""B40"").Value = Preencher_ObservacaoComAviso(AvOb)", _
         "Pre-OS, OS e avaliacao impressas recebem aviso operacional do sistema", _
         "Aviso informa status da empresa nesta data no corpo do formulario ou nas observacoes", _
         "Facilita auditoria humana dos documentos impressos"
@@ -2035,33 +2035,34 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_13_IMPRESSOS_AVISO_CORPO_OBSERVACOES", repoRoot, _
         "Preencher", "Preencher.bas", _
-        "Private Sub Preencher_EscreverAvisoOperacionalCorpo|ws.Range(""B30"").Value = aviso|With ws.Range(""B30:K30"")|" & _
+        "Private Sub Preencher_EscreverAvisoOperacionalCorpo|Preencher_DividirAvisoOperacional|" & _
+        "ws.Range(""B29"").Value = avisoLinha1|ws.Range(""B30"").Value = avisoLinha2|With ws.Range(""B29:K30"")|" & _
         ".WrapText = False|.ShrinkToFit = False|Preencher_ObservacaoComAviso", _
-        "Pre-OS e OS usam B30 para o aviso operacional; avaliacao preserva diagnostico completo nas observacoes", _
-        "Aviso sai do cabecalho comprimido e usa campo mais largo do corpo do formulario", _
+        "Pre-OS e OS usam B29/B30 para o aviso operacional; avaliacao preserva diagnostico completo nas observacoes", _
+        "Aviso sai do cabecalho comprimido e usa duas linhas no corpo do formulario", _
         "Evita que o PDF comprima texto operacional ate ficar ilegivel"
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_14_IMPRESSOS_LIMPEZA_AVISO_CORPO", repoRoot, _
         "Preencher", "Preencher.bas", _
-        "Sub LimparOS|Sub LimparPREOS|ws.Range(""B24"").Value = """"|ws.Range(""B30"").Value = """"|Preencher_EscreverAvisoOperacionalCorpo", _
+        "Sub LimparOS|Sub LimparPREOS|ws.Range(""B24"").Value = """"|ws.Range(""B29"").Value = """"|ws.Range(""B30"").Value = """"|Preencher_EscreverAvisoOperacionalCorpo", _
         "Limpeza dos templates remove aviso operacional do corpo antes de novo uso", _
-        "B24 legado e B30 ativo ficam cobertos nas rotinas de limpeza de OS e Pre-OS", _
+        "B24 legado e B29/B30 ativos ficam cobertos nas rotinas de limpeza de OS e Pre-OS", _
         "Evita residuo visual entre impressoes sucessivas"
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_15_IMPRESSOS_AVISO_RODAPE_LEGIVEL", repoRoot, _
         "Preencher", "Preencher.bas", _
-        "ws.Range(""B24"").Value = """"|ws.Range(""B30"").Value = aviso|With ws.Range(""B30:K30"")|" & _
+        "ws.Range(""B24"").Value = """"|ws.Range(""B29"").Value = avisoLinha1|ws.Range(""B30"").Value = avisoLinha2|With ws.Range(""B29:K30"")|" & _
         ".Font.Size = 7|.WrapText = False|.ShrinkToFit = False", _
-        "Aviso operacional usa linha inferior do quadro de servicos com fonte reduzida", _
-        "B24 fica limpo e B30 recebe o aviso em fonte 7, sem quebrar linha nem encolher artificialmente", _
+        "Aviso operacional usa as duas linhas inferiores do quadro de servicos com fonte reduzida", _
+        "B24 fica limpo e B29/B30 recebem o aviso em fonte 7, sem quebrar linha nem encolher artificialmente", _
         "Evita que o texto encoste nas bordas ou concorra com a primeira linha de servico"
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_16_RELATORIOS_LARGURA_UTIL", repoRoot, _
         "Util_Config", "Util_Config.bas", _
-        "Public Sub Rel_ConfigurarPagina|.LeftMargin = Application.CentimetersToPoints(0.2)|" & _
-        ".RightMargin = Application.CentimetersToPoints(0.2)|.FitToPagesWide = 1|.Zoom = False", _
-        "Relatorios usam margens laterais menores para ganhar largura util de impressao", _
-        "Configuracao comum de pagina preserva FitToPage e amplia o espaco horizontal sem tocar nos formularios", _
+        "Public Sub Rel_DefinirAreaImpressao|Private Sub Rel_AjustarZoomLarguraUtil|Private Function Rel_LarguraPaginaUtil|" & _
+        "REL_ZOOM_MIN_EXPAND|REL_ZOOM_MAX_EXPAND|.Zoom = zoomAlvo|.FitToPagesWide = 1", _
+        "Relatorios usam largura util e zoom dinamico para ampliar areas estreitas de impressao", _
+        "Configuracao comum preserva FitToPage quando precisa reduzir e amplia quando sobra pagina", _
         "Reduz o vazio no lado direito da pagina e melhora a legibilidade dos relatorios com muitas colunas"
 
     TV2_FinalizarExecucao suite, silencioso

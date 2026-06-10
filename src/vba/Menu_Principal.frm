@@ -1109,7 +1109,7 @@ wsRel.Columns("A:J").AutoFit
 Call Rel_FormatarCabecalho(wsRel, 10)
 Call Rel_FormatarDados(wsRel, 2, linhaRel - 1, 10)
 Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE ENTIDADES CADASTRADAS NO CREDENCIAMENTO", "J", False)
-wsRel.PageSetup.PrintArea = wsRel.Range("A1:J" & (linhaRel - 1)).Address
+Call Rel_DefinirAreaImpressao(wsRel, wsRel.Range("A1:J" & (linhaRel - 1)))
 
 wsRel.Range("A1:J" & (linhaRel - 1)).PrintOut
 
@@ -2759,7 +2759,7 @@ wsRel.Columns("A:N").AutoFit
 Call Rel_FormatarCabecalho(wsRel, 14)
 Call Rel_FormatarDados(wsRel, 2, linhaRel - 1, 14)
 Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE EMPRESAS CADASTRADAS NO CREDENCIAMENTO", "N", False)
-wsRel.PageSetup.PrintArea = wsRel.Range("A1:N" & (linhaRel - 1)).Address
+Call Rel_DefinirAreaImpressao(wsRel, wsRel.Range("A1:N" & (linhaRel - 1)))
 wsRel.Range("A1:N" & (linhaRel - 1)).PrintOut
 wsRel.Cells.Clear
 wsRel.PageSetup.PrintArea = ""
@@ -2887,7 +2887,7 @@ wsRel.Columns("A:N").AutoFit
 Call Rel_FormatarCabecalho(wsRel, 14)
 Call Rel_FormatarDados(wsRel, 2, linhaRel - 1, 14)
 Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE EMPRESAS CREDENCIADAS", "N", False)
-wsRel.PageSetup.PrintArea = wsRel.Range("A1:N" & (linhaRel - 1)).Address
+Call Rel_DefinirAreaImpressao(wsRel, wsRel.Range("A1:N" & (linhaRel - 1)))
 
     wsRel.Range("A1:N" & (linhaRel - 1)).PrintOut
     wsRel.Cells.Clear
@@ -3001,7 +3001,7 @@ End If
     Call Rel_FormatarCabecalho(wsRel, 16)
     Call Rel_FormatarDados(wsRel, 2, linhaRel - 1, 16)
     Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE ORDENS DE SERVICO ABERTAS", "P", False)
-    wsRel.PageSetup.PrintArea = wsRel.Range("A1:P" & (linhaRel - 1)).Address
+    Call Rel_DefinirAreaImpressao(wsRel, wsRel.Range("A1:P" & (linhaRel - 1)))
 
     wsRel.Range("A1:P" & (linhaRel - 1)).PrintOut
 
@@ -3599,7 +3599,7 @@ End If
     Call Rel_FormatarCabecalho(wsRel, 13)
     Call Rel_FormatarDados(wsRel, 2, linhaRel - 1, 13)
     Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE PRE-OS VENCIDAS", "M", False)
-    wsRel.PageSetup.PrintArea = wsRel.Range("A1:M" & (linhaRel - 1)).Address
+    Call Rel_DefinirAreaImpressao(wsRel, wsRel.Range("A1:M" & (linhaRel - 1)))
 
     wsRel.Range("A1:M" & (linhaRel - 1)).PrintOut
 

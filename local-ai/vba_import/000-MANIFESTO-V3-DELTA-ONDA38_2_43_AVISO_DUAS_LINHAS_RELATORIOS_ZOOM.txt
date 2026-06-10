@@ -1,0 +1,53 @@
+# Manifesto V3 - ONDA38_2_43_AVISO_DUAS_LINHAS_RELATORIOS_ZOOM
+# Sistema de Credenciamento - V12.0.0206 em validacao
+# Build label: 8078e73+ONDA38.2.43-AVISO-2LINHAS-REL-ZOOM
+#
+# Objetivo:
+#   - Dividir o aviso operacional dos impressos Pre-OS/OS em duas linhas livres:
+#     B29:K29 para status/disponibilidade e B30:K30 para suspensao/strikes.
+#   - Limpar B24 legado e B29/B30 ativos em LimparOS e LimparPREOS para evitar
+#     residuo visual entre impressoes sucessivas.
+#   - Definir area de impressao dos relatorios por helper comum, com zoom
+#     dinamico quando a area impressa for menor que a largura util da pagina A4.
+#   - Atualizar contratos TV2 dirigidos sem aumentar a contagem da suite.
+#
+# Nao toca:
+#   - Arquivos .frx.
+#   - Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.
+#   - Motor de rodizio, expiracao, recusa, fila ou regra de disponibilidade.
+#
+# Comando esperado no VBE/Excel:
+#   ImportarPacoteV3_Delta "ONDA38_2_43_AVISO_DUAS_LINHAS_RELATORIOS_ZOOM", "8078e73+ONDA38.2.43-AVISO-2LINHAS-REL-ZOOM"
+#
+# Resultado esperado do Importador V3:
+#   modo=Estabilizado | dryRun=False | M=6 | F=3 | err=0 | skip=0
+#
+# Gate manual apos import:
+#   1. VBE > Depurar > Compilar VBAProject precisa passar limpo.
+#   2. Imediato: TV2_RunRelatoriosSuspensoesStrikesReset
+#      Esperado: OK=16 | FALHA=0 | MANUAL=0
+#   3. Gerar/revisar PDFs equivalentes a 031-038:
+#      - Pre-OS/OS: C16 limpo; B24 limpo; aviso dividido e legivel em B29:K30.
+#      - Relatorios: tabelas ocupam melhor a largura horizontal visivel.
+#   4. Nao rodar VCR neste microdelta; reservar para checkpoint forte.
+#
+# Artefatos e hashes locais:
+#   AAX-App_Release.bas        bytes=24802  sha256=693b2b132c26a55b1a7465ebcedee86fc9beaf149ce5e2a9e84a43af8dec292a
+#   AAD-Util_Config.bas        bytes=26300  sha256=b7b6d4e37df2cfa4624ad77c8b23624b8eea02ff313725bf2b763ea6927fd341
+#   AAU-Preencher.bas          bytes=158662 sha256=7efe231c8eabffabd6d0da2af154fa83d8bcb4610a0c94a7602fef95de843111
+#   ABV-Rel_Rodizio_Status.bas bytes=24384  sha256=3410877572ed8496ea2fd1a09f1972f62fffe2d72a878c33cfa648c1212bac18
+#   ABF-Teste_V2_Engine.bas    bytes=238082 sha256=6d8c72df99ff6c0ba26f80b87cbc80a0e880e837b2309cfb9013d9d591037837
+#   ABG-Teste_V2_Roteiros.bas  bytes=367439 sha256=009accdf64cbee0b0222edc5a622011dd7dc992d9977af71a1037e73b6b056d0
+#   AAM-Menu_Principal.frm     bytes=156613 sha256=0be58643711755659bb85bca8f6358cae21319e50ca6990965a15abfb97e7b9d
+#   AAK-Rel_Emp_Serv.frm       bytes=9838   sha256=9d65ac1accec9b0cf917e02d15eda54fd4c3033cac96ab2b9a67756594d883b3
+#   AAL-Rel_OSEmpresa.frm      bytes=14269  sha256=46ca0755ef6c5551515e819cf68cae76bab00f1b26a487fe93d7622a95678239
+
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/AAD-Util_Config.bas
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/ABV-Rel_Rodizio_Status.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
+F|002-formularios/AAM-Menu_Principal.frm
+F|002-formularios/AAK-Rel_Emp_Serv.frm
+F|002-formularios/AAL-Rel_OSEmpresa.frm

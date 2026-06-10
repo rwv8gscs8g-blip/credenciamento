@@ -1316,6 +1316,7 @@ ws.Range("F18").Value = ""
 ws.Range("L18").Value = ""
 ws.Range("B23").Value = ""
 ws.Range("B24").Value = ""
+ws.Range("B29").Value = ""
 ws.Range("B30").Value = ""
 If Not ws.Range("L23").HasFormula Then ws.Range("L23").Value = 0
 If Not ws.Range("M23").HasFormula Then ws.Range("M23").Value = 0
@@ -1348,6 +1349,7 @@ ws.Range("F18").Value = ""
 ws.Range("L18").Value = ""
 ws.Range("B23").Value = ""
 ws.Range("B24").Value = ""
+ws.Range("B29").Value = ""
 ws.Range("B30").Value = ""
 If Not ws.Range("L23").HasFormula Then ws.Range("L23").Value = 0
 If Not ws.Range("M23").HasFormula Then ws.Range("M23").Value = 0
@@ -1653,12 +1655,16 @@ End Function
 
 Private Sub Preencher_EscreverAvisoOperacionalCorpo(ByVal ws As Worksheet)
     Dim aviso As String
+    Dim avisoLinha1 As String
+    Dim avisoLinha2 As String
 
     aviso = Trim$(Preencher_AvisoOperacionalAtual())
     Call Preencher_LimparAvisoOperacionalCabecalho(ws)
+    Call Preencher_DividirAvisoOperacional(aviso, avisoLinha1, avisoLinha2)
     ws.Range("B24").Value = ""
-    ws.Range("B30").Value = aviso
-    With ws.Range("B30:K30")
+    ws.Range("B29").Value = avisoLinha1
+    ws.Range("B30").Value = avisoLinha2
+    With ws.Range("B29:K30")
         .Font.Size = 7
         .Font.Italic = True
         .HorizontalAlignment = xlLeft
@@ -1666,6 +1672,29 @@ Private Sub Preencher_EscreverAvisoOperacionalCorpo(ByVal ws As Worksheet)
         .WrapText = False
         .ShrinkToFit = False
     End With
+End Sub
+
+Private Sub Preencher_DividirAvisoOperacional(ByVal aviso As String, ByRef linha1 As String, ByRef linha2 As String)
+    Dim posSuspensa As Long
+    Dim prefixo As String
+
+    aviso = Trim$(aviso)
+    If aviso = "" Then
+        linha1 = ""
+        linha2 = ""
+        Exit Sub
+    End If
+
+    posSuspensa = InStr(1, aviso, "suspensa ate=", vbTextCompare)
+    If posSuspensa > 2 Then
+        prefixo = Trim$(Left$(aviso, posSuspensa - 2))
+        If Right$(prefixo, 1) <> ";" Then prefixo = prefixo & ";"
+        linha1 = prefixo
+        linha2 = Trim$(Mid$(aviso, posSuspensa))
+    Else
+        linha1 = aviso
+        linha2 = ""
+    End If
 End Sub
 
 Private Sub Preencher_LimparAvisoOperacionalCabecalho(ByVal ws As Worksheet)

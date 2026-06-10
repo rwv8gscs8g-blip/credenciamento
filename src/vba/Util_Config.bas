@@ -600,6 +600,57 @@ Public Sub Rel_ConfigurarPagina(ByVal ws As Worksheet, ByVal titulo As String, _
     End With
 End Sub
 
+Public Sub Rel_DefinirAreaImpressao(ByVal ws As Worksheet, ByVal areaImpressao As Range)
+    If ws Is Nothing Then Exit Sub
+    If areaImpressao Is Nothing Then Exit Sub
+
+    ws.PageSetup.PrintArea = areaImpressao.Address
+    Call Rel_AjustarZoomLarguraUtil(ws, areaImpressao)
+End Sub
+
+Private Sub Rel_AjustarZoomLarguraUtil(ByVal ws As Worksheet, ByVal areaImpressao As Range)
+    Const REL_ZOOM_MIN_EXPAND As Long = 105
+    Const REL_ZOOM_MAX_EXPAND As Long = 175
+    Dim larguraDisponivel As Double
+    Dim larguraArea As Double
+    Dim zoomAlvo As Long
+
+    If ws Is Nothing Then Exit Sub
+    If areaImpressao Is Nothing Then Exit Sub
+
+    larguraArea = areaImpressao.Width
+    larguraDisponivel = Rel_LarguraPaginaUtil(ws)
+    If larguraArea <= 0 Or larguraDisponivel <= 0 Then Exit Sub
+
+    zoomAlvo = CLng(Fix((larguraDisponivel / larguraArea) * 100))
+    With ws.PageSetup
+        If zoomAlvo >= REL_ZOOM_MIN_EXPAND Then
+            If zoomAlvo > REL_ZOOM_MAX_EXPAND Then zoomAlvo = REL_ZOOM_MAX_EXPAND
+            .FitToPagesWide = False
+            .FitToPagesTall = False
+            .Zoom = zoomAlvo
+        Else
+            .Zoom = False
+            .FitToPagesWide = 1
+            .FitToPagesTall = False
+        End If
+    End With
+End Sub
+
+Private Function Rel_LarguraPaginaUtil(ByVal ws As Worksheet) As Double
+    Dim larguraPapel As Double
+
+    If ws Is Nothing Then Exit Function
+
+    If ws.PageSetup.Orientation = xlLandscape Then
+        larguraPapel = Application.CentimetersToPoints(29.7)
+    Else
+        larguraPapel = Application.CentimetersToPoints(21)
+    End If
+
+    Rel_LarguraPaginaUtil = larguraPapel - ws.PageSetup.LeftMargin - ws.PageSetup.RightMargin
+End Function
+
 Public Sub Rel_FormatarCabecalho(ByVal ws As Worksheet, ByVal ultimaCol As Long, _
                                   Optional ByVal linhaHeader As Long = 1)
     ' Formata a linha de cabecalho de dados com estilo profissional:

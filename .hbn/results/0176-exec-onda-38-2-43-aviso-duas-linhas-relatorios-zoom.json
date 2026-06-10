@@ -1,0 +1,198 @@
+{
+  "result_id": "0176-exec-onda-38-2-43-aviso-duas-linhas-relatorios-zoom",
+  "execution_id": "0176-exec-onda-38-2-43-aviso-duas-linhas-relatorios-zoom",
+  "readback_id": "0176-rb-onda-38-2-43-aviso-duas-linhas-relatorios-zoom",
+  "data": "2026-06-10",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "pacote_aviso_duas_linhas_relatorios_zoom_pronto",
+  "human_status": "pending_import_compile_tv2_pdf_review",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "8078e73",
+  "build_label": "8078e73+ONDA38.2.43-AVISO-2LINHAS-REL-ZOOM",
+  "action": "Dividir o aviso operacional dos impressos Pre-OS/OS em B29/B30 e aplicar area de impressao com zoom dinamico nos relatorios.",
+  "summary": "Preencher passou a escrever o aviso operacional em duas linhas no corpo dos impressos: B29 para status/disponibilidade e B30 para suspensao/strikes. LimparOS e LimparPREOS limpam B24, B29 e B30. Util_Config recebeu Rel_DefinirAreaImpressao, que define PrintArea e ajusta zoom pela largura util A4; os relatorios de Menu_Principal, Rel_Emp_Serv, Rel_OSEmpresa e Rel_Rodizio_Status passaram a usar o helper comum. TV2_RunRelatoriosSuspensoesStrikesReset permanece com 16 cenarios, com contratos atualizados para B29/B30 e zoom dinamico.",
+  "classification": {
+    "defect_type": "visual_pdf_legibility_fix4",
+    "production_code_change_required": true,
+    "business_rule_engine_changed": false,
+    "queue_or_expiration_changed": false,
+    "form_or_frx_changed": true,
+    "form_code_changed": true,
+    "designer_or_frx_changed": false,
+    "test_change_required": true,
+    "rationale": "A mudanca e visual/informativa: nao altera aptidao de rodizio, expiracao, recusa, fila ou disponibilidade."
+  },
+  "human_gate_input": {
+    "previous_import": "0175 importou com M=5 | F=0 | err=0 | skip=0",
+    "previous_compile": "Compile limpo reportado pelo operador",
+    "previous_tv2": "TV2_20260610_002102 retornou OK=16 | FALHA=0 | MANUAL=0",
+    "visual_findings": "PDFs 031-038 mostraram aviso ainda apertado em B30 e relatorios com sobra horizontal direita."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_43_AVISO_DUAS_LINHAS_RELATORIOS_ZOOM\", \"8078e73+ONDA38.2.43-AVISO-2LINHAS-REL-ZOOM\"",
+    "import_result": "M=6 | F=3 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunRelatoriosSuspensoesStrikesReset",
+    "tv2_directed_result": "OK=16 | FALHA=0 | MANUAL=0",
+    "human_review": "Gerar PDFs equivalentes a 031-038; Pre-OS/OS devem manter C16/B24 limpos e aviso legivel em B29:K30; relatorios devem ocupar melhor a largura visivel.",
+    "vcr": "Nao rodar neste microdelta antes da revisao visual; reservar para checkpoint forte posterior antes do freeze V206."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_43_AVISO_DUAS_LINHAS_RELATORIOS_ZOOM.txt",
+    "manifest_bytes": 3027,
+    "manifest_sha256": "1c6a41350e27ade36c9861187b3fa2a3f34c63d0b38da2fa25301819508b48f5",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_43_AVISO_DUAS_LINHAS_RELATORIOS_ZOOM\", \"8078e73+ONDA38.2.43-AVISO-2LINHAS-REL-ZOOM\"",
+    "expected_import": {
+      "modules": 6,
+      "forms": 3,
+      "errors": 0,
+      "skips": 0
+    },
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24802,
+        "sha256": "693b2b132c26a55b1a7465ebcedee86fc9beaf149ce5e2a9e84a43af8dec292a"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAD-Util_Config.bas",
+        "bytes": 26300,
+        "sha256": "b7b6d4e37df2cfa4624ad77c8b23624b8eea02ff313725bf2b763ea6927fd341"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "bytes": 158662,
+        "sha256": "7efe231c8eabffabd6d0da2af154fa83d8bcb4610a0c94a7602fef95de843111"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+        "bytes": 24384,
+        "sha256": "3410877572ed8496ea2fd1a09f1972f62fffe2d72a878c33cfa648c1212bac18"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 238082,
+        "sha256": "6d8c72df99ff6c0ba26f80b87cbc80a0e880e837b2309cfb9013d9d591037837"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 367439,
+        "sha256": "009accdf64cbee0b0222edc5a622011dd7dc992d9977af71a1037e73b6b056d0"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+        "bytes": 156613,
+        "sha256": "0be58643711755659bb85bca8f6358cae21319e50ca6990965a15abfb97e7b9d"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+        "bytes": 9838,
+        "sha256": "9d65ac1accec9b0cf917e02d15eda54fd4c3033cac96ab2b9a67756594d883b3"
+      },
+      {
+        "path": "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+        "bytes": 14269,
+        "sha256": "46ca0755ef6c5551515e819cf68cae76bab00f1b26a487fe93d7622a95678239"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0176-rb-onda-38-2-43-aviso-duas-linhas-relatorios-zoom.json",
+    ".hbn/hearbacks/0176-rb-onda-38-2-43-aviso-duas-linhas-relatorios-zoom-confirmed.json",
+    ".hbn/hearbacks/0176-rb-onda-38-2-43-aviso-duas-linhas-relatorios-zoom-confirmed.md",
+    ".hbn/results/0176-exec-onda-38-2-43-aviso-duas-linhas-relatorios-zoom.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "auditoria/03_ondas/onda_38_2_43_aviso_duas_linhas_relatorios_zoom/0176_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_43_aviso_duas_linhas_relatorios_zoom/0176_PROCEDIMENTO_IMPORT.md",
+    "src/vba/App_Release.bas",
+    "src/vba/Util_Config.bas",
+    "src/vba/Preencher.bas",
+    "src/vba/Rel_Rodizio_Status.bas",
+    "src/vba/Menu_Principal.frm",
+    "src/vba/Rel_Emp_Serv.frm",
+    "src/vba/Rel_OSEmpresa.frm",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_43_AVISO_DUAS_LINHAS_RELATORIOS_ZOOM.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAD-Util_Config.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+    "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+    "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+    "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Preflight raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Readback 0176",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0176-rb-onda-38-2-43-aviso-duas-linhas-relatorios-zoom.json retornou OK."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "bash local-ai/scripts/publicar_vba_import_v2.sh --check retornou 61 arquivos in_sync e OK em G7/G8."
+    },
+    {
+      "gate": "Whitespace",
+      "status": "pass_local",
+      "evidence": "git diff --check sem saida."
+    },
+    {
+      "gate": "HBN guards",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/hbn-guards-runner.sh passou antes do staging, com readback 0176 confirmado."
+    },
+    {
+      "gate": "Tokens do fix",
+      "status": "pass_local",
+      "evidence": "rg confirmou B29/B30, Preencher_DividirAvisoOperacional, Rel_DefinirAreaImpressao e contratos RELSSR_13-16/REL_TELA_11 atualizados."
+    },
+    {
+      "gate": "Hashes do manifesto",
+      "status": "pass_local",
+      "evidence": "wc -c e shasum -a 256 conferidos para manifesto, seis modulos e tres formularios importaveis."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunRelatoriosSuspensoesStrikesReset no workbook",
+    "Geracao/revisao visual dos PDFs pos-0176",
+    "VCR"
+  ],
+  "rollback_plan": [
+    "Se import V3 falhar, restaurar backup indicado pelo Importador.",
+    "Se compile falhar, nao salvar workbook e restaurar backup V3.",
+    "Se TV2 falhar, anexar CSV de falhas e nao rodar VCR.",
+    "Se B29/B30 ou os relatorios ainda ficarem ilegiveis no PDF, manter V206 sem freeze e abrir nova onda visual com decisao de template/colunas."
+  ],
+  "next_recommended_wave": {
+    "after_human_gate": "Continuar validacao tela a tela dos formularios se PDFs ficarem legiveis.",
+    "doc_only": "Abrir onda fast_track para auditoria cruzada de pendencias, handoffs anteriores, plano de estabilidade V206 e backlog/refatoramento V207.",
+    "cross_audit_outputs_proposed": [
+      ".hbn/proposals/0034-antigravity-gemini35-auditoria-pendencias-freeze-v206-v207.md",
+      ".hbn/proposals/0035-claude-opus48-auditoria-pendencias-freeze-v206-v207.md",
+      ".hbn/proposals/0036-codex-consolidacao-pendencias-freeze-v206-v207.md",
+      ".hbn/protocol-evolutions/20260610-passagem-bastao-documentacao-v206-v207.md"
+    ]
+  },
+  "updated_at": "2026-06-10T00:45:00-03:00"
+}

@@ -1,0 +1,159 @@
+{
+  "readback_id": "0176-rb-onda-38-2-43-aviso-duas-linhas-relatorios-zoom",
+  "data": "2026-06-10",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0175-rb-onda-38-2-42-aviso-rodape-relatorios-largos",
+  "intent": {
+    "objective": "Corrigir o achado visual pos-0175 dividindo o aviso operacional de Pre-OS/OS em duas linhas B29/B30 e fazendo os relatorios usarem zoom dinamico conforme a largura real da area de impressao.",
+    "non_goals": [
+      "Nao alterar Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao alterar arquivos .frx",
+      "Nao alterar motor de rodizio, expiracao, recusa ou fila",
+      "Nao alterar regra de disponibilidade operacional ou suspensao",
+      "Nao rodar Excel, VBE, TV2 ou VCR pelo agente",
+      "Nao iniciar refatoramento V12.0.0207 nesta onda",
+      "Nao consolidar auditoria cruzada de protocolo useHBN nesta onda"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0176-rb-onda-38-2-43-aviso-duas-linhas-relatorios-zoom.json",
+      ".hbn/hearbacks/0176-rb-onda-38-2-43-aviso-duas-linhas-relatorios-zoom-confirmed.json",
+      ".hbn/hearbacks/0176-rb-onda-38-2-43-aviso-duas-linhas-relatorios-zoom-confirmed.md",
+      ".hbn/results/0176-exec-onda-38-2-43-aviso-duas-linhas-relatorios-zoom.json",
+      ".hbn/messages/**",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "auditoria/03_ondas/onda_38_2_43_aviso_duas_linhas_relatorios_zoom/0176_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_43_aviso_duas_linhas_relatorios_zoom/0176_PROCEDIMENTO_IMPORT.md",
+      "src/vba/App_Release.bas",
+      "src/vba/Util_Config.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Rel_Rodizio_Status.bas",
+      "src/vba/Menu_Principal.frm",
+      "src/vba/Rel_Emp_Serv.frm",
+      "src/vba/Rel_OSEmpresa.frm",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAD-Util_Config.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.frm",
+      "local-ai/vba_import/002-formularios/AAM-Menu_Principal.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.frm",
+      "local-ai/vba_import/002-formularios/AAK-Rel_Emp_Serv.code-only.txt",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.frm",
+      "local-ai/vba_import/002-formularios/AAL-Rel_OSEmpresa.code-only.txt",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_43_AVISO_DUAS_LINHAS_RELATORIOS_ZOOM.txt",
+      "local-ai/vba_import/000-MANIFESTO-IMPORTACAO.txt",
+      "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+      "local-ai/vba_import/000-BUILD-IMPORTAR-SEMPRE.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAZ-ThisWorkbook.bas",
+      "*.frx",
+      "backups/**",
+      "auditoria/evidencias/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decision": {
+    "human_approval": "Mauricio informou em 2026-06-10 que a 0175 importou, compilou e TV2_20260610_002102 retornou OK=16; pediu dividir o aviso entre a linha atual e a linha imediatamente superior, e fazer relatorios aproveitarem a area visivel sem tanta sobra branca.",
+    "chosen_fix": "Pre-OS/OS passam a usar B29/B30 para duas linhas de aviso. Relatorios passam a usar Rel_DefinirAreaImpressao, que calcula zoom dinamico conforme largura do PrintArea depois de Rel_ConfigurarPagina.",
+    "handoff_position": "Codex pode implementar a 0176; apos o gate visual, recomenda-se onda doc-only para auditoria cruzada de pendencias e planejamento V206/V207."
+  },
+  "invariants_preserved": [
+    "Aviso operacional continua informativo e nao altera estado.",
+    "Expiracao de Pre-OS, recusa e avanco de fila permanecem manuais pelos fluxos existentes.",
+    "Pre-OS vencidas continuam apenas consultadas/impressas pelo relatorio.",
+    "Disponibilidade composta sob suspensao permanece a mesma.",
+    "Fonte src/vba e espelho local-ai/vba_import ficam sincronizados por Glasswing G7.",
+    "Nao ha alteracao de .frx ou layout de designer; os formularios mudam apenas em codigo VBA."
+  ],
+  "risks": [
+    {
+      "risk": "Importar formularios .frm pode ampliar a superficie operacional do delta.",
+      "mitigation": "Tocar apenas codigo VBA dos formularios de relatorio, sem .frx, com manifestos e TV2 estatico cobrindo os tokens de impressao.",
+      "severity": "high"
+    },
+    {
+      "risk": "Zoom dinamico pode deixar algum relatorio largo demais em impressoras com area nao imprimivel maior.",
+      "mitigation": "Calcular zoom por largura util A4 e limitar expansao; se o relatorio ja exceder a largura, manter FitToPagesWide=1.",
+      "severity": "medium"
+    },
+    {
+      "risk": "B29 pode nao estar livre em algum template do workbook.",
+      "mitigation": "Usar apenas a linha imediatamente acima de B30, conforme evidencia visual dos PDFs, e exigir revisao visual pos-import.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Teste estatico nao prova legibilidade final do PDF.",
+      "mitigation": "TV2 cobre contrato estrutural e ERP exige gate humano por PDFs 031-038 equivalentes pos-0176.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0176 valido",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0176-exec-onda-38-2-43-aviso-duas-linhas-relatorios-zoom.json"
+      },
+      {
+        "gate": "Glasswing G7/G8 sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0176-exec-onda-38-2-43-aviso-duas-linhas-relatorios-zoom.json"
+      },
+      {
+        "gate": "Importador V3 delta 0176",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "VBE Compile limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "TV2_RunRelatoriosSuspensoesStrikesReset",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "Revisao visual PDFs equivalentes a 031-038",
+        "evidence_kind": "screenshot",
+        "evidence_required_in": "evidencias humanas pos-import"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import falhar, nao salvar o workbook e restaurar o backup informado pelo Importador V3.",
+      "Se o compile falhar, nao salvar o workbook e restaurar o backup informado pelo Importador V3.",
+      "Se o TV2 falhar, anexar o resultado/CSV da suite e nao rodar VCR.",
+      "Se B29/B30 ou relatorios ainda ficarem ilegiveis no PDF, manter V206 sem freeze e abrir nova decisao visual."
+    ],
+    "anchor_to_restore": "8078e73 fix(vba): ajusta aviso operacional e largura de relatorios"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-10T00:33:00-03:00",
+  "confirmed_at": "2026-06-10T00:33:00-03:00",
+  "hearback_summary": "Mauricio aprovou continuidade apos importar/compilar a 0175 e reportar TV2_20260610_002102 OK=16, pedindo divisao do aviso e relatorios mais legiveis."
+}

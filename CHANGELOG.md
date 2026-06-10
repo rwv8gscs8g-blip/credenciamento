@@ -7,6 +7,24 @@ tratam apenas da linha pública oficial.
 
 ### Adicionado
 
+- **Onda 38.2.43 — aviso em duas linhas e zoom dinamico nos relatorios** —
+  corrige o achado visual pos-0175 nos PDFs 031-038: o aviso operacional em
+  `B30` ficava legivel, mas ainda apertado quando a disponibilidade e os prazos
+  apareciam completos. Pre-OS e OS passam a dividir o aviso em `B29:K30`, com
+  `B29` para status/disponibilidade e `B30` para suspensao/strikes, limpando
+  `B24`, `B29` e `B30` antes de novo uso. Os relatorios passam a definir a area
+  de impressao por `Rel_DefinirAreaImpressao`, que calcula a largura util A4 e
+  aumenta o zoom quando a area impressa e menor que a pagina. Atualiza os
+  contratos `REL_TELA_11_PREOS_VENCIDAS_IMPRESSAO_SEM_EXPIRAR`,
+  `RELSSR_13_IMPRESSOS_AVISO_CORPO_OBSERVACOES`,
+  `RELSSR_14_IMPRESSOS_LIMPEZA_AVISO_CORPO`,
+  `RELSSR_15_IMPRESSOS_AVISO_RODAPE_LEGIVEL` e
+  `RELSSR_16_RELATORIOS_LARGURA_UTIL`. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_43_AVISO_DUAS_LINHAS_RELATORIOS_ZOOM.txt`.
+  Gate esperado: import `M=6 | F=3 | err=0 | skip=0`, compile limpo, TV2
+  dirigido verde e revisao visual de novos PDFs. Sem `.frx`, sem motor de
+  rodizio e sem VCR neste microdelta.
+
 - **Onda 38.2.42 — aviso em linha inferior e relatorios com maior largura util** —
   corrige o achado visual pos-0174 nos PDFs 022-030: o aviso operacional em
   `B24` ainda ficava apertado no quadro de servicos. Pre-OS e OS passam a usar

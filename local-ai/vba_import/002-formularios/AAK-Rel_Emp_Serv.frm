@@ -161,7 +161,7 @@ Private Sub SV_CR_Lista_Click()
     Call Rel_FormatarCabecalho(wsRel, 11, linhaHeader)
     Call Rel_FormatarDados(wsRel, linhaDados, linhaOut - 1, 11)
     Call Rel_ConfigurarPagina(wsRel, "RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO", "K", False, xlLandscape)
-    wsRel.PageSetup.PrintArea = wsRel.Range("A1:K" & CStr(linhaOut - 1)).Address
+    Call Rel_DefinirAreaImpressao(wsRel, wsRel.Range("A1:K" & CStr(linhaOut - 1)))
 
     If MsgBox("Relatório gerado com " & CStr(totalRegistros) & " registro(s)." & vbCrLf & _
               "Identificação sugerida: " & Rel_NomeArquivoSugerido("RELATORIO DE EMPRESAS CREDENCIADAS POR SERVICO") & vbCrLf & _

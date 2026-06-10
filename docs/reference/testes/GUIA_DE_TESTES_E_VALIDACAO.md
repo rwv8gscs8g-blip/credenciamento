@@ -206,13 +206,13 @@ A suite cobre:
   strikes e resumo operacional;
 - `Status da empresa nesta data` em impressos de Pre-OS, OS e avaliacao;
 - `C16` limpo nos impressos, evitando frase comprimida no cabecalho;
-- aviso operacional no corpo de Pre-OS/OS em `B30`, com fonte reduzida e sem
+- aviso operacional no corpo de Pre-OS/OS em `B29/B30`, com fonte reduzida e sem
   `WrapText`/`ShrinkToFit`;
 - diagnostico completo da avaliacao preservado em `B40` Observacoes;
-- limpeza de `B24` legado e `B30` ativo em `LimparOS` e `LimparPREOS` para
+- limpeza de `B24` legado e `B29/B30` ativos em `LimparOS` e `LimparPREOS` para
   evitar residuo entre impressoes sucessivas;
-- margens laterais reduzidas no helper comum dos relatorios para ampliar a
-  largura util de impressao;
+- area de impressao definida por helper comum com zoom dinamico quando sobra
+  largura util na pagina;
 - disponibilidade composta sob suspensao, mostrando `OS EM EXECUCAO` ou
   `PRE-OS PENDENTE` como complemento sem liberar a empresa para rodizio;
 - contrato de Novo Periodo: limpa `PRE_OS`/`CAD_OS`, preserva cadastros,
