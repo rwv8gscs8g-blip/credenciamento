@@ -1,0 +1,8 @@
+{
+  "readback_id": "0175-rb-onda-38-2-42-aviso-rodape-relatorios-largos",
+  "status": "confirmed",
+  "confirmed_by": "Mauricio",
+  "confirmed_at": "2026-06-09T23:35:00-03:00",
+  "summary": "Aprovada a implementacao da 0175 para mover o aviso operacional para a ultima linha livre da Pre-OS/OS e ampliar a largura util dos relatorios apos evidencias dos PDFs 022-030.",
+  "source": "chat humano em 2026-06-09: importou, compilou, TV2 OK=14; pediu ajuste visual e propostas de continuidade/handoff."
+}

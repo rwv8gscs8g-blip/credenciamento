@@ -7,6 +7,21 @@ tratam apenas da linha pública oficial.
 
 ### Adicionado
 
+- **Onda 38.2.42 — aviso em linha inferior e relatorios com maior largura util** —
+  corrige o achado visual pos-0174 nos PDFs 022-030: o aviso operacional em
+  `B24` ainda ficava apertado no quadro de servicos. Pre-OS e OS passam a usar
+  `B30:K30`, com fonte menor, sem quebra de linha e limpando tambem o antigo
+  `B24` para evitar residuo. O helper comum `Rel_ConfigurarPagina` reduz as
+  margens laterais dos relatorios para ampliar a largura util de impressao sem
+  tocar em formularios. Atualiza `TV2_RunRelatoriosSuspensoesStrikesReset` para
+  `OK=16 | FALHA=0 | MANUAL=0`, com os cenarios
+  `RELSSR_15_IMPRESSOS_AVISO_RODAPE_LEGIVEL` e
+  `RELSSR_16_RELATORIOS_LARGURA_UTIL`. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_42_AVISO_RODAPE_RELATORIOS_LARGOS.txt`.
+  Gate esperado: import `M=5 | F=0 | err=0 | skip=0`, compile limpo, TV2
+  dirigido verde e revisao visual de novos PDFs. Sem formulario, sem `.frx`,
+  sem motor de rodizio e sem VCR neste microdelta.
+
 - **Onda 38.2.41 — aviso operacional no corpo dos impressos** — corrige o
   achado visual pos-0173 nos PDFs 009-021: mesmo curto, o aviso em `C16`
   continuava competindo com o cabecalho e ficava dificil de ler. Pre-OS e OS

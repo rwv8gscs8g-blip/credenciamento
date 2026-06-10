@@ -1,0 +1,150 @@
+{
+  "readback_id": "0175-rb-onda-38-2-42-aviso-rodape-relatorios-largos",
+  "data": "2026-06-09",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0174-rb-onda-38-2-41-aviso-operacional-corpo-legivel",
+  "intent": {
+    "objective": "Corrigir o achado visual pos-0174 movendo o aviso operacional dos impressos Pre-OS/OS para a ultima linha livre acima da faixa de avaliacao obrigatoria e ampliar a largura util dos relatorios via configuracao comum de pagina.",
+    "non_goals": [
+      "Nao alterar formularios .frm ou .frx",
+      "Nao alterar Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao alterar motor de rodizio, expiracao, recusa ou fila",
+      "Nao alterar regra de disponibilidade operacional ou suspensao",
+      "Nao rodar Excel, VBE, TV2 ou VCR pelo agente",
+      "Nao iniciar refatoramento V12.0.0207 nesta onda",
+      "Nao consolidar ainda a auditoria cruzada de protocolo useHBN; isso fica para onda doc-only propria se aprovada"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0175-rb-onda-38-2-42-aviso-rodape-relatorios-largos.json",
+      ".hbn/hearbacks/0175-rb-onda-38-2-42-aviso-rodape-relatorios-largos-confirmed.json",
+      ".hbn/hearbacks/0175-rb-onda-38-2-42-aviso-rodape-relatorios-largos-confirmed.md",
+      ".hbn/results/0175-exec-onda-38-2-42-aviso-rodape-relatorios-largos.json",
+      ".hbn/messages/**",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "auditoria/03_ondas/onda_38_2_42_aviso_rodape_relatorios_largos/0175_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_42_aviso_rodape_relatorios_largos/0175_PROCEDIMENTO_IMPORT.md",
+      "src/vba/App_Release.bas",
+      "src/vba/Util_Config.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAD-Util_Config.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_42_AVISO_RODAPE_RELATORIOS_LARGOS.txt",
+      "local-ai/vba_import/000-MANIFESTO-IMPORTACAO.txt",
+      "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+      "local-ai/vba_import/000-BUILD-IMPORTAR-SEMPRE.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAZ-ThisWorkbook.bas",
+      "local-ai/vba_import/002-formularios/**",
+      "*.frm",
+      "*.frx",
+      "backups/**",
+      "auditoria/evidencias/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decision": {
+    "human_approval": "Mauricio informou import/compile/TV2 OK da 0174 em 2026-06-09 e pediu nova correcao: mover a informacao na Pre-OS para a ultima linha disponivel acima de 'A avaliacao do prestador e obrigatoria' e ampliar a area util dos relatorios.",
+    "chosen_fix": "Pre-OS/OS passam a usar B30:K30 com fonte menor para o aviso operacional; B24 fica limpo para retirar residuo visual da 0174. Rel_ConfigurarPagina reduz margens laterais e documenta o contrato de largura util comum aos relatorios.",
+    "handoff_position": "Codex ainda possui contexto operacional suficiente para fechar a 0175, mas deve gerar handoff/prompt de retomada se houver nova janela Cursor ou auditoria cruzada antes do freeze V206."
+  },
+  "invariants_preserved": [
+    "Aviso operacional continua informativo e nao altera estado.",
+    "Expiracao de Pre-OS, recusa e avanco de fila permanecem manuais pelos fluxos existentes.",
+    "Pre-OS vencidas continuam apenas consultadas/impressas pelo relatorio.",
+    "Disponibilidade composta sob suspensao permanece a mesma.",
+    "Fonte src/vba e espelho local-ai/vba_import ficam sincronizados por Glasswing G7.",
+    "Linhas em branco finais do pacote continuam preservadas como comportamento documentado, nao como bug a remover."
+  ],
+  "risks": [
+    {
+      "risk": "B30 pode nao ser exatamente a ultima linha visual livre em todas as variacoes do template salvo no workbook.",
+      "mitigation": "Aplicar a mudanca sem tocar .frm/.frx, exigir revisao visual dos PDFs pos-import e manter rollback pelo backup do Importador V3.",
+      "severity": "high"
+    },
+    {
+      "risk": "Margens laterais menores podem melhorar largura util mas nao resolver sozinhas relatorios com muitas colunas.",
+      "mitigation": "Cobrir o contrato comum por teste estatico e registrar que qualquer redistribuicao coluna-a-coluna fica para nova onda se os PDFs ainda ficarem comprimidos.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Aviso antigo em B24 pode permanecer no workbook importado de uma rodada anterior.",
+      "mitigation": "Limpar B24 e B30 em LimparOS/LimparPREOS e tambem limpar B24 antes de escrever B30.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Teste estatico nao prova legibilidade final do PDF.",
+      "mitigation": "TV2 cobre contrato estrutural e ERP exige gate humano por PDFs 022-030 equivalentes pos-0175.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0175 valido",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0175-exec-onda-38-2-42-aviso-rodape-relatorios-largos.json"
+      },
+      {
+        "gate": "Glasswing G7/G8 sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0175-exec-onda-38-2-42-aviso-rodape-relatorios-largos.json"
+      },
+      {
+        "gate": "Importador V3 delta 0175",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "VBE Compile limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "TV2_RunRelatoriosSuspensoesStrikesReset",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "Revisao visual PDFs equivalentes a 022-030",
+        "evidence_kind": "screenshot",
+        "evidence_required_in": "evidencias humanas pos-import"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import falhar, nao salvar o workbook e restaurar o backup informado pelo Importador V3.",
+      "Se o compile falhar, nao salvar o workbook e restaurar o backup informado pelo Importador V3.",
+      "Se o TV2 falhar, anexar o resultado/CSV da suite e nao rodar VCR.",
+      "Se B30 ou os relatorios ainda ficarem ilegiveis no PDF, manter V206 sem freeze e abrir nova onda visual com ajuste de template/colunas."
+    ],
+    "anchor_to_restore": "8d84a23 fix(vba): move aviso operacional para corpo dos impressos"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-09T23:35:00-03:00",
+  "confirmed_at": "2026-06-09T23:35:00-03:00",
+  "hearback_summary": "Mauricio aprovou a continuidade apos importar/compilar a 0174, reportou TV2_20260609_231627 OK=14 e pediu o fix visual dos PDFs 022-030."
+}

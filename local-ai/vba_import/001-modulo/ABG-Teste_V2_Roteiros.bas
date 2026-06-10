@@ -1918,7 +1918,7 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
 
     On Error GoTo falha
 
-    TV2_InitExecucao suite, visual, 14
+    TV2_InitExecucao suite, visual, 16
     repoRoot = TV2_UI_RepoRoot()
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_01_HELPER_RESUMO_STRIKES", repoRoot, _
@@ -1992,7 +1992,7 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
         "Preencher_EscreverAvisoOperacionalCorpo|Preencher_LimparAvisoOperacionalCabecalho|Preencher_AvisoOperacionalAtual|" & _
         "Preencher_AtividadeIdAtual|Preencher_EmpresaIdAtual|Preencher_ObservacaoComAviso|" & _
         "RRS_AvisoOperacionalEmpresa(empId, ""ATIVO"", Preencher_AtividadeIdAtual())|" & _
-        "ws.Range(""B24"").Value = aviso|ws.Range(""B40"").Value = Preencher_ObservacaoComAviso(AvOb)", _
+        "ws.Range(""B30"").Value = aviso|ws.Range(""B40"").Value = Preencher_ObservacaoComAviso(AvOb)", _
         "Pre-OS, OS e avaliacao impressas recebem aviso operacional do sistema", _
         "Aviso informa status da empresa nesta data no corpo do formulario ou nas observacoes", _
         "Facilita auditoria humana dos documentos impressos"
@@ -2035,18 +2035,34 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_13_IMPRESSOS_AVISO_CORPO_OBSERVACOES", repoRoot, _
         "Preencher", "Preencher.bas", _
-        "Private Sub Preencher_EscreverAvisoOperacionalCorpo|ws.Range(""B24"").Value = aviso|With ws.Range(""B24:K24"")|" & _
-        ".WrapText = True|.ShrinkToFit = False|Preencher_ObservacaoComAviso", _
-        "Pre-OS e OS usam B24 para o aviso operacional; avaliacao preserva diagnostico completo nas observacoes", _
+        "Private Sub Preencher_EscreverAvisoOperacionalCorpo|ws.Range(""B30"").Value = aviso|With ws.Range(""B30:K30"")|" & _
+        ".WrapText = False|.ShrinkToFit = False|Preencher_ObservacaoComAviso", _
+        "Pre-OS e OS usam B30 para o aviso operacional; avaliacao preserva diagnostico completo nas observacoes", _
         "Aviso sai do cabecalho comprimido e usa campo mais largo do corpo do formulario", _
         "Evita que o PDF comprima texto operacional ate ficar ilegivel"
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_14_IMPRESSOS_LIMPEZA_AVISO_CORPO", repoRoot, _
         "Preencher", "Preencher.bas", _
-        "Sub LimparOS|Sub LimparPREOS|ws.Range(""B24"").Value = """"|Preencher_EscreverAvisoOperacionalCorpo", _
+        "Sub LimparOS|Sub LimparPREOS|ws.Range(""B24"").Value = """"|ws.Range(""B30"").Value = """"|Preencher_EscreverAvisoOperacionalCorpo", _
         "Limpeza dos templates remove aviso operacional do corpo antes de novo uso", _
-        "B24 fica coberto nas rotinas de limpeza de OS e Pre-OS", _
+        "B24 legado e B30 ativo ficam cobertos nas rotinas de limpeza de OS e Pre-OS", _
         "Evita residuo visual entre impressoes sucessivas"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_15_IMPRESSOS_AVISO_RODAPE_LEGIVEL", repoRoot, _
+        "Preencher", "Preencher.bas", _
+        "ws.Range(""B24"").Value = """"|ws.Range(""B30"").Value = aviso|With ws.Range(""B30:K30"")|" & _
+        ".Font.Size = 7|.WrapText = False|.ShrinkToFit = False", _
+        "Aviso operacional usa linha inferior do quadro de servicos com fonte reduzida", _
+        "B24 fica limpo e B30 recebe o aviso em fonte 7, sem quebrar linha nem encolher artificialmente", _
+        "Evita que o texto encoste nas bordas ou concorra com a primeira linha de servico"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_16_RELATORIOS_LARGURA_UTIL", repoRoot, _
+        "Util_Config", "Util_Config.bas", _
+        "Public Sub Rel_ConfigurarPagina|.LeftMargin = Application.CentimetersToPoints(0.2)|" & _
+        ".RightMargin = Application.CentimetersToPoints(0.2)|.FitToPagesWide = 1|.Zoom = False", _
+        "Relatorios usam margens laterais menores para ganhar largura util de impressao", _
+        "Configuracao comum de pagina preserva FitToPage e amplia o espaco horizontal sem tocar nos formularios", _
+        "Reduz o vazio no lado direito da pagina e melhora a legibilidade dos relatorios com muitas colunas"
 
     TV2_FinalizarExecucao suite, silencioso
     Exit Sub

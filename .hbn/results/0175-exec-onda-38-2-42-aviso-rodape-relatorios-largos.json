@@ -1,0 +1,156 @@
+{
+  "result_id": "0175-exec-onda-38-2-42-aviso-rodape-relatorios-largos",
+  "execution_id": "0175-exec-onda-38-2-42-aviso-rodape-relatorios-largos",
+  "readback_id": "0175-rb-onda-38-2-42-aviso-rodape-relatorios-largos",
+  "data": "2026-06-09",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "pacote_aviso_rodape_relatorios_largos_pronto",
+  "human_status": "pending_import_compile_tv2_pdf_review",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "8d84a23",
+  "build_label": "8d84a23+ONDA38.2.42-AVISO-RODAPE-REL-LARGOS",
+  "action": "Mover o aviso operacional dos impressos Pre-OS/OS para B30:K30, limpar B24 legado e reduzir margens laterais dos relatorios via Rel_ConfigurarPagina.",
+  "summary": "Preencher passou a escrever o aviso operacional em B30:K30 com fonte 7, sem WrapText e sem ShrinkToFit; B24 e B30 sao limpos em LimparOS/LimparPREOS. Util_Config reduziu margens laterais de relatorios de 0.5 cm para 0.2 cm. TV2_RunRelatoriosSuspensoesStrikesReset passou para 16 cenarios com cobertura de B30 e largura util.",
+  "classification": {
+    "defect_type": "visual_pdf_legibility_fix3",
+    "production_code_change_required": true,
+    "business_rule_engine_changed": false,
+    "queue_or_expiration_changed": false,
+    "form_or_frx_changed": false,
+    "test_change_required": true,
+    "rationale": "A mudanca e visual/informativa: nao altera aptidao de rodizio, expiracao, recusa, fila ou disponibilidade."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_42_AVISO_RODAPE_RELATORIOS_LARGOS\", \"8d84a23+ONDA38.2.42-AVISO-RODAPE-REL-LARGOS\"",
+    "import_result": "M=5 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunRelatoriosSuspensoesStrikesReset",
+    "tv2_directed_result": "OK=16 | FALHA=0 | MANUAL=0",
+    "human_review": "Gerar PDFs equivalentes a 022-030; Pre-OS/OS devem manter C16 limpo, B24 limpo e aviso legivel em B30:K30; relatorios devem usar melhor a largura horizontal.",
+    "vcr": "Nao rodar neste microdelta antes da revisao visual; reservar para checkpoint forte posterior antes do freeze V206."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_42_AVISO_RODAPE_RELATORIOS_LARGOS.txt",
+    "manifest_bytes": 2349,
+    "manifest_sha256": "848d41986c77a5dcb6144b47ed1539f6ef3ddc9a7241cf88d37127865ecdf8de",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_42_AVISO_RODAPE_RELATORIOS_LARGOS\", \"8d84a23+ONDA38.2.42-AVISO-RODAPE-REL-LARGOS\"",
+    "expected_import": {
+      "modules": 5,
+      "forms": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24711,
+        "sha256": "2a8309cbf2c56194e32cd1f662a14da9af11dc95d98c7287e9697f85617a4591"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAD-Util_Config.bas",
+        "bytes": 24548,
+        "sha256": "f87c6aee32b963940ebbc390157295825434929c67aca1b44455379eb0299ee3",
+        "note": "Arquivo importavel sob .gitignore amplo de local-ai; deve ser staged com git add -f."
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "bytes": 157747,
+        "sha256": "952de181a626112af2904c37fc2aba74cac97764c0946dc0303a50e36a895d4d"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 238030,
+        "sha256": "01384001991e058f47757e803644c3825ced4570bd4afdcc20ab0aeed9449b8c"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 367191,
+        "sha256": "f19ff079f2949ec0603dbca422f9a62338f07cdfc2749b69fe7db877485b353a"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0175-rb-onda-38-2-42-aviso-rodape-relatorios-largos.json",
+    ".hbn/hearbacks/0175-rb-onda-38-2-42-aviso-rodape-relatorios-largos-confirmed.json",
+    ".hbn/hearbacks/0175-rb-onda-38-2-42-aviso-rodape-relatorios-largos-confirmed.md",
+    ".hbn/results/0175-exec-onda-38-2-42-aviso-rodape-relatorios-largos.json",
+    ".hbn/messages/20260609-2350-handoff-fim-sessao-codex-0175-cursor-retomada.md",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "auditoria/03_ondas/onda_38_2_42_aviso_rodape_relatorios_largos/0175_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_42_aviso_rodape_relatorios_largos/0175_PROCEDIMENTO_IMPORT.md",
+    "src/vba/App_Release.bas",
+    "src/vba/Util_Config.bas",
+    "src/vba/Preencher.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_42_AVISO_RODAPE_RELATORIOS_LARGOS.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAD-Util_Config.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Preflight raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Readback 0175",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0175-rb-onda-38-2-42-aviso-rodape-relatorios-largos.json retornou OK."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "bash local-ai/scripts/publicar_vba_import_v2.sh --check retornou 61 arquivos in_sync e OK em G7/G8."
+    },
+    {
+      "gate": "Whitespace",
+      "status": "pass_local",
+      "evidence": "git diff --check sem saida."
+    },
+    {
+      "gate": "Tokens do fix",
+      "status": "pass_local",
+      "evidence": "rg confirmou B30, fonte 7, margens 0.2 e RELSSR_15/RELSSR_16 em fonte e espelho."
+    },
+    {
+      "gate": "Hashes do manifesto",
+      "status": "pass_local",
+      "evidence": "wc -c e shasum -a 256 conferidos para manifesto e cinco modulos importaveis."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunRelatoriosSuspensoesStrikesReset no workbook",
+    "Geracao/revisao visual dos PDFs pos-0175",
+    "VCR"
+  ],
+  "rollback_plan": [
+    "Se import V3 falhar, restaurar backup indicado pelo Importador.",
+    "Se compile falhar, nao salvar workbook e restaurar backup V3.",
+    "Se TV2 falhar, anexar CSV de falhas e nao rodar VCR.",
+    "Se B30 ou os relatorios ainda ficarem ilegiveis no PDF, manter V206 sem freeze e abrir nova onda visual com ajuste de template/colunas."
+  ],
+  "next_recommended_wave": {
+    "after_human_gate": "Continuar validacao tela a tela dos formularios se PDFs ficarem legiveis.",
+    "doc_only": "Abrir 0176 fast_track para auditoria cruzada de pendencias, handoffs anteriores, plano de estabilidade V206 e backlog/refatoramento V207.",
+    "cross_audit_outputs_proposed": [
+      ".hbn/proposals/0034-antigravity-gemini35-auditoria-pendencias-freeze-v206-v207.md",
+      ".hbn/proposals/0035-claude-opus48-auditoria-pendencias-freeze-v206-v207.md",
+      ".hbn/proposals/0036-codex-consolidacao-pendencias-freeze-v206-v207.md",
+      ".hbn/protocol-evolutions/20260610-passagem-bastao-documentacao-v206-v207.md"
+    ]
+  },
+  "updated_at": "2026-06-09T23:50:00-03:00"
+}

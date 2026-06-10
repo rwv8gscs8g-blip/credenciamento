@@ -1316,6 +1316,7 @@ ws.Range("F18").Value = ""
 ws.Range("L18").Value = ""
 ws.Range("B23").Value = ""
 ws.Range("B24").Value = ""
+ws.Range("B30").Value = ""
 If Not ws.Range("L23").HasFormula Then ws.Range("L23").Value = 0
 If Not ws.Range("M23").HasFormula Then ws.Range("M23").Value = 0
 If Not ws.Range("M31").HasFormula Then ws.Range("M31").Value = 0
@@ -1347,6 +1348,7 @@ ws.Range("F18").Value = ""
 ws.Range("L18").Value = ""
 ws.Range("B23").Value = ""
 ws.Range("B24").Value = ""
+ws.Range("B30").Value = ""
 If Not ws.Range("L23").HasFormula Then ws.Range("L23").Value = 0
 If Not ws.Range("M23").HasFormula Then ws.Range("M23").Value = 0
 If Not ws.Range("M31").HasFormula Then ws.Range("M31").Value = 0
@@ -1654,13 +1656,14 @@ Private Sub Preencher_EscreverAvisoOperacionalCorpo(ByVal ws As Worksheet)
 
     aviso = Trim$(Preencher_AvisoOperacionalAtual())
     Call Preencher_LimparAvisoOperacionalCabecalho(ws)
-    ws.Range("B24").Value = aviso
-    With ws.Range("B24:K24")
-        .Font.Size = 9
+    ws.Range("B24").Value = ""
+    ws.Range("B30").Value = aviso
+    With ws.Range("B30:K30")
+        .Font.Size = 7
         .Font.Italic = True
         .HorizontalAlignment = xlLeft
         .VerticalAlignment = xlCenter
-        .WrapText = True
+        .WrapText = False
         .ShrinkToFit = False
     End With
 End Sub

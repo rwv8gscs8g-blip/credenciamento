@@ -245,7 +245,7 @@ principal; o complemento `; OS EM EXECUCAO` ou `; PRE-OS PENDENTE` apenas revela
 que existe ocupacao adicional na mesma atividade.
 
 Nos documentos impressos de Pre-OS e OS, o sistema tambem deve incluir aviso
-operacional no corpo do quadro de servicos, em `B24`. Esse aviso e informativo:
+operacional no corpo do quadro de servicos, em `B30`. Esse aviso e informativo:
 mostra status, disponibilidade e contexto operacional sem alterar fila,
 expiracao ou recusa. O antigo ponto `C16` fica limpo para nao competir com o
 cabecalho do prestador. Na avaliacao, o diagnostico completo aparece no campo

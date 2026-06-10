@@ -1,0 +1,44 @@
+# Manifesto V3 — ONDA38_2_42_AVISO_RODAPE_RELATORIOS_LARGOS
+# Sistema de Credenciamento — V12.0.0206 em validacao
+# Build label: 8d84a23+ONDA38.2.42-AVISO-RODAPE-REL-LARGOS
+#
+# Objetivo:
+#   - Mover o aviso operacional dos impressos Pre-OS/OS de B24 para B30:K30,
+#     ultima linha livre acima da faixa "A avaliacao do prestador e obrigatoria".
+#   - Limpar B24 legado e B30 ativo para evitar residuo visual entre impressoes.
+#   - Reduzir margens laterais dos relatorios no helper comum Rel_ConfigurarPagina
+#     para ampliar a largura util de impressao sem tocar formularios.
+#   - Atualizar TV2 dirigido de REL_SUSP_STRIKES_RESET para 16 cenarios.
+#
+# Nao toca:
+#   - Formularios .frm/.frx.
+#   - Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.
+#   - Motor de rodizio, expiracao, recusa, fila ou regra de disponibilidade.
+#
+# Comando esperado no VBE/Excel:
+#   ImportarPacoteV3_Delta "ONDA38_2_42_AVISO_RODAPE_RELATORIOS_LARGOS", "8d84a23+ONDA38.2.42-AVISO-RODAPE-REL-LARGOS"
+#
+# Resultado esperado do Importador V3:
+#   modo=Estabilizado | dryRun=False | M=5 | F=0 | err=0 | skip=0
+#
+# Gate manual apos import:
+#   1. VBE > Depurar > Compilar VBAProject precisa passar limpo.
+#   2. Imediato: TV2_RunRelatoriosSuspensoesStrikesReset
+#      Esperado: OK=16 | FALHA=0 | MANUAL=0
+#   3. Gerar/revisar PDFs equivalentes a 022-030:
+#      - Pre-OS/OS: C16 limpo; B24 sem aviso; B30:K30 com aviso legivel.
+#      - Relatorios: tabela aproveita melhor a largura da pagina.
+#   4. Nao rodar VCR neste microdelta; reservar para checkpoint forte.
+#
+# Artefatos e hashes locais:
+#   AAX-App_Release.bas        bytes=24711  sha256=2a8309cbf2c56194e32cd1f662a14da9af11dc95d98c7287e9697f85617a4591
+#   AAD-Util_Config.bas        bytes=24548  sha256=f87c6aee32b963940ebbc390157295825434929c67aca1b44455379eb0299ee3
+#   AAU-Preencher.bas          bytes=157747 sha256=952de181a626112af2904c37fc2aba74cac97764c0946dc0303a50e36a895d4d
+#   ABF-Teste_V2_Engine.bas    bytes=238030 sha256=01384001991e058f47757e803644c3825ced4570bd4afdcc20ab0aeed9449b8c
+#   ABG-Teste_V2_Roteiros.bas  bytes=367191 sha256=f19ff079f2949ec0603dbca422f9a62338f07cdfc2749b69fe7db877485b353a
+
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/AAD-Util_Config.bas
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas
