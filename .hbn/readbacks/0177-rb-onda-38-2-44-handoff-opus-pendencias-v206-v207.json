@@ -1,0 +1,117 @@
+{
+  "readback_id": "0177-rb-onda-38-2-44-handoff-opus-pendencias-v206-v207",
+  "data": "2026-06-10",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0176-rb-onda-38-2-43-aviso-duas-linhas-relatorios-zoom",
+  "intent": {
+    "objective": "Registrar o gate humano da 0176, formalizar transferencia de bastao para Claude Opus 4.8, preparar prompts de auditoria cruzada Opus/Antigravity e handoff de retomada Codex para a validacao tela a tela ate o freeze V206.",
+    "non_goals": [
+      "Nao implementar nova correcao visual nos relatorios nesta onda",
+      "Nao alterar motor de rodizio, expiracao, recusa, fila ou disponibilidade",
+      "Nao alterar formularios, .frx, Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao rodar Excel, VBE, TV2 ou VCR pelo agente",
+      "Nao iniciar refatoramento V12.0.0207",
+      "Nao congelar V12.0.0206"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0177-rb-onda-38-2-44-handoff-opus-pendencias-v206-v207.json",
+      ".hbn/hearbacks/0177-rb-onda-38-2-44-handoff-opus-pendencias-v206-v207-confirmed.json",
+      ".hbn/hearbacks/0177-rb-onda-38-2-44-handoff-opus-pendencias-v206-v207-confirmed.md",
+      ".hbn/results/0176-exec-onda-38-2-43-aviso-duas-linhas-relatorios-zoom.json",
+      ".hbn/results/0177-exec-onda-38-2-44-handoff-opus-pendencias-v206-v207.json",
+      ".hbn/messages/20260610-0110-handoff-fim-sessao-codex-bastao-codex-para-opus.md",
+      ".hbn/messages/20260610-0110-prompts-auditoria-cruzada-v206-v207.md",
+      ".hbn/protocol-evolutions/20260610-usehbn-passagem-bastao-documentacao-cross-audit.md",
+      ".hbn/relay/INDEX.md",
+      "auditoria/03_ondas/onda_38_2_44_handoff_opus_pendencias_v206_v207/0177_TECNICO.md",
+      "src/vba/App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook.bas",
+      "local-ai/vba_import/001-modulo/AAA-Mod_Types.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/001-modulo/AAY-Auto_Open.bas",
+      "local-ai/vba_import/001-modulo/AAZ-ThisWorkbook.bas",
+      "*.frm",
+      "*.frx",
+      "backups/**",
+      "auditoria/evidencias/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decision": {
+    "human_approval": "Mauricio informou em 2026-06-10 que a 0176 importou, compilou e TV2_20260610_005405 retornou OK=16; reportou que o uso da area branca a direita nos relatorios ainda nao funcionou e solicitou handoff formal para Opus, melhoria do protocolo useHBN e retomada posterior pelo Codex.",
+    "chosen_fix": "Nao ha fix VBA nesta onda. Apenas documentar o estado, deixar bastao com Opus, preparar prompts e absorver recarimbo operacional de App_Release para restaurar sincronismo G7.",
+    "handoff_position": "Opus recebe bastao como auditor/arquiteto de protocolo. Codex retoma depois de Opus e Antigravity com consolidacao das auditorias e proxima onda de validacao/correcao."
+  },
+  "invariants_preserved": [
+    "A linha V12.0.0206 continua em validacao iterativa, sem freeze.",
+    "0176 ficou funcionalmente verde por import/compile/TV2 humano, mas gate visual dos relatorios segue aberto.",
+    "O drift em AAX-App_Release.bas e tratado como recarimbo operacional do Importador V3, sem alteracao funcional.",
+    "Nenhuma regra de negocio, fila, expiracao, recusa, disponibilidade ou formulario de designer sera alterado."
+  ],
+  "risks": [
+    {
+      "risk": "Relatorios impressos ainda nao aproveitam a area branca a direita, apesar do zoom dinamico.",
+      "mitigation": "Registrar finding para auditoria cruzada; proxima correcao deve avaliar distribuicao de colunas, resumo operacional e page setup em conjunto.",
+      "severity": "high"
+    },
+    {
+      "risk": "Transferencia de bastao sem documento completo pode fazer Opus ou Codex repetir re-leitura extensa e perder contexto visual.",
+      "mitigation": "Criar handoff com 16 itens, prompts e paths exatos dos PDFs 039-048, commits e gates.",
+      "severity": "high"
+    },
+    {
+      "risk": "Protocolo useHBN ainda mistura relay, propostas, prompts e ERPs sem regra mecanica para auditoria cruzada multi-IA.",
+      "mitigation": "Criar proposta de evolucao do protocolo com artefatos nomeados e responsabilidades de cada IA.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0177 valido",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0177-exec-onda-38-2-44-handoff-opus-pendencias-v206-v207.json"
+      },
+      {
+        "gate": "Handoff fim-de-sessao com itens 1-16",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/messages/20260610-0110-handoff-fim-sessao-codex-bastao-codex-para-opus.md"
+      },
+      {
+        "gate": "Prompts Opus/Antigravity/Codex preparados com outputs nomeados",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/messages/20260610-0110-prompts-auditoria-cruzada-v206-v207.md"
+      },
+      {
+        "gate": "G7/G8 e guards HBN",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0177-exec-onda-38-2-44-handoff-opus-pendencias-v206-v207.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se Opus apontar BLOQUEADOR de governanca, nao abrir nova correcao VBA antes de consolidar a decisao humana.",
+      "Se Antigravity apontar BLOQUEADOR visual/operacional, Codex deve abrir readback proprio para fix especifico.",
+      "Se G7 falhar por recarimbo App_Release, sincronizar fonte e espelho sem alterar comportamento."
+    ],
+    "anchor_to_restore": "0df2241 fix(vba): divide aviso e amplia relatorios impressos"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-10T01:10:00-03:00",
+  "confirmed_at": "2026-06-10T01:10:00-03:00",
+  "hearback_summary": "Mauricio pediu handoff formal para Opus, melhoria do protocolo useHBN e retomada posterior pelo Codex com auditoria adversarial e validacao tela a tela."
+}

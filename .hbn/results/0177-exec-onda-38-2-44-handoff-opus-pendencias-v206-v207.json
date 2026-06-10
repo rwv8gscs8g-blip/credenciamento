@@ -1,0 +1,97 @@
+{
+  "result_id": "0177-exec-onda-38-2-44-handoff-opus-pendencias-v206-v207",
+  "execution_id": "0177-exec-onda-38-2-44-handoff-opus-pendencias-v206-v207",
+  "readback_id": "0177-rb-onda-38-2-44-handoff-opus-pendencias-v206-v207",
+  "data": "2026-06-10",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "handoff_ready",
+  "outcome": "bastao_formal_opus_auditoria_cruzada_preparada",
+  "human_status": "pending_opus_antigravity_audit",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "0df2241",
+  "action": "Registrar gate humano da 0176, atualizar relay, criar handoff Codex->Opus, preparar prompts Opus/Antigravity/Codex e proposta inicial de melhoria useHBN.",
+  "summary": "0176 importou, compilou e passou TV2 dirigido, mas PDFs 043-048 mostraram que relatorios ainda nao usam a area branca direita como esperado. A 0177 interrompe nova implementacao VBA, deixa o bastao formalmente com Claude Opus 4.8 para auditoria/protocolo, prepara prompt adversarial para Antigravity/Gemini 3.5 e prompt de retomada Codex para consolidacao futura.",
+  "human_gate_observed_0176": {
+    "import_result": "M=6 | F=3 | err=0 | skip=0",
+    "compile_result": "Compile limpo reportado pelo operador",
+    "tv2_directed_result": "TV2_20260610_005405 retornou OK=16 | FALHA=0 | MANUAL=0",
+    "pdfs_reviewed": "039-048",
+    "visual_result": "B29/B30 melhorou Pre-OS/OS; relatorios 043-048 seguem com finding visual de largura/area branca."
+  },
+  "handoff": {
+    "to": "Claude Opus 4.8",
+    "role": "auditor_arquiteto_protocolo",
+    "handoff_file": ".hbn/messages/20260610-0110-handoff-fim-sessao-codex-bastao-codex-para-opus.md",
+    "prompt_pack": ".hbn/messages/20260610-0110-prompts-auditoria-cruzada-v206-v207.md",
+    "codex_status": "em_espera_ate_pareceres"
+  },
+  "expected_outputs": [
+    ".hbn/proposals/0034-claude-opus48-auditoria-pendencias-freeze-v206-v207.md",
+    ".hbn/protocol-evolutions/20260610-claude-opus48-proposta-usehbn-bastao-documentacao-cross-audit.md",
+    ".hbn/proposals/0035-antigravity-gemini35-auditoria-adversarial-pendencias-freeze-v206-v207.md",
+    ".hbn/proposals/0036-codex-consolidacao-auditorias-pendencias-freeze-v206-v207.md"
+  ],
+  "files_changed": [
+    ".hbn/readbacks/0177-rb-onda-38-2-44-handoff-opus-pendencias-v206-v207.json",
+    ".hbn/hearbacks/0177-rb-onda-38-2-44-handoff-opus-pendencias-v206-v207-confirmed.json",
+    ".hbn/hearbacks/0177-rb-onda-38-2-44-handoff-opus-pendencias-v206-v207-confirmed.md",
+    ".hbn/results/0176-exec-onda-38-2-43-aviso-duas-linhas-relatorios-zoom.json",
+    ".hbn/results/0177-exec-onda-38-2-44-handoff-opus-pendencias-v206-v207.json",
+    ".hbn/messages/20260610-0110-handoff-fim-sessao-codex-bastao-codex-para-opus.md",
+    ".hbn/messages/20260610-0110-prompts-auditoria-cruzada-v206-v207.md",
+    ".hbn/protocol-evolutions/20260610-usehbn-passagem-bastao-documentacao-cross-audit.md",
+    ".hbn/relay/INDEX.md",
+    "auditoria/03_ondas/onda_38_2_44_handoff_opus_pendencias_v206_v207/0177_TECNICO.md",
+    "src/vba/App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Preflight raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "PDF review",
+      "status": "pass_local_with_findings",
+      "evidence": "pdftotext -layout revisou 039-048; renderizacao amostral de 044 e 048 confirmou grande area branca e tabela pequena."
+    },
+    {
+      "gate": "Readback 0177",
+      "status": "pass_local",
+      "evidence": "validate-readback retornou OK."
+    },
+    {
+      "gate": "App_Release sync",
+      "status": "pass_local",
+      "evidence": "Recarimbo APP_BUILD_GERADO_EM 2026-06-10 00:53 absorvido em src e espelho; sem mudanca funcional."
+    },
+    {
+      "gate": "Glasswing G7/G8",
+      "status": "pass_local",
+      "evidence": "bash local-ai/scripts/publicar_vba_import_v2.sh --check retornou 61 arquivos in_sync e OK em G7/G8."
+    },
+    {
+      "gate": "Whitespace",
+      "status": "pass_local",
+      "evidence": "git diff --cached --check sem saida."
+    },
+    {
+      "gate": "HBN guards staged",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/hbn-guards-runner.sh passou com todos arquivos staged dentro do scope 0177."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2 no workbook",
+    "VCR",
+    "Nova correcao VBA dos relatorios"
+  ],
+  "next_required_action": "Claude Opus 4.8 deve executar o prompt Opus e produzir os artefatos 0034 e protocol-evolution antes de Codex retomar.",
+  "updated_at": "2026-06-10T01:10:00-03:00"
+}

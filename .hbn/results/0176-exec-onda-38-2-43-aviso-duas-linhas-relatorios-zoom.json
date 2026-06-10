@@ -6,9 +6,9 @@
   "agent_id": "codex",
   "track": "safe_track",
   "version_target": "V12.0.0206",
-  "status": "package_ready_gate_pending",
-  "outcome": "pacote_aviso_duas_linhas_relatorios_zoom_pronto",
-  "human_status": "pending_import_compile_tv2_pdf_review",
+  "status": "completed_with_visual_finding",
+  "outcome": "import_compile_tv2_passed_reports_width_visual_finding_open",
+  "human_status": "import_compile_tv2_passed_visual_review_failed_reports_width",
   "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
   "branch": "codex/v12-0-0206-planejamento",
   "head_before": "8078e73",
@@ -31,6 +31,24 @@
     "previous_compile": "Compile limpo reportado pelo operador",
     "previous_tv2": "TV2_20260610_002102 retornou OK=16 | FALHA=0 | MANUAL=0",
     "visual_findings": "PDFs 031-038 mostraram aviso ainda apertado em B30 e relatorios com sobra horizontal direita."
+  },
+  "human_gate_observed": {
+    "import_result": "M=6 | F=3 | err=0 | skip=0",
+    "compile_result": "Compile limpo reportado pelo operador",
+    "tv2_directed_result": "TV2_20260610_005405 retornou OK=16 | FALHA=0 | MANUAL=0",
+    "pdfs_reviewed": [
+      "/Users/macbookpro/Downloads/039.pdf",
+      "/Users/macbookpro/Downloads/040.pdf",
+      "/Users/macbookpro/Downloads/041.pdf",
+      "/Users/macbookpro/Downloads/042.pdf",
+      "/Users/macbookpro/Downloads/043.pdf",
+      "/Users/macbookpro/Downloads/044.pdf",
+      "/Users/macbookpro/Downloads/045.pdf",
+      "/Users/macbookpro/Downloads/046.pdf",
+      "/Users/macbookpro/Downloads/047.pdf",
+      "/Users/macbookpro/Downloads/048.pdf"
+    ],
+    "visual_result": "B29/B30 resolveu a leitura principal em Pre-OS/OS, mas relatorios 043-048 continuam com uso insuficiente da area branca direita."
   },
   "human_gate_expected": {
     "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_43_AVISO_DUAS_LINHAS_RELATORIOS_ZOOM\", \"8078e73+ONDA38.2.43-AVISO-2LINHAS-REL-ZOOM\"",
@@ -175,7 +193,6 @@
     "Importador V3 no Excel",
     "VBE Debug > Compile VBAProject",
     "TV2_RunRelatoriosSuspensoesStrikesReset no workbook",
-    "Geracao/revisao visual dos PDFs pos-0176",
     "VCR"
   ],
   "rollback_plan": [
@@ -194,5 +211,5 @@
       ".hbn/protocol-evolutions/20260610-passagem-bastao-documentacao-v206-v207.md"
     ]
   },
-  "updated_at": "2026-06-10T00:45:00-03:00"
+  "updated_at": "2026-06-10T01:10:00-03:00"
 }
