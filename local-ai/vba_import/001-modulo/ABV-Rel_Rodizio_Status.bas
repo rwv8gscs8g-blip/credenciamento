@@ -274,6 +274,39 @@ Public Function RRS_AvisoOperacionalEmpresa( _
     RRS_AvisoOperacionalEmpresa = RRS_StatusEmpresaNaData(empId, statusCred, ativId)
 End Function
 
+Public Function RRS_AvisoOperacionalEmpresaCurto( _
+    ByVal empId As String, _
+    Optional ByVal statusCred As String = "ATIVO", _
+    Optional ByVal ativId As String = "" _
+) As String
+    Dim emp As TEmpresa
+    Dim linhaEmp As Long
+    Dim disponibilidade As String
+    Dim strikesNota As Long
+    Dim strikesRecusa As Long
+
+    On Error GoTo falha
+
+    emp = LerEmpresa(RRS_Pad3(empId), linhaEmp)
+    If linhaEmp = 0 Then
+        RRS_AvisoOperacionalEmpresaCurto = "Aviso operacional: EMPRESA NAO ENCONTRADA"
+        Exit Function
+    End If
+
+    disponibilidade = RRS_DisponibilidadeOperacionalEmpresa(emp.EMP_ID, statusCred, ativId)
+    strikesNota = RRS_StrikesNotaBaixa(emp.EMP_ID, emp.STATUS_GLOBAL)
+    strikesRecusa = RRS_StrikesRecusaPrazo(emp.EMP_ID)
+
+    RRS_AvisoOperacionalEmpresaCurto = "Aviso operacional: " & RRS_StatusGlobalHumano(emp.STATUS_GLOBAL) & _
+        "; " & disponibilidade & _
+        "; NB=" & CStr(strikesNota) & _
+        "; RP=" & CStr(strikesRecusa)
+    Exit Function
+
+falha:
+    RRS_AvisoOperacionalEmpresaCurto = "Aviso operacional: DIAGNOSTICO INDISPONIVEL"
+End Function
+
 Public Function RRS_ParticipaRodizioHumano(ByVal participaCodigo As String) As String
     Dim cod As String
 

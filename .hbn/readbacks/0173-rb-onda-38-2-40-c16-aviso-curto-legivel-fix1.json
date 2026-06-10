@@ -1,0 +1,143 @@
+{
+  "readback_id": "0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1",
+  "data": "2026-06-09",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0172-rb-onda-38-2-39-consolidacao-gate-humano-pdfs-vcr",
+  "intent": {
+    "objective": "Corrigir o fix1 de legibilidade do aviso operacional C16 nos impressos, trocando o texto longo espremido por resumo curto auditavel e preservando o diagnostico completo nas observacoes quando aplicavel.",
+    "non_goals": [
+      "Nao alterar formularios .frm ou .frx",
+      "Nao alterar Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook",
+      "Nao alterar motor de rodizio, expiracao, recusa ou fila",
+      "Nao rodar Excel, VBE, TV2 ou VCR pelo agente",
+      "Nao iniciar refatoramento V12.0.0207 nesta onda"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1.json",
+      ".hbn/hearbacks/0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1-confirmed.json",
+      ".hbn/hearbacks/0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1-confirmed.md",
+      ".hbn/results/0173-exec-onda-38-2-40-c16-aviso-curto-legivel-fix1.json",
+      ".hbn/relay/INDEX.md",
+      "CHANGELOG.md",
+      "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+      "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+      "auditoria/03_ondas/onda_38_2_40_c16_aviso_curto_legivel_fix1/0173_TECNICO.md",
+      "auditoria/03_ondas/onda_38_2_40_c16_aviso_curto_legivel_fix1/0173_PROCEDIMENTO_IMPORT.md",
+      "src/vba/App_Release.bas",
+      "src/vba/Preencher.bas",
+      "src/vba/Rel_Rodizio_Status.bas",
+      "src/vba/Teste_V2_Engine.bas",
+      "src/vba/Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+      "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+      "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+      "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+      "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+      "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_40_C16_AVISO_CURTO_LEGIVEL_FIX1.txt",
+      "local-ai/vba_import/000-MANIFESTO-IMPORTACAO.txt",
+      "local-ai/vba_import/000-MAPA-PREFIXOS.txt",
+      "local-ai/vba_import/000-BUILD-IMPORTAR-SEMPRE.txt"
+    ],
+    "files_forbidden": [
+      "src/vba/Mod_Types.bas",
+      "src/vba/Importador_V3.bas",
+      "src/vba/Auto_Open.bas",
+      "src/vba/ThisWorkbook.bas",
+      "local-ai/vba_import/001-modulo/ABK-Importador_V3.bas",
+      "local-ai/vba_import/002-formularios/**",
+      "*.frm",
+      "*.frx",
+      "backups/**",
+      "auditoria/evidencias/**"
+    ],
+    "imports_must_come_from": "local-ai/vba_import/"
+  },
+  "decision": {
+    "human_approval": "Mauricio aprovou avancar com o fix em 2026-06-09 e destacou que a regra de linhas em branco no pacote ja e bug recorrente documentado.",
+    "chosen_fix": "Resumo curto em C16, sem ShrinkToFit, mantendo diagnostico completo no texto de observacao quando o documento ja possui esse campo.",
+    "next_wave_after_gate": "Abrir pedido de validacao cruzada de pendencias, handoff e planejamento final V206/V207 apos o gate humano da 0173."
+  },
+  "invariants_preserved": [
+    "C16 continua informativo e nao altera estado operacional.",
+    "Expiracao de Pre-OS, recusa e avanco de fila permanecem manuais pelos fluxos existentes.",
+    "A disponibilidade composta da 0170 permanece visivel no resumo curto.",
+    "Fonte src/vba e espelho local-ai/vba_import ficam sincronizados por Glasswing G7.",
+    "Linhas em branco finais do pacote serao preservadas pelo publicador e nao corrigidas manualmente como falso bug."
+  ],
+  "risks": [
+    {
+      "risk": "Resumo curto perder detalhe operacional relevante que existia no diagnostico longo.",
+      "mitigation": "Manter o diagnostico completo em Preencher_ObservacaoComAviso e testar que C16 usa helper curto especifico.",
+      "severity": "medium"
+    },
+    {
+      "risk": "C16 continuar ilegivel por excesso de texto em cenarios compostos.",
+      "mitigation": "Remover ShrinkToFit e limitar C16 a status, disponibilidade e contadores compactos NB/RP.",
+      "severity": "high"
+    },
+    {
+      "risk": "AAX-App_Release.bas permanecer divergente do fonte por mudanca humana pos-import.",
+      "mitigation": "Atualizar App_Release no fonte e republicar os espelhos, incorporando o saneamento no mesmo scope 0173.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Teste estatico passar sem cobrir o contrato visual real.",
+      "mitigation": "Atualizar TV2 para validar helper curto, ausencia de ShrinkToFit e gate humano com PDFs pos-import.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0173 valido",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0173-exec-onda-38-2-40-c16-aviso-curto-legivel-fix1.json"
+      },
+      {
+        "gate": "Glasswing G7/G8 sincronizado",
+        "evidence_kind": "shasum_match",
+        "evidence_required_in": ".hbn/results/0173-exec-onda-38-2-40-c16-aviso-curto-legivel-fix1.json"
+      },
+      {
+        "gate": "Importador V3 delta 0173",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "VBE Compile limpo",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "TV2_RunRelatoriosSuspensoesStrikesReset",
+        "evidence_kind": "human_report",
+        "evidence_required_in": "hearback humano pos-import"
+      },
+      {
+        "gate": "Revisao visual PDFs C16",
+        "evidence_kind": "screenshot",
+        "evidence_required_in": "evidencias humanas pos-import"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se o import falhar, nao salvar o workbook e restaurar o backup informado pelo Importador V3.",
+      "Se o compile falhar, nao salvar o workbook e restaurar o backup informado pelo Importador V3.",
+      "Se o TV2 falhar, anexar o resultado/CSV da suite e nao rodar VCR.",
+      "Se o PDF ainda ficar ilegivel, manter V206 sem freeze e abrir fix2 com decisao humana sobre duas linhas ou campo mais amplo."
+    ],
+    "anchor_to_restore": "349b2b6 docs(hbn): consolida gate humano 0172"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-09T09:35:00-03:00",
+  "confirmed_at": "2026-06-09T09:35:00-03:00",
+  "hearback_summary": "Mauricio aprovou avancar com o fix1 e pediu seguir com validacao tela a tela, com posterior auditoria de pendencias/handoffs e planejamento de fechamento V206/V207."
+}

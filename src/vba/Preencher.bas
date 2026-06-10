@@ -1650,7 +1650,7 @@ End Function
 Private Sub Preencher_EscreverAvisoOperacional(ByVal ws As Worksheet)
     Dim aviso As String
 
-    aviso = Preencher_AvisoOperacionalAtual()
+    aviso = Preencher_AvisoOperacionalCurtoAtual()
     ws.Range("C16").Value = aviso
     With ws.Range("C16:N16")
         .Font.Size = 8
@@ -1658,9 +1658,16 @@ Private Sub Preencher_EscreverAvisoOperacional(ByVal ws As Worksheet)
         .HorizontalAlignment = xlLeft
         .VerticalAlignment = xlCenter
         .WrapText = False
-        .ShrinkToFit = True
+        .ShrinkToFit = False
     End With
 End Sub
+
+Private Function Preencher_AvisoOperacionalCurtoAtual() As String
+    Dim empId As String
+
+    empId = Preencher_EmpresaIdAtual()
+    If empId <> "" Then Preencher_AvisoOperacionalCurtoAtual = RRS_AvisoOperacionalEmpresaCurto(empId, "ATIVO", Preencher_AtividadeIdAtual())
+End Function
 
 Private Function Preencher_AvisoOperacionalAtual() As String
     Dim empId As String

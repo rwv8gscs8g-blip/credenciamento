@@ -7,6 +7,20 @@ tratam apenas da linha pública oficial.
 
 ### Adicionado
 
+- **Onda 38.2.40-fix1 — C16 com aviso operacional curto legivel** — corrige
+  o achado visual da consolidacao 0172: o aviso completo era longo demais para
+  `C16:N16` e o `ShrinkToFit` deixava os PDFs 079-082 praticamente ilegiveis.
+  O C16 passa a usar resumo curto com status, disponibilidade e contadores
+  `NB`/`RP`, sem encolher fonte; o diagnostico completo continua disponivel nas
+  observacoes quando o documento possui esse campo. Adiciona o cenario V2
+  `RELSSR_13_IMPRESSOS_C16_AVISO_CURTO_LEGIVEL`, atualizando
+  `TV2_RunRelatoriosSuspensoesStrikesReset` para
+  `OK=13 | FALHA=0 | MANUAL=0`. Manifesto V3:
+  `local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_40_C16_AVISO_CURTO_LEGIVEL_FIX1.txt`.
+  Gate esperado: import `M=5 | F=0 | err=0 | skip=0`, compile limpo, TV2
+  dirigido verde e revisao visual de novos PDFs. Sem formulario, sem `.frx`,
+  sem motor de rodizio e sem VCR neste microdelta.
+
 - **Onda 38.2.37 — disponibilidade composta sob suspensao** — melhora a
   leitura operacional quando uma empresa suspensa tambem possui OS aberta ou
   Pre-OS pendente na mesma atividade. A suspensao continua sendo o bloqueio

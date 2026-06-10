@@ -206,7 +206,9 @@ A suite cobre:
   strikes e resumo operacional;
 - `Status da empresa nesta data` em impressos de Pre-OS, OS e avaliacao;
 - alinhamento legivel do aviso operacional em `C16:N16`, neutralizando
-  alinhamento distribuido herdado do template;
+  alinhamento distribuido herdado do template sem usar `ShrinkToFit`;
+- resumo curto no `C16`, com diagnostico completo preservado nas observacoes
+  quando houver campo proprio;
 - disponibilidade composta sob suspensao, mostrando `OS EM EXECUCAO` ou
   `PRE-OS PENDENTE` como complemento sem liberar a empresa para rodizio;
 - contrato de Novo Periodo: limpa `PRE_OS`/`CAD_OS`, preserva cadastros,
@@ -218,5 +220,5 @@ Resultado esperado apos import/compile:
 
 ```text
 TV2_RunRelatoriosSuspensoesStrikesReset
-OK=12 | FALHA=0 | MANUAL=0
+OK=13 | FALHA=0 | MANUAL=0
 ```

@@ -245,10 +245,11 @@ principal; o complemento `; OS EM EXECUCAO` ou `; PRE-OS PENDENTE` apenas revela
 que existe ocupacao adicional na mesma atividade.
 
 Nos documentos impressos de Pre-OS, OS e avaliacao, o sistema tambem deve
-incluir `Status da empresa nesta data: ...`, com status, disponibilidade,
-eventual suspensao e strikes por nota baixa e por recusa/prazo.
-Esse aviso deve aparecer legivel em `C16`, sem letras artificialmente
-espacadas por alinhamento distribuido do template.
+incluir aviso operacional em `C16`. Esse ponto e um resumo curto para leitura
+visual, com status, disponibilidade e contadores `NB` e `RP`; ele nao deve
+ficar espremido por `ShrinkToFit` nem com letras artificialmente espacadas por
+alinhamento distribuido do template. Quando o documento possui campo de
+observacoes, o diagnostico completo continua ali como complemento de auditoria.
 
 ### Relatorio de Pre-OS Vencidas
 

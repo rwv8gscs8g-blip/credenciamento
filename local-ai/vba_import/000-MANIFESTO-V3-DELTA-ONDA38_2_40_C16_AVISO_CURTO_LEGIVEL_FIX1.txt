@@ -1,0 +1,55 @@
+# Manifesto V3 DELTA ONDA38_2_40_C16_AVISO_CURTO_LEGIVEL_FIX1 - V12.0.0206 Onda 38.2.40 / Readback 0173
+# Tema: fix1 de legibilidade real do aviso operacional C16 nos impressos.
+#
+# Contexto:
+#   - A consolidacao 0172 registrou VCR aprovada, mas achado FORTE nos PDFs 079-082.
+#   - O C16 existia e estava alinhado a esquerda, mas o diagnostico completo ficou longo demais e o ShrinkToFit comprimiu a fonte ate perder legibilidade.
+#   - A correcao desta onda separa o aviso visual curto do diagnostico completo.
+#
+# Comando operacional:
+#   ImportarPacoteV3_Delta "ONDA38_2_40_C16_AVISO_CURTO_LEGIVEL_FIX1", "349b2b6+ONDA38.2.40-C16-AVISO-CURTO-FIX1"
+#
+# Pos-import esperado:
+#   - Importador V3: M=5 | F=0 | err=0 | skip=0.
+#   - VBE > Depurar > Compilar VBAProject passa limpo.
+#   - Janela Imediata: TV2_RunRelatoriosSuspensoesStrikesReset
+#   - Esperado: OK=13 | FALHA=0 | MANUAL=0.
+#   - Gerar/revisar PDFs de Pre-OS, OS e avaliacao: C16 deve estar legivel em tamanho normal, sem texto espremido.
+#   - VCR reservado para checkpoint forte posterior, se Mauricio solicitar.
+#
+# Guardas:
+#   - Sem Mod_Types.bas, Importador_V3.bas, Auto_Open.bas ou ThisWorkbook.
+#   - Sem formularios e sem .frx nesta onda.
+#   - Sem alterar motor de rodizio, expiracao, recusa ou fila.
+#   - Sem tornar empresa suspensa disponivel automaticamente.
+#   - Linhas em branco finais do pacote sao normalizadas pelo publicador; nao tratar EOF do espelho como bug manual.
+#
+# Contrato operacional documentado:
+#   - C16 usa resumo curto: status, disponibilidade e contadores NB/RP.
+#   - O resumo curto nao deve usar ShrinkToFit.
+#   - O diagnostico completo continua em observacoes quando o documento possui campo proprio.
+#   - O aviso e apenas informativo; nao expira Pre-OS, nao recusa demanda e nao avanca fila.
+#
+# Artefatos hash-pinados:
+#   M|001-modulo/AAX-App_Release.bas
+#     bytes=24533
+#     sha256=a7e06d06918009ef941183888c378580fe319accd030f33d6b35015056efd115
+#   M|001-modulo/AAU-Preencher.bas
+#     bytes=157218
+#     sha256=25ab872ab1f5b4ab2d0618214fb42808f6ec49a0f4853b6dc93b0f9127803426
+#   M|001-modulo/ABV-Rel_Rodizio_Status.bas
+#     bytes=24339
+#     sha256=6c2cc9573483b58083b7dc80804c38ee39d1aea6a18d2bf1b8f21208c02a86d3
+#   M|001-modulo/ABF-Teste_V2_Engine.bas
+#     bytes=236144
+#     sha256=31dfcb714122004ffad18e388415fdf6db511f2d27c108a57e1d0d8417ea2337
+#   M|001-modulo/ABG-Teste_V2_Roteiros.bas
+#     bytes=365507
+#     sha256=42b7545b24757b93787b9c86764ecb84062e4f0f5639d15b31f5c398af8e0280
+#
+# GRUPO_ONDA38_2_40_C16_AVISO_CURTO_LEGIVEL_FIX1
+M|001-modulo/AAX-App_Release.bas
+M|001-modulo/AAU-Preencher.bas
+M|001-modulo/ABV-Rel_Rodizio_Status.bas
+M|001-modulo/ABF-Teste_V2_Engine.bas
+M|001-modulo/ABG-Teste_V2_Roteiros.bas

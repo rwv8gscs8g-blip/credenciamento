@@ -1,0 +1,8 @@
+{
+  "hearback_id": "0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1-confirmed",
+  "readback_id": "0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1",
+  "status": "confirmed",
+  "signed_by": "mauricio-zanin",
+  "signed_at": "2026-06-09T09:35:00-03:00",
+  "notes": "Mauricio aprovou avancar com o fix1 C16, pediu respeitar a regra documentada sobre linhas em branco no pacote e definiu que apos a 0173 seguiremos validacao tela a tela e uma onda de auditoria/planejamento de pendencias V206/V207."
+}

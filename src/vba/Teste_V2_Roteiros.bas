@@ -1918,7 +1918,7 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
 
     On Error GoTo falha
 
-    TV2_InitExecucao suite, visual, 12
+    TV2_InitExecucao suite, visual, 13
     repoRoot = TV2_UI_RepoRoot()
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_01_HELPER_RESUMO_STRIKES", repoRoot, _
@@ -1926,6 +1926,7 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
         "Public Function RRS_StrikesNotaBaixa|Public Function RRS_StrikesRecusaPrazo|" & _
         "Public Function RRS_DisponibilidadeOperacionalEmpresa|Public Function RRS_StatusEmpresaNaData|" & _
         "Public Function RRS_DiagnosticoOperacionalEmpresa|Public Function RRS_AvisoOperacionalEmpresa|" & _
+        "Public Function RRS_AvisoOperacionalEmpresaCurto|Aviso operacional:|NB=|RP=|" & _
         "Private Function RRS_UltimoStrikeSuspensaoAudit|ORIGEM=STRIKE|STRIKES=|" & _
         "Status da empresa nesta data|disponibilidade=|PRE-OS PENDENTE|OS EM EXECUCAO", _
         "Helpers de relatorio expõem strikes de nota baixa e recusa/prazo", _
@@ -1988,8 +1989,9 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_08_IMPRESSOS_AVISO_OPERACIONAL", repoRoot, _
         "Preencher", "Preencher.bas", _
-        "Preencher_EscreverAvisoOperacional|Preencher_AvisoOperacionalAtual|" & _
+        "Preencher_EscreverAvisoOperacional|Preencher_AvisoOperacionalCurtoAtual|Preencher_AvisoOperacionalAtual|" & _
         "Preencher_AtividadeIdAtual|Preencher_EmpresaIdAtual|Preencher_ObservacaoComAviso|" & _
+        "RRS_AvisoOperacionalEmpresaCurto(empId, ""ATIVO"", Preencher_AtividadeIdAtual())|" & _
         "RRS_AvisoOperacionalEmpresa(empId, ""ATIVO"", Preencher_AtividadeIdAtual())|" & _
         "ws.Range(""C16"").Value = aviso|ws.Range(""B40"").Value = Preencher_ObservacaoComAviso(AvOb)", _
         "Pre-OS, OS e avaliacao impressas recebem aviso operacional do sistema", _
@@ -2017,9 +2019,9 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_11_IMPRESSOS_C16_ALINHAMENTO_LEGIVEL", repoRoot, _
         "Preencher", "Preencher.bas", _
         "With ws.Range(""C16:N16"")|.HorizontalAlignment = xlLeft|" & _
-        ".VerticalAlignment = xlCenter|.WrapText = False|.ShrinkToFit = True", _
-        "Aviso operacional em C16 neutraliza alinhamento distribuido herdado do template", _
-        "Range C16:N16 recebe alinhamento esquerdo, vertical central e sem wrap antes do ShrinkToFit", _
+        ".VerticalAlignment = xlCenter|.WrapText = False|.ShrinkToFit = False", _
+        "Aviso operacional em C16 neutraliza alinhamento distribuido herdado do template sem encolher a fonte", _
+        "Range C16:N16 recebe alinhamento esquerdo, vertical central, sem wrap e sem ShrinkToFit", _
         "Evita caracteres artificialmente espacado nos PDFs de Pre-OS, OS e avaliacao"
 
     TV2_EST_LogComponenteContemTokens suite, "RELSSR_12_DISPONIBILIDADE_COMPOSTA_SUSPENSAO", repoRoot, _
@@ -2031,6 +2033,14 @@ Public Sub TV2_RunRelatoriosSuspensoesStrikesReset(Optional ByVal visual As Bool
         "Disponibilidade de empresa suspensa mostra ocupacao adicional da atividade", _
         "Suspensao continua bloqueio principal, mas OS aberta ou Pre-OS pendente deixam de ficar ocultas", _
         "Evita confusao operacional em relatorios e avisos impressos"
+
+    TV2_EST_LogComponenteContemTokens suite, "RELSSR_13_IMPRESSOS_C16_AVISO_CURTO_LEGIVEL", repoRoot, _
+        "Preencher", "Preencher.bas", _
+        "Private Function Preencher_AvisoOperacionalCurtoAtual|RRS_AvisoOperacionalEmpresaCurto(empId, ""ATIVO"", Preencher_AtividadeIdAtual())|" & _
+        "Preencher_AvisoOperacionalAtual|Preencher_ObservacaoComAviso|.ShrinkToFit = False", _
+        "C16 usa resumo operacional curto e preserva diagnostico completo nas observacoes", _
+        "Aviso curto fica em C16 e o texto completo continua disponivel quando ha campo de observacao", _
+        "Evita que o PDF comprima texto longo ate ficar ilegivel"
 
     TV2_FinalizarExecucao suite, silencioso
     Exit Sub

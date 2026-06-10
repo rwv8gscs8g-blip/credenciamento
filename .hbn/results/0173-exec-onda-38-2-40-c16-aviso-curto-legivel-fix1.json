@@ -1,0 +1,148 @@
+{
+  "result_id": "0173-exec-onda-38-2-40-c16-aviso-curto-legivel-fix1",
+  "execution_id": "0173-exec-onda-38-2-40-c16-aviso-curto-legivel-fix1",
+  "readback_id": "0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1",
+  "data": "2026-06-09",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "status": "package_ready_gate_pending",
+  "outcome": "pacote_c16_aviso_curto_legivel_fix1_pronto",
+  "human_status": "pending_import_compile_tv2_pdf_review",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "349b2b6",
+  "build_label": "349b2b6+ONDA38.2.40-C16-AVISO-CURTO-FIX1",
+  "action": "Corrigir a legibilidade visual do C16 nos impressos trocando o diagnostico completo espremido por resumo operacional curto e mantendo o diagnostico completo nas observacoes quando aplicavel.",
+  "summary": "Rel_Rodizio_Status ganhou helper curto para aviso operacional; Preencher usa esse helper em C16 e desativa ShrinkToFit; o diagnostico completo anterior permanece disponivel em Preencher_ObservacaoComAviso. A suite TV2_RunRelatoriosSuspensoesStrikesReset passou para 13 cenarios com RELSSR_13_IMPRESSOS_C16_AVISO_CURTO_LEGIVEL. O espelho AAX-App_Release.bas que estava fora de sync foi saneado por atualizacao intencional do fonte e republicacao Glasswing G7.",
+  "classification": {
+    "defect_type": "visual_pdf_legibility_fix",
+    "production_code_change_required": true,
+    "business_rule_engine_changed": false,
+    "queue_or_expiration_changed": false,
+    "form_or_frx_changed": false,
+    "test_change_required": true,
+    "rationale": "A mudanca e informativa e visual: nao altera aptidao de rodizio nem qualquer mutacao operacional."
+  },
+  "human_gate_expected": {
+    "import_command": "ImportarPacoteV3_Delta \"ONDA38_2_40_C16_AVISO_CURTO_LEGIVEL_FIX1\", \"349b2b6+ONDA38.2.40-C16-AVISO-CURTO-FIX1\"",
+    "import_result": "M=5 | F=0 | err=0 | skip=0",
+    "compile_result": "VBE Debug > Compile VBAProject passa limpo",
+    "tv2_directed_macro": "TV2_RunRelatoriosSuspensoesStrikesReset",
+    "tv2_directed_result": "OK=13 | FALHA=0 | MANUAL=0",
+    "human_review": "Gerar PDFs de Pre-OS, OS e avaliacao; C16 deve estar legivel em tamanho normal, sem fonte espremida e sem letras artificialmente espacadas.",
+    "vcr": "Nao rodar neste microdelta antes da revisao visual; reservar para checkpoint forte posterior."
+  },
+  "package_v3": {
+    "manifest": "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_40_C16_AVISO_CURTO_LEGIVEL_FIX1.txt",
+    "manifest_bytes": 2741,
+    "manifest_sha256": "277f35b8e80ae9d7dd95833d1e691b4e2e1c3d7b88ad823b5bae18dd9f64a61c",
+    "command": "ImportarPacoteV3_Delta \"ONDA38_2_40_C16_AVISO_CURTO_LEGIVEL_FIX1\", \"349b2b6+ONDA38.2.40-C16-AVISO-CURTO-FIX1\"",
+    "expected_import": {
+      "modules": 5,
+      "forms": 0,
+      "errors": 0,
+      "skips": 0
+    },
+    "artifacts": [
+      {
+        "path": "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+        "bytes": 24533,
+        "sha256": "a7e06d06918009ef941183888c378580fe319accd030f33d6b35015056efd115"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+        "bytes": 157218,
+        "sha256": "25ab872ab1f5b4ab2d0618214fb42808f6ec49a0f4853b6dc93b0f9127803426"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+        "bytes": 24339,
+        "sha256": "6c2cc9573483b58083b7dc80804c38ee39d1aea6a18d2bf1b8f21208c02a86d3"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+        "bytes": 236144,
+        "sha256": "31dfcb714122004ffad18e388415fdf6db511f2d27c108a57e1d0d8417ea2337"
+      },
+      {
+        "path": "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas",
+        "bytes": 365507,
+        "sha256": "42b7545b24757b93787b9c86764ecb84062e4f0f5639d15b31f5c398af8e0280"
+      }
+    ]
+  },
+  "files_changed": [
+    ".hbn/readbacks/0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1.json",
+    ".hbn/hearbacks/0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1-confirmed.json",
+    ".hbn/hearbacks/0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1-confirmed.md",
+    ".hbn/results/0173-exec-onda-38-2-40-c16-aviso-curto-legivel-fix1.json",
+    ".hbn/relay/INDEX.md",
+    "CHANGELOG.md",
+    "docs/reference/testes/GUIA_DE_TESTES_E_VALIDACAO.md",
+    "docs/tutorials/MANUAL_OPERACIONAL_TELA_A_TELA.md",
+    "auditoria/03_ondas/onda_38_2_40_c16_aviso_curto_legivel_fix1/0173_TECNICO.md",
+    "auditoria/03_ondas/onda_38_2_40_c16_aviso_curto_legivel_fix1/0173_PROCEDIMENTO_IMPORT.md",
+    "src/vba/App_Release.bas",
+    "src/vba/Preencher.bas",
+    "src/vba/Rel_Rodizio_Status.bas",
+    "src/vba/Teste_V2_Engine.bas",
+    "src/vba/Teste_V2_Roteiros.bas",
+    "local-ai/vba_import/000-MANIFESTO-V3-DELTA-ONDA38_2_40_C16_AVISO_CURTO_LEGIVEL_FIX1.txt",
+    "local-ai/vba_import/001-modulo/AAX-App_Release.bas",
+    "local-ai/vba_import/001-modulo/AAU-Preencher.bas",
+    "local-ai/vba_import/001-modulo/ABV-Rel_Rodizio_Status.bas",
+    "local-ai/vba_import/001-modulo/ABF-Teste_V2_Engine.bas",
+    "local-ai/vba_import/001-modulo/ABG-Teste_V2_Roteiros.bas"
+  ],
+  "validation_gates": [
+    {
+      "gate": "Preflight raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; branch codex/v12-0-0206-planejamento."
+    },
+    {
+      "gate": "Readback 0173",
+      "status": "pass_local",
+      "evidence": "bash scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0173-rb-onda-38-2-40-c16-aviso-curto-legivel-fix1.json retornou OK."
+    },
+    {
+      "gate": "Fonte e espelho VBA",
+      "status": "pass_local",
+      "evidence": "bash local-ai/scripts/publicar_vba_import_v2.sh --check retornou 61 arquivos in_sync e OK em G7/G8."
+    },
+    {
+      "gate": "Whitespace",
+      "status": "pass_local",
+      "evidence": "git diff --check sem saida."
+    },
+    {
+      "gate": "Hashes do manifesto",
+      "status": "pass_local",
+      "evidence": "wc -c e shasum -a 256 conferidos para manifesto e cinco modulos importaveis."
+    },
+    {
+      "gate": "Tokens do fix",
+      "status": "pass_local",
+      "evidence": "rg confirmou RRS_AvisoOperacionalEmpresaCurto, .ShrinkToFit = False em C16, RELSSR_13 e TV2_InitExecucao suite REL_SUSP_STRIKES_RESET com 13."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2_RunRelatoriosSuspensoesStrikesReset no workbook",
+    "Geracao/revisao visual dos PDFs pos-0173",
+    "VCR"
+  ],
+  "rollback_plan": [
+    "Se import V3 falhar, restaurar backup indicado pelo Importador.",
+    "Se compile falhar, nao salvar workbook e restaurar backup V3.",
+    "Se TV2 falhar, anexar CSV de falhas e nao rodar VCR.",
+    "Se C16 ainda ficar ilegivel no PDF, manter V206 sem freeze e abrir fix2 com decisao humana sobre duas linhas ou campo mais amplo."
+  ],
+  "next_recommended_wave": {
+    "after_human_gate": "Continuar validacao tela a tela.",
+    "planning_request": "Abrir auditoria/planejamento de pendencias e handoffs anteriores para checklist final de estabilidade V206 e separacao segura do backlog V207."
+  },
+  "updated_at": "2026-06-09T09:45:00-03:00"
+}
