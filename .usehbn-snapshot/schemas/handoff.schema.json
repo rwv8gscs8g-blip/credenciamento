@@ -1,0 +1,168 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HBN Session Handoff Record (Bastao 2.0)",
+  "description": "Formaliza o handoff de fim-de-sessao da knowledge 0014 (12 itens; +4 quando gatilho=bastao), ja praticado na onda 0177. Valida a projecao JSON do arquivo .hbn/messages/AAAAMMDD-HHmm-handoff-fim-sessao-<agente>[-bastao-<de>-para-<para>].md: front-matter YAML + presenca/conteudo das secoes numeradas. Status: accepted (hearback Mauricio 2026-06-10). Era debito tecnico declarado na propria 0014.",
+  "type": "object",
+  "required": [
+    "titulo",
+    "agente",
+    "sessao_inicio",
+    "sessao_fim",
+    "gatilho",
+    "secoes"
+  ],
+  "properties": {
+    "titulo": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agente": {
+      "type": "string",
+      "minLength": 1,
+      "examples": ["codex", "claude-opus-4-8", "antigravity-gemini35"]
+    },
+    "sessao_inicio": {
+      "type": "string",
+      "minLength": 1
+    },
+    "sessao_fim": {
+      "type": "string",
+      "minLength": 1
+    },
+    "gatilho": {
+      "type": "string",
+      "enum": [
+        "operador_pediu",
+        "turnos_30",
+        "contexto_50",
+        "bastao",
+        "erp_fechado"
+      ]
+    },
+    "secoes": {
+      "type": "object",
+      "description": "Secoes numeradas do corpo markdown. 1-12 sempre; 13-16 quando gatilho=bastao (knowledge 0014 + onda 0113).",
+      "required": [
+        "onda_em_curso",
+        "ultimo_readback",
+        "ultimo_erp",
+        "hearbacks_pendentes",
+        "sinais_abertos",
+        "proxima_acao",
+        "arquivos_scope_ativo",
+        "decisoes_nao_documentadas",
+        "riscos_abertos",
+        "leituras_obrigatorias",
+        "comando_validacao",
+        "sinal"
+      ],
+      "properties": {
+        "onda_em_curso": { "type": "string", "minLength": 1 },
+        "ultimo_readback": {
+          "type": "string",
+          "minLength": 1,
+          "description": "ID + status do readback (ex.: '0177-rb-... — confirmed')."
+        },
+        "ultimo_erp": { "type": "string", "minLength": 1 },
+        "hearbacks_pendentes": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "sinais_abertos": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "proxima_acao": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 400,
+          "description": "1 frase verbo-imperativo. DEVE coincidir com proxima_acao do STATE no mesmo commit (checado pelo guard-state-fresh)."
+        },
+        "arquivos_scope_ativo": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "decisoes_nao_documentadas": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "riscos_abertos": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "leituras_obrigatorias": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "description": "Read-list do sucessor. Bastao 2.0: STATE + este handoff + readback ativo + contrato do papel (~4 itens; teto 6 evita regressao a listas de 16).",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "comando_validacao": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Comando unico para validar estado ao retomar."
+        },
+        "sinal": {
+          "type": "string",
+          "pattern": "HBN HANDOFF READY"
+        },
+        "papel_transferido": {
+          "type": "string",
+          "enum": ["implementador", "auditor cruzado", "consolidador", "auditor-arquiteto"]
+        },
+        "bastao_para": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Agente que recebe + evidencia objetiva (nao opiniao)."
+        },
+        "checklist_anti_vies": {
+          "type": "object",
+          "description": "Checklist 12.4 do PROMPT_ARQUITETO.",
+          "required": ["auto_indicacao", "evidencia_objetiva", "vies_reconhecido", "mitigacao"],
+          "properties": {
+            "auto_indicacao": { "type": "string", "minLength": 1 },
+            "evidencia_objetiva": { "type": "string", "minLength": 1 },
+            "vies_reconhecido": { "type": "string", "minLength": 1 },
+            "mitigacao": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false
+        },
+        "prompt_entrada_sucessor": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Path do prompt pack OU referencia ao template do papel em agents/role-templates.md."
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "if": {
+    "properties": { "gatilho": { "const": "bastao" } }
+  },
+  "then": {
+    "properties": {
+      "secoes": {
+        "required": [
+          "onda_em_curso",
+          "ultimo_readback",
+          "ultimo_erp",
+          "hearbacks_pendentes",
+          "sinais_abertos",
+          "proxima_acao",
+          "arquivos_scope_ativo",
+          "decisoes_nao_documentadas",
+          "riscos_abertos",
+          "leituras_obrigatorias",
+          "comando_validacao",
+          "sinal",
+          "papel_transferido",
+          "bastao_para",
+          "checklist_anti_vies",
+          "prompt_entrada_sucessor"
+        ]
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,159 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HBN Connector Operation Contract",
+  "type": "object",
+  "required": [
+    "status",
+    "recommended_choice",
+    "connector_presence",
+    "choices",
+    "privacy_contract",
+    "user_messages",
+    "delivery_expectation"
+  ],
+  "properties": {
+    "status": {
+      "type": "string",
+      "enum": [
+        "ready_to_assume_process",
+        "approval_required_before_build",
+        "ready_to_build_connector",
+        "requires_bridge_choice"
+      ]
+    },
+    "recommended_choice": {
+      "type": "string",
+      "minLength": 1
+    },
+    "connector_presence": {
+      "type": "object",
+      "required": ["status", "evidence", "marker_path"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["active", "available_but_not_active", "absent"]
+        },
+        "evidence": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "marker_path": {
+          "type": "string",
+          "minLength": 0
+        }
+      }
+    },
+    "choices": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["id", "available", "requires_human_approval", "question"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "available": { "type": "boolean" },
+          "requires_human_approval": { "type": "boolean" },
+          "question": { "type": "string", "minLength": 1 },
+          "allowed_operations": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "requires_remote_lookup_approval": { "type": "boolean" },
+          "required_fields": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "privacy_contract": {
+      "type": "object",
+      "required": [
+        "mode",
+        "stores_only_on_user_machine",
+        "external_collection",
+        "external_persistence_by_default",
+        "personal_identity_required",
+        "default_retention",
+        "gdpr_design_principles",
+        "remote_lookup",
+        "local_storage_paths",
+        "notice"
+      ],
+      "properties": {
+        "mode": { "type": "string", "minLength": 1 },
+        "stores_only_on_user_machine": { "type": "boolean" },
+        "external_collection": { "type": "boolean" },
+        "external_persistence_by_default": { "type": "boolean" },
+        "personal_identity_required": { "type": "boolean" },
+        "default_retention": { "type": "string", "minLength": 1 },
+        "gdpr_design_principles": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "remote_lookup": {
+          "type": "object",
+          "required": [
+            "authorization_required",
+            "required_now",
+            "allowed_payload_scope",
+            "forbidden_payload_scope",
+            "external_identity_mode"
+          ],
+          "properties": {
+            "authorization_required": { "type": "boolean" },
+            "required_now": { "type": "boolean" },
+            "allowed_payload_scope": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "forbidden_payload_scope": {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            "external_identity_mode": { "type": "string", "minLength": 1 }
+          }
+        },
+        "local_storage_paths": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string" }
+        },
+        "notice": { "type": "string", "minLength": 1 }
+      }
+    },
+    "user_messages": {
+      "type": "object",
+      "required": [
+        "existing_connector",
+        "auto_discovery",
+        "manual_entry",
+        "privacy_notice",
+        "remote_lookup"
+      ],
+      "properties": {
+        "existing_connector": { "type": "string", "minLength": 1 },
+        "auto_discovery": { "type": "string", "minLength": 1 },
+        "manual_entry": { "type": "string", "minLength": 1 },
+        "privacy_notice": { "type": "string", "minLength": 1 },
+        "remote_lookup": { "type": "string", "minLength": 1 }
+      }
+    },
+    "delivery_expectation": {
+      "type": "object",
+      "required": [
+        "selected_delivery_language",
+        "selected_coupling_mode",
+        "requires_host_installation",
+        "delivery_target"
+      ],
+      "properties": {
+        "selected_delivery_language": { "type": "string", "minLength": 0 },
+        "selected_coupling_mode": { "type": "string", "minLength": 0 },
+        "requires_host_installation": { "type": "boolean" },
+        "delivery_target": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

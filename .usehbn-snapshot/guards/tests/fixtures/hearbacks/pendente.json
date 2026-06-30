@@ -1,0 +1,1 @@
+{"hearback_id":"fixture-pendente","path":"guards/tests/fixtures/hearbacks/pendente.json","status":"pendente","signed_by":null,"signed_at":null,"excecoes_cobertas":[{"tipo":"familia","entre":["alpha-1","alpha-2"]}],"notes":"FIXTURE de teste (ADR-020) — declara a exceção mas status≠confirmed: não vale."}

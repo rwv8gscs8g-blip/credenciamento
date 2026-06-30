@@ -1,0 +1,147 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HBN Model Capability Profile",
+  "description": "Valida um perfil de capacidade de modelo em .hbn/models/<apelido>.json (ADR-015). Status: accepted (hearback Mauricio 2026-06-10). Regra dura embutida: handoff_threshold > 0.5 (relaxamento do default conservador) EXIGE hearback_ref — sem evidência de hearback, o schema recusa.",
+  "type": "object",
+  "required": [
+    "profile_version",
+    "model_id",
+    "context_window_tokens",
+    "handoff_threshold",
+    "papeis_aptos",
+    "modos",
+    "nao_verificado",
+    "ultima_revisao",
+    "status",
+    "temperatura"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "profile_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "model_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identificador canônico do modelo (string da API ou nome usado nos relays, ex.: claude-fable-5, antigravity-gemini35)"
+    },
+    "apelido": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Nome curto do arquivo: .hbn/models/<apelido>.json"
+    },
+    "fornecedor": {
+      "type": "string"
+    },
+    "context_window_tokens": {
+      "type": ["integer", "null"],
+      "minimum": 1000,
+      "description": "Janela de contexto em tokens. null = não verificado (e o campo DEVE constar em nao_verificado)"
+    },
+    "handoff_threshold": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 0.9,
+      "description": "Fração da janela usada que dispara handoff (knowledge 0017). Default conservador do protocolo: 0.5. Valores > 0.5 só com hearback (ver if/then)."
+    },
+    "hearback_ref": {
+      "type": ["string", "null"],
+      "description": "Path do hearback que autorizou relaxar o threshold acima de 0.5 (ex.: .hbn/hearbacks/NNNN-....json)"
+    },
+    "papeis_aptos": {
+      "type": "array",
+      "minItems": 0,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "implementador",
+          "auditor-cruzado",
+          "auditor-arquiteto",
+          "consolidador"
+        ]
+      },
+      "description": "Papéis (vocabulário do state.schema.json) que o modelo já exerceu com evidência — não aspiração"
+    },
+    "modos": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      },
+      "description": "Modos de operação disponíveis verificados (ex.: chat-desktop, cli, agentic-tools, dry-run)"
+    },
+    "verificado": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "description": "Mapa campo→evidência (Truth Barrier): de onde veio cada número afirmado"
+    },
+    "nao_verificado": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      },
+      "description": "Campos cujo valor é desconhecido ou não confirmado — lista explícita, sem vergonha"
+    },
+    "observacoes": {
+      "type": "string"
+    },
+    "ultima_revisao": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "status": {
+      "type": "string",
+      "enum": ["proposed", "accepted", "superseded"]
+    },
+    "temperatura": {
+      "type": "string",
+      "enum": ["quente", "frio", "ultrapassado"]
+    },
+    "superseded_by": {
+      "type": "string"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "handoff_threshold": {
+            "exclusiveMinimum": 0.5
+          }
+        }
+      },
+      "then": {
+        "required": ["hearback_ref"],
+        "properties": {
+          "hearback_ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "context_window_tokens": {
+            "type": "null"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "nao_verificado": {
+            "contains": {
+              "const": "context_window_tokens"
+            }
+          }
+        }
+      }
+    }
+  ]
+}

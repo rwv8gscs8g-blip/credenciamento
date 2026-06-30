@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HBN Relay STATE Record (Bastao 2.0)",
+  "description": "Valida o front-matter YAML de .hbn/relay/STATE.md (projetado para JSON). Status: accepted (hearback Mauricio 2026-06-10). APENAS o vigente — historico vive no relay-archive.",
+  "type": "object",
+  "required": [
+    "state_version",
+    "projeto",
+    "onda_atual",
+    "proprietario_bastao",
+    "papel_bastao",
+    "papeis",
+    "proxima_acao",
+    "sinais_abertos",
+    "readback_ativo",
+    "handoff_mais_recente",
+    "ultima_atualizacao",
+    "atualizado_por"
+  ],
+  "properties": {
+    "state_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "projeto": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocolo": {
+      "type": "string"
+    },
+    "onda_atual": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 60
+    },
+    "proprietario_bastao": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 60
+    },
+    "papel_bastao": {
+      "type": "string",
+      "enum": [
+        "implementador",
+        "auditor-cruzado",
+        "auditor-arquiteto",
+        "consolidador",
+        "humano"
+      ]
+    },
+    "papeis": {
+      "type": "object",
+      "description": "Papel de cada IA AGORA, com status inline (ATIVO/EM ESPERA/PENDENTE). Chaves livres por papel.",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      }
+    },
+    "proxima_acao": {
+      "type": "string",
+      "description": "UMA acao atomica, verbo-imperativo, com agente e artefato de saida nomeado.",
+      "minLength": 10,
+      "maxLength": 400
+    },
+    "sinais_abertos": {
+      "type": "array",
+      "description": "Somente sinais HBN SEM resposta. Sinal fechado sai do STATE (vive no archive).",
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "maxItems": 10
+    },
+    "readback_ativo": {
+      "type": "string",
+      "pattern": "^\\.hbn/readbacks/.+\\.json$"
+    },
+    "handoff_mais_recente": {
+      "type": "string",
+      "pattern": "^\\.hbn/messages/.+\\.md$"
+    },
+    "ancora_rollback": {
+      "type": "string"
+    },
+    "ancora_estavel": {
+      "type": "string"
+    },
+    "ciclo_ativo": {
+      "type": "string",
+      "maxLength": 200
+    },
+    "ultima_atualizacao": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "atualizado_por": {
+      "type": "string",
+      "minLength": 1
+    },
+    "atribuicao": {
+      "type": "object",
+      "description": "ACCEPTED (corrente E 50%, readback 0002, 2026-06-10). Atribuição de chapéus checável por máquina — ver core/roles-assignment-spec.md §2. Validável por guards/assert-role-family.sh.",
+      "additionalProperties": false,
+      "required": ["chapeu_atual", "implementador", "auditores", "gravada_em"],
+      "properties": {
+        "chapeu_atual": {
+          "type": "string",
+          "enum": ["implementador", "auditor-cruzado", "auditor-arquiteto", "consolidador", "humano"],
+          "description": "Papel da janela dona do bastão AGORA — chapéu inequívoco."
+        },
+        "implementador": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9.-]*$",
+          "description": "Apelido de perfil em .hbn/models/<apelido>.json (ADR-015)."
+        },
+        "auditores": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]*$" }
+        },
+        "gravada_em": { "type": "string", "format": "date-time" },
+        "hearback_ref": {
+          "type": ["string", "null"],
+          "description": "Hearback que cobre exceções ao invariante anti-groupthink, se houver."
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

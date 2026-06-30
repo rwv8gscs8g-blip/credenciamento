@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HBN Autoevolve Cycle Microdelta Record",
+  "description": "Single record written to .hbn/autoevolve/cycle-<id>.jsonl by AuditWriter — matches MicrodeltaResult v1.0.0 contract.",
+  "type": "object",
+  "required": [
+    "task_id",
+    "arm",
+    "slug",
+    "status",
+    "tests_passed",
+    "signals",
+    "ts"
+  ],
+  "properties": {
+    "task_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "arm": {
+      "type": "string",
+      "minLength": 1
+    },
+    "slug": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "type": "string",
+      "enum": ["ok", "failed", "oversized", "skipped"]
+    },
+    "tests_passed": {
+      "type": "boolean"
+    },
+    "diff_added": {
+      "type": "integer"
+    },
+    "diff_removed": {
+      "type": "integer"
+    },
+    "commit": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string"
+    },
+    "signals": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 1
+    },
+    "ts": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

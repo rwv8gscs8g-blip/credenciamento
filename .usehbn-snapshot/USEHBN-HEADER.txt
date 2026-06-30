@@ -1,0 +1,5 @@
+ISTO E O PROTOCOLO useHBN (usehbn@v1-estavel, commit a67e8049ed6fd4f81423ee60194a2f5896f25af0) — read-only.
+NAO EDITAR. Para ler a regra: aqui (.usehbn-snapshot/, read-only).
+Para trabalhar no projeto: na raiz do projeto. Para melhorar o protocolo:
+deposite em inbox/credenciamento/ do protocolo (nunca edite o genoma direto).
+Qualquer edicao deste diretorio e bloqueada por assert-snapshot-integrity.

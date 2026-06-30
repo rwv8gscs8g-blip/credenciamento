@@ -1,0 +1,6 @@
+protocol_sha256=8796b672819c0dd0df6fc9c7b0c24288b987ad0e9adfa3b3fd115dd12b5cb7f1
+tag=v1-estavel
+commit=a67e8049ed6fd4f81423ee60194a2f5896f25af0
+generated_at=2026-06-27T05:07:44Z
+surface=core methodology schemas guards
+file_count=137

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HBN Connector Approval Record",
+  "type": "object",
+  "required": [
+    "id",
+    "question",
+    "choice_id",
+    "approved",
+    "allowed_operations",
+    "requires_remote_lookup",
+    "descriptor_scope",
+    "created_at",
+    "storage_path",
+    "processing_mode"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "question": { "type": "string", "minLength": 1 },
+    "choice_id": { "type": "string", "minLength": 1 },
+    "approved": { "type": "boolean" },
+    "allowed_operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string" }
+    },
+    "requires_remote_lookup": { "type": "boolean" },
+    "descriptor_scope": { "type": "object" },
+    "created_at": { "type": "string", "minLength": 1 },
+    "storage_path": { "type": "string", "minLength": 1 },
+    "processing_mode": { "type": "string", "minLength": 1 }
+  }
+}

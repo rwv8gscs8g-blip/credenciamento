@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HBN Semantic Readback Record",
+  "type": "object",
+  "required": [
+    "readback_id",
+    "execution_id",
+    "agent_id",
+    "track",
+    "hearback_status",
+    "understanding",
+    "invariants_preserved",
+    "action_plan",
+    "classification_basis",
+    "created_at"
+  ],
+  "properties": {
+    "readback_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "execution_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "track": {
+      "type": "string",
+      "enum": [
+        "fast_track",
+        "safe_track"
+      ]
+    },
+    "hearback_status": {
+      "type": "string",
+      "enum": [
+        "pending",
+        "confirmed",
+        "rejected"
+      ]
+    },
+    "understanding": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 2000
+    },
+    "invariants_preserved": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "action_plan": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "out_of_scope": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "residual_risks": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "classification_basis": {
+      "type": "object",
+      "required": [
+        "has_guardian_warnings",
+        "has_risks",
+        "has_constraints"
+      ],
+      "properties": {
+        "has_guardian_warnings": {
+          "type": "boolean"
+        },
+        "has_risks": {
+          "type": "boolean"
+        },
+        "has_constraints": {
+          "type": "boolean"
+        }
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "protocol_version": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

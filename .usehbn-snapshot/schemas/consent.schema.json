@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HBN Consent Record",
+  "type": "object",
+  "required": [
+    "id",
+    "question",
+    "scope",
+    "duration",
+    "contribution_units",
+    "revocable",
+    "allowed_operations",
+    "granted",
+    "processing_mode",
+    "created_at",
+    "storage_path"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "question": {
+      "type": "string",
+      "minLength": 1
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "duration": {
+      "type": "string",
+      "minLength": 1
+    },
+    "contribution_units": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "revocable": {
+      "type": "boolean"
+    },
+    "allowed_operations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "granted": {
+      "type": "boolean"
+    },
+    "processing_mode": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "storage_path": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

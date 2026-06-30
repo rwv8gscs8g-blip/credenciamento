@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HBN Audit Pre-Execution Record",
+  "description": "Parecer de uma IA auditora adversarial sobre o readback ANTES da execucao comecar. Cobre coerencia, riscos nao declarados, violacao de invariantes, scope ambiguo. Status: accepted (hearback Mauricio 2026-06-10). Promovido de Credenciamento/.hbn/schemas/audit-pre (v1.0.0); generalizado: auditor_agent e string livre aqui, pinado por projeto.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "audit_id",
+    "readback_id",
+    "auditor_agent",
+    "verdict",
+    "findings",
+    "signed_at"
+  ],
+  "properties": {
+    "audit_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-pre$"
+    },
+    "readback_id": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[a-z0-9-]+$"
+    },
+    "auditor_agent": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Identificador do agente auditor (ex.: claude-opus-4-8, gemini-3-5-antigravity, humano). Projetos DEVEM restringir a enum no schema local. Auditor nao pode ser o mesmo agente que produziu o readback (P10)."
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["pass", "warn", "fail"],
+      "description": "pass = readback pode prosseguir para hearback humano. warn = pode prosseguir mas com nota explicita ao operador. fail = readback deve ser refeito antes de hearback."
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["severity", "category", "description"],
+        "additionalProperties": false,
+        "properties": {
+          "severity": { "type": "string", "enum": ["info", "low", "medium", "high", "p0"] },
+          "category": { "type": "string", "enum": ["scope_ambiguity", "missing_risk", "invariant_violation_risk", "rollback_weak", "evidence_weak", "doctrinal_drift", "naming_drift", "other"] },
+          "description": { "type": "string", "minLength": 10 },
+          "suggested_fix": { "type": "string" }
+        }
+      },
+      "description": "Lista de achados (pode ser vazia se verdict=pass sem ressalvas)."
+    },
+    "signals_emitted": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "✅ HBN ACTIVE",
+          "🟡 HBN NEEDS HUMAN DECISION",
+          "❌ HBN SECURITY BLOCKED SUGGESTION",
+          "🔍 GROUPTHINK ALARM",
+          "🪞 MIRROR DRIFT",
+          "🟠 SOURCE DRIFT DETECTED",
+          "⚪ HBN AUDIT-ONLY"
+        ],
+        "description": "Vocabulario do registry canonico de sinais (core/, iter 11 do autoevolve)."
+      }
+    },
+    "signed_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}

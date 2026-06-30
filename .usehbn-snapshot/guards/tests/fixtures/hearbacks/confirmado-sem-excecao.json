@@ -1,0 +1,1 @@
+{"hearback_id":"fixture-confirmado-sem-excecao","path":"guards/tests/fixtures/hearbacks/confirmado-sem-excecao.json","status":"confirmed","signed_by":"fixture-teste","signed_at":"2026-06-10T00:00:00-03:00","excecoes_cobertas":[],"notes":"FIXTURE de teste (ADR-020) — confirmado mas NÃO declara exceção alguma: não pode cobrir bypass."}

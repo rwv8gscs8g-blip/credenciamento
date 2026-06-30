@@ -1,0 +1,9 @@
+# mapa canonico apelido->familia; curado por humano; usado por G-AUDITOR-ID
+opus Anthropic
+claude Anthropic
+codex OpenAI
+gpt-5 OpenAI
+cursor OpenAI
+gemini Google
+antigravity Google
+grok xAI

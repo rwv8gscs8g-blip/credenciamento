@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HBN Execution Result Protocol Record",
+  "type": "object",
+  "required": [
+    "traceability",
+    "hbn_outcome",
+    "human_decision",
+    "intent_risk_profile",
+    "action_taken",
+    "created_at"
+  ],
+  "properties": {
+    "traceability": {
+      "type": "object",
+      "required": [
+        "execution_id",
+        "agent_id"
+      ],
+      "properties": {
+        "execution_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "agent_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "hbn_outcome": {
+      "type": "string",
+      "enum": [
+        "executed",
+        "executed_with_risk",
+        "blocked_by_guardian",
+        "rejected",
+        "failed"
+      ]
+    },
+    "human_decision": {
+      "type": "object",
+      "required": [
+        "status"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "approved",
+            "rejected",
+            "conditional",
+            "not_reviewed"
+          ]
+        },
+        "review_notes": {
+          "type": "string"
+        }
+      }
+    },
+    "intent_risk_profile": {
+      "type": "object",
+      "required": [
+        "deception",
+        "improbable",
+        "random",
+        "herd_behavior",
+        "financial_survival_risk",
+        "abandonment_or_resource_loss_risk",
+        "curiosity_driven",
+        "agi_resource_shift",
+        "ethical_break"
+      ],
+      "properties": {
+        "deception": {
+          "type": "boolean"
+        },
+        "improbable": {
+          "type": "boolean"
+        },
+        "random": {
+          "type": "boolean"
+        },
+        "herd_behavior": {
+          "type": "boolean"
+        },
+        "financial_survival_risk": {
+          "type": "boolean"
+        },
+        "abandonment_or_resource_loss_risk": {
+          "type": "boolean"
+        },
+        "curiosity_driven": {
+          "type": "boolean"
+        },
+        "agi_resource_shift": {
+          "type": "boolean"
+        },
+        "ethical_break": {
+          "type": "boolean"
+        },
+        "other_emergent_risk": {
+          "type": "string"
+        }
+      }
+    },
+    "action_taken": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 500
+    },
+    "readback_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "reference"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "reference": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "minLength": 1
+    },
+    "environment": {
+      "type": "object",
+      "description": "Optional environment conditions that contributed to the result outcome.",
+      "properties": {
+        "node_version": { "type": "string" },
+        "python_version": { "type": "string" },
+        "os": { "type": "string" },
+        "network_available": { "type": "boolean" },
+        "custom": { "type": "object" }
+      },
+      "additionalProperties": true
+    },
+    "protocol_version": {
+      "type": "string",
+      "minLength": 1
+    }
+  }
+}

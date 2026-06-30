@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+# HBN_HOOK_SHIM_VERSION=M-A-20260614
+
+fail() {
+    echo "[hbn-hook/commit-msg] BLOQUEADO: $*" >&2
+    exit 1
+}
+
+MSG_FILE="${1:-}"
+[[ -n "$MSG_FILE" && -f "$MSG_FILE" ]] || fail "arquivo de mensagem ausente"
+TOP="$(git rev-parse --show-toplevel 2>/dev/null || true)"
+[[ -n "$TOP" ]] || fail "fora de um worktree Git"
+POINTER="${TOP}/.hbn/active-version"
+[[ -r "$POINTER" ]] || fail "ponteiro ${POINTER} ausente ou ilegível"
+if grep -qE '^(<<<<<<<|=======|>>>>>>>)' "$POINTER" 2>/dev/null; then
+    fail "ponteiro ${POINTER} contém conflito de merge; resolva para uma única versão ativa"
+fi
+ACTIVE_LINES="$(grep -v '^[[:space:]]*#' "$POINTER" | grep -v '^[[:space:]]*$' || true)"
+ACTIVE_COUNT="$(printf '%s\n' "$ACTIVE_LINES" | sed '/^[[:space:]]*$/d' | wc -l | tr -d '[:space:]')"
+[[ "$ACTIVE_COUNT" == "1" ]] || fail "ponteiro deve conter exatamente uma linha ativa; encontrou ${ACTIVE_COUNT}"
+ACTIVE="$(printf '%s\n' "$ACTIVE_LINES" | sed -n '1p' | sed -E 's/^[[:space:]]+//; s/[[:space:]]+$//')"
+if [[ "$ACTIVE" != "." && ! "$ACTIVE" =~ ^versao_[0-9]+_[0-9]+_[A-Za-z0-9]+$ ]]; then
+    fail "valor inválido em .hbn/active-version: ${ACTIVE}"
+fi
+case "$ACTIVE" in
+    /*|*..*|*//*|*\\*|*" "*|*"	"*) fail "path inseguro em .hbn/active-version: ${ACTIVE}" ;;
+esac
+if [[ "$ACTIVE" == "." ]]; then
+    ACTIVE_ROOT="$TOP"
+else
+    ACTIVE_ROOT="${TOP}/${ACTIVE}"
+fi
+[[ -d "$ACTIVE_ROOT" ]] || fail "versão ativa inexistente: ${ACTIVE}"
+for g in assert-baton-token.sh assert-exception-traceable.sh; do
+    guard_path="${ACTIVE_ROOT}/guards/${g}"
+    [[ -f "$guard_path" ]] || fail "guard obrigatório ausente na versão ativa: ${guard_path}"
+    bash "$guard_path" "$MSG_FILE" || exit 1
+done
+exit 0

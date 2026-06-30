@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HBN Dual-Run Result",
+  "description": "Registro de um caso do dual-run (ADR-016, core/dual-run-spec.md). Status: proposed (corrente D, 2026-06-10; hearback pendente). Gate: identico passa; diferente exige justificativa + hearback_ref confirmado.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "projeto",
+    "caso",
+    "inputs_hash",
+    "hash_velho",
+    "hash_novo",
+    "diff_status",
+    "executado_por",
+    "executado_em"
+  ],
+  "properties": {
+    "run_id": {
+      "type": "string",
+      "pattern": "^[0-9]{8}-[0-9]{2}-[a-z0-9-]+$",
+      "description": "Id global ADR-011 do run + slug (ex.: 20260615-01-dualrun-v207-relatorios)."
+    },
+    "projeto": { "type": "string", "minLength": 1 },
+    "caso": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "Id estável do caso no corpus (.hbn/dual-run/corpus/)."
+    },
+    "motor_velho": { "type": "string", "description": "Identificação/versão do motor gabarito (ex.: V12.0.0206)." },
+    "motor_novo": { "type": "string", "description": "Identificação/versão do motor candidato (ex.: V12.0.0207-rc1)." },
+    "inputs_hash": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "normalizacao": {
+      "type": "string",
+      "description": "Transformação declarada aplicada às duas saídas antes do hash. Ausente = byte a byte."
+    },
+    "hash_velho": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "hash_novo": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "diff_status": { "type": "string", "enum": ["identico", "diferente"] },
+    "diff_resumo": { "type": "string", "description": "O que mudou, em linguagem humana. Obrigatório se diferente." },
+    "justificativa": { "type": "string", "description": "Por que a diferença é desejada. Obrigatória se diferente." },
+    "hearback_ref": {
+      "type": "string",
+      "pattern": "^\\.hbn/hearbacks/.+\\.json$",
+      "description": "Hearback confirmado aprovando o diff. Sem ele, caso diferente FALHA o gate."
+    },
+    "executado_por": { "type": "string", "description": "Humano que rodou (T3: IA desenha, humano roda)." },
+    "executado_em": { "type": "string", "format": "date-time" }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "diff_status": { "const": "diferente" } } },
+      "then": { "required": ["diff_resumo", "justificativa"] }
+    },
+    {
+      "if": { "properties": { "diff_status": { "const": "identico" } } },
+      "then": {
+        "properties": {
+          "justificativa": false,
+          "hearback_ref": false
+        }
+      }
+    }
+  ]
+}

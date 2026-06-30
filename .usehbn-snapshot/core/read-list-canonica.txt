@@ -1,0 +1,20 @@
+# G-ORQ-ENTRADA — read-list canonica para bastao de orquestrador.
+# Formato:
+#   <blob_hash_sha1> <path>
+#   DYNAMIC <campo_do_STATE>
+# Os itens DYNAMIC nao carregam hash fixo: o guard resolve o path pelo STATE
+# vigente e exige que a atestacao traga o hash atual de disco.
+
+3018a075aed76767241e3eb9d95496543c7b3f05 .hbn/relay/STATE.md
+DYNAMIC handoff_mais_recente
+DYNAMIC readback_ativo
+2e9cd62645b9047ad842d43fcc88eec3858a450c agents/role-templates.md
+417ee20eaadd138cdbc2e19d02e5fbf1e39d9371 .hbn/knowledge/0022-firewall-workflow-fast-track.md
+6c9b2830888cde89ba155cddf15d1348664f1891 core/role-cards.md
+5fca3e063fcdafb2483ef42ef83909be27ee6edf .hbn/knowledge/0001-comandos-atomicos-copiaveis.md
+c45a4917d918c47beb6dde0183e96d35ecef30b3 .hbn/knowledge/0002-entrega-operacional-minimalista.md
+770ebe4d8eee87a366f12966e6f190c9554b59e5 .hbn/knowledge/0023-area-temporaria-e-fixtures-efemeras.md
+5120aabb91ed71ab7e30cdbb0135c0489f54986d .hbn/knowledge/0024-orquestrador-nao-sela-zona-livre-sem-aprovacao.md
+739f1414ad888a69635d36ee06a08e60efb4e7a1 .hbn/knowledge/0025-auditor-read-only-sem-no-verify.md
+357b58a37c29af4a6bbcad7fcc9be569f6a602cc core/orchestrator-profile-spec.md
+765fe19c0e3cc98d4ddb593a22af65388c90fa56 core/relay-spec.md

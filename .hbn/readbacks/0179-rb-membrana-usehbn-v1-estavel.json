@@ -1,0 +1,81 @@
+{
+  "readback_id": "0179-rb-membrana-usehbn-v1-estavel",
+  "data": "2026-06-29",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0178-rb-relatorio-prestacao-contas-abril-maio-testes",
+  "intent": {
+    "objective": "Registrar (commitar) no repo Credenciamento a membrana usehbn@v1-estavel ja instalada e verificada no disco (.usehbn-snapshot/ = 137 protocolo + 5 meta; protocol_sha256 8796b672819c0dd0df6fc9c7b0c24288b987ad0e9adfa3b3fd115dd12b5cb7f1; scripts/hbn-snapshot/assert-snapshot-integrity.sh; .hbn/active-version=.). Commit ADITIVO e escopado na branch atual; nao toca codigo de dominio. P2-B parte 2 (lado projeto).",
+    "non_goals": [
+      "Nao editar nenhum arquivo da membrana (.usehbn-snapshot/ e read-only; trocas futuras via install-snapshot.sh --upgrade)",
+      "Nao tocar codigo de dominio (src/vba, formularios, local-ai)",
+      "Nao instalar runner project-mode nem subset bloqueante (isso e P2-C)",
+      "Nao tocar a main do protocolo (usehbn) nem qualquer coisa fora do Credenciamento",
+      "Nao rodar Excel/VBE/TV2/VCR"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".usehbn-snapshot/**",
+      "scripts/hbn-snapshot/assert-snapshot-integrity.sh",
+      ".hbn/active-version",
+      ".hbn/readbacks/0179-rb-membrana-usehbn-v1-estavel.json"
+    ],
+    "files_forbidden": [
+      "src/**",
+      "local-ai/**",
+      "*.frm",
+      "*.frx",
+      "backups/**",
+      "auditoria/evidencias/**"
+    ],
+    "imports_must_come_from": "n/a (commit aditivo de membrana; sem VBA)"
+  },
+  "decision": {
+    "human_approval": "Mauricio escolheu o rito GOVERNADO (safe_track) para o commit da membrana na sessao de 2026-06-29, autorizando o escopo restrito a membrana + este readback.",
+    "chosen_fix": "Commit unico, aditivo, com git add EXPLICITO de .usehbn-snapshot/, scripts/hbn-snapshot/assert-snapshot-integrity.sh e .hbn/active-version, sob o rito do projeto (pre-commit FASE 1).",
+    "handoff_position": "Apos commit+push, repoint do STATE do protocolo (onda propria no usehbn) para P2-C."
+  },
+  "invariants_preserved": [
+    ".usehbn-snapshot/ permanece read-only e integro (assert-snapshot-integrity.sh = 137).",
+    "Protocolo v1-estavel congelado/intocado; o projeto so consome via .hbn/active-version=.",
+    "Codigo de dominio (VBA, formularios) nao e tocado.",
+    "main do protocolo (usehbn) intocada 4db6928."
+  ],
+  "risks": [
+    {
+      "risk": "Algum arquivo fora da membrana entrar staged por engano.",
+      "mitigation": "git add EXPLICITO dos caminhos + scope-lock safe_track enforcando files_allowed/forbidden; conferencia de git diff --cached --name-only antes do commit.",
+      "severity": "medium"
+    },
+    {
+      "risk": "assert-snapshot-integrity falhar se a membrana for staged antes da verificacao.",
+      "mitigation": "Rodar assert-snapshot-integrity.sh ANTES do git add (esperar 137).",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      { "gate": "assert-snapshot-integrity 137 antes do stage", "evidence_kind": "command_output", "evidence_required_in": "terminal do operador" },
+      { "gate": "pre-commit FASE 1 (5 guards) verde no commit", "evidence_kind": "command_output", "evidence_required_in": "saida do git commit" },
+      { "gate": "Push confirmado no remoto", "evidence_kind": "command_output", "evidence_required_in": "git log origin/codex/v12-0-0206-planejamento" }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se algum guard bloquear: PARAR e relatar (motivo do disco), nao contornar, nao --no-verify.",
+      "Se arquivo fora de escopo for staged: git restore --staged <arquivo> e repetir conferencia.",
+      "Para desfazer o commit antes do push: git reset --soft HEAD~1."
+    ],
+    "anchor_to_restore": "d299335 (HEAD antes do commit da membrana)"
+  },
+  "human_status": "confirmed",
+  "hearback_status": "confirmed",
+  "created_at": "2026-06-29T23:00:00-03:00",
+  "confirmed_at": "2026-06-29T23:00:00-03:00",
+  "hearback_summary": "Mauricio, na sessao 2026-06-29, escolheu o rito governado (safe_track) e autorizou o commit aditivo da membrana usehbn@v1-estavel no Credenciamento, escopo restrito a membrana + este readback."
+}
