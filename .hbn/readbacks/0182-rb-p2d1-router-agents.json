@@ -1,0 +1,81 @@
+{
+  "readback_id": "0182-rb-p2d1-router-agents",
+  "data": "2026-06-30",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0181-rb-p2c2-index-reconciliado",
+  "intent": {
+    "objective": "P2-D1: inserir o router (protocolo x projeto) no topo do AGENTS.md, entre marcadores HBN-ROUTER, antes de '## Identidade do projeto'. Aditivo; nao toca codigo de dominio, nem a membrana, nem o espelho usehbn/.",
+    "non_goals": [
+      "Nao fazer untangle (P2-D2), tombstone (P2-D3), limpeza de refs (P2-D4) nem selagem (P2-D5)",
+      "Nao editar .usehbn-snapshot/** (read-only)",
+      "Nao tocar codigo de dominio (src/vba, formularios, local-ai) nem o espelho usehbn/",
+      "Nao tocar a main do usehbn",
+      "Nao usar HBN_GUARDS_BYPASS nem --no-verify"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "AGENTS.md",
+      ".hbn/readbacks/0182-rb-p2d1-router-agents.json"
+    ],
+    "files_forbidden": [
+      ".usehbn-snapshot/**",
+      "usehbn/**",
+      "src/**",
+      "local-ai/**",
+      "*.frm",
+      "*.frx",
+      "backups/**"
+    ],
+    "imports_must_come_from": "n/a (sem VBA)"
+  },
+  "decision": {
+    "human_approval": "Mauricio deu o hearback (pronto) em 2026-06-30 sobre o diff do router.",
+    "chosen_fix": "Insercao idempotente do bloco HBN-ROUTER antes de '## Identidade do projeto' no AGENTS.md. git add escopado de 2 caminhos; commit unico sob rito do projeto.",
+    "handoff_position": "Apos commit+push, proxima sub-onda P2-D2 (untangle dos artefatos de dominio do espelho usehbn/)."
+  },
+  "invariants_preserved": [
+    ".usehbn-snapshot/ read-only e integro (137); guard congelado intocado.",
+    "Espelho usehbn/ intocado nesta sub-onda (sai so no tombstone, apos untangle).",
+    "Codigo de dominio nao e tocado.",
+    "main do usehbn intocada."
+  ],
+  "risks": [
+    {
+      "risk": "Router duplicar em re-execucao.",
+      "mitigation": "marcador HBN-ROUTER:BEGIN faz a insercao no-op se ja presente.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "router presente e antes de '## Identidade do projeto'",
+        "evidence_kind": "command_output",
+        "evidence_required_in": "terminal do operador"
+      },
+      {
+        "gate": "pre-commit FASE 1 verde (7 guards) no commit",
+        "evidence_kind": "command_output",
+        "evidence_required_in": "saida do git commit"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se algum guard bloquear: PARAR e relatar o motivo lido do disco; nao contornar, nao --no-verify.",
+      "git checkout -- AGENTS.md para desfazer antes do commit."
+    ],
+    "anchor_to_restore": "23efaac (HEAD antes do P2-D1)"
+  },
+  "human_status": "confirmed",
+  "hearback_status": "confirmed",
+  "created_at": "2026-06-30T16:30:00-03:00",
+  "confirmed_at": "2026-06-30T17:00:00-03:00",
+  "hearback_summary": "Mauricio confirmou o hearback do P2-D1 em 2026-06-30 (pronto), apos verificacao no disco: router HBN-ROUTER no topo do AGENTS.md (linha 10) antes de Identidade (linha 20), HEAD 23efaac intocado. Autorizado o commit aditivo escopado."
+}

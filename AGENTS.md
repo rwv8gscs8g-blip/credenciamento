@@ -7,6 +7,16 @@
 > historicamente especificos (`CLAUDE.md`, `.codex/`, `.cursorrules`)
 > apontam para este como fonte unica.
 
+<!-- HBN-ROUTER:BEGIN (P2-D1) -->
+## Router — protocolo x projeto (LEIA PRIMEIRO)
+
+> Antes de qualquer leitura ou escrita, saiba onde voce esta:
+> - **PROTOCOLO** (genoma usehbn@v1-estavel): vive em `.usehbn-snapshot/` — **read-only**, nunca edite.
+> - **PROJETO** (trabalho de dominio): a raiz do repositorio, fora de `.usehbn-snapshot/`.
+> - **Melhorar o protocolo**: deposite em `inbox/credenciamento/` no repo do protocolo (usehbn) — **nunca** edite o protocolo direto.
+> - **Editar `.usehbn-snapshot/` = bloqueio** (assert-snapshot-integrity).
+<!-- HBN-ROUTER:END -->
+
 ## Identidade do projeto
 
 | Campo | Valor |
