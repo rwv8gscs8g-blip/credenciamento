@@ -1,0 +1,72 @@
+{
+  "readback_id": "0180-rb-runner-project-mode-p2c",
+  "data": "2026-06-30",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0179-rb-membrana-usehbn-v1-estavel",
+  "intent": {
+    "objective": "P2-C: reescrever scripts/hbn-guards/hbn-guards-runner.sh para rodar assert-snapshot-integrity.sh e, em seguida, o subset bloqueante a partir de .usehbn-snapshot/guards/ (canonical-root, tmp-worktree, env-files, legacy-paths, scope-lock, hearback-integrity). Mudanca aditiva no runner; nao toca dominio nem a membrana.",
+    "non_goals": [
+      "Nao editar .usehbn-snapshot/** (read-only; upgrade so via install-snapshot.sh --upgrade)",
+      "Nao incluir assert-knowledge-index no subset (P2-C2, apos higiene do INDEX)",
+      "Nao tocar codigo de dominio (src/vba, formularios, local-ai)",
+      "Nao rodar o runner completo do genoma; nao tocar a main do usehbn",
+      "Nao usar HBN_GUARDS_BYPASS nem --no-verify"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "scripts/hbn-guards/hbn-guards-runner.sh",
+      ".hbn/readbacks/0180-rb-runner-project-mode-p2c.json"
+    ],
+    "files_forbidden": [
+      ".usehbn-snapshot/**",
+      "src/**",
+      "local-ai/**",
+      "*.frm",
+      "*.frx",
+      "backups/**"
+    ],
+    "imports_must_come_from": "n/a (sem VBA)"
+  },
+  "decision": {
+    "human_approval": "Mauricio deu o hearback na sessao de 2026-06-30 (\"pode seguir\"), apos verificacao do orquestrador no disco: runner reescrito, integridade 137, 5 guards verdes no sandbox + canonical-root verde na raiz canonica (run end-to-end do codex), drift detectado e revertido. Escopo restrito ao runner + este readback.",
+    "chosen_fix": "Reescrita integral do runner (integridade + subset de .usehbn-snapshot/guards/), git add EXPLICITO de 2 caminhos, commit unico sob rito do projeto.",
+    "handoff_position": "Apos commit+push, onda propria no usehbn faz o repoint do STATE para P2-C2/P2-D."
+  },
+  "invariants_preserved": [
+    ".usehbn-snapshot/ permanece read-only e integro (assert-snapshot-integrity = 137).",
+    "Protocolo v1-estavel intocado; projeto consome via .hbn/active-version=.",
+    "Codigo de dominio (VBA, formularios) nao e tocado.",
+    "main do usehbn intocada 4db6928."
+  ],
+  "risks": [
+    { "risk": "Snapshot canonical-root falhar no sandbox Cowork (toplevel != .hbn/canonical-root).", "mitigation": "Validar/commitar no Terminal do operador (raiz canonica real) — conhecimento de projeto 0021; nao alterar guard.", "severity": "low" },
+    { "risk": "Arquivo fora de escopo entrar staged.", "mitigation": "git add EXPLICITO dos 2 caminhos + scope-lock safe_track; conferir git diff --cached --name-only.", "severity": "medium" }
+  ],
+  "validation_plan": {
+    "gates": [
+      { "gate": "assert-snapshot-integrity = 137 antes do stage", "evidence_kind": "command_output", "evidence_required_in": "terminal do operador" },
+      { "gate": "novo runner verde com nada staged (integridade + 6 guards)", "evidence_kind": "command_output", "evidence_required_in": "terminal do operador" },
+      { "gate": "drift test: mutar 1 byte da membrana -> integridade exit!=0 -> reverter -> verde", "evidence_kind": "command_output", "evidence_required_in": "terminal do operador" },
+      { "gate": "pre-commit FASE 1 verde no commit", "evidence_kind": "command_output", "evidence_required_in": "saida do git commit" }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se algum guard bloquear: PARAR e relatar o motivo lido do disco; nao contornar, nao --no-verify.",
+      "git restore --staged <arquivo> para arquivo fora de escopo.",
+      "git reset --soft HEAD~1 para desfazer o commit antes do push."
+    ],
+    "anchor_to_restore": "8dcaafa (HEAD antes do P2-C)"
+  },
+  "human_status": "confirmed",
+  "hearback_status": "confirmed",
+  "created_at": "2026-06-30T12:00:00-03:00",
+  "confirmed_at": "2026-06-30T13:00:00-03:00",
+  "hearback_summary": "Mauricio confirmou o hearback do P2-C (runner project-mode) em 2026-06-30 com \"pode seguir\", autorizando o flip para confirmed e o commit aditivo sob o rito do projeto, escopo restrito a scripts/hbn-guards/hbn-guards-runner.sh + este readback."
+}
