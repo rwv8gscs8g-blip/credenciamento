@@ -1,0 +1,77 @@
+{
+  "readback_id": "0183-rb-p2d2-untangle",
+  "data": "2026-06-30",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0182-rb-p2d1-router-agents",
+  "intent": {
+    "objective": "P2-D2 untangle: mover os 5 dirs de dominio (radar, study-plans, audits, docs, site; 88 arquivos) do espelho usehbn/ para docs/reference/<nome>/ via git mv. usehbn/docs -> docs/reference/usehbn-docs (evita colisao com docs/). Move estrutural; nao edita conteudo.",
+    "non_goals": [
+      "Nao tombstone (P2-D3), nem limpeza de refs (P2-D4), nem selagem (P2-D5)",
+      "Nao tocar usehbn/methodology nem usehbn/modules (remanescentes do protocolo; saem no tombstone)",
+      "Nao editar .usehbn-snapshot/** nem conteudo dos arquivos movidos",
+      "Nao tocar codigo de dominio (src/vba, formularios, local-ai)",
+      "Nao tocar a main do usehbn; nao usar bypass nem --no-verify"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      "usehbn/radar/**",
+      "usehbn/study-plans/**",
+      "usehbn/audits/**",
+      "usehbn/docs/**",
+      "usehbn/site/**",
+      "docs/reference/**",
+      ".hbn/readbacks/0183-rb-p2d2-untangle.json"
+    ],
+    "files_forbidden": [
+      "usehbn/methodology/**",
+      "usehbn/modules/**",
+      ".usehbn-snapshot/**",
+      "src/**",
+      "local-ai/**",
+      "*.frm",
+      "*.frx",
+      "backups/**"
+    ],
+    "imports_must_come_from": "n/a (move estrutural; sem VBA)"
+  },
+  "decision": {
+    "human_approval": "Mauricio deu o hearback (pronto) em 2026-06-30 sobre o diff dos 88 renames.",
+    "chosen_fix": "git mv dos 5 dirs de dominio para docs/reference/ (lar unico, decisao de Mauricio). Commit unico sob rito do projeto.",
+    "handoff_position": "Apos commit+push, proxima sub-onda P2-D3 (tombstone do espelho usehbn/ restante)."
+  },
+  "invariants_preserved": [
+    ".usehbn-snapshot/ read-only e integro (137).",
+    "Conteudo dos arquivos preservado (move, nao edicao).",
+    "usehbn/methodology e usehbn/modules intocados nesta sub-onda.",
+    "main do usehbn intocada."
+  ],
+  "risks": [
+    { "risk": "Re-execucao falhar por fonte ja movida.", "mitigation": "mv_dir checa [ -d origem ] e vira no-op se ja movido.", "severity": "low" },
+    { "risk": "Arquivo fora de escopo staged.", "mitigation": "git mv escopado aos 5 dirs + scope-lock safe_track; conferir git diff --cached --name-status.", "severity": "medium" }
+  ],
+  "validation_plan": {
+    "gates": [
+      { "gate": "5 fontes usehbn/<dir> removidas; 5 destinos docs/reference/<dir> presentes", "evidence_kind": "command_output", "evidence_required_in": "terminal do operador" },
+      { "gate": "~88 renames staged", "evidence_kind": "command_output", "evidence_required_in": "terminal do operador" },
+      { "gate": "pre-commit FASE 1 verde (7 guards) no commit", "evidence_kind": "command_output", "evidence_required_in": "saida do git commit" }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se algum guard bloquear: PARAR e relatar o motivo lido do disco; nao contornar, nao --no-verify.",
+      "git reset && git checkout -- . para desfazer os moves antes do commit (anchor fcdcb5a)."
+    ],
+    "anchor_to_restore": "fcdcb5a (HEAD antes do P2-D2)"
+  },
+  "human_status": "confirmed",
+  "hearback_status": "confirmed",
+  "created_at": "2026-06-30T17:30:00-03:00",
+  "confirmed_at": "2026-06-30T18:00:00-03:00",
+  "hearback_summary": "Mauricio confirmou o hearback do P2-D2 em 2026-06-30 (pronto), apos verificacao no disco: 88 renames staged, 5 fontes usehbn removidas, 5 destinos docs/reference presentes, nada fora do escopo, methodology/modules intocados, HEAD fcdcb5a. Autorizado o commit."
+}
