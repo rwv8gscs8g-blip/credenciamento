@@ -1,0 +1,92 @@
+{
+  "readback_id": "0181-rb-p2c2-index-reconciliado",
+  "data": "2026-06-30",
+  "agent_id": "codex",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0180-rb-runner-project-mode-p2c",
+  "intent": {
+    "objective": "P2-C2: reconciliar o INDEX da knowledge do projeto adicionando um bloco canonico de tokens em backtick (um por entrada .hbn/knowledge/*.md), forma aceita pelo regex do assert-knowledge-index do genoma congelado; e promover assert-knowledge-index a guard bloqueante no runner project-mode (subset de 6 para 7).",
+    "non_goals": [
+      "Nao editar .usehbn-snapshot/** (read-only; nao alterar o guard congelado)",
+      "Nao renumerar nem mover arquivos de knowledge (colisoes 0005/0014 preservadas)",
+      "Nao tocar codigo de dominio (src/vba, formularios, local-ai)",
+      "Nao tocar a main do usehbn",
+      "Nao usar HBN_GUARDS_BYPASS nem --no-verify"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/knowledge/INDEX.md",
+      "scripts/hbn-guards/hbn-guards-runner.sh",
+      ".hbn/readbacks/0181-rb-p2c2-index-reconciliado.json"
+    ],
+    "files_forbidden": [
+      ".usehbn-snapshot/**",
+      "src/**",
+      "local-ai/**",
+      "*.frm",
+      "*.frx",
+      "backups/**"
+    ],
+    "imports_must_come_from": "n/a (sem VBA)"
+  },
+  "decision": {
+    "human_approval": "Mauricio deu o hearback (pronto) em 2026-06-30 sobre o diff real; abordagem backtick confirmada antes.",
+    "chosen_fix": "Bloco canonico de tokens em backtick no INDEX (entre marcadores HBN-KNOWLEDGE-TOKENS, idempotente) + assert-knowledge-index adicionado ao SUBSET do runner. git add escopado de 3 caminhos; commit unico sob rito do projeto.",
+    "handoff_position": "Apos commit+push, onda propria no usehbn faz o repoint do STATE para P2-D (router+tombstone+limpeza+selagem do passo 2)."
+  },
+  "invariants_preserved": [
+    ".usehbn-snapshot/ permanece read-only e integro (137); guard congelado nao e alterado.",
+    "Protocolo v1-estavel intocado; projeto consome via .hbn/active-version=.",
+    "Codigo de dominio nao e tocado; colisoes de numeracao 0005/0014 preservadas.",
+    "main do usehbn intocada."
+  ],
+  "risks": [
+    {
+      "risk": "Bloco de tokens duplicar a cada rodada.",
+      "mitigation": "awk remove o bloco antigo entre marcadores antes de reanexar — idempotente.",
+      "severity": "low"
+    },
+    {
+      "risk": "assert-knowledge-index ainda falhar por algum basename fora do bloco.",
+      "mitigation": "bloco gerado de git ls-files .hbn/knowledge/*.md; validacao na working tree confirma 24/24 antes do commit.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "24/24 basenames com token backtick no INDEX (working tree)",
+        "evidence_kind": "command_output",
+        "evidence_required_in": "terminal do operador"
+      },
+      {
+        "gate": "runner contem assert-knowledge-index.sh",
+        "evidence_kind": "command_output",
+        "evidence_required_in": "terminal do operador"
+      },
+      {
+        "gate": "pre-commit FASE 1 verde (7 guards) no commit",
+        "evidence_kind": "command_output",
+        "evidence_required_in": "saida do git commit"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Se algum guard bloquear: PARAR e relatar o motivo lido do disco; nao contornar, nao --no-verify.",
+      "git restore --staged <arquivo> para arquivo fora de escopo.",
+      "git checkout -- .hbn/knowledge/INDEX.md scripts/hbn-guards/hbn-guards-runner.sh para desfazer antes do commit."
+    ],
+    "anchor_to_restore": "b7b0baa (HEAD antes do P2-C2)"
+  },
+  "human_status": "confirmed",
+  "hearback_status": "confirmed",
+  "created_at": "2026-06-30T15:00:00-03:00",
+  "confirmed_at": "2026-06-30T15:30:00-03:00",
+  "hearback_summary": "Mauricio confirmou o hearback do P2-C2 em 2026-06-30 (pronto), apos verificacao no disco: INDEX com bloco canonico de 24 tokens em backtick (24/24), runner com assert-knowledge-index bloqueante, HEAD b7b0baa intocado. Autorizado o commit aditivo escopado."
+}

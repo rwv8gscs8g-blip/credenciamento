@@ -60,3 +60,32 @@ Registrado na onda 0117 (2026-06-05).
 
 Quando uma decisao for explicitamente revogada por release oficial,
 mover o arquivo para `.hbn/relay-archive/` com sufixo `_revogado_AAAA-MM-DD`.
+
+<!-- HBN-KNOWLEDGE-TOKENS:BEGIN (auto-gerado por P2-C2; nao editar a mao) -->
+## Indice canonico de entradas (tokens auto-localizaveis — assert-knowledge-index)
+
+`0001-regras-v203-inegociaveis.md`
+`0002-regra-ouro-vba-import.md`
+`0003-glasswing-style-preventive-security.md`
+`0004-padrao-resposta-tabela-de-entrega.md`
+`0005-bug-form-importado-como-modulo.md`
+`0005-protocolo-markers-v2.md`
+`0006-padronizacao-encoding-line-endings-frm.md`
+`0007-acesso-controlado-via-cla.md`
+`0008-importador-v2-arquitetura.md`
+`0009-licoes-importador-v3-phase1.md`
+`0010-funcionalidade-nova-exige-teste.md`
+`0011-higiene-documental-recorrente.md`
+`0012-raiz-canonica-projeto.md`
+`0013-contratos-executaveis.md`
+`0014-protocolo-fim-de-sessao.md`
+`0014-protocolo-reprovacao-onda.md`
+`0015-readback-opening-bootstrap.md`
+`0016-bump-build-label-anti-conflito.md`
+`0017-handoff-aos-50-pct-contexto.md`
+`0018-uso-delta-vs-completo.md`
+`0019-cadencia-d-estendida-passagem-bastao.md`
+`0020-explore-diff-cosmetico-suspeito.md`
+`0021-arquiteto-via-cowork-sandbox.md`
+`0022-firewall-workflow-fast-track.md`
+<!-- HBN-KNOWLEDGE-TOKENS:END -->
