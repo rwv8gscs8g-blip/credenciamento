@@ -21,6 +21,7 @@ Esta área consolida a leitura humana e institucional da bateria de testes.
 - [NOMENCLATURA_BATERIAS_V205.md](NOMENCLATURA_BATERIAS_V205.md) — equivalência histórica RVS/SRC/BRL
 - [ESPEC_PDF_AUTOMATICO_V205.md](ESPEC_PDF_AUTOMATICO_V205.md) — PDF manual na V205 e motor automático diferido para V206
 - [09_MATRIZ_COBERTURA_TESTES_V205.md](09_MATRIZ_COBERTURA_TESTES_V205.md) — cobertura de testes e evidências da V205
+- [10_BATERIAS_TESTES_DISPONIVEIS_V206.md](10_BATERIAS_TESTES_DISPONIVEIS_V206.md) — catálogo atualizado das baterias disponíveis na linha V206
 - [../../how-to/COMO_RODAR_GATE_RELEASE_V205.md](../../how-to/COMO_RODAR_GATE_RELEASE_V205.md) — roteiro técnico do Gate RVS
 - [../../../auditoria/evidencias/V12.0.0205/INDEX.md](../../../auditoria/evidencias/V12.0.0205/INDEX.md) — evidências da V205
 

@@ -1,0 +1,78 @@
+{
+  "result_id": "0178-exec-relatorio-prestacao-contas-abril-maio-testes",
+  "execution_id": "0178-exec-relatorio-prestacao-contas-abril-maio-testes",
+  "readback_id": "0178-rb-relatorio-prestacao-contas-abril-maio-testes",
+  "data": "2026-06-18",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "status": "completed",
+  "outcome": "relatorio_prestacao_contas_e_catalogo_testes_entregues",
+  "human_status": "confirmed_by_request",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "head_before": "56528dd",
+  "action": "Produzir relatorio de prestacao de contas dos avancos de abril e maio de 2026 e catalogo atualizado das baterias de testes disponiveis.",
+  "summary": "Foram criados dois documentos: um relatorio detalhado para prestacao de contas tecnica de abril/maio e um catalogo atualizado das baterias de testes disponiveis na linha V206. O relatorio separa V12.0.0205 como release oficial validada de V12.0.0206 como linha em validacao iterativa, descreve versoes, correcoes, funcionalidades, testes ampliados e integracao useHBN. O catalogo lista gates, menu da Central de Testes V2, baterias nucleares, suites dirigidas e evidencias esperadas.",
+  "files_changed": [
+    ".hbn/readbacks/0178-rb-relatorio-prestacao-contas-abril-maio-testes.json",
+    ".hbn/results/0178-exec-relatorio-prestacao-contas-abril-maio-testes.json",
+    "auditoria/00_status/127_RELATORIO_PRESTACAO_CONTAS_ABRIL_MAIO_2026.md",
+    "docs/reference/testes/10_BATERIAS_TESTES_DISPONIVEIS_V206.md",
+    "docs/reference/testes/INDEX.md"
+  ],
+  "document_checksums": [
+    {
+      "path": "auditoria/00_status/127_RELATORIO_PRESTACAO_CONTAS_ABRIL_MAIO_2026.md",
+      "sha256": "ec29328424b076611ef27b81bff107ecb310df68f4bac50fc7dd203f4e04aaf9",
+      "lines": 497
+    },
+    {
+      "path": "docs/reference/testes/10_BATERIAS_TESTES_DISPONIVEIS_V206.md",
+      "sha256": "22651e18b2dcec66eb05afea9729a12aab4de34911b99e3b6ee78df4d11675c8",
+      "lines": 168
+    }
+  ],
+  "validation_gates": [
+    {
+      "gate": "Preflight raiz canonica",
+      "status": "pass_local",
+      "evidence": "pwd e git rev-parse --show-toplevel retornaram /Users/macbookpro/Projetos/Credenciamento; worktree list confirmou a raiz canonica."
+    },
+    {
+      "gate": "Readback 0178 schema",
+      "status": "pass_local",
+      "evidence": "scripts/hbn-guards/validate-readback.sh .hbn/readbacks/0178-rb-relatorio-prestacao-contas-abril-maio-testes.json retornou OK."
+    },
+    {
+      "gate": "Escopo documental",
+      "status": "pass_local",
+      "evidence": "Arquivos criados/editados permanecem no escopo do readback 0178; nenhum src/vba, local-ai/vba_import, .xlsm ou evidencia historica foi alterado."
+    },
+    {
+      "gate": "Whitespace",
+      "status": "pass_local",
+      "evidence": "git diff --check sem saida."
+    },
+    {
+      "gate": "Glasswing claims",
+      "status": "pass_local",
+      "evidence": "rg nao encontrou '100%', 'zero risco' ou 'totalmente seguro' nos documentos novos."
+    },
+    {
+      "gate": "Catalogo de testes",
+      "status": "pass_local",
+      "evidence": "Catalogo cruzado com docs/reference/testes e simbolos publicos em Teste_Validacao_Release.bas, Central_Testes_V2.bas e modulos Teste_*.bas."
+    }
+  ],
+  "not_executed_by_agent": [
+    "Importador V3 no Excel",
+    "VBE Debug > Compile VBAProject",
+    "TV2 no workbook",
+    "RVS ou VCR no workbook",
+    "Criacao de novas evidencias funcionais"
+  ],
+  "preexisting_worktree_note": "git status mostra D em obsidian-vault/Sem titulo.canvas antes desta entrega; alteracao nao foi tocada nem revertida.",
+  "next_required_action": "Operador pode revisar o relatorio e preencher valores administrativos de horas, se necessario, usando os blocos tecnicos como comprovantes.",
+  "updated_at": "2026-06-18T15:18:57-03:00"
+}

@@ -1,0 +1,100 @@
+{
+  "readback_id": "0178-rb-relatorio-prestacao-contas-abril-maio-testes",
+  "data": "2026-06-18",
+  "agent_id": "codex",
+  "track": "fast_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0177-rb-onda-38-2-44-handoff-opus-pendencias-v206-v207",
+  "intent": {
+    "objective": "Produzir relatorio detalhado de prestacao de contas dos avancos de abril e maio de 2026 e um catalogo atualizado das baterias de testes disponiveis, usando apenas documentacao, historico e evidencias existentes.",
+    "non_goals": [
+      "Nao alterar codigo VBA, formularios, .frx ou pacote de importacao",
+      "Nao executar Excel, VBE, TV2, VCR ou qualquer teste que dependa do workbook",
+      "Nao congelar V12.0.0206 nem alterar status oficial da V12.0.0205",
+      "Nao criar novas evidencias de validacao funcional",
+      "Nao editar CHANGELOG.md ou reescrever documentacao historica"
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0178-rb-relatorio-prestacao-contas-abril-maio-testes.json",
+      ".hbn/results/0178-exec-relatorio-prestacao-contas-abril-maio-testes.json",
+      "auditoria/00_status/127_RELATORIO_PRESTACAO_CONTAS_ABRIL_MAIO_2026.md",
+      "docs/reference/testes/10_BATERIAS_TESTES_DISPONIVEIS_V206.md",
+      "docs/reference/testes/INDEX.md"
+    ],
+    "files_forbidden": [
+      "src/vba/**",
+      "local-ai/vba_import/**",
+      "*.xlsm",
+      "*.frm",
+      "*.frx",
+      "backups/**",
+      "auditoria/evidencias/**",
+      ".github/**",
+      "CHANGELOG.md"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "invariants_preserved": [
+    "V12.0.0205 continua sendo a versao oficial validada e congelada.",
+    "V12.0.0206 continua em validacao iterativa, sem freeze declarado.",
+    "Nenhum artefato importavel, codigo de producao ou evidencia historica sera alterado.",
+    "Os testes VBA continuam descritos como executaveis pelo operador humano no workbook, nao pelo agente."
+  ],
+  "risks": [
+    {
+      "risk": "Misturar linha oficial V12.0.0205 com linha V12.0.0206 em validacao pode gerar prestacao de contas ambigua.",
+      "mitigation": "Separar explicitamente versao oficial final, linha atual analisada e itens ainda nao congelados.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Relatorio de horas tecnicas pode extrapolar fatos se converter commits em horas sem apontamento humano.",
+      "mitigation": "Comprovar esforco por entregaveis, gates, microdeltas e evidencias, deixando valores-hora para preenchimento administrativo.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Catalogo de baterias pode ficar incompleto se considerar apenas documentos e ignorar suites publicas no codigo.",
+      "mitigation": "Cruzar docs de teste com simbolos publicos em src/vba/Teste_*.bas e Central_Testes_V2.bas sem editar o codigo.",
+      "severity": "low"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Readback 0178 valido contra schema HBN",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0178-exec-relatorio-prestacao-contas-abril-maio-testes.json"
+      },
+      {
+        "gate": "Relatorio de prestacao de contas com frontmatter e referencias a evidencias historicas",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": "auditoria/00_status/127_RELATORIO_PRESTACAO_CONTAS_ABRIL_MAIO_2026.md"
+      },
+      {
+        "gate": "Catalogo de baterias atualizado com gates, macros e escopo de execucao",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": "docs/reference/testes/10_BATERIAS_TESTES_DISPONIVEIS_V206.md"
+      },
+      {
+        "gate": "Diff documental sem whitespace invalido",
+        "evidence_kind": "audit_post",
+        "evidence_required_in": ".hbn/results/0178-exec-relatorio-prestacao-contas-abril-maio-testes.json"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Remover os dois documentos novos se a prestacao de contas nao for aceita pelo operador.",
+      "Restaurar docs/reference/testes/INDEX.md ao estado anterior se o link novo for rejeitado.",
+      "Registrar no ERP 0178 qualquer ajuste pendente ou decisao humana necessaria."
+    ],
+    "anchor_to_restore": "56528dd"
+  },
+  "human_status": "confirmed",
+  "created_at": "2026-06-18T15:18:57-03:00",
+  "hearback_summary": "Mauricio solicitou relatorio completo de prestacao de contas de abril e maio, com versoes, correcoes, novas funcionalidades, testes ampliados, integracao useHBN e catalogo atualizado de baterias disponiveis."
+}
