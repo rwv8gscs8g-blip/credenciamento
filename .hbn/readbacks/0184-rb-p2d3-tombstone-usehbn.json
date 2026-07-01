@@ -1,0 +1,104 @@
+{
+  "readback_id": "0184-rb-p2d3-tombstone-usehbn",
+  "data": "2026-07-01",
+  "agent_id": "gemini-3-5-antigravity",
+  "track": "safe_track",
+  "version_target": "V12.0.0206",
+  "canonical_root": "/Users/macbookpro/Projetos/Credenciamento",
+  "branch": "codex/v12-0-0206-planejamento",
+  "worktree": "/Users/macbookpro/Projetos/Credenciamento",
+  "predecessor_readback_id": "0183-rb-p2d2-untangle",
+  "intent": {
+    "objective": "P2-D3 tombstone: criar o tombstone de usehbn/ e remover methodology/ e modules/ sob a mesma pasta, consolidando a migracao dos ativos para docs/reference/",
+    "non_goals": [
+      "Nao commitar, nem push.",
+      "Nao usar bypass de guards (HBN_GUARDS_BYPASS).",
+      "Nao tocar .usehbn-snapshot/** ou codigo de dominio/workbook.",
+      "Nao iniciar P2-D4 ou P2-D5."
+    ]
+  },
+  "scope": {
+    "files_allowed": [
+      ".hbn/readbacks/0184-rb-p2d3-tombstone-usehbn.json",
+      ".hbn/messages/20260701-164100-antigravity-plan-p2d3-tombstone-usehbn.md",
+      ".hbn/messages/20260701-163300-antigravity-handoff-p2d3-tombstone-usehbn.md",
+      "usehbn/TOMBSTONE.md",
+      "usehbn/methodology/**",
+      "usehbn/modules/**"
+    ],
+    "files_forbidden": [
+      ".usehbn-snapshot/**",
+      "src/**",
+      "local-ai/**",
+      "*.frm",
+      "*.frx",
+      "backups/**",
+      "AGENTS.md",
+      "docs/reference/**"
+    ],
+    "imports_must_come_from": "n/a"
+  },
+  "decision": {
+    "human_approval": "Mauricio aprovou o plano P2-D3 em 2026-07-01, solicitou retificacao do path canonico do plano e autorizou a execucao controlada da delecao Git dos remanescentes usehbn/methodology/** e usehbn/modules/**.",
+    "chosen_fix": "Tombstone e remocao via git rm dos diretorios methodology/ e modules/ sob usehbn/. Criacao do TOMBSTONE.md.",
+    "handoff_position": "Apos esta onda P2-D3, o proximo passo sera P2-D4 (limpeza de referencias)."
+  },
+  "invariants_preserved": [
+    "Apenas arquivos sob usehbn/ e metadados HBN sao alterados.",
+    "Nenhum arquivo em docs/reference/ ou .usehbn-snapshot/ e tocado."
+  ],
+  "risks": [
+    {
+      "risk": "Remocao acidental de arquivos fora do escopo.",
+      "mitigation": "Uso estrito de git rm escopado sob usehbn/methodology/ e usehbn/modules/.",
+      "severity": "medium"
+    },
+    {
+      "risk": "Falta de homologacao do plano canonico no git status.",
+      "mitigation": "Plano canonico salvo explicitamente no path e adicionado em scope.files_allowed.",
+      "severity": "low"
+    },
+    {
+      "risk": "Residual untracked files left in usehbn/ directory.",
+      "mitigation": "Perform git status --short and verify that only TOMBSTONE.md is tracked while others are ignored/deleted.",
+      "severity": "low"
+    },
+    {
+      "risk": "Rollback com comando destrutivo apagar residuo local ainda nao revisado.",
+      "mitigation": "Rollback documentado somente com git restore/staged; limpeza de untracked exige nova autorizacao humana explicita.",
+      "severity": "medium"
+    }
+  ],
+  "validation_plan": {
+    "gates": [
+      {
+        "gate": "Remocao dos arquivos methodology/ e modules/ sob usehbn/",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": "terminal do operador"
+      },
+      {
+        "gate": "Criacao de usehbn/TOMBSTONE.md e persistencia no Git",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": "terminal do operador"
+      },
+      {
+        "gate": "Validacao de readback com validate-readback.sh e runner de guards verde",
+        "evidence_kind": "VR_ID",
+        "evidence_required_in": "terminal do operador"
+      }
+    ]
+  },
+  "rollback_plan": {
+    "steps": [
+      "Antes do commit, desfazer staging apenas dos paths P2-D3 com git restore --staged <paths_do_pacote>.",
+      "Restaurar os arquivos versionados removidos com git restore usehbn/methodology/ usehbn/modules/.",
+      "Manter arquivos novos untracked para revisao; qualquer limpeza de untracked exige nova autorizacao humana explicita."
+    ],
+    "anchor_to_restore": "eb3f2850b8beb03aa50ddbe9143e4f00341d051e"
+  },
+  "human_status": "confirmed",
+  "hearback_status": "confirmed",
+  "created_at": "2026-07-01T16:56:00-03:00",
+  "confirmed_at": "2026-07-01T17:00:00-03:00",
+  "hearback_summary": "Mauricio autorizou a execucao imediata do plano P2-D3 com a retificacao de salvar o plano no path canonico do repo."
+}
